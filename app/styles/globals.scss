@@ -1,0 +1,48 @@
+@use "theme" as *;
+@use "layout" as *;
+@use "style" as *;
+@use "layout" as *;
+@use "typography" as *;
+@use "overrides" as *;
+// @import 'bootstrap/dist/css/bootstrap.min.css';
+// @import 'nprogress/nprogress.css';
+// @import 'react-quill/dist/quill.snow.css';
+
+
+// ==================================== Global CSS ====================================
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#nprogress .bar {
+  background: $primary !important;
+}
+
+.songs-detail-img {
+  .ant-image {
+    width: 100% !important;
+  }
+
+  img {
+    height: 250px !important;
+    object-fit: cover;
+  }
+}
+
+.overlay-image {
+  position: absolute;
+  width: 100%;
+  inset: 0;
+  height: 100%;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%);
+  border-radius: 10px;
+  background-size: cover;
+}
+
+.tooltip-img {
+  .ant-tooltip {
+      display: none !important;
+  }
+}

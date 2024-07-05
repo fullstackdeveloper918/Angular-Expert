@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     console.log('middleware called');
 
-    const accessToken = request.cookies.get('COOKIES_USER_ACCESS_TOKEN');
+    const accessToken = "request.cookies.get('COOKIES_USER_ACCESS_TOKEN')";
     console.log(accessToken, "accessToken")
     // debugger
     if (!accessToken) {

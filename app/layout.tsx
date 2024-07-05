@@ -1,7 +1,7 @@
 "use client"
 // import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../app/styles/globals.scss"
 import { Provider } from "react-redux";
 import {Store} from '../lib/store'
 const inter = Inter({ subsets: ["latin"] });
