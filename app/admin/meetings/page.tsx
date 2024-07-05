@@ -13,7 +13,7 @@ const page = () => {
         <div className="container">
             <div className="row mt-3">
                 <h1 className="text-center">Meetings Listing</h1>
-                <h3 className="">{userName}</h3>
+                {/* <h3 className="">{userName}</h3> */}
                 <button className="" onClick={handleClick}>change view item</button>
             </div>
         </div>

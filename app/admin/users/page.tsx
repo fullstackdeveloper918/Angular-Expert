@@ -14,7 +14,7 @@ const userName=useSelector((state:any) => state.user.viewItem)
             </div>
             <div className="row gap-3">
                 <div className="justify-content-center mt-2 d-flex gap-3">
-                    <h1 className="">{userName}</h1>
+                    {/* <h1 className="">{userName}</h1> */}
                     <Link href={'/admin/users/1'}>
                     <button type="button" className="btn btn-primary ">Go to detail page</button>
                     </Link>

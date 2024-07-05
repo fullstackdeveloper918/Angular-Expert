@@ -26,5 +26,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: [  '/dashboard/:path*', '/artists/:path*', '/content/:path*', '/faq/:path*', '/badge-info/:path*', '/rewards/:path*', '/orders/:path*', '/transaction/user/:path*', '/transaction/artist/:path*', '/commission', '/commission/edit', '/contact-us/:path*', '/cloud-messaging', '/database', '/staff/:path*', '/points/:path*', '/genre/:path*'],
+    matcher: [  '/admin/users/:path*', '/admin//:path*','/admin//:path*'],
 };
