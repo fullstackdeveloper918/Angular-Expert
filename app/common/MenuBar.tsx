@@ -99,12 +99,12 @@ console.log(openKeys,"latestOpenKey");
         key: henceofrthEnums.Roles.PAGES, view: getItem('Meetings', 'sub1', <BookOutlined style={iconSize} />,
           [
             getItem(<Link href="/admin/meetings" className='text-decoration-none'>Meetings</Link>, 'meetings', <OrderedListOutlined style={iconSize} />),
-            getItem(<Link href="/content/add" className='text-decoration-none'>Manage Questions for Meeting</Link>, 'meetings', <AppstoreAddOutlined style={iconSize} />),
+            getItem(<Link href="/admin/manage_questions" className='text-decoration-none'>Manage Questions for Meeting</Link>, 'meetings', <AppstoreAddOutlined style={iconSize} />),
           ]
         )
       },
     {
-      key: henceofrthEnums.Roles.ORDER, view: getItem(<Link href='/orders/page/1?limit=10&type=songs' className='text-decoration-none'>Questionnaire</Link>, 'questionnaire', <span><ShoppingCartOutlined style={iconSize} /></span>),
+      key: henceofrthEnums.Roles.ORDER, view: getItem(<Link href='/admin/questionnaire' className='text-decoration-none'>Questionnaire</Link>, 'questionnaire', <span><ShoppingCartOutlined style={iconSize} /></span>),
     },
     // {
     //   key: henceofrthEnums.Roles.PAYOUT, view: getItem(<Link href='/payout/page/1?limit=10' className='text-decoration-none'>Payout</Link>, 'payout', <span><DollarOutlined style={iconSize} /></span>),

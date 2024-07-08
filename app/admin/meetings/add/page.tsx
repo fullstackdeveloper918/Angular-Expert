@@ -104,12 +104,12 @@ const page = () => {
                                     <Breadcrumb separator=">">
                                         <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item><Link href="/admin/meetings" className='text-decoration-none'>Meetings</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item className='text-decoration-none'>Edit Meeting</Breadcrumb.Item>
+                                        <Breadcrumb.Item className='text-decoration-none'>Add Meeting</Breadcrumb.Item>
                                     </Breadcrumb>
                                 </div>
                                 {/* Title  */}
                                 <div className='mb-4'>
-                                    <Typography.Title level={3} className='m-0 fw-bold'>Edit Meeting</Typography.Title>
+                                    <Typography.Title level={3} className='m-0 fw-bold'>Add Meeting</Typography.Title>
                                 </div>
 
                                 {/* form  */}
@@ -156,7 +156,7 @@ const page = () => {
 
                                         {/* Button  */}
                                         <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
-                                            Edit Meeting
+                                            Add Meeting
                                         </Button>
                                     </Form>
                                 </div>

@@ -178,7 +178,7 @@ const page = () => {
             age: 32,
             address: '10 Downing Street',
             action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
+            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
           </ul>
         },
         {
@@ -192,7 +192,7 @@ const page = () => {
             age: 42,
             address: '10 Downing Street',
             action:<ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
+            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
           </ul>
         },
         {
@@ -206,7 +206,7 @@ const page = () => {
             age: 42,
             address: '10 Downing Street',
             action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
+            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
           </ul>
         },
         {
@@ -220,7 +220,7 @@ const page = () => {
             age: 42,
             address: '10 Downing Street',
             action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
+            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
           </ul>
         },
         {
@@ -234,7 +234,7 @@ const page = () => {
             age: 42,
             address: '10 Downing Street',
             action:<ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
+            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
           </ul>
         },
     ];
@@ -283,6 +283,10 @@ const page = () => {
     const handleChange = (value: string) => {
         console.log(`selected ${value}`);
     };
+
+    const addUser=()=>{
+        router.push("/admin/users/add")
+    }
     return (
         <MainLayout>
 
@@ -306,7 +310,7 @@ const page = () => {
                                     <Typography.Title level={3} className='m-0 fw-bold'>Users</Typography.Title>
                                     <div className='d-flex gap-2'>
                                         {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
-                                            <Button type="primary" htmlType="button" size='large' icon={<UploadOutlined />}>Add User</Button>
+                                            <Button type="primary" htmlType="button" size='large' icon={<UploadOutlined />} onClick={addUser}>Add User</Button>
                                         {/* </Upload> */}
                                     </div>
                                 </div>

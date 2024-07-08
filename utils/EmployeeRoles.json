@@ -1,0 +1,27 @@
+[
+    {
+        "sr": 1,
+        "name": "Dashboard",
+        "rol": "DASHBOARD",
+        "color": "magenta"
+    },
+    {
+        "sr": 2,
+        "name": "Meetings",
+        "rol": "MEETINGS",
+        "color": "geekblue"
+    },
+    {
+        "sr": 3,
+        "name": "Users",
+        "rol": "USERS",
+        "color": "red"
+    },
+    {
+        "sr": 4,
+        "name": "Questionnaire",
+        "rol": "QUESTIONNAIRE",
+        "color": "volcano"
+    }
+   
+]
