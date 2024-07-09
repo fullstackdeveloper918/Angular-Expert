@@ -340,7 +340,7 @@ const Home: Page = (props: any) => {
             <Card className='common-card'>
               
               {/* title  */}
-              <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3'>
+              <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                 <Typography.Title level={4} className='m-0 fw-bold'>Recent Users</Typography.Title>
                 
               </div>

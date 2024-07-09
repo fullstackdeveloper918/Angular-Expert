@@ -98,7 +98,7 @@ console.log(form,"form");
   
     <section>
       <Row justify="center" gutter={[20, 20]}>
-        <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
+        <Col sm={22} md={20} lg={16} xl={14} xxl={12}>
           <Card className='common-card'>
             <div className='mb-4'>
               <Breadcrumb separator=">">
@@ -123,7 +123,8 @@ console.log(form,"form");
 
 
                 {/* First Name  */}
-                <Form.Item name="firstname" rules={[{ required: true, whitespace: true, message: 'Please Enter First Name' }]} label="First Name">
+                <div className='row'>
+                <Form.Item name="firstname" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter First Name' }]} label="First Name">
                   <Input size={'large'} placeholder="First Name"
                      onKeyPress={(e: any) => {
                       if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -135,7 +136,7 @@ console.log(form,"form");
                      />
                 </Form.Item>
                 {/* Last Name  */}
-                <Form.Item name="lastname" rules={[{ required: true, whitespace: true, message: 'Please Enter Last Name' }]} label="Last Name">
+                <Form.Item name="lastname" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Last Name' }]} label="Last Name">
                   <Input size={'large'} placeholder="Last Name" 
                      onKeyPress={(e: any) => {
                       if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -146,7 +147,7 @@ console.log(form,"form");
                     }}
                     />
                 </Form.Item>
-                <Form.Item name="companyname" rules={[{ required: true, whitespace: true, message: 'Please Enter Company Name' }]} label="Company Name">
+                <Form.Item name="companyname" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Company Name' }]} label="Company Name">
                   <Input size={'large'} placeholder="Company Name" 
                      onKeyPress={(e: any) => {
                       if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -158,27 +159,27 @@ console.log(form,"form");
                     />
                 </Form.Item>
               
-                <Form.Item name="mobile" rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
+                <Form.Item name="mobile" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
                   <Input size={'large'} type="text" minLength={10} maxLength={10} placeholder="Phone No" />
                 </Form.Item>
-                <Form.Item name="position" rules={[{ required: true, message: 'Please Enter Position' }]} label="Position">
+                <Form.Item name="position" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Position' }]} label="Position">
                   <Input size={'large'} type='position' placeholder="Position" />
                 </Form.Item>
-                <Form.Item name="homecity" rules={[{ required: true, message: 'Please Enter Home City' }]} label="Home City">
+                <Form.Item name="homecity" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Home City' }]} label="Home City">
                   <Input size={'large'} type='homecity' placeholder="Home City" />
                 </Form.Item>
                   {/* Email  */}
-                  <Form.Item name="email" rules={[{ required: true, message: 'Please Enter Email' }]} label="Email">
+                  <Form.Item name="email" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Email' }]} label="Email">
                   <Input size={'large'} type='email' placeholder="Email" />
                 </Form.Item>
                 {/* Password  */}
-                <Form.Item name="password" rules={[{ required: true, message: 'Please Enter Password!' }]} label="Password">
+                <Form.Item name="password" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Password!' }]} label="Password">
                   <Input.Password size={'large'} type="password" placeholder="Password" />
                 </Form.Item>
                 {/* Phone No  */}
                
                 {/* Roles  */}
-                <Form.Item name="roles" label="Roles" rules={[{ required: true, message: 'Please Select Roles' }]}>
+                <Form.Item name="roles" className=' col-sm-12'  label="Roles" rules={[{ required: true, message: 'Please Select Roles' }]}>
                   <Select
                     mode="tags"
                     size={'large'}
@@ -192,6 +193,7 @@ console.log(form,"form");
                     })}
                   />
                 </Form.Item>
+                </div>
                 {/* Button  */}
                 <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
                   Save & Next

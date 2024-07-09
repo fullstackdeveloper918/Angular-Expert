@@ -55,7 +55,7 @@ const page = () => {
                         onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                     >
-                        <Button type="text" danger htmlType='button' className='px-0' ><Icons.Delete /></Button>
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                     </Popconfirm>
                 </li>
             </ul>
@@ -77,7 +77,7 @@ const page = () => {
                         onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                     >
-                        <Button type="text" danger htmlType='button' className='px-0' ><Icons.Delete /></Button>
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                     </Popconfirm>
                 </li>
             </ul>
@@ -98,7 +98,7 @@ const page = () => {
                         onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                     >
-                        <Button type="text" danger htmlType='button' className='px-0' ><Icons.Delete /></Button>
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                     </Popconfirm>
                 </li>
             </ul>
@@ -119,7 +119,7 @@ const page = () => {
                         onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                     >
-                        <Button type="text" danger htmlType='button' className='px-0' ><Icons.Delete /></Button>
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                     </Popconfirm>
                 </li>
             </ul>
@@ -140,7 +140,7 @@ const page = () => {
                         onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                     >
-                        <Button type="text" danger htmlType='button' className='px-0' ><Icons.Delete /></Button>
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                     </Popconfirm>
                 </li>
             </ul>
@@ -243,7 +243,7 @@ const page = () => {
                 onConfirm={(event) => { event?.stopPropagation(); handleDelete(res._id) }}
                 okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
             >
-                <Button type="text" danger htmlType='button' className='px-0' ><Icons.Delete /></Button>
+                <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
             </Popconfirm>
         </li>
     </ul>)

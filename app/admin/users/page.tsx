@@ -178,7 +178,7 @@ const page = () => {
             age: 32,
             address: '10 Downing Street',
             action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
+            <Link href={`/admin/users/view`}><Button  className='ViewMore'><EyeOutlined /></Button></Link></li>
           </ul>
         },
         {
@@ -192,7 +192,7 @@ const page = () => {
             age: 42,
             address: '10 Downing Street',
             action:<ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
+            <Link href={`/admin/users/view`}><Button   className='ViewMore'><EyeOutlined /></Button></Link></li>
           </ul>
         },
         {
@@ -206,7 +206,7 @@ const page = () => {
             age: 42,
             address: '10 Downing Street',
             action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
+            <Link href={`/admin/users/view`}><Button    className='ViewMore'><EyeOutlined /></Button></Link></li>
           </ul>
         },
         {
@@ -220,7 +220,7 @@ const page = () => {
             age: 42,
             address: '10 Downing Street',
             action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
+            <Link href={`/admin/users/view`}><Button    className='ViewMore'><EyeOutlined /></Button></Link></li>
           </ul>
         },
         {
@@ -234,7 +234,7 @@ const page = () => {
             age: 42,
             address: '10 Downing Street',
             action:<ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
+            <Link href={`/admin/users/view`}><Button   className='ViewMore'><EyeOutlined /></Button></Link></li>
           </ul>
         },
     ];

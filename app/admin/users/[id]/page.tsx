@@ -53,7 +53,7 @@ interface StaffDetailInterface {
     <section>
       <Spin spinning={loading}>
         <Row gutter={[20, 20]}>
-          <Col sm={22} md={12} lg={11} xl={10} xxl={9}>
+          <Col sm={22} md={12} lg={11} xl={10} xxl={9} className='mx-auto'>
             <Card className='common-card'>
               <div className='mb-4'>
                 <Breadcrumb separator=">">
@@ -110,7 +110,7 @@ interface StaffDetailInterface {
                     cancelText="No"
                     okButtonProps={{ type: 'primary', ghost: true }}
                   >
-                    <Button size='large' type="primary" htmlType='button' className='flex-grow-1' ghost>{state.is_blocked ? 'Deactivate' : 'Activate'}</Button>
+                    <Button size='large' type="primary" htmlType='button' className='flex-grow-1 activateBtn' ghost>{state.is_blocked ? 'Deactivate' : 'Activate'}</Button>
                   </Popconfirm>
                   <Popconfirm
                     title="Archive the user"
@@ -120,7 +120,7 @@ interface StaffDetailInterface {
                     cancelText="No"
                     okButtonProps={{ type: 'primary', danger: true }}
                   >
-                    <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100' danger>Archive</Button>
+                    <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 archiveBtn' danger>Archive</Button>
                   </Popconfirm>
                 </div>
               </div>
