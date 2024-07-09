@@ -33,7 +33,7 @@ import user from "@/assets/images/placeholder.png"
 import Link from 'next/link';
 import { Space } from 'antd';
 import type { TabsProps } from 'antd';
-import { EyeOutlined, DownloadOutlined, UploadOutlined } from '@ant-design/icons'
+import { PlusOutlined, DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 // import { useRouter } from 'next/router';
 // import henceforthApi from '@/utils/henceforthApi';
 // import { GlobalContext } from '@/context/Provider';
@@ -380,7 +380,7 @@ const page = () => {
                                     <Typography.Title level={3} className='m-0 fw-bold'>Meetings</Typography.Title>
                                     <div className='d-flex gap-2'>
                                         {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
-                                        <Button type="primary" style={{ width: 190 }} htmlType="button" size='large' icon={<UploadOutlined />} onClick={add}>Add Meetings</Button>
+                                        <Button type="primary" style={{ width: 190 }} htmlType="button" size='large' icon={<PlusOutlined />} onClick={add}>Add Meeting</Button>
                                         {/* </Upload> */}
                                     </div>
                                 </div>

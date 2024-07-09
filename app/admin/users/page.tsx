@@ -9,7 +9,7 @@ import user from "@/assets/images/placeholder.png"
 import Link from 'next/link';
 import { Space } from 'antd';
 import type { TabsProps } from 'antd';
-import { EyeOutlined, DownloadOutlined, UploadOutlined } from '@ant-design/icons'
+import { EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
 // import { useRouter } from 'next/router';
 // import henceforthApi from '@/utils/henceforthApi';
 // import { GlobalContext } from '@/context/Provider';
@@ -310,7 +310,7 @@ const page = () => {
                                     <Typography.Title level={3} className='m-0 fw-bold'>Users</Typography.Title>
                                     <div className='d-flex gap-2'>
                                         {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
-                                            <Button type="primary" htmlType="button" size='large' icon={<UploadOutlined />} onClick={addUser}>Add User</Button>
+                                            <Button type="primary" htmlType="button" size='large' icon={<PlusOutlined />} onClick={addUser}>Add User</Button>
                                         {/* </Upload> */}
                                     </div>
                                 </div>

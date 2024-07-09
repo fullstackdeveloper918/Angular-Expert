@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import logo from "../../assests/images/logo.png"
+import logo from "../../assests/images/image.png"
 import { Typography, type MenuProps } from 'antd';
 import { CloseOutlined } from '@ant-design/icons'
 import User from "../../assests/images/placeholder.png"
@@ -21,6 +21,7 @@ import {
   DatabaseOutlined,
   AppstoreAddOutlined,
   ShoppingCartOutlined,
+  UsergroupAddOutlined,
   CustomerServiceOutlined,
   GoldOutlined,
   SafetyCertificateOutlined,
@@ -96,7 +97,7 @@ console.log(openKeys,"latestOpenKey");
     //   key: henceofrthEnums.Roles.ARTISTS, view: getItem(<Link href='/artists/page/1?limit=10' className='text-decoration-none'>Meetings</Link>, 'meetings', <UserOutlined style={iconSize} />),
     // },
     {
-        key: henceofrthEnums.Roles.PAGES, view: getItem('Meetings', 'sub1', <BookOutlined style={iconSize} />,
+        key: henceofrthEnums.Roles.PAGES, view: getItem('Meetings', 'sub1',  <UsergroupAddOutlined style={iconSize}/>,
           [
             getItem(<Link href="/admin/meetings" className='text-decoration-none'>Meetings</Link>, 'meetings', <OrderedListOutlined style={iconSize} />),
             getItem(<Link href="/admin/manage_questions" className='text-decoration-none'>Manage Questions for Meeting</Link>, 'meetings', <AppstoreAddOutlined style={iconSize} />),
@@ -104,7 +105,7 @@ console.log(openKeys,"latestOpenKey");
         )
       },
     {
-      key: henceofrthEnums.Roles.ORDER, view: getItem(<Link href='/admin/questionnaire' className='text-decoration-none'>Questionnaire</Link>, 'questionnaire', <span><ShoppingCartOutlined style={iconSize} /></span>),
+      key: henceofrthEnums.Roles.ORDER, view: getItem(<Link href='/admin/questionnaire' className='text-decoration-none'>Questionnaire</Link>, 'questionnaire', <span><BookOutlined style={iconSize} /></span>),
     },
     // {
     //   key: henceofrthEnums.Roles.PAYOUT, view: getItem(<Link href='/payout/page/1?limit=10' className='text-decoration-none'>Payout</Link>, 'payout', <span><DollarOutlined style={iconSize} /></span>),
@@ -218,8 +219,8 @@ let userInfo={
   return (
     <div className='menu-wrapper position-relative'>
       <div className="logo">
-        {/* <Link href="/"><img src={`${!collapsed ? logo.src : favicon.src}`} alt="logo" className='img-fluid' /></Link> */}
-       <h1 className="">DCB</h1>
+        <Link href="/"><img src={`${ logo.src}`} alt="logo" className='img-fluid' /></Link>
+       {/* <h1 className="">DCB</h1> */}
         <div className='position-absolute end-0' style={{ top: '-10px' }}>
           <Button className='d-lg-none p-0' shape='circle' size='small' type='primary' icon={<CloseOutlined style={{ width: '10px' }} />} onClick={() => setCollapsed(true)}></Button>
         </div>

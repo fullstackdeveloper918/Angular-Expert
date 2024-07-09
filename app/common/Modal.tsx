@@ -3,7 +3,7 @@ import { Table, Input, Breadcrumb, Typography, Space, Form, Popover, Popconfirm,
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
 import Icons from './Icons';
-
+import { PlusOutlined } from '@ant-design/icons'
 const { Row, Col, Card, Button, Pagination } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -58,7 +58,7 @@ const CustomModal = (props: any) => {
         <>
             <div className="">
                 {props?.type === "Add" ?
-                    <Button type="primary" htmlType="button" size={'large'} onClick={() => setAddModalOpen(true)}>Add Manage Questions for Meeting</Button> :
+                    <Button type="primary" htmlType="button" size={'large'} onClick={() => setAddModalOpen(true)}><PlusOutlined/>Add New Questions</Button> :
                     <Button type="text" className='px-0 border-0 bg-transparent shadow-none' onClick={() => setAddModalOpen(true)}><Icons.Edit /></Button>}
                 <AntModal
                     centered

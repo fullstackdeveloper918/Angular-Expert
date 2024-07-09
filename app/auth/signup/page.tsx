@@ -1,6 +1,6 @@
 "use client"
 import loginImg from "../../../assests/images/login-bg.png"
-import logo from "../../../assests/images/logo.png"
+import logo from "../../../assests/images/image.png"
 import React, { useContext } from 'react';
 import {
     Form,
@@ -14,6 +14,7 @@ import {
 import dynamic from 'next/dynamic';
 import Icons from "@/app/common/Icons";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 // import Icons from "@/components/Icons";
 // import { lowerCase } from "lodash";
 // import { getFirebaseMessageToken } from "@/utils/firebase";
@@ -85,16 +86,21 @@ const signup = () => {
                     <Col className="gutter-row" xs={22} sm={18} md={12} lg={10} xl={8}>
                         <div className='form-wrapper d-flex justify-content-center align-items-center h-100 bg-white py-5 px-4 px-md-5'>
                             <div>
-                                <div className='logo-wrapper text-center mb-2'>
-                                    {/* <img src={logo.src} alt="login" /> */}
-                                    <h1 className="">DCB</h1>
+                            <div className="logo mb-5">
+                                    <img src={`${logo.src}`} alt="logo" className='img-fluid' />
                                 </div>
                                 
                                 <Form name="normal_login" className="login-form" initialValues={{ remember: false }} onFinish={onFinish} scrollToFirstError>
                                     {/* Email  */}
-                                    <Form.Item name="name" rules={[{ required: true, whitespace: true, message: 'Please enter valid name' }]} >
-                                        <Input size={'large'}  placeholder="Name" />
+                                    <div className="d-flex gap-2">
+
+                                    <Form.Item name="firstname" rules={[{ required: true, whitespace: true, message: 'Please enter valid first name' }]} >
+                                        <Input size={'large'}  placeholder="First Name" />
                                     </Form.Item>
+                                    <Form.Item name="lastname" rules={[{ required: true, whitespace: true, message: 'Please enter valid last name' }]} >
+                                        <Input size={'large'}  placeholder="Last Name" />
+                                    </Form.Item>
+                                    </div>
                                     <Form.Item name="email" rules={[{ required: true, whitespace: true, message: 'Please enter valid email' }]} >
                                         <Input size={'large'} prefix={<Icons.Email />} placeholder="Email" />
                                     </Form.Item>
@@ -102,6 +108,8 @@ const signup = () => {
                                     <Form.Item name="password" rules={[{ required: true, message: 'Please enter password' }]}>
                                         <Input.Password size={'large'} prefix={<Icons.Password />} type="password" placeholder="Password" />
                                     </Form.Item>
+                                    
+
                                     {/* Button  */}
                                     <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" >
                                         Sign Up

@@ -22,6 +22,7 @@ const page=()=> {
   const [form] = Form.useForm();
   const [loading,setLoading]=useState(false)
 
+console.log(form,"form");
 
   const onFinish = async (values: any) => {
     console.log('Received values of form: ', values);
@@ -88,13 +89,16 @@ const page=()=> {
       setLoading(false)
     }
   };
+  const submit=()=>{
+    router.push("/admin/users/add/page2")
+  }
   return (
     <MainLayout>
     <Fragment>
   
     <section>
-      <Row gutter={[20, 20]}>
-        <Col sm={22} md={12} lg={11} xl={10} xxl={9}>
+      <Row justify="center" gutter={[20, 20]}>
+        <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
           <Card className='common-card'>
             <div className='mb-4'>
               <Breadcrumb separator=">">
@@ -104,13 +108,13 @@ const page=()=> {
               </Breadcrumb>
             </div>
             {/* Title  */}
-            <div className='mb-4'>
+            <div className=''>
               <Typography.Title level={3} className='m-0 fw-bold'>Add User</Typography.Title>
             </div>
 
             {/* form  */}
             <div className='card-form-wrapper'>
-              <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical'>
+              <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={submit}>
                 {/* Image  */}
 
                 <Form.Item name='profile_pic'>
@@ -153,10 +157,7 @@ const page=()=> {
                     }}
                     />
                 </Form.Item>
-                {/* Email  */}
-                <Form.Item name="email" rules={[{ required: true, message: 'Please Enter Email' }]} label="Email">
-                  <Input size={'large'} type='email' placeholder="Email" />
-                </Form.Item>
+              
                 <Form.Item name="mobile" rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
                   <Input size={'large'} type="text" minLength={10} maxLength={10} placeholder="Phone No" />
                 </Form.Item>
@@ -165,6 +166,10 @@ const page=()=> {
                 </Form.Item>
                 <Form.Item name="homecity" rules={[{ required: true, message: 'Please Enter Home City' }]} label="Home City">
                   <Input size={'large'} type='homecity' placeholder="Home City" />
+                </Form.Item>
+                  {/* Email  */}
+                  <Form.Item name="email" rules={[{ required: true, message: 'Please Enter Email' }]} label="Email">
+                  <Input size={'large'} type='email' placeholder="Email" />
                 </Form.Item>
                 {/* Password  */}
                 <Form.Item name="password" rules={[{ required: true, message: 'Please Enter Password!' }]} label="Password">
@@ -189,7 +194,7 @@ const page=()=> {
                 </Form.Item>
                 {/* Button  */}
                 <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
-                  Add Staff
+                  Save & Next
                 </Button>
               </Form>
             </div>
