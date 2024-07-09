@@ -136,7 +136,7 @@ const page = () => {
                                         <Breadcrumb.Item><Link href="/admin/users" className='text-decoration-none'>User</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/users/add" className='text-decoration-none'>Add User</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/users/add/page2" className='text-decoration-none'>BUSINESS UPDATE</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item className='text-decoration-none'>GOALS</Breadcrumb.Item>
+                                        {/* <Breadcrumb.Item className='text-decoration-none'>GOALS</Breadcrumb.Item> */}
                                     </Breadcrumb>
                                 </div>
                                 {/* Title  */}
