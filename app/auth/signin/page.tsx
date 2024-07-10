@@ -166,12 +166,10 @@ console.log(values.password,"pass");
                                         Log In
                                     </Button>
                                 </Form>
-                                <Divider plain className="hrdivider"></Divider>
+                                {/* <Divider plain className="hrdivider"></Divider>
                                 <div className="d-flex justify-content-center align-items-baseline">
                                     <span className="mt-2">
-                                        {/* <p className=""> */}
                                         Don't have a account yet?
-                                        {/* </p> */}
                                     </span>
                                     <Link href={"/auth/signup"}>
 
@@ -179,7 +177,7 @@ console.log(values.password,"pass");
                                             Sign Up
                                         </Button>
                                     </Link>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </Col>

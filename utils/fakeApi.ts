@@ -1,5 +1,6 @@
 // fakeApi.ts
 import { areas } from '../jsonFiles/user.json';
+import { data } from '../jsonFiles/meeting.json';
 
 export const fetchAreas = (): Promise<typeof areas> => {
   return new Promise((resolve) => {
@@ -27,4 +28,50 @@ export const searchAreasByName = (name: string): Promise<typeof areas> => {
       resolve(filteredAreas);
     }, 1000); // Simulate network delay
   });
+};
+
+
+export const fetchMeeting = (): Promise<typeof data> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(data);
+    }, 1000); // Simulate network delay
+  });
+};
+
+export const fetchMeetingById = (id: number): Promise<typeof data[0] | undefined> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const area = data.find((a:any) => a.id === id);
+      resolve(area);
+    }, 1000); // Simulate network delay
+  });
+};
+
+export const searchMeetingByName = (name: string): Promise<typeof data> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const filteredAreas = data.filter((area:any) =>
+        area.name.toLowerCase().includes(name.toLowerCase())
+      );
+      resolve(filteredAreas);
+    }, 1000); // Simulate network delay
+  });
+};
+export const deleteMeetingById = (id: number): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const initialLength = data.length;
+            const newData = data.filter((m: any) => m.id !== id);
+
+            if (newData.length < initialLength) {
+                // Update local data (optional if you're using React or similar state management)
+                // Example using React state management
+                // setData(newData);
+                resolve(true); // Meeting deleted successfully
+            } else {
+                reject(new Error(`Meeting with id ${id} not found`));
+            }
+        }, 1000); // Simulate network delay
+    });
 };

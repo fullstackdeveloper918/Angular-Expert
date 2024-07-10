@@ -26,7 +26,7 @@
 // const userName=useSelector((state:any) => state.user.viewItem)
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head';
-import React, { Fragment, ReactNode, useState } from 'react'
+import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 // import MainLayout from '@/layouts/MainLayout';
 import { Table, Input, Breadcrumb, Tabs, Typography, Upload, Badge, Tag, Select, Popconfirm } from 'antd';
 import user from "@/assets/images/placeholder.png"
@@ -43,9 +43,10 @@ import MainLayout from '@/app/layouts/page';
 import { useRouter } from 'next/navigation';
 import FilterSelect from '@/app/common/FilterSelect';
 import Icons from '@/app/common/Icons';
+import { deleteMeetingById, fetchMeeting, searchMeetingByName } from '@/utils/fakeApi';
 // import ExportFile from '@/components/ExportFile';
 // import s3bucket from '@/utils/s3bucket';
-
+import dayjs from "dayjs"
 const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -71,7 +72,8 @@ const page = () => {
     })
     const [loading, setLoading] = React.useState(false)
     const [exportModal, setExportModal] = React.useState(false);
-
+    const [areas, setAreas] = useState<any>([]);
+    const [searchTerm, setSearchTerm] = useState('')
     //   const onChangeRouter = (key: string, value: string) => {
     //     router.replace({
     //       query: { ...router.query, [key]: value }
@@ -205,29 +207,29 @@ const page = () => {
         }
 
     }
-    const dataSource = [
+    const dataSource1 = [
         {
             key: '1',
             meeting: "abc",
             start: '08:20 pm 15-07-2024',
             end: "06:20 pm 18-07-2024",
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-            <li>
-                <Link href={`/admin/meetings/edit`} >
-                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                </Link>
-            </li>
-            <li>
-                <Popconfirm
-                    title="Delete"
-                    description="Are you sure you want to delete ?"
-                    onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                <li>
+                    <Link href={`/admin/meetings/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                >
-                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                </Popconfirm>
-            </li>
-        </ul>
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
         },
         {
             key: '2',
@@ -235,22 +237,22 @@ const page = () => {
             start: '08:20 pm 15-07-2024',
             end: "06:20 pm 18-07-2024",
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-            <li>
-                <Link href={`/admin/meetings/edit`} >
-                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                </Link>
-            </li>
-            <li>
-                <Popconfirm
-                    title="Delete"
-                    description="Are you sure you want to delete ?"
-                    onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                <li>
+                    <Link href={`/admin/meetings/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                >
-                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                </Popconfirm>
-            </li>
-        </ul>
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
         },
         {
             key: '3',
@@ -258,45 +260,45 @@ const page = () => {
             start: '08:20 pm 15-07-2024',
             end: "06:20 pm 18-07-2024",
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-            <li>
-                <Link href={`/admin/meetings/edit`} >
-                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                </Link>
-            </li>
-            <li>
-                <Popconfirm
-                    title="Delete"
-                    description="Are you sure you want to delete ?"
-                    onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                <li>
+                    <Link href={`/admin/meetings/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                >
-                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                </Popconfirm>
-            </li>
-        </ul>
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
         },
         {
             key: '4',
             meeting: "abc",
             start: '08:20 pm 15-07-2024',
             end: "06:20 pm 18-07-2024",
-            action:<ul className='list-unstyled mb-0 gap-3 d-flex'>
-            <li>
-                <Link href={`/admin/meetings/edit`} >
-                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                </Link>
-            </li>
-            <li>
-                <Popconfirm
-                    title="Delete"
-                    description="Are you sure you want to delete ?"
-                    onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                <li>
+                    <Link href={`/admin/meetings/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                >
-                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                </Popconfirm>
-            </li>
-        </ul>
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
         },
         {
             key: '5',
@@ -304,24 +306,48 @@ const page = () => {
             start: '08:20 pm 15-07-2024',
             end: "06:20 pm 18-07-2024",
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-            <li>
-                <Link href={`/admin/meetings/edit`} >
-                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                </Link>
-            </li>
-            <li>
-                <Popconfirm
-                    title="Delete"
-                    description="Are you sure you want to delete ?"
-                    onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                <li>
+                    <Link href={`/admin/meetings/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                >
-                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                </Popconfirm>
-            </li>
-        </ul>
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
         },
     ];
+    const dataSource = areas?.map((res: any, index: number) => {
+        return {
+            key: index+1,
+            meeting:res?.meeting_name,
+            start: dayjs(res?.start_time).format('h A DD-MM-YYYY'),
+            end: dayjs(res?.end_time).format('h A DD-MM-YYYY'),
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                <li>
+                    <Link href={`/admin/meetings/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDeleteMeeting(res.id) }}
+                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
+        }})
     const columns = [
         {
             title: 'Key',
@@ -349,12 +375,45 @@ const page = () => {
             key: 'action',
         },
     ];
+
+
+    useEffect(() => {
+        fetchMeeting().then((data) => {
+            setAreas(data);
+        });
+    }, []);
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+
+        if (value.trim() === '') {
+            fetchMeeting().then((data) => {
+                setAreas(data);
+            });
+        } else {
+            searchMeetingByName(value).then((data) => {
+                setAreas(data);
+            });
+        }
+    };
+
+    console.log(areas, "hhhhhh");
+    const handleDeleteMeeting = async (id: number) => {
+        try {
+            await deleteMeetingById(id);
+            const updatedMeetings = areas.filter((m:any) => m.id !== id);
+            setAreas(updatedMeetings); // Update state or local data
+            alert(`Meeting with id ${id} deleted successfully.`);
+        } catch (error:any) {
+            alert(error.message); // Handle error if meeting is not found
+        }
+    };
     const handleChange = (value: string) => {
         console.log(`selected ${value}`);
     };
 
 
-    const add=()=>{
+    const add = () => {
         router.push("/admin/meetings/add")
     }
     return (
@@ -386,7 +445,8 @@ const page = () => {
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 d-flex gap-3'>
-                                    <Search size='large' placeholder="Search by Meeting Name or year" enterButton />
+                                    <Search size='large' placeholder="Search by Meeting Name or year" enterButton value={searchTerm}
+                                        onChange={handleSearch} />
                                     {/* <Button type="primary" size='large' htmlType="button"  icon={<DownloadOutlined />} onClick={() => setExportModal(true)}>Export</Button> */}
                                     {/* <Space wrap> */}
                                     <FilterSelect />
