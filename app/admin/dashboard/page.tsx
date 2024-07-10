@@ -349,9 +349,9 @@ const Home: Page = (props: any) => {
               {/* Tabs  */}
               <div className='tabs-wrapper'>
 
-              <Table dataSource={dataSource} columns={columns} />
+              <Table dataSource={dataSource} columns={columns} pagination={false}/>
               </div>
-              <div className=' justify-content-center'>
+              <div className=' justify-content-center mt-4' style={{paddingLeft:"500px"}}>
               <Button className='text-center'> View All</Button>
 
               {/* <Table dataSource={dataSource} columns={columns} />; */}
