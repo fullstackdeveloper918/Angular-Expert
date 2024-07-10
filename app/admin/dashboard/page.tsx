@@ -362,7 +362,7 @@ const Home: Page = (props: any) => {
         </Head>
         <section>
           {/* <div className="container-fluid"> */}
-          <Row gutter={[20, 20]} className="mb-4">
+          <Row gutter={[20, 20]} className="mb-4 ">
             {DashboardData.map((data: any, index: number) => {
               return (
                 <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
@@ -381,7 +381,7 @@ const Home: Page = (props: any) => {
               )
             })}
           </Row>
-          <Row gutter={[20, 20]}>
+          <Row gutter={[20, 20]} className='dashboradTable'>
 
 
           <Col  sm={24} md={24} xl={12}>
@@ -390,7 +390,11 @@ const Home: Page = (props: any) => {
                 {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                   <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates</Typography.Title>
+               
+                  <Button className='text-center blackViewBtn'> View All</Button>
 
+                  {/* <Table dataSource={dataSource} columns={columns} />; */}
+                
                 </div>
                 {/* Search  */}
 
@@ -399,11 +403,7 @@ const Home: Page = (props: any) => {
 
                   <Table dataSource={dataSource} columns={columns} pagination={false} />
                 </div>
-                <div className=' justify-content-center mt-4 d-flex'>
-                  <Button className='text-center blackViewBtn'> View All</Button>
-
-                  {/* <Table dataSource={dataSource} columns={columns} />; */}
-                </div>
+                
                 {/* Pagination  */}
 
               </Card>
@@ -415,6 +415,11 @@ const Home: Page = (props: any) => {
                 {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                   <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates</Typography.Title>
+               
+                  <Button className='text-center blackViewBtn'> View All</Button>
+
+                  {/* <Table dataSource={dataSource} columns={columns} />; */}
+               
 
                 </div>
                 {/* Search  */}
@@ -424,11 +429,7 @@ const Home: Page = (props: any) => {
 
                   <Table dataSource={dataSource} columns={columns} pagination={false} />
                 </div>
-                <div className=' justify-content-center mt-4 d-flex'>
-                  <Button className='text-center blackViewBtn'> View All</Button>
-
-                  {/* <Table dataSource={dataSource} columns={columns} />; */}
-                </div>
+                
                 {/* Pagination  */}
 
               </Card>
@@ -440,7 +441,7 @@ const Home: Page = (props: any) => {
                 {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                   <Typography.Title level={4} className='m-0 fw-bold'>Recent Users</Typography.Title>
-
+                  <Button className='text-center blackViewBtn'> View All</Button>
                 </div>
                 {/* Search  */}
 
@@ -449,11 +450,11 @@ const Home: Page = (props: any) => {
 
                   <Table dataSource={dataSource} columns={columns} pagination={false} />
                 </div>
-                <div className=' justify-content-center mt-4 d-flex'>
-                  <Button className='text-center blackViewBtn'> View All</Button>
+                {/* <div className=' justify-content-center mt-4 d-flex'> */}
+                 
 
                   {/* <Table dataSource={dataSource} columns={columns} />; */}
-                </div>
+                {/* </div> */}
                 {/* Pagination  */}
 
               </Card>

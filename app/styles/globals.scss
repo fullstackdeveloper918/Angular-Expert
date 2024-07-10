@@ -191,10 +191,8 @@ a.forgotPassword {
   font-size: 15px;
   margin-bottom: 12px;
 }
-.ant-card .ant-card-body {
-  overflow: hidden;
-  overflow-x: scroll;
-  scrollbar-width: thin;
+.dashboradTable .ant-card .ant-card-body {
+  padding: 6px 0 !important;
 }
 @media screen and (max-width:991x) {
   .ant-card .ant-card-body {
