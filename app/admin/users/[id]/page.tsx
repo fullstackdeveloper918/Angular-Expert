@@ -72,6 +72,7 @@ interface StaffDetailInterface {
                   <Avatar size={120} src={User.src}>{state?.firstname?.charAt(0)?.toUpperCase()}</Avatar>
                 </div>
                 <Divider plain></Divider> */}
+                
                 {/* Detail  */}
                 <ul className='list-unstyled my-4 mb-4'>
                   <li className='mb-3'><Typography.Text >Name:</Typography.Text > <Typography.Text className='ms-1 text-capitalize'>{state?.firstname ? `${state?.firstname} ${state?.lastname}` : 'N/A'}</Typography.Text ></li>
