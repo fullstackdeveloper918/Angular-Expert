@@ -106,7 +106,6 @@ const page = () => {
                                         <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item><Link href="/admin/users" className='text-decoration-none'>User</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/users/add" className='text-decoration-none'>Add User</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item className='text-decoration-none'>BUSINESS UPDATE</Breadcrumb.Item>
                                     </Breadcrumb>
                                 </div>
                                 {/* Title  */}
@@ -117,7 +116,7 @@ const page = () => {
                                 {/* form  */}
                                 <div className='card-form-wrapper'>
                                     <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={submit}>
-                                      
+
 
 
                                         {/* First Name  */}
@@ -181,7 +180,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
 
 
                                         <Form.Item name="position" rules={[{ required: true, message: 'Please Fill Field' }]} label="How can the Craftsmen aid or support you with these challenges?">
-                                        <TextArea size={'large'} placeholder="Enter..."
+                                            <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
                                                         e.preventDefault();
