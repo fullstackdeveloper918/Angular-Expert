@@ -365,7 +365,7 @@ const Home: Page = (props: any) => {
           <Row gutter={[20, 20]} className="mb-4">
             {DashboardData.map((data: any, index: number) => {
               return (
-                <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={4} className="gutter-row" key={index}>
+                <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
                   <Link className='text-decoration-none' href={data.link}>
                     <Card className='dashboard-widget-card text-center h-100 border-0' style={{ background: data.cardBackground }} >
                       <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
@@ -382,7 +382,59 @@ const Home: Page = (props: any) => {
             })}
           </Row>
           <Row gutter={[20, 20]}>
-            <Col span={24}>
+
+
+          <Col  sm={24} md={24} xl={12}>
+              <Card className='common-card'>
+
+                {/* title  */}
+                <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
+                  <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates</Typography.Title>
+
+                </div>
+                {/* Search  */}
+
+                {/* Tabs  */}
+                <div className='tabs-wrapper'>
+
+                  <Table dataSource={dataSource} columns={columns} pagination={false} />
+                </div>
+                <div className=' justify-content-center mt-4 d-flex'>
+                  <Button className='text-center blackViewBtn'> View All</Button>
+
+                  {/* <Table dataSource={dataSource} columns={columns} />; */}
+                </div>
+                {/* Pagination  */}
+
+              </Card>
+            </Col>
+
+            <Col   sm={24} md={24} xl={12}>
+              <Card className='common-card'>
+
+                {/* title  */}
+                <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
+                  <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates</Typography.Title>
+
+                </div>
+                {/* Search  */}
+
+                {/* Tabs  */}
+                <div className='tabs-wrapper'>
+
+                  <Table dataSource={dataSource} columns={columns} pagination={false} />
+                </div>
+                <div className=' justify-content-center mt-4 d-flex'>
+                  <Button className='text-center blackViewBtn'> View All</Button>
+
+                  {/* <Table dataSource={dataSource} columns={columns} />; */}
+                </div>
+                {/* Pagination  */}
+
+              </Card>
+            </Col>
+
+            <Col span={24} >
               <Card className='common-card'>
 
                 {/* title  */}
@@ -406,6 +458,7 @@ const Home: Page = (props: any) => {
 
               </Card>
             </Col>
+          
           </Row>
           {/*  Graphs   */}
           {/* {GraphType.map((res)=><DashboardGraph key={res.heading} {...res}/>)} */}

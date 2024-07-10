@@ -128,13 +128,13 @@ console.log(values.password,"pass");
                     {error && <p>Error: {error}</p>}
                 </div> */}
                 <Row justify="center">
-                    <Col className="gutter-row d-none d-md-block" xs={0} sm={6} md={12} lg={10} xl={8}>
+                    {/* <Col className="gutter-row d-none d-md-block" xs={0} sm={6} md={12} lg={10} xl={8}>
                         <div className='image-wrapper '>
                             <img src={loginImg.src} alt="login" style={{ width: "100%" }} />
-                            {/* <h2 className="">D</h2> */}
+                           
                         </div>
-                    </Col>
-                    <Col className="gutter-row" xs={22} sm={18} md={12} lg={10} xl={8}>
+                    </Col> */}
+                    <Col className="gutter-row" xs={22} sm={18} md={12} lg={10} xl={10}>
                         <div className='form-wrapper d-flex justify-content-center align-items-center h-100 bg-white py-5 px-4 px-md-5'>
                             <div>
                                 {/* <div className='logo-wrapper text-center mb-5'>
@@ -148,14 +148,16 @@ console.log(values.password,"pass");
                                 <Form name="normal_login" className="login-form" initialValues={{ remember: false }} onFinish={onFinish} scrollToFirstError>
                                     {/* Email  */}
                                     <Form.Item name="email" rules={[{ required: true, whitespace: true, message: 'Please enter valid email' }]} >
+                                        <label className=" labelSignup">Email</label>
                                         <Input size={'large'} prefix={<i className="fa-regular fa-envelope"></i>} placeholder="Email" />
                                     </Form.Item>
                                     {/* Password  */}
                                     <Form.Item name="password" rules={[{ message: 'Please enter password' }]}>
+                                    <label className="labelSignup">Password</label>
                                         <Input.Password size={'large'} prefix={<i className="fa-solid fa-lock"></i>} type="password" placeholder="Password" />
                                     </Form.Item>
-                                        <div className="">
-                                            <Link href={"/auth/forgot_password"} className="forgotPassword">
+                                        <div className="text-end">
+                                            <Link href={"/auth/forgot-password"} className="forgotPassword">
                                                 Forgot your password?
                                             </Link>
                                         </div>

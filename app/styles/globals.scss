@@ -175,3 +175,41 @@ a.forgotPassword {
   border: 0 !important;
   margin: 10px 0 !important;
 }
+
+.auth-pages .form-wrapper {
+  border-radius: 40px;
+}
+
+:where(.css-dev-only-do-not-override-f7vrd6).ant-input-affix-wrapper-lg {
+  padding: 7px 10px;
+}
+:where(.css-dev-only-do-not-override-f7vrd6).ant-input-affix-wrapper .ant-input-prefix {
+  margin-inline-end: 8px;
+}
+
+.labelSignup{
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+.ant-card .ant-card-body {
+  overflow: hidden;
+  overflow-x: scroll;
+  scrollbar-width: thin;
+}
+@media screen and (max-width:991x) {
+  .ant-card .ant-card-body {
+    overflow: hidden;
+    overflow-x: scroll;
+    scrollbar-width: thin;
+}
+}
+@media screen and (max-width:767px) {
+  .flexWrapper{
+    flex-wrap: wrap;
+    gap: 0 !important;
+  }
+  .flexWrapper .ant-form-item{
+    width: 100%;
+  }
+
+}

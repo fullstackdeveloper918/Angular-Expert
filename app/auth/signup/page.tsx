@@ -78,12 +78,12 @@ const signup = () => {
         <section className='auth-pages d-flex align-items-center h-100'>
             <div className="container">
                 <Row justify="center">
-                    <Col className="gutter-row d-none d-md-block" xs={0} sm={6} md={12} lg={10} xl={8}>
+                    {/* <Col className="gutter-row d-none d-md-block" xs={0} sm={6} md={12} lg={10} xl={8}>
                         <div className='image-wrapper '>
                             <img src={loginImg.src} alt="login" style={{ width: "100%" }} />
                         </div>
-                    </Col>
-                    <Col className="gutter-row" xs={22} sm={18} md={12} lg={10} xl={8}>
+                    </Col> */}
+                    <Col className="gutter-row" xs={23} sm={21} md={19} lg={12} xl={10}>
                         <div className='form-wrapper d-flex justify-content-center align-items-center h-100 bg-white py-5 px-4 px-md-5'>
                             <div>
                             <div className="logo mb-5">
@@ -92,20 +92,24 @@ const signup = () => {
                                 
                                 <Form name="normal_login" className="login-form" initialValues={{ remember: false }} onFinish={onFinish} scrollToFirstError>
                                     {/* Email  */}
-                                    {/* <div className="d-flex gap-2"> */}
+                                    <div className="d-flex gap-2 flexWrapper">
 
-                                    <Form.Item name="firstname" rules={[{ required: true, whitespace: true, message: 'Please enter valid first name' }]} >
+                                    <Form.Item name="firstname" className="col-md-6 col-sm-12 col-lg-6" rules={[{ required: true, whitespace: true, message: 'Please enter valid first name' }]} >
+                                    <label className=" labelSignup">First Name</label>
                                         <Input size={'large'}  prefix={<i className="fa-regular fa-user"></i>} placeholder="First Name" />
                                     </Form.Item>
-                                    <Form.Item name="lastname" rules={[{ required: true, whitespace: true, message: 'Please enter valid last name' }]} >
+                                    <Form.Item name="lastname" className="col-md-6 col-sm-12 col-lg-6" rules={[{ required: true, whitespace: true, message: 'Please enter valid last name' }]} >
+                                    <label className=" labelSignup">Last Name</label>
                                         <Input size={'large'}  prefix={<i className="fa-regular fa-user"></i>}  placeholder="Last Name" />
                                     </Form.Item>
-                                    {/* </div> */}
+                                    </div>
                                     <Form.Item name="email" rules={[{ required: true, whitespace: true, message: 'Please enter valid email' }]} >
+                                    <label className=" labelSignup">Email</label>
                                         <Input size={'large'} prefix={<i className="fa-regular fa-envelope"></i>} placeholder="Email" />
                                     </Form.Item>
                                     {/* Password  */}
                                     <Form.Item name="password" rules={[{ required: true, message: 'Please enter password' }]}>
+                                    <label className=" labelSignup">Password</label>
                                         <Input.Password size={'large'} prefix={<i className="fa-solid fa-lock"></i>} type="password" placeholder="Password" />
                                     </Form.Item>
                                     
