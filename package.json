@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start:api": "node server.js",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -17,17 +18,21 @@
     "antd": "^5.7.0",
     "antd-img-crop": "^4.12.2",
     "firebase": "^10.12.3",
+    "json-server": "^1.0.0-beta.1",
     "next": "14.2.4",
     "nookies": "^2.5.2",
     "react": "^18",
     "react-dom": "^18",
     "react-redux": "^9.1.2",
-    "sass": "^1.77.6"
+    "sass": "^1.77.6",
+    "superagent": "^9.0.2",
+    "superagent-promise": "^1.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/superagent": "^8.1.7",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "postcss": "^8",

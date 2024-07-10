@@ -1,0 +1,95 @@
+{
+    "areas": [
+      {
+        "name": "Mike",  
+        "company":"Abc solutions",
+        "email":"mike@gmail.com",
+        "phone":"7878787878",
+        "position":"Manager",
+        "home":"Los Angeles",
+        "id": 1
+      },
+      {
+        "id": 2,
+        "name": "Liam",  
+        "company":"Xyz solutions",
+        "email":"liam@gmail.com",
+        "phone":"9898989898",
+        "position":"Hr",
+        "home":"Chicago"
+      },
+      {
+        "id":"3",
+       "name": "Noah",  
+        "company":"Noah solutions",
+        "email":"noah@gmail.com",
+        "phone":"9494949494",
+        "position":"Chief executive officer",
+        "home":"Houston"
+      },
+      {
+        "id":"4",
+       "name": "Oliver",  
+        "company":"Oliver solutions",
+        "email":"oliver@gmail.com",
+        "phone":"4545454545",
+        "position":"Chief financial officer ",
+        "home":"Phoenix"
+      },
+      {
+        "id":"5",
+       "name": "James",  
+        "company":"James solutions",
+        "email":"james@gmail.com",
+        "phone":"6565656565",
+        "position":"Business analyst",
+        "home":"Philadelphia"
+      },
+      {
+        "id":"6",
+       "name": "Elijah",  
+        "company":"Elijah solutions",
+        "email":"elijah@gmail.com",
+        "phone":"6161616161",
+        "position":"Software engineer",
+        "home":"California"
+      },
+      {
+        "id":"7",
+       "name": "Mateo",  
+        "company":"Mateo solutions",
+        "email":"mateo@gmail.com",
+        "phone":"2121212121",
+        "position":"Administrative assistant",
+        "home":"Denver"
+      },
+      {
+        "id":"8",
+       "name": "Theodore",  
+        "company":"Theodore solutions",
+        "email":"theodore@gmail.com",
+        "phone":"3232323232",
+        "position":"Marketing manager",
+        "home":"Columbus"
+      },
+      {
+        "id":"9",
+       "name": "Henry",  
+        "company":"Henry solutions",
+        "email":"henry@gmail.com",
+        "phone":"7548789658",
+        "position":"Information technology manager",
+        "home":"El Paso"
+      },
+      {
+        "id":"10",
+       "name": "William",  
+        "company":"William solutions",
+        "email":"william@gmail.com",
+        "phone":"9787878787",
+        "position":"Chief marketing officer",
+        "home":"Boston"
+      }
+    ]
+  }
+  

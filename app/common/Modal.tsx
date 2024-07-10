@@ -59,7 +59,7 @@ const CustomModal = (props: any) => {
             <div className="">
                 {props?.type === "Add" ?
                     <Button type="primary" htmlType="button" size={'large'} onClick={() => setAddModalOpen(true)}><PlusOutlined/>Add New Questions</Button> :
-                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none' onClick={() => setAddModalOpen(true)}><Icons.Edit /></Button>}
+                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none' onClick={() => setAddModalOpen(true)}><i className="fa-solid fa-pen-to-square"></i></Button>}
                 <AntModal
                     centered
                     title={`${props?.type} Questions for Meeting`}

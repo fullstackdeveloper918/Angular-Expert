@@ -214,7 +214,7 @@ const page = () => {
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
             <li>
                 <Link href={`/admin/meetings/edit`} >
-                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><Icons.Edit /></Button>
+                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
                 </Link>
             </li>
             <li>
@@ -224,7 +224,7 @@ const page = () => {
                     onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                 >
-                    <Button type="text" danger htmlType='button' className='px-0' ><Icons.Delete /></Button>
+                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                 </Popconfirm>
             </li>
         </ul>
@@ -237,7 +237,7 @@ const page = () => {
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
             <li>
                 <Link href={`/admin/meetings/edit`} >
-                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><Icons.Edit /></Button>
+                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
                 </Link>
             </li>
             <li>
@@ -247,7 +247,7 @@ const page = () => {
                     onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                 >
-                    <Button type="text" danger htmlType='button' className='px-0' ><Icons.Delete /></Button>
+                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                 </Popconfirm>
             </li>
         </ul>
@@ -260,7 +260,7 @@ const page = () => {
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
             <li>
                 <Link href={`/admin/meetings/edit`} >
-                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><Icons.Edit /></Button>
+                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
                 </Link>
             </li>
             <li>
@@ -270,7 +270,7 @@ const page = () => {
                     onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                 >
-                    <Button type="text" danger htmlType='button' className='px-0' ><Icons.Delete /></Button>
+                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                 </Popconfirm>
             </li>
         </ul>
@@ -283,7 +283,7 @@ const page = () => {
             action:<ul className='list-unstyled mb-0 gap-3 d-flex'>
             <li>
                 <Link href={`/admin/meetings/edit`} >
-                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><Icons.Edit /></Button>
+                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
                 </Link>
             </li>
             <li>
@@ -293,7 +293,7 @@ const page = () => {
                     onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                 >
-                    <Button type="text" danger htmlType='button' className='px-0' ><Icons.Delete /></Button>
+                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                 </Popconfirm>
             </li>
         </ul>
@@ -306,7 +306,7 @@ const page = () => {
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
             <li>
                 <Link href={`/admin/meetings/edit`} >
-                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><Icons.Edit /></Button>
+                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
                 </Link>
             </li>
             <li>
@@ -316,7 +316,7 @@ const page = () => {
                     onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                 >
-                    <Button type="text" danger htmlType='button' className='px-0' ><Icons.Delete /></Button>
+                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                 </Popconfirm>
             </li>
         </ul>

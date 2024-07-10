@@ -1,0 +1,35 @@
+{
+    "areas": [
+      {
+        "name": "Packaging",
+        "id": 1,
+        "usersSize": 10,
+        "users": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "workgroupsSize": 3,
+        "workgroups": [1, 2, 3],
+        "assetsSize": 8,
+        "assets": ["1", "2", "3", "4", "5", "6", "7", "8"]
+      },
+      {
+        "name": "Printing",
+        "id": 2,
+        "usersSize": 10,
+        "users": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "workgroupsSize": 3,
+        "workgroups": [1, 2, 3],
+        "assetsSize": 8,
+        "assets": ["1", "2", "3", "4", "5", "6", "7", "8"]
+      },
+      {
+        "name": "Maintenance",
+        "id": 12,
+        "usersSize": 10,
+        "users": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "workgroupsSize": 3,
+        "workgroups": [1, 2, 3],
+        "assetsSize": 8,
+        "assets": ["1", "2", "3", "4", "5", "6", "7", "8"]
+      }
+    ]
+  }
+  

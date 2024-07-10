@@ -98,7 +98,7 @@ const page = () => {
 
                 <section>
                     <Row gutter={[20, 20]}>
-                        <Col sm={22} md={12} lg={11} xl={10} xxl={9}>
+                        <Col sm={22} md={12} lg={11} xl={10} xxl={9} className='mx-auto'>
                             <Card className='common-card'>
                                 <div className='mb-4'>
                                     <Breadcrumb separator=">">

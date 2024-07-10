@@ -2,7 +2,7 @@
 // const userName=useSelector((state:any) => state.user.viewItem)
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head';
-import React, { Fragment, ReactNode, useState } from 'react'
+import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 // import MainLayout from '@/layouts/MainLayout';
 import { Table, Input, Breadcrumb, Tabs, Typography, Upload, Badge, Tag, Select } from 'antd';
 import user from "@/assets/images/placeholder.png"
@@ -17,6 +17,7 @@ import { EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
 import dynamic from 'next/dynamic';
 import MainLayout from '@/app/layouts/page';
 import { useRouter } from 'next/navigation';
+import { fetchAreas, searchAreasByName } from '@/utils/fakeApi';
 // import ExportFile from '@/components/ExportFile';
 // import s3bucket from '@/utils/s3bucket';
 
@@ -45,7 +46,9 @@ const page = () => {
     })
     const [loading, setLoading] = React.useState(false)
     const [exportModal, setExportModal] = React.useState(false);
-
+    const [areas, setAreas] = useState<any>([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    // const [graphType, setGraphType] = React.useState(henceofrthEnums.G
     //   const onChangeRouter = (key: string, value: string) => {
     //     router.replace({
     //       query: { ...router.query, [key]: value }
@@ -166,78 +169,21 @@ const page = () => {
     //       setLoading(false)
     //     }
     //   }
-    const dataSource = [
-        {
-            key: '1',
-            name: 'Mike',
-            company:"xyz solutions",
-            email:"example@gmail.com",
-            phone:"76785678***",
-            position:"ABC",
-            city:"New York",
-            age: 32,
-            address: '10 Downing Street',
-            action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
+    const dataSource = areas?.map((res: any, index: number) => {
+        return {
+          key: index+1,
+          name: res?.name,
+          company: res?.company,
+          email: res?.email,
+          phone: res?.phone,
+          position: res?.position,
+          city: res?.home,
+          action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+            <Link href={`/admin/users/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
           </ul>
-        },
-        {
-            key: '2',
-            name: 'John',
-            company:"xyz solutions",
-            email:"example@gmail.com",
-            phone:"76785678***",
-            position:"ABC",
-            city:"New York",
-            age: 42,
-            address: '10 Downing Street',
-            action:<ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
-          </ul>
-        },
-        {
-            key: '3',
-            name: 'John',
-            company:"xyz solutions",
-            email:"example@gmail.com",
-            phone:"76785678***",
-            position:"ABC",
-            city:"New York",
-            age: 42,
-            address: '10 Downing Street',
-            action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
-          </ul>
-        },
-        {
-            key: '4',
-            name: 'John',
-            company:"xyz solutions",
-            email:"example@gmail.com",
-            phone:"76785678***",
-            position:"ABC",
-            city:"New York",
-            age: 42,
-            address: '10 Downing Street',
-            action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
-          </ul>
-        },
-        {
-            key: '5',
-            name: 'John',
-            company:"xyz solutions",
-            email:"example@gmail.com",
-            phone:"76785678***",
-            position:"ABC",
-            city:"New York",
-            age: 42,
-            address: '10 Downing Street',
-            action:<ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/view`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
-          </ul>
-        },
-    ];
+        }
+      }
+      );
     const columns = [
         {
             title: 'Key',
@@ -280,6 +226,27 @@ const page = () => {
             key: 'action',
         },
     ];
+
+
+    useEffect(() => {
+        fetchAreas().then((data) => {
+          setAreas(data);
+        });
+      }, []);
+      const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+    
+        if (value.trim() === '') {
+          fetchAreas().then((data) => {
+            setAreas(data);
+          });
+        } else {
+          searchAreasByName(value).then((data) => {
+            setAreas(data);
+          });
+        }
+      };
     const handleChange = (value: string) => {
         console.log(`selected ${value}`);
     };
@@ -316,7 +283,8 @@ const page = () => {
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 '>
-                                    <Search size='large' placeholder="Search by Name & Email" enterButton />
+                                    <Search size='large' placeholder="Search by Name & Email" enterButton  value={searchTerm}
+        onChange={handleSearch}/>
                                     {/* <Button type="primary" size='large' htmlType="button"  icon={<DownloadOutlined />} onClick={() => setExportModal(true)}>Export</Button> */}
                                     {/* <Space wrap> */}
                                     {/* <Select
