@@ -48,20 +48,16 @@ const page = () => {
 console.log(values.email,"email");
 console.log(values.password,"pass");
 
-        // const fcmTokenId = await getFirebaseMessageToken()
-        // console.log("fcmTokenId----", fcmTokenId)
         let items = {
             email: String(values.email).toLowerCase(),
             password: values.password,
         }
-        // if (fcmTokenId.tokenId) {
-        //     items = { ...items, ...{ fcm_token: fcmTokenId.tokenId } }
-        // }
+
         try {
             // setLoading(true)
             const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
-            console.log( state,"userCredential");
             setState(userCredential)
+            console.log( state,"userCredential");
             // const Token= await userCredential.user
             setState(userCredential)
             const idToken = await userCredential.user.getIdToken();
@@ -128,12 +124,12 @@ console.log(values.password,"pass");
                     {error && <p>Error: {error}</p>}
                 </div> */}
                 <Row justify="center">
-                    {/* <Col className="gutter-row d-none d-md-block" xs={0} sm={6} md={12} lg={10} xl={8}>
+                    <Col className="gutter-row d-none d-md-block" xs={0} sm={6} md={12} lg={10} xl={8}>
                         <div className='image-wrapper '>
                             <img src={loginImg.src} alt="login" style={{ width: "100%" }} />
                            
                         </div>
-                    </Col> */}
+                    </Col>
                     <Col className="gutter-row" xs={22} sm={18} md={12} lg={10} xl={10}>
                         <div className='form-wrapper d-flex justify-content-center align-items-center h-100 bg-white py-5 px-4 px-md-5'>
                             <div>
@@ -146,14 +142,13 @@ console.log(values.password,"pass");
 
                                 </div>
                                 <Form name="normal_login" className="login-form" initialValues={{ remember: false }} onFinish={onFinish} scrollToFirstError>
-                                    {/* Email  */}
-                                    <Form.Item name="email" rules={[{ required: true, whitespace: true, message: 'Please enter valid email' }]} >
-                                        <label className=" labelSignup">Email</label>
+                                    <Form.Item name="email"  >
+                                        {/* <label className=" labelSignup">Email</label> */}
                                         <Input size={'large'} prefix={<i className="fa-regular fa-envelope"></i>} placeholder="Email" />
                                     </Form.Item>
                                     {/* Password  */}
                                     <Form.Item name="password" rules={[{ message: 'Please enter password' }]}>
-                                    <label className="labelSignup">Password</label>
+                                    {/* <label className="labelSignup">Password</label> */}
                                         <Input.Password size={'large'} prefix={<i className="fa-solid fa-lock"></i>} type="password" placeholder="Password" />
                                     </Form.Item>
                                         <div className="text-end">

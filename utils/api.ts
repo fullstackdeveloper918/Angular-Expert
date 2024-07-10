@@ -2,7 +2,7 @@ import _superagent, { search } from "superagent";
 const SuperagentPromise = require('superagent-promise');
 const superagent = SuperagentPromise(_superagent, global.Promise);
 
-const API_ROOT = 'http://localhost:3001/';
+const API_ROOT = 'https://frontend.goaideme.com/';
 
 const BUCKET_ROOT = `https://shared2.fra1.digitaloceanspaces.com/shared2/`;
 
@@ -47,7 +47,9 @@ const Auth = {
     requests.post('admin/users/login_as_user', info),
   logout: () =>
     requests.put('admin/logout', {}),
-  changePassword: (info: any) =>
+  forgotPassword: (info: any) =>
+    requests.post('forgot-password', info),
+  updatePassword: (info: any) =>
     requests.put('change-password', info),
   profile: () =>
     requests.get(`profile`),

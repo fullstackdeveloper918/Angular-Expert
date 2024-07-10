@@ -13,16 +13,17 @@ import {
 // import { setCookie } from 'nookies';
 import dynamic from 'next/dynamic';
 import Icons from "@/app/common/Icons";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import { setCookie } from "nookies";
 import api from "@/utils/api";
+import axios from "axios";
 // import Icons from "@/components/Icons";
 // import { lowerCase } from "lodash";
 // import { getFirebaseMessageToken } from "@/utils/firebase";
-import axios from "axios"
+
 const { Row, Col, Button, Divider } = {
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
@@ -36,6 +37,9 @@ interface User {
 const page = () => {
     const router = useRouter()
     // const { loading, setLoading, Toast, setUserInfo } = React.useContext(GlobalContext)
+    const params=useParams()
+    console.log(params,"kkkk");
+    
     const [rememberMe, setRememberMe] = React.useState<any>(false)
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -50,10 +54,8 @@ const page = () => {
     //         link: `auth/update_password?${values.email}`
     //     };
     //     try {
-
     //         setLoading(true)
     //         let apiRes = await api.Auth.forgotPassword(items);
-    //         console.log('try');
     //         console.log("API response", apiRes);
     //     } catch (error: any) {
     //         console.log("login error message", error);
@@ -61,13 +63,13 @@ const page = () => {
     //         setLoading(false)
     //     }
     // };
-    const onFinish = async (values: any) => {
+ const onFinish = async (values: any) => {
         let items = {
-            to: values.email,
-            link: `http://localhost:3000/auth/update_password?${values.email}`
+            email:"",
+            password: values.new_password
         };
         try {
-            let res = await axios.post("https://frontend.goaideme.com/forgot-password", items)
+            let res = await axios.post("https://frontend.goaideme.com/update-password", items)
             console.log(res, "checkkkkkkk");
 
         } catch (error) {
@@ -75,26 +77,6 @@ const page = () => {
 
         }
     }
-    // const onFinish = async (values: any) => {
-    //     let items = {
-    //         to: values.email,
-    //         link: `auth/update_password?${values.email}`,
-    //         name : "Bindu",
-    //         phone_number: 8987987545,
-    //         address: "bindu",
-    //         email: "fullstackdeveloper918@gmail.com",
-    //         password: "testing12"
-    //     };
-    //     try {
-    //         let res = await axios.post("https://frontend.goaideme.com/register", items)
-    //         console.log(res, "checkkkkkkk");
-
-    //     } catch (error) {
-    //         console.log(error);
-
-    //     }
-    // }
-
     return (
         <section className='auth-pages d-flex align-items-center h-100'>
             <div className="container">
@@ -114,21 +96,19 @@ const page = () => {
                                     scrollToFirstError
                                 >
                                     {/* Email  */}
-                                    <Form.Item
-                                        name="email"
-                                        rules={[
-                                            { required: true, message: 'Please input your Email!' },
-                                            { type: 'email', message: 'The input is not valid E-mail!' }
-                                        ]}
-                                    >
-                                        {/* <label className="labelSignup">Email</label> */}
-                                        <Input size={'large'} prefix={<i className="fa-regular fa-envelope"></i>} placeholder="Email" />
+                                    <label className="labelSignup">New Password</label>
+                                    <Form.Item name="new_password" rules={[{ message: 'Please enter password' }]}>
+                                        <Input size={'large'} prefix={<i className="fa-solid fa-lock"></i>} type="text" placeholder="New Password" />
+                                    </Form.Item>
+                                    <label className="labelSignup">Confirm Password</label>
+                                    <Form.Item name="password" rules={[{ message: 'Please enter password' }]} >
+                                        <Input.Password size={'large'} prefix={<i className="fa-solid fa-lock"></i>} type="password" placeholder="Confirm Password" />
                                     </Form.Item>
 
                                     {/* Button  */}
                                     <Form.Item>
-                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
-                                            {loading ? "" : "Submit"}
+                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" >
+                                            Submit
                                         </Button>
                                     </Form.Item>
                                 </Form>

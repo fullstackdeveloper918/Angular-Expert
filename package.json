@@ -17,6 +17,7 @@
     "ant-responsive-table": "^1.0.8",
     "antd": "^5.7.0",
     "antd-img-crop": "^4.12.2",
+    "axios": "^1.7.2",
     "firebase": "^10.12.3",
     "json-server": "^1.0.0-beta.1",
     "next": "14.2.4",
