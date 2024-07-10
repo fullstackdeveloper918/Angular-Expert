@@ -148,14 +148,14 @@ console.log(values.password,"pass");
                                 <Form name="normal_login" className="login-form" initialValues={{ remember: false }} onFinish={onFinish} scrollToFirstError>
                                     {/* Email  */}
                                     <Form.Item name="email" rules={[{ required: true, whitespace: true, message: 'Please enter valid email' }]} >
-                                        <Input size={'large'} prefix={<Icons.Email />} placeholder="Email" />
+                                        <Input size={'large'} prefix={<i className="fa-regular fa-envelope"></i>} placeholder="Email" />
                                     </Form.Item>
                                     {/* Password  */}
                                     <Form.Item name="password" rules={[{ message: 'Please enter password' }]}>
-                                        <Input.Password size={'large'} prefix={<Icons.Password />} type="password" placeholder="Password" />
+                                        <Input.Password size={'large'} prefix={<i className="fa-solid fa-lock"></i>} type="password" placeholder="Password" />
                                     </Form.Item>
-                                        <div className="text-end">
-                                            <Link href={"/auth/forgot_password"}>
+                                        <div className="">
+                                            <Link href={"/auth/forgot_password"} className="forgotPassword">
                                                 Forgot your password?
                                             </Link>
                                         </div>
@@ -164,8 +164,8 @@ console.log(values.password,"pass");
                                         Log In
                                     </Button>
                                 </Form>
-                                <Divider plain></Divider>
-                                <div className="d-flex gap-3 justify-content-center">
+                                <Divider plain className="hrdivider"></Divider>
+                                <div className="d-flex justify-content-center align-items-baseline">
                                     <span className="mt-2">
                                         {/* <p className=""> */}
                                         Don't have a account yet?
@@ -173,7 +173,7 @@ console.log(values.password,"pass");
                                     </span>
                                     <Link href={"/auth/signup"}>
 
-                                        <Button size={'large'} type="primary" htmlType="submit" className="" >
+                                        <Button  htmlType="submit" className="signBtn" >
                                             Sign Up
                                         </Button>
                                     </Link>

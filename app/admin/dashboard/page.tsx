@@ -397,8 +397,8 @@ const Home: Page = (props: any) => {
 
                   <Table dataSource={dataSource} columns={columns} pagination={false} />
                 </div>
-                <div className=' justify-content-center mt-4' style={{ paddingLeft: "500px" }}>
-                  <Button className='text-center'> View All</Button>
+                <div className=' justify-content-center mt-4 d-flex'>
+                  <Button className='text-center blackViewBtn'> View All</Button>
 
                   {/* <Table dataSource={dataSource} columns={columns} />; */}
                 </div>

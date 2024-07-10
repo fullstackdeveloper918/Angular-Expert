@@ -126,3 +126,52 @@ i.fa-trash-can{
   font-size: 20px;
   border: 0 !important;
 }
+.blackViewBtn {
+  color: #fff !important;
+  background-color: #000 !important;
+  padding: 8px 20px;
+  height: auto;
+  transition: all .3s ease-in;
+}
+
+.blackViewBtn:hover{
+  background-color: transparent !important;
+  color: #000 !important;
+}
+
+:where(.css-dev-only-do-not-override-f7vrd6).ant-btn:not(:disabled):focus-visible {
+  outline: none !important;
+}
+
+.paginationCenter .ant-pagination{
+  justify-content: center;
+}
+a.forgotPassword {
+  color: #000;
+  text-decoration: none;
+  margin: -10px 0 10px;
+  display: block;
+}
+
+.signBtn {
+  border: 0;
+  outline: 0;
+  padding: 0;
+  margin-left: 6px;
+}
+.signBtn:hover{
+  text-decoration: underline;
+}
+
+:where(.css-dev-only-do-not-override-f7vrd6).ant-input-outlined:focus, :where(.css-dev-only-do-not-override-f7vrd6).ant-input-outlined:focus-within,
+:where(.css-dev-only-do-not-override-f7vrd6).ant-input-outlined:hover {
+  border-color: #000000;
+  box-shadow: none;
+  outline: 0;
+  background-color: #ffffff;
+}
+
+.ant-divider-horizontal {
+  border: 0 !important;
+  margin: 10px 0 !important;
+}

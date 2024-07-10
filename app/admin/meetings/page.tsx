@@ -396,7 +396,7 @@ const page = () => {
                                     <Table dataSource={dataSource} columns={columns} pagination={false} />
                                 </div>
                                 {/* Pagination  */}
-                                <Row justify={'center'} className="mt-5" style={{ paddingLeft: "550px" }}>
+                                <Row justify={'center'} className="mt-5 d-flex paginationCenter">
                                     <Col span={24}>
                                         <Pagination total={15} hideOnSinglePage={true} disabled={loading} />
                                     </Col>

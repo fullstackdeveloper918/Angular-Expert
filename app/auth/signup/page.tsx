@@ -92,21 +92,21 @@ const signup = () => {
                                 
                                 <Form name="normal_login" className="login-form" initialValues={{ remember: false }} onFinish={onFinish} scrollToFirstError>
                                     {/* Email  */}
-                                    <div className="d-flex gap-2">
+                                    {/* <div className="d-flex gap-2"> */}
 
                                     <Form.Item name="firstname" rules={[{ required: true, whitespace: true, message: 'Please enter valid first name' }]} >
-                                        <Input size={'large'}  placeholder="First Name" />
+                                        <Input size={'large'}  prefix={<i className="fa-regular fa-user"></i>} placeholder="First Name" />
                                     </Form.Item>
                                     <Form.Item name="lastname" rules={[{ required: true, whitespace: true, message: 'Please enter valid last name' }]} >
-                                        <Input size={'large'}  placeholder="Last Name" />
+                                        <Input size={'large'}  prefix={<i className="fa-regular fa-user"></i>}  placeholder="Last Name" />
                                     </Form.Item>
-                                    </div>
+                                    {/* </div> */}
                                     <Form.Item name="email" rules={[{ required: true, whitespace: true, message: 'Please enter valid email' }]} >
-                                        <Input size={'large'} prefix={<Icons.Email />} placeholder="Email" />
+                                        <Input size={'large'} prefix={<i className="fa-regular fa-envelope"></i>} placeholder="Email" />
                                     </Form.Item>
                                     {/* Password  */}
                                     <Form.Item name="password" rules={[{ required: true, message: 'Please enter password' }]}>
-                                        <Input.Password size={'large'} prefix={<Icons.Password />} type="password" placeholder="Password" />
+                                        <Input.Password size={'large'} prefix={<i className="fa-solid fa-lock"></i>} type="password" placeholder="Password" />
                                     </Form.Item>
                                     
 
