@@ -47,6 +47,13 @@
   }
 }
 
+:where(.css-dev-only-do-not-override-f7vrd6) a{
+  color: #000 !important; 
+  text-decoration: none;
+}
+:where(.css-dev-only-do-not-override-f7vrd6).ant-select-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: #f0f0f0 !important
+}
 .trigger, .ant-pagination .ant-pagination-item-active{
   background: #040707 !important
 }
@@ -63,7 +70,10 @@
 :where(.css-dev-only-do-not-override-f7vrd6).ant-menu-light .ant-menu-item-selected{
   background-color: #f8f9fa;
 }
-
+.ant-select-focused:where(.css-dev-only-do-not-override-f7vrd6).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector{
+  border-color: #040707 !important;
+  box-shadow: none  !important;
+}
 input:focus,
 input:focus-visible{
   outline: none !important;
@@ -71,10 +81,12 @@ input:focus-visible{
 }
 
 :where(.css-dev-only-do-not-override-f7vrd6).ant-btn-primary {
-
+border: 1px solid #000 !important;
   background: #040707 !important;
    box-shadow: none !important; 
+   max-width: 200px ;
 }
+
 
 :where(.css-dev-only-do-not-override-f7vrd6).ant-menu-light .ant-menu-item-selected {
   background: #040707 !important;
@@ -194,11 +206,43 @@ a.forgotPassword {
 .dashboradTable .ant-card .ant-card-body {
   padding: 6px 0 !important;
 }
+
+:where(.css-dev-only-do-not-override-f7vrd6).ant-picker-outlined {
+  padding: 7.5px 11px;
+}
+
+:where(.css-dev-only-do-not-override-f7vrd6).ant-picker-outlined:focus ,
+:where(.css-dev-only-do-not-override-f7vrd6).ant-picker-outlined:hover,
+:where(.css-dev-only-do-not-override-f7vrd6).ant-picker-outlined:focus-within {
+  border-color: #000000 !important;
+  box-shadow: none !important;
+  outline: 0;
+}
+.heightCenter{
+  height:calc(100vh - 10vh) ;
+  align-items: center;
+}
+
+:where(.css-dev-only-do-not-override-f7vrd6).ant-btn-primary:hover {
+  border: 1px solid #000 !important;
+    background: transparent !important;
+    color: #000 !important; 
+  }
+  :where(.css-dev-only-do-not-override-f7vrd6).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector {
+    border-color: #000000  !important;
+}
+:where(.css-dev-only-do-not-override-f7vrd6).ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):active{
+  background-color: #f0f0f0 !important;
+}
+
 @media screen and (max-width:991x) {
   .ant-card .ant-card-body {
     overflow: hidden;
     overflow-x: scroll;
     scrollbar-width: thin;
+}
+.heightCenter{
+  height:100% ;
 }
 }
 @media screen and (max-width:767px) {
@@ -210,4 +254,9 @@ a.forgotPassword {
     width: 100%;
   }
 
+}
+@media screen and (max-width:575px) {
+  :where(.css-dev-only-do-not-override-f7vrd6).ant-btn-primary {
+    max-width: 100%;
+}
 }
