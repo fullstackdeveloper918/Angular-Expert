@@ -4,10 +4,11 @@ import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import Link from 'next/link';
 import User from "../../../../assests/images/placeholder.png"
 import { Avatar, Breadcrumb, Divider, Spin, Tag, Typography, theme } from 'antd';
-import React, { Fragment, ReactNode, useState } from 'react'
+import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 // import Head from 'next/head';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import MainLayout from '@/app/layouts/page';
+import { fetchAreaById } from '@/utils/fakeApi';
 // import React from 'react'
 const { Row, Col, Card, Button, Space, Popconfirm } = {
   Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -31,18 +32,37 @@ interface StaffDetailInterface {
  const page=() =>{
   const [loading,setLoading]=useState(false)
   const router = useRouter()
-  const [state, setState] = React.useState<StaffDetailInterface>({
-    email: "",
-    is_blocked: false,
-    firstname: "",
-    lastname: "",
-    profile_pic: "",
-    country_code: 0,
-    mobile: 0,
-    roles: [] as Array<string>,
-    _id: ""
+  const [state, setState] = React.useState<any>({
+    id:"",
+    name:"",
+    company:"",
+    email:"",
+    phone:"",
+    position:"",
+    home:""
   })
+  const searchParam = useParams();
+  // console.log(searchParam, "cheee");
 
+  const id: any = searchParam.id;
+  const getDataById = async (id: string) => {
+    console.log(id);
+    try {
+      const res = await fetchAreaById(Number(id));
+      console.log(res, "Fetched Meeting");
+      setState(res || null);
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      getDataById(id);
+    }
+  }, [id]);
+  console.log(state,"state");
+  
   return (
     <MainLayout>
     <Fragment>
@@ -58,13 +78,13 @@ interface StaffDetailInterface {
               <div className='mb-4'>
                 <Breadcrumb separator=">">
                   <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
-                  <Breadcrumb.Item><Link href="/staff/page/1" className='text-decoration-none'>User's</Link></Breadcrumb.Item>
-                  <Breadcrumb.Item className='text-decoration-none'>User Details</Breadcrumb.Item>
+                  <Breadcrumb.Item><Link href="/staff/page/1" className='text-decoration-none'>Club Member</Link></Breadcrumb.Item>
+                  <Breadcrumb.Item className='text-decoration-none'>Club Member Details</Breadcrumb.Item>
                 </Breadcrumb>
               </div>
               {/* Title  */}
               <div>
-                <Typography.Title level={3} className='m-0 fw-bold'>User Details</Typography.Title>
+                <Typography.Title level={3} className='m-0 fw-bold'>Club Member Details</Typography.Title>
               </div>
               {/* Car Listing  */}
               <div className='card-listing'>
@@ -75,15 +95,16 @@ interface StaffDetailInterface {
                 
                 {/* Detail  */}
                 <ul className='list-unstyled my-4 mb-4'>
-                  <li className='mb-3'><Typography.Text >Name:</Typography.Text > <Typography.Text className='ms-1 text-capitalize'>{state?.firstname ? `${state?.firstname} ${state?.lastname}` : 'N/A'}</Typography.Text ></li>
-                  <li className='mb-3'><Typography.Text >Company Name:</Typography.Text > <Typography.Text className='ms-1'>{state?.email}</Typography.Text ></li>
-                  <li className='mb-3'><Typography.Text >Email:</Typography.Text > <Typography.Text className='ms-1'>{state?.email}</Typography.Text ></li>
+                  <li className='mb-3'><Typography.Text >Name:</Typography.Text > <Typography.Text className='ms-1 text-capitalize'>{state?.name ? `${state?.name}` : 'N/A'}</Typography.Text ></li>
+                  <li className='mb-3'><Typography.Text >Company Name:</Typography.Text > <Typography.Text className='ms-1'>{state?.company||"N/A"}</Typography.Text ></li>
+                  <li className='mb-3'><Typography.Text >Email:</Typography.Text > <Typography.Text className='ms-1'>{state?.email||"N/A"}</Typography.Text ></li>
                   <li className='mb-3'><Typography.Text >Phone no:</Typography.Text > <Typography.Text className='ms-10'>
-                    {state?.mobile ? `+${String(state?.country_code).replace("+", "")} ${state?.mobile}` : 'N/A'}
+                    {/* {state?.mobile ? `+${String(state?.country_code).replace("+", "")} ${state?.mobile}` : 'N/A'} */}
+                    {state?.phone||"N/A"}
                   </Typography.Text ></li>
-                  <li className='mb-3'><Typography.Text >Position:</Typography.Text > <Typography.Text className='ms-1'>{state?.email}</Typography.Text ></li>
-                  <li className='mb-3'><Typography.Text >Home City:</Typography.Text > <Typography.Text className='ms-1'>{state?.email}</Typography.Text ></li>
-                  <li className='d-flex'>
+                  <li className='mb-3'><Typography.Text >Position:</Typography.Text > <Typography.Text className='ms-1'>{state?.position||"N/A"}</Typography.Text ></li>
+                  <li className='mb-3'><Typography.Text >Home City:</Typography.Text > <Typography.Text className='ms-1'>{state?.home||"N/A"}</Typography.Text ></li>
+                  {/* <li className='d-flex'>
                     <Typography.Text className='text-nowrap'>Roles:</Typography.Text >
                     <Typography>
                       <Space size={[0, 8]} wrap className='ms-1'>
@@ -94,29 +115,39 @@ interface StaffDetailInterface {
                         )}
                       </Space>
                     </Typography>
-                  </li>
+                  </li> */}
                 </ul>
                 {/* Button  */}
                 <div className='card-listing-button d-inline-flex flex-wrap gap-3 w-100'>
-                  <Link href={`/admin/users/view/edit`} className='text-decoration-none text-white flex-grow-1'>
+                  <Link href={`/admin/users/${state?.id}/edit`} className='text-decoration-none text-white flex-grow-1'>
                     <Button size='large' type="primary" htmlType='button' className='w-100'>
                       Edit
                     </Button>
                   </Link>
                   <Popconfirm
-                    title={`${state.is_blocked ? 'deactivate' : 'activate'} the user`}
+                    title={`${state.is_blocked ? 'deactivate' : 'activate'} the club member`}
                     // onConfirm={blockStaff}
-                    description={`Are you sure to ${state?.is_blocked ? 'deactivate' : 'activate'} this user?`}
+                    description={`Are you sure to ${state?.is_blocked ? 'deactivate' : 'activate'} this club member?`}
                     okText={state.is_blocked ? 'Deactivate' : 'Activate'}
                     cancelText="No"
-                    okButtonProps={{ type: 'primary', ghost: true }}
+                    okButtonProps={{ type: 'primary', danger: true }}
                   >
                     <Button size='large' type="primary" htmlType='button' className='flex-grow-1 activateBtn' ghost>{state.is_blocked ? 'Deactivate' : 'Activate'}</Button>
                   </Popconfirm>
                   <Popconfirm
-                    title="Archive the user"
+                    title="Reset password the club member"
                     // onConfirm={deleteStaffById}
-                    description="Are you sure to archive this user?"
+                    description="Are you sure to reset password this club member?"
+                    okText="Reset it!"
+                    cancelText="No"
+                    okButtonProps={{ type: 'primary', danger: true }}
+                  >
+                    <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 '>Reset Password</Button>
+                    </Popconfirm>
+                  <Popconfirm
+                    title="Archive the club member"
+                    // onConfirm={deleteStaffById}
+                    description="Are you sure to archive this club member?"
                     okText="Archive it!"
                     cancelText="No"
                     okButtonProps={{ type: 'primary', danger: true }}

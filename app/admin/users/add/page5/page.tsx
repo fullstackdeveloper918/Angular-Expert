@@ -2,7 +2,7 @@
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
 import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ import MainLayout from '@/app/layouts/page';
 
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import TextArea from 'antd/es/input/TextArea';
+import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -90,8 +91,32 @@ const page = () => {
             setLoading(false)
         }
     };
-    const submit = () => {
-        router.push("/admin/users/add/page6")
+
+    const searchParams = useSearchParams();
+    const entries = Array.from(searchParams.entries());
+    const value = entries.length > 0 ? entries[0][0] : '';
+    const submit = async(values:any) => {
+        let items={
+            craftsmen_checkup:{
+                userId:value,
+                commitment:values?.commitment,
+                contribute:values?.contribute,
+                wellbeing:values?.wellbeing,
+                contact_info:values?.contact_info
+            }
+        }
+        try {
+            setLoading(true)
+            let res=await api.Auth.signUp(items)
+            console.log(res,"gghgh");
+            
+            router.push(`/admin/users/add/page6?${res?.userId}`)
+        } catch (error) {
+            console.log(error);
+            
+        }finally{
+            setLoading(false)
+        }
     }
     return (
         <MainLayout>
@@ -125,7 +150,7 @@ const page = () => {
 
 
                                         {/* First Name  */}
-                                        <Form.Item name="firstname" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="What is your level of commitment to our club?">
+                                        <Form.Item name="commitment" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="What is your level of commitment to our club?">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -136,7 +161,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="firstname1" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="List Something(s) you can do to contribute to our club.">
+                                        <Form.Item name="contribute" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="List Something(s) you can do to contribute to our club.">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -147,7 +172,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="firstname2" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="How is your present health, wellbeing, family life?">
+                                        <Form.Item name="wellbeing" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="How is your present health, wellbeing, family life?">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -158,7 +183,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="firstname3" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Have any items on your contact info changed?">
+                                        <Form.Item name="contact_info" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Have any items on your contact info changed?">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {

@@ -1,95 +1,154 @@
 {
-    "data":[ 
+    "data": [
         {
-        "id": 1,
-        "meeting_name": "Weekly Team Sync",
-        "purpose": "Discuss project updates and upcoming tasks.",
-        "start_time": "2024-07-10T10:00:00",
-        "end_time": "2024-07-10T11:00:00",
-        "location": "Conference Room A",
-        "organizer": "John Doe"
-    },
-     {
-        "id": 2,
-        "meeting_name": "Monthly Review",
-        "purpose": "Review performance metrics and set new goals.",
-        "start_time": "2024-07-15T09:30:00",
-        "end_time": "2024-07-15T11:00:00",
-        "location": "Boardroom B",
-        "organizer": "Jane Smith"
-    },
-    {
-        "id": 3,
-        "meeting_name": "Project Kickoff",
-        "purpose": "Launch new project initiatives.",
-        "start_time": "2024-07-12T14:00:00",
-        "end_time": "2024-07-12T16:00:00",
-        "location": "Main Hall",
-        "organizer": "Emily Brown"
-    },
-    {
-        "id": 4,
-        "meeting_name": "Quarterly Strategy Session",
-        "purpose": "Align on quarterly goals and strategies.",
-        "start_time": "2024-07-20T13:00:00",
-        "end_time": "2024-07-20T15:00:00",
-        "location": "Executive Lounge",
-        "organizer": "Michael Johnson"
-    },
-    {
-        "id": 5,
-        "meeting_name": "Product Roadmap Discussion",
-        "purpose": "Review and update product roadmap.",
-        "start_time": "2024-07-18T11:00:00",
-        "end_time": "2024-07-18T12:30:00",
-        "location": "Product Development Lab",
-        "organizer": "Sarah Lee"
-    },
-    {
-        "id": 6,
-        "meeting_name": "Training Workshop",
-        "purpose": "Train new hires on company policies.",
-        "start_time": "2024-07-14T09:00:00",
-        "end_time": "2024-07-14T12:00:00",
-        "location": "Training Room 1",
-        "organizer": "David Wilson"
-    },
-    {
-        "id": 7,
-        "meeting_name": "Client Presentation",
-        "purpose": "Present new project proposal to client.",
-        "start_time": "2024-07-16T15:00:00",
-        "end_time": "2024-07-16T17:00:00",
-        "location": "Client Office",
-        "organizer": "Olivia Martinez"
-    },
-    {
-        "id": 8,
-        "meeting_name": "Team Building Activity",
-        "purpose": "Promote team bonding and collaboration.",
-        "start_time": "2024-07-19T10:30:00",
-        "end_time": "2024-07-19T12:30:00",
-        "location": "Outdoor Activity Area",
-        "organizer": "Daniel Adams"
-    },
-    {
-        "id": 9,
-        "meeting_name": "Board Meeting",
-        "purpose": "Discuss financial performance and strategy.",
-        "start_time": "2024-07-25T14:00:00",
-        "end_time": "2024-07-25T16:00:00",
-        "location": "Boardroom C",
-        "organizer": "Sophia Taylor"
-    },
-    {
-        "id": 10,
-        "meeting_name": "Product Launch Planning",
-        "purpose": "Plan marketing and logistics for new product launch.",
-        "start_time": "2024-07-22T11:00:00",
-        "end_time": "2024-07-22T13:00:00",
-        "location": "Marketing Department",
-        "organizer": "Matthew Roberts"
-    }
-
-]
+            "id": 1,
+            "meeting_name": "Weekly Team Sync",
+            "purpose": "Discuss project updates and upcoming tasks.",
+            "start_time": "2024-07-10T10:00:00",
+            "end_time": "2024-07-10T11:00:00",
+            "location": "Los Angeles",
+            "organizer": "John Doe",
+            "hotel": "Xyz",
+            "airport": "Abc",
+            "host_company": "as",
+            "host": "sdfg",
+            "cell": "sdfg",
+            "weather": "xcvb"
+        },
+        {
+            "id": 2,
+            "meeting_name": "Monthly Review",
+            "purpose": "Review performance metrics and set new goals.",
+            "start_time": "2024-07-15T09:30:00",
+            "end_time": "2024-07-15T11:00:00",
+            "location": "Chicago",
+            "organizer": "Jane Smith",
+            "hotel": "Xyz",
+            "airport": "Abc",
+            "host_company": "as",
+            "host": "sdfg",
+            "cell": "sdfg",
+            "weather": "xcvb"
+        },
+        {
+            "id": 3,
+            "meeting_name": "Project Kickoff",
+            "purpose": "Launch new project initiatives.",
+            "start_time": "2024-07-12T14:00:00",
+            "end_time": "2024-07-12T16:00:00",
+            "location": "Houston",
+            "organizer": "Emily Brown",
+            "hotel": "Xyz",
+            "airport": "Abc",
+            "host_company": "as",
+            "host": "sdfg",
+            "cell": "sdfg",
+            "weather": "xcvb"
+        },
+        {
+            "id": 4,
+            "meeting_name": "Quarterly Strategy Session",
+            "purpose": "Align on quarterly goals and strategies.",
+            "start_time": "2024-07-20T13:00:00",
+            "end_time": "2024-07-20T15:00:00",
+            "location": "Phoenix",
+            "organizer": "Michael Johnson",
+            "hotel": "Xyz",
+            "airport": "Abc",
+            "host_company": "as",
+            "host": "sdfg",
+            "cell": "sdfg",
+            "weather": "xcvb"
+        },
+        {
+            "id": 5,
+            "meeting_name": "Product Roadmap Discussion",
+            "purpose": "Review and update product roadmap.",
+            "start_time": "2024-07-18T11:00:00",
+            "end_time": "2024-07-18T12:30:00",
+            "location": "Philadelphia",
+            "organizer": "Sarah Lee",
+            "hotel": "Xyz",
+            "airport": "Abc",
+            "host_company": "as",
+            "host": "sdfg",
+            "cell": "sdfg",
+            "weather": "xcvb"
+        },
+        {
+            "id": 6,
+            "meeting_name": "Training Workshop",
+            "purpose": "Train new hires on company policies.",
+            "start_time": "2024-07-14T09:00:00",
+            "end_time": "2024-07-14T12:00:00",
+            "location": "California",
+            "organizer": "David Wilson",
+            "hotel": "Xyz",
+            "airport": "Abc",
+            "host_company": "as",
+            "host": "sdfg",
+            "cell": "sdfg",
+            "weather": "xcvb"
+        },
+        {
+            "id": 7,
+            "meeting_name": "Client Presentation",
+            "purpose": "Present new project proposal to client.",
+            "start_time": "2024-07-16T15:00:00",
+            "end_time": "2024-07-16T17:00:00",
+            "location": "Denver",
+            "organizer": "Olivia Martinez",
+            "hotel": "Xyz",
+            "airport": "Abc",
+            "host_company": "as",
+            "host": "sdfg",
+            "cell": "sdfg",
+            "weather": "xcvb"
+        },
+        {
+            "id": 8,
+            "meeting_name": "Team Building Activity",
+            "purpose": "Promote team bonding and collaboration.",
+            "start_time": "2024-07-19T10:30:00",
+            "end_time": "2024-07-19T12:30:00",
+            "location": "Denver",
+            "organizer": "Daniel Adams",
+            "hotel": "Xyz",
+            "airport": "Abc",
+            "host_company": "as",
+            "host": "sdfg",
+            "cell": "sdfg",
+            "weather": "xcvb"
+        },
+        {
+            "id": 9,
+            "meeting_name": "Board Meeting",
+            "purpose": "Discuss financial performance and strategy.",
+            "start_time": "2024-07-25T14:00:00",
+            "end_time": "2024-07-25T16:00:00",
+            "location": "Denver",
+            "organizer": "Sophia Taylor",
+            "hotel": "Xyz",
+            "airport": "Abc",
+            "host_company": "as",
+            "host": "sdfg",
+            "cell": "sdfg",
+            "weather": "xcvb"
+        },
+        {
+            "id": 10,
+            "meeting_name": "Product Launch Planning",
+            "purpose": "Plan marketing and logistics for new product launch.",
+            "start_time": "2024-07-22T11:00:00",
+            "end_time": "2024-07-22T13:00:00",
+            "location": "California",
+            "organizer": "Matthew Roberts",
+            "hotel": "Xyz",
+            "airport": "Abc",
+            "host_company": "as",
+            "host": "sdfg",
+            "cell": "sdfg",
+            "weather": "xcvb"
+        }
+    ]
 }

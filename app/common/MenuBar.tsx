@@ -20,6 +20,7 @@ import {
   OrderedListOutlined,
   DatabaseOutlined,
   AppstoreAddOutlined,
+  FolderOpenOutlined,
   ShoppingCartOutlined,
   UsergroupAddOutlined,
   CustomerServiceOutlined,
@@ -91,16 +92,14 @@ console.log(openKeys,"latestOpenKey");
         key: henceofrthEnums.Roles.DASHBOARD, view: getItem(<Link href='/' className='text-decoration-none'>Dashboard</Link>, 'dashboard', <DashboardOutlined style={iconSize} />),
       },
       {
-        key: henceofrthEnums.Roles.USERS, view: getItem(<Link href='/admin/users' className='text-decoration-none'>Users</Link>, 'users', <UserOutlined style={iconSize} />),
+        key: henceofrthEnums.Roles.USERS, view: getItem(<Link href='/admin/users' className='text-decoration-none'>Club Members</Link>, 'users', <UserOutlined style={iconSize} />),
       },
-    // {
-    //   key: henceofrthEnums.Roles.ARTISTS, view: getItem(<Link href='/artists/page/1?limit=10' className='text-decoration-none'>Meetings</Link>, 'meetings', <UserOutlined style={iconSize} />),
-    // },
     {
         key: henceofrthEnums.Roles.PAGES, view: getItem('Meetings', 'sub1',  <UsergroupAddOutlined style={iconSize}/>,
           [
             getItem(<Link href="/admin/meetings" className='text-decoration-none'>Meetings</Link>, 'meetings', <OrderedListOutlined style={iconSize} />),
-            getItem(<Link href="/admin/manage_questions" className='text-decoration-none'>Manage Questions for Meeting</Link>, 'meetings', <AppstoreAddOutlined style={iconSize} />),
+            getItem(<Link href="/admin/manage_questions" className='text-decoration-none'>Manage Questions for Meeting</Link>, 'manage/-questions', <AppstoreAddOutlined style={iconSize} />),
+            getItem(<Link href="/admin/archive_meeting" className='text-decoration-none'>Archive Meetings</Link>, 'archive_meeting', <FolderOpenOutlined style={iconSize} />),
           ]
         )
       },

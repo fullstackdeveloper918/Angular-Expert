@@ -10,6 +10,7 @@ import validation from '@/utils/validation';
 import MainLayout from '@/app/layouts/page';
 
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
+import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
   Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
   Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -26,40 +27,45 @@ console.log(form,"form");
 
   const onFinish = async (values: any) => {
     console.log('Received values of form: ', values);
+    // country_code: values.country_code ?? "+93",
     let items = {
+      first_step:{
       firstname: String(values.firstname).trim(),
       lastname: String(values.lastname).trim(),
       email: String(values.email).trim(),
       password: String(values.password).trim(),
-      country_code: values.country_code ?? "+93",
       mobile: String(values.mobile).trim(),
-      roles: values.roles
+      roles: values.roles,
+      company_name:values?.company_name,
+      position:values?.position,
+      home_city:values?.homecity,
+      }
     } as any
-    if (!items.firstname) {
-      // return Toast.warn("Please Enter Valid First Name")
-    }
-    if (!items.lastname) {
-      // return Toast.warn("Please Enter Valid Last Name")
-    }
-    // if (!henceforthValidations.email(items.email)) {
-    //   return Toast.warn("Please Enter Valid E-mail")
+    console.log(items,"items");
+    
+   
+    // if (!items.firstname) {
+    //   // return Toast.warn("Please Enter Valid First Name")
     // }
-    // if (!henceforthValidations.strongPassword(items.password)) {
-    //   return Toast.warn("Please Enter Valid Password")
+    // if (!items.lastname) {
+    //   // return Toast.warn("Please Enter Valid Last Name")
     // }
-    if (!Number(items.mobile)) {
-      // return Toast.warn("Please Enter Valid Phone No.")
-    }
-    if (!items.country_code) {
-      // return Toast.warn("Please Select Country Code")
-    }
-    if (!values?.profile_pic?.fileList[0].originFileObj) {
-      // return Toast.warn("Please Add Image")
-    }
+    // if (!Number(items.mobile)) {
+    //   // return Toast.warn("Please Enter Valid Phone No.")
+    // }
+    // if (!items.country_code) {
+    //   // return Toast.warn("Please Select Country Code")
+    // }
+    // if (!values?.profile_pic?.fileList[0].originFileObj) {
+    //   // return Toast.warn("Please Add Image")
+    // }
     try {
       setLoading(true)
      
+let res =await api.Auth.signUp(items)
+console.log(res,"resssssssssssss");
 
+router.push(`/admin/users/add/page2?${res?.user_id}`)
       // setUserInfo((preValue: any) => {
       //   return {
       //     ...preValue,
@@ -79,7 +85,7 @@ console.log(form,"form");
       //   }
       // })
 
-      form.resetFields()
+      // form.resetFields()
       // Toast.success("Staff Added Successfully");
       // router.replace(`/staff/${apiRes?._id}/view`)
     } catch (error: any) {
@@ -114,16 +120,10 @@ console.log(form,"form");
 
             {/* form  */}
             <div className='card-form-wrapper'>
-              <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={submit}>
-                {/* Image  */}
-
-                <Form.Item name='profile_pic'>
-                 
-                </Form.Item>
-
-
+              <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onFinish}>
+            
                 {/* First Name  */}
-                <div className='row'>
+                <div className='row mt-4'>
                 <Form.Item name="firstname" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter First Name' }]} label="First Name">
                   <Input size={'large'} placeholder="First Name"
                      onKeyPress={(e: any) => {
@@ -147,7 +147,7 @@ console.log(form,"form");
                     }}
                     />
                 </Form.Item>
-                <Form.Item name="companyname" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Company Name' }]} label="Company Name">
+                <Form.Item name="company_name" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Company Name' }]} label="Company Name">
                   <Input size={'large'} placeholder="Company Name" 
                      onKeyPress={(e: any) => {
                       if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {

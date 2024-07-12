@@ -1,15 +1,39 @@
 "use client"
+// import { setViewItem } from '@/lib/features/userSlice'
+// import React from 'react'
+// import { useDispatch, useSelector } from 'react-redux'
+// const page = () => {
+//     const dispatch = useDispatch()
+//     const userName = useSelector((state: any) => state.user.viewItem)
+//     const handleClick = () => {
+//         dispatch(setViewItem("Abhay Singh"))
+
+//     }
+//     return (
+//         <div className="container">
+//             <div className="row mt-3">
+//                 <h1 className="text-center">Meetings Listing</h1>
+//                 {/* <h3 className="">{userName}</h3> */}
+//                 <button className="" onClick={handleClick}>change view item</button>
+//             </div>
+//         </div>
+//     )
+// }
+
+// export default page
+
+"use client"
 // const userName=useSelector((state:any) => state.user.viewItem)
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 // import MainLayout from '@/layouts/MainLayout';
-import { Table, Input, Breadcrumb, Tabs, Typography, Upload, Badge, Tag, Select } from 'antd';
+import { Table, Input, Breadcrumb, Tabs, Typography, Upload, Badge, Tag, Select, Popconfirm } from 'antd';
 import user from "@/assets/images/placeholder.png"
 import Link from 'next/link';
 import { Space } from 'antd';
 import type { TabsProps } from 'antd';
-import { EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
+import { PlusOutlined, DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 // import { useRouter } from 'next/router';
 // import henceforthApi from '@/utils/henceforthApi';
 // import { GlobalContext } from '@/context/Provider';
@@ -17,10 +41,12 @@ import { EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
 import dynamic from 'next/dynamic';
 import MainLayout from '@/app/layouts/page';
 import { useRouter } from 'next/navigation';
-import { fetchAreas, searchAreasByName } from '@/utils/fakeApi';
+import FilterSelect from '@/app/common/FilterSelect';
+import Icons from '@/app/common/Icons';
+import { deleteMeetingById, fetchMeeting, searchMeetingByName } from '@/utils/fakeApi';
 // import ExportFile from '@/components/ExportFile';
 // import s3bucket from '@/utils/s3bucket';
-
+import dayjs from "dayjs"
 const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -47,8 +73,7 @@ const page = () => {
     const [loading, setLoading] = React.useState(false)
     const [exportModal, setExportModal] = React.useState(false);
     const [areas, setAreas] = useState<any>([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    // const [graphType, setGraphType] = React.useState(henceofrthEnums.G
+    const [searchTerm, setSearchTerm] = useState('')
     //   const onChangeRouter = (key: string, value: string) => {
     //     router.replace({
     //       query: { ...router.query, [key]: value }
@@ -169,21 +194,143 @@ const page = () => {
     //       setLoading(false)
     //     }
     //   }
+    const handleDelete = async (_id: string) => {
+        // setDeleteLoading(_id)
+        try {
+            // let apiRes = await henceforthApi.Faq.delete(_id)
+            // Toast.success("FAQ is deleted successfully")
+            // await initialise()
+        } catch (error) {
+            console.log(error)
+        } finally {
+            // setDeleteLoading("")
+        }
+
+    }
+    const dataSource1 = [
+        {
+            key: '1',
+            meeting: "abc",
+            start: '08:20 pm 15-07-2024',
+            end: "06:20 pm 18-07-2024",
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                <li>
+                    <Link href={`/admin/meetings/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
+        },
+        {
+            key: '2',
+            meeting: "abc",
+            start: '08:20 pm 15-07-2024',
+            end: "06:20 pm 18-07-2024",
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                <li>
+                    <Link href={`/admin/meetings/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
+        },
+        {
+            key: '3',
+            meeting: "abc",
+            start: '08:20 pm 15-07-2024',
+            end: "06:20 pm 18-07-2024",
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                <li>
+                    <Link href={`/admin/meetings/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
+        },
+        {
+            key: '4',
+            meeting: "abc",
+            start: '08:20 pm 15-07-2024',
+            end: "06:20 pm 18-07-2024",
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                <li>
+                    <Link href={`/admin/meetings/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
+        },
+        {
+            key: '5',
+            meeting: "abc",
+            start: '08:20 pm 15-07-2024',
+            end: "06:20 pm 18-07-2024",
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                <li>
+                    <Link href={`/admin/meetings/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
+        },
+    ];
     const dataSource = areas?.map((res: any, index: number) => {
         return {
-          key: index+1,
-          name: res?.name,
-          company: res?.company,
-          email: res?.email,
-          phone: res?.phone,
-          position: res?.position,
-          city: res?.home,
-          action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
-          </ul>
-        }
-      }
-      );
+            key: index+1,
+            meeting:res?.meeting_name,
+            start: dayjs(res?.start_time).format('h A DD-MM-YYYY'),
+            end: dayjs(res?.end_time).format('h A DD-MM-YYYY'),
+        }})
     const columns = [
         {
             title: 'Key',
@@ -191,76 +338,69 @@ const page = () => {
             key: 'key',
         },
         {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
+            title: 'Meeting Name',
+            dataIndex: 'meeting',
+            key: 'meeting',
         },
         {
-            title: 'Company Name',
-            dataIndex: 'company',
-            key: 'company',
+            title: 'Start Time',
+            dataIndex: 'start',
+            key: 'start',
         },
         {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-        },
-        {
-            title: 'Phone No',
-            dataIndex: 'phone',
-            key: 'phone',
-        },
-        {
-            title: 'Position',
-            dataIndex: 'position',
-            key: 'position',
-        },
-        {
-            title: 'Home City',
-            dataIndex: 'city',
-            key: 'city',
-        },
-        {
-            title: 'Action',
-            dataIndex: 'action',
-            key: 'action',
+            title: 'End Time',
+            dataIndex: 'end',
+            key: 'end',
         },
     ];
 
 
     useEffect(() => {
-        fetchAreas().then((data) => {
-          setAreas(data);
+        fetchMeeting().then((data) => {
+            setAreas(data);
         });
-      }, []);
-      const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    }, []);
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         setSearchTerm(value);
-    
+
         if (value.trim() === '') {
-          fetchAreas().then((data) => {
-            setAreas(data);
-          });
+            fetchMeeting().then((data) => {
+                setAreas(data);
+            });
         } else {
-          searchAreasByName(value).then((data) => {
-            setAreas(data);
-          });
+            searchMeetingByName(value).then((data) => {
+                setAreas(data);
+            });
         }
-      };
+    };
+
+    console.log(areas, "hhhhhh");
+    const handleDeleteMeeting = async (id: number) => {
+        try {
+            await deleteMeetingById(id);
+            const updatedMeetings = areas.filter((m:any) => m.id !== id);
+            setAreas(updatedMeetings); // Update state or local data
+            alert(`Meeting with id ${id} deleted successfully.`);
+        } catch (error:any) {
+            alert(error.message); // Handle error if meeting is not found
+        }
+    };
     const handleChange = (value: string) => {
         console.log(`selected ${value}`);
     };
 
-    const addUser=()=>{
-        router.push("/admin/users/add")
+
+    const add = () => {
+        router.push("/admin/meetings/add")
     }
     return (
         <MainLayout>
 
             <Fragment>
                 <Head>
-                    <title>Users</title>
-                    <meta name="description" content="Users" />
+                    <title>Meetings</title>
+                    <meta name="meetings" content="Meetings" />
                 </Head>
                 <section>
                     <Row gutter={[20, 20]}>
@@ -269,43 +409,28 @@ const page = () => {
                                 <div className='mb-4'>
                                     <Breadcrumb separator=">">
                                         <Breadcrumb.Item><Link className='text-decoration-none' href="/">General</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item className='text-decoration-none'>Users</Breadcrumb.Item>
+                                        <Breadcrumb.Item className='text-decoration-none'>Archive Meetings</Breadcrumb.Item>
                                     </Breadcrumb>
                                 </div>
                                 {/* title  */}
                                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3'>
-                                    <Typography.Title level={3} className='m-0 fw-bold'>Users</Typography.Title>
-                                    <div className='d-flex gap-2'>
-                                        {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
-                                            <Button type="primary" htmlType="button" size='large' icon={<PlusOutlined />} onClick={addUser}>Add User</Button>
-                                        {/* </Upload> */}
-                                    </div>
+                                    <Typography.Title level={3} className='m-0 fw-bold'>Archive Meetings</Typography.Title>
+                                   
                                 </div>
                                 {/* Search  */}
-                                <div className='my-4 '>
-                                    <Search size='large' placeholder="Search by Name & Email" enterButton  value={searchTerm}
-        onChange={handleSearch}/>
+                                <div className='my-4 d-flex gap-3'>
+                                    <Search size='large' placeholder="Search by Meeting Name or year" enterButton value={searchTerm}
+                                        onChange={handleSearch} />
                                     {/* <Button type="primary" size='large' htmlType="button"  icon={<DownloadOutlined />} onClick={() => setExportModal(true)}>Export</Button> */}
                                     {/* <Space wrap> */}
-                                    {/* <Select
-                                        defaultValue="lucy"
-                                        style={{ width: 220 }}
-                                        // onChange={handleChange}
-                                        size='large'
-                                        options={[
-                                            { value: 'jack', label: 'Jack' },
-                                            { value: 'lucy', label: 'Lucy' },
-                                            { value: 'Yiminghe', label: 'yiminghe' },
-                                            { value: 'disabled', label: 'Disabled', disabled: true },
-                                        ]}
-                                    /> */}
+                                    {/* <FilterSelect /> */}
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
                                     <Table dataSource={dataSource} columns={columns} pagination={false} />
                                 </div>
                                 {/* Pagination  */}
-                                <Row justify={'center'} className="mt-5" style={{ paddingLeft: "650px" }}>
+                                <Row justify={'center'} className="mt-5 d-flex paginationCenter">
                                     <Col span={24}>
                                         <Pagination total={15} hideOnSinglePage={true} disabled={loading} />
                                     </Col>
@@ -313,7 +438,7 @@ const page = () => {
                             </Card>
                         </Col>
                     </Row>
-                 
+
 
                 </section>
             </Fragment>

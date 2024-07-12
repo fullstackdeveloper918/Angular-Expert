@@ -58,6 +58,14 @@ export const searchMeetingByName = (name: string): Promise<typeof data> => {
     }, 1000); // Simulate network delay
   });
 };
+export const addMeeting = (newMeeting: typeof data[0]): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      data.push(newMeeting);
+      resolve();
+    }, 1000); // Simulate network delay
+  });
+};
 export const deleteMeetingById = (id: number): Promise<boolean> => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {

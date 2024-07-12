@@ -2,7 +2,7 @@
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
 import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ import MainLayout from '@/app/layouts/page';
 
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import TextArea from 'antd/es/input/TextArea';
+import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -90,8 +91,29 @@ const page = () => {
             setLoading(false)
         }
     };
-    const submit = () => {
-        router.push("/admin/users/add/page7")
+    const searchParams = useSearchParams();
+    const entries = Array.from(searchParams.entries());
+    const value = entries.length > 0 ? entries[0][0] : '';
+    const submit = async(values:any) => {
+        let items={
+            fall_meeting_review:{
+                userId:value,
+                fall_meeting:values?.fall_meeting,
+                personal_finances:values?.personal_finances,
+            }
+        }
+        try {
+            setLoading(true)
+            let res=await api.Auth.signUp(items)
+            console.log(res,"ggsadfhgh");
+            
+            router.push(`/admin/users/add/page7?${res?.userId}`)
+        } catch (error) {
+            console.log(error);
+            
+        }finally{
+            setLoading(false)
+        }
     }
     return (
         <MainLayout>
@@ -126,7 +148,7 @@ const page = () => {
 
 
                                         {/* First Name  */}
-                                        <Form.Item name="firstname" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="What was your most valuable take away from our fall meeting?">
+                                        <Form.Item name="fall_meeting" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="What was your most valuable take away from our fall meeting?">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -137,7 +159,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="firstname1" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Have you implemented any of Jim Weber’s estate/financial planning reccomendations into your business and/or personal finances?">
+                                        <Form.Item name="personal_finances" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Have you implemented any of Jim Weber’s estate/financial planning reccomendations into your business and/or personal finances?">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {

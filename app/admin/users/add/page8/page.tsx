@@ -2,111 +2,122 @@
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps, Divider } from 'antd';
 import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useState } from 'react'
 import Link from 'next/link';
 import validation from '@/utils/validation';
 import MainLayout from '@/app/layouts/page';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
+import { Image } from 'antd';
+import type { GetProp, UploadFile, UploadProps } from 'antd';
+import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+const getBase64 = (file: FileType): Promise<string> =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = (error) => reject(error);
+    });
 const page = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
-    const [loading, setLoading] = useState(false)
+    const [inputPairs, setInputPairs] = useState([{ id: Date.now(), goalName: 'goal1', goalLabel: 'Project 1', commentName: 'comment1', commentLabel: 'Comment 1' }]);
+    const [fileLists, setFileLists] = useState<Record<string, UploadFile<any>[]>>({});
+    const [previewImage, setPreviewImage] = useState<any>('');
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    console.log(form, "form");
+    const handlePreview = async (file: UploadFile<any>) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj as FileType);
+        }
+        setPreviewImage(file.url || file.preview);
+        setPreviewOpen(true);
+    };
 
-    const onFinish = async (values: any) => {
-        console.log('Received values of form: ', values);
-        let items = {
-            firstname: String(values.firstname).trim(),
-            lastname: String(values.lastname).trim(),
-            email: String(values.email).trim(),
-            password: String(values.password).trim(),
-            country_code: values.country_code ?? "+93",
-            mobile: String(values.mobile).trim(),
-            roles: values.roles
-        } as any
-        if (!items.firstname) {
-            // return Toast.warn("Please Enter Valid First Name")
+    const handleChange = (info: any, id: string) => {
+        const newFileLists = { ...fileLists, [id]: info.fileList };
+        setFileLists(newFileLists);
+    };
+    const addInputPair = () => {
+        const newId = Date.now();
+        setInputPairs([
+            ...inputPairs,
+            { id: newId, goalName: `goal${newId}`, goalLabel: `Project ${inputPairs.length + 1}`, commentName: `comment${newId}`, commentLabel: `Comment ${inputPairs.length + 1}` }
+        ]);
+    };
+
+
+    const removeInputPair = (id: number) => {
+        setInputPairs(inputPairs.filter(pair => pair.id !== id));
+        const newFileLists = { ...fileLists };
+        delete newFileLists[id];
+        setFileLists(newFileLists);
+    };
+
+    const searchParams = useSearchParams();
+    const entries = Array.from(searchParams.entries());
+    const value = entries.length > 0 ? entries[0][0] : '';
+    const uploadFiles = async (files: UploadFile<any>[]) => {
+        // const urls = [];
+        for (const file of files) {
+            if (file.originFileObj) {
+                // Implement the actual upload to your API and get the URL
+                const formData = new FormData();
+                formData.append('file', file.originFileObj);
+                // const res = await api.upload(formData);
+                // urls.push(res.url);
+            }
         }
-        if (!items.lastname) {
-            // return Toast.warn("Please Enter Valid Last Name")
-        }
-        // if (!henceforthValidations.email(items.email)) {
-        //   return Toast.warn("Please Enter Valid E-mail")
+        // return urls;
+    };
+
+    const submit = async (values: any) => {
+
+        // let item = {
+        //     photo_section: {
+        //         userId:value,
+        //         photo_comment: inputPairs
+        //     }
         // }
-        // if (!henceforthValidations.strongPassword(items.password)) {
-        //   return Toast.warn("Please Enter Valid Password")
-        // }
-        if (!Number(items.mobile)) {
-            // return Toast.warn("Please Enter Valid Phone No.")
-        }
-        if (!items.country_code) {
-            // return Toast.warn("Please Select Country Code")
-        }
-        if (!values?.profile_pic?.fileList[0].originFileObj) {
-            // return Toast.warn("Please Add Image")
-        }
+        // console.log(item,"chchhchc");
+
         try {
+            const photoComment = [];
+            for (const pair of inputPairs) {
+                const fileUrls = await uploadFiles(fileLists[pair.id] || []);
+                photoComment.push({
+                    goal: values[pair.goalName],
+                    comment: values[pair.commentName],
+                    files: fileUrls,
+                });
+            }
+            const item = {
+                photo_section: {
+                    userId: value,
+                    photo_comment: photoComment,
+                }
+            };
             setLoading(true)
-
-
-            // setUserInfo((preValue: any) => {
-            //   return {
-            //     ...preValue,
-            //     profile_pic: apiImageRes
-            //   }
-            // })
-
-            // let apiRes = await henceforthApi.Staff.create(items)
-            // console.log('apiRes', apiRes);
-
-            // setUserInfo((preValue: any) => {
-            //   return {
-            //     ...preValue,
-            //     name: apiRes.name,
-            //     email: apiRes.email,
-            //     mobile: apiRes.mobile
-            //   }
-            // })
-
-            form.resetFields()
-            // Toast.success("Staff Added Successfully");
-            // router.replace(`/staff/${apiRes?._id}/view`)
-        } catch (error: any) {
-            // Toast.error(error)
+            let res = await api.Auth.signUp(item)
+            console.log(res, "ggsadsdssdfhgh");
+        } catch (error) {
             console.log(error);
+
         } finally {
             setLoading(false)
         }
     };
-    const submit = () => {
-        // router.push("/admin/users/add/page4")
-    }
 
-    const [inputPairs, setInputPairs] = useState([
-        { id: 1, goalName: 'goal1', goalLabel: 'PROJECT 1:', commentName: 'comments1', commentLabel: 'PROJECT 1 COMMENTS:' }
-    ]);
-
-    const addInputPair = () => {
-        const nextIndex = inputPairs.length + 1;
-        setInputPairs([
-            ...inputPairs,
-            { id: nextIndex, goalName: `goal${nextIndex}`, goalLabel: `PROJECT #${nextIndex}`, commentName: `comments${nextIndex}`, commentLabel: `PROJECT #${nextIndex} COMMENTS:` }
-        ]);
-    };
-
-    const removeInputPair = (id: any) => {
-        setInputPairs(inputPairs.filter(pair => pair.id !== id));
-    };
     return (
         <MainLayout>
             <Fragment>
@@ -147,27 +158,34 @@ const page = () => {
                                     </div>
                                     <Divider plain></Divider>
                                     <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={submit}>
-                                        {/* First Name  */}
-
-                                        <div className="">
-                                            {inputPairs.map((pair: any, index: any) => (
+                                        <div>
+                                            {inputPairs.map((pair) => (
                                                 <div key={pair.id} style={{ position: 'relative' }}>
                                                     <Form.Item
                                                         name={pair.goalName}
-                                                        rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
+                                                        // rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
                                                         label={pair.goalLabel}
                                                     >
-                                                        <Input
-                                                            size={'large'}
-                                                            placeholder="Enter..."
-                                                            onKeyPress={(e: any) => {
-                                                                if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                                    e.preventDefault();
-                                                                } else {
-                                                                    e.target.value = String(e.target.value).trim();
-                                                                }
-                                                            }}
-                                                        />
+                                                        <Upload
+                                                            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                                                            listType="picture-card"
+                                                            fileList={fileLists[pair.id] || []}
+                                                            onPreview={handlePreview}
+                                                            onChange={(info) => handleChange(info, pair.id.toString())}
+                                                        >
+                                                            {(fileLists[pair.id] || []).length >= 8 ? null : <PlusOutlined />}
+                                                        </Upload>
+                                                        {previewImage && (
+                                                            <Image
+                                                                wrapperStyle={{ display: 'none' }}
+                                                                preview={{
+                                                                    visible: previewOpen,
+                                                                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                                                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                                                }}
+                                                                src={previewImage}
+                                                            />
+                                                        )}
                                                     </Form.Item>
                                                     <Form.Item
                                                         name={pair.commentName}
@@ -175,7 +193,7 @@ const page = () => {
                                                         label={pair.commentLabel}
                                                     >
                                                         <Input
-                                                            size={'large'}
+                                                            size="large"
                                                             placeholder="Enter..."
                                                             onKeyPress={(e: any) => {
                                                                 if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -198,10 +216,8 @@ const page = () => {
                                                 Add Project and Comment
                                             </Button>
                                         </div>
-
-                                        {/* Button  */}
-                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100 mt-2" loading={loading}>
-                                            Submit 
+                                        <Button size="large" type="primary" htmlType="submit" className="login-form-button w-100 mt-2" loading={loading}>
+                                            Submit
                                         </Button>
                                     </Form>
                                 </div>

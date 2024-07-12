@@ -2,7 +2,7 @@
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps, Divider } from 'antd';
 import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ import MainLayout from '@/app/layouts/page';
 
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import TextArea from 'antd/es/input/TextArea';
+import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -90,8 +91,31 @@ const page = () => {
             setLoading(false)
         }
     };
-    const submit = () => {
-        router.push("/admin/users/add/page8")
+
+    const searchParams = useSearchParams();
+    const entries = Array.from(searchParams.entries());
+    const value = entries.length > 0 ? entries[0][0] : '';
+    const submit = async(values:any) => {
+        let items={
+            spring_meeting:{
+                userId:value,
+                estimating:values?.estimating,
+                accountability:values?.accountability,
+                productivity:values?.productivity,
+            }
+        }
+        try {
+            setLoading(true)
+            let res=await api.Auth.signUp(items)
+            console.log(res,"ggsadfhgh");
+            
+            router.push(`/admin/users/add/page8?${res?.userId}`)
+        } catch (error) {
+            console.log(error);
+            
+        }finally{
+            setLoading(false)
+        }
     }
     return (
         <MainLayout>
@@ -131,7 +155,7 @@ const page = () => {
                                         </div>
                                         <Divider plain></Divider>
                                         {/* First Name  */}
-                                        <Form.Item name="firstname" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} >
+                                        <Form.Item name="estimating" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} >
                                             <TextArea size={'large'} placeholder="Estimating should always be No.1"
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -142,7 +166,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="firstname1" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}>
+                                        <Form.Item name="accountability" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}>
                                             <TextArea size={'large'} placeholder="Accountability should always be No. 2"
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -153,7 +177,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="firstname21" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}>
+                                        <Form.Item name="productivity" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}>
                                             <TextArea size={'large'} placeholder="Productivity should always be No. 3
 Daily routine for everybody.
 What CRM systems do you use?"

@@ -2,13 +2,14 @@
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
 import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useState } from 'react'
 import Link from 'next/link';
 import validation from '@/utils/validation';
 import MainLayout from '@/app/layouts/page';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
+import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -22,7 +23,17 @@ const page = () => {
     const [loading, setLoading] = useState(false)
 
     console.log(form, "form");
-
+    const searchParam= useParams()
+    const searchParams = useSearchParams();
+    const entries = Array.from(searchParams.entries());
+    console.log(searchParams,"iddd");
+    console.log(entries,"entries");
+    const value = entries.length > 0 ? entries[0][0] : '';
+    console.log(value,"value");
+    const id: any = searchParam.id;
+    console.log(id,"ididid");
+    console.log(searchParam,"searchParamsearchParam");
+    
     const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
         let items = {
@@ -88,9 +99,7 @@ const page = () => {
             setLoading(false)
         }
     };
-    const submit = () => {
-        router.push("/admin/users/add/page4")
-    }
+
     const [inputFields, setInputFields] = useState([{ name: 'goal1', label: 'Goal 1:' }]);
 
     const addInputField = () => {
@@ -122,6 +131,30 @@ const page = () => {
     const removeInputPair = (id: any) => {
         setInputPairs(inputPairs.filter(pair => pair.id !== id));
     };
+
+    const submit = async(values: any) => {
+        let items = {
+            goals: {
+                userId:value,
+                goal_last_meeting: inputPairs,
+                goal_next_meeting:inputFields
+            }
+        }
+        try {
+            setLoading(true)
+            let res=await api.Auth.signUp(items)
+            console.log(res,"gghgh");
+            
+            router.push(`/admin/users/add/page4?${res?.userId}`)
+        } catch (error) {
+            console.log(error);
+            
+        }finally{
+            setLoading(false)
+        }
+
+        
+    }
     return (
         <MainLayout>
             <Fragment>
@@ -216,7 +249,7 @@ const page = () => {
                                                         <Input
                                                             size={'large'}
                                                             placeholder="Enter..."
-                                                            onKeyPress={(e:any) => {
+                                                            onKeyPress={(e: any) => {
                                                                 if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
                                                                     e.preventDefault();
                                                                 } else {

@@ -99,7 +99,7 @@ const Home: Page = (props: any) => {
       icon: <Icons.Users />,
       title: "20",
       textColor: "#007B55",
-      count: "Total Users",
+      count: "Fall 2024 (80 day's)",
       link: "/users/page/1?limit=10"
 
     },
@@ -109,33 +109,31 @@ const Home: Page = (props: any) => {
       icon: <Icons.ArtistIcon />,
       textColor: "#006C9C",
       title: "3",
-      count: "Total Meetings",
+      count: "Spring 2025 (408 day's)",
       link: "/artists/page/1?limit=10"
+    },
+    {
+      cardBackground: "#FFF5CC",
+      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
+      icon: <Icons.Users />,
+      textColor: "#B76E00",
+      title: "80",
+      count: "Total Club Member",
+      link: "/"
 
 
     },
-    // {
-    //   cardBackground: "#FFF5CC",
-    //   iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-    //   icon: <Icons.SongsIcon />,
-    //   textColor: "#B76E00",
-    //   title: state?.TotalSongs,
-    //   count: "Total Songs",
-    //   link: "/"
+    {
+      cardBackground: "#EBEDFF",
+      iconBackground: "linear-gradient(135deg, rgba(201, 206, 255, 0.00) 0%, rgba(201, 206, 255, 0.44) 90.25%, rgba(201, 206, 255, 0.48) 97.35%)",
+      icon: <Icons.ArtistIcon />,
+      textColor: "#747EDF",
+      title: "30",
+      count: "Total Meetings",
+      link: "/"
 
 
-    // },
-    // {
-    //   cardBackground: "#EBEDFF",
-    //   iconBackground: "linear-gradient(135deg, rgba(201, 206, 255, 0.00) 0%, rgba(201, 206, 255, 0.44) 90.25%, rgba(201, 206, 255, 0.48) 97.35%)",
-    //   icon: <Icons.WatchIcon />,
-    //   textColor: "#747EDF",
-    //   title: state?.TotalWatches,
-    //   count: "Total Watch",
-    //   link: "/"
-
-
-    // },
+    },
     // {
     //   cardBackground: "#FFE3D3",
     //   iconBackground: "linear-gradient(135deg, rgba(201, 206, 255, 0.00) 0%, rgba(255, 176, 134, 0.00) 0.01%, rgba(255, 176, 134, 0.48) 97.35%)",
@@ -222,9 +220,9 @@ const Home: Page = (props: any) => {
     initialise()
   }, [])
 
-  const dataSource = areas?.slice(0,5).map((res: any, index: number) => {
+  const dataSource = areas?.slice(0, 5).map((res: any, index: number) => {
     return {
-      key: index+1,
+      key: index + 1,
       name: res?.name,
       company: res?.company,
       email: res?.email,
@@ -232,7 +230,31 @@ const Home: Page = (props: any) => {
       position: res?.position,
       city: res?.home,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        <Link href={`/admin/users/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+        <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+      </ul>
+    }
+  }
+  );
+  const dataSource1 = areas?.slice(0, 5).map((res: any, index: number) => {
+    return {
+      key: index + 1,
+      name: res?.name,
+      company: res?.company,
+      email: res?.email,
+      action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+        <Link href={`/admin/fall/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+      </ul>
+    }
+  }
+  );
+  const dataSource2 = areas?.slice(0, 5).map((res: any, index: number) => {
+    return {
+      key: index + 1,
+      name: res?.name,
+      company: res?.company,
+      email: res?.email,
+      action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+        <Link href={`/admin/fall/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
       </ul>
     }
   }
@@ -253,7 +275,7 @@ const Home: Page = (props: any) => {
 
   const TableData = () => <Row gutter={[20, 20]} >
     <Col span={24} >
-      <Table dataSource={dataSource} pagination={false} scroll={{ x: '100%' }} />
+      {/* <Table dataSource={dataSource} pagination={false} scroll={{ x: '100%' }} /> */}
     </Col>
   </Row>
 
@@ -306,6 +328,60 @@ const Home: Page = (props: any) => {
       key: 'email',
     },
     {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+    },
+  ];
+  const columns1 = [
+    {
+      title: 'Key',
+      dataIndex: 'key',
+      key: 'key',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Company Name',
+      dataIndex: 'company',
+      key: 'company',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+    },
+  ];
+  const columns2 = [
+    {
+      title: 'Key',
+      dataIndex: 'key',
+      key: 'key',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Company Name',
+      dataIndex: 'company',
+      key: 'company',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
       title: 'Phone No',
       dataIndex: 'phone',
       key: 'phone',
@@ -328,7 +404,7 @@ const Home: Page = (props: any) => {
   ];
 
 
- 
+
   console.log(areas, "areas");
 
   useEffect(() => {
@@ -384,42 +460,42 @@ const Home: Page = (props: any) => {
           <Row gutter={[20, 20]} className='dashboradTable'>
 
 
-          <Col  sm={24} md={24} xl={12}>
+            <Col sm={24} md={24} xl={12}>
               <Card className='common-card'>
 
                 {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                   <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates</Typography.Title>
-               
-                  <Button className='text-center blackViewBtn'> View All</Button>
+
+                  {/* <Button className='text-center blackViewBtn'> View All</Button> */}
 
                   {/* <Table dataSource={dataSource} columns={columns} />; */}
-                
+
                 </div>
                 {/* Search  */}
 
                 {/* Tabs  */}
                 <div className='tabs-wrapper'>
 
-                  <Table dataSource={dataSource} columns={columns} pagination={false} />
+                  <Table dataSource={dataSource1} columns={columns1} pagination={false} />
                 </div>
-                
+
                 {/* Pagination  */}
 
               </Card>
             </Col>
 
-            <Col   sm={24} md={24} xl={12}>
+            <Col sm={24} md={24} xl={12}>
               <Card className='common-card'>
 
                 {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                   <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates</Typography.Title>
-               
-                  <Button className='text-center blackViewBtn'> View All</Button>
+
+                  {/* <Button className='text-center blackViewBtn'> View All</Button> */}
 
                   {/* <Table dataSource={dataSource} columns={columns} />; */}
-               
+
 
                 </div>
                 {/* Search  */}
@@ -427,9 +503,9 @@ const Home: Page = (props: any) => {
                 {/* Tabs  */}
                 <div className='tabs-wrapper'>
 
-                  <Table dataSource={dataSource} columns={columns} pagination={false} />
+                  <Table dataSource={dataSource2} columns={columns} pagination={false} />
                 </div>
-                
+
                 {/* Pagination  */}
 
               </Card>
@@ -440,26 +516,28 @@ const Home: Page = (props: any) => {
 
                 {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                  <Typography.Title level={4} className='m-0 fw-bold'>Recent Users</Typography.Title>
+                  <Typography.Title level={4} className='m-0 fw-bold'>Recent Club Member</Typography.Title>
+                  <Link href={'/admin/users'}>
                   <Button className='text-center blackViewBtn'> View All</Button>
+                  </Link>
                 </div>
                 {/* Search  */}
 
                 {/* Tabs  */}
                 <div className='tabs-wrapper'>
 
-                  <Table dataSource={dataSource} columns={columns} pagination={false} />
+                  <Table dataSource={dataSource} columns={columns2} pagination={false} />
                 </div>
                 {/* <div className=' justify-content-center mt-4 d-flex'> */}
-                 
 
-                  {/* <Table dataSource={dataSource} columns={columns} />; */}
+
+                {/* <Table dataSource={dataSource} columns={columns} />; */}
                 {/* </div> */}
                 {/* Pagination  */}
 
               </Card>
             </Col>
-          
+
           </Row>
           {/*  Graphs   */}
           {/* {GraphType.map((res)=><DashboardGraph key={res.heading} {...res}/>)} */}

@@ -2,7 +2,7 @@
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
 import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ import MainLayout from '@/app/layouts/page';
 
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import TextArea from 'antd/es/input/TextArea';
+import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -90,8 +91,30 @@ const page = () => {
             setLoading(false)
         }
     };
-    const submit = () => {
-        router.push("/admin/users/add/page5")
+    const searchParams = useSearchParams();
+    const entries = Array.from(searchParams.entries());
+    const value = entries.length > 0 ? entries[0][0] : '';
+    const submit = async(values:any) => {
+        let items={
+            craftsmen_toolbox:{
+                userId:value,
+                technology:values?.technology,
+                products :values?.products,
+                project:values?.project
+            }
+        }
+        try {
+            setLoading(true)
+            let res=await api.Auth.signUp(items)
+            console.log(res,"gghgh");
+            
+            router.push(`/admin/users/add/page5?${res?.userId}`)
+        } catch (error) {
+            console.log(error);
+            
+        }finally{
+            setLoading(false)
+        }
     }
     return (
         <MainLayout>
@@ -124,7 +147,7 @@ const page = () => {
 
 
                                         {/* First Name  */}
-                                        <Form.Item name="firstname" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any new technology you started using and share the name of the app or website:">
+                                        <Form.Item name="technology" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any new technology you started using and share the name of the app or website:">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -135,7 +158,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="firstname1" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any new products you have used in the last 6 months & share the name and website:">
+                                        <Form.Item name="products" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any new products you have used in the last 6 months & share the name and website:">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -146,7 +169,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="firstname2" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe something that you do with each project that sets you apart from your competition:">
+                                        <Form.Item name="project" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe something that you do with each project that sets you apart from your competition:">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {

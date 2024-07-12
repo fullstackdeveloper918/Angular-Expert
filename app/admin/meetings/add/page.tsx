@@ -11,13 +11,14 @@ import MainLayout from '@/app/layouts/page';
 
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import dayjs from "dayjs"
+import { addMeeting } from '@/utils/fakeApi';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
-const page = () => {
+const page = ({ onAdd }: any) => {
     // const defaultValue = dayjs('2024-01-01');
 
     const router = useRouter()
@@ -92,6 +93,33 @@ const page = () => {
             setLoading(false)
         }
     };
+
+    const onSubmit = async (values: any) => {
+        let items={
+            meeting_name:values?.meeting_name,
+            // "purpose": "Present new project proposal to client.",
+            start_time: values?.start_time,
+            end_time: values?.end_time,
+            location: values?.location,
+            hotel: values?.hotel,
+            airport: values?.airport,
+            host_company: values?.host_company,
+            host: values?.host,
+            cell: values?.cell,
+            weather: values?.weather
+        }
+        console.log(items, "asdfasdffasd");
+
+        try {
+            let res = await addMeeting(items as any);
+            console.log(res, "gggggg");
+
+            onAdd();
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
     return (
         <MainLayout>
             <Fragment>
@@ -114,8 +142,8 @@ const page = () => {
 
                                 {/* form  */}
                                 <div className='card-form-wrapper'>
-                                    <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical'>
-                                       
+                                    <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onSubmit}>
+
 
 
                                         {/* First Name  */}
@@ -136,14 +164,14 @@ const page = () => {
                                         {/* Email  */}
                                         <Form.Item name="start" rules={[{ required: true, message: 'Please Enter Start Meeting' }]} label="Start Meeting">
                                             <DatePicker
-                                           style={{ width: '100%' }}
+                                                style={{ width: '100%' }}
                                                 // defaultValue={defaultValue}
                                                 showTime
                                                 // locale={buddhistLocale}
                                                 onChange={onChange}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="end" rules={[{ required: true, whitespace: true, message: 'Please Enter End Meeting' }]} label="End Meeting">
+                                        <Form.Item name="end" rules={[{ required: true,  message: 'Please Enter End Meeting' }]} label="End Meeting">
                                             <DatePicker
                                                 // defaultValue={defaultValue}
                                                 style={{ width: '100%' }}
@@ -152,7 +180,83 @@ const page = () => {
                                                 onChange={onChange}
                                             />
                                         </Form.Item>
-
+                                        <Form.Item name="location" rules={[{ required: true, whitespace: true, message: 'Please Enter Location' }]} label="Location">
+                                            <Input size={'large'} placeholder="Location"
+                                                onKeyPress={(e: any) => {
+                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                        e.preventDefault();
+                                                    } else {
+                                                        e.target.value = String(e.target.value).trim()
+                                                    }
+                                                }}
+                                            />
+                                        </Form.Item>
+                                        <Form.Item name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
+                                            <Input size={'large'} placeholder="Hotel"
+                                                onKeyPress={(e: any) => {
+                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                        e.preventDefault();
+                                                    } else {
+                                                        e.target.value = String(e.target.value).trim()
+                                                    }
+                                                }}
+                                            />
+                                        </Form.Item>
+                                        <Form.Item name="airport " rules={[{ required: true, whitespace: true, message: 'Please Enter Nearest Airport' }]} label="Nearest Airport">
+                                            <Input size={'large'} placeholder="Nearest Airport"
+                                                onKeyPress={(e: any) => {
+                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                        e.preventDefault();
+                                                    } else {
+                                                        e.target.value = String(e.target.value).trim()
+                                                    }
+                                                }}
+                                            />
+                                        </Form.Item>
+                                        <Form.Item name="host_company" rules={[{ required: true, whitespace: true, message: 'Please Enter Host Company' }]} label="Host Company">
+                                            <Input size={'large'} placeholder="Host Company"
+                                                onKeyPress={(e: any) => {
+                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                        e.preventDefault();
+                                                    } else {
+                                                        e.target.value = String(e.target.value).trim()
+                                                    }
+                                                }}
+                                            />
+                                        </Form.Item>
+                                        <Form.Item name="host" rules={[{ required: true, whitespace: true, message: 'Please Enter Host' }]} label="Host">
+                                            <Input size={'large'} placeholder="Host"
+                                                onKeyPress={(e: any) => {
+                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                        e.preventDefault();
+                                                    } else {
+                                                        e.target.value = String(e.target.value).trim()
+                                                    }
+                                                }}
+                                            />
+                                        </Form.Item>
+                                        <Form.Item name="cell" rules={[{ required: true, whitespace: true, message: 'Please Enter Cell' }]} label="Cell">
+                                            <Input size={'large'} placeholder="Cell"
+                                                onKeyPress={(e: any) => {
+                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                        e.preventDefault();
+                                                    } else {
+                                                        e.target.value = String(e.target.value).trim()
+                                                    }
+                                                }}
+                                            />
+                                        </Form.Item>
+                                        <Form.Item name="weather" rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
+                                            <Input size={'large'} placeholder="Weather"
+                                                onKeyPress={(e: any) => {
+                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                        e.preventDefault();
+                                                    } else {
+                                                        e.target.value = String(e.target.value).trim()
+                                                    }
+                                                }}
+                                            />
+                                        </Form.Item>
 
                                         {/* Button  */}
                                         <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>

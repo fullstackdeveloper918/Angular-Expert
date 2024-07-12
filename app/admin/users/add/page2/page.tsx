@@ -2,7 +2,7 @@
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
 import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ import MainLayout from '@/app/layouts/page';
 
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import TextArea from 'antd/es/input/TextArea';
+import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -24,43 +25,35 @@ const page = () => {
     const [loading, setLoading] = useState(false)
 
     console.log(form, "form");
-
+    const searchParams = useSearchParams();
+    const entries = Array.from(searchParams.entries());
+    console.log(searchParams,"iddd");
+    console.log(entries,"entries");
+    
+  
     const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
         let items = {
-            firstname: String(values.firstname).trim(),
-            lastname: String(values.lastname).trim(),
-            email: String(values.email).trim(),
-            password: String(values.password).trim(),
-            country_code: values.country_code ?? "+93",
-            mobile: String(values.mobile).trim(),
-            roles: values.roles
+           bussiness_update:{
+            userId:"X6WkbgScnwdHY9gcfARFxoaEGNv1",
+            financial_position:values?.financial_position,
+            sales_position:values?.sales_position,
+            accomplishments:values?.accomplishments,
+            hr_position:values?.hr_position,
+            current_challenges:values?.current_challenges,
+            craftsmen_support:values?.craftsmen_support,
+           }
         } as any
-        if (!items.firstname) {
-            // return Toast.warn("Please Enter Valid First Name")
-        }
-        if (!items.lastname) {
-            // return Toast.warn("Please Enter Valid Last Name")
-        }
-        // if (!henceforthValidations.email(items.email)) {
-        //   return Toast.warn("Please Enter Valid E-mail")
-        // }
-        // if (!henceforthValidations.strongPassword(items.password)) {
-        //   return Toast.warn("Please Enter Valid Password")
-        // }
-        if (!Number(items.mobile)) {
-            // return Toast.warn("Please Enter Valid Phone No.")
-        }
-        if (!items.country_code) {
-            // return Toast.warn("Please Select Country Code")
-        }
-        if (!values?.profile_pic?.fileList[0].originFileObj) {
-            // return Toast.warn("Please Add Image")
-        }
+        console.log(items,"page2");
+        
+        // router.push("/admin/users/add/page3")
         try {
             setLoading(true)
 
-
+            let res =await api.Auth.signUp(items)
+            console.log(res,"qqqq");
+            
+            router.push(`/admin/users/add/page3?${res?.user_id}`)
             // setUserInfo((preValue: any) => {
             //   return {
             //     ...preValue,
@@ -80,9 +73,7 @@ const page = () => {
             //   }
             // })
 
-            form.resetFields()
-            // Toast.success("Staff Added Successfully");
-            // router.replace(`/staff/${apiRes?._id}/view`)
+            // form.resetFields()
         } catch (error: any) {
             // Toast.error(error)
             console.log(error);
@@ -115,12 +106,12 @@ const page = () => {
 
                                 {/* form  */}
                                 <div className='card-form-wrapper'>
-                                    <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={submit}>
+                                    <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onFinish}>
 
 
 
                                         {/* First Name  */}
-                                        <Form.Item name="firstname" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your current financial position:">
+                                        <Form.Item name="financial_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your current financial position:">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -132,7 +123,7 @@ const page = () => {
                                             />
                                         </Form.Item>
                                         {/* Last Name  */}
-                                        <Form.Item name="lastname" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your current sales positions, hot prospects, recently contracted work:">
+                                        <Form.Item name="sales_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your current sales positions, hot prospects, recently contracted work:">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -143,7 +134,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="companyname" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your accomplishments in the last 6 months:">
+                                        <Form.Item name="accomplishments" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your accomplishments in the last 6 months:">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -154,7 +145,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="companyname1" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your HR position &/or needs:">
+                                        <Form.Item name="hr_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your HR position &/or needs:">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -165,7 +156,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="companyname2" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any current challenges your business is facing (i.e. problem client, personnel
+                                        <Form.Item name="current_challenges" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any current challenges your business is facing (i.e. problem client, personnel
 issue(s), trade availability, rising costs, supply chain, etc.):">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
@@ -179,7 +170,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                         </Form.Item>
 
 
-                                        <Form.Item name="position" rules={[{ required: true, message: 'Please Fill Field' }]} label="How can the Craftsmen aid or support you with these challenges?">
+                                        <Form.Item name="craftsmen_support" rules={[{ required: true, message: 'Please Fill Field' }]} label="How can the Craftsmen aid or support you with these challenges?">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {

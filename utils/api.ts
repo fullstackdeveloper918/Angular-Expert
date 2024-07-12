@@ -43,6 +43,7 @@ const requests = {
 const Auth = {
   login: (info: any) =>
     requests.post('login', info),
+  signUp: (items: any) => requests.post(`register`, items),
   loginAsUser: (info: any) =>
     requests.post('admin/users/login_as_user', info),
   logout: () =>

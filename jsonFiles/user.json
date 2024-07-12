@@ -7,7 +7,8 @@
         "phone":"7878787878",
         "position":"Manager",
         "home":"Los Angeles",
-        "id": 1
+        "id": 1,
+        "roles":["dashboard","Club Member","Meetings"]
       },
       {
         "id": 2,
@@ -16,7 +17,8 @@
         "email":"liam@gmail.com",
         "phone":"9898989898",
         "position":"Hr",
-        "home":"Chicago"
+        "home":"Chicago",
+        "roles":["dashboard","Meetings"]
       },
       {
         "id":"3",
@@ -25,7 +27,8 @@
         "email":"noah@gmail.com",
         "phone":"9494949494",
         "position":"Chief executive officer",
-        "home":"Houston"
+        "home":"Houston",
+        "roles":["dashboard","Club Member","Meetings"]
       },
       {
         "id":"4",
@@ -34,7 +37,8 @@
         "email":"oliver@gmail.com",
         "phone":"4545454545",
         "position":"Chief financial officer ",
-        "home":"Phoenix"
+        "home":"Phoenix",
+        "roles":["dashboard","Club Member"]
       },
       {
         "id":"5",
@@ -43,7 +47,8 @@
         "email":"james@gmail.com",
         "phone":"6565656565",
         "position":"Business analyst",
-        "home":"Philadelphia"
+        "home":"Philadelphia",
+        "roles":["dashboard","Club Member","Meetings"]
       },
       {
         "id":"6",
@@ -52,7 +57,8 @@
         "email":"elijah@gmail.com",
         "phone":"6161616161",
         "position":"Software engineer",
-        "home":"California"
+        "home":"California",
+        "roles":["Club Member","Meetings"]
       },
       {
         "id":"7",
@@ -61,7 +67,8 @@
         "email":"mateo@gmail.com",
         "phone":"2121212121",
         "position":"Administrative assistant",
-        "home":"Denver"
+        "home":"Denver",
+        "roles":["dashboard","Club Member","Meetings"]
       },
       {
         "id":"8",
@@ -70,7 +77,8 @@
         "email":"theodore@gmail.com",
         "phone":"3232323232",
         "position":"Marketing manager",
-        "home":"Columbus"
+        "home":"Columbus",
+        "roles":["dashboard","Club Member","Meetings"]
       },
       {
         "id":"9",
@@ -79,7 +87,8 @@
         "email":"henry@gmail.com",
         "phone":"7548789658",
         "position":"Information technology manager",
-        "home":"El Paso"
+        "home":"El Paso",
+        "roles":["dashboard","Club Member","Meetings"]
       },
       {
         "id":"10",
@@ -88,7 +97,8 @@
         "email":"william@gmail.com",
         "phone":"9787878787",
         "position":"Chief marketing officer",
-        "home":"Boston"
+        "home":"Boston",
+        "roles":["dashboard","Club Member","Meetings"]
       }
     ]
   }

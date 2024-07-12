@@ -43,7 +43,7 @@ import MainLayout from '@/app/layouts/page';
 import { useRouter } from 'next/navigation';
 import FilterSelect from '@/app/common/FilterSelect';
 import Icons from '@/app/common/Icons';
-import { deleteMeetingById, fetchMeeting, searchMeetingByName } from '@/utils/fakeApi';
+import { deleteMeetingById, fetchMeeting, fetchMeetingById, searchMeetingByName } from '@/utils/fakeApi';
 // import ExportFile from '@/components/ExportFile';
 // import s3bucket from '@/utils/s3bucket';
 import dayjs from "dayjs"
@@ -375,7 +375,23 @@ const page = () => {
             key: 'action',
         },
     ];
-
+    const [meeting, setMeeting] = useState<any>(null);
+    let meetingId:any=1
+    const ssdaasd = async () => {
+      try {
+          const res=await fetchMeetingById(1);
+          console.log(res,"dddd");
+          
+          // const updatedMeetings = areas.filter((m:any) => m.id !== id);
+          // setAreas(updatedMeetings); // Update state or local data
+          // alert(`Meeting with id ${id} deleted successfully.`);
+      } catch (error:any) {
+          alert(error.message); // Handle error if meeting is not found
+      }
+  };
+  useEffect(()=>{
+    ssdaasd()
+  },)
 
     useEffect(() => {
         fetchMeeting().then((data) => {
