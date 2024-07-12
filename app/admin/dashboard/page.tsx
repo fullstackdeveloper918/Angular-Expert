@@ -117,23 +117,23 @@ const Home: Page = (props: any) => {
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#B76E00",
-      title: "80",
+      title: "20",
       count: "Total Club Member",
       link: "/"
 
 
     },
-    {
-      cardBackground: "#EBEDFF",
-      iconBackground: "linear-gradient(135deg, rgba(201, 206, 255, 0.00) 0%, rgba(201, 206, 255, 0.44) 90.25%, rgba(201, 206, 255, 0.48) 97.35%)",
-      icon: <Icons.ArtistIcon />,
-      textColor: "#747EDF",
-      title: "30",
-      count: "Total Meetings",
-      link: "/"
+    // {
+    //   cardBackground: "#EBEDFF",
+    //   iconBackground: "linear-gradient(135deg, rgba(201, 206, 255, 0.00) 0%, rgba(201, 206, 255, 0.44) 90.25%, rgba(201, 206, 255, 0.48) 97.35%)",
+    //   icon: <Icons.ArtistIcon />,
+    //   textColor: "#747EDF",
+    //   title: "30",
+    //   count: "Total Meetings",
+    //   link: "/"
 
 
-    },
+    // },
     // {
     //   cardBackground: "#FFE3D3",
     //   iconBackground: "linear-gradient(135deg, rgba(201, 206, 255, 0.00) 0%, rgba(255, 176, 134, 0.00) 0.01%, rgba(255, 176, 134, 0.48) 97.35%)",
@@ -516,7 +516,7 @@ const Home: Page = (props: any) => {
 
                 {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                  <Typography.Title level={4} className='m-0 fw-bold'>Recent Club Member</Typography.Title>
+                  <Typography.Title level={4} className='m-0 fw-bold'>Club Members</Typography.Title>
                   <Link href={'/admin/users'}>
                   <Button className='text-center blackViewBtn'> View All</Button>
                   </Link>

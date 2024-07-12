@@ -18,9 +18,10 @@ import dynamic from 'next/dynamic';
 import MainLayout from '@/app/layouts/page';
 import { useRouter } from 'next/navigation';
 import { fetchAreas, searchAreasByName } from '@/utils/fakeApi';
+import api from '@/utils/api';
 // import ExportFile from '@/components/ExportFile';
 // import s3bucket from '@/utils/s3bucket';
-
+import { parseCookies } from 'nookies';
 const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -44,6 +45,8 @@ const page = () => {
         data: [],
         count: 0
     })
+const[state1,setState1]=useState<any>([])
+
     const [loading, setLoading] = React.useState(false)
     const [exportModal, setExportModal] = React.useState(false);
     const [areas, setAreas] = useState<any>([]);
@@ -169,10 +172,10 @@ const page = () => {
     //       setLoading(false)
     //     }
     //   }
-    const dataSource = areas?.map((res: any, index: number) => {
+    const dataSource = state1?.users?.map((res: any, index: number) => {
         return {
           key: index+1,
-          name: res?.name,
+          name: res?.displayName,
           company: res?.company,
           email: res?.email,
           phone: res?.phone,
@@ -254,6 +257,26 @@ const page = () => {
     const addUser=()=>{
         router.push("/admin/users/add")
     }
+
+    // console.count('hello count')
+    const cookies = parseCookies();
+const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
+console.log(accessToken,"gfgfgfgfgfg");
+
+    const getData=async()=>{
+        try {
+            let res=await api.User.listing()
+            setState1(res.data)
+        } catch (error) {
+            
+        }
+    }
+    useEffect(()=>{
+        getData()
+
+    },[])
+    console.log(state1,"ggggdgggdgd");
+    
     return (
         <MainLayout>
 
@@ -269,15 +292,15 @@ const page = () => {
                                 <div className='mb-4'>
                                     <Breadcrumb separator=">">
                                         <Breadcrumb.Item><Link className='text-decoration-none' href="/">General</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item className='text-decoration-none'>Users</Breadcrumb.Item>
+                                        <Breadcrumb.Item className='text-decoration-none'>Club Members</Breadcrumb.Item>
                                     </Breadcrumb>
                                 </div>
                                 {/* title  */}
                                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3'>
-                                    <Typography.Title level={3} className='m-0 fw-bold'>Users</Typography.Title>
+                                    <Typography.Title level={3} className='m-0 fw-bold'>Club Members</Typography.Title>
                                     <div className='d-flex gap-2'>
                                         {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
-                                            <Button type="primary" htmlType="button" size='large' icon={<PlusOutlined />} onClick={addUser}>Add User</Button>
+                                            <Button type="primary" htmlType="button" size='large' icon={<PlusOutlined />} onClick={addUser}>Add New Club Member</Button>
                                         {/* </Upload> */}
                                     </div>
                                 </div>

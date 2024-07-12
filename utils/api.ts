@@ -1,6 +1,7 @@
 import _superagent, { search } from "superagent";
 const SuperagentPromise = require('superagent-promise');
 const superagent = SuperagentPromise(_superagent, global.Promise);
+import { parseCookies } from 'nookies';
 
 const API_ROOT = 'https://frontend.goaideme.com/';
 
@@ -13,15 +14,17 @@ const API_FILE_ROOT_AUDIO = `${BUCKET_ROOT}audio/`;
 const API_FILE_ROOT_VIDEO = `${BUCKET_ROOT}video/`;
 const API_FILE_ROOT_DOCUMENTS = `${BUCKET_ROOT}documents/`;
 const API_FILE_ROOT_DB_BACKUP = `${BUCKET_ROOT}backup/`;
-
+const cookies = parseCookies();
+const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
+console.log(accessToken,"gfgfgfgfgfg");
 const encode = encodeURIComponent;
 const responseBody = (res: any) => res.body;
 
-let token: any = null;
+let token: any = accessToken;
 console.log(token,"qwqwwqwq");
 const tokenPlugin = (req: any) => {
   if (token) {
-    req.set('Authorization', `Bearer ${token}`);
+    req.set('Token', `${token}`);
     // req.set('token', token || "mim");
   }
 }
@@ -59,6 +62,27 @@ const Auth = {
   //   requests.put('admin/profile/edit', info),
   edit: (info: any) =>
     requests.patch('profile', info),
+};
+
+const User = {
+  listing: () =>
+    requests.get(`list`),
+  export: (start_date?: number, end_date?: number) =>
+    requests.get(`user?start_date=${start_date}&end_date=${end_date}`),
+  getById: (id: string) =>
+    requests.get(`user/details/${id}`),
+  getPurchase: (_id: string, q?: string) =>
+    requests.get(`user/${_id}/purchase${q ? `?${q}` : ""}`),
+  detailPurchase: (_id: string) =>
+    requests.get(`user/purchase/${_id}`),
+  block: (id: string, info: any) =>
+    requests.patch(`user/block/${id}`, info),
+  deactivate: (id: string, info: any) =>
+    requests.patch(`user/status/${id}`, info),
+  delete: (id: string) =>
+    requests.del(`user/delete/${id}`),
+  import: (file: any) =>
+    requests.file(`user`, 'file', file)
 };
 
 // const Dashboard = {
@@ -258,26 +282,7 @@ const Transaction = {
     requests.get(`transaction?type=USER&start_date=${start_date}&end_date=${end_date}`),
 };
 
-const User = {
-  listing: (q: string) =>
-    requests.get(`user?${q}`),
-  export: (start_date?: number, end_date?: number) =>
-    requests.get(`user?start_date=${start_date}&end_date=${end_date}`),
-  getById: (id: string) =>
-    requests.get(`user/details/${id}`),
-  getPurchase: (_id: string, q?: string) =>
-    requests.get(`user/${_id}/purchase${q ? `?${q}` : ""}`),
-  detailPurchase: (_id: string) =>
-    requests.get(`user/purchase/${_id}`),
-  block: (id: string, info: any) =>
-    requests.patch(`user/block/${id}`, info),
-  deactivate: (id: string, info: any) =>
-    requests.patch(`user/status/${id}`, info),
-  delete: (id: string) =>
-    requests.del(`user/delete/${id}`),
-  import: (file: any) =>
-    requests.file(`user`, 'file', file)
-};
+
 
 const VP_points = {
   create: (info: any) =>

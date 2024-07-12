@@ -109,13 +109,13 @@ router.push(`/admin/users/add/page2?${res?.user_id}`)
             <div className='mb-4'>
               <Breadcrumb separator=">">
                 <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
-                <Breadcrumb.Item><Link href="/admin/users" className='text-decoration-none'>User</Link></Breadcrumb.Item>
-                <Breadcrumb.Item className='text-decoration-none'>Add User</Breadcrumb.Item>
+                <Breadcrumb.Item><Link href="/admin/users" className='text-decoration-none'>Club Members</Link></Breadcrumb.Item>
+                <Breadcrumb.Item className='text-decoration-none'>Add Club Member</Breadcrumb.Item>
               </Breadcrumb>
             </div>
             {/* Title  */}
             <div className=''>
-              <Typography.Title level={3} className='m-0 fw-bold'>Add User</Typography.Title>
+              <Typography.Title level={3} className='m-0 fw-bold'>Add Club Member</Typography.Title>
             </div>
 
             {/* form  */}
@@ -168,6 +168,7 @@ router.push(`/admin/users/add/page2?${res?.user_id}`)
                 <Form.Item name="homecity" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Home City' }]} label="Home City">
                   <Input size={'large'} type='homecity' placeholder="Home City" />
                 </Form.Item>
+                
                   {/* Email  */}
                   <Form.Item name="email" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Email' }]} label="Email">
                   <Input size={'large'} type='email' placeholder="Email" />

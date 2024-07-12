@@ -7,30 +7,24 @@
 // @import 'bootstrap/dist/css/bootstrap.min.css';
 // @import 'nprogress/nprogress.css';
 // @import 'react-quill/dist/quill.snow.css';
-
-
 // ==================================== Global CSS ====================================
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
-
 #nprogress .bar {
   background: $primary !important;
 }
-
 .songs-detail-img {
   .ant-image {
     width: 100% !important;
   }
-
   img {
     height: 250px !important;
     object-fit: cover;
   }
 }
-
 .overlay-image {
   position: absolute;
   width: 100%;
@@ -40,35 +34,26 @@
   border-radius: 10px;
   background-size: cover;
 }
-
 .tooltip-img {
   .ant-tooltip {
       display: none !important;
   }
 }
-
-:where(.css-dev-only-do-not-override-f7vrd6) a{
-  color: #000 !important; 
-  text-decoration: none;
-}
 :where(.css-dev-only-do-not-override-f7vrd6).ant-select-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-  background-color: #f0f0f0 !important
+  background-color: #F0F0F0 !important
 }
 .trigger, .ant-pagination .ant-pagination-item-active{
   background: #040707 !important
 }
-
 :where(.css-dev-only-do-not-override-f7vrd6).ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
   color: #040707 !important;
   border-color:#040707 !important;
 }
-
 :where(.css-dev-only-do-not-override-f7vrd6).ant-input-search .ant-input:hover, :where(.css-dev-only-do-not-override-f7vrd6).ant-input-search .ant-input:focus {
   border-color: #040707 !important;
 }
-
 :where(.css-dev-only-do-not-override-f7vrd6).ant-menu-light .ant-menu-item-selected{
-  background-color: #f8f9fa;
+  background-color: #F8F9FA;
 }
 .ant-select-focused:where(.css-dev-only-do-not-override-f7vrd6).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector{
   border-color: #040707 !important;
@@ -79,31 +64,26 @@ input:focus-visible{
   outline: none !important;
   box-shadow: none !important;
 }
-
 :where(.css-dev-only-do-not-override-f7vrd6).ant-btn-primary {
 border: 1px solid #000 !important;
   background: #040707 !important;
-   box-shadow: none !important; 
+   box-shadow: none !important;
    max-width: 200px ;
 }
-
-
 :where(.css-dev-only-do-not-override-f7vrd6).ant-menu-light .ant-menu-item-selected {
   background: #040707 !important;
   color: #fff !important;
 }
-
 i.fa-pen-to-square,
 i.fa-trash-can{
   font-size: 17px;
 }
-
 .archiveBtn{
-  background: #ff4d4f  !important;
+  background: #FF4D4F  !important;
 }
 .archiveBtn:hover{
-  border-color: #ff4d4f !important;
-  color: #ff4d4f !important;
+  border-color: #FF4D4F !important;
+  color: #FF4D4F !important;
   background: transparent  !important;
 }
 .activateBtn{
@@ -116,22 +96,19 @@ i.fa-trash-can{
   color: #fff !important;
   background-color: #040707 !important;
 }
-
 .ant-table-content tbody.ant-table-tbody tr:nth-child(even) {
-  background: #fafafa;
+  background: #FAFAFA;
 }
 .ant-table-thead tr th {
-  background: #e5e5e5 !important;
+  background: #E5E5E5 !important;
   color: #000 !important;
 }
-
 .ant-spin-container {
   box-shadow: 0 0 10px rgb(144 143 143 / 20%);
 }
 :where(.css-dev-only-do-not-override-f7vrd6).ant-table-wrapper .ant-table-pagination-right {
   padding: 10px;
 }
-
 .ViewMore {
   background: transparent !important;
   color: #000 !important;
@@ -145,16 +122,13 @@ i.fa-trash-can{
   height: auto;
   transition: all .3s ease-in;
 }
-
 .blackViewBtn:hover{
   background-color: transparent !important;
   color: #000 !important;
 }
-
 :where(.css-dev-only-do-not-override-f7vrd6).ant-btn:not(:disabled):focus-visible {
   outline: none !important;
 }
-
 .paginationCenter .ant-pagination{
   justify-content: center;
 }
@@ -164,7 +138,6 @@ a.forgotPassword {
   margin: -10px 0 10px;
   display: block;
 }
-
 .signBtn {
   border: 0;
   outline: 0;
@@ -174,31 +147,26 @@ a.forgotPassword {
 .signBtn:hover{
   text-decoration: underline;
 }
-
 :where(.css-dev-only-do-not-override-f7vrd6).ant-input-outlined:focus, :where(.css-dev-only-do-not-override-f7vrd6).ant-input-outlined:focus-within,
 :where(.css-dev-only-do-not-override-f7vrd6).ant-input-outlined:hover {
   border-color: #000000;
   box-shadow: none;
   outline: 0;
-  background-color: #ffffff;
+  background-color: #FFFFFF;
 }
-
 .ant-divider-horizontal {
   border: 0 !important;
   margin: 10px 0 !important;
 }
-
 .auth-pages .form-wrapper {
   border-radius: 40px;
 }
-
 :where(.css-dev-only-do-not-override-f7vrd6).ant-input-affix-wrapper-lg {
   padding: 7px 10px;
 }
 :where(.css-dev-only-do-not-override-f7vrd6).ant-input-affix-wrapper .ant-input-prefix {
   margin-inline-end: 8px;
 }
-
 .labelSignup{
   font-size: 15px;
   margin-bottom: 12px;
@@ -206,11 +174,9 @@ a.forgotPassword {
 .dashboradTable .ant-card .ant-card-body {
   padding: 6px 0 !important;
 }
-
 :where(.css-dev-only-do-not-override-f7vrd6).ant-picker-outlined {
   padding: 7.5px 11px;
 }
-
 :where(.css-dev-only-do-not-override-f7vrd6).ant-picker-outlined:focus ,
 :where(.css-dev-only-do-not-override-f7vrd6).ant-picker-outlined:hover,
 :where(.css-dev-only-do-not-override-f7vrd6).ant-picker-outlined:focus-within {
@@ -222,19 +188,17 @@ a.forgotPassword {
   height:calc(100vh - 10vh) ;
   align-items: center;
 }
-
 :where(.css-dev-only-do-not-override-f7vrd6).ant-btn-primary:hover {
   border: 1px solid #000 !important;
     background: transparent !important;
-    color: #000 !important; 
+    color: #000 !important;
   }
   :where(.css-dev-only-do-not-override-f7vrd6).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector {
     border-color: #000000  !important;
 }
 :where(.css-dev-only-do-not-override-f7vrd6).ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):active{
-  background-color: #f0f0f0 !important;
+  background-color: #F0F0F0 !important;
 }
-
 @media screen and (max-width:991x) {
   .ant-card .ant-card-body {
     overflow: hidden;
@@ -253,7 +217,6 @@ a.forgotPassword {
   .flexWrapper .ant-form-item{
     width: 100%;
   }
-
 }
 @media screen and (max-width:575px) {
   :where(.css-dev-only-do-not-override-f7vrd6).ant-btn-primary {
