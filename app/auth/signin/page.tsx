@@ -18,6 +18,8 @@ import Link from "next/link";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import { setCookie } from "nookies";
+import api from "@/utils/api";
+import axios from "axios";
 // import Icons from "@/components/Icons";
 // import { lowerCase } from "lodash";
 // import { getFirebaseMessageToken } from "@/utils/firebase";
@@ -62,9 +64,36 @@ console.log(values.password,"pass");
             setState(userCredential)
             const idToken = await userCredential.user.getIdToken();
             setToken(idToken);
-            console.log('Token ID:', idToken);
+            console.log(idToken,"jkjkhkh");
+            
+            // let item={
+            //     token:idToken
+            // }
+            // const config = {
+            //     headers: {
+            //       Authorization: `${idToken}`, // Assuming the token type is Bearer
+            //       'Content-Type': 'application/json' // If your API expects JSON data
+            //     }
+            //   };
+            // const res=await api.Auth.login(item)
+            // console.log(res,'ressdasas',);
+            const res = await axios.get(
+                "https://frontend.goaideme.com/single-user",
+                {
+                  headers: {
+                    Token: `${idToken}`, // Assuming the token type is Bearer
+                    'Content-Type': 'application/json' // If your API expects JSON data
+                  }
+                }
+              )
+              .then(response => {
+                // Handle the response
+                console.log('Response:', response.data);
+              })
+            console.log(res,"ereree");
+            
             // Toast.success("Login successfully")
-            if (rememberMe) {
+            if (rememberMe) {   
                 setCookie(this, "COOKIES_USER_ACCESS_TOKEN", idToken, {
                     maxAge: 60 * 60 * 24 * 30,
                     path: "/",

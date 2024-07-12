@@ -18,6 +18,7 @@ const encode = encodeURIComponent;
 const responseBody = (res: any) => res.body;
 
 let token: any = null;
+console.log(token,"qwqwwqwq");
 const tokenPlugin = (req: any) => {
   if (token) {
     req.set('Authorization', `Bearer ${token}`);
@@ -42,7 +43,7 @@ const requests = {
 
 const Auth = {
   login: (info: any) =>
-    requests.post('login', info),
+    requests.post('single-user', info),
   signUp: (items: any) => requests.post(`register`, items),
   loginAsUser: (info: any) =>
     requests.post('admin/users/login_as_user', info),
