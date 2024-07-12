@@ -125,8 +125,8 @@ const page = ({ onAdd }: any) => {
             <Fragment>
 
                 <section>
-                    <Row gutter={[20, 20]}>
-                        <Col sm={22} md={12} lg={11} xl={10} xxl={9}>
+                    <Row justify="center"  gutter={[20, 20]} className='heightCenter'>
+                    <Col sm={22} md={20} lg={16} xl={14} xxl={12}>
                             <Card className='common-card'>
                                 <div className='mb-4'>
                                     <Breadcrumb separator=">">
@@ -144,10 +144,10 @@ const page = ({ onAdd }: any) => {
                                 <div className='card-form-wrapper'>
                                     <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onSubmit}>
 
-
+                                    <div className='row mt-4 selectPaddingBox'>
 
                                         {/* First Name  */}
-                                        <Form.Item name="meeting" rules={[{ required: true, whitespace: true, message: 'Please Enter Meeting Name' }]} label="Meeting Name">
+                                        <Form.Item name="meeting" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Meeting Name' }]} label="Meeting Name">
                                             <Input size={'large'} placeholder="Meeting Name"
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -162,7 +162,7 @@ const page = ({ onAdd }: any) => {
 
 
                                         {/* Email  */}
-                                        <Form.Item name="start" rules={[{ required: true, message: 'Please Enter Start Meeting' }]} label="Start Meeting">
+                                        <Form.Item name="start" className='col-lg-6 col-sm-12'  rules={[{ required: true, message: 'Please Enter Start Meeting' }]} label="Start Meeting">
                                             <DatePicker
                                                 style={{ width: '100%' }}
                                                 // defaultValue={defaultValue}
@@ -171,7 +171,7 @@ const page = ({ onAdd }: any) => {
                                                 onChange={onChange}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="end" rules={[{ required: true,  message: 'Please Enter End Meeting' }]} label="End Meeting">
+                                        <Form.Item name="end" className='col-lg-6 col-sm-12' rules={[{ required: true,  message: 'Please Enter End Meeting' }]} label="End Meeting">
                                             <DatePicker
                                                 // defaultValue={defaultValue}
                                                 style={{ width: '100%' }}
@@ -180,7 +180,7 @@ const page = ({ onAdd }: any) => {
                                                 onChange={onChange}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="location" rules={[{ required: true, whitespace: true, message: 'Please Enter Location' }]} label="Location">
+                                        <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Location' }]} label="Location">
                                             <Input size={'large'} placeholder="Location"
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -191,7 +191,7 @@ const page = ({ onAdd }: any) => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
+                                        <Form.Item className='col-lg-6 col-sm-12' name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
                                             <Input size={'large'} placeholder="Hotel"
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -202,7 +202,7 @@ const page = ({ onAdd }: any) => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="airport " rules={[{ required: true, whitespace: true, message: 'Please Enter Nearest Airport' }]} label="Nearest Airport">
+                                        <Form.Item name="airport "  className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Nearest Airport' }]} label="Nearest Airport">
                                             <Input size={'large'} placeholder="Nearest Airport"
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -213,7 +213,7 @@ const page = ({ onAdd }: any) => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="host_company" rules={[{ required: true, whitespace: true, message: 'Please Enter Host Company' }]} label="Host Company">
+                                        <Form.Item name="host_company" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Host Company' }]} label="Host Company">
                                             <Input size={'large'} placeholder="Host Company"
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -224,7 +224,7 @@ const page = ({ onAdd }: any) => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="host" rules={[{ required: true, whitespace: true, message: 'Please Enter Host' }]} label="Host">
+                                        <Form.Item name="host" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Host' }]} label="Host">
                                             <Input size={'large'} placeholder="Host"
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -235,7 +235,7 @@ const page = ({ onAdd }: any) => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="cell" rules={[{ required: true, whitespace: true, message: 'Please Enter Cell' }]} label="Cell">
+                                        <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Cell' }]} label="Cell">
                                             <Input size={'large'} placeholder="Cell"
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -246,7 +246,7 @@ const page = ({ onAdd }: any) => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="weather" rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
+                                        <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
                                             <Input size={'large'} placeholder="Weather"
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -257,7 +257,7 @@ const page = ({ onAdd }: any) => {
                                                 }}
                                             />
                                         </Form.Item>
-
+</div>
                                         {/* Button  */}
                                         <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
                                             Add Meeting
