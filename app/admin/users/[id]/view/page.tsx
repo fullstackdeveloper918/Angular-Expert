@@ -120,7 +120,7 @@ interface StaffDetailInterface {
                 {/* Button  */}
                 <div className='card-listing-button d-inline-flex flex-wrap gap-3 w-100'>
                   <Link href={`/admin/users/${state?.id}/edit`} className='text-decoration-none text-white flex-grow-1'>
-                    <Button size='large' type="primary" htmlType='button' className='w-100'>
+                    <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn'>
                       Edit
                     </Button>
                   </Link>
@@ -142,7 +142,7 @@ interface StaffDetailInterface {
                     cancelText="No"
                     okButtonProps={{ type: 'primary', danger: true }}
                   >
-                    <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 '>Reset Password</Button>
+                    <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 primaryBtn'>Reset Password</Button>
                     </Popconfirm>
                   <Popconfirm
                     title="Archive the club member"

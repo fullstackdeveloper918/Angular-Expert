@@ -172,10 +172,10 @@ const[state1,setState1]=useState<any>([])
     //       setLoading(false)
     //     }
     //   }
-    const dataSource = state1?.users?.map((res: any, index: number) => {
+    const dataSource = areas?.map((res: any, index: number) => {
         return {
           key: index+1,
-          name: res?.displayName,
+          name: res?.name,
           company: res?.company,
           email: res?.email,
           phone: res?.phone,
@@ -187,6 +187,21 @@ const[state1,setState1]=useState<any>([])
         }
       }
       );
+    // const dataSource = state1?.users?.map((res: any, index: number) => {
+    //     return {
+    //       key: index+1,
+    //       name: res?.displayName,
+    //       company: res?.company,
+    //       email: res?.email,
+    //       phone: res?.phone,
+    //       position: res?.position,
+    //       city: res?.home,
+    //       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+    //         <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+    //       </ul>
+    //     }
+    //   }
+    //   );
     const columns = [
         {
             title: 'Key',
@@ -300,13 +315,13 @@ console.log(accessToken,"gfgfgfgfgfg");
                                     <Typography.Title level={3} className='m-0 fw-bold'>Club Members</Typography.Title>
                                     <div className='d-flex gap-2'>
                                         {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
-                                            <Button type="primary" htmlType="button" size='large' icon={<PlusOutlined />} onClick={addUser}>Add New Club Member</Button>
+                                            <Button type="primary" htmlType="button" size='large' className='primaryBtn' icon={<PlusOutlined />} onClick={addUser}>Add New Club Member</Button>
                                         {/* </Upload> */}
                                     </div>
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 '>
-                                    <Search size='large' placeholder="Search by Name & Email" enterButton  value={searchTerm}
+                                    <Search size='large' className='' placeholder="Search by Name & Email" enterButton  value={searchTerm}
         onChange={handleSearch}/>
                                     {/* <Button type="primary" size='large' htmlType="button"  icon={<DownloadOutlined />} onClick={() => setExportModal(true)}>Export</Button> */}
                                     {/* <Space wrap> */}

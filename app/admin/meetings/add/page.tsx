@@ -118,7 +118,9 @@ const page = ({ onAdd }: any) => {
             cell: values?.cell,
             weather: values?.weather,
             comments: values?.comments,
-            notes: values?.notes
+            notes: values?.notes,
+            club_member:values?.club_member,
+            phone:values?.phone,
         }
         console.log(items, "chhhchh");
 

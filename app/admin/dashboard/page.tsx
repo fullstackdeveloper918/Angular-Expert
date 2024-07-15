@@ -219,7 +219,9 @@ const Home: Page = (props: any) => {
   React.useEffect(() => {
     initialise()
   }, [])
-
+  const springData=areas.filter((res:any)=>res?.type==="spring")
+  const fallData=areas.filter((res:any)=>res?.type==="fall")
+  console.log(springData,"springData");
   const dataSource = areas?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
@@ -235,26 +237,26 @@ const Home: Page = (props: any) => {
     }
   }
   );
-  const dataSource1 = areas?.slice(0, 5).map((res: any, index: number) => {
+  const dataSource1 = fallData?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
       name: res?.name,
       company: res?.company,
       email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        <Link href={`/admin/fall/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+        <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
       </ul>
     }
   }
   );
-  const dataSource2 = areas?.slice(0, 5).map((res: any, index: number) => {
+  const dataSource2 = springData?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
       name: res?.name,
       company: res?.company,
       email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        <Link href={`/admin/fall/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+        <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
       </ul>
     }
   }
