@@ -77,6 +77,7 @@ const Home: Page = (props: any) => {
   const array = [henceofrthEnums.GraphType.Yearly, henceofrthEnums.GraphType.Monthly, henceofrthEnums.GraphType.Weekly, henceofrthEnums.GraphType.Daily]
   const [areas, setAreas] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const[state1,setState1]=useState<any>([])
   // const [graphType, setGraphType] = React.useState(henceofrthEnums.GraphType.Yearly.toUpperCase() as string)
 
   // const handlePagination = (page: number, pageSize: number) => {
@@ -219,29 +220,30 @@ const Home: Page = (props: any) => {
   React.useEffect(() => {
     initialise()
   }, [])
-  const springData=areas.filter((res:any)=>res?.type==="spring")
-  const fallData=areas.filter((res:any)=>res?.type==="fall")
-  console.log(springData,"springData");
-  const dataSource = areas?.slice(0, 5).map((res: any, index: number) => {
+  const completed = state1.filter((res:any) => res?.is_completed === true);
+  const non_completed=state1.filter((res:any)=>res?.is_completed==false)
+  console.log(completed,"completed");
+  console.log(non_completed,"non_completed");
+  const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.name,
-      company: res?.company,
+      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+      company: res?.company_name,
       email: res?.email,
-      phone: res?.phone,
+      phone: res?.mobile,
       position: res?.position,
-      city: res?.home,
+      city: res?.home_city,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
         <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
       </ul>
     }
   }
   );
-  const dataSource1 = fallData?.slice(0, 5).map((res: any, index: number) => {
+  const dataSource1 = completed?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.name,
-      company: res?.company,
+      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+      company: res?.company_name,
       email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
         <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
@@ -249,11 +251,11 @@ const Home: Page = (props: any) => {
     }
   }
   );
-  const dataSource2 = springData?.slice(0, 5).map((res: any, index: number) => {
+  const dataSource2 = non_completed?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.name,
-      company: res?.company,
+      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+      company: res?.company_name,
       email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
         <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
@@ -405,7 +407,18 @@ const Home: Page = (props: any) => {
     },
   ];
 
+  const getData=async()=>{
+    try {
+        let res=await api.User.listing()
+        setState1(res)
+    } catch (error) {
+        
+    }
+}
+useEffect(()=>{
+    getData()
 
+},[])
 
   console.log(areas, "areas");
 

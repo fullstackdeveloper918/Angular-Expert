@@ -13,7 +13,7 @@
         "Club Member",
         "Meetings"
       ],
-      "type": "spring"
+      "action": "completed"
     },
     {
       "id": 2,
@@ -27,7 +27,7 @@
         "dashboard",
         "Meetings"
       ],
-      "type": "fall"
+      "action": "non_completed"
     },
     {
       "id": 3,
@@ -42,7 +42,7 @@
         "Club Member",
         "Meetings"
       ],
-      "type": "spring"
+      "action": "completed"
     },
     {
       "id": 4,
@@ -56,7 +56,7 @@
         "dashboard",
         "Club Member"
       ],
-      "type": "fall"
+      "action": "non_completed"
     },
     {
       "id": 5,
@@ -71,7 +71,7 @@
         "Club Member",
         "Meetings"
       ],
-      "type": "spring"
+      "action": "completed"
     },
     {
       "id": 6,
@@ -85,7 +85,7 @@
         "Club Member",
         "Meetings"
       ],
-      "type": "fall"
+      "action": "non_completed"
     },
     {
       "id": 7,
@@ -100,7 +100,7 @@
         "Club Member",
         "Meetings"
       ],
-      "type": "spring"
+      "action": "completed"
     },
     {
       "id": 8,
@@ -115,7 +115,7 @@
         "Club Member",
         "Meetings"
       ],
-      "type": "fall"
+      "action": "non_completed"
     },
     {
       "id": 9,
@@ -130,7 +130,7 @@
         "Club Member",
         "Meetings"
       ],
-      "type": "fall"
+      "action": "non_completed"
     },
     {
       "id": 10,
@@ -145,7 +145,7 @@
         "Club Member",
         "Meetings"
       ],
-      "type": "spring"
+      "action": "completed"
     }
   ]
 }

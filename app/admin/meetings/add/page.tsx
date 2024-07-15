@@ -13,6 +13,7 @@ import utc from 'dayjs/plugin/utc';
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import dayjs from "dayjs"
 import { addMeeting, searchAreasByName } from '@/utils/fakeApi';
+import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -114,13 +115,14 @@ const page = ({ onAdd }: any) => {
             hotel: values?.hotel,
             airport: values?.airport,
             host_company: values?.host_company,
-            host: values?.host,
+            host: ["testing", "check"],
+            // host: values?.host,
             cell: values?.cell,
             weather: values?.weather,
             comments: values?.comments,
             notes: values?.notes,
-            club_member:values?.club_member,
-            phone:values?.phone,
+            // club_member:values?.club_member,
+            phone: ["88888888888", "8787890987"],
         }
         console.log(items, "chhhchh");
 
@@ -134,10 +136,10 @@ const page = ({ onAdd }: any) => {
         // console.log(dayjs.extend(values?.start_time),"gkghjkghjk");
 
         try {
-            let res = await addMeeting(items as any);
+            let res = await api.Meeting.create(items as any);
             console.log(res, "gggggg");
-
-            onAdd();
+            router.back()
+            // onAdd();
         } catch (error) {
             console.log(error);
 
@@ -271,7 +273,7 @@ const page = ({ onAdd }: any) => {
                                                     }}
                                                 />
                                             </Form.Item>
-                                            <Form.Item name="host_company" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Host Company' }]} label="Host Company">
+                                            <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
                                                 <Input size={'large'} placeholder="Host Company"
                                                     onKeyPress={(e: any) => {
                                                         if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -282,7 +284,7 @@ const page = ({ onAdd }: any) => {
                                                     }}
                                                 />
                                             </Form.Item>
-                                            <Form.Item name="host" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Host' }]} label="Host">
+                                            {/* <Form.Item name="host" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Host' }]} label="Host">
                                                 <Input size={'large'} placeholder="Host"
                                                     onKeyPress={(e: any) => {
                                                         if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -292,7 +294,7 @@ const page = ({ onAdd }: any) => {
                                                         }
                                                     }}
                                                 />
-                                            </Form.Item>
+                                            </Form.Item> */}
                                             <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Cell' }]} label="Cell">
                                                 <Input size={'large'} placeholder="Cell"
                                                     onKeyPress={(e: any) => {
@@ -316,18 +318,18 @@ const page = ({ onAdd }: any) => {
                                                 />
                                             </Form.Item>
                                             <Form.Item
-                                                name="club_member"
+                                                name="host"
                                                 className="col-lg-6 col-sm-12"
                                                 validateTrigger={['onChange', 'onBlur']}
                                                 rules={[
-                                                    { required: true, message: 'Please Select Club Member' },
+                                                    { required: true, message: 'Please Select Host' },
                                                 ]}
-                                                label="Club Member"
+                                                label="Host"
                                             >
                                                 <Select
                                                     mode="multiple"
                                                     size="large"
-                                                    placeholder="Select Club Members"
+                                                    placeholder="Select Host"
                                                     onSearch={handleSearch}
                                                     optionLabelProp="label"
                                                     defaultActiveFirstOption  // Ensure first option is active on dropdown open
@@ -342,18 +344,18 @@ const page = ({ onAdd }: any) => {
                                                 </Select>
                                             </Form.Item>
                                             <Form.Item name="mobile_no" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Mobile Number' }]} label="Mobile Number">
-                                                <Input 
-                                             
+                                                <Input
+
                                                     size={'large'} placeholder="Mobile Number"
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim()
-                                                        }
-                                                    }}
+                                                // onKeyPress={(e: any) => {
+                                                //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                //         e.preventDefault();
+                                                //     } else {
+                                                //         e.target.value = String(e.target.value).trim()
+                                                //     }
+                                                // }}
                                                 />
-                                             {/* <Select
+                                                {/* <Select
                                                     mode="multiple"
                                                     size="large"
                                                     // placeholder="Select Club Members"

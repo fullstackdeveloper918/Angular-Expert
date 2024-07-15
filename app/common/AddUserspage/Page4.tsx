@@ -2,7 +2,7 @@
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
 import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -18,43 +18,50 @@ const { Row, Col, Card, Button } = {
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
-const page = () => {
+const Page4 = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false)
 
     console.log(form, "form");
-    const searchParams = useSearchParams();
-    const entries = Array.from(searchParams.entries());
-    console.log(searchParams,"iddd");
-    console.log(entries,"entries");
 
-    const value = entries.length > 0 ? entries[0][0] : '';
-  
     const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
         let items = {
-           bussiness_update:{
-            userId:value,
-            financial_position:values?.financial_position,
-            sales_position:values?.sales_position,
-            accomplishments:values?.accomplishments,
-            hr_position:values?.hr_position,
-            current_challenges:values?.current_challenges,
-            craftsmen_support:values?.craftsmen_support,
-           }
+            firstname: String(values.firstname).trim(),
+            lastname: String(values.lastname).trim(),
+            email: String(values.email).trim(),
+            password: String(values.password).trim(),
+            country_code: values.country_code ?? "+93",
+            mobile: String(values.mobile).trim(),
+            roles: values.roles
         } as any
-        console.log(items,"page2");
-        
-        // router.push("/admin/users/add/page3")
+        if (!items.firstname) {
+            // return Toast.warn("Please Enter Valid First Name")
+        }
+        if (!items.lastname) {
+            // return Toast.warn("Please Enter Valid Last Name")
+        }
+        // if (!henceforthValidations.email(items.email)) {
+        //   return Toast.warn("Please Enter Valid E-mail")
+        // }
+        // if (!henceforthValidations.strongPassword(items.password)) {
+        //   return Toast.warn("Please Enter Valid Password")
+        // }
+        if (!Number(items.mobile)) {
+            // return Toast.warn("Please Enter Valid Phone No.")
+        }
+        if (!items.country_code) {
+            // return Toast.warn("Please Select Country Code")
+        }
+        if (!values?.profile_pic?.fileList[0].originFileObj) {
+            // return Toast.warn("Please Add Image")
+        }
         try {
             setLoading(true)
 
-            let res =await api.Auth.signUp(items)
-            console.log(res,"qqqq");
-            
-            router.push(`/admin/users/add/page3?${res?.user_id}`)
+
             // setUserInfo((preValue: any) => {
             //   return {
             //     ...preValue,
@@ -74,7 +81,9 @@ const page = () => {
             //   }
             // })
 
-            // form.resetFields()
+            form.resetFields()
+            // Toast.success("Staff Added Successfully");
+            // router.replace(`/staff/${apiRes?._id}/view`)
         } catch (error: any) {
             // Toast.error(error)
             console.log(error);
@@ -82,15 +91,37 @@ const page = () => {
             setLoading(false)
         }
     };
-    const submit = () => {
-        router.push("/admin/users/add/page3")
+    const searchParams = useSearchParams();
+    const entries = Array.from(searchParams.entries());
+    const value = entries.length > 0 ? entries[0][0] : '';
+    const submit = async(values:any) => {
+        let items={
+            craftsmen_toolbox:{
+                userId:value,
+                technology:values?.technology,
+                products :values?.products,
+                project:values?.project
+            }
+        }
+        try {
+            setLoading(true)
+            let res=await api.Auth.signUp(items)
+            console.log(res,"gghgh");
+            
+            router.push(`/admin/users/add/page5?${res?.userId}`)
+        } catch (error) {
+            console.log(error);
+            
+        }finally{
+            setLoading(false)
+        }
     }
     return (
         <MainLayout>
             <Fragment>
 
                 <section>
-                    <Row justify="center" gutter={[20, 20]}>
+                    <Row justify="center" gutter={[24, 24]}>
                         <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
                             <Card className='common-card'>
                                 <div className='mb-4'>
@@ -98,21 +129,25 @@ const page = () => {
                                         <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item><Link href="/admin/users" className='text-decoration-none'>User</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/users/add" className='text-decoration-none'>Add User</Link></Breadcrumb.Item>
+                                        <Breadcrumb.Item ><Link href="/admin/users/add/page2" className='text-decoration-none'>BUSINESS UPDATE</Link></Breadcrumb.Item>
+                                        <Breadcrumb.Item ><Link href="/admin/users/add/page3" className='text-decoration-none'>GOALS</Link></Breadcrumb.Item>
+                                        {/* <Breadcrumb.Item className='text-decoration-none'>BUSINESS UPDATE</Breadcrumb.Item> */}
+                                        {/* <Breadcrumb.Item className='text-decoration-none'>CRAFTSMEN TOOLBOX</Breadcrumb.Item> */}
                                     </Breadcrumb>
                                 </div>
                                 {/* Title  */}
                                 <div className='mb-2'>
-                                    <Typography.Title level={3} className='m-0 fw-bold'>BUSINESS UPDATE</Typography.Title>
+                                    <Typography.Title level={3} className='m-0 fw-bold'>CRAFTSMEN TOOLBOX</Typography.Title>
                                 </div>
 
                                 {/* form  */}
                                 <div className='card-form-wrapper'>
-                                    <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onFinish}>
+                                    <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={submit}>
 
 
 
                                         {/* First Name  */}
-                                        <Form.Item name="financial_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your current financial position:">
+                                        <Form.Item name="technology" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any new technology you started using and share the name of the app or website:">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -123,8 +158,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        {/* Last Name  */}
-                                        <Form.Item name="sales_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your current sales positions, hot prospects, recently contracted work:">
+                                        <Form.Item name="products" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any new products you have used in the last 6 months & share the name and website:">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -135,30 +169,7 @@ const page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="accomplishments" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your accomplishments in the last 6 months:">
-                                            <TextArea size={'large'} placeholder="Enter..."
-                                                onKeyPress={(e: any) => {
-                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                        e.preventDefault();
-                                                    } else {
-                                                        e.target.value = String(e.target.value).trim()
-                                                    }
-                                                }}
-                                            />
-                                        </Form.Item>
-                                        <Form.Item name="hr_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your HR position &/or needs:">
-                                            <TextArea size={'large'} placeholder="Enter..."
-                                                onKeyPress={(e: any) => {
-                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                        e.preventDefault();
-                                                    } else {
-                                                        e.target.value = String(e.target.value).trim()
-                                                    }
-                                                }}
-                                            />
-                                        </Form.Item>
-                                        <Form.Item name="current_challenges" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any current challenges your business is facing (i.e. problem client, personnel
-issue(s), trade availability, rising costs, supply chain, etc.):">
+                                        <Form.Item name="project" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe something that you do with each project that sets you apart from your competition:">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -170,18 +181,6 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                             />
                                         </Form.Item>
 
-
-                                        <Form.Item name="craftsmen_support" rules={[{ required: true, message: 'Please Fill Field' }]} label="How can the Craftsmen aid or support you with these challenges?">
-                                            <TextArea size={'large'} placeholder="Enter..."
-                                                onKeyPress={(e: any) => {
-                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                        e.preventDefault();
-                                                    } else {
-                                                        e.target.value = String(e.target.value).trim()
-                                                    }
-                                                }}
-                                            />
-                                        </Form.Item>
 
                                         {/* Button  */}
                                         <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
@@ -199,4 +198,4 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
     )
 }
 
-export default page
+export default Page4

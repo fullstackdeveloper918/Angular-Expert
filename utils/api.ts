@@ -69,22 +69,31 @@ const User = {
     requests.get(`list`),
   export: (start_date?: number, end_date?: number) =>
     requests.get(`user?start_date=${start_date}&end_date=${end_date}`),
-  getById: (id: string) =>
-    requests.get(`user/details/${id}`),
+  getById: (info: any) =>
+    requests.post(`single-user-detail`,info),
   getPurchase: (_id: string, q?: string) =>
     requests.get(`user/${_id}/purchase${q ? `?${q}` : ""}`),
   detailPurchase: (_id: string) =>
     requests.get(`user/purchase/${_id}`),
   block: (id: string, info: any) =>
     requests.patch(`user/block/${id}`, info),
-  deactivate: (id: string, info: any) =>
-    requests.patch(`user/status/${id}`, info),
+  deactivate: (info: any) =>
+    requests.post(`activte-deactivate-archive`, info),
   delete: (id: string) =>
     requests.del(`user/delete/${id}`),
   import: (file: any) =>
     requests.file(`user`, 'file', file)
 };
+const Meeting={
+  // add-meeting
+  create: (info: any) =>
+    requests.post('add-meeting', info),
+  listing: () =>
+    requests.get("meeting-list"),
+  delete: (info: any) =>
+    requests.post(`delete-meeting`, info),
 
+}
 // const Dashboard = {
 //   listing: (q?: string) =>
 //     requests.get(`admin/dashboard${q ? `?${q}` : ""}`)
@@ -310,7 +319,10 @@ const Dashboard={
         requests.get(`areas`)
 }
 
-
+const ImageUpload={
+  add: (info: any) =>
+    requests.post('uploadFile', info),
+}
 const henceforthApi = {
   Auth,
   API_ROOT,
@@ -321,7 +333,9 @@ const henceforthApi = {
   API_FILE_ROOT_VIDEO,
   API_FILE_ROOT_DOCUMENTS,
   Dashboard,
+  ImageUpload,
   FILES,
+  Meeting,
   Faq,
   Graph,
   Genre,

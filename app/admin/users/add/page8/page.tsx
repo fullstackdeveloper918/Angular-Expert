@@ -31,6 +31,7 @@ const Page = () => {
     const [form] = Form.useForm();
     const [inputPairs, setInputPairs] = useState([{ id: Date.now(), goalName: 'goal1', goalLabel: 'Project 1', commentName: 'comment1', commentLabel: 'Comment 1' }]);
     const [fileLists, setFileLists] = useState<Record<string, UploadFile<any>[]>>({});
+    const [uploadedUrls, setUploadedUrls] = useState<Record<string, string[]>>({});
     const [previewImage, setPreviewImage] = useState<any>('');
     const [previewOpen, setPreviewOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -43,9 +44,21 @@ const Page = () => {
         setPreviewOpen(true);
     };
 
-    const handleChange = (info: any, id: string) => {
+    const handleChange = async (info: any, id: string) => {
         const newFileLists = { ...fileLists, [id]: info.fileList };
         setFileLists(newFileLists);
+
+        if (info.file.status === 'done') {
+            try {
+                const formData = new FormData();
+                formData.append('file', info.file.originFileObj);
+                const response = await api.ImageUpload.add(formData);
+                const newUploadedUrls = { ...uploadedUrls, [id]: [...(uploadedUrls[id] || []), response.data.url] };
+                setUploadedUrls(newUploadedUrls);
+            } catch (error) {
+                console.error('Error uploading file:', error);
+            }
+        }
     };
 
     const addInputPair = () => {
@@ -61,32 +74,35 @@ const Page = () => {
         const newFileLists = { ...fileLists };
         delete newFileLists[id];
         setFileLists(newFileLists);
+        const newUploadedUrls = { ...uploadedUrls };
+        delete newUploadedUrls[id];
+        setUploadedUrls(newUploadedUrls);
     };
 
     const searchParams = useSearchParams();
     const entries = Array.from(searchParams.entries());
     const value = entries.length > 0 ? entries[0][0] : '';
+// console.log(uploadedUrls,"chchhc");
 
     const submit = async (values: any) => {
-        const photoComment = inputPairs.map(pair => ({
-            goal: values[pair.goalName],
-            comment: values[pair.commentName],
-            files: fileLists[pair.id]?.map(file => file.originFileObj),
-        }));
-
-        const item = {
-            photo_section: {
-                userId: value,
-                photo_comment: photoComment,
-                is_action:"completed",
-                is_draft:"completed"
-            }
-        };
-        console.log(item, "ooooo");
-
         setLoading(true);
         try {
-            let res = await api.Auth.signUp(item);
+            const photoComment = inputPairs.map(pair => ({
+                // goal: values[pair.goalName],
+                comment: values[pair.commentName],
+                files: values[pair.goalName],
+                // files: uploadedUrls[pair.id.toString()] || [],
+            }));
+
+            const item = {
+                photo_section: {
+                    userId: value,
+                    photo_comment: photoComment,
+                    is_draft: "completed"
+                }
+            };
+
+            const res = await api.Auth.signUp(item);
             console.log(res, "Response");
         } catch (error) {
             console.error(error);
@@ -94,6 +110,33 @@ const Page = () => {
             setLoading(false);
         }
     };
+    // const submit = async (values: any) => {
+    //     const photoComment = inputPairs.map(pair => ({
+    //         goal: values[pair.goalName],
+    //         comment: values[pair.commentName],
+    //         files: fileLists[pair.id]?.map(file => file.originFileObj),
+    //     }));
+
+    //     const item = {
+    //         photo_section: {
+    //             userId: value,
+    //             photo_comment: photoComment,
+    //             // is_action:"completed",
+    //             is_draft:"completed"
+    //         }
+    //     };
+    //     console.log(item, "ooooo");
+
+    //     setLoading(true);
+    //     try {
+    //         let res = await api.Auth.signUp(item);
+    //         console.log(res, "Response");
+    //     } catch (error) {
+    //         console.error(error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     return (
         <MainLayout>

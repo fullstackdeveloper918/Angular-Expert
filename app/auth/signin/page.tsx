@@ -43,6 +43,7 @@ const page = () => {
     const [token, setToken] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [state,setState]=useState<any>("")
+    const[loading,setLoading]=useState<any>(false)
     const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
         // router.push("/admin/dashboard")
@@ -56,7 +57,7 @@ console.log(values.password,"pass");
         }
 
         try {
-            // setLoading(true)
+            setLoading(true)
             const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
             setState(userCredential)
             console.log( state,"userCredential");
@@ -115,6 +116,8 @@ console.log(values.password,"pass");
             console.log("login error message", error);
             // Toast.error(error)
             // setLoading(false)
+        }finally{
+            setLoading(false)
         }
     };
     const handleLogin = async () => {
@@ -186,7 +189,7 @@ console.log(values.password,"pass");
                                             </Link>
                                         </div>
                                     {/* Button  */}
-                                    <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" >
+                                    <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading} >
                                         Log In
                                     </Button>
                                 </Form>

@@ -47,6 +47,7 @@ import { deleteMeetingById, fetchMeeting, fetchMeetingById, searchMeetingByName 
 // import ExportFile from '@/components/ExportFile';
 // import s3bucket from '@/utils/s3bucket';
 import dayjs from "dayjs"
+import api from '@/utils/api';
 const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -324,6 +325,20 @@ const page = () => {
             </ul>
         },
     ];
+
+    const archive = async (id:any) => {
+        const item = {
+          meeting_id: id,
+        }
+        try {
+          let res = await api.Meeting.delete(item as any)
+          console.log(res, "hhhh");
+          initialise()
+        //   setAreas
+        } catch (error) {
+    
+        }
+      }
     const dataSource = areas?.map((res: any, index: number) => {
         return {
             key: index+1,
@@ -340,7 +355,7 @@ const page = () => {
                     <Popconfirm
                         title="Delete"
                         description="Are you sure you want to delete ?"
-                        onConfirm={(event) => { event?.stopPropagation(); handleDeleteMeeting(res.id) }}
+                        onConfirm={(event:any) => {archive(res?.id)}}
                     // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                     >
                         <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
@@ -393,11 +408,20 @@ const page = () => {
     ssdaasd()
   },)
 
-    useEffect(() => {
-        fetchMeeting().then((data) => {
-            setAreas(data);
-        });
-    }, []);
+  const initialise = async () => {
+      try {
+          let res = await api.Meeting.listing();
+          setAreas(res); 
+      } catch (error) {
+          console.error('Error fetching meeting listing:', error);
+      }
+  };
+  useEffect(() => {
+
+    initialise(); 
+
+}, []);
+
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         setSearchTerm(value);
@@ -419,11 +443,13 @@ const page = () => {
             await deleteMeetingById(id);
             const updatedMeetings = areas.filter((m:any) => m.id !== id);
             setAreas(updatedMeetings); // Update state or local data
-            alert(`Meeting with id ${id} deleted successfully.`);
+            // alert(`Meeting with id ${id} deleted successfully.`);
         } catch (error:any) {
             alert(error.message); // Handle error if meeting is not found
         }
     };
+
+  
     const handleChange = (value: string) => {
         console.log(`selected ${value}`);
     };
@@ -432,6 +458,15 @@ const page = () => {
     const add = () => {
         router.push("/admin/meetings/add")
     }
+
+
+    // const initialise=async()=>{
+    //     try {
+    //         let res= await api.Meeting.listing()
+    //     } catch (error) {
+            
+    //     }
+    // }
     return (
         <MainLayout>
 

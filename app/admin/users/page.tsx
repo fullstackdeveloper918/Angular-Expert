@@ -172,25 +172,10 @@ const[state1,setState1]=useState<any>([])
     //       setLoading(false)
     //     }
     //   }
-    const dataSource = areas?.map((res: any, index: number) => {
-        return {
-          key: index+1,
-          name: res?.name,
-          company: res?.company,
-          email: res?.email,
-          phone: res?.phone,
-          position: res?.position,
-          city: res?.home,
-          action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
-          </ul>
-        }
-      }
-      );
-    // const dataSource = state1?.users?.map((res: any, index: number) => {
+    // const dataSource = areas?.map((res: any, index: number) => {
     //     return {
     //       key: index+1,
-    //       name: res?.displayName,
+    //       name: res?.name,
     //       company: res?.company,
     //       email: res?.email,
     //       phone: res?.phone,
@@ -202,6 +187,21 @@ const[state1,setState1]=useState<any>([])
     //     }
     //   }
     //   );
+    const dataSource = state1?.map((res: any, index: number) => {
+        return {
+          key: index+1,
+          name: res?.firstname?`${res?.firstname} ${res?.lastname}`:"N/A",
+          company: res?.company_name,
+          email: res?.email,
+          phone: res?.mobile,
+          position: res?.position,
+          city: res?.home_city,
+          action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+            <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+          </ul>
+        }
+      }
+      );
     const columns = [
         {
             title: 'Key',
@@ -281,7 +281,7 @@ console.log(accessToken,"gfgfgfgfgfg");
     const getData=async()=>{
         try {
             let res=await api.User.listing()
-            setState1(res.data)
+            setState1(res)
         } catch (error) {
             
         }
