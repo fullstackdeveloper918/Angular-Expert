@@ -257,7 +257,7 @@ const page = () => {
                                                     > */}
                                                     <Select
                                                          defaultValue={pair.status}
-                                                        style={{ position: 'absolute', top: '-7px', right: '58px', fontSize: '24px', cursor: 'pointer', width: 120 }}
+                                                        style={{ position: 'absolute', top: '-14px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
                                                         onChange={(value) => handleStatusChange(pair.id, value)}>
                                                         <Option value="completed">Completed</Option>
                                                     <Option value="progressing">Progressing</Option>
@@ -303,7 +303,7 @@ const page = () => {
                                                         />
                                                         <Select
                                                            defaultValue={field.status1}
-                                                            style={{ position: 'absolute', top: '-35px', right: '58px', fontSize: '24px', cursor: 'pointer', width: 120 }}
+                                                            style={{ position: 'absolute', top: '-42px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
                                                             onChange={(value) => handleStatusChange1(index, value)}
                                                             options={[
                                                                 { value: 'high', label: 'High' },
