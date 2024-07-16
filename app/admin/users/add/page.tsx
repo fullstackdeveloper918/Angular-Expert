@@ -1,10 +1,8 @@
 "use client"
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
-import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { Fragment, useState } from 'react'
-import { PlusOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import validation from '@/utils/validation';
 import MainLayout from '@/app/layouts/page';
@@ -44,21 +42,7 @@ console.log(form,"form");
     console.log(items,"items");
     
    
-    // if (!items.firstname) {
-    //   // return Toast.warn("Please Enter Valid First Name")
-    // }
-    // if (!items.lastname) {
-    //   // return Toast.warn("Please Enter Valid Last Name")
-    // }
-    // if (!Number(items.mobile)) {
-    //   // return Toast.warn("Please Enter Valid Phone No.")
-    // }
-    // if (!items.country_code) {
-    //   // return Toast.warn("Please Select Country Code")
-    // }
-    // if (!values?.profile_pic?.fileList[0].originFileObj) {
-    //   // return Toast.warn("Please Add Image")
-    // }
+    
     try {
       setLoading(true)
      
