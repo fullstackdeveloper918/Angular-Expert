@@ -347,7 +347,7 @@ const page = () => {
             end: dayjs(res?.end_time).format('h A DD-MM-YYYY'),
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
                 <li>
-                    <Link href={`/admin/meetings/edit`} >
+                    <Link href={`/admin/meetings/${res?.id}/edit`} >
                         <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
                     </Link>
                 </li>

@@ -1,39 +1,15 @@
 "use client"
-// import { setViewItem } from '@/lib/features/userSlice'
-// import React from 'react'
-// import { useDispatch, useSelector } from 'react-redux'
-// const page = () => {
-//     const dispatch = useDispatch()
-//     const userName = useSelector((state: any) => state.user.viewItem)
-//     const handleClick = () => {
-//         dispatch(setViewItem("Abhay Singh"))
-
-//     }
-//     return (
-//         <div className="container">
-//             <div className="row mt-3">
-//                 <h1 className="text-center">Meetings Listing</h1>
-//                 {/* <h3 className="">{userName}</h3> */}
-//                 <button className="" onClick={handleClick}>change view item</button>
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default page
-
-"use client"
 // const userName=useSelector((state:any) => state.user.viewItem)
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 // import MainLayout from '@/layouts/MainLayout';
-import { Table, Input, Breadcrumb, Tabs, Typography, Upload, Badge, Tag, Select, Popconfirm } from 'antd';
+import { Table, Input, Breadcrumb, Tabs, Typography, Upload, Badge, Tag, Select } from 'antd';
 import user from "@/assets/images/placeholder.png"
 import Link from 'next/link';
 import { Space } from 'antd';
 import type { TabsProps } from 'antd';
-import { PlusOutlined, DownloadOutlined, UploadOutlined } from '@ant-design/icons'
+import { EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
 // import { useRouter } from 'next/router';
 // import henceforthApi from '@/utils/henceforthApi';
 // import { GlobalContext } from '@/context/Provider';
@@ -41,13 +17,11 @@ import { PlusOutlined, DownloadOutlined, UploadOutlined } from '@ant-design/icon
 import dynamic from 'next/dynamic';
 import MainLayout from '@/app/layouts/page';
 import { useRouter } from 'next/navigation';
-import FilterSelect from '@/app/common/FilterSelect';
-import Icons from '@/app/common/Icons';
-import { deleteMeetingById, fetchMeeting, searchMeetingByName } from '@/utils/fakeApi';
+import { fetchAreas, searchAreasByName } from '@/utils/fakeApi';
+import api from '@/utils/api';
 // import ExportFile from '@/components/ExportFile';
 // import s3bucket from '@/utils/s3bucket';
-import dayjs from "dayjs"
-import api from '@/utils/api';
+import { parseCookies } from 'nookies';
 const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -71,10 +45,13 @@ const page = () => {
         data: [],
         count: 0
     })
+const[state1,setState1]=useState<any>([])
+
     const [loading, setLoading] = React.useState(false)
     const [exportModal, setExportModal] = React.useState(false);
-    const [searchTerm, setSearchTerm] = useState('')
     const [areas, setAreas] = useState<any>([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    // const [graphType, setGraphType] = React.useState(henceofrthEnums.G
     //   const onChangeRouter = (key: string, value: string) => {
     //     router.replace({
     //       query: { ...router.query, [key]: value }
@@ -195,15 +172,36 @@ const page = () => {
     //       setLoading(false)
     //     }
     //   }
-  
-  
-    const dataSource = areas?.map((res: any, index: number) => {
+    // const dataSource = areas?.map((res: any, index: number) => {
+    //     return {
+    //       key: index+1,
+    //       name: res?.name,
+    //       company: res?.company,
+    //       email: res?.email,
+    //       phone: res?.phone,
+    //       position: res?.position,
+    //       city: res?.home,
+    //       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+    //         <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+    //       </ul>
+    //     }
+    //   }
+    //   );
+    const dataSource = state1?.map((res: any, index: number) => {
         return {
-            key: index+1,
-            meeting:res?.meeting_name,
-            start: dayjs(res?.start_time).format('h A DD-MM-YYYY'),
-            end: dayjs(res?.end_time).format('h A DD-MM-YYYY'),
-        }})
+          key: index+1,
+          name: res?.firstname?`${res?.firstname} ${res?.lastname}`:"N/A",
+          company: res?.company_name,
+          email: res?.email,
+          phone: res?.mobile,
+          position: res?.position,
+          city: res?.home_city,
+          action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+            <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+          </ul>
+        }
+      }
+      );
     const columns = [
         {
             title: 'Key',
@@ -211,63 +209,96 @@ const page = () => {
             key: 'key',
         },
         {
-            title: 'Meeting Name',
-            dataIndex: 'meeting',
-            key: 'meeting',
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
         },
         {
-            title: 'Start Time',
-            dataIndex: 'start',
-            key: 'start',
+            title: 'Company Name',
+            dataIndex: 'company',
+            key: 'company',
         },
         {
-            title: 'End Time',
-            dataIndex: 'end',
-            key: 'end',
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+        },
+        {
+            title: 'Phone No',
+            dataIndex: 'phone',
+            key: 'phone',
+        },
+        {
+            title: 'Position',
+            dataIndex: 'position',
+            key: 'position',
+        },
+        {
+            title: 'Home City',
+            dataIndex: 'city',
+            key: 'city',
+        },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            key: 'action',
         },
     ];
 
 
-    console.log(areas, "hhhhhh");
-    const handleDeleteMeeting = async (id: number) => {
-        try {
-            await deleteMeetingById(id);
-            const updatedMeetings = areas.filter((m:any) => m.id !== id);
-            setAreas(updatedMeetings); // Update state or local data
-            alert(`Meeting with id ${id} deleted successfully.`);
-        } catch (error:any) {
-            alert(error.message); // Handle error if meeting is not found
+    useEffect(() => {
+        fetchAreas().then((data) => {
+          setAreas(data);
+        });
+      }, []);
+      const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+    
+        if (value.trim() === '') {
+          fetchAreas().then((data) => {
+            setAreas(data);
+          });
+        } else {
+          searchAreasByName(value).then((data) => {
+            setAreas(data);
+          });
         }
-    };
+      };
     const handleChange = (value: string) => {
         console.log(`selected ${value}`);
     };
 
-
-    const add = () => {
-        router.push("/admin/meetings/add")
+    const addUser=()=>{
+        router.push("/admin/member/add")
     }
 
-    const initialise = async () => {
+    // console.count('hello count')
+    const cookies = parseCookies();
+const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
+console.log(accessToken,"gfgfgfgfgfg");
+
+    const getData=async()=>{
         try {
-            let res = await api.Meeting.archive();
-            setAreas(res?.data); 
+            let res=await api.User.listing()
+            setState1(res)
         } catch (error) {
-            console.error('Error fetching meeting listing:', error);
+            
         }
-    };
-    useEffect(() => {
-  
-      initialise(); 
-  
-  }, []);
+    }
+    useEffect(()=>{
+        getData()
+
+    },[])
+    console.log(state1,"ggggdgggdgd");
+    
     return (
         <MainLayout>
 
             <Fragment>
                 <Head>
-                    <title>Meetings</title>
-                    <meta name="meetings" content="Meetings" />
+                    <title>Users</title>
+                    <meta name="description" content="Users" />
                 </Head>
                 <section>
                     <Row gutter={[20, 20]}>
@@ -276,28 +307,43 @@ const page = () => {
                                 <div className='mb-4'>
                                     <Breadcrumb separator=">">
                                         <Breadcrumb.Item><Link className='text-decoration-none' href="/">General</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item className='text-decoration-none'>Archive Meetings</Breadcrumb.Item>
+                                        <Breadcrumb.Item className='text-decoration-none'>Club Members</Breadcrumb.Item>
                                     </Breadcrumb>
                                 </div>
                                 {/* title  */}
                                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3'>
-                                    <Typography.Title level={3} className='m-0 fw-bold'>Archive Meetings</Typography.Title>
-                                   
+                                    <Typography.Title level={3} className='m-0 fw-bold'>Club Members</Typography.Title>
+                                    <div className='d-flex gap-2'>
+                                        {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
+                                            <Button type="primary" htmlType="button" size='large' className='primaryBtn' icon={<PlusOutlined />} onClick={addUser}>Add New Club Member</Button>
+                                        {/* </Upload> */}
+                                    </div>
                                 </div>
                                 {/* Search  */}
-                                <div className='my-4 d-flex gap-3'>
-                                    <Search size='large' placeholder="Search by Meeting Name or year" enterButton value={searchTerm}
-                                        />
+                                <div className='my-4 '>
+                                    <Search size='large' className='' placeholder="Search by Name & Email" enterButton  value={searchTerm}
+        onChange={handleSearch}/>
                                     {/* <Button type="primary" size='large' htmlType="button"  icon={<DownloadOutlined />} onClick={() => setExportModal(true)}>Export</Button> */}
                                     {/* <Space wrap> */}
-                                    {/* <FilterSelect /> */}
+                                    {/* <Select
+                                        defaultValue="lucy"
+                                        style={{ width: 220 }}
+                                        // onChange={handleChange}
+                                        size='large'
+                                        options={[
+                                            { value: 'jack', label: 'Jack' },
+                                            { value: 'lucy', label: 'Lucy' },
+                                            { value: 'Yiminghe', label: 'yiminghe' },
+                                            { value: 'disabled', label: 'Disabled', disabled: true },
+                                        ]}
+                                    /> */}
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
                                     <Table dataSource={dataSource} columns={columns} pagination={false} />
                                 </div>
                                 {/* Pagination  */}
-                                <Row justify={'center'} className="mt-5 d-flex paginationCenter">
+                                <Row justify={'center'} className="mt-5" style={{ paddingLeft: "650px" }}>
                                     <Col span={24}>
                                         <Pagination total={15} hideOnSinglePage={true} disabled={loading} />
                                     </Col>
@@ -305,7 +351,7 @@ const page = () => {
                             </Card>
                         </Col>
                     </Row>
-
+                 
 
                 </section>
             </Fragment>

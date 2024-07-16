@@ -67,17 +67,6 @@ console.log(values.password,"pass");
             setToken(idToken);
             console.log(idToken,"jkjkhkh");
             
-            // let item={
-            //     token:idToken
-            // }
-            // const config = {
-            //     headers: {
-            //       Authorization: `${idToken}`, // Assuming the token type is Bearer
-            //       'Content-Type': 'application/json' // If your API expects JSON data
-            //     }
-            //   };
-            // const res=await api.Auth.login(item)
-            // console.log(res,'ressdasas',);
             const res = await axios.get(
                 "https://frontend.goaideme.com/single-user",
                 {

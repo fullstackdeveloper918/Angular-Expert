@@ -1,9 +1,10 @@
 "use client";
 import { Table, Input, Breadcrumb, Typography, Space, Form, Popover, Popconfirm, Select } from 'antd';
 import dynamic from 'next/dynamic';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Icons from './Icons';
 import { PlusOutlined } from '@ant-design/icons'
+import api from '@/utils/api';
 const { Row, Col, Card, Button, Pagination } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -16,7 +17,25 @@ const AntModal = dynamic(() => import("antd").then(module => module.Modal), { ss
 
 const CustomModal = (props: any) => {
     console.log(props, "props");
+    const initialise = async () => {
+        try {
+            // setLoading(true)
+            let res=await api.Manage_Question.listing()
+            console.log(res,"qwqwqwqw");
+            
+        } catch (error) {
+            // Toast.error(error)
+            console.log(error);
+            
 
+        } finally {
+            // setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        initialise()
+    }, [])
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(null as any);
     const [loading, setLoading] = useState(false);
@@ -24,8 +43,9 @@ const CustomModal = (props: any) => {
     const [addLoading, setAddLoading] = useState(false);
     const [editLoading, setEditLoading] = useState(false);
     const [addForm] = Form.useForm();
+    
     const [editForm] = Form.useForm();
-
+const [state,setState]=useState<any>("")
     const addGenre = async (values: any) => {
         console.log("addGenre values", values);
         setAddLoading(true);
@@ -53,6 +73,49 @@ const CustomModal = (props: any) => {
             console.log("Questions field value:", changedValues.questions);
         }
     };
+    const getDataById = async () => {
+        // console.log(id);
+        const item = {
+          question_id: props?.id
+        }
+        try {
+          const res = await api.User.getById(item as any);
+          console.log(res, "ressssss");
+          setState(res?.data || null);
+          addForm.setFieldsValue(res);
+        } catch (error: any) {
+          alert(error.message);
+        }
+      };
+    const addQuestion = (values: any) => {
+            
+            let item = {
+                question_id:props?.id,
+                question: values.question,
+                question_type: values.question_type
+            }
+        try {
+            if(props?.type==="Add"){
+                let item = {
+                    question: values.question,
+                    question_type: values.question_type
+                }
+                let res = api.Manage_Question.create(item as any)
+            }
+            let res = api.Manage_Question.edit(item as any)
+            props?.initialise()
+            console.log(res, "resCheck");
+            setAddModalOpen(false)
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+    useEffect(() => {
+        // if (id) {
+        getDataById();
+        // }
+      }, []);
 
     return (
         <>
@@ -72,19 +135,20 @@ const CustomModal = (props: any) => {
                         labelCol={{ span: 24 }}
                         wrapperCol={{ span: 24 }}
                         initialValues={{ remember: true }}
-                        onFinish={addGenre}
+                        onFinish={addQuestion}
                         form={addForm}
                         autoComplete="off"
+                        
                     >
                         <Form.Item
-                            name="questions"
+                            name="question"
                             label={`${props?.type} Questions`}
                             rules={[{ required: true, whitespace: true, message: `Please Enter valid ${props?.type} Questions` }]}
                         >
                             <Input size={'large'} placeholder={`${props?.type} Questions`} />
                         </Form.Item>
                         <Form.Item
-                    name="type"
+                    name="question_type"
                     label={`${props?.type} Questions Type`}
                     rules={[{ required: true, message: `Please select a valid ${props?.type} Questions Type` }]}
                 >

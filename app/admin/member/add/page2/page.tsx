@@ -18,7 +18,7 @@ const { Row, Col, Card, Button } = {
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
-const Page2 = () => {
+const page = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
@@ -29,13 +29,14 @@ const Page2 = () => {
     const entries = Array.from(searchParams.entries());
     console.log(searchParams,"iddd");
     console.log(entries,"entries");
-    
+
+    const value = entries.length > 0 ? entries[0][0] : '';
   
     const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
         let items = {
            bussiness_update:{
-            userId:"X6WkbgScnwdHY9gcfARFxoaEGNv1",
+            userId:value,
             financial_position:values?.financial_position,
             sales_position:values?.sales_position,
             accomplishments:values?.accomplishments,
@@ -85,20 +86,20 @@ const Page2 = () => {
         router.push("/admin/users/add/page3")
     }
     return (
-        // <MainLayout>
-        //     <Fragment>
+        <MainLayout>
+            <Fragment>
 
                 <section>
                     <Row justify="center" gutter={[20, 20]}>
                         <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
-                            {/* <Card className='common-card'> */}
-                                {/* <div className='mb-4'>
+                            <Card className='common-card'>
+                                <div className='mb-4'>
                                     <Breadcrumb separator=">">
                                         <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item><Link href="/admin/users" className='text-decoration-none'>User</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item ><Link href="/admin/users/add" className='text-decoration-none'>Add User</Link></Breadcrumb.Item>
+                                        <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>User</Link></Breadcrumb.Item>
+                                        <Breadcrumb.Item ><Link href="/admin/member/add" className='text-decoration-none'>Add User</Link></Breadcrumb.Item>
                                     </Breadcrumb>
-                                </div> */}
+                                </div>
                                 {/* Title  */}
                                 <div className='mb-2'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>BUSINESS UPDATE</Typography.Title>
@@ -188,14 +189,14 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                         </Button>
                                     </Form>
                                 </div>
-                            {/* </Card> */}
+                            </Card>
                         </Col>
                     </Row>
 
                 </section>
-        //     </Fragment >
-        // </MainLayout>
+            </Fragment >
+        </MainLayout>
     )
 }
 
-export default Page2
+export default page

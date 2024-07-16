@@ -45,12 +45,12 @@ const page = () => {
         data: [],
         count: 0
     })
-const[state1,setState1]=useState<any>([])
+    const [state1, setState1] = useState<any>([])
 
     const [loading, setLoading] = React.useState(false)
     const [exportModal, setExportModal] = React.useState(false);
     const [areas, setAreas] = useState<any>([]);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState<any>('');
     // const [graphType, setGraphType] = React.useState(henceofrthEnums.G
     //   const onChangeRouter = (key: string, value: string) => {
     //     router.replace({
@@ -159,49 +159,22 @@ const[state1,setState1]=useState<any>([])
     //   }, [router.query.pagination, router.query.limit, router.query.search, router.query.type])
 
 
-    //   const handleUploadCsvFile = async (info: any) => {
-    //     setLoading(true)
-    //     if (info.file.status === 'done' || info.file.status === 'error') {
-    //       try {
-    //         // let data = await uploadCSV(info.file.originFileObj);
-    //         // console.log('data', data);
-    //         let apiRes = await henceforthApi.User.import(info.file.originFileObj)
-    //         Toast.success((apiRes.count2 + apiRes.count1) == 0 ? "No user added" : `${apiRes.message2} ${apiRes.count2} and ${apiRes.message1} ${apiRes.count1}`);
-    //       } catch (error) {
-    //       }
-    //       setLoading(false)
-    //     }
-    //   }
-    // const dataSource = areas?.map((res: any, index: number) => {
-    //     return {
-    //       key: index+1,
-    //       name: res?.name,
-    //       company: res?.company,
-    //       email: res?.email,
-    //       phone: res?.phone,
-    //       position: res?.position,
-    //       city: res?.home,
-    //       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-    //         <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
-    //       </ul>
-    //     }
-    //   }
-    //   );
+
     const dataSource = state1?.map((res: any, index: number) => {
         return {
-          key: index+1,
-          name: res?.firstname?`${res?.firstname} ${res?.lastname}`:"N/A",
-          company: res?.company_name,
-          email: res?.email,
-          phone: res?.mobile,
-          position: res?.position,
-          city: res?.home_city,
-          action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
-          </ul>
+            key: index + 1,
+            name: res?.data?.firstname ? `${res?.data?.firstname} ${res?.data?.lastname}` : "N/A",
+            company: res?.data?.company_name,
+            email: res?.data?.email,
+            phone: res?.data?.mobile,
+            position: res?.data?.position,
+            city: res?.data?.home_city,
+            action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+                <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+            </ul>
         }
-      }
-      );
+    }
+    );
     const columns = [
         {
             title: 'Key',
@@ -248,50 +221,52 @@ const[state1,setState1]=useState<any>([])
 
     useEffect(() => {
         fetchAreas().then((data) => {
-          setAreas(data);
+            setAreas(data);
         });
-      }, []);
-      const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    }, []);
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         setSearchTerm(value);
-    
-        if (value.trim() === '') {
-          fetchAreas().then((data) => {
-            setAreas(data);
-          });
-        } else {
-          searchAreasByName(value).then((data) => {
-            setAreas(data);
-          });
-        }
-      };
+        console.log(value, "value");
+    };
+    // if (value.trim() === '') {
+    //   fetchAreas().then((data) => {
+    //     setAreas(data);
+    //   });
+    // } else {
+    //   searchAreasByName(value).then((data) => {
+    //     setAreas(data);
+    //   });
+    // }
     const handleChange = (value: string) => {
         console.log(`selected ${value}`);
     };
 
-    const addUser=()=>{
-        router.push("/admin/users/add")
+    const addUser = () => {
+        router.push("/admin/member/add")
     }
 
     // console.count('hello count')
     const cookies = parseCookies();
-const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
-console.log(accessToken,"gfgfgfgfgfg");
+    const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
+    console.log(accessToken, "gfgfgfgfgfg");
 
-    const getData=async()=>{
+    const getData = async (query: string) => {
         try {
-            let res=await api.User.listing()
-            setState1(res)
+            let res = await api.User.listing(query);
+            setState1(res?.data || []);
         } catch (error) {
-            
+            console.error(error);
         }
-    }
-    useEffect(()=>{
-        getData()
+    };
 
-    },[])
-    console.log(state1,"ggggdgggdgd");
-    
+    useEffect(() => {
+        const query = searchTerm ? `searchTerm=${searchTerm}` : '';
+        getData(query);
+    }, [searchTerm]);
+
+    console.log(state1, "ggggdgggdgd");
+
     return (
         <MainLayout>
 
@@ -315,14 +290,14 @@ console.log(accessToken,"gfgfgfgfgfg");
                                     <Typography.Title level={3} className='m-0 fw-bold'>Club Members</Typography.Title>
                                     <div className='d-flex gap-2'>
                                         {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
-                                            <Button type="primary" htmlType="button" size='large' className='primaryBtn' icon={<PlusOutlined />} onClick={addUser}>Add New Club Member</Button>
+                                        <Button type="primary" htmlType="button" size='large' className='primaryBtn' icon={<PlusOutlined />} onClick={addUser}>Add New Club Member</Button>
                                         {/* </Upload> */}
                                     </div>
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 '>
-                                    <Search size='large' className='' placeholder="Search by Name & Email" enterButton  value={searchTerm}
-        onChange={handleSearch}/>
+                                    <Search size='large' className='' placeholder="Search by Name & Email" enterButton value={searchTerm}
+                                        onChange={handleSearch} />
                                     {/* <Button type="primary" size='large' htmlType="button"  icon={<DownloadOutlined />} onClick={() => setExportModal(true)}>Export</Button> */}
                                     {/* <Space wrap> */}
                                     {/* <Select
@@ -351,7 +326,7 @@ console.log(accessToken,"gfgfgfgfgfg");
                             </Card>
                         </Col>
                     </Row>
-                 
+
 
                 </section>
             </Fragment>

@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     console.log('middleware called');
 
-    const accessToken = "request.cookies.get('COOKIES_USER_ACCESS_TOKEN')";
+    const accessToken = request.cookies.get('COOKIES_USER_ACCESS_TOKEN');
     console.log(accessToken, "accessToken")
     // debugger
     if (!accessToken) {
@@ -26,5 +26,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: [  '/admin/users/:path*', '/admin//:path*','/admin//:path*'],
+    matcher: ["/",'/admin/dashboard/:path*',  '/admin/member/:path*', '/admin/meeting/:path*','/admin/manage_questions/:path*','/admin/archive_meeting/:path*','/admin/questionnaire/:path*'],
 };

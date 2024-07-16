@@ -26,9 +26,11 @@ const page = () => {
 
     // const { Toast, loading, setLoading } = React.useContext(GlobalContext)
     const [deleteLoading, setDeleteLoading] = React.useState("")
-    const [state, setState] = React.useState<any>([])
+    const [state, setState] = React.useState({
+        data: [] as any,
+        count: 0
+    })
 
-console.log(state,"statestatestate");
 
 
     const panelStyle = {
@@ -45,7 +47,7 @@ console.log(state,"statestatestate");
             </p>,
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
                 <li>
-                   <CustomModal type={"Edit"}/>
+                    <CustomModal type={"Edit"} />
                 </li>
                 <li>
                     <Popconfirm
@@ -59,9 +61,110 @@ console.log(state,"statestatestate");
                 </li>
             </ul>
         },
-      
+        {
+            key: '2',
+            question:
+                <p >
+                    <span>Describe your current sales positions, hot prospects, recently contracted work:</span>
+                </p>,
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                <li>
+                    <CustomModal type={"Edit"} />
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
+        },
+        {
+            key: '3',
+            question: <p >
+                <span>Describe your accomplishments in the last 6 months:</span>
+            </p>,
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                <li>
+                    <CustomModal type={"Edit"} />
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
+        },
+        {
+            key: '4',
+            question: <p >
+                <span>Describe your HR position &/or needs:</span>
+            </p>,
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                <li>
+                    <CustomModal type={"Edit"} />
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
+        },
+        {
+            key: '5',
+            question: <p >
+                <span>Describe any current challenges your business is facing (i.e. problem client, personnel issue(s), trade availability, rising costs, supply chain, etc.):</span>
+            </p>,
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                <li>
+                    <CustomModal type={"Edit"} />
+                </li>
+                <li>
+                    <Popconfirm
+                        title="Delete"
+                        description="Are you sure you want to delete ?"
+                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                    >
+                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                    </Popconfirm>
+                </li>
+            </ul>
+        },
     ];
-   
+    const columns = [
+        {
+            title: 'Key',
+            dataIndex: 'key',
+            key: 'key',
+        },
+        {
+            title: 'Questions',
+            dataIndex: 'question',
+            key: 'question',
+        },
+
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            key: 'action',
+        },
+    ];
     const onChangeRouter = (key: string, value: string) => {
         // router.replace({
         //     query: { ...router.query, [key]: value }
@@ -87,10 +190,8 @@ console.log(state,"statestatestate");
     const initialise = async () => {
         try {
             // setLoading(true)
-            let res=await api.Manage_Question.listing()
-            console.log(res,"qwqwqwqw");
-            
-            setState(res.data)
+            let res=api.Manage_Question.listing()
+            setState(res)
         } catch (error) {
             // Toast.error(error)
             console.log(error);
@@ -101,9 +202,9 @@ console.log(state,"statestatestate");
         }
     }
 
-    useEffect(() => {
-        initialise()
-    }, [])
+    // useEffect(() => {
+    //     initialise()
+    // }, [])
 
     const handleDelete = async (_id: string) => {
         setDeleteLoading(_id)
@@ -118,51 +219,7 @@ console.log(state,"statestatestate");
         }
 
     }
-    const dataSource2 = state?.map((res: any, index: number) => {
-        return {
-            key: index+1,
-            question:res?.question,
-            question_type:res?.question_type,
-            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-            <li>
-               <CustomModal type={"Edit"} {...res} initialise={initialise}/>
-            </li>
-            {/* <li>
-                <Popconfirm
-                    title="Delete"
-                    description="Are you sure you want to delete ?"
-                    onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
-                // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                >
-                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                </Popconfirm>
-            </li> */}
-        </ul>
-            
-        }})
-    const columns = [
-        {
-            title: 'Key',
-            dataIndex: 'key',
-            key: 'key',
-        },
-        {
-            title: 'Questions',
-            dataIndex: 'question',
-            key: 'question',
-        },
-        {
-            title: 'Questions Type',
-            dataIndex: 'question_type',
-            key: 'question_type',
-        },
 
-        {
-            title: 'Action',
-            dataIndex: 'action',
-            key: 'action',
-        },
-    ];
     // console.log('props', props);
     // const [addModalOpen, setAddModalOpen] = useState<any>(false);
     const genExtra = (res: any) => (<ul className='list-unstyled mb-0 gap-3 d-flex'>
@@ -182,6 +239,22 @@ console.log(state,"statestatestate");
             </Popconfirm>
         </li>
     </ul>)
+
+
+    const addQuestion = (values: any) => {
+        let item = {
+            question: values.questions,
+            question_type: values.questions_type
+        }
+        try {
+            let res = api.Manage_Question.create(item as any)
+            console.log(res, "resCheck");
+
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
     return (
         <MainLayout>
             <Fragment>
@@ -207,14 +280,14 @@ console.log(state,"statestatestate");
                                 {/* Search  */}
                                 <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
                                     <Search size="large" placeholder="Search..." onSearch={onSearch} onChange={(e) => onSearch(e.target.value)} enterButton />
-                                    <CustomModal type={"Add"} />
+                                    <CustomModal type={"Add"} addQuestion={addQuestion}/>
                                     {/* <Button size='large' type="primary" icon={<PlusOutlined />} onClick={() => setAddModalOpen(true)}>Add Id Proof</Button> */}
                                 </div>
 
                                 {/* Accordion  */}
-                                
+
                                 <div className='accordion-wrapper'>
-                                    <Table dataSource={dataSource2} columns={columns} pagination={false} />
+                                    <Table dataSource={dataSource} columns={columns} pagination={false} />
                                 </div>
                                 {/* <Pagination current={Number(router.query.pagination) || 1} pageSize={Number(router.query.limit) || 10} total={state.count} hideOnSinglePage={true} disabled={loading} onChange={handlePagination} /> */}
                             </Card>

@@ -65,8 +65,10 @@ const Auth = {
 };
 
 const User = {
-  listing: () =>
-    requests.get(`list`),
+  edit: (info: any) =>
+    requests.post('update-user', info),
+  listing: (q?: string) =>
+    requests.get(`list${q ? `?${q}` : ""}`),
   export: (start_date?: number, end_date?: number) =>
     requests.get(`user?start_date=${start_date}&end_date=${end_date}`),
   getById: (info: any) =>
@@ -89,10 +91,26 @@ const Meeting={
   create: (info: any) =>
     requests.post('add-meeting', info),
   listing: () =>
-    requests.get("meeting-list"),
+    requests.get(`meeting-list`),
+  archive: () =>
+    requests.get("meeting-archive"),
+  getById: (info: any) =>
+    requests.post(`meeting-detail`,info),
+  edit: ( info: any) =>
+    requests.put(`meeting-update`, info),
   delete: (info: any) =>
     requests.post(`delete-meeting`, info),
 
+}
+const Manage_Question={
+  create: (info: any) =>
+    requests.post('question-add', info),
+  edit: ( info: any) =>
+    requests.put(`question-update`, info),
+  listing: () =>
+    requests.get(`question-list`),
+  getById: (info: any) =>
+    requests.post(`single-user-detail`,info),
 }
 // const Dashboard = {
 //   listing: (q?: string) =>
@@ -144,45 +162,9 @@ const Homepage = {
     requests.put(`admin/homepage/${_id}`, info),
 };
 
-const ID_Proof = {
-  create: (info: any) =>
-    requests.post('id-proof', info),
-  getByID: (id: string) =>
-    requests.get(`id-proof/${id}`),
-  listing: (q?: string) =>
-    requests.get(`id-proof${q ? `?${q}` : ""}`),
-  delete: (_id: string) =>
-    requests.del(`id-proof/delete/${_id}`),
-  edit: (_id: string, info: any) =>
-    requests.patch(`id-proof/edit/${_id}`, info),
-};
 
 
-const LanguageParent = {
-  create: (info: any) =>
-    requests.post('admin/v1/language', info),
-  // getById: (id: string, q?: string) =>
-  //   requests.get(`admin/v1/language/child/${id}${q ? `?${q}` : ""}`),
-  listing: (q?: string) =>
-    requests.get(`admin/v1/language${q ? `?${q}` : ""}`),
-  delete: (_id: string) =>
-    requests.del(`admin/v1/language/${_id}`),
-  edit: (_id: string, info: any) =>
-    requests.patch(`admin/v1/language/${_id}`, info),
-}
 
-const LanguageChild = {
-  create: (info: any) =>
-    requests.post('admin/v1/language/child', info),
-  listing: (_id: string, q?: string) =>
-    requests.get(`admin/v1/language/childs/${_id}${q ? `?${q}` : ""}`),
-  getById: (_id: string) =>
-    requests.get(`admin/v1/language/child/${_id}}`),
-  delete: (_id: string) =>
-    requests.del(`admin/v1/language/child/${_id}`),
-  edit: (_id: string, info: any) =>
-    requests.put(`admin/v1/language/child/${_id}`, info),
-}
 
 const Notification = {
   create: (info: any) =>
@@ -197,14 +179,6 @@ const Notification = {
     requests.get(`admin/v1/notification/count`)
 }
 
-const Orders = {
-  listing: (q?: string) =>
-    requests.get(`orders${q ? `?${q}` : ""}`),
-  getById: (id: string) =>
-    requests.get(`orders/${id}`),
-  export: (start_date?: number, end_date?: number) =>
-    requests.get(`orders?start_date=${start_date}&end_date=${end_date}`),
-};
 
 const Products = {
   create: (info: any) =>
@@ -227,20 +201,7 @@ const Products = {
     requests.patch(`admin/product/${_id}`, {})
 };
 
-const Rewards = {
-  create: (info: any) =>
-    requests.post('rewards/name', info),
-  listing: (q?: string) =>
-    requests.get(`rewards/name${q ? `?${q}` : ""}`),
-  edit: (_id: string, info: any) =>
-    requests.put(`rewards/name/${_id}`, info),
-  delete: (id: string) =>
-    requests.del(`rewards/name/${id}`),
-  getById: (id: string) =>
-    requests.get(`rewards/name/${id}`),
-  export: (start_date?: number, end_date?: number) =>
-    requests.get(`staff?start_date=${start_date}&end_date=${end_date}`),
-};
+
 
 const Search = {
   pagination: (search: string, nft_type: string) =>
@@ -270,41 +231,10 @@ const Staff = {
     }),
 };
 
-const Transaction = {
-  artistListing: (q?: string) =>
-    requests.get(`transaction?type=ARTIST&${q}`),
-  userListing: (q?: string) =>
-    requests.get(`transaction?type=USER&${q}`),
-  transactionDetail: (id: string) =>
-    requests.get(`transaction/${id}`),
-  getPayoutList: (q?: string) =>
-    requests.get(`artist/earning${q ? `?${q}` : ""}`),
-  payout: (info: any) =>
-    requests.post(`admin/payout`, info),
-  artistGetById: (id: string) =>
-    requests.get(`transaction/${id}`),
-  userGetById: (id: string) =>
-    requests.get(`transaction/${id}`),
-  artistExport: (start_date?: number, end_date?: number) =>
-    requests.get(`transaction?type=ARTIST&start_date=${start_date}&end_date=${end_date}`),
-  userExport: (start_date?: number, end_date?: number) =>
-    requests.get(`transaction?type=USER&start_date=${start_date}&end_date=${end_date}`),
-};
 
 
 
-const VP_points = {
-  create: (info: any) =>
-    requests.post('vppoints', info),
-  listing: (q?: string) =>
-    requests.get(`vppoints${q ? `?${q}` : ""}`),
-  edit: (_id: string, info: any) =>
-    requests.patch(`vppoints/${_id}`, info),
-  delete: (id: string) =>
-    requests.del(`vppoints/${id}`),
-  getById: (id: string) =>
-    requests.get(`vppoints/${id}`),
-};
+
 
 const FILES = {
   audio: (filename: string) => filename?.startsWith('http') ? filename : `${API_FILE_ROOT_AUDIO}${filename}`,
@@ -336,23 +266,17 @@ const henceforthApi = {
   ImageUpload,
   FILES,
   Meeting,
+  Manage_Question,
   Faq,
   Graph,
   Genre,
   Homepage,
-  ID_Proof,
-  LanguageParent,
-  LanguageChild,
   Notification,
-  Orders,
   Products,
-  Rewards,
   Staff,
   Search,
-  Transaction,
   token,
   User,
-  VP_points,
   encode,
   setToken: (_token?: string) => { token = _token; }
 };

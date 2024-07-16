@@ -92,7 +92,7 @@ console.log(openKeys,"latestOpenKey");
         key: henceofrthEnums.Roles.DASHBOARD, view: getItem(<Link href='/' className='text-decoration-none'>Dashboard</Link>, 'dashboard', <DashboardOutlined style={iconSize} />),
       },
       {
-        key: henceofrthEnums.Roles.USERS, view: getItem(<Link href='/admin/users' className='text-decoration-none'>Club Members</Link>, 'users', <UserOutlined style={iconSize} />),
+        key: henceofrthEnums.Roles.USERS, view: getItem(<Link href='/admin/member' className='text-decoration-none'>Club Members</Link>, 'users', <UserOutlined style={iconSize} />),
       },
     {
         key: henceofrthEnums.Roles.PAGES, view: getItem('Meetings', 'sub1',  <UsergroupAddOutlined style={iconSize}/>,

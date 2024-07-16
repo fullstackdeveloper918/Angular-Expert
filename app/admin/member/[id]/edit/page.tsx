@@ -59,8 +59,8 @@ interface StaffDetailInterface {
               <div className='mb-4'>
                 <Breadcrumb separator=">">
                   <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
-                  <Breadcrumb.Item><Link href="/admin/users" className='text-decoration-none'>User</Link></Breadcrumb.Item>
-                  <Breadcrumb.Item><Link href={`/admin/users/view`} className='text-decoration-none text-capitalize'>{state?.firstname ? `${state?.firstname} ${state?.lastname}` : 'View'}</Link></Breadcrumb.Item>
+                  <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>User</Link></Breadcrumb.Item>
+                  <Breadcrumb.Item><Link href={`/admin/member/view`} className='text-decoration-none text-capitalize'>{state?.firstname ? `${state?.firstname} ${state?.lastname}` : 'View'}</Link></Breadcrumb.Item>
                   <Breadcrumb.Item className='text-decoration-none'>Edit</Breadcrumb.Item>
                 </Breadcrumb>
               </div>

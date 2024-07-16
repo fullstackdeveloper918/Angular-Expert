@@ -131,7 +131,7 @@ const page = () => {
                   <div className='mb-4'>
                     <Breadcrumb separator=">">
                       <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
-                      <Breadcrumb.Item><Link href="/staff/page/1" className='text-decoration-none'>Club Member</Link></Breadcrumb.Item>
+                      <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>Club Member</Link></Breadcrumb.Item>
                       <Breadcrumb.Item className='text-decoration-none'>Club Member Details</Breadcrumb.Item>
                     </Breadcrumb>
                   </div>
@@ -157,7 +157,7 @@ const page = () => {
                       </Typography.Text ></li>
                       <li className='mb-3'><Typography.Text >Position:</Typography.Text > <Typography.Text className='ms-1'>{state?.position || "N/A"}</Typography.Text ></li>
                       <li className='mb-3'><Typography.Text >Home City:</Typography.Text > <Typography.Text className='ms-1'>{state?.home_city || "N/A"}</Typography.Text ></li>
-                      <li className='d-flex'>
+                      {/* <li className='d-flex'>
                         <Typography.Text className='text-nowrap'>Roles:</Typography.Text >
                         <Typography>
                           <Space size={[0, 8]} wrap className='ms-1'>
@@ -168,11 +168,11 @@ const page = () => {
                             )}
                           </Space>
                         </Typography>
-                      </li>
+                      </li> */}
                     </ul>
                     {/* Button  */}
                     <div className='card-listing-button d-inline-flex flex-wrap gap-3 w-100'>
-                      <Link href={`/admin/users/${state?.id}/edit`} className='text-decoration-none text-white flex-grow-1'>
+                      <Link href={`/admin/member/add?${state?.uid}&edit`} className='text-decoration-none text-white flex-grow-1'>
                         <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn'>
                           Edit
                         </Button>

@@ -101,17 +101,17 @@ const Home: Page = (props: any) => {
       title: "20",
       textColor: "#007B55",
       count: "Fall 2024 (80 day's)",
-      link: "/users/page/1?limit=10"
+      link: "/"
 
     },
     {
       cardBackground: "#CAFDF5",
       iconBackground: "linear-gradient(135deg, rgba(0, 184, 217, 0) 0%, rgba(0, 184, 217, 0.24) 97.35%)",
-      icon: <Icons.ArtistIcon />,
+      icon: <Icons.Users />,
       textColor: "#006C9C",
       title: "3",
       count: "Spring 2025 (408 day's)",
-      link: "/artists/page/1?limit=10"
+      link: "/"
     },
     {
       cardBackground: "#FFF5CC",
@@ -220,21 +220,21 @@ const Home: Page = (props: any) => {
   React.useEffect(() => {
     initialise()
   }, [])
-  const completed = state1.filter((res:any) => res?.is_completed === true);
-  const non_completed=state1.filter((res:any)=>res?.is_completed==false)
+  const completed = state1.filter((res:any) => res?.data?.is_completed === true);
+  const non_completed=state1.filter((res:any)=>res?.data?.is_completed==false)
   console.log(completed,"completed");
   console.log(non_completed,"non_completed");
   const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
-      company: res?.company_name,
-      email: res?.email,
-      phone: res?.mobile,
-      position: res?.position,
-      city: res?.home_city,
+      name: res?.data?.firstname? `${res?.data?.firstname} ${res?.data?.lastname}`:"N/A",
+      company: res?.data?.company_name,
+      email: res?.data?.email,
+      phone: res?.data?.mobile,
+      position: res?.data?.position,
+      city: res?.data?.home_city,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
       </ul>
     }
   }
@@ -242,11 +242,11 @@ const Home: Page = (props: any) => {
   const dataSource1 = completed?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
-      company: res?.company_name,
-      email: res?.email,
+      name: res?.data?.firstname? `${res?.data?.firstname} ${res?.data?.lastname}`:"N/A",
+      company: res?.data?.company_name,
+      email: res?.data?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
       </ul>
     }
   }
@@ -254,11 +254,11 @@ const Home: Page = (props: any) => {
   const dataSource2 = non_completed?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
-      company: res?.company_name,
-      email: res?.email,
+      name: res?.data?.firstname? `${res?.data?.firstname} ${res?.data?.lastname}`:"N/A",
+      company: res?.data?.company_name,
+      email: res?.data?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        <Link href={`/admin/users/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
       </ul>
     }
   }
@@ -410,7 +410,7 @@ const Home: Page = (props: any) => {
   const getData=async()=>{
     try {
         let res=await api.User.listing()
-        setState1(res)
+        setState1(res?.data)
     } catch (error) {
         
     }
@@ -532,7 +532,7 @@ useEffect(()=>{
                 {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                   <Typography.Title level={4} className='m-0 fw-bold'>Club Members</Typography.Title>
-                  <Link href={'/admin/users'}>
+                  <Link href={'/admin/member'}>
                   <Button className='text-center blackViewBtn'> View All</Button>
                   </Link>
                 </div>

@@ -65,7 +65,7 @@ console.log(form,"form");
 let res =await api.Auth.signUp(items)
 console.log(res,"resssssssssssss");
 
-// router.push(`/admin/users/add/page2?${res?.user_id}`)
+// router.push(`/add/page2?${res?.user_id}`)
       // setUserInfo((preValue: any) => {
       //   return {
       //     ...preValue,

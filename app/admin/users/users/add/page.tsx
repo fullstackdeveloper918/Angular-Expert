@@ -49,7 +49,7 @@ console.log(form,"form");
 let res =await api.Auth.signUp(items)
 console.log(res,"resssssssssssss");
 
-router.push(`/admin/users/add/page2?${res?.user_id}`)
+router.push(`/admin/member/add/page2?${res?.user_id}`)
       // setUserInfo((preValue: any) => {
       //   return {
       //     ...preValue,
@@ -80,7 +80,7 @@ router.push(`/admin/users/add/page2?${res?.user_id}`)
     }
   };
   const submit=()=>{
-    router.push("/admin/users/add/page2")
+    router.push("/admin/member/add/page2")
   }
   return (
     <MainLayout>
