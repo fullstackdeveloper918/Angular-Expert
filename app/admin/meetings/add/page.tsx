@@ -3,7 +3,7 @@ import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, Se
 import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import React, { Fragment, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import validation from '@/utils/validation';
@@ -14,6 +14,7 @@ import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import dayjs from "dayjs"
 import { addMeeting, searchAreasByName } from '@/utils/fakeApi';
 import api from '@/utils/api';
+import GoogleMap from '@/app/common/GoogleMap';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -31,7 +32,7 @@ const page = () => {
     const onChange: DatePickerProps['onChange'] = (_, dateStr) => {
         console.log('onChange:', dateStr);
     };
-    const locationSearchRef = useRef<any>()
+   
     const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
         let items = {
@@ -114,14 +115,14 @@ const page = () => {
             hotel: values?.hotel,
             airport: values?.airport,
             host_company: values?.host_company,
-            host: ["testing", "check"],
+            host: ["k6BCkBusVnYcsA3BGtncc5WOPHc2","uLK1TZNE87af8pToETMA0AdlDjD2"],
             // host: values?.host,
             cell: values?.cell,
             weather: values?.weather,
             comments: values?.comments,
             notes: values?.notes,
             // club_member:values?.club_member,
-            phone: ["88888888888", "8787890987"],
+            phone: ["8521458798","8796548596"],
         }
         console.log(items, "chhhchh");
 
@@ -188,118 +189,36 @@ const page = () => {
         return current && current.year() < dayjs().year();
     };
 
-    function loadGoogleMapScript(callback: any) {
-        if (
-            typeof (window as any).google === "object" &&
-            typeof (window as any).google.maps === "object"
-        ) {
-            callback();
-        } else {
-            const googleMapScript = document.createElement("script");
-            googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDVyNgUZlibBRYwSzi7Fd1M_zULyKAPLWQ&libraries=places`
-            window.document.body.appendChild(googleMapScript);
-            googleMapScript.addEventListener("load", callback);
-        }
-    }
-    const runTry = (cb: any) => {
-        loadGoogleMapScript(() => {
-            cb();
-        });
-    };
-    const initPlaceAPI = () => {
-        debugger
-        if (locationSearchRef?.current) {
-            let autocomplete = new (window as any).google.maps.places.Autocomplete(
-                locationSearchRef?.current?.input
-            );
-            autocomplete.addListener("place_changed", async () => {
-                let place = autocomplete.getPlace();
-                // console.log(place?.geometry);
-                if (!place.geometry) {
-                    console.log("chla");
-                    // Toast.warning("Please enter a valid location");
-                    return;
-                }
-                const address = place?.address_components;
-                const coordinate = place?.geometry?.location;
-
-                // console.log(coordinate, "coordinate____");
-                // console.log(coordinate?.lng(), "lng_____");
-                // console.log(coordinate?.lat(), "lat______");
-
-                let items: any = {};
-                if (Array.isArray(address) && address?.length > 0) {
-                    let zipIndex = address.findIndex((res) =>
-                        res.types.includes("postal_code")
-                    );
-                    let administrativeAreaIndex = address?.findIndex((res) =>
-                        res?.types.includes("administrative_area_level_1", "political")
-                    );
-                    let localityIndex = address?.findIndex((res) =>
-                        res?.types?.includes("locality", "political")
-                    );
-                    let countryIndex = address?.findIndex((res) =>
-                        res?.types?.includes("country", "political")
-                    );
-
-                    if (zipIndex > -1) {
-                        items.postal_code = address[zipIndex]?.long_name;
-                    }
-                    if (administrativeAreaIndex > -1) {
-                        items.state = address[administrativeAreaIndex]?.long_name;
-                    }
-                    if (localityIndex > -1) {
-                        items.city = address[localityIndex]?.long_name;
-                    }
-                    if (countryIndex > -1) {
-                        items.country = address[countryIndex]?.long_name;
-                    }
-                    const heheheh = {
-                        address: place.formatted_address,
-                        country: items?.country,
-                        state: items?.state,
-                        city: items?.city,
-                        postal_code: items?.postal_code,
-                    } as any;
-                    const errors = form.getFieldsError();
-                    if (errors.length) {
-                        form?.setFields(
-                            errors.flatMap((res: any) => {
-                                if (!(res.name[0] in heheheh)) return [];
-                                console.log(
-                                    !!heheheh[res.name[0]],
-                                    heheheh[res.name[0]],
-                                    heheheh,
-                                    res.name
-                                );
-                                return {
-                                    name: res.name,
-                                    errors: !!heheheh[res.name[0]]
-                                        ? []
-                                        : [
-                                            `Please enter ` +
-                                            res.name[0].toString().replace("_", " "),
-                                        ],
-                                };
-                            })
-                        );
-                    }
-                    console.log(items);
-
-                    form?.setFieldValue("address", place.formatted_address);
-                    form?.setFieldValue("country", items?.country);
-                    form?.setFieldValue("city", items?.city);
-                }
-            });
-        }
-    };
-
-    React.useEffect(() => {
-        runTry(() => {
-            setTimeout(() => {
+    const locationSearchRef = useRef(null);
+    useEffect(() => {
+        const loadGoogleMapScript = () => {
+            if (!window.google) {
+                const googleMapScript = document.createElement('script');
+                googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDVyNgUZlibBRYwSzi7Fd1M_zULyKAPLWQ&libraries=places`;
+                googleMapScript.onload = initPlaceAPI;
+                document.body.appendChild(googleMapScript);
+            } else {
                 initPlaceAPI();
-            }, 0);
-        });
+            }
+        };
+        const initPlaceAPI = () => {
+            if (locationSearchRef.current) {
+                let autocomplete = new window.google.maps.places.Autocomplete(
+                    locationSearchRef.current
+                );
+                autocomplete.addListener('place_changed', () => {
+                    let place = autocomplete.getPlace();
+                    // Handle place data if needed
+                    console.log(place,"place");
+                    
+                });
+            }
+        };
+        loadGoogleMapScript();
+        // Cleanup function if needed
+        return () => {
+            // Cleanup code if any
+        };
     }, []);
     return (
         <MainLayout>
@@ -353,7 +272,7 @@ const page = () => {
 
 
                                             {/* Email  */}
-                                            <Form.Item name="start" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Start Meeting' }]} label="Start Meeting">
+                                            <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Start Meeting' }]} label="Start Meeting">
                                                 <DatePicker
                                                     style={{ width: '100%' }}
                                                     // defaultValue={defaultValue}
@@ -364,7 +283,7 @@ const page = () => {
                                                     onChange={onChange}
                                                 />
                                             </Form.Item>
-                                            <Form.Item name="end" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter End Meeting' }]} label="End Meeting">
+                                            <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter End Meeting' }]} label="End Meeting">
                                                 <DatePicker
                                                     // defaultValue={defaultValue}
                                                     style={{ width: '100%' }}
@@ -378,8 +297,8 @@ const page = () => {
                                             <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Year' }]} label="End Year">
                                                 <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
                                             </Form.Item>
-                                            <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Location' }]} label="Location">
-                                                {/* <Input size={'large'} placeholder="Location"
+                                            <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
+                                            <Input size={'large'} placeholder="Hotel"
                                                     onKeyPress={(e: any) => {
                                                         if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
                                                             e.preventDefault();
@@ -387,16 +306,15 @@ const page = () => {
                                                             e.target.value = String(e.target.value).trim()
                                                         }
                                                     }}
-                                                /> */}
-                                                <Input
-                                                    className="custom-input"
-                                                    name="address"
-                                                    ref={(ref: any) => (locationSearchRef.current = ref)}
-                                                    id="Address"
-                                                    variant="filled"
-                                                    placeholder="Enter your address"
                                                 />
                                             </Form.Item>
+                                            {/* <Form.Item
+                                    name="location"
+                                    label="Location"
+                                    rules={[{ required: true, message: 'Please enter a location' }]}
+                                >
+                                 <GoogleMap locationSearchRef={locationSearchRef.current}/>
+                                </Form.Item> */}
                                             <Form.Item className='col-lg-6 col-sm-12' name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
                                                 <Input size={'large'} placeholder="Hotel"
                                                     onKeyPress={(e: any) => {

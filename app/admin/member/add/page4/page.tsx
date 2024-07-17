@@ -3,7 +3,7 @@ import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, Se
 import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import validation from '@/utils/validation';
@@ -23,7 +23,7 @@ const page = () => {
     const router = useRouter()
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false)
-
+    const [state, setState] = useState<any>("")
     console.log(form, "form");
 
     const onFinish = async (values: any) => {
@@ -94,6 +94,7 @@ const page = () => {
     const searchParams = useSearchParams();
     const entries = Array.from(searchParams.entries());
     const value = entries.length > 0 ? entries[0][0] : '';
+    const type = entries.length > 1 ? entries[1][0] : '';
     const submit = async(values:any) => {
         let items={
             craftsmen_toolbox:{
@@ -104,11 +105,27 @@ const page = () => {
             }
         }
         try {
+            if (type == "edit") {
+                let items = {
+                    craftsmen_toolbox:{
+                        userId:value,
+                        technology:values?.technology,
+                        products :values?.products,
+                        project:values?.project
+                    }
+            } as any
             setLoading(true)
-            let res=await api.Auth.signUp(items)
-            console.log(res,"gghgh");
-            
-            router.push(`/admin/member/add/page5?${res?.userId}`)
+            let res = await api.User.edit(items)
+                console.log(res,"yyyy");
+                router.push(`/admin/member/add/page5?${value}&edit`)
+            }else{
+
+                setLoading(true)
+                let res =await api.Auth.signUp(items)
+                console.log(res,"qqqq");
+                
+                router.push(`/admin/member/add/page5?${res?.userId}`)
+            }
         } catch (error) {
             console.log(error);
             
@@ -116,6 +133,30 @@ const page = () => {
             setLoading(false)
         }
     }
+
+    
+    const getDataById = async () => {
+        // console.log(id);
+        const item = {
+          user_id: value
+        }
+        try {
+          const res = await api.User.getById(item as any);
+          console.log(res, "ressssss");
+          setState(res?.data || null);
+          form.setFieldsValue(res?.data)
+        } catch (error: any) {
+          alert(error.message);
+        }
+      };
+      useEffect(() => {
+        // if (id) {
+        getDataById();
+        // }
+      }, []);
+      const onPrevious=()=>{
+        router.back()
+      }
     return (
         <MainLayout>
             <Fragment>
@@ -136,8 +177,9 @@ const page = () => {
                                     </Breadcrumb>
                                 </div>
                                 {/* Title  */}
-                                <div className='mb-2'>
+                                <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>CRAFTSMEN TOOLBOX</Typography.Title>
+                                    <Button size={'large'} type="primary" className="text-white" disabled>4/8</Button>
                                 </div>
 
                                 {/* form  */}
@@ -183,9 +225,14 @@ const page = () => {
 
 
                                         {/* Button  */}
-                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
-                                            Save & Next
+                                        <div className="d-flex gap-3 justify-content-center">
+                                        <Button size={'large'} type="primary" className="login-form-button " loading={loading} onClick={onPrevious}>
+                                            Previous
                                         </Button>
+                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                            Next
+                                        </Button>
+                                        </div>
                                     </Form>
                                 </div>
                             </Card>

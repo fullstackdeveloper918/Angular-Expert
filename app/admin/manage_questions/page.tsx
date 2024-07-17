@@ -207,7 +207,7 @@ console.log(state,"statestatestate");
                                 {/* Search  */}
                                 <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
                                     <Search size="large" placeholder="Search..." onSearch={onSearch} onChange={(e) => onSearch(e.target.value)} enterButton />
-                                    <CustomModal type={"Add"} />
+                                    <CustomModal type={"Add"} initialise={initialise}/>
                                     {/* <Button size='large' type="primary" icon={<PlusOutlined />} onClick={() => setAddModalOpen(true)}>Add Id Proof</Button> */}
                                 </div>
 

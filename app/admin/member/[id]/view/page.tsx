@@ -11,6 +11,9 @@ import MainLayout from '@/app/layouts/page';
 import { fetchAreaById } from '@/utils/fakeApi';
 import api from '@/utils/api';
 import axios from 'axios';
+import { pdf } from '@react-pdf/renderer';
+import { saveAs } from 'file-saver'
+import Pdf from '@/app/common/Pdf';
 // import React from 'react'
 const { Row, Col, Card, Button, Space, Popconfirm } = {
   Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -105,7 +108,7 @@ const page = () => {
     } catch (error) {
       console.log(error);
 
-    }finally{
+    } finally {
       setLoading(false)
     }
   }
@@ -115,6 +118,15 @@ const page = () => {
     // }
   }, []);
   console.log(state, "state");
+  const downLoadPdf = async () => {
+    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+
+    const blob = await pdf(
+        <Pdf state={state}/>
+    ).toBlob();
+
+    saveAs(blob, `Order_${timestamp}`);
+}
 
   return (
     <MainLayout>
@@ -136,8 +148,17 @@ const page = () => {
                     </Breadcrumb>
                   </div>
                   {/* Title  */}
-                  <div>
+                  <div className='d-flex justify-content-between'>
+                    <div className="">
+
                     <Typography.Title level={3} className='m-0 fw-bold'>Club Member Details</Typography.Title>
+                    </div>
+                    <div className="">
+
+                      <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn' onClick={downLoadPdf}>
+                        Download Pdf
+                      </Button>
+                    </div>
                   </div>
                   {/* Car Listing  */}
                   <div className='card-listing'>
@@ -197,7 +218,7 @@ const page = () => {
                         cancelText="No"
                         okButtonProps={{ type: 'primary', danger: true }}
                       > */}
-                        <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 primaryBtn' loading={loading}  onClick={onFinish}>Reset Password</Button>
+                      <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 primaryBtn' loading={loading} onClick={onFinish}>Reset Password</Button>
                       {/* </Popconfirm> */}
                       <Popconfirm
                         title="Archive the club member"

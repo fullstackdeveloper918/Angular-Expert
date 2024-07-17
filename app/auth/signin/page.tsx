@@ -1,7 +1,7 @@
 "use client"
 import loginImg from "../../../assests/images/login-bg.png"
 import logo from "../../../assests/images/image.png"
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     Form,
     Input,
@@ -15,7 +15,7 @@ import dynamic from 'next/dynamic';
 import Icons from "@/app/common/Icons";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import { setCookie } from "nookies";
 import api from "@/utils/api";
@@ -42,14 +42,45 @@ const page = () => {
     const [password, setPassword] = useState('');
     const [token, setToken] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [state,setState]=useState<any>("")
-    const[loading,setLoading]=useState<any>(false)
+    const [state, setState] = useState<any>("")
+    const [state1, setState1] = useState<any>("")
+    const [loading, setLoading] = useState<any>(false)
+    useEffect(() => {
+        // Monitor auth state changes
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const idToken = await user.getIdToken();
+                    setToken(idToken);
+                    setState(user);
+                    // Refresh the cookie
+                    setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
+                        maxAge: rememberMe ? 60 * 60 * 24 * 30 : undefined, // 30 days for remember me, session cookie otherwise
+                        path: "/",
+                    });
+                } catch (error: any) {
+                    // Token expiration error handling
+                    console.error("Error getting ID token: ", error);
+                    if (error.response && error.response.status === 401) {
+                        router.push('/auth/signin');
+                    }
+                    router.push('/auth/signin');
+                }
+            } else {
+                // User is signed out, redirect to sign-in
+                router.push('/auth/signin');
+            }
+        });
+
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
+    }, [rememberMe, router]);
     const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
         // router.push("/admin/dashboard")
-      
-console.log(values.email,"email");
-console.log(values.password,"pass");
+
+        console.log(values.email, "email");
+        console.log(values.password, "pass");
 
         let items = {
             email: String(values.email).toLowerCase(),
@@ -60,31 +91,31 @@ console.log(values.password,"pass");
             setLoading(true)
             const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
             setState(userCredential)
-            console.log( state,"userCredential");
+            console.log(state, "userCredential");
             // const Token= await userCredential.user
-            setState(userCredential)
             const idToken = await userCredential.user.getIdToken();
             setToken(idToken);
-            console.log(idToken,"jkjkhkh");
-            
-            const res = await axios.get(
-                "https://frontend.goaideme.com/single-user",
-                {
-                  headers: {
-                    Token: `${idToken}`, // Assuming the token type is Bearer
-                    'Content-Type': 'application/json' // If your API expects JSON data
-                  }
+            console.log(idToken, "jkjkhkh");
+
+            const res = await axios.get("https://frontend.goaideme.com/single-user", {
+                headers: {
+                    Token: `${idToken}`,
+                    'Content-Type': 'application/json',
                 }
-              )
-              .then(response => {
-                // Handle the response
-                console.log('Response:', response.data);
-              })
-            console.log(res,"ereree");
-            
+            });
+            const responseData:any = res?.data?.data;
+            localStorage.setItem('user_data', JSON.stringify(responseData));
+            console.log('Response:', responseData);
+    
+            const encodedResponseData = encodeURIComponent(JSON.stringify(responseData));
+            console.log(res, "ereree");
             // Toast.success("Login successfully")
-            if (rememberMe) {   
+            if (rememberMe) {
                 setCookie(this, "COOKIES_USER_ACCESS_TOKEN", idToken, {
+                    maxAge: 60 * 60 * 24 * 30,
+                    path: "/",
+                });
+                setCookie(this, "user_data", responseData, {
                     maxAge: 60 * 60 * 24 * 30,
                     path: "/",
                 });
@@ -92,8 +123,14 @@ console.log(values.password,"pass");
                 setCookie(this, "COOKIES_USER_ACCESS_TOKEN", idToken, {
                     path: "/",
                 });
+                setCookie(this, "user_data", responseData, {
+                    maxAge: 60 * 60 * 24 * 30,
+                    path: "/",
+                });
             }
             router.replace('/admin/dashboard')
+            console.log(state1,"state1");
+            
             // setState(userCredential)
             // if (router.asPath?.includes("redirect")) {
             //     router.replace(router?.query?.redirect ? router?.query?.redirect as string : '/')
@@ -103,17 +140,18 @@ console.log(values.password,"pass");
 
         } catch (error: any) {
             console.log("login error message", error);
+            router.push('/auth/signin');
             // Toast.error(error)
             // setLoading(false)
-        }finally{
+        } finally {
             setLoading(false)
         }
     };
     const handleLogin = async () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log(userCredential,"userCredential");
-            
+            console.log(userCredential, "userCredential");
+
             const idToken = await userCredential.user.getIdToken();
             setToken(idToken);
             console.log('Token ID:', idToken);
@@ -148,7 +186,7 @@ console.log(values.password,"pass");
                     <Col className="gutter-row d-none d-md-block" xs={0} sm={6} md={12} lg={10} xl={8}>
                         <div className='image-wrapper '>
                             <img src={loginImg.src} alt="login" style={{ width: "100%" }} />
-                           
+
                         </div>
                     </Col>
                     <Col className="gutter-row" xs={22} sm={18} md={12} lg={10} xl={10}>
@@ -169,14 +207,14 @@ console.log(values.password,"pass");
                                     </Form.Item>
                                     {/* Password  */}
                                     <Form.Item name="password" rules={[{ message: 'Please enter password' }]}>
-                                    {/* <label className="labelSignup">Password</label> */}
+                                        {/* <label className="labelSignup">Password</label> */}
                                         <Input.Password size={'large'} prefix={<i className="fa-solid fa-lock"></i>} type="password" placeholder="Password" />
                                     </Form.Item>
-                                        <div className="text-end">
-                                            <Link href={"/auth/forgot-password"} className="forgotPassword">
-                                                Forgot your password?
-                                            </Link>
-                                        </div>
+                                    <div className="text-end">
+                                        <Link href={"/auth/forgot-password"} className="forgotPassword">
+                                            Forgot your password?
+                                        </Link>
+                                    </div>
                                     {/* Button  */}
                                     <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading} >
                                         Log In

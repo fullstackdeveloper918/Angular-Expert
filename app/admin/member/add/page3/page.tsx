@@ -3,7 +3,7 @@ import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, Se
 import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import Link from 'next/link';
 import validation from '@/utils/validation';
 import MainLayout from '@/app/layouts/page';
@@ -22,7 +22,7 @@ const page = () => {
     const router = useRouter()
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false)
-
+    const [state, setState] = useState<any>("")
     console.log(form, "form");
     const searchParam = useParams()
     const searchParams = useSearchParams();
@@ -35,74 +35,7 @@ const page = () => {
     console.log(id, "ididid");
     console.log(searchParam, "searchParamsearchParam");
 
-    const onFinish = async (values: any) => {
-        console.log('Received values of form: ', values);
-        let items = {
-            firstname: String(values.firstname).trim(),
-            lastname: String(values.lastname).trim(),
-            email: String(values.email).trim(),
-            password: String(values.password).trim(),
-            country_code: values.country_code ?? "+93",
-            mobile: String(values.mobile).trim(),
-            roles: values.roles
-        } as any
-        if (!items.firstname) {
-            // return Toast.warn("Please Enter Valid First Name")
-        }
-        if (!items.lastname) {
-            // return Toast.warn("Please Enter Valid Last Name")
-        }
-        // if (!henceforthValidations.email(items.email)) {
-        //   return Toast.warn("Please Enter Valid E-mail")
-        // }
-        // if (!henceforthValidations.strongPassword(items.password)) {
-        //   return Toast.warn("Please Enter Valid Password")
-        // }
-        if (!Number(items.mobile)) {
-            // return Toast.warn("Please Enter Valid Phone No.")
-        }
-        if (!items.country_code) {
-            // return Toast.warn("Please Select Country Code")
-        }
-        if (!values?.profile_pic?.fileList[0].originFileObj) {
-            // return Toast.warn("Please Add Image")
-        }
-        try {
-            setLoading(true)
-
-
-            // setUserInfo((preValue: any) => {
-            //   return {
-            //     ...preValue,
-            //     profile_pic: apiImageRes
-            //   }
-            // })
-
-            // let apiRes = await henceforthApi.Staff.create(items)
-            // console.log('apiRes', apiRes);
-
-            // setUserInfo((preValue: any) => {
-            //   return {
-            //     ...preValue,
-            //     name: apiRes.name,
-            //     email: apiRes.email,
-            //     mobile: apiRes.mobile
-            //   }
-            // })
-
-            form.resetFields()
-            // Toast.success("Staff Added Successfully");
-            // router.replace(`/staff/${apiRes?._id}/view`)
-        } catch (error: any) {
-            // Toast.error(error)
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
-    };
-    const handleChange = (value: string) => {
-        console.log(`selected ${value}`);
-    };
+  
 
     const [inputFields, setInputFields] = useState([
         { name: 'goal_next', label: 'Goal 1:', status1: 'Select...' }
@@ -178,6 +111,30 @@ const page = () => {
 
 
     }
+
+
+    const getDataById = async () => {
+        // console.log(id);
+        const item = {
+          user_id: value
+        }
+        try {
+          const res = await api.User.getById(item as any);
+          console.log(res, "ressssss");
+          setState(res?.data || null);
+          form.setFieldsValue(res?.data)
+        } catch (error: any) {
+          alert(error.message);
+        }
+      };
+      useEffect(() => {
+        // if (id) {
+        getDataById();
+        // }
+      }, []);
+      const onPrevious=()=>{
+        router.back()
+      }
     return (
         <MainLayout>
             <Fragment>
@@ -196,8 +153,9 @@ const page = () => {
                                     </Breadcrumb>
                                 </div>
                                 {/* Title  */}
-                                <div className='mb-2'>
+                                <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>GOALS</Typography.Title>
+                                    <Button size={'large'} type="primary" className="text-white" disabled>3/8</Button>
                                 </div>
 
                                 {/* form  */}
@@ -325,9 +283,14 @@ const page = () => {
                                             </Button>
                                         </div>
                                         {/* Button  */}
-                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100 mt-2" loading={loading}>
-                                            Save & Next
+                                        <div className="d-flex gap-3 justify-content-center">
+                                        <Button size={'large'} type="primary" className="login-form-button " loading={loading} onClick={onPrevious}>
+                                            Previous
                                         </Button>
+                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                            Next
+                                        </Button>
+                                        </div>
                                     </Form>
                                 </div>
                             </Card>

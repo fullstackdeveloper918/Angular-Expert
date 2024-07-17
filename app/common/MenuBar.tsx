@@ -86,7 +86,22 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
 };
 console.log(openKeys,"latestOpenKey");
 
+const getUserDataFromLocalStorage = () => {
+  const storedUserData = localStorage.getItem('user_data');
+  if (storedUserData) {
+      try {
+          const userData = JSON.parse(storedUserData);
+          return userData;
+      } catch (error) {
+          console.error("Failed to parse user data from local storage:", error);
+          return null;
+      }
+  }
+  return null;
+}
 
+const userData = getUserDataFromLocalStorage();
+console.log(userData);
   const mainMenu = [
     {
         key: henceofrthEnums.Roles.DASHBOARD, view: getItem(<Link href='/' className='text-decoration-none'>Dashboard</Link>, 'dashboard', <DashboardOutlined style={iconSize} />),
@@ -228,10 +243,10 @@ let userInfo={
       <div className={`menu-profile-wrapper my-4 d-flex align-items-center gap-2 ${!collapsed ? "bg-light" : "p-0 bg-tranaprent"}`}>
         <Avatar 
         // src={User.src}
-         size={40}>J</Avatar>
+         size={40}>{userData?.firstname.slice(0,1)}</Avatar>
         {!collapsed && <div>
           <Typography.Title level={5} className='m-0 fw-bold text-capitalize'>{'Super Admin'}</Typography.Title> 
-          <Typography.Paragraph className='m-0'>{"John"}</Typography.Paragraph>
+          <Typography.Paragraph className='m-0'>{userData?.firstname}</Typography.Paragraph>
         </div>}
       </div>
 

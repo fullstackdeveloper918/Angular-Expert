@@ -25,7 +25,7 @@ const page = () => {
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   console.log(searchParams, "iddd");
-  console.log(entries[1][0], "entries");
+  // console.log(entries[1][0], "entries");
 
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 0 ? entries[1][0] : '';
@@ -47,14 +47,14 @@ const page = () => {
         home_city: values?.home_city,
       }
     } as any
-    
+
     console.log(items, "items");
     try {
       setLoading(true)
       if (type == "edit") {
         let items = {
           first_step: {
-            userId:value,
+            userId: value,
             firstname: String(values.firstname).trim(),
             lastname: String(values.lastname).trim(),
             email: String(values.email).trim(),
@@ -67,13 +67,13 @@ const page = () => {
           }
         } as any
         let res = await api.User.edit(items)
-        console.log(res,"yyyy");
+        console.log(res, "yyyy");
         router.push(`/admin/member/add/page2?${value}&edit`)
-      }else{
+      } else {
 
         let res = await api.Auth.signUp(items)
         console.log(res, "resssssssssssss");
-  
+
         router.push(`/admin/member/add/page2?${res?.user_id}`)
       }
 
@@ -124,8 +124,10 @@ const page = () => {
                   </Breadcrumb>
                 </div>
                 {/* Title  */}
-                <div className=''>
+                <div className='d-flex justify-content-between'>
+
                   <Typography.Title level={3} className='m-0 fw-bold'>Add Club Member</Typography.Title>
+                  <Button size={'large'} type="primary" className="text-white" disabled>1/8</Button>
                 </div>
 
                 {/* form  */}

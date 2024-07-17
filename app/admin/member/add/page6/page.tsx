@@ -94,6 +94,7 @@ const page = () => {
     const searchParams = useSearchParams();
     const entries = Array.from(searchParams.entries());
     const value = entries.length > 0 ? entries[0][0] : '';
+    const type = entries.length > 1 ? entries[1][0] : '';
     const submit = async(values:any) => {
         let items={
             fall_meeting_review:{
@@ -103,11 +104,26 @@ const page = () => {
             }
         }
         try {
+            if (type == "edit") {
+                let items = {
+                    fall_meeting_review:{
+                        userId:value,
+                        fall_meeting:values?.fall_meeting,
+                        personal_finances:values?.personal_finances,
+                    }
+            } as any
             setLoading(true)
-            let res=await api.Auth.signUp(items)
-            console.log(res,"ggsadfhgh");
-            
-            router.push(`/admin/member/add/page7?${res?.userId}`)
+            let res = await api.User.edit(items)
+                console.log(res,"yyyy");
+                router.push(`/admin/member/add/page7?${value}&edit`)
+            }else{
+
+                setLoading(true)
+                let res =await api.Auth.signUp(items)
+                console.log(res,"qqqq");
+                
+                router.push(`/admin/member/add/page7?${res?.userId}`)
+            }
         } catch (error) {
             console.log(error);
             
@@ -115,6 +131,29 @@ const page = () => {
             setLoading(false)
         }
     }
+    const [state, setState] = useState<any>("")
+    const getDataById = async () => {
+        // console.log(id);
+        const item = {
+          user_id: value
+        }
+        try {
+          const res = await api.User.getById(item as any);
+          console.log(res, "ressssss");
+          setState(res?.data || null);
+          form.setFieldsValue(res?.data)
+        } catch (error: any) {
+          alert(error.message);
+        }
+      };
+      React.useEffect(() => {
+        // if (id) {
+        getDataById();
+        // }
+      }, []);
+      const onPrevious=()=>{
+        router.back()
+      }
     return (
         <MainLayout>
             <Fragment>
@@ -137,8 +176,9 @@ const page = () => {
                                     </Breadcrumb>
                                 </div>
                                 {/* Title  */}
-                                <div className='mb-2'>
+                                <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>FALL 2023 MEETING REVIEW</Typography.Title>
+                                    <Button size={'large'} type="primary" className="text-white" disabled>6/8</Button>
                                 </div>
 
                                 {/* form  */}
@@ -174,9 +214,14 @@ const page = () => {
 
 
                                         {/* Button  */}
-                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
-                                            Save & Next
+                                        <div className="d-flex gap-3 justify-content-center">
+                                        <Button size={'large'} type="primary" className="login-form-button " loading={loading} onClick={onPrevious}>
+                                            Previous
                                         </Button>
+                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                            Next
+                                        </Button>
+                                        </div>
                                     </Form>
                                 </div>
                             </Card>

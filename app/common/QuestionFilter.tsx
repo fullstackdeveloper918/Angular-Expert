@@ -2,21 +2,17 @@ import React, { useState } from 'react';
 import { Select, Dropdown, Menu } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 const { Option } = Select;
-const QuestionFilter = () => {
+const QuestionFilter = (props:any) => {
 
-    const [questionType, setQuestionType] = useState(null);
+console.log(props,"yyyy");
 
-    const handleChange = (value:any) => {
-        setQuestionType(value);
-    };
-    console.log(questionType,"tyrytryy");
     
     return (
         <Select
             size="large"
             placeholder="Select Question Type"
-            onChange={handleChange}
-            value={questionType}
+            onChange={props?.handleChange}
+            value={props?.questionType}
         >
             <Option value="short_text">Short Text</Option>
             <Option value="long_text">Long Text</Option>

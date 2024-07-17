@@ -82,6 +82,7 @@ const Page = () => {
     const searchParams = useSearchParams();
     const entries = Array.from(searchParams.entries());
     const value = entries.length > 0 ? entries[0][0] : '';
+    const type = entries.length > 1 ? entries[1][0] : '';
 // console.log(uploadedUrls,"chchhc");
 
     const submit = async (values: any) => {
@@ -102,42 +103,55 @@ const Page = () => {
                 }
             };
 
-            const res = await api.Auth.signUp(item);
-            console.log(res, "Response");
+            if (type == "edit") {
+                let items = {
+                    photo_section: {
+                        userId: value,
+                        photo_comment: photoComment,
+                        is_draft: "completed"
+                    }
+            } as any
+            setLoading(true)
+            let res = await api.User.edit(items)
+                console.log(res,"yyyy");
+                router.push(`/admin/member`)
+            }else{
+
+                setLoading(true)
+                let res =await api.Auth.signUp(item)
+                console.log(res,"qqqq");
+                
+                router.push(`/admin/member`)
+            }
         } catch (error) {
             console.error(error);
         } finally {
             setLoading(false);
         }
     };
-    // const submit = async (values: any) => {
-    //     const photoComment = inputPairs.map(pair => ({
-    //         goal: values[pair.goalName],
-    //         comment: values[pair.commentName],
-    //         files: fileLists[pair.id]?.map(file => file.originFileObj),
-    //     }));
-
-    //     const item = {
-    //         photo_section: {
-    //             userId: value,
-    //             photo_comment: photoComment,
-    //             // is_action:"completed",
-    //             is_draft:"completed"
-    //         }
-    //     };
-    //     console.log(item, "ooooo");
-
-    //     setLoading(true);
-    //     try {
-    //         let res = await api.Auth.signUp(item);
-    //         console.log(res, "Response");
-    //     } catch (error) {
-    //         console.error(error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
+    const [state, setState] = useState<any>("")
+    const getDataById = async () => {
+        // console.log(id);
+        const item = {
+          user_id: value
+        }
+        try {
+          const res = await api.User.getById(item as any);
+          console.log(res, "ressssss");
+          setState(res?.data || null);
+          form.setFieldsValue(res?.data)
+        } catch (error: any) {
+          alert(error.message);
+        }
+      };
+      React.useEffect(() => {
+        // if (id) {
+        getDataById();
+        // }
+      }, []);
+      const onPrevious=()=>{
+        router.back()
+      }
     return (
         <MainLayout>
             <Fragment>
@@ -159,8 +173,9 @@ const Page = () => {
                                     </Breadcrumb>
                                 </div>
                                 {/* Title  */}
-                                <div className='mb-2'>
+                                <div className='mb-2 d-flex justify-content-between'>
                                     <Title level={3} className='m-0 fw-bold'>PHOTO SECTION</Title>
+                                    <Button size={'large'} type="primary" className="text-white" disabled>8/8</Button>
                                 </div>
 
                                 {/* form  */}
@@ -229,9 +244,17 @@ const Page = () => {
                                                 Add Project and Comment
                                             </DynamicButton>
                                         </div>
-                                        <DynamicButton size="large" type="primary" htmlType="submit" className="login-form-button w-100 mt-2" loading={loading}>
+                                       
+                                        <div className="d-flex gap-3 justify-content-center">
+                                            {/* <Link href={router.back}> */}
+                                        <DynamicButton size={'large'} type="primary" className="login-form-button mt-4" loading={loading} onClick={onPrevious}>
+                                            Previous
+                                        </DynamicButton>
+                                            {/* </Link> */}
+                                        <DynamicButton size="large" type="primary" htmlType="submit" className="login-form-button  mt-4" loading={loading}>
                                             Submit
                                         </DynamicButton>
+                                        </div>
                                     </Form>
                                 </div>
                             </DynamicCard>

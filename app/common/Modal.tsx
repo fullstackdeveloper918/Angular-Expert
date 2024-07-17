@@ -17,25 +17,25 @@ const AntModal = dynamic(() => import("antd").then(module => module.Modal), { ss
 
 const CustomModal = (props: any) => {
     console.log(props, "props");
-    const initialise = async () => {
-        try {
-            // setLoading(true)
-            let res=await api.Manage_Question.listing()
-            console.log(res,"qwqwqwqw");
+    // const initialise = async () => {
+    //     try {
+    //         // setLoading(true)
+    //         let res=await api.Manage_Question.listing()
+    //         console.log(res,"qwqwqwqw");
             
-        } catch (error) {
-            // Toast.error(error)
-            console.log(error);
+    //     } catch (error) {
+    //         // Toast.error(error)
+    //         console.log(error);
             
 
-        } finally {
-            // setLoading(false)
-        }
-    }
+    //     } finally {
+    //         // setLoading(false)
+    //     }
+    // }
 
-    useEffect(() => {
-        initialise()
-    }, [])
+    // useEffect(() => {
+    //     initialise()
+    // }, [])
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(null as any);
     const [loading, setLoading] = useState(false);
@@ -74,48 +74,58 @@ const [state,setState]=useState<any>("")
         }
     };
     const getDataById = async () => {
-        // console.log(id);
         const item = {
-          question_id: props?.id
+            question_id: props.id
         }
         try {
-          const res = await api.User.getById(item as any);
-          console.log(res, "ressssss");
-          setState(res?.data || null);
-          addForm.setFieldsValue(res);
-        } catch (error: any) {
-          alert(error.message);
+            setLoading(true);
+            const res = await api.Manage_Question.getById(item);
+            console.log(res, "ressssss");
+            // setState(res?.data || null);
+            addForm.setFieldsValue(res.data);
+        } catch (error:any) {
+            alert(error.message);
+        } finally {
+            setLoading(false);
         }
-      };
-    const addQuestion = (values: any) => {
-            
-            let item = {
-                question_id:props?.id,
-                question: values.question,
-                question_type: values.question_type
-            }
+    };
+    useEffect(() => {
+        if (props.id) {
+            getDataById();
+        }
+    }, [props.id]);
+    const addQuestion = async (values: any) => {
+        let item = {
+            question_id: props?.id,
+            question: values.question,
+            question_type: values.question_type
+        };
+    
         try {
-            if(props?.type==="Add"){
+            if (props?.type === "Add") {
                 let item = {
                     question: values.question,
                     question_type: values.question_type
-                }
-                let res = api.Manage_Question.create(item as any)
+                };
+                let res = await api.Manage_Question.create(item as any);
+                props?.initialise();
+                setAddModalOpen(false);
+            } else {
+                let res = await api.Manage_Question.edit(item as any);
+                props?.initialise();
+                console.log(res, "resCheck");
+                setAddModalOpen(false);
             }
-            let res = api.Manage_Question.edit(item as any)
-            props?.initialise()
-            console.log(res, "resCheck");
-            setAddModalOpen(false)
         } catch (error) {
             console.log(error);
-
         }
-    }
-    useEffect(() => {
-        // if (id) {
-        getDataById();
-        // }
-      }, []);
+    };
+    
+    // useEffect(() => {
+    //     if (props?.id) {
+    //     getDataById();
+    //     }
+    //   }, []);
 
     return (
         <>

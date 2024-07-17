@@ -95,6 +95,7 @@ const page = () => {
     const searchParams = useSearchParams();
     const entries = Array.from(searchParams.entries());
     const value = entries.length > 0 ? entries[0][0] : '';
+    const type = entries.length > 1 ? entries[1][0] : '';
     const submit = async(values:any) => {
         let items={
             spring_meeting:{
@@ -105,11 +106,27 @@ const page = () => {
             }
         }
         try {
+            if (type == "edit") {
+                let items = {
+                    spring_meeting:{
+                        userId:value,
+                        estimating:values?.estimating,
+                        accountability:values?.accountability,
+                        productivity:values?.productivity,
+                    }
+            } as any
             setLoading(true)
-            let res=await api.Auth.signUp(items)
-            console.log(res,"ggsadfhgh");
-            
-            router.push(`/admin/member/add/page8?${res?.userId}`)
+            let res = await api.User.edit(items)
+                console.log(res,"yyyy");
+                router.push(`/admin/member/add/page8?${value}&edit`)
+            }else{
+
+                setLoading(true)
+                let res =await api.Auth.signUp(items)
+                console.log(res,"qqqq");
+                
+                router.push(`/admin/member/add/page8?${res?.userId}`)
+            }
         } catch (error) {
             console.log(error);
             
@@ -117,6 +134,30 @@ const page = () => {
             setLoading(false)
         }
     }
+
+    const [state, setState] = useState<any>("")
+    const getDataById = async () => {
+        // console.log(id);
+        const item = {
+          user_id: value
+        }
+        try {
+          const res = await api.User.getById(item as any);
+          console.log(res, "ressssss");
+          setState(res?.data || null);
+          form.setFieldsValue(res?.data)
+        } catch (error: any) {
+          alert(error.message);
+        }
+      };
+      React.useEffect(() => {
+        // if (id) {
+        getDataById();
+        // }
+      }, []);
+      const onPrevious=()=>{
+        router.back()
+      }
     return (
         <MainLayout>
             <Fragment>
@@ -140,8 +181,9 @@ const page = () => {
                                     </Breadcrumb>
                                 </div>
                                 {/* Title  */}
-                                <div className='mb-2'>
+                                <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>SPRING 2024 MEETING PREPARATION</Typography.Title>
+                                    <Button size={'large'} type="primary" className="text-white" disabled>7/8</Button>
                                 </div>
 
                                 {/* form  */}
@@ -194,9 +236,14 @@ What CRM systems do you use?"
 
 
                                         {/* Button  */}
-                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
-                                            Save & Next
+                                        <div className="d-flex gap-3 justify-content-center">
+                                        <Button size={'large'} type="primary" className="login-form-button " loading={loading} onClick={onPrevious}>
+                                            Previous
                                         </Button>
+                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                            Next
+                                        </Button>
+                                        </div>
                                     </Form>
                                 </div>
                             </Card>

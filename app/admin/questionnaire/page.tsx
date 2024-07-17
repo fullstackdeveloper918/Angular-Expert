@@ -5,6 +5,7 @@ import MainLayout from '@/app/layouts/page';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import QuestionFilter from '@/app/common/QuestionFilter';
+import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -14,8 +15,11 @@ const { Row, Col, Card, Button } = {
 const { Search } = Input;
 let timer: any
 const page = () => {
+    const [questionType, setQuestionType] = useState<any>(null);
 
-    const dataSource = [
+
+const [state,setState]=useState<any>([])
+    const dataSource2 = [
         {
             key: '1',
             question: <p >
@@ -53,6 +57,14 @@ const page = () => {
            
         },
     ];
+    const dataSource = state?.map((res: any, index: number) => {
+        return {
+            key: index+1,
+            question:
+            <p >
+            <span>{res?.question}:</span>
+        </p>,     
+        }})
     const columns = [
         {
             title: 'Key',
@@ -81,6 +93,30 @@ const page = () => {
             onChangeRouter("search", String(value).trim())
         }, 2000);
     }
+ 
+const initialise = async (questionType: any) => {
+    try {
+        // setLoading(true)
+        const params:any = questionType ? { searchFilter: questionType } : {};
+        let res = await api.Questionnaire.listing(params);
+        console.log(res, "qwqwqwqw");
+        
+        setState(res.data);
+    } catch (error) {
+        // Toast.error(error)
+        console.log(error);
+    } finally {
+        // setLoading(false)
+    }
+};
+
+useEffect(() => {
+    initialise(questionType);
+}, [questionType]);
+const handleChange = (value:any) => {
+    setQuestionType(value);
+};
+console.log(questionType,"tyrytryy");
     return (
         <MainLayout>
             <Fragment>
@@ -106,7 +142,7 @@ const page = () => {
                                 {/* Search  */}
                                 <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
                                     <Search size="large" placeholder="Search..." onSearch={onSearch} onChange={(e) => onSearch(e.target.value)} enterButton />
-                                        <QuestionFilter/>
+                                        <QuestionFilter questionType={questionType} handleChange={handleChange}/>
                                     {/* <CustomModal type={"Add"}/> */}
                                     {/* <Button size='large' type="primary" icon={<PlusOutlined />} onClick={() => setAddModalOpen(true)}>Add Id Proof</Button> */}
                                 </div>

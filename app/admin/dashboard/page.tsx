@@ -78,6 +78,8 @@ const Home: Page = (props: any) => {
   const [areas, setAreas] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const[state1,setState1]=useState<any>([])
+  const[upcoming,setUpcoming]=useState<any>([])
+  const[next,setNext]=useState<any>([])
   // const [graphType, setGraphType] = React.useState(henceofrthEnums.GraphType.Yearly.toUpperCase() as string)
 
   // const handlePagination = (page: number, pageSize: number) => {
@@ -410,7 +412,11 @@ const Home: Page = (props: any) => {
   const getData=async()=>{
     try {
         let res=await api.User.listing()
+        let res1=await api.dashboard.upcoming()
+        let res2=await api.dashboard.next()
         setState1(res?.data)
+        setUpcoming(res1)
+        setNext(res2)
     } catch (error) {
         
     }
@@ -419,6 +425,8 @@ useEffect(()=>{
     getData()
 
 },[])
+console.log(upcoming,"upcoming");
+console.log(next,"next");
 
   console.log(areas, "areas");
 

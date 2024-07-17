@@ -63,7 +63,12 @@ const Auth = {
   edit: (info: any) =>
     requests.patch('profile', info),
 };
-
+const dashboard={
+  upcoming: () =>
+    requests.get(`upcoming-meeting`),
+  next: () =>
+    requests.get(`next-meetings`),
+}
 const User = {
   edit: (info: any) =>
     requests.post('update-user', info),
@@ -110,7 +115,11 @@ const Manage_Question={
   listing: () =>
     requests.get(`question-list`),
   getById: (info: any) =>
-    requests.post(`single-user-detail`,info),
+    requests.post(`single-question`,info),
+}
+const Questionnaire={
+  listing: (q?: string) =>
+    requests.get(`question-list${q ? `?${q}` : ""}`),
 }
 // const Dashboard = {
 //   listing: (q?: string) =>
@@ -269,6 +278,7 @@ const henceforthApi = {
   Manage_Question,
   Faq,
   Graph,
+  Questionnaire,
   Genre,
   Homepage,
   Notification,
@@ -278,6 +288,7 @@ const henceforthApi = {
   token,
   User,
   encode,
+  dashboard,
   setToken: (_token?: string) => { token = _token; }
 };
 
