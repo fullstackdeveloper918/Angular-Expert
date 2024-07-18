@@ -78,9 +78,7 @@ i.fa-pen-to-square,
 i.fa-trash-can{
   font-size: 17px;
 }
-.archiveBtn{
-  background: #FF4D4F  !important;
-}
+
 .primaryBtn{
   background: #000000 !important;
 }
@@ -93,21 +91,7 @@ i.fa-trash-can{
 .ant-menu-submenu-title{
   color: #000000 !important;
 }
-.archiveBtn:hover{
-  border-color: #FF4D4F !important;
-  color: #FF4D4F !important;
-  background: transparent  !important;
-}
-.activateBtn{
-  background-color: transparent !important;
-  color: #FF4D4F !important;
-  border-color: #FF4D4F !important;
-  transition: all .3s ease-in;
-}
-.activateBtn:hover{
-  color: #fff !important;
-  background-color: #040707 !important;
-}
+
 .ant-table-content tbody.ant-table-tbody tr:nth-child(even) {
   background: #FAFAFA;
 }
@@ -171,7 +155,8 @@ a.forgotPassword {
   margin: 10px 0 !important;
 }
 .auth-pages .form-wrapper {
-  border-radius: 40px;
+  border-radius: 0 40px 40px 0;
+  box-shadow: none !important;
 }
 :where(.css-dev-only-do-not-override-f7vrd6).ant-input-affix-wrapper-lg {
   padding: 7px 10px;
@@ -210,6 +195,31 @@ a.forgotPassword {
 }
 :where(.css-dev-only-do-not-override-f7vrd6).ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):active{
   background-color: #F0F0F0 !important;
+}
+.archiveBtn{
+  background: #FF4D4F  !important;
+}
+
+.archiveBtn:hover{
+  border-color: #FF4D4F !important;
+  color: #FF4D4F !important;
+  background: transparent  !important;
+}
+.activateBtn{
+  background-color: transparent !important;
+  color: #FF4D4F !important;
+  border-color: #FF4D4F !important;
+  transition: all .3s ease-in;
+}
+.activateBtn:hover{
+  color: #fff !important;
+  background-color: #FF4D4F !important;
+}
+@media screen and (max-width:1280x) {
+  .auth-pages .image-wrapper{
+    height: 520px;
+    padding: 0 30px;
+  }
 }
 @media screen and (max-width:991x) {
   .ant-card .ant-card-body {

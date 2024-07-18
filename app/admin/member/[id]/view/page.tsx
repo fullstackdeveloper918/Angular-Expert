@@ -131,10 +131,6 @@ const Page = () => {
   return (
     <MainLayout>
       <Fragment>
-        {/* <Head>
-      <title>Staff Details</title>
-      <meta name="description" content="Staff Details" />
-    </Head> */}
         <section>
           <Spin spinning={loading}>
             <Row gutter={[20, 20]}>

@@ -1,5 +1,6 @@
 "use client"
-import loginImg from "../../../assests/images/login-bg.png"
+import loginImg from "../../../assests/images/nahb.png"
+// import loginImg from "../../../assests/images/login-bg.png"
 import logo from "../../../assests/images/image.png"
 import React, { useContext, useEffect, useState } from 'react';
 import {
