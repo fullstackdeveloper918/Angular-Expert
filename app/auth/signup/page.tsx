@@ -25,7 +25,7 @@ const { Row, Col, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
 }
 
-const signup = () => {
+const Signup = () => {
     const router = useRouter()
     // const { loading, setLoading, Toast, setUserInfo } = React.useContext(GlobalContext)
     const [rememberMe, setRememberMe] = React.useState(false)
@@ -128,4 +128,4 @@ const signup = () => {
     )
 }
 
-export default signup;
+export default Signup;

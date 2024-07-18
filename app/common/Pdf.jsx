@@ -142,7 +142,7 @@ const MemberUpdatePDF = (props) => {
         <Text style={styles.main_heading}>Goals</Text>
         <Text style={styles.subheading}>Goals from Last Meeting</Text>
         {props?.state?.goal_last_meeting?.map((res,index)=>
-        <View style={styles.goal}>
+        <View style={styles.goal} key={index}>
           <View style={styles.div_wrapper}>
           <View style={styles.Flex_div}><Text style={styles.text}> Goal #{index+1}:  </Text>
           <Text style={styles.textarea}>   {res?.goal}  </Text>
@@ -189,7 +189,7 @@ const MemberUpdatePDF = (props) => {
         <Text style={styles.subheading}>Goals for Next Meeting</Text>
         {props?.state?.goal_next_meeting?.map((res,index)=>
         
-        <View style={styles.goal}>
+        <View style={styles.goal} key={index}>
 
           <View style={styles.div_wrapper}>
           <View style={styles.Flex_div}>
@@ -312,7 +312,7 @@ const MemberUpdatePDF = (props) => {
         <Text style={styles.subheading}>Please paste a dropbox link for each project in the boxes indicated below, and write a brief
         summary of each project in the comment section.</Text>
         {props?.state?.photo_comment.map((res,index)=>
-        <View style={styles.goal}>
+        <View style={styles.goal} key={index}>
 
           <View style={styles.div_wrapper}>
           <View style={styles.Flex_div}>

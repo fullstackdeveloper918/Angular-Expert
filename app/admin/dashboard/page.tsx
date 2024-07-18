@@ -1,6 +1,5 @@
 "use client"
 import type { GetServerSideProps, NextPage } from 'next'
-import Head from 'next/head';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 import MainLayout from '../../layouts/page';
 import { Avatar } from 'antd';
@@ -23,7 +22,7 @@ import { useRouter } from 'next/navigation';
 import type { TabsProps } from 'antd';
 import '../../styles/globals.scss';
 import { Table, Input, Breadcrumb, Tabs, Typography, Upload, Badge, Tag } from 'antd';
-import { fetchAreas, searchAreasByName } from "../../../utils/fakeApi"
+// import { fetchAreas, searchAreasByName } from "../../../utils/fakeApi"
 import api from '@/utils/api';
 const { Row, Col, Card, Button, Pagination, Tooltip, Select, Image } = {
   Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -59,7 +58,6 @@ interface Area {
 }
 const Home: Page = (props: any) => {
   const router = useRouter()
-  //   const { userInfo } = React.useContext(GlobalContext)
   const [state, setState] = React.useState({
     data: [],
     TotalUsers: 0,
@@ -76,24 +74,10 @@ const Home: Page = (props: any) => {
   const [loading, setLoading] = React.useState(false)
   const array = [henceofrthEnums.GraphType.Yearly, henceofrthEnums.GraphType.Monthly, henceofrthEnums.GraphType.Weekly, henceofrthEnums.GraphType.Daily]
   const [areas, setAreas] = useState<any>([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const[state1,setState1]=useState<any>([])
   const[upcoming,setUpcoming]=useState<any>([])
   const[next,setNext]=useState<any>([])
-  // const [graphType, setGraphType] = React.useState(henceofrthEnums.GraphType.Yearly.toUpperCase() as string)
 
-  // const handlePagination = (page: number, pageSize: number) => {
-  //   router.replace({
-  //     query: { ...router.query, pagination: page, limit: pageSize }
-  //   })
-  // }
-
-  // const _content = (
-  //   <div>
-  //     <p>Content</p>
-  //     <p>Content</p>
-  //   </div>
-  // );
 
   const DashboardData = [
     {
@@ -102,7 +86,7 @@ const Home: Page = (props: any) => {
       icon: <Icons.Users />,
       title: "20",
       textColor: "#007B55",
-      count: "Fall 2024 (80 day's)",
+      count: "Fall 2024 (80 days)",
       link: "/"
 
     },
@@ -112,7 +96,7 @@ const Home: Page = (props: any) => {
       icon: <Icons.Users />,
       textColor: "#006C9C",
       title: "3",
-      count: "Spring 2025 (408 day's)",
+      count: "Spring 2025 (408 days)",
       link: "/"
     },
     {
@@ -121,7 +105,7 @@ const Home: Page = (props: any) => {
       icon: <Icons.Users />,
       textColor: "#B76E00",
       title: "20",
-      count: "Total Club Member",
+      count: "Total Club Members",
       link: "/"
 
 
@@ -163,65 +147,6 @@ const Home: Page = (props: any) => {
 
 
 
-  const initialise = async () => {
-    try {
-      setLoading(true)
-      // let query = router.query
-      // let urlSearchParam = new URLSearchParams()
-      // urlSearchParam.set('pagination', query.pagination ? `${Number(query.pagination) - 1}` : '0')
-      // urlSearchParam.set('limit', `${query.limit || 10}`)
-      // let apiRes = await henceforthApi.Dashboard.listing(urlSearchParam.toString())
-
-      //   let apiRes = await henceforthApi.Dashboard.listing()
-
-      //   setState(apiRes)
-    } catch (error) {
-
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const typeChange = async (type: string) => {
-    // onChangeRouter("type", type)
-    console.log("typeChange", type)
-    // if (type === graphType) return
-    // await handleProductGraph(type)
-    // setGraphType(type)
-  }
-
-  //   const onChangeRouter = (key: string, value: string) => {
-  //     router.replace({
-  //       query: { ...router.query, [key]: value }
-  //     })
-  //     console.log("router query", router.query);
-  //   }
-
-  // const handleProductGraph = async (type: string) => {
-  //   setLoading(true)
-  //   try {
-
-  //     let urlSearchParam = new URLSearchParams()
-  //     urlSearchParam.set('type', type)
-
-  //     let resApi = await henceforthApi.Graph.create(urlSearchParam.toString())
-  //     console.log("resapi", resApi.data);
-  //     setGraphState({
-  //       ...graphState,
-  //       data: resApi.data,
-  //       total_count: resApi.total_count
-  //     })
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  //   finally {
-  //     setLoading(false)
-  //   }
-  // }
-
-  React.useEffect(() => {
-    initialise()
-  }, [])
   const completed = state1.filter((res:any) => res?.data?.is_completed === true);
   const non_completed=state1.filter((res:any)=>res?.data?.is_completed==false)
   console.log(completed,"completed");
@@ -430,35 +355,35 @@ console.log(next,"next");
 
   console.log(areas, "areas");
 
-  useEffect(() => {
-    fetchAreas().then((data) => {
-      setAreas(data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   fetchAreas().then((data) => {
+  //     setAreas(data);
+  //   });
+  // }, []);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchTerm(value);
+  // const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = event.target.value;
+  //   setSearchTerm(value);
 
-    if (value.trim() === '') {
-      fetchAreas().then((data) => {
-        setAreas(data);
-      });
-    } else {
-      searchAreasByName(value).then((data) => {
-        setAreas(data);
-      });
-    }
-  };
+  //   if (value.trim() === '') {
+  //     fetchAreas().then((data) => {
+  //       setAreas(data);
+  //     });
+  //   } else {
+  //     searchAreasByName(value).then((data) => {
+  //       setAreas(data);
+  //     });
+  //   }
+  // };
 
   return (
     <MainLayout>
 
       <Fragment>
-        <Head>
+        {/* <Head>
           <title>Dashboard</title>
           <meta name="description" content="Homepage desc" />
-        </Head>
+        </Head> */}
         <section>
           {/* <div className="container-fluid"> */}
           <Row gutter={[20, 20]} className="mb-4 ">

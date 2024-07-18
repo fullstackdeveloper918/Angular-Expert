@@ -1,51 +1,13 @@
-"use client"
-// import { setViewItem } from '@/lib/features/userSlice'
-// import React from 'react'
-// import { useDispatch, useSelector } from 'react-redux'
-// const page = () => {
-//     const dispatch = useDispatch()
-//     const userName = useSelector((state: any) => state.user.viewItem)
-//     const handleClick = () => {
-//         dispatch(setViewItem("Abhay Singh"))
-
-//     }
-//     return (
-//         <div className="container">
-//             <div className="row mt-3">
-//                 <h1 className="text-center">Meetings Listing</h1>
-//                 {/* <h3 className="">{userName}</h3> */}
-//                 <button className="" onClick={handleClick}>change view item</button>
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default page
 
 "use client"
 // const userName=useSelector((state:any) => state.user.viewItem)
-import type { GetServerSideProps, NextPage } from 'next'
-import Head from 'next/head';
+import type {NextPage } from 'next'
 import React, { Fragment, ReactNode, useEffect, useState } from 'react'
-// import MainLayout from '@/layouts/MainLayout';
 import { Table, Input, Breadcrumb, Tabs, Typography, Upload, Badge, Tag, Select, Popconfirm } from 'antd';
-import user from "@/assets/images/placeholder.png"
 import Link from 'next/link';
-import { Space } from 'antd';
-import type { TabsProps } from 'antd';
-import { PlusOutlined, DownloadOutlined, UploadOutlined } from '@ant-design/icons'
-// import { useRouter } from 'next/router';
-// import henceforthApi from '@/utils/henceforthApi';
-// import { GlobalContext } from '@/context/Provider';
-// import ColumnsType from '@/interfaces/ColumnsType';
 import dynamic from 'next/dynamic';
 import MainLayout from '@/app/layouts/page';
 import { useRouter } from 'next/navigation';
-import FilterSelect from '@/app/common/FilterSelect';
-import Icons from '@/app/common/Icons';
-import { deleteMeetingById, fetchMeeting, searchMeetingByName } from '@/utils/fakeApi';
-// import ExportFile from '@/components/ExportFile';
-// import s3bucket from '@/utils/s3bucket';
 import dayjs from "dayjs"
 import api from '@/utils/api';
 const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
@@ -63,7 +25,7 @@ type Page<P = {}> = NextPage<P> & {
     getLayout?: (page: ReactNode) => ReactNode;
 };
 
-const page = () => {
+const Page = () => {
     const router = useRouter()
     //   const { userInfo, downloadCSV, Toast, uploadCSV } = React.useContext(GlobalContext)
     const [show, setShow] = useState(true);
@@ -229,16 +191,16 @@ const page = () => {
 
 
     console.log(areas, "hhhhhh");
-    const handleDeleteMeeting = async (id: number) => {
-        try {
-            await deleteMeetingById(id);
-            const updatedMeetings = areas.filter((m:any) => m.id !== id);
-            setAreas(updatedMeetings); // Update state or local data
-            alert(`Meeting with id ${id} deleted successfully.`);
-        } catch (error:any) {
-            alert(error.message); // Handle error if meeting is not found
-        }
-    };
+    // const handleDeleteMeeting = async (id: number) => {
+    //     try {
+    //         await deleteMeetingById(id);
+    //         const updatedMeetings = areas.filter((m:any) => m.id !== id);
+    //         setAreas(updatedMeetings); // Update state or local data
+    //         alert(`Meeting with id ${id} deleted successfully.`);
+    //     } catch (error:any) {
+    //         alert(error.message); // Handle error if meeting is not found
+    //     }
+    // };
     const handleChange = (value: string) => {
         console.log(`selected ${value}`);
     };
@@ -265,10 +227,10 @@ const page = () => {
         <MainLayout>
 
             <Fragment>
-                <Head>
+                {/* <Head>
                     <title>Meetings</title>
                     <meta name="meetings" content="Meetings" />
-                </Head>
+                </Head> */}
                 <section>
                     <Row gutter={[20, 20]}>
                         <Col span={24}>
@@ -314,12 +276,8 @@ const page = () => {
     )
 }
 
-page.getLayout = (page: ReactNode) => (
-    <MainLayout>
-        {page}
-    </MainLayout>
-);
 
 
 
-export default page;
+
+export default Page;

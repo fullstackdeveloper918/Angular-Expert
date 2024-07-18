@@ -1,6 +1,5 @@
 "use client"
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps, Divider } from 'antd';
-import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useState } from 'react'
@@ -8,7 +7,6 @@ import { PlusOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import validation from '@/utils/validation';
 import MainLayout from '@/app/layouts/page';
-
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import TextArea from 'antd/es/input/TextArea';
 import api from '@/utils/api';
@@ -18,7 +16,7 @@ const { Row, Col, Card, Button } = {
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
-const page = () => {
+const Page = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
@@ -256,4 +254,4 @@ What CRM systems do you use?"
     )
 }
 
-export default page
+export default Page

@@ -114,7 +114,7 @@ const MainLayout = ({ children }: any) => {
                         }
                     </div>
                     <div className='d-inline-flex align-items-center'>
-                        <Link href="/notification/page/1" className="text-decoration-none">
+                        {/* <Link href="/notification/page/1" className="text-decoration-none">
                             <Button type="default" size={'large'} className="border-0 shadow-none bg-transparent py-0" htmlType='button'>
                                 <Tooltip title="Notification">
                                     <Badge count={"3"} size='default'>
@@ -122,9 +122,9 @@ const MainLayout = ({ children }: any) => {
                                     </Badge>
                                 </Tooltip>
                             </Button>
-                        </Link>
+                        </Link> */}
                         <Link href="/staff/page/1?limit=10" className="text-decoration-none">
-                            <Tooltip title="Staff">
+                            <Tooltip title="Admin">
                                 <Button className='border-0 shadow-none bg-transparent py-0' size={'large'}>
                                     <UsergroupAddOutlined style={{ fontSize: "24px" }} />
                                 </Button>

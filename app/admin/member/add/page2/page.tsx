@@ -1,6 +1,5 @@
 "use client"
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
-import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useEffect, useState } from 'react'
@@ -18,7 +17,7 @@ const { Row, Col, Card, Button } = {
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
-const page = () => {
+const Page = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
@@ -74,26 +73,7 @@ const page = () => {
                 router.push(`/admin/member/add/page3?${res?.user_id}`)
             }
 
-            // setUserInfo((preValue: any) => {
-            //   return {
-            //     ...preValue,
-            //     profile_pic: apiImageRes
-            //   }
-            // })
-
-            // let apiRes = await henceforthApi.Staff.create(items)
-            // console.log('apiRes', apiRes);
-
-            // setUserInfo((preValue: any) => {
-            //   return {
-            //     ...preValue,
-            //     name: apiRes.name,
-            //     email: apiRes.email,
-            //     mobile: apiRes.mobile
-            //   }
-            // })
-
-            // form.resetFields()
+           
         } catch (error: any) {
             // Toast.error(error)
             console.log(error);
@@ -124,7 +104,7 @@ const page = () => {
         router.push("/admin/users/add/page3")
     }
     const onPrevious=()=>{
-        router.back()
+        router.replace(`/admin/member/add?${value}&edit`)
       }
     return (
         <MainLayout>
@@ -246,4 +226,4 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
     )
 }
 
-export default page
+export default Page

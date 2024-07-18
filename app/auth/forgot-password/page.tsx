@@ -33,7 +33,7 @@ interface User {
     accessToken: string;
     // other properties
 }
-const page = () => {
+const Page = () => {
     const router = useRouter()
     // const { loading, setLoading, Toast, setUserInfo } = React.useContext(GlobalContext)
     const [rememberMe, setRememberMe] = React.useState<any>(false)
@@ -141,4 +141,4 @@ const page = () => {
     )
 }
 
-export default page;
+export default Page;

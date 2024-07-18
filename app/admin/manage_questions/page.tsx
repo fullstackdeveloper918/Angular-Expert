@@ -1,14 +1,10 @@
 "use client"
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
-import React, { Fragment, ReactNode, useEffect, useState } from 'react'
-import { Input, Breadcrumb, Collapse, theme, Typography, Pagination, Popconfirm, Form, Table } from 'antd';
+import React, { Fragment,  useEffect } from 'react'
+import { Input, Breadcrumb, Collapse,  Typography, Pagination, Popconfirm, Table } from 'antd';
 import Link from 'next/link';
-import Icons from '@/app/common/Icons';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import MainLayout from '@/app/layouts/page';
 import CustomModal from '@/app/common/Modal';
-import { EyeOutlined, DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -20,23 +16,14 @@ const { Row, Col, Card, Button } = {
 const { Panel } = Collapse;
 const { Search } = Input;
 let timer: any
-const page = () => {
-    const { token } = theme.useToken();
-    const router = useRouter();
+const Page = () => {
 
-    // const { Toast, loading, setLoading } = React.useContext(GlobalContext)
     const [deleteLoading, setDeleteLoading] = React.useState("")
     const [state, setState] = React.useState<any>([])
 
 console.log(state,"statestatestate");
 
 
-    const panelStyle = {
-        marginBottom: 24,
-        background: token.colorFillAlter,
-        borderRadius: token.borderRadiusLG,
-        border: '1px solid #e6e6e6',
-    };
     const dataSource = [
         {
             key: '1',
@@ -78,11 +65,6 @@ console.log(state,"statestatestate");
         }, 2000);
     }
 
-    const handlePagination = (page: number, pageSize: number) => {
-        // router.replace({
-        //     query: { ...router.query, pagination: page, limit: pageSize }
-        // })
-    }
 
     const initialise = async () => {
         try {
@@ -163,25 +145,7 @@ console.log(state,"statestatestate");
             key: 'action',
         },
     ];
-    // console.log('props', props);
-    // const [addModalOpen, setAddModalOpen] = useState<any>(false);
-    const genExtra = (res: any) => (<ul className='list-unstyled mb-0 gap-3 d-flex'>
-        <li>
-            <Link href={`/faq/${res._id}/edit`} >
-                <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><Icons.Edit /></Button>
-            </Link>
-        </li>
-        <li>
-            <Popconfirm
-                title="Delete"
-                description="Are you sure you want to delete ?"
-                onConfirm={(event) => { event?.stopPropagation(); handleDelete(res._id) }}
-                okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-            >
-                <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-            </Popconfirm>
-        </li>
-    </ul>)
+   
     return (
         <MainLayout>
             <Fragment>
@@ -208,7 +172,6 @@ console.log(state,"statestatestate");
                                 <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
                                     <Search size="large" placeholder="Search..." onSearch={onSearch} onChange={(e) => onSearch(e.target.value)} enterButton />
                                     <CustomModal type={"Add"} initialise={initialise}/>
-                                    {/* <Button size='large' type="primary" icon={<PlusOutlined />} onClick={() => setAddModalOpen(true)}>Add Id Proof</Button> */}
                                 </div>
 
                                 {/* Accordion  */}
@@ -228,4 +191,4 @@ console.log(state,"statestatestate");
     )
 }
 
-export default page
+export default Page

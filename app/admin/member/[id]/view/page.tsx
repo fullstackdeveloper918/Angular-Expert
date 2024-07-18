@@ -8,7 +8,7 @@ import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 // import Head from 'next/head';
 import { useParams, useRouter } from 'next/navigation';
 import MainLayout from '@/app/layouts/page';
-import { fetchAreaById } from '@/utils/fakeApi';
+// import { fetchAreaById } from '@/utils/fakeApi';
 import api from '@/utils/api';
 import axios from 'axios';
 import { pdf } from '@react-pdf/renderer';
@@ -34,7 +34,7 @@ interface StaffDetailInterface {
   mobile?: number,
   _id: string
 }
-const page = () => {
+const Page = () => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const [state, setState] = React.useState<any>({
@@ -242,4 +242,4 @@ const page = () => {
     </MainLayout>
   )
 }
-export default page;
+export default Page;

@@ -1,7 +1,7 @@
 "use client"
 // const userName=useSelector((state:any) => state.user.viewItem)
 import type { GetServerSideProps, NextPage } from 'next'
-import Head from 'next/head';
+// import Head from 'next/head';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 // import MainLayout from '@/layouts/MainLayout';
 import { Table, Input, Breadcrumb, Tabs, Typography, Upload, Badge, Tag, Select } from 'antd';
@@ -17,7 +17,7 @@ import { EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
 import dynamic from 'next/dynamic';
 import MainLayout from '@/app/layouts/page';
 import { useRouter } from 'next/navigation';
-import { fetchAreas, searchAreasByName } from '@/utils/fakeApi';
+// import { fetchAreas, searchAreasByName } from '@/utils/fakeApi';
 import api from '@/utils/api';
 // import ExportFile from '@/components/ExportFile';
 // import s3bucket from '@/utils/s3bucket';
@@ -37,7 +37,7 @@ type Page<P = {}> = NextPage<P> & {
     getLayout?: (page: ReactNode) => ReactNode;
 };
 
-const page = () => {
+const Page = () => {
     const router = useRouter()
     //   const { userInfo, downloadCSV, Toast, uploadCSV } = React.useContext(GlobalContext)
     const [show, setShow] = useState(true);
@@ -219,11 +219,11 @@ const page = () => {
     ];
 
 
-    useEffect(() => {
-        fetchAreas().then((data) => {
-            setAreas(data);
-        });
-    }, []);
+    // useEffect(() => {
+    //     fetchAreas().then((data) => {
+    //         setAreas(data);
+    //     });
+    // }, []);
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         setSearchTerm(value);
@@ -271,10 +271,10 @@ const page = () => {
         <MainLayout>
 
             <Fragment>
-                <Head>
+                {/* <Head>
                     <title>Users</title>
                     <meta name="description" content="Users" />
-                </Head>
+                </Head> */}
                 <section>
                     <Row gutter={[20, 20]}>
                         <Col span={24}>
@@ -335,12 +335,12 @@ const page = () => {
     )
 }
 
-page.getLayout = (page: ReactNode) => (
+Page.getLayout = (Page: ReactNode) => (
     <MainLayout>
-        {page}
+        {Page}
     </MainLayout>
 );
 
 
 
-export default page;
+export default Page;

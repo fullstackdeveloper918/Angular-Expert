@@ -34,7 +34,7 @@ interface User {
     accessToken: string;
     // other properties
 }
-const page = () => {
+const Page = () => {
     const router = useRouter()
     // const { loading, setLoading, Toast, setUserInfo } = React.useContext(GlobalContext)
     const [rememberMe, setRememberMe] = React.useState<any>(false)
@@ -104,7 +104,7 @@ const page = () => {
                 }
             });
             const responseData:any = res?.data?.data;
-            localStorage.setItem('user_data', JSON.stringify(responseData));
+            // localStorage.setItem('user_data', JSON.stringify(responseData));
             console.log('Response:', responseData);
     
             const encodedResponseData = encodeURIComponent(JSON.stringify(responseData));
@@ -241,4 +241,4 @@ const page = () => {
     )
 }
 
-export default page;
+export default Page;

@@ -1,6 +1,5 @@
 "use client"
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps, DatePickerProps, DatePicker } from 'antd';
-import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { Fragment, useState } from 'react'
@@ -17,7 +16,7 @@ const { Row, Col, Card, Button } = {
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
-const page = () => {
+const Page = () => {
     // const defaultValue = dayjs('2024-01-01');
 
     const router = useRouter()
@@ -170,4 +169,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

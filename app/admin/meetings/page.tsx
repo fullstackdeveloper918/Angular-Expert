@@ -25,7 +25,6 @@
 "use client"
 // const userName=useSelector((state:any) => state.user.viewItem)
 import type { GetServerSideProps, NextPage } from 'next'
-import Head from 'next/head';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 // import MainLayout from '@/layouts/MainLayout';
 import { Table, Input, Breadcrumb, Tabs, Typography, Upload, Badge, Tag, Select, Popconfirm } from 'antd';
@@ -43,7 +42,7 @@ import MainLayout from '@/app/layouts/page';
 import { useRouter } from 'next/navigation';
 import FilterSelect from '@/app/common/FilterSelect';
 import Icons from '@/app/common/Icons';
-import { deleteMeetingById, fetchMeeting, fetchMeetingById, searchMeetingByName } from '@/utils/fakeApi';
+// import { deleteMeetingById, fetchMeeting, fetchMeetingById, searchMeetingByName } from '@/utils/fakeApi';
 // import ExportFile from '@/components/ExportFile';
 // import s3bucket from '@/utils/s3bucket';
 import dayjs from "dayjs"
@@ -63,7 +62,7 @@ type Page<P = {}> = NextPage<P> & {
     getLayout?: (page: ReactNode) => ReactNode;
 };
 
-const page = () => {
+const Page = () => {
     const router = useRouter()
     //   const { userInfo, downloadCSV, Toast, uploadCSV } = React.useContext(GlobalContext)
     const [show, setShow] = useState(true);
@@ -392,21 +391,21 @@ const page = () => {
     ];
     const [meeting, setMeeting] = useState<any>(null);
     let meetingId:any=1
-    const ssdaasd = async () => {
-      try {
-          const res=await fetchMeetingById(1);
-          console.log(res,"dddd");
+//     const ssdaasd = async () => {
+//       try {
+//           const res=await fetchMeetingById(1);
+//           console.log(res,"dddd");
           
-          // const updatedMeetings = areas.filter((m:any) => m.id !== id);
-          // setAreas(updatedMeetings); // Update state or local data
-          // alert(`Meeting with id ${id} deleted successfully.`);
-      } catch (error:any) {
-          alert(error.message); // Handle error if meeting is not found
-      }
-  };
-  useEffect(()=>{
-    ssdaasd()
-  },)
+//           // const updatedMeetings = areas.filter((m:any) => m.id !== id);
+//           // setAreas(updatedMeetings); // Update state or local data
+//           // alert(`Meeting with id ${id} deleted successfully.`);
+//       } catch (error:any) {
+//           alert(error.message); // Handle error if meeting is not found
+//       }
+//   };
+//   useEffect(()=>{
+//     ssdaasd()
+//   },)
 
   const initialise = async () => {
       try {
@@ -422,32 +421,32 @@ const page = () => {
 
 }, []);
 
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        setSearchTerm(value);
+    // const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const value = event.target.value;
+    //     setSearchTerm(value);
 
-        if (value.trim() === '') {
-            fetchMeeting().then((data) => {
-                setAreas(data);
-            });
-        } else {
-            searchMeetingByName(value).then((data) => {
-                setAreas(data);
-            });
-        }
-    };
+    //     if (value.trim() === '') {
+    //         fetchMeeting().then((data) => {
+    //             setAreas(data);
+    //         });
+    //     } else {
+    //         searchMeetingByName(value).then((data) => {
+    //             setAreas(data);
+    //         });
+    //     }
+    // };
 
     console.log(areas, "hhhhhh");
-    const handleDeleteMeeting = async (id: number) => {
-        try {
-            await deleteMeetingById(id);
-            const updatedMeetings = areas.filter((m:any) => m.id !== id);
-            setAreas(updatedMeetings); // Update state or local data
-            // alert(`Meeting with id ${id} deleted successfully.`);
-        } catch (error:any) {
-            alert(error.message); // Handle error if meeting is not found
-        }
-    };
+    // const handleDeleteMeeting = async (id: number) => {
+    //     try {
+    //         await deleteMeetingById(id);
+    //         const updatedMeetings = areas.filter((m:any) => m.id !== id);
+    //         setAreas(updatedMeetings); // Update state or local data
+    //         // alert(`Meeting with id ${id} deleted successfully.`);
+    //     } catch (error:any) {
+    //         alert(error.message); // Handle error if meeting is not found
+    //     }
+    // };
 
   
     const handleChange = (value: string) => {
@@ -471,10 +470,10 @@ const page = () => {
         <MainLayout>
 
             <Fragment>
-                <Head>
+                {/* <Head>
                     <title>Meetings</title>
                     <meta name="meetings" content="Meetings" />
-                </Head>
+                </Head> */}
                 <section>
                     <Row gutter={[20, 20]}>
                         <Col span={24}>
@@ -497,7 +496,7 @@ const page = () => {
                                 {/* Search  */}
                                 <div className='my-4 d-flex gap-3'>
                                     <Search size='large' placeholder="Search by Meeting Name or year" enterButton value={searchTerm}
-                                        onChange={handleSearch} />
+                                        />
                                     {/* <Button type="primary" size='large' htmlType="button"  icon={<DownloadOutlined />} onClick={() => setExportModal(true)}>Export</Button> */}
                                     {/* <Space wrap> */}
                                     <FilterSelect />
@@ -524,12 +523,12 @@ const page = () => {
     )
 }
 
-page.getLayout = (page: ReactNode) => (
+Page.getLayout = (Page: ReactNode) => (
     <MainLayout>
-        {page}
+        {Page}
     </MainLayout>
 );
 
 
 
-export default page;
+export default Page;

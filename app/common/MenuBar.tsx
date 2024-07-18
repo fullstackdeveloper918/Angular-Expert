@@ -86,25 +86,25 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
 };
 console.log(openKeys,"latestOpenKey");
 
-const getUserDataFromLocalStorage = () => {
-  const storedUserData = localStorage.getItem('user_data');
-  if (storedUserData) {
-      try {
-          const userData = JSON.parse(storedUserData);
-          return userData;
-      } catch (error) {
-          console.error("Failed to parse user data from local storage:", error);
-          return null;
-      }
-  }
-  return null;
-}
+// const getUserDataFromLocalStorage = () => {
+//   const storedUserData = localStorage.getItem('user_data');
+//   if (storedUserData) {
+//       try {
+//           const userData = JSON.parse(storedUserData);
+//           return userData;
+//       } catch (error) {
+//           console.error("Failed to parse user data from local storage:", error);
+//           return null;
+//       }
+//   }
+//   return null;
+// }
 
-const userData = getUserDataFromLocalStorage();
-console.log(userData);
+// const userData = getUserDataFromLocalStorage();
+// console.log(userData);
   const mainMenu = [
     {
-        key: henceofrthEnums.Roles.DASHBOARD, view: getItem(<Link href='/' className='text-decoration-none'>Dashboard</Link>, 'dashboard', <DashboardOutlined style={iconSize} />),
+        key: henceofrthEnums.Roles.DASHBOARD, view: getItem(<Link href='/admin/dashboard' className='text-decoration-none'>Dashboard</Link>, 'dashboard', <DashboardOutlined style={iconSize} />),
       },
       {
         key: henceofrthEnums.Roles.USERS, view: getItem(<Link href='/admin/member' className='text-decoration-none'>Club Members</Link>, 'users', <UserOutlined style={iconSize} />),
@@ -233,7 +233,7 @@ let userInfo={
   return (
     <div className='menu-wrapper position-relative'>
       <div className="logo">
-        <Link href="/"><img src={`${ logo.src}`} alt="logo" className='img-fluid' /></Link>
+        <Link href="/admin/dashboard"><img src={`${ logo.src}`} alt="logo" className='img-fluid' /></Link>
        {/* <h1 className="">DCB</h1> */}
         <div className='position-absolute end-0' style={{ top: '-10px' }}>
           <Button className='d-lg-none p-0' shape='circle' size='small' type='primary' icon={<CloseOutlined style={{ width: '10px' }} />} onClick={() => setCollapsed(true)}></Button>
@@ -243,10 +243,10 @@ let userInfo={
       <div className={`menu-profile-wrapper my-4 d-flex align-items-center gap-2 ${!collapsed ? "bg-light" : "p-0 bg-tranaprent"}`}>
         <Avatar 
         // src={User.src}
-         size={40}>{userData?.firstname.slice(0,1)}</Avatar>
+         size={40}>A</Avatar>
         {!collapsed && <div>
           <Typography.Title level={5} className='m-0 fw-bold text-capitalize'>{'Super Admin'}</Typography.Title> 
-          <Typography.Paragraph className='m-0'>{userData?.firstname}</Typography.Paragraph>
+          <Typography.Paragraph className='m-0'>Admin</Typography.Paragraph>
         </div>}
       </div>
 

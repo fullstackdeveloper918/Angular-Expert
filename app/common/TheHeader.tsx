@@ -42,7 +42,7 @@ const TheHeader = (props: any) => {
 
                     {/* right side  */}
                     <ul className="nav gap-3 main-nav align-items-center">
-                        {!hideShow ? <li>
+                      <li>
                             <div className="desktop-screen">
                                 <div className="dropdown">
                                     <button className="btn shadow-none border-0 dropdown-toggle p-0 fw-bold mt-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -59,7 +59,7 @@ const TheHeader = (props: any) => {
                                     </ul>
                                 </div>
                             </div>
-                        </li> : ''}
+                        </li>
                         <li>
                             <button type="button" className="btn btn-primary py-2 px-4 shadow-none logout-btn border-0 fw-fw-semibold" onClick={logoutUser}  >
                                 <i className="fa fa-sign-out"></i> Log out

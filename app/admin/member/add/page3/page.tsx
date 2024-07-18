@@ -1,6 +1,5 @@
 "use client"
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
-import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useEffect, useState } from 'react'
@@ -17,7 +16,7 @@ const { Row, Col, Card, Button } = {
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
 const { Option } = Select;
-const page = () => {
+const Page = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
@@ -35,60 +34,60 @@ const page = () => {
     console.log(id, "ididid");
     console.log(searchParam, "searchParamsearchParam");
 
-  
+
 
     const [inputFields, setInputFields] = useState([
         { name: 'goal_next', label: 'Goal 1:', status1: 'Select...' }
-      ]);
-    
-      const addInputField = () => {
+    ]);
+
+    const addInputField = () => {
         setInputFields([
-          ...inputFields,
-          { name: `goal_next${inputFields.length + 1}`, label: `Goal ${inputFields.length + 1}:`, status1: 'Select...' }
+            ...inputFields,
+            { name: `goal_next${inputFields.length + 1}`, label: `Goal ${inputFields.length + 1}:`, status1: 'Select...' }
         ]);
-      };
-    
-      const removeInputField = (index:any) => {
+    };
+
+    const removeInputField = (index: any) => {
         const newInputFields = inputFields.filter((_, i) => i !== index);
         setInputFields(newInputFields.map((field, i) => ({
-          name: `goal_next${i + 1}`,
-          label: `Goal ${i + 1}:`,
-          status1: field.status1 // maintain the status
+            name: `goal_next${i + 1}`,
+            label: `Goal ${i + 1}:`,
+            status1: field.status1 // maintain the status
         })));
-      };
-    
-      const handleStatusChange1 = (index:any, value:any) => {
+    };
+
+    const handleStatusChange1 = (index: any, value: any) => {
         setInputFields(inputFields.map((field, i) => i === index ? { ...field, status1: value } : field));
-      };
+    };
     const [inputPairs, setInputPairs] = useState([
         { id: 1, goalName: 'goal1', goalLabel: 'GOAL #1', commentName: 'comments1', commentLabel: 'Comments:', status: 'Select...' }
-      ]);
-    
-      const addInputPair = () => {
+    ]);
+
+    const addInputPair = () => {
         const nextIndex = inputPairs.length + 1;
         setInputPairs([
-          ...inputPairs,
-          { id: nextIndex, goalName: `goal${nextIndex}`, goalLabel: `GOAL #${nextIndex}`, commentName: `comments${nextIndex}`, commentLabel: 'Comments:', status: 'Select...' }
+            ...inputPairs,
+            { id: nextIndex, goalName: `goal${nextIndex}`, goalLabel: `GOAL #${nextIndex}`, commentName: `comments${nextIndex}`, commentLabel: 'Comments:', status: 'Select...' }
         ]);
-      };
-    
-      const removeInputPair = (id:any) => {
+    };
+
+    const removeInputPair = (id: any) => {
         setInputPairs(inputPairs.filter(pair => pair.id !== id));
-      };
-    
-      const handleStatusChange = (id:any, value:any) => {
+    };
+
+    const handleStatusChange = (id: any, value: any) => {
         setInputPairs(inputPairs.map(pair => pair.id === id ? { ...pair, status: value } : pair));
-      };
+    };
     const submit = async (values: any) => {
         const goalsData = inputPairs.map(pair => ({
             goal: values[pair.goalName],
             comment: values[pair.commentName],
             status: pair.status
-          }));
-          const goalsData1 = inputFields.map(field => ({
+        }));
+        const goalsData1 = inputFields.map(field => ({
             goal: values[field.name],
             status: field.status1
-          }));
+        }));
         let items = {
             goals: {
                 userId: value,
@@ -116,25 +115,65 @@ const page = () => {
     const getDataById = async () => {
         // console.log(id);
         const item = {
-          user_id: value
+            user_id: value
         }
         try {
-          const res = await api.User.getById(item as any);
-          console.log(res, "ressssss");
-          setState(res?.data || null);
-          form.setFieldsValue(res?.data)
+            const res = await api.User.getById(item as any);
+            console.log(res, "ressssss");
+            setState(res?.data || null);
+            const fetchedGoals = res?.data.goal_last_meeting || [];
+            const formattedGoals = fetchedGoals.map((goal: any, index: any) => ({
+                id: index + 1,
+                goalName: `goal${index + 1}`,
+                goalLabel: `GOAL #${index + 1}`,
+                commentName: `comments${index + 1}`,
+                commentLabel: 'Comments:',
+                status: goal.status,
+                initialGoal: goal.goal,
+                initialComment: goal.comment
+            }));
+            setInputPairs(formattedGoals);
+            form.setFieldsValue({
+                ...fetchedGoals.reduce((acc: any, goal: any, index: any) => {
+                    acc[`goal${index + 1}`] = goal.goal;
+                    acc[`comments${index + 1}`] = goal.comment;
+                    return acc;
+                }, {})
+            });
+            const fetchedGoalsNext = res?.data.goal_next_meeting || [];
+            const formattedGoalsNext = fetchedGoalsNext.map((goal: any, index: any) => ({
+              name: `goal_next${index + 1}`,
+              label: `Goal ${index + 1}:`,
+              status1: goal.status,
+              initialGoal: goal.goal
+            }));
+      
+            setInputFields(formattedGoalsNext);
+      
+            form.setFieldsValue({
+              ...fetchedGoals.reduce((acc: any, goal: any, index: any) => {
+                acc[`goal_next${index + 1}`] = goal.goal;
+                acc[`comments${index + 1}`] = goal.comment;
+                return acc;
+              }, {}),
+              ...fetchedGoalsNext.reduce((acc: any, goal: any, index: any) => {
+                acc[`goal_next${index + 1}`] = goal.goal;
+                return acc;
+              }, {})
+            });
         } catch (error: any) {
-          alert(error.message);
+            alert(error.message);
         }
-      };
-      useEffect(() => {
+    };
+    useEffect(() => {
         // if (id) {
         getDataById();
         // }
-      }, []);
-      const onPrevious=()=>{
+    }, []);
+    const onPrevious = () => {
         router.back()
-      }
+    }
+    console.log(inputPairs, "inputPairs")
     return (
         <MainLayout>
             <Fragment>
@@ -214,13 +253,13 @@ const page = () => {
                                                         label="STATUS OF GOAL"
                                                     > */}
                                                     <Select
-                                                         defaultValue={pair.status}
+                                                        defaultValue={pair.status}
                                                         style={{ position: 'absolute', top: '-14px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
                                                         onChange={(value) => handleStatusChange(pair.id, value)}>
                                                         <Option value="completed">Completed</Option>
-                                                    <Option value="progressing">Progressing</Option>
-                                                    <Option value="struggling">Struggling</Option>
-                                                    <Option value="not_started">Not Started</Option>
+                                                        <Option value="progressing">Progressing</Option>
+                                                        <Option value="struggling">Struggling</Option>
+                                                        <Option value="not_started">Not Started</Option>
                                                     </Select>
                                                     {/* </Form.Item> */}
                                                     {/* </div> */}
@@ -246,6 +285,7 @@ const page = () => {
                                                     name={field.name}
                                                     rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
                                                     label={field.label}
+                                                    // initialValue={field.initialGoal}
                                                 >
                                                     <div style={{ position: 'relative' }}>
                                                         <Input
@@ -260,7 +300,7 @@ const page = () => {
                                                             }}
                                                         />
                                                         <Select
-                                                           defaultValue={field.status1}
+                                                            defaultValue={field.status1}
                                                             style={{ position: 'absolute', top: '-42px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
                                                             onChange={(value) => handleStatusChange1(index, value)}
                                                             options={[
@@ -284,12 +324,12 @@ const page = () => {
                                         </div>
                                         {/* Button  */}
                                         <div className="d-flex gap-3 justify-content-center">
-                                        <Button size={'large'} type="primary" className="login-form-button " loading={loading} onClick={onPrevious}>
-                                            Previous
-                                        </Button>
-                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                            Next
-                                        </Button>
+                                            <Button size={'large'} type="primary" className="login-form-button " loading={loading} onClick={onPrevious}>
+                                                Previous
+                                            </Button>
+                                            <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                                Next
+                                            </Button>
                                         </div>
                                     </Form>
                                 </div>
@@ -303,4 +343,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

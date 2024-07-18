@@ -5,7 +5,7 @@ import Link from 'next/link';
 import User from "@/assets/images/placeholder.png"
 import { Breadcrumb, Form, Select, Input, Upload, Modal, Spin, Typography, SelectProps } from 'antd';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react'
-import Head from 'next/head';
+// import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import MainLayout from '@/app/layouts/page';
 
@@ -29,7 +29,7 @@ interface StaffDetailInterface {
   mobile?: number,
   _id: string
 }
- const page=() =>{
+ const Page=() =>{
   const [loading,setLoading]=useState(false)
   const router = useRouter()
   const [state, setState] = React.useState<StaffDetailInterface>({
@@ -162,4 +162,4 @@ interface StaffDetailInterface {
   </MainLayout>
   )
 }
-export default page;
+export default Page;

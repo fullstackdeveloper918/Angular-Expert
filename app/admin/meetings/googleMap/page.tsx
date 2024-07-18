@@ -6,7 +6,7 @@ import MainLayout from '@/app/layouts/page';
 import dynamic from 'next/dynamic';
 const { Option } = Select;
 const { TextArea } = Input;
-const page = () => {
+const Page = () => {
     const [form] = Form.useForm();
     const locationSearchRef = useRef(null);
     useEffect(() => {
@@ -81,4 +81,4 @@ const page = () => {
         </MainLayout>
     );
 };
-export default page;
+export default Page;

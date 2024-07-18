@@ -14,7 +14,7 @@ const { Row, Col, Card, Button } = {
 }
 const { Search } = Input;
 let timer: any
-const page = () => {
+const Page = () => {
     const [questionType, setQuestionType] = useState<any>(null);
 
 
@@ -135,18 +135,14 @@ console.log(questionType,"tyrytryy");
                                         <Breadcrumb.Item className='text-decoration-none'>Manage Questionnaire</Breadcrumb.Item>
                                     </Breadcrumb>
                                 </div>
-                                {/* Title  */}
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <Typography.Title level={3} className='m-0 fw-bold' >Manage Questionnaire</Typography.Title>
                                 </div>
-                                {/* Search  */}
                                 <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
                                     <Search size="large" placeholder="Search..." onSearch={onSearch} onChange={(e) => onSearch(e.target.value)} enterButton />
                                         <QuestionFilter questionType={questionType} handleChange={handleChange}/>
                                     {/* <CustomModal type={"Add"}/> */}
-                                    {/* <Button size='large' type="primary" icon={<PlusOutlined />} onClick={() => setAddModalOpen(true)}>Add Id Proof</Button> */}
                                 </div>
-
                                 {/* Accordion  */}
                                 
                                 <div className='accordion-wrapper'>
@@ -164,4 +160,4 @@ console.log(questionType,"tyrytryy");
     )
 }
 
-export default page
+export default Page

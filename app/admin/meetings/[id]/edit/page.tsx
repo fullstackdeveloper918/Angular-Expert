@@ -1,6 +1,5 @@
 "use client"
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps, DatePickerProps, DatePicker } from 'antd';
-import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
 import { useParams, useRouter } from 'next/navigation';
 import React, { Fragment, useEffect, useState } from 'react'
@@ -21,7 +20,7 @@ const { Row, Col, Card, Button } = {
 }
 const { Option } = Select;
 dayjs.extend(utc);
-const page = () => {
+const Page = () => {
   // const defaultValue = dayjs('2024-01-01');
 
   const router = useRouter()
@@ -345,4 +344,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

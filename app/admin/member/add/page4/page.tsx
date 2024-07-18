@@ -1,6 +1,5 @@
 "use client"
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
-import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useEffect, useState } from 'react'
@@ -18,7 +17,7 @@ const { Row, Col, Card, Button } = {
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
-const page = () => {
+const Page = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
@@ -245,4 +244,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

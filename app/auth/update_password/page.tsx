@@ -34,35 +34,11 @@ interface User {
     accessToken: string;
     // other properties
 }
-const page = () => {
-    const router = useRouter()
-    // const { loading, setLoading, Toast, setUserInfo } = React.useContext(GlobalContext)
+const Page = () => {
+
     const params=useParams()
     console.log(params,"kkkk");
     
-    const [rememberMe, setRememberMe] = React.useState<any>(false)
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [token, setToken] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
-    const [state, setState] = useState<any>("")
-    const [loading, setLoading] = useState<any>(false)
-    // const onFinish = async (values: any) => {
-    //     console.log(values.email, "adkfaskfhdkashd");
-    //     let items = {
-    //         to: values.email,
-    //         link: `auth/update_password?${values.email}`
-    //     };
-    //     try {
-    //         setLoading(true)
-    //         let apiRes = await api.Auth.forgotPassword(items);
-    //         console.log("API response", apiRes);
-    //     } catch (error: any) {
-    //         console.log("login error message", error);
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // };
  const onFinish = async (values: any) => {
         let items = {
             email:"",
@@ -121,4 +97,4 @@ const page = () => {
     )
 }
 
-export default page;
+export default Page;

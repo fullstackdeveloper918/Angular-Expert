@@ -1,6 +1,5 @@
 "use client"
 import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps, DatePickerProps, DatePicker } from 'antd';
-import { Head } from 'next/document';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { Fragment, useEffect, useRef, useState } from 'react'
@@ -12,7 +11,7 @@ import utc from 'dayjs/plugin/utc';
 // import utc from "dayjs"
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import dayjs from "dayjs"
-import { addMeeting, searchAreasByName } from '@/utils/fakeApi';
+// import { addMeeting, searchAreasByName } from '@/utils/fakeApi';
 import api from '@/utils/api';
 import GoogleMap from '@/app/common/GoogleMap';
 const { Row, Col, Card, Button } = {
@@ -23,7 +22,7 @@ const { Row, Col, Card, Button } = {
 }
 const { Option } = Select;
 dayjs.extend(utc);
-const page = () => {
+const Page = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
@@ -150,20 +149,20 @@ const page = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [searchValue, setSearchValue] = useState('');
 
-    const handleSearch = async (value: string) => {
-        setSearchValue(value.trim()); // Trim input value
-        if (value.trim() !== '') {
-            try {
-                const data: any = await searchAreasByName(value);
-                setSearchResults(data);
-            } catch (error) {
-                console.error('Error fetching areas:', error);
-                setSearchResults([]);
-            }
-        } else {
-            setSearchResults([]); // Clear results if search value is empty
-        }
-    };
+    // const handleSearch = async (value: string) => {
+    //     setSearchValue(value.trim()); // Trim input value
+    //     if (value.trim() !== '') {
+    //         try {
+    //             const data: any = await searchAreasByName(value);
+    //             setSearchResults(data);
+    //         } catch (error) {
+    //             console.error('Error fetching areas:', error);
+    //             setSearchResults([]);
+    //         }
+    //     } else {
+    //         setSearchResults([]); // Clear results if search value is empty
+    //     }
+    // };
     console.log(searchResults, "yyy");
     const disabledDate = (current: any) => {
         // Can not select days before today and today
@@ -384,17 +383,17 @@ const page = () => {
                                             <Form.Item
                                                 name="host"
                                                 className="col-lg-6 col-sm-12"
-                                                validateTrigger={['onChange', 'onBlur']}
-                                                rules={[
-                                                    { required: true, message: 'Please Select Host' },
-                                                ]}
+                                                // validateTrigger={['onChange', 'onBlur']}
+                                                // rules={[
+                                                //     { required: true, message: 'Please Select Host' },
+                                                // ]}
                                                 label="Host"
                                             >
                                                 <Select
                                                     mode="multiple"
                                                     size="large"
                                                     placeholder="Select Host"
-                                                    onSearch={handleSearch}
+                                                    // onSearch={handleSearch}
                                                     optionLabelProp="label"
                                                     defaultActiveFirstOption  // Ensure first option is active on dropdown open
                                                     value={searchValue} // Control the value with searchValue state
@@ -475,4 +474,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page
