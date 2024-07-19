@@ -163,12 +163,12 @@ const Page = () => {
     const dataSource = state1?.map((res: any, index: number) => {
         return {
             key: index + 1,
-            name: res?.data?.firstname ? `${res?.data?.firstname} ${res?.data?.lastname}` : "N/A",
-            company: res?.data?.company_name,
-            email: res?.data?.email,
-            phone: res?.data?.mobile,
-            position: res?.data?.position,
-            city: res?.data?.home_city,
+            name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
+            company: res?.company_name,
+            email: res?.email,
+            phone: res?.phone_number,
+            position: res?.position,
+            city: res?.home_city,
             action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
                 <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
             </ul>
@@ -177,7 +177,7 @@ const Page = () => {
     );
     const columns = [
         {
-            title: 'Key',
+            title: 'Sr.No',
             dataIndex: 'key',
             key: 'key',
         },

@@ -3,7 +3,9 @@
 import { Inter } from "next/font/google";
 import "../app/styles/globals.scss"
 import { Provider } from "react-redux";
-import {Store} from '../lib/store'
+// import {Store} from '../lib/store'
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from '../lib/store'; 
 const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata: Metadata = {
@@ -25,11 +27,13 @@ export default function RootLayout({
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         </head>
         <body className={inter.className}>
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossOrigin="anonymous"></script>
+          {/* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossOrigin="anonymous"></script> */}
           {/* <Header /> */}
-          <Provider store={Store}>
+          <Provider store={store}>
 
-          {children}
+          <PersistGate loading={null} persistor={persistor}>
+              {children}
+            </PersistGate>
           </Provider>
           </body>
       </html>

@@ -1,4 +1,5 @@
 
+"use client"
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -6,6 +7,7 @@ const initialState = {
     recentProducts: [],
     recentCustomers: [],
     viewItem: 'abhay',
+    userData:{}
   }
 export const AdminSlice = createSlice({
     name: 'admin',
@@ -23,10 +25,16 @@ export const AdminSlice = createSlice({
       getRecentCustomers: (state, action) => {
         state.recentCustomers = action.payload
       },
+      getuserData: (state, action) => {
+        state.userData = action.payload
+      },
+      clearUserData: (state, action) => {
+        state.userData = action.payload
+      },
     
     },
   })
 
 
-  export const {getTotalCount,setViewItem,getRecentCustomers,getRecentProducts}  = AdminSlice.actions
+  export const {getTotalCount,setViewItem,getRecentCustomers,getRecentProducts,getuserData,clearUserData}  = AdminSlice.actions
   export default AdminSlice.reducer

@@ -7,14 +7,14 @@
     },
     {
         "sr": 2,
-        "name": "Meetings",
-        "rol": "MEETINGS",
+        "name": "Meeting",
+        "rol": "Meeting",
         "color": "geekblue"
     },
     {
         "sr": 3,
-        "name": "Users",
-        "rol": "USERS",
+        "name": "Club Member",
+        "rol": "CLUB_MEMEBR",
         "color": "red"
     },
     {

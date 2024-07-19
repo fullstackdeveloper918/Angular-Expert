@@ -56,10 +56,10 @@ const Page = () => {
       start_time: date
     }));
   };
-  const searchParam = useParams();
+const searchParam = useParams();
   // console.log(searchParam, "cheee");
 
-  const id: any = searchParam.id;
+  const id = searchParam.id;
   const getDataById = async () => {
     console.log(id);
     const item = {

@@ -69,6 +69,19 @@ const dashboard={
   next: () =>
     requests.get(`next-meetings`),
 }
+const Admin={
+  // admin/listadmin/add
+  listing: (q?: string) =>
+    requests.get(`admin/list${q ? `?${q}` : ""}`),
+  create: (info: any) =>
+    requests.post('admin/add', info),
+  delete: (info: any) =>
+    requests.post(`admin/delete`, info),
+  edit: ( info: any) =>
+    requests.put(`admin/update`, info),
+  getById: (info: any) =>
+    requests.post(`admin/detail`,info),
+}
 const User = {
   edit: (info: any) =>
     requests.post('update-user', info),
@@ -275,6 +288,7 @@ const henceforthApi = {
   ImageUpload,
   FILES,
   Meeting,
+  Admin,
   Manage_Question,
   Faq,
   Graph,

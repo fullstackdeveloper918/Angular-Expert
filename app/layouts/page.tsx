@@ -1,18 +1,19 @@
 "use client"
 
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
-import { Avatar, Badge, Grid, Layout, MenuProps } from 'antd';
+import { MenuOutlined, CloseOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Avatar, Badge, Grid, Layout, MenuProps, Popconfirm } from 'antd';
 import React, { useState, useEffect } from 'react';
-// import MenuBar from "@/components/common/MenuBar";
-// import Footer from '@/components/common/Footer';
 import Link from 'next/link';
-import { UsergroupAddOutlined, BellOutlined,} from '@ant-design/icons'
-// import { GlobalContext } from '@/context/Provider';
+import { UsergroupAddOutlined, BellOutlined, } from '@ant-design/icons'
 import dynamic from 'next/dynamic';
+import {clearUserData} from '../../lib/features/userSlice'
 import MenuBar from '../common/MenuBar';
-// import henceforthApi from '@/utils/henceforthApi';
-// import s3bucket from '@/utils/s3bucket';
-
+import { parseCookies, destroyCookie } from 'nookies';
+import { useRouter } from 'next/navigation';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector, UseSelector } from 'react-redux';
+import { UseDispatch } from 'react-redux';
 const { Button, Dropdown, Tooltip } = {
     Dropdown: dynamic(() => import("antd").then(module => module.Dropdown), { ssr: false }),
     Tooltip: dynamic(() => import("antd").then(module => module.Tooltip), { ssr: false }),
@@ -25,7 +26,8 @@ const MainLayout = ({ children }: any) => {
     // const { userInfo, setUserInfo, count, setCount, logout } = React.useContext(GlobalContext)
     const [collapsed, setCollapsed] = useState(false);
     const screens = Grid.useBreakpoint();
-
+    const router = useRouter()
+    const dispatch=useDispatch()
     useEffect(() => {
         window.addEventListener("scroll", () => {
             const header: any = document.querySelector('.ant-layout-header');
@@ -73,48 +75,87 @@ const MainLayout = ({ children }: any) => {
             ),
         },
     ];
+    const [accessToken, setAccessToken] = useState<string | null>(null);
+    const getUserdata=useSelector((state:any)=>state?.user?.userData)
+console.log(getUserdata,"qwertyu");
+
+    useEffect(() => {
+        // Get the access token from cookies
+        const cookies = parseCookies();
+        const token = cookies['COOKIES_USER_ACCESS_TOKEN'];
+        setAccessToken(token);
+    }, []);
+
+    const handleLogout = async () => {
+        if (accessToken) {
+            destroyCookie(null, 'COOKIES_USER_ACCESS_TOKEN');
+
+            toast.success('Logout Successful', {
+                position: 'top-center',
+                autoClose: 300,
+                onClose: () => {
+                    router.push('/auth/signin');
+                },
+            });
+
+        }
+        dispatch(clearUserData({}))
+    };
+
 
     return (
-        <Layout className="layout" hasSider>
-            <Sider trigger={null} collapsible collapsed={collapsed} theme="light" width={'250px'} breakpoint="lg" collapsedWidth="0"
-                onBreakpoint={(broken) => {
-                    console.log(broken);
-                }} onCollapse={(collapsed, type) => {
-                    console.log(collapsed, type);
-                }}
-                style={{
-                    overflow: 'auto',
-                    height: screens.lg ? '100vh' : '100%',
-                    position: 'fixed',
-                    background: '#ffffff',
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    zIndex: screens.lg ? 1 : 9
-                }}
-            >
+        <>
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
+            <Layout className="layout" hasSider>
+                <Sider trigger={null} collapsible collapsed={collapsed} theme="light" width={'250px'} breakpoint="lg" collapsedWidth="0"
+                    onBreakpoint={(broken) => {
+                        console.log(broken);
+                    }} onCollapse={(collapsed, type) => {
+                        console.log(collapsed, type);
+                    }}
+                    style={{
+                        overflow: 'auto',
+                        height: screens.lg ? '100vh' : '100%',
+                        position: 'fixed',
+                        background: '#ffffff',
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        zIndex: screens.lg ? 1 : 9
+                    }}
+                >
 
-                <MenuBar />
-            </Sider>
-            <Layout className="site-layout" style={{ marginLeft: screens.lg ? collapsed ? '0px' : '250px' : '0', transition: "all 0.3s ease-in-out" }}>
-                {/* Header  */}
-                <Header className="site-layout-background d-flex justify-content-between align-items-center px-4 py-3" >
-                    <div>
-                        {screens.md ?
-                            <> {React.createElement(collapsed ? CloseOutlined : MenuOutlined, {
-                                className: 'trigger',
-                                onClick: () => setCollapsed(!collapsed),
-                            })}</>
-                            :
-                            <> {React.createElement(MenuOutlined, {
-                                className: 'trigger',
-                                onClick: () => setCollapsed(!collapsed),
-                            })}
-                            </>
-                        }
-                    </div>
-                    <div className='d-inline-flex align-items-center'>
-                        {/* <Link href="/notification/page/1" className="text-decoration-none">
+                    <MenuBar />
+                </Sider>
+                <Layout className="site-layout" style={{ marginLeft: screens.lg ? collapsed ? '0px' : '250px' : '0', transition: "all 0.3s ease-in-out" }}>
+                    {/* Header  */}
+                    <Header className="site-layout-background d-flex justify-content-between align-items-center px-4 py-3" >
+                        <div>
+                            {screens.md ?
+                                <> {React.createElement(collapsed ? CloseOutlined : MenuOutlined, {
+                                    className: 'trigger',
+                                    onClick: () => setCollapsed(!collapsed),
+                                })}</>
+                                :
+                                <> {React.createElement(MenuOutlined, {
+                                    className: 'trigger',
+                                    onClick: () => setCollapsed(!collapsed),
+                                })}
+                                </>
+                            }
+                        </div>
+                        <div className='d-inline-flex gap-3 align-items-center'>
+                            {/* <Link href="/notification/page/1" className="text-decoration-none">
                             <Button type="default" size={'large'} className="border-0 shadow-none bg-transparent py-0" htmlType='button'>
                                 <Tooltip title="Notification">
                                     <Badge count={"3"} size='default'>
@@ -123,28 +164,54 @@ const MainLayout = ({ children }: any) => {
                                 </Tooltip>
                             </Button>
                         </Link> */}
-                        <Link href="/staff/page/1?limit=10" className="text-decoration-none">
-                            <Tooltip title="Admin">
-                                <Button className='border-0 shadow-none bg-transparent py-0' size={'large'}>
-                                    <UsergroupAddOutlined style={{ fontSize: "24px" }} />
-                                </Button>
-                            </Tooltip>
-                        </Link>
-                        <Dropdown menu={{ items }} trigger={['click']} placement="bottomRight" arrow>
+                        {getUserdata?.is_admin===true&&!getUserdata?.permission?
+                            <Link href="/admin/admin-staff" className="text-decoration-none">
+                                <Tooltip title="Admin">
+                                    <Button className='border-0 shadow-none bg-transparent py-0 mt-3' size={'large'}>
+                                        <UsergroupAddOutlined style={{ fontSize: "24px" }} />
+                                    </Button>
+                                </Tooltip>
+                            </Link>:""}
+                            {/* <Dropdown menu={{ items }} trigger={['click']} placement="bottomRight" arrow> */}
+                            {/* <Button className='shadow-none py-0 border-0 bg-transparent' style={{ height: 'unset' }} htmlType='button'>
+                                Logout
+                            </Button> */}
+                            
+                            <Popconfirm
+                                title="Logout"
+                                // onConfirm={deleteStaffById}
+                                onConfirm={handleLogout}
+                                description="Are you sure to Logout ?"
+                                okText="Logout it!"
+                                cancelText="No"
+                                okButtonProps={{ type: 'primary', danger: true }}
+                            >
+                                {/* <Tooltip title="Logout"> */}
+                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
+                               <LogoutOutlined style={{ fontSize: "18px" }}/>
+                                            Logout
+                                        </Button>
+                               {/* </Tooltip> */}
+                            </Popconfirm>
+                            {/* <Dropdown menu={{ items }} trigger={['click']} placement="bottomRight" arrow>
                             <Button className='shadow-none py-0 border-0 bg-transparent' style={{ height: 'unset' }} htmlType='button'>
-                                {/* {userInfo?.profile_pic ? <img src={s3bucket.getUrl(userInfo?.profile_pic)} alt="img" className='profile-img ' /> : <Avatar size={40}>A</Avatar>} */}
+                                {<Avatar size={40}>A</Avatar>}
                             </Button>
-                        </Dropdown>
-                    </div>
-                </Header>
-                {/* Content  */}
-                <Content className="m-4">
-                    {children}
-                </Content>
-                {/* Footer  */}
-                {/* <Footer /> */}
-            </Layout>
-        </Layout >
+                        </Dropdown> */}
+                            {/* {userInfo?.profile_pic ? <img src={s3bucket.getUrl(userInfo?.profile_pic)} alt="img" className='profile-img ' /> : <Avatar size={40}>A</Avatar>} */}
+                            {/* </Dropdown> */}
+                        </div>
+                    </Header>
+                    {/* Content  */}
+                    <Content className="m-4">
+                        {children}
+                    </Content>
+                    {/* Footer  */}
+                    {/* <Footer /> */}
+                </Layout>
+            </Layout >
+        </>
+
     )
 }
 

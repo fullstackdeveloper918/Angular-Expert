@@ -41,7 +41,7 @@ import dynamic from 'next/dynamic';
 // import s3bucket from '@/utils/s3bucket';
 import henceofrthEnums from '@/utils/henceofrthEnums';
 import { useRouter } from 'next/navigation';
-
+import { useDispatch, useSelector, UseSelector } from 'react-redux';
 const iconSize = { fontSize: '18px' };
 const { Row, Col, Avatar, Card, Menu, Pagination, Tooltip, Button } = {
   Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -74,7 +74,12 @@ function getItem(
 const MenuBar = ({ collapsed, setCollapsed }: any) => {
 //   const { userInfo, contentPages, setContentPages } = React.useContext(GlobalContext)
   const [openKeys, setOpenKeys] = useState(['sub1']);
-
+  const getUserdata=useSelector((state:any)=>state?.user?.userData)
+  const hasDashboardPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("DASHBOARD")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const hasMeetingPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("Meeting")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const hasQUESTIONNAIREPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("QUESTIONNAIRE")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
+  
   const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
     if (rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
@@ -103,12 +108,20 @@ console.log(openKeys,"latestOpenKey");
 // const userData = getUserDataFromLocalStorage();
 // console.log(userData);
   const mainMenu = [
-    {
-        key: henceofrthEnums.Roles.DASHBOARD, view: getItem(<Link href='/admin/dashboard' className='text-decoration-none'>Dashboard</Link>, 'dashboard', <DashboardOutlined style={iconSize} />),
-      },
+    
+    hasDashboardPermission && {
+      key: henceofrthEnums.Roles.DASHBOARD, 
+      view: getItem(
+        <Link href='/admin/dashboard' className='text-decoration-none'>Dashboard</Link>, 
+        'dashboard', 
+        <DashboardOutlined style={iconSize} />
+      ),
+    },
+    hasClubMemberPermission&&
       {
         key: henceofrthEnums.Roles.USERS, view: getItem(<Link href='/admin/member' className='text-decoration-none'>Club Members</Link>, 'users', <UserOutlined style={iconSize} />),
       },
+      hasMeetingPermission&&
     {
         key: henceofrthEnums.Roles.PAGES, view: getItem('Meetings', 'sub1',  <UsergroupAddOutlined style={iconSize}/>,
           [
@@ -118,6 +131,7 @@ console.log(openKeys,"latestOpenKey");
           ]
         )
       },
+      hasQUESTIONNAIREPermission&&
     {
       key: henceofrthEnums.Roles.ORDER, view: getItem(<Link href='/admin/questionnaire' className='text-decoration-none'>Questionnaire</Link>, 'questionnaire', <span><BookOutlined style={iconSize} /></span>),
     },
@@ -203,7 +217,12 @@ let userInfo={
 //   console.log("Roless", userInfo?.roles, "super_admin", userInfo?.super_admin)
 
   const router = useRouter();
-  const showCheck = (type: string) => userInfo?.roles?.includes(type.toUpperCase())
+  const showCheck = (type: string | undefined) => {
+    if (typeof type === 'string') {
+      return userInfo?.roles?.includes(type.toUpperCase());
+    }
+    return false;
+  };
   let men = options(mainMenu.filter(res => showCheck(res.key)))
   let gen = options(general.filter(res => showCheck(res.key)))
   console.log(gen, "gen");

@@ -24,6 +24,7 @@ import '../../styles/globals.scss';
 import { Table, Input, Breadcrumb, Tabs, Typography, Upload, Badge, Tag } from 'antd';
 // import { fetchAreas, searchAreasByName } from "../../../utils/fakeApi"
 import api from '@/utils/api';
+import { useSelector } from 'react-redux';
 const { Row, Col, Card, Button, Pagination, Tooltip, Select, Image } = {
   Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
   Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -57,6 +58,7 @@ interface Area {
   assets: string[];
 }
 const Home: Page = (props: any) => {
+  const getUserdata=useSelector((state:any)=>state?.user?.userData)
   const router = useRouter()
   const [state, setState] = React.useState({
     data: [],
@@ -147,21 +149,25 @@ const Home: Page = (props: any) => {
 
 
 
-  const completed = state1.filter((res:any) => res?.data?.is_completed === true);
-  const non_completed=state1.filter((res:any)=>res?.data?.is_completed==false)
+  const completed = state1.filter((res:any) => res?.is_completed === true);
+  const non_completed=state1.filter((res:any)=>res?.is_completed==false)
   console.log(completed,"completed");
   console.log(non_completed,"non_completed");
+  const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
   const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.data?.firstname? `${res?.data?.firstname} ${res?.data?.lastname}`:"N/A",
-      company: res?.data?.company_name,
-      email: res?.data?.email,
-      phone: res?.data?.mobile,
-      position: res?.data?.position,
-      city: res?.data?.home_city,
+      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+      company: res?.company_name,
+      email: res?.email,
+      phone: res?.phone_number,
+      position: res?.position,
+      city: res?.home_city,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+        {hasClubMemberPermission? 
+        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link>:
+        <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}
+        </li>
       </ul>
     }
   }
@@ -169,11 +175,13 @@ const Home: Page = (props: any) => {
   const dataSource1 = completed?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.data?.firstname? `${res?.data?.firstname} ${res?.data?.lastname}`:"N/A",
-      company: res?.data?.company_name,
-      email: res?.data?.email,
+      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+      company: res?.company_name,
+      email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+       {hasClubMemberPermission? 
+        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link>:
+        <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}</li>
       </ul>
     }
   }
@@ -181,11 +189,13 @@ const Home: Page = (props: any) => {
   const dataSource2 = non_completed?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.data?.firstname? `${res?.data?.firstname} ${res?.data?.lastname}`:"N/A",
-      company: res?.data?.company_name,
-      email: res?.data?.email,
+      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+      company: res?.company_name,
+      email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+       {hasClubMemberPermission? 
+        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link>:
+        <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}</li>
       </ul>
     }
   }
@@ -465,9 +475,10 @@ console.log(next,"next");
                 {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                   <Typography.Title level={4} className='m-0 fw-bold'>Club Members</Typography.Title>
+                  {hasClubMemberPermission?
                   <Link href={'/admin/member'}>
                   <Button className='text-center blackViewBtn'> View All</Button>
-                  </Link>
+                  </Link>:""}
                 </div>
                 {/* Search  */}
 

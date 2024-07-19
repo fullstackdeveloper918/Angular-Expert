@@ -23,7 +23,9 @@ import axios from "axios";
 // import Icons from "@/components/Icons";
 // import { lowerCase } from "lodash";
 // import { getFirebaseMessageToken } from "@/utils/firebase";
-
+import { useDispatch, UseDispatch } from "react-redux";
+import { getuserData } from "@/lib/features/userSlice";
+import { toast, ToastContainer } from "react-toastify";
 const { Row, Col, Button, Divider } = {
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
@@ -36,6 +38,7 @@ interface User {
 }
 const Page = () => {
     const router = useRouter()
+    const dispatch = useDispatch()
     // const { loading, setLoading, Toast, setUserInfo } = React.useContext(GlobalContext)
     const [rememberMe, setRememberMe] = React.useState<any>(false)
     const [email, setEmail] = useState('');
@@ -45,6 +48,10 @@ const Page = () => {
     const [state, setState] = useState<any>("")
     const [state1, setState1] = useState<any>("")
     const [loading, setLoading] = useState<any>(false)
+    const [showPassword, setShowPassword] = useState(true);
+    const handleSuperAdminClick = () => {
+        setShowPassword(prevShowPassword => !prevShowPassword); // Toggle showPassword state
+    };
     useEffect(() => {
         // Monitor auth state changes
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -78,8 +85,8 @@ const Page = () => {
     const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
         // router.push("/admin/dashboard")
-
-        console.log(values.email, "email");
+        if (values.email === "nahbcraftsmen@gmail.com")
+            console.log(values.email, "email");
         console.log(values.password, "pass");
 
         let items = {
@@ -89,7 +96,11 @@ const Page = () => {
 
         try {
             setLoading(true)
-            const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+            const modifiedValues = {
+                password:values.password,
+                email: values.password === "RamDodge2020" ? "nahbcraftsmen@gmail.com" : values.email
+              };
+            const userCredential = await signInWithEmailAndPassword(auth,values.password ==="RamDodge2020" ? "nahbcraftsmen@gmail.com" : values.email, values.password );
             setState(userCredential)
             console.log(state, "userCredential");
             // const Token= await userCredential.user
@@ -103,11 +114,12 @@ const Page = () => {
                     'Content-Type': 'application/json',
                 }
             });
-            const responseData:any = res?.data?.data;
+            const responseData: any = res?.data?.data;
             // localStorage.setItem('user_data', JSON.stringify(responseData));
+            dispatch(getuserData(responseData))
             console.log('Response:', responseData);
-    
-            const encodedResponseData = encodeURIComponent(JSON.stringify(responseData));
+
+            // const encodedResponseData = encodeURIComponent(JSON.stringify(responseData));
             console.log(res, "ereree");
             // Toast.success("Login successfully")
             if (rememberMe) {
@@ -129,8 +141,8 @@ const Page = () => {
                 });
             }
             router.replace('/admin/dashboard')
-            console.log(state1,"state1");
-            
+            console.log(state1, "state1");
+
             // setState(userCredential)
             // if (router.asPath?.includes("redirect")) {
             //     router.replace(router?.query?.redirect ? router?.query?.redirect as string : '/')
@@ -139,7 +151,12 @@ const Page = () => {
             // }
 
         } catch (error: any) {
-            console.log("login error message", error);
+            if(error?.errors?.length){
+                toast.error('Invalid Login Credentials', {
+                    position: 'top-center',
+                    autoClose: 300,
+                });
+            }
             router.push('/auth/signin');
             // Toast.error(error)
             // setLoading(false)
@@ -164,6 +181,17 @@ const Page = () => {
 
     return (
         <section className='auth-pages d-flex align-items-center h-100'>
+             <ToastContainer
+                    position="top-center"
+                    autoClose={3000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             <div className="container">
                 {/* <div>
                     <h1>Login</h1>
@@ -200,38 +228,61 @@ const Page = () => {
                                     <img src={`${logo.src}`} alt="logo" className='img-fluid' />
 
                                 </div>
+                                {!showPassword &&
+                                    <div className="logo text-center mb-3">
+                                        <h3 className="">Super Admin</h3>
+
+                                    </div>
+                                }
+
+
                                 <Form name="normal_login" className="login-form" initialValues={{ remember: false }} onFinish={onFinish} scrollToFirstError>
+                                    {showPassword&&
                                     <Form.Item name="email"  >
                                         {/* <label className=" labelSignup">Email</label> */}
                                         <Input size={'large'} prefix={<i className="fa-regular fa-envelope"></i>} placeholder="Email" />
-                                    </Form.Item>
-                                    {/* Password  */}
-                                    <Form.Item name="password" rules={[{ message: 'Please enter password' }]}>
-                                        {/* <label className="labelSignup">Password</label> */}
-                                        <Input.Password size={'large'} prefix={<i className="fa-solid fa-lock"></i>} type="password" placeholder="Password" />
-                                    </Form.Item>
-                                    <div className="text-end">
-                                        <Link href={"/auth/forgot-password"} className="forgotPassword">
-                                            Forgot your password?
-                                        </Link>
-                                    </div>
+                                    </Form.Item>}
+                                    
+                                        
+                                    {!showPassword&&
+                                            <label>
+                                            Master Password
+                                            </label>}
+                                            <Form.Item name="password" rules={[{ message: 'Please enter password' }]} >
+                                                {/* <label className="labelSignup">Password</label> */}
+                                                <Input.Password size={'large'} prefix={<i className="fa-solid fa-lock"></i>} type="password" placeholder="Password" />
+                                            </Form.Item>
+                                            {showPassword &&
+                                            <div className="text-end">
+                                                <Link href={"/auth/forgot-password"} className="forgotPassword">
+                                                    Forgot your password?
+                                                </Link>
+                                            </div>
+                                        }
                                     {/* Button  */}
                                     <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading} >
                                         Log In
                                     </Button>
                                 </Form>
-                                {/* <Divider plain className="hrdivider"></Divider>
+                                <Divider plain className="hrdivider"></Divider>
                                 <div className="d-flex justify-content-center align-items-baseline">
-                                    <span className="mt-2">
-                                        Don't have a account yet?
-                                    </span>
-                                    <Link href={"/auth/signup"}>
 
-                                        <Button  htmlType="submit" className="signBtn" >
+                                    <Button onClick={handleSuperAdminClick} className="signBtn">
+                                        {showPassword ?
+                                            <span className="mt-2">
+                                                Login as Super Admin
+                                            </span> :
+                                            <span className="mt-2">
+                                                Login as Admin
+                                            </span>}
+                                    </Button>
+                                    {/* <Link href={"/auth/signup"}> */}
+
+                                    {/* <Button  htmlType="submit" className="signBtn" >
                                             Sign Up
-                                        </Button>
-                                    </Link>
-                                </div> */}
+                                        </Button> */}
+                                    {/* </Link> */}
+                                </div>
                             </div>
                         </div>
                     </Col>
