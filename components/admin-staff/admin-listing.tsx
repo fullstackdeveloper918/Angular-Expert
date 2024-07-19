@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import type { MenuProps } from 'antd';
-import MainLayout from '@/app/layouts/page';
+import MainLayout from '../Layout/layout';
 import { ApiError } from 'next/dist/server/api-utils';
 import api from '@/utils/api';
 import { permission } from 'process';

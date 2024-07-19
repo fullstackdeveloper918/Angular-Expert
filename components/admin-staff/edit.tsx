@@ -10,7 +10,7 @@ import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import { useParams, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import type { UploadChangeParam } from 'antd/es/upload';
-import MainLayout from '@/app/layouts/page';
+import MainLayout from '../Layout/layout';
 import api from '@/utils/api';
 import { permission } from 'process';
 import { toast, ToastContainer } from 'react-toastify';

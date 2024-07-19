@@ -10,10 +10,11 @@ import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import validation from '@/utils/validation';
-import MainLayout from '@/app/layouts/page';
+// import MainLayout from '@/app/layouts/page';
 import api from '@/utils/api';
 import { toast, ToastContainer } from 'react-toastify';
 import { permission } from 'process';
+import MainLayout from '../Layout/layout';
 
 
 
