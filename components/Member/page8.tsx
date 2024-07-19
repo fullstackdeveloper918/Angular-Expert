@@ -7,6 +7,8 @@ import React, { Fragment, useCallback, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import api from "@/utils/api";
 import type { UploadFile } from "antd";
+import TextArea from "antd/es/input/TextArea";
+import { toast, ToastContainer } from "react-toastify";
 
 const { Title } = Typography;
 
@@ -103,14 +105,14 @@ const Page8 = () => {
             console.log(inputPairs,"qwetyui");
             
             const photoComment = inputPairs.map(pair =>
-                console.log(pair.goalName,"asdfasdfasdf")
-            //      ({
-            //     // goal: values[pair.goalName],
+                // console.log(pair.goalName,"asdfasdfasdf")
+                 ({
+                // goal: values[pair.goalName],
                 
-            //     comment: values[pair.commentName],
-            //     files: values[pair.goalName],
-            //     // files: uploadedUrls[pair.id.toString()] || [],
-            // })
+                comment: values[pair.commentName],
+                files: values[pair.goalName],
+                // files: uploadedUrls[pair.id.toString()] || [],
+            })
         );
 
         // return
@@ -134,18 +136,23 @@ const Page8 = () => {
             setLoading(true)
             let res = await api.User.edit(items)
                 console.log(res,"yyyy");
-                // router.push(`/admin/member`)
+                router.push(`/admin/member`)
             }else{
-                const check={
-                    file: photoComment,
-                }
+                // const check={
+                //     userId: value,
+                //     file: photoComment,
+                // }
                 setLoading(true)
                 // let res2 = await api.ImageUpload.add(check as any)
                 let res =await api.Auth.signUp(item)
                 // console.log(res2,"qqqq");
+                toast.success('Add Successsfully', {
+                    position: 'top-center',
+                    autoClose: 300,
+                });
                 console.log(res,"wwww");
                 
-                // router.push(`/admin/member`)
+                router.push(`/admin/member`)
             }
         } catch (error) {
             console.error(error);
@@ -179,6 +186,17 @@ const Page8 = () => {
   return (
     <MainLayout>
     <Fragment>
+    <ToastContainer
+                    position="top-center"
+                    autoClose={300}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
         <section>
             <DynamicRow justify="center" gutter={[20, 20]}>
                 <DynamicCol sm={22} md={24} lg={11} xl={10} xxl={9}>
@@ -231,7 +249,7 @@ const Page8 = () => {
                                                 rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
                                                 label={pair.commentLabel}
                                             >
-                                                <Input
+                                                <TextArea
                                                     size="large"
                                                     placeholder="Enter..."
                                                     onKeyPress={(e: any) => {
@@ -258,7 +276,7 @@ const Page8 = () => {
                                
                                 <div className="d-flex gap-3 justify-content-center">
                                     {/* <Link href={router.back}> */}
-                                <DynamicButton size={'large'} type="primary" className="login-form-button mt-4" loading={loading} onClick={onPrevious}>
+                                <DynamicButton size={'large'} type="primary" className="login-form-button mt-4" onClick={onPrevious}>
                                     Previous
                                 </DynamicButton>
                                     {/* </Link> */}

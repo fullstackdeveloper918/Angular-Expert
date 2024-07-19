@@ -48,7 +48,7 @@ const MeetingAdd = () => {
           hotel: values?.hotel,
           airport: values?.airport,
           host_company: values?.host_company,
-          host: ["lEcoHnJNYeUzrvePPSeVExeuo3e2","OJO0T0jhmeU6ulWX5uRYLHbo1sh2"],
+          host: ["o7YFpiVNFSVOUbTScNZYo6X9jtB2"],
           // host: values?.host,
           cell: values?.cell,
           weather: values?.weather,

@@ -329,7 +329,7 @@ const MemberUpdatePDF = (props) => {
               indicated below, and write a brief summary of each project in the
               comment section.
             </Text>
-            {props?.state?.photo_comment.map((res, index) => (
+            {props?.state?.photo_comment?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_wrapper}>
                   <View style={styles.Flex_div}>

@@ -76,21 +76,10 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
   const [openKeys, setOpenKeys] = useState(["sub1"]);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const hasDashboardPermission =
-    (getUserdata?.permission?.length &&
-      getUserdata.permission.includes("DASHBOARD")) ||
-    getUserdata?.email === "nahbcraftsmen@gmail.com";
-  const hasMeetingPermission =
-    (getUserdata?.permission?.length &&
-      getUserdata.permission.includes("Meeting")) ||
-    getUserdata?.email === "nahbcraftsmen@gmail.com";
-  const hasClubMemberPermission =
-    (getUserdata?.permission?.length &&
-      getUserdata.permission.includes("CLUB_MEMEBR")) ||
-    getUserdata?.email === "nahbcraftsmen@gmail.com";
-  const hasQUESTIONNAIREPermission =
-    (getUserdata?.permission?.length &&
-      getUserdata.permission.includes("QUESTIONNAIRE")) ||
-    getUserdata?.email === "nahbcraftsmen@gmail.com";
+    (getUserdata?.permission?.length &&getUserdata.permission.includes("DASHBOARD")) ||getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
+  const hasMeetingPermission =(getUserdata?.permission?.length &&getUserdata.permission.includes("Meeting")) ||getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) ||getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const hasQUESTIONNAIREPermission =(getUserdata?.permission?.length &&getUserdata.permission.includes("QUESTIONNAIRE")) || getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
 
   const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
@@ -158,7 +147,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
         ]
       ),
     },
-    hasQUESTIONNAIREPermission && {
+    hasQUESTIONNAIREPermission||getUserdata?.is_admin==false && {
       key: henceofrthEnums.Roles.ORDER,
       view: getItem(
         <Link href="/admin/questionnaire" className="text-decoration-none">
@@ -367,13 +356,16 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
           !collapsed ? "bg-light" : "p-0 bg-tranaprent"
         }`}
       >
-        <Avatar size={40}>A</Avatar>
+        <Avatar size={50}>A</Avatar>
+        {/* <Avatar size={50}>{getUserdata?.firstname.slice(0,1)}</Avatar> */}
         {!collapsed && (
           <div>
+            {getUserdata?.email === "nahbcraftsmen@gmail.com"?
             <Typography.Title level={5} className="m-0 fw-bold text-capitalize">
               {"Super Admin"}
             </Typography.Title>
-            <Typography.Paragraph className="m-0">Admin</Typography.Paragraph>
+            :""}
+            <Typography.Paragraph className="m-0">{getUserdata?.firstname}</Typography.Paragraph>
           </div>
         )}
       </div>

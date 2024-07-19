@@ -104,7 +104,7 @@ const User = {
   import: (file: any) =>
     requests.file(`user`, 'file', file),
   create: (info: any) =>
-    requests.post('send-pdf', info),
+    requests.post('save-pdf', info),
 };
 const Meeting={
   // add-meeting

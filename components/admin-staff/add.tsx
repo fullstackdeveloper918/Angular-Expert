@@ -191,7 +191,10 @@ const AddStaff: Page = () => {
                                             <Input size={'large'} type='email' placeholder="Email" />
                                         </Form.Item>
                                         {/* Password  */}
-                                        <Form.Item name="password" rules={[{ required: true, message: 'Please Enter Password!' }, { pattern: validation.strongPasswordRegEx, message: "Password must contains 8 characters including combination of uppercase, lowercase letter, number and special characters" }]} label="Password">
+                                        <Form.Item name="password" rules={[{ required: true, message: 'Please Enter Password!' },
+                                            //  { pattern: validation.strongPasswordRegEx, message: "Password must contains 8 characters including combination of uppercase, lowercase letter, number and special characters" }
+                                            ]}
+                                              label="Password">
                                             <Input.Password size={'large'} type="password" placeholder="Password" />
                                         </Form.Item>
                                         {/* Phone No  */}

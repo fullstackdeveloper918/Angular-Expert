@@ -28,7 +28,7 @@ const Forgotpaswrd = () => {
     const onFinish = async (values: any) => {
         let items = {
             to: values.email,
-            link: `http://localhost:3000/auth/update_password?${values.email}`
+            link: `https://angular-expert-mu.vercel.app/auth/update_password?${values.email}`
         };
         try {
             let res = await axios.post("https://frontend.goaideme.com/forgot-password", items)

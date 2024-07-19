@@ -69,6 +69,7 @@ const MemberList = () => {
       is_archive: ""
     })
   const [state1, setState1] = useState<any>([])
+  const [copiedText, setCopiedText] = useState('');
 
   const [loading, setLoading] = React.useState(false)
   const [exportModal, setExportModal] = React.useState(false);
@@ -102,47 +103,42 @@ const MemberList = () => {
     };
   const generatePdf = async () => {
       const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
-      const blob = await pdf(<Pdf state={state} />).toBlob();
-      const pdfUrl = URL.createObjectURL(blob);
-      return { blob, pdfUrl, timestamp };
+      const blob = await pdf(<Pdf state={state} />).toBlob()
+      const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
+    return { file, blob, timestamp };
     };
   
     // Function to handle PDF download
     const downLoadPdf = async () => {
       const { blob, timestamp } = await generatePdf();
+      
       saveAs(blob, `Order_${timestamp}.pdf`);
     };
   
     // Function to handle PDF sharing
     const sharePdf = async () => {
-      const { pdfUrl, timestamp } = await generatePdf();
+        const { file } = await generatePdf();
+
+        const formData = new FormData();
+        formData.append('file', file);
+        console.log(formData, 'checkfordata')
+        
+        try {
+            const res = await api.User.create(formData);
+            console.log(res?.fileUrl, 'response from api')
+           
+            await navigator.clipboard.writeText(res?.fileUrl);
+            toast.success('PDF copied to clipboard!', {
+              position: 'top-center',
+              autoClose: 300
+            });
+          } catch (err) {
+            console.error('Failed to copy: ', err);
+          }
   
-  
-      const data = {
-        // url: pdfUrl,
-        // filename: `Order_${timestamp}.pdf`,
-        to: state.email,
-        link: pdfUrl
-      };
-      const res = await api.User.create(data)
-      toast.success('Link Share Successfully', {
-        position: 'top-center',
-        autoClose: 300,
-  
-      });
-  
-      // Optionally, open the PDF in a new tab
-      // window.open(pdfUrl, '_blank');
     };
-  //   const copyToClipboard = (text) => {
-  //     navigator.clipboard.writeText(text)
-  //         .then(() => {
-  //             message.success('Link copied to clipboard');
-  //         })
-  //         .catch(() => {
-  //             message.error('Failed to copy link to clipboard');
-  //         });
-  // };
+ 
+
     const handleDownloadAndFetchData = (id:any) => {
         getDataById(id);
         downLoadPdf();

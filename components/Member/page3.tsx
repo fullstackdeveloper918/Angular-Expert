@@ -23,6 +23,7 @@ import MainLayout from "../../components/Layout/layout";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import EmployeeRoles from "@/utils/EmployeeRoles.json";
 import api from "@/utils/api";
+import TextArea from "antd/es/input/TextArea";
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -215,7 +216,7 @@ const Page3 = () => {
                                                 label={pair.goalLabel}
                                             >
 
-                                                <Input
+                                                <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
                                                     onKeyPress={(e: any) => {
@@ -232,7 +233,7 @@ const Page3 = () => {
                                                 rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
                                                 label={pair.commentLabel}
                                             >
-                                                <Input
+                                                <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
                                                     onKeyPress={(e: any) => {
@@ -282,7 +283,7 @@ const Page3 = () => {
                                             // initialValue={field.initialGoal}
                                         >
                                             <div style={{ position: 'relative' }}>
-                                                <Input
+                                                <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
                                                     onKeyPress={(e: any) => {

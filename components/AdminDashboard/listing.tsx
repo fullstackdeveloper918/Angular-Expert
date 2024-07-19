@@ -10,11 +10,12 @@ import henceofrthEnums from "@/utils/henceofrthEnums";
 import { useRouter } from "next/navigation";
 import type { TabsProps } from "antd";
 import "../../styles/globals.scss";
-import { Button, Card, Col, Row, Table, Typography } from "antd";
+import { Button, Card, Col, Popconfirm, Row, Table, Typography } from "antd";
 import api from "@/utils/api";
 import { useSelector } from "react-redux";
 import Icons from "@/components/common/Icons";
 import MainLayout from "../../components/Layout/layout";
+import dayjs from "dayjs";
 
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
@@ -24,12 +25,15 @@ const AdminDashboard: Page = (props: any) => {
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
 
   const[state1,setState1]=useState<any>([])
-  const[upcoming,setUpcoming]=useState<any>([])
-  const[next,setNext]=useState<any>([])
-
+  const[upcoming,setUpcoming]=useState<any>("")
+  const[next,setNext]=useState<any>("")
+  const [areas, setAreas] = useState<any>([]);
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
 
   const DashboardData = [
+    // getUserdata?.is_admin==false?
+    
+    // getUserdata?.is_admin==true?
     {
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
@@ -40,6 +44,7 @@ const AdminDashboard: Page = (props: any) => {
       link: "/admin/dashboard"
 
     },
+    // getUserdata?.is_admin==true?
     {
       cardBackground: "#CAFDF5",
       iconBackground: "linear-gradient(135deg, rgba(0, 184, 217, 0) 0%, rgba(0, 184, 217, 0.24) 97.35%)",
@@ -49,6 +54,7 @@ const AdminDashboard: Page = (props: any) => {
       count: "Spring 2025 (408 days)",
       link: "/admin/dashboard"
     },
+    // getUserdata?.is_admin==true?
     {
       cardBackground: "#FFF5CC",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
@@ -59,6 +65,32 @@ const AdminDashboard: Page = (props: any) => {
       link:hasClubMemberPermission? `/admin/member`:"/admin/dashboard"
 
     },
+ 
+  ]
+  const DashboardData2 = [
+    // getUserdata?.is_admin==false?
+    {
+      cardBackground: "#C8FACD",
+      iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
+      icon: <Icons.Users />,
+      title: "2",
+      textColor: "#007B55",
+      count: "No. of Users fillled the Form for coming meeting",
+      link: "/admin/dashboard"
+
+    },
+    // getUserdata?.is_admin==false?
+    {
+      cardBackground: "#FFF5CC",
+      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
+      icon: <Icons.Users />,
+      title: "3",
+      textColor: "#B76E00",
+      count: "No. of Users remains to fill the Form for coming meeting",
+      link: "/admin/dashboard"
+
+    },
+   
  
   ]
 
@@ -112,10 +144,50 @@ const AdminDashboard: Page = (props: any) => {
     }
   }
   );
+  const dataSource3 = areas?.length &&areas?.map((res: any, index: number) => {
+    return {
+        key: index+1,
+        meeting:res?.meeting_name,
+        start: dayjs(res?.start_time).format('h A DD-MM-YYYY'),
+        end: dayjs(res?.end_time).format('h A DD-MM-YYYY'),
+        // action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+        //     <li>
+        //         <Link href={`/admin/meetings/${res?.id}/edit`} >
+        //             <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+        //         </Link>
+        //     </li>
+           
+        // </ul>
+    }})
 
 
-
-
+    const columns3 = [
+      {
+          title: 'Sr.no',
+          dataIndex: 'key',
+          key: 'key',
+      },
+      {
+          title: 'Meeting Name',
+          dataIndex: 'meeting',
+          key: 'meeting',
+      },
+      {
+          title: 'Start Time',
+          dataIndex: 'start',
+          key: 'start',
+      },
+      {
+          title: 'End Time',
+          dataIndex: 'end',
+          key: 'end',
+      },
+      // {
+      //     title: 'Action',
+      //     dataIndex: 'action',
+      //     key: 'action',
+      // },
+  ];
 
 
 
@@ -228,6 +300,19 @@ const AdminDashboard: Page = (props: any) => {
         
     }
 }
+const initialise = async () => {
+  try {
+      let res = await api.Meeting.listing();
+      setAreas(res); 
+  } catch (error) {
+      console.error('Error fetching meeting listing:', error);
+  }
+};
+useEffect(() => {
+
+initialise(); 
+
+}, []);
 useEffect(()=>{
     getData()
 
@@ -244,27 +329,48 @@ useEffect(()=>{
         <section>
           {/* <div className="container-fluid"> */}
           <Row gutter={[20, 20]} className="mb-4 ">
-            {DashboardData.map((data: any, index: number) => {
-              return (
-                <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
-                  <Link className='text-decoration-none' href={data.link}>
-                    <Card className='dashboard-widget-card text-center h-100 border-0' style={{ background: data.cardBackground }} >
-                      <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
-                        {data.icon}
-                      </div>
-                      <div className='dashboard-widget-card-content'>
-                        <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
-                        <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
-                      </div>
-                    </Card>
-                  </Link>
-                </Col>
-              )
-            })}
+{getUserdata?.is_admin==true?
+<>
+{DashboardData.map((data: any, index: number) => {
+  return (
+    <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
+      <Link className='text-decoration-none' href={data.link}>
+        <Card className='dashboard-widget-card text-center h-100 border-0' style={{ background: data.cardBackground }} >
+          <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
+            {data.icon}
+          </div>
+          <div className='dashboard-widget-card-content'>
+            <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
+            <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
+          </div>
+        </Card>
+      </Link>
+    </Col>
+  )
+})}
+</>:<>
+{DashboardData2.map((data: any, index: number) => {
+  return (
+    <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
+      <Link className='text-decoration-none' href={data.link}>
+        <Card className='dashboard-widget-card text-center h-100 border-0' style={{ background: data.cardBackground }} >
+          <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
+            {data.icon}
+          </div>
+          <div className='dashboard-widget-card-content'>
+            <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
+            <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
+          </div>
+        </Card>
+      </Link>
+    </Col>
+  )
+})}
+</>}
           </Row>
           <Row gutter={[20, 20]} className='dashboradTable'>
 
-
+{getUserdata?.is_admin==true?
             <Col sm={24} md={24} xl={12}>
               <Card className='common-card'>
 
@@ -289,7 +395,8 @@ useEffect(()=>{
 
               </Card>
             </Col>
-
+            :""}
+{getUserdata?.is_admin==true?
             <Col sm={24} md={24} xl={12}>
               <Card className='common-card'>
 
@@ -314,8 +421,8 @@ useEffect(()=>{
                 {/* Pagination  */}
 
               </Card>
-            </Col>
-
+            </Col>:""}
+            {getUserdata?.is_admin==true?
             <Col span={24} >
               <Card className='common-card'>
 
@@ -342,8 +449,31 @@ useEffect(()=>{
                 {/* Pagination  */}
 
               </Card>
-            </Col>
+            </Col>:""}
+            {getUserdata?.is_admin==false?
+            <Col span={24} >
+              <Card className='common-card'>
 
+                {/* title  */}
+                <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
+                  <Typography.Title level={4} className='m-0 fw-bold'>Coming Meetings</Typography.Title>
+                </div>
+                {/* Search  */}
+
+                {/* Tabs  */}
+                <div className='tabs-wrapper'>
+
+                  <Table dataSource={dataSource3} columns={columns3} pagination={false} />
+                </div>
+                {/* <div className=' justify-content-center mt-4 d-flex'> */}
+
+
+                {/* <Table dataSource={dataSource} columns={columns} />; */}
+                {/* </div> */}
+                {/* Pagination  */}
+
+              </Card>
+            </Col>:""}
           </Row>
           {/*  Graphs   */}
           {/* {GraphType.map((res)=><DashboardGraph key={res.heading} {...res}/>)} */}
