@@ -37,7 +37,7 @@ const AdminDashboard: Page = (props: any) => {
       title: "20",
       textColor: "#007B55",
       count: "Fall 2024 (80 days)",
-      link: "/"
+      link: "/admin/dashboard"
 
     },
     {
@@ -47,7 +47,7 @@ const AdminDashboard: Page = (props: any) => {
       textColor: "#006C9C",
       title: "3",
       count: "Spring 2025 (408 days)",
-      link: "/"
+      link: "/admin/dashboard"
     },
     {
       cardBackground: "#FFF5CC",
@@ -56,8 +56,7 @@ const AdminDashboard: Page = (props: any) => {
       textColor: "#B76E00",
       title: "20",
       count: "Total Club Members",
-      link:hasClubMemberPermission? `/admin/member`:"/"
-
+      link:hasClubMemberPermission? `/admin/member`:"/admin/dashboard"
 
     },
  

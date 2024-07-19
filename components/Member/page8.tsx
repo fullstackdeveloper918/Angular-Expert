@@ -140,7 +140,7 @@ const Page8 = () => {
                     file: photoComment,
                 }
                 setLoading(true)
-                let res2 = await api.ImageUpload.add(check as any)
+                // let res2 = await api.ImageUpload.add(check as any)
                 let res =await api.Auth.signUp(item)
                 // console.log(res2,"qqqq");
                 console.log(res,"wwww");
@@ -183,19 +183,6 @@ const Page8 = () => {
             <DynamicRow justify="center" gutter={[20, 20]}>
                 <DynamicCol sm={22} md={24} lg={11} xl={10} xxl={9}>
                     <DynamicCard className='common-card'>
-                        {/* <div className='mb-4'>
-                            <Breadcrumb separator=">">
-                                <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
-                                <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>User</Link></Breadcrumb.Item>
-                                <Breadcrumb.Item ><Link href="/admin/member/add" className='text-decoration-none'>Add User</Link></Breadcrumb.Item>
-                                <Breadcrumb.Item ><Link href="/admin/member/add/page2" className='text-decoration-none'>BUSINESS UPDATE</Link></Breadcrumb.Item>
-                                <Breadcrumb.Item ><Link href="/admin/member/add/page3" className='text-decoration-none'>GOALS</Link></Breadcrumb.Item>
-                                <Breadcrumb.Item ><Link href="/admin/member/add/page4" className='text-decoration-none'>CRAFTSMEN TOOLBOX</Link></Breadcrumb.Item>
-                                <Breadcrumb.Item ><Link href="/admin/member/add/page5" className='text-decoration-none'>CRAFTSMEN CHECK-UP</Link></Breadcrumb.Item>
-                                <Breadcrumb.Item ><Link href="/admin/member/add/page6" className='text-decoration-none'>2023 MEETING REVIEW</Link></Breadcrumb.Item>
-                                <Breadcrumb.Item ><Link href="/admin/member/add/page7" className='text-decoration-none'>2024 MEETING PREPARATION</Link></Breadcrumb.Item>
-                            </Breadcrumb>
-                        </div> */}
                         {/* Title  */}
                         <div className='mb-2 d-flex justify-content-between'>
                             <Title level={3} className='m-0 fw-bold'>PHOTO SECTION</Title>
