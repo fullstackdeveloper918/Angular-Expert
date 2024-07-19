@@ -102,7 +102,9 @@ const User = {
   delete: (id: string) =>
     requests.del(`user/delete/${id}`),
   import: (file: any) =>
-    requests.file(`user`, 'file', file)
+    requests.file(`user`, 'file', file),
+  create: (info: any) =>
+    requests.post('send-pdf', info),
 };
 const Meeting={
   // add-meeting

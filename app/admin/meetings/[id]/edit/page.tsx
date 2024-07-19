@@ -50,24 +50,20 @@ const Page = () => {
   };
 
   const onChange = (date: any, dateString: any) => {
-    console.log(date, dateString);
     setState((prevState: any) => ({
       ...prevState,
       start_time: date
     }));
   };
 const searchParam = useParams();
-  // console.log(searchParam, "cheee");
 
   const id = searchParam.id;
   const getDataById = async () => {
-    console.log(id);
     const item = {
       meeting_id: id
     }
     try {
       const res = await api.Meeting.getById(item as any);
-      console.log(res, "ressssss");
       const data = res?.data || {};
       if (data.start_time) {
         data.start_time = dayjs(data.start_time);
@@ -86,7 +82,6 @@ const searchParam = useParams();
     }
   };
   const onFinish = async (values: any) => {
-    console.log('Received values of form: ', values);
     let items = {
       meeting_name: values?.meeting_name,
       meeting_id: id,
@@ -108,20 +103,15 @@ const searchParam = useParams();
     try {
       setLoading(true)
       let res = await api.Meeting.edit(items as any);
-      console.log(res, "gggggg");
       router.push("/admin/meetings")
     } catch (error: any) {
-      // Toast.error(error)
-      console.log(error);
     } finally {
       setLoading(false)
     }
   };
 
   useEffect(() => {
-    // if (id) {
     getDataById();
-    // }
   }, []);
   return (
     <MainLayout>

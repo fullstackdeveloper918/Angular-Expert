@@ -23,16 +23,12 @@ const Page = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false)
     const [state, setState] = useState<any>("")
-    console.log(form, "form");
     const searchParams = useSearchParams();
     const entries = Array.from(searchParams.entries());
-    console.log(searchParams,"iddd");
-    console.log(entries,"entries");
 
     const value = entries.length > 0 ? entries[0][0] : '';
     const type = entries.length > 1 ? entries[1][0] : '';
     const onFinish = async (values: any) => {
-        console.log('Received values of form: ', values);
         let items = {
            bussiness_update:{
             userId:value,
@@ -44,7 +40,6 @@ const Page = () => {
             craftsmen_support:values?.craftsmen_support,
            }
         } as any
-        console.log(items,"page2");
         
         // router.push("/admin/users/add/page3")
         try {
@@ -62,33 +57,27 @@ const Page = () => {
             } as any
             setLoading(true)
             let res = await api.User.edit(items)
-                console.log(res,"yyyy");
                 router.push(`/admin/member/add/page3?${value}&edit`)
             }else{
 
                 setLoading(true)
                 let res =await api.Auth.signUp(items)
-                console.log(res,"qqqq");
-                
                 router.push(`/admin/member/add/page3?${res?.user_id}`)
             }
 
            
         } catch (error: any) {
             // Toast.error(error)
-            console.log(error);
         } finally {
             setLoading(false)
         }
     };
     const getDataById = async () => {
-        // console.log(id);
         const item = {
           user_id: value
         }
         try {
           const res = await api.User.getById(item as any);
-          console.log(res, "ressssss");
           setState(res?.data || null);
           form.setFieldsValue(res?.data)
         } catch (error: any) {
@@ -114,13 +103,13 @@ const Page = () => {
                     <Row justify="center" gutter={[20, 20]}>
                         <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
                             <Card className='common-card'>
-                                <div className='mb-4'>
+                                {/* <div className='mb-4'>
                                     <Breadcrumb separator=">">
                                         <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>User</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/member/add" className='text-decoration-none'>Add User</Link></Breadcrumb.Item>
                                     </Breadcrumb>
-                                </div>
+                                </div> */}
                                 {/* Title  */}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>BUSINESS UPDATE</Typography.Title>

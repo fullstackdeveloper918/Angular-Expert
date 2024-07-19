@@ -22,17 +22,11 @@ const Page = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false)
     const [state, setState] = useState<any>("")
-    console.log(form, "form");
     const searchParam = useParams()
     const searchParams = useSearchParams();
     const entries = Array.from(searchParams.entries());
-    console.log(searchParams, "iddd");
-    console.log(entries, "entries");
     const value = entries.length > 0 ? entries[0][0] : '';
-    console.log(value, "value");
     const id: any = searchParam.id;
-    console.log(id, "ididid");
-    console.log(searchParam, "searchParamsearchParam");
 
 
 
@@ -98,11 +92,9 @@ const Page = () => {
         try {
             setLoading(true)
             let res = await api.Auth.signUp(items)
-            console.log(res, "gghgh");
 
             router.push(`/admin/member/add/page4?${res?.userId}`)
         } catch (error) {
-            console.log(error);
 
         } finally {
             setLoading(false)
@@ -113,13 +105,11 @@ const Page = () => {
 
 
     const getDataById = async () => {
-        // console.log(id);
         const item = {
             user_id: value
         }
         try {
             const res = await api.User.getById(item as any);
-            console.log(res, "ressssss");
             setState(res?.data || null);
             const fetchedGoals = res?.data.goal_last_meeting || [];
             const formattedGoals = fetchedGoals.map((goal: any, index: any) => ({
@@ -142,20 +132,22 @@ const Page = () => {
             });
             const fetchedGoalsNext = res?.data.goal_next_meeting || [];
             const formattedGoalsNext = fetchedGoalsNext.map((goal: any, index: any) => ({
+               
+                
               name: `goal_next${index + 1}`,
               label: `Goal ${index + 1}:`,
               status1: goal.status,
-              initialGoal: goal.goal
+              initialGoal1: goal.goal
             }));
       
             setInputFields(formattedGoalsNext);
       
             form.setFieldsValue({
-              ...fetchedGoals.reduce((acc: any, goal: any, index: any) => {
-                acc[`goal_next${index + 1}`] = goal.goal;
-                acc[`comments${index + 1}`] = goal.comment;
-                return acc;
-              }, {}),
+            //   ...fetchedGoals.reduce((acc: any, goal: any, index: any) => {
+            //     acc[`goal_next${index + 1}`] = goal.goal;
+            //     acc[`comments${index + 1}`] = goal.comment;
+            //     return acc;
+            //   }, {}),
               ...fetchedGoalsNext.reduce((acc: any, goal: any, index: any) => {
                 acc[`goal_next${index + 1}`] = goal.goal;
                 return acc;
@@ -173,7 +165,6 @@ const Page = () => {
     const onPrevious = () => {
         router.back()
     }
-    console.log(inputPairs, "inputPairs")
     return (
         <MainLayout>
             <Fragment>
@@ -182,15 +173,14 @@ const Page = () => {
                     <Row justify="center" gutter={[20, 20]}>
                         <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
                             <Card className='common-card'>
-                                <div className='mb-4'>
+                                {/* <div className='mb-4'>
                                     <Breadcrumb separator=">">
                                         <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>User</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/member/add" className='text-decoration-none'>Add User</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/member/add/page2" className='text-decoration-none'>BUSINESS UPDATE</Link></Breadcrumb.Item>
-                                        {/* <Breadcrumb.Item className='text-decoration-none'>GOALS</Breadcrumb.Item> */}
                                     </Breadcrumb>
-                                </div>
+                                </div> */}
                                 {/* Title  */}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>GOALS</Typography.Title>
@@ -280,6 +270,7 @@ const Page = () => {
                                         </div>
                                         <div className="">
                                             {inputFields.map((field, index) => (
+                                                
                                                 <Form.Item
                                                     key={field.name}
                                                     name={field.name}

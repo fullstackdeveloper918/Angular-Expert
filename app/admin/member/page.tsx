@@ -9,7 +9,7 @@ import user from "@/assets/images/placeholder.png"
 import Link from 'next/link';
 import { Space } from 'antd';
 import type { TabsProps } from 'antd';
-import { EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
+import { DownloadOutlined, EyeOutlined, PlusOutlined, UploadOutlined, UsergroupAddOutlined } from '@ant-design/icons'
 // import { useRouter } from 'next/router';
 // import henceforthApi from '@/utils/henceforthApi';
 // import { GlobalContext } from '@/context/Provider';
@@ -51,112 +51,7 @@ const Page = () => {
     const [exportModal, setExportModal] = React.useState(false);
     const [areas, setAreas] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState<any>('');
-    // const [graphType, setGraphType] = React.useState(henceofrthEnums.G
-    //   const onChangeRouter = (key: string, value: string) => {
-    //     router.replace({
-    //       query: { ...router.query, [key]: value }
-    //     })
-    //     console.log("router query", router.query);
-    //   }
-
-    //   const onChange = (value: string) => {
-    //     onChangeRouter("type", value)
-    //   };
-
-    //   const onSearch = (value: string) => {
-    //     console.log("onserach value", value);
-    //     if (timer) {
-    //       clearTimeout(timer)
-    //     }
-    //     timer = setTimeout(() => {
-    //       onChangeRouter("search", String(value).trim())
-    //     }, 1000);
-    //   }
-
-    //   const handlePagination = (page: number, pageSize: number) => {
-    //     console.log('page: number, pageSize', page, pageSize);
-    //     router.replace({
-    //       query: { ...router.query, pagination: page, limit: pageSize }
-    //     })
-    //   }
-
-    //   const dataSource2 = state.data.map((res: any, index: number) => {
-    //     return {
-    //       key: router.query.pagination ? (Number(router.query.pagination) - 1) * Number(router.query.limit || 10) + (index + 1) : index + 1,
-    //       name: <div className='user-detail d-inline-flex gap-2 align-items-center'>
-    //         {/* <Avatar size={40} src={res?.image ? s3bucket.getUrl(res?.image) : user.src}></Avatar> */}
-    //         <Typography.Text className='text-capitalize'>{res.first_name ? `${res?.first_name} ${res?.last_name}` : 'N/A'}</Typography.Text></div>,
-    //       email: <Tooltip placement="topLeft" title={`${res?.email}`} arrow={true}>
-    //         {res.email ? res.email?.length >= 20 ? `${res.email.slice(0, 20)}...` : res.email : 'N/A'}
-    //       </Tooltip>,
-    //       phone: res.mobile ? `${res.country_code} ${res.mobile}` : 'N/A',
-    //       status: !router.query.type && ((res.is_blocked && !res.is_active) ? <Tag color='#000'>Blocked</Tag> : res.is_blocked ? <Tag color='#000'>Blocked</Tag> : !res.is_active ? <Tag color='red'>De-Activated</Tag> : <Tag color='success'>Active</Tag>),
-    //       actions: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-    //         <Link href={`/users/${res._id}/view?pagination=1&limit=10`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
-    //       </ul>
-    //     }
-    //   }
-    //   );
-
-    //   const TableData = () => <Row gutter={[20, 20]} >
-    //     <Col span={24} >
-    //       <Table dataSource={dataSource} columns={router.query.type ? ColumnsType.userColumns : ColumnsType.allUserColumns} pagination={false} scroll={{ x: '100%' }} />
-    //     </Col>
-    //   </Row>
-
-    //   const items: TabsProps['items'] = [
-    //     {
-    //       key: '',
-    //       label: 'All',
-    //       children: <TableData />,
-    //     },
-    //     {
-    //       key: 'active',
-    //       label: 'Active',
-    //       children: <TableData />,
-    //     },
-    //     {
-    //       key: 'deactive',
-    //       label: 'Deactive',
-    //       children: <TableData />,
-    //     },
-    //     {
-    //       key: 'blocked',
-    //       label: 'Blocked',
-    //       children: <TableData />,
-    //     }
-    //   ];
-
-    //   const initialise = async () => {
-    //     console.log("latest router query", router.query);
-    //     try {
-    //       setLoading(true)
-    //       let query = router.query
-    //       let urlSearchParam = new URLSearchParams()
-    //       if (query.pagination) {
-    //         urlSearchParam.set('pagination', `${Number(router.query.pagination)}`)
-    //       }
-    //       if (query.limit) {
-    //         urlSearchParam.set('limit', router.query.limit as string)
-    //       }
-    //       if (query.search) {
-    //         urlSearchParam.set('search', router.query.search as string)
-    //       }
-    //       if (query.type) {
-    //         urlSearchParam.set('filter_by', String(router.query.type) as string)
-    //       }
-    //     //   let apiRes = await henceforthApi.User.listing(urlSearchParam.toString())
-    //     //   setState(apiRes)
-    //     } catch (error) {
-
-    //     } finally {
-    //       setLoading(false)
-    //     }
-    //   }
-
-    //   React.useEffect(() => {
-    //     initialise()
-    //   }, [router.query.pagination, router.query.limit, router.query.search, router.query.type])
+   
 
 
 
@@ -169,8 +64,16 @@ const Page = () => {
             phone: res?.phone_number,
             position: res?.position,
             city: res?.home_city,
-            action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-                <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+            action: <ul className='m-0 list-unstyled d-flex gap-2'>
+                <li>
+                    <Tooltip title="Download Pdf">
+                        <Button className='ViewMore ' ><DownloadOutlined /></Button>
+                    </Tooltip>
+                </li>
+                <li>
+                <Link href={`/admin/member/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
+                </li>
+                
             </ul>
         }
     }
@@ -187,7 +90,7 @@ const Page = () => {
             key: 'name',
         },
         {
-            title: 'Company Name',
+            title: 'Club Name',
             dataIndex: 'company',
             key: 'company',
         },
@@ -219,37 +122,19 @@ const Page = () => {
     ];
 
 
-    // useEffect(() => {
-    //     fetchAreas().then((data) => {
-    //         setAreas(data);
-    //     });
-    // }, []);
+    
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         setSearchTerm(value);
-        console.log(value, "value");
-    };
-    // if (value.trim() === '') {
-    //   fetchAreas().then((data) => {
-    //     setAreas(data);
-    //   });
-    // } else {
-    //   searchAreasByName(value).then((data) => {
-    //     setAreas(data);
-    //   });
-    // }
-    const handleChange = (value: string) => {
-        console.log(`selected ${value}`);
     };
 
+   
     const addUser = () => {
         router.push("/admin/member/add")
     }
 
-    // console.count('hello count')
     const cookies = parseCookies();
     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
-    console.log(accessToken, "gfgfgfgfgfg");
 
     const getData = async (query: string) => {
         try {
@@ -265,7 +150,6 @@ const Page = () => {
         getData(query);
     }, [searchTerm]);
 
-    console.log(state1, "ggggdgggdgd");
 
     return (
         <MainLayout>

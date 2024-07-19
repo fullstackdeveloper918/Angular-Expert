@@ -14,6 +14,7 @@ import axios from 'axios';
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver'
 import Pdf from '@/app/common/Pdf';
+import { toast, ToastContainer } from 'react-toastify';
 // import React from 'react'
 const { Row, Col, Card, Button, Space, Popconfirm } = {
   Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -50,17 +51,14 @@ const Page = () => {
   })
   const [isActive, setIsActive] = useState(false);
   const searchParam = useParams();
-  // console.log(searchParam, "cheee");
 
   const id: any = searchParam.id;
   const getDataById = async () => {
-    console.log(id);
     const item = {
       user_id: id
     }
     try {
       const res = await api.User.getById(item as any);
-      console.log(res, "ressssss");
       setState(res?.data || null);
     } catch (error: any) {
       alert(error.message);
@@ -75,7 +73,6 @@ const Page = () => {
     }
     try {
       let res = await api.User.deactivate(item as any)
-      console.log(res, "hhhh");
       getDataById()
     } catch (error) {
 
@@ -88,7 +85,6 @@ const Page = () => {
     }
     try {
       let res = await api.User.deactivate(item as any)
-      console.log(res, "hhhh");
       router.back()
     } catch (error) {
 
@@ -103,10 +99,8 @@ const Page = () => {
     try {
       setLoading(true)
       let res = await axios.post("https://frontend.goaideme.com/reset-password", items)
-      console.log(res, "checkkkkkkk");
       getDataById()
     } catch (error) {
-      console.log(error);
 
     } finally {
       setLoading(false)
@@ -117,21 +111,57 @@ const Page = () => {
     getDataById();
     // }
   }, []);
-  console.log(state, "state");
-  const downLoadPdf = async () => {
+  const generatePdf = async () => {
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+    const blob = await pdf(<Pdf state={state} />).toBlob();
+    const pdfUrl = URL.createObjectURL(blob);
+    return { blob, pdfUrl, timestamp };
+  };
 
-    const blob = await pdf(
-        <Pdf state={state}/>
-    ).toBlob();
+  // Function to handle PDF download
+  const downLoadPdf = async () => {
+    const { blob, timestamp } = await generatePdf();
+    saveAs(blob, `Order_${timestamp}.pdf`);
+  };
 
-    saveAs(blob, `Order_${timestamp}`);
-}
+  // Function to handle PDF sharing
+  const sharePdf = async () => {
+    const { pdfUrl, timestamp } = await generatePdf();
+
+
+    const data = {
+      // url: pdfUrl,
+      // filename: `Order_${timestamp}.pdf`,
+      to: "abhay@cybersify.tech",
+      link: pdfUrl
+    };
+    const res = await api.User.create(data)
+    toast.success('Link Share Successfully', {
+      position: 'top-center',
+      autoClose: 300,
+
+    });
+
+    // Optionally, open the PDF in a new tab
+    // window.open(pdfUrl, '_blank');
+  };
+
 
   return (
     <MainLayout>
       <Fragment>
         <section>
+          <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           <Spin spinning={loading}>
             <Row gutter={[20, 20]}>
               <Col sm={22} md={12} lg={11} xl={10} xxl={9} className='mx-auto'>
@@ -147,30 +177,35 @@ const Page = () => {
                   <div className='d-flex justify-content-between'>
                     <div className="">
 
-                    <Typography.Title level={3} className='m-0 fw-bold'>Club Member Details</Typography.Title>
+                      <Typography.Title level={3} className='m-0 fw-bold'>Club Member Details</Typography.Title>
                     </div>
-                    <div className="">
+                    <div className=" ">
 
                       <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn' onClick={downLoadPdf}>
                         Download Pdf
+                      </Button>
+
+                      <Button
+                        size='large'
+                        // type="primary"
+                        // htmlType='button'
+                        className='w-100 mt-3'
+                        onClick={sharePdf}
+                      >
+                        Share a Link
                       </Button>
                     </div>
                   </div>
                   {/* Car Listing  */}
                   <div className='card-listing'>
-                    {/* <div className='card-listing-image my-4 text-center'>
-                  <Avatar size={120} src={User.src}>{state?.firstname?.charAt(0)?.toUpperCase()}</Avatar>
-                </div>
-                <Divider plain></Divider> */}
 
-                    {/* Detail  */}
                     <ul className='list-unstyled my-4 mb-4'>
                       <li className='mb-3'><Typography.Text >Name:</Typography.Text > <Typography.Text className='ms-1 text-capitalize'>{state?.firstname ? `${state?.firstname} ${state?.lastname}` : 'N/A'}</Typography.Text ></li>
-                      <li className='mb-3'><Typography.Text >Company Name:</Typography.Text > <Typography.Text className='ms-1'>{state?.company_name || "N/A"}</Typography.Text ></li>
+                      <li className='mb-3'><Typography.Text >Club Name:</Typography.Text > <Typography.Text className='ms-1'>{state?.company_name || "N/A"}</Typography.Text ></li>
                       <li className='mb-3'><Typography.Text >Email:</Typography.Text > <Typography.Text className='ms-1'>{state?.email || "N/A"}</Typography.Text ></li>
                       <li className='mb-3'><Typography.Text >Phone no:</Typography.Text > <Typography.Text className='ms-10'>
                         {/* {state?.mobile ? `+${String(state?.country_code).replace("+", "")} ${state?.mobile}` : 'N/A'} */}
-                        {state?.mobile || "N/A"}
+                        {state?.phone_number || "N/A"}
                       </Typography.Text ></li>
                       <li className='mb-3'><Typography.Text >Position:</Typography.Text > <Typography.Text className='ms-1'>{state?.position || "N/A"}</Typography.Text ></li>
                       <li className='mb-3'><Typography.Text >Home City:</Typography.Text > <Typography.Text className='ms-1'>{state?.home_city || "N/A"}</Typography.Text ></li>

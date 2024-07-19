@@ -21,18 +21,13 @@ const Page = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false)
   const [state, setState] = useState<any>("")
-  console.log(form, "form");
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
-  console.log(searchParams, "iddd");
-  // console.log(entries[1][0], "entries");
 
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 0 ? entries[1][0] : '';
-  console.log(value, "checkifd");
 
   const onFinish = async (values: any) => {
-    console.log('Received values of form: ', values);
     // country_code: values.country_code ?? "+93",
     let items = {
       first_step: {
@@ -48,7 +43,6 @@ const Page = () => {
       }
     } as any
 
-    console.log(items, "items");
     try {
       setLoading(true)
       if (type == "edit") {
@@ -59,40 +53,34 @@ const Page = () => {
             lastname: String(values.lastname).trim(),
             email: String(values.email).trim(),
             password: String(values.password).trim(),
-            mobile: String(values.mobile).trim(),
-            roles: values.roles,
+            mobile: String(values.phone_number).trim(),
+            roles: "",
             company_name: values?.company_name,
             position: values?.position,
             home_city: values?.home_city,
           }
         } as any
         let res = await api.User.edit(items)
-        console.log(res, "yyyy");
         router.push(`/admin/member/add/page2?${value}&edit`)
       } else {
 
         let res = await api.Auth.signUp(items)
-        console.log(res, "resssssssssssss");
 
         router.push(`/admin/member/add/page2?${res?.user_id}`)
       }
 
     } catch (error: any) {
-      // Toast.error(error)
-      console.log(error);
     } finally {
       setLoading(false)
     }
   };
 
   const getDataById = async () => {
-    // console.log(id);
     const item = {
       user_id: value
     }
     try {
       const res = await api.User.getById(item as any);
-      console.log(res, "ressssss");
       setState(res?.data || null);
       form.setFieldsValue(res?.data)
     } catch (error: any) {
@@ -116,13 +104,13 @@ const Page = () => {
           <Row justify="center" gutter={[20, 20]} className='heightCenter'>
             <Col sm={22} md={20} lg={16} xl={14} xxl={12}>
               <Card className='common-card'>
-                <div className='mb-4'>
+                {/* <div className='mb-4'>
                   <Breadcrumb separator=">">
                     <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                     <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>Club Members</Link></Breadcrumb.Item>
                     <Breadcrumb.Item className='text-decoration-none'>Add Club Member</Breadcrumb.Item>
                   </Breadcrumb>
-                </div>
+                </div> */}
                 {/* Title  */}
                 <div className='d-flex justify-content-between'>
 
@@ -159,8 +147,8 @@ const Page = () => {
                           }}
                         />
                       </Form.Item>
-                      <Form.Item name="company_name" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Company Name' }]} label="Company Name">
-                        <Input size={'large'} placeholder="Company Name"
+                      <Form.Item name="company_name" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Club Name' }]} label="Club Name">
+                        <Input size={'large'} placeholder="Club Name"
                           onKeyPress={(e: any) => {
                             if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
                               e.preventDefault();
@@ -171,7 +159,7 @@ const Page = () => {
                         />
                       </Form.Item>
 
-                      <Form.Item name="mobile" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
+                      <Form.Item name="phone_number" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
                         <Input size={'large'} type="text" minLength={10} maxLength={10} placeholder="Phone No" />
                       </Form.Item>
                       <Form.Item name="position" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Position' }]} label="Position">
@@ -192,7 +180,7 @@ const Page = () => {
                       {/* Phone No  */}
 
                       {/* Roles  */}
-                      <Form.Item name="roles" className=' col-sm-12' label="Roles" rules={[{ required: true, message: 'Please Select Roles' }]}>
+                      {/* <Form.Item name="roles" className=' col-sm-12' label="Roles" rules={[{ required: true, message: 'Please Select Roles' }]}>
                         <Select
                           mode="tags"
                           size={'large'}
@@ -205,7 +193,7 @@ const Page = () => {
                             }
                           })}
                         />
-                      </Form.Item>
+                      </Form.Item> */}
                     </div>
                     {/* Button  */}
                     <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>

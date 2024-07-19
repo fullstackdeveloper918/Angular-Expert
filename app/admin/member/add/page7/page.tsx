@@ -164,7 +164,7 @@ const Page = () => {
                     <Row justify="center" gutter={[24, 24]}>
                         <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
                             <Card className='common-card'>
-                                <div className='mb-4'>
+                                {/* <div className='mb-4'>
                                     <Breadcrumb separator=">">
                                         <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>User</Link></Breadcrumb.Item>
@@ -174,10 +174,8 @@ const Page = () => {
                                         <Breadcrumb.Item ><Link href="/admin/member/add/page4" className='text-decoration-none'>CRAFTSMEN TOOLBOX</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/member/add/page5" className='text-decoration-none'>CRAFTSMEN CHECK-UP</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/member/add/page6" className='text-decoration-none'>2023 MEETING REVIEW</Link></Breadcrumb.Item>
-                                        {/* <Breadcrumb.Item className='text-decoration-none'>BUSINESS UPDATE</Breadcrumb.Item> */}
-                                        {/* <Breadcrumb.Item className='text-decoration-none'>CRAFTSMEN TOOLBOX</Breadcrumb.Item> */}
                                     </Breadcrumb>
-                                </div>
+                                </div> */}
                                 {/* Title  */}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>SPRING 2024 MEETING PREPARATION</Typography.Title>

@@ -23,10 +23,8 @@ const Page = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false)
     const [state, setState] = useState<any>("")
-    console.log(form, "form");
 
     const onFinish = async (values: any) => {
-        console.log('Received values of form: ', values);
         let items = {
             firstname: String(values.firstname).trim(),
             lastname: String(values.lastname).trim(),
@@ -85,7 +83,6 @@ const Page = () => {
             // router.replace(`/staff/${apiRes?._id}/view`)
         } catch (error: any) {
             // Toast.error(error)
-            console.log(error);
         } finally {
             setLoading(false)
         }
@@ -115,18 +112,15 @@ const Page = () => {
             } as any
             setLoading(true)
             let res = await api.User.edit(items)
-                console.log(res,"yyyy");
                 router.push(`/admin/member/add/page5?${value}&edit`)
             }else{
 
                 setLoading(true)
                 let res =await api.Auth.signUp(items)
-                console.log(res,"qqqq");
                 
                 router.push(`/admin/member/add/page5?${res?.userId}`)
             }
         } catch (error) {
-            console.log(error);
             
         }finally{
             setLoading(false)
@@ -141,7 +135,6 @@ const Page = () => {
         }
         try {
           const res = await api.User.getById(item as any);
-          console.log(res, "ressssss");
           setState(res?.data || null);
           form.setFieldsValue(res?.data)
         } catch (error: any) {
@@ -164,17 +157,15 @@ const Page = () => {
                     <Row justify="center" gutter={[24, 24]}>
                         <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
                             <Card className='common-card'>
-                                <div className='mb-4'>
+                                {/* <div className='mb-4'>
                                     <Breadcrumb separator=">">
                                         <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>User</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/member/add" className='text-decoration-none'>Add User</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/member/add/page2" className='text-decoration-none'>BUSINESS UPDATE</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item ><Link href="/admin/member/add/page3" className='text-decoration-none'>GOALS</Link></Breadcrumb.Item>
-                                        {/* <Breadcrumb.Item className='text-decoration-none'>BUSINESS UPDATE</Breadcrumb.Item> */}
-                                        {/* <Breadcrumb.Item className='text-decoration-none'>CRAFTSMEN TOOLBOX</Breadcrumb.Item> */}
                                     </Breadcrumb>
-                                </div>
+                                </div> */}
                                 {/* Title  */}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>CRAFTSMEN TOOLBOX</Typography.Title>

@@ -112,35 +112,7 @@ const Home: Page = (props: any) => {
 
 
     },
-    // {
-    //   cardBackground: "#EBEDFF",
-    //   iconBackground: "linear-gradient(135deg, rgba(201, 206, 255, 0.00) 0%, rgba(201, 206, 255, 0.44) 90.25%, rgba(201, 206, 255, 0.48) 97.35%)",
-    //   icon: <Icons.ArtistIcon />,
-    //   textColor: "#747EDF",
-    //   title: "30",
-    //   count: "Total Meetings",
-    //   link: "/"
-
-
-    // },
-    // {
-    //   cardBackground: "#FFE3D3",
-    //   iconBackground: "linear-gradient(135deg, rgba(201, 206, 255, 0.00) 0%, rgba(255, 176, 134, 0.00) 0.01%, rgba(255, 176, 134, 0.48) 97.35%)",
-    //   icon: <Icons.Transactions />,
-    //   textColor: "#EB854E",
-    //   title: state?.TotalUserTransection,
-    //   count: "Total Transactions Users",
-    //   link: "/transaction/user/page/1?limit=10"
-    // },
-    // {
-    //   cardBackground: "#FFE3D3",
-    //   iconBackground: "linear-gradient(135deg, rgba(201, 206, 255, 0.00) 0%, rgba(255, 176, 134, 0.00) 0.01%, rgba(255, 176, 134, 0.48) 97.35%)",
-    //   icon: <Icons.Transactions />,
-    //   textColor: "#EB854E",
-    //   title: state?.TotalArtistTransection,
-    //   count: "Total Transactions Artists",
-    //   link: "/transaction/artist/page/1?limit=10"
-    // },
+ 
   ]
 
 
@@ -151,8 +123,6 @@ const Home: Page = (props: any) => {
 
   const completed = state1.filter((res:any) => res?.is_completed === true);
   const non_completed=state1.filter((res:any)=>res?.is_completed==false)
-  console.log(completed,"completed");
-  console.log(non_completed,"non_completed");
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
   const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
     return {
@@ -259,7 +229,7 @@ const Home: Page = (props: any) => {
       key: 'name',
     },
     {
-      title: 'Company Name',
+      title: 'Club Name',
       dataIndex: 'company',
       key: 'company',
     },
@@ -286,7 +256,7 @@ const Home: Page = (props: any) => {
       key: 'name',
     },
     {
-      title: 'Company Name',
+      title: 'Club Name',
       dataIndex: 'company',
       key: 'company',
     },
@@ -313,7 +283,7 @@ const Home: Page = (props: any) => {
       key: 'name',
     },
     {
-      title: 'Company Name',
+      title: 'Club Name',
       dataIndex: 'company',
       key: 'company',
     },
@@ -360,10 +330,7 @@ useEffect(()=>{
     getData()
 
 },[])
-console.log(upcoming,"upcoming");
-console.log(next,"next");
 
-  console.log(areas, "areas");
 
   // useEffect(() => {
   //   fetchAreas().then((data) => {

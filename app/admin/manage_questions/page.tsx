@@ -21,7 +21,6 @@ const Page = () => {
     const [deleteLoading, setDeleteLoading] = React.useState("")
     const [state, setState] = React.useState<any>([])
 
-console.log(state,"statestatestate");
 
 
     const dataSource = [
@@ -50,10 +49,7 @@ console.log(state,"statestatestate");
     ];
    
     const onChangeRouter = (key: string, value: string) => {
-        // router.replace({
-        //     query: { ...router.query, [key]: value }
-        // })
-        console.log("router query");
+      
     }
 
     const onSearch = (value: string) => {
@@ -70,12 +66,10 @@ console.log(state,"statestatestate");
         try {
             // setLoading(true)
             let res=await api.Manage_Question.listing()
-            console.log(res,"qwqwqwqw");
             
             setState(res.data)
         } catch (error) {
             // Toast.error(error)
-            console.log(error);
             
 
         } finally {
@@ -94,7 +88,6 @@ console.log(state,"statestatestate");
             // Toast.success("FAQ is deleted successfully")
             await initialise()
         } catch (error) {
-            console.log(error)
         } finally {
             setDeleteLoading("")
         }

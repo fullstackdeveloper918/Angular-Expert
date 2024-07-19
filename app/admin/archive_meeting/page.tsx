@@ -37,126 +37,7 @@ const Page = () => {
     const [exportModal, setExportModal] = React.useState(false);
     const [searchTerm, setSearchTerm] = useState('')
     const [areas, setAreas] = useState<any>([]);
-    //   const onChangeRouter = (key: string, value: string) => {
-    //     router.replace({
-    //       query: { ...router.query, [key]: value }
-    //     })
-    //     console.log("router query", router.query);
-    //   }
 
-    //   const onChange = (value: string) => {
-    //     onChangeRouter("type", value)
-    //   };
-
-    //   const onSearch = (value: string) => {
-    //     console.log("onserach value", value);
-    //     if (timer) {
-    //       clearTimeout(timer)
-    //     }
-    //     timer = setTimeout(() => {
-    //       onChangeRouter("search", String(value).trim())
-    //     }, 1000);
-    //   }
-
-    //   const handlePagination = (page: number, pageSize: number) => {
-    //     console.log('page: number, pageSize', page, pageSize);
-    //     router.replace({
-    //       query: { ...router.query, pagination: page, limit: pageSize }
-    //     })
-    //   }
-
-    //   const dataSource2 = state.data.map((res: any, index: number) => {
-    //     return {
-    //       key: router.query.pagination ? (Number(router.query.pagination) - 1) * Number(router.query.limit || 10) + (index + 1) : index + 1,
-    //       name: <div className='user-detail d-inline-flex gap-2 align-items-center'>
-    //         {/* <Avatar size={40} src={res?.image ? s3bucket.getUrl(res?.image) : user.src}></Avatar> */}
-    //         <Typography.Text className='text-capitalize'>{res.first_name ? `${res?.first_name} ${res?.last_name}` : 'N/A'}</Typography.Text></div>,
-    //       email: <Tooltip placement="topLeft" title={`${res?.email}`} arrow={true}>
-    //         {res.email ? res.email?.length >= 20 ? `${res.email.slice(0, 20)}...` : res.email : 'N/A'}
-    //       </Tooltip>,
-    //       phone: res.mobile ? `${res.country_code} ${res.mobile}` : 'N/A',
-    //       status: !router.query.type && ((res.is_blocked && !res.is_active) ? <Tag color='#000'>Blocked</Tag> : res.is_blocked ? <Tag color='#000'>Blocked</Tag> : !res.is_active ? <Tag color='red'>De-Activated</Tag> : <Tag color='success'>Active</Tag>),
-    //       actions: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-    //         <Link href={`/users/${res._id}/view?pagination=1&limit=10`}><Button type='primary' shape='circle'><EyeOutlined /></Button></Link></li>
-    //       </ul>
-    //     }
-    //   }
-    //   );
-
-    //   const TableData = () => <Row gutter={[20, 20]} >
-    //     <Col span={24} >
-    //       <Table dataSource={dataSource} columns={router.query.type ? ColumnsType.userColumns : ColumnsType.allUserColumns} pagination={false} scroll={{ x: '100%' }} />
-    //     </Col>
-    //   </Row>
-
-    //   const items: TabsProps['items'] = [
-    //     {
-    //       key: '',
-    //       label: 'All',
-    //       children: <TableData />,
-    //     },
-    //     {
-    //       key: 'active',
-    //       label: 'Active',
-    //       children: <TableData />,
-    //     },
-    //     {
-    //       key: 'deactive',
-    //       label: 'Deactive',
-    //       children: <TableData />,
-    //     },
-    //     {
-    //       key: 'blocked',
-    //       label: 'Blocked',
-    //       children: <TableData />,
-    //     }
-    //   ];
-
-    //   const initialise = async () => {
-    //     console.log("latest router query", router.query);
-    //     try {
-    //       setLoading(true)
-    //       let query = router.query
-    //       let urlSearchParam = new URLSearchParams()
-    //       if (query.pagination) {
-    //         urlSearchParam.set('pagination', `${Number(router.query.pagination)}`)
-    //       }
-    //       if (query.limit) {
-    //         urlSearchParam.set('limit', router.query.limit as string)
-    //       }
-    //       if (query.search) {
-    //         urlSearchParam.set('search', router.query.search as string)
-    //       }
-    //       if (query.type) {
-    //         urlSearchParam.set('filter_by', String(router.query.type) as string)
-    //       }
-    //     //   let apiRes = await henceforthApi.User.listing(urlSearchParam.toString())
-    //     //   setState(apiRes)
-    //     } catch (error) {
-
-    //     } finally {
-    //       setLoading(false)
-    //     }
-    //   }
-
-    //   React.useEffect(() => {
-    //     initialise()
-    //   }, [router.query.pagination, router.query.limit, router.query.search, router.query.type])
-
-
-    //   const handleUploadCsvFile = async (info: any) => {
-    //     setLoading(true)
-    //     if (info.file.status === 'done' || info.file.status === 'error') {
-    //       try {
-    //         // let data = await uploadCSV(info.file.originFileObj);
-    //         // console.log('data', data);
-    //         let apiRes = await henceforthApi.User.import(info.file.originFileObj)
-    //         Toast.success((apiRes.count2 + apiRes.count1) == 0 ? "No user added" : `${apiRes.message2} ${apiRes.count2} and ${apiRes.message1} ${apiRes.count1}`);
-    //       } catch (error) {
-    //       }
-    //       setLoading(false)
-    //     }
-    //   }
   
   
     const dataSource = areas?.map((res: any, index: number) => {
@@ -189,26 +70,7 @@ const Page = () => {
         },
     ];
 
-
-    console.log(areas, "hhhhhh");
-    // const handleDeleteMeeting = async (id: number) => {
-    //     try {
-    //         await deleteMeetingById(id);
-    //         const updatedMeetings = areas.filter((m:any) => m.id !== id);
-    //         setAreas(updatedMeetings); // Update state or local data
-    //         alert(`Meeting with id ${id} deleted successfully.`);
-    //     } catch (error:any) {
-    //         alert(error.message); // Handle error if meeting is not found
-    //     }
-    // };
-    const handleChange = (value: string) => {
-        console.log(`selected ${value}`);
-    };
-
-
-    const add = () => {
-        router.push("/admin/meetings/add")
-    }
+ 
 
     const initialise = async () => {
         try {

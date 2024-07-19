@@ -29,78 +29,12 @@ const Page = () => {
     const [loading, setLoading] = useState(false)
     const [meetingType, setMeetingType] = useState<any>('');
     const onChange: DatePickerProps['onChange'] = (_, dateStr) => {
-        console.log('onChange:', dateStr);
     };
    
-    const onFinish = async (values: any) => {
-        console.log('Received values of form: ', values);
-        let items = {
-            firstname: String(values.firstname).trim(),
-            lastname: String(values.lastname).trim(),
-            email: String(values.email).trim(),
-            password: String(values.password).trim(),
-            country_code: values.country_code ?? "+93",
-            mobile: String(values.mobile).trim(),
-            roles: values.roles
-        } as any
-        if (!items.firstname) {
-            // return Toast.warn("Please Enter Valid First Name")
-        }
-        if (!items.lastname) {
-            // return Toast.warn("Please Enter Valid Last Name")
-        }
-        // if (!henceforthValidations.email(items.email)) {
-        //   return Toast.warn("Please Enter Valid E-mail")
-        // }
-        // if (!henceforthValidations.strongPassword(items.password)) {
-        //   return Toast.warn("Please Enter Valid Password")
-        // }
-        if (!Number(items.mobile)) {
-            // return Toast.warn("Please Enter Valid Phone No.")
-        }
-        if (!items.country_code) {
-            // return Toast.warn("Please Select Country Code")
-        }
-        if (!values?.profile_pic?.fileList[0].originFileObj) {
-            // return Toast.warn("Please Add Image")
-        }
-        try {
-            setLoading(true)
-
-
-            // setUserInfo((preValue: any) => {
-            //   return {
-            //     ...preValue,
-            //     profile_pic: apiImageRes
-            //   }
-            // })
-
-            // let apiRes = await henceforthApi.Staff.create(items)
-            // console.log('apiRes', apiRes);
-
-            // setUserInfo((preValue: any) => {
-            //   return {
-            //     ...preValue,
-            //     name: apiRes.name,
-            //     email: apiRes.email,
-            //     mobile: apiRes.mobile
-            //   }
-            // })
-
-            form.resetFields()
-            // Toast.success("Staff Added Successfully");
-            // router.replace(`/staff/${apiRes?._id}/view`)
-        } catch (error: any) {
-            // Toast.error(error)
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
-    };
+  
     const handleChange = (value: any) => {
         setMeetingType(value);
     };
-    console.log(meetingType, "meetingType");
 
     const onSubmit = async (values: any) => {
         let items = {
@@ -120,10 +54,8 @@ const Page = () => {
             weather: values?.weather,
             comments: values?.comments,
             notes: values?.notes,
-            // club_member:values?.club_member,
             phone: ["8521458798","8796548596"],
         }
-        console.log(items, "chhhchh");
 
         const timestamp = 1720782277333;
 
@@ -131,16 +63,12 @@ const Page = () => {
         const date = dayjs(timestamp);
 
 
-        console.log(date.utc().format('YYYY-MM-DD HH:mm:ss [UTC]'), "asdfasdffasd");
-        // console.log(dayjs.extend(values?.start_time),"gkghjkghjk");
 
         try {
             let res = await api.Meeting.create(items as any);
-            console.log(res, "gggggg");
             router.back()
             // onAdd();
         } catch (error) {
-            console.log(error);
 
         }
     }
@@ -149,23 +77,8 @@ const Page = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [searchValue, setSearchValue] = useState('');
 
-    // const handleSearch = async (value: string) => {
-    //     setSearchValue(value.trim()); // Trim input value
-    //     if (value.trim() !== '') {
-    //         try {
-    //             const data: any = await searchAreasByName(value);
-    //             setSearchResults(data);
-    //         } catch (error) {
-    //             console.error('Error fetching areas:', error);
-    //             setSearchResults([]);
-    //         }
-    //     } else {
-    //         setSearchResults([]); // Clear results if search value is empty
-    //     }
-    // };
-    console.log(searchResults, "yyy");
+   
     const disabledDate = (current: any) => {
-        // Can not select days before today and today
         return current && current < dayjs().startOf('day');
     };
 
@@ -207,16 +120,12 @@ const Page = () => {
                 );
                 autocomplete.addListener('place_changed', () => {
                     let place = autocomplete.getPlace();
-                    // Handle place data if needed
-                    console.log(place,"place");
                     
                 });
             }
         };
         loadGoogleMapScript();
-        // Cleanup function if needed
         return () => {
-            // Cleanup code if any
         };
     }, []);
     return (

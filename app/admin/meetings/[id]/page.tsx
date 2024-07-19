@@ -17,80 +17,14 @@ const { Row, Col, Card, Button } = {
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
 const Page = () => {
-    // const defaultValue = dayjs('2024-01-01');
 
     const router = useRouter()
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false)
     const onChange: DatePickerProps['onChange'] = (_, dateStr) => {
-        console.log('onChange:', dateStr);
     };
 
-    const onFinish = async (values: any) => {
-        console.log('Received values of form: ', values);
-        let items = {
-            firstname: String(values.firstname).trim(),
-            lastname: String(values.lastname).trim(),
-            email: String(values.email).trim(),
-            password: String(values.password).trim(),
-            country_code: values.country_code ?? "+93",
-            mobile: String(values.mobile).trim(),
-            roles: values.roles
-        } as any
-        if (!items.firstname) {
-            // return Toast.warn("Please Enter Valid First Name")
-        }
-        if (!items.lastname) {
-            // return Toast.warn("Please Enter Valid Last Name")
-        }
-        // if (!henceforthValidations.email(items.email)) {
-        //   return Toast.warn("Please Enter Valid E-mail")
-        // }
-        // if (!henceforthValidations.strongPassword(items.password)) {
-        //   return Toast.warn("Please Enter Valid Password")
-        // }
-        if (!Number(items.mobile)) {
-            // return Toast.warn("Please Enter Valid Phone No.")
-        }
-        if (!items.country_code) {
-            // return Toast.warn("Please Select Country Code")
-        }
-        if (!values?.profile_pic?.fileList[0].originFileObj) {
-            // return Toast.warn("Please Add Image")
-        }
-        try {
-            setLoading(true)
-
-
-            // setUserInfo((preValue: any) => {
-            //   return {
-            //     ...preValue,
-            //     profile_pic: apiImageRes
-            //   }
-            // })
-
-            // let apiRes = await henceforthApi.Staff.create(items)
-            // console.log('apiRes', apiRes);
-
-            // setUserInfo((preValue: any) => {
-            //   return {
-            //     ...preValue,
-            //     name: apiRes.name,
-            //     email: apiRes.email,
-            //     mobile: apiRes.mobile
-            //   }
-            // })
-
-            form.resetFields()
-            // Toast.success("Staff Added Successfully");
-            // router.replace(`/staff/${apiRes?._id}/view`)
-        } catch (error: any) {
-            // Toast.error(error)
-            console.log(error);
-        } finally {
-            setLoading(false)
-        }
-    };
+ 
     return (
         <MainLayout>
             <Fragment>
