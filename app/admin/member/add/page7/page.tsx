@@ -16,7 +16,7 @@ const { Row, Col, Card, Button } = {
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
-const Page = () => {
+const index = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
@@ -251,4 +251,4 @@ What CRM systems do you use?"
     )
 }
 
-export default Page
+export default index

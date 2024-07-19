@@ -1,13 +1,10 @@
 "use client"
-import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
+import {  Form, Select, Input, Typography } from 'antd';
 import dynamic from 'next/dynamic';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { Fragment, useEffect, useState } from 'react'
-import Link from 'next/link';
-import validation from '@/utils/validation';
 import MainLayout from '@/app/layouts/page';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
-import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -16,7 +13,7 @@ const { Row, Col, Card, Button } = {
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
 const { Option } = Select;
-const Page = () => {
+const index = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
@@ -143,11 +140,7 @@ const Page = () => {
             setInputFields(formattedGoalsNext);
       
             form.setFieldsValue({
-            //   ...fetchedGoals.reduce((acc: any, goal: any, index: any) => {
-            //     acc[`goal_next${index + 1}`] = goal.goal;
-            //     acc[`comments${index + 1}`] = goal.comment;
-            //     return acc;
-            //   }, {}),
+            
               ...fetchedGoalsNext.reduce((acc: any, goal: any, index: any) => {
                 acc[`goal_next${index + 1}`] = goal.goal;
                 return acc;
@@ -173,15 +166,7 @@ const Page = () => {
                     <Row justify="center" gutter={[20, 20]}>
                         <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
                             <Card className='common-card'>
-                                {/* <div className='mb-4'>
-                                    <Breadcrumb separator=">">
-                                        <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>User</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item ><Link href="/admin/member/add" className='text-decoration-none'>Add User</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item ><Link href="/admin/member/add/page2" className='text-decoration-none'>BUSINESS UPDATE</Link></Breadcrumb.Item>
-                                    </Breadcrumb>
-                                </div> */}
-                                {/* Title  */}
+                                
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>GOALS</Typography.Title>
                                     <Button size={'large'} type="primary" className="text-white" disabled>3/8</Button>
@@ -235,13 +220,7 @@ const Page = () => {
                                                             }}
                                                         />
                                                     </Form.Item>
-                                                    {/* <div className="d-flex"> */}
-                                                    {/* <Form.Item
-                                                        name={pair.commentName}
-                                                        rules={[{ required: true, whitespace: true, message: 'Please Select Field' }]}
-                                                        style={{ position: 'absolute', top: '-7px', right: '88px', fontSize: '24px', cursor: 'pointer' }}
-                                                        label="STATUS OF GOAL"
-                                                    > */}
+                                                   
                                                     <Select
                                                         defaultValue={pair.status}
                                                         style={{ position: 'absolute', top: '-14px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
@@ -334,4 +313,4 @@ const Page = () => {
     )
 }
 
-export default Page
+export default index

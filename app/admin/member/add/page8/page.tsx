@@ -88,13 +88,20 @@ const Page = () => {
     const submit = async (values: any) => {
         setLoading(true);
         try {
-            const photoComment = inputPairs.map(pair => ({
-                // goal: values[pair.goalName],
-                comment: values[pair.commentName],
-                files: values[pair.goalName],
-                // files: uploadedUrls[pair.id.toString()] || [],
-            }));
+            console.log(inputPairs,"qwetyui");
+            
+            const photoComment = inputPairs.map(pair =>
+                console.log(pair.goalName,"asdfasdfasdf")
+            //      ({
+            //     // goal: values[pair.goalName],
+                
+            //     comment: values[pair.commentName],
+            //     files: values[pair.goalName],
+            //     // files: uploadedUrls[pair.id.toString()] || [],
+            // })
+        );
 
+        return
             const item = {
                 photo_section: {
                     userId: value,
@@ -117,11 +124,11 @@ const Page = () => {
                 console.log(res,"yyyy");
                 // router.push(`/admin/member`)
             }else{
-                // const check={
-                //     file: photoComment,
-                // }
+                const check={
+                    file: photoComment,
+                }
                 setLoading(true)
-                // let res2 = await api.ImageUpload.add(check as any)
+                let res2 = await api.ImageUpload.add(check as any)
                 let res =await api.Auth.signUp(item)
                 // console.log(res2,"qqqq");
                 console.log(res,"wwww");

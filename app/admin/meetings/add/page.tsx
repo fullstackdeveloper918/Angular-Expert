@@ -22,7 +22,7 @@ const { Row, Col, Card, Button } = {
 }
 const { Option } = Select;
 dayjs.extend(utc);
-const Page = () => {
+const index = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
@@ -383,4 +383,4 @@ const Page = () => {
     )
 }
 
-export default Page
+export default index

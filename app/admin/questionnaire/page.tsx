@@ -7,7 +7,8 @@ import Link from 'next/link';
 import QuestionFilter from '@/app/common/QuestionFilter';
 import api from '@/utils/api';
 const { Row, Col, Card, Button } = {
-    Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
+    // Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
+    Button: dynamic(() => import('antd').then(module=> module.Row), {ssr: false}),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
@@ -79,24 +80,10 @@ const [state,setState]=useState<any>([])
 
        
     ];
-    const onChangeRouter = (key: string, value: string) => {
-        // router.replace({
-        //     query: { ...router.query, [key]: value }
-        // })
-        console.log("router query");
-    }
-    const onSearch = (value: string) => {
-        if (timer) {
-            clearTimeout(timer)
-        }
-        timer = setTimeout(() => {
-            onChangeRouter("search", String(value).trim())
-        }, 2000);
-    }
- 
+   
 const initialise = async (questionType: any) => {
     try {
-        // setLoading(true)
+       
         const params:any = questionType ? { searchFilter: questionType } : {};
         let res = await api.Questionnaire.listing(params);
         console.log(res, "qwqwqwqw");
@@ -139,7 +126,7 @@ console.log(questionType,"tyrytryy");
                                     <Typography.Title level={3} className='m-0 fw-bold' >Manage Questionnaire</Typography.Title>
                                 </div>
                                 <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
-                                    <Search size="large" placeholder="Search..." onSearch={onSearch} onChange={(e) => onSearch(e.target.value)} enterButton />
+                                    <Search size="large" placeholder="Search..."  enterButton />
                                         <QuestionFilter questionType={questionType} handleChange={handleChange}/>
                                     {/* <CustomModal type={"Add"}/> */}
                                 </div>

@@ -17,7 +17,7 @@ const { Row, Col, Card, Button } = {
     Col: dynamic(() => import("antd").then(module => module.Col), { ssr: false }),
     Card: dynamic(() => import("antd").then(module => module.Card), { ssr: false }),
 }
-const Page = () => {
+const index = () => {
 
     const router = useRouter()
     const [form] = Form.useForm();
@@ -41,7 +41,7 @@ const Page = () => {
            }
         } as any
         
-        // router.push("/admin/users/add/page3")
+     
         try {
             if (type == "edit") {
                 let items = {
@@ -67,7 +67,7 @@ const Page = () => {
 
            
         } catch (error: any) {
-            // Toast.error(error)
+            
         } finally {
             setLoading(false)
         }
@@ -85,13 +85,11 @@ const Page = () => {
         }
       };
       useEffect(() => {
-        // if (id) {
+       
         getDataById();
-        // }
+       
       }, []);
-    const submit = () => {
-        router.push("/admin/users/add/page3")
-    }
+    
     const onPrevious=()=>{
         router.replace(`/admin/member/add?${value}&edit`)
       }
@@ -103,14 +101,7 @@ const Page = () => {
                     <Row justify="center" gutter={[20, 20]}>
                         <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
                             <Card className='common-card'>
-                                {/* <div className='mb-4'>
-                                    <Breadcrumb separator=">">
-                                        <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>User</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item ><Link href="/admin/member/add" className='text-decoration-none'>Add User</Link></Breadcrumb.Item>
-                                    </Breadcrumb>
-                                </div> */}
-                                {/* Title  */}
+                              
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>BUSINESS UPDATE</Typography.Title>
                                     <Button size={'large'} type="primary" className="text-white" disabled>2/8</Button>
@@ -215,4 +206,4 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
     )
 }
 
-export default Page
+export default index
