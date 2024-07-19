@@ -9,11 +9,12 @@
         overflow: hidden;
         height: 600px;
         box-shadow: $shadow-md;
-        background-color: $white;
+        background-color: #000;
+        padding: 0 40px;
 
         img {
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             object-position: center;
         }
     }
