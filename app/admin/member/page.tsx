@@ -9,7 +9,7 @@ import user from "@/assets/images/placeholder.png"
 import Link from 'next/link';
 import { Space } from 'antd';
 import type { TabsProps } from 'antd';
-import { DownloadOutlined, EyeOutlined, PlusOutlined, UploadOutlined, UsergroupAddOutlined } from '@ant-design/icons'
+import { DownloadOutlined, EyeOutlined, PlusOutlined, ShareAltOutlined, UploadOutlined, UsergroupAddOutlined } from '@ant-design/icons'
 // import { useRouter } from 'next/router';
 // import henceforthApi from '@/utils/henceforthApi';
 // import { GlobalContext } from '@/context/Provider';
@@ -22,6 +22,10 @@ import api from '@/utils/api';
 // import ExportFile from '@/components/ExportFile';
 // import s3bucket from '@/utils/s3bucket';
 import { parseCookies } from 'nookies';
+import { pdf } from '@react-pdf/renderer';
+import { saveAs } from 'file-saver'
+import Pdf from '@/app/common/Pdf';
+import { toast, ToastContainer } from 'react-toastify';
 const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
     Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -41,21 +45,101 @@ const Page = () => {
     const router = useRouter()
     //   const { userInfo, downloadCSV, Toast, uploadCSV } = React.useContext(GlobalContext)
     const [show, setShow] = useState(true);
-    const [state, setState] = React.useState({
-        data: [],
-        count: 0
-    })
+    const [state, setState] = React.useState<any>({
+        id: "",
+        name: "",
+        company: "",
+        email: "",
+        phone: "",
+        position: "",
+        home: "",
+        is_activate: "",
+        is_archive: ""
+      })
     const [state1, setState1] = useState<any>([])
 
     const [loading, setLoading] = React.useState(false)
     const [exportModal, setExportModal] = React.useState(false);
     const [areas, setAreas] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState<any>('');
-   
+    const [filteredData, setFilteredData] = useState(state1);
+    useEffect(() => {
+        // Filter data when searchTerm or state1 changes
+        const filtered = state1?.filter((res:any) => {
+            const name = res?.firstname ? `${res?.firstname} ${res?.lastname}` : "";
+            const email = res?.email || "";
+            return name.toLowerCase().includes(searchTerm.toLowerCase()) || email.toLowerCase().includes(searchTerm.toLowerCase());
+        });
+        setFilteredData(filtered);
+    }, [searchTerm, state1]);
 
-
-
-    const dataSource = state1?.map((res: any, index: number) => {
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+    };
+    const getDataById = async (id:any) => {
+        const item = {
+          user_id: id
+        }
+        try {
+          const res = await api.User.getById(item as any);
+          setState(res?.data || null);
+        } catch (error: any) {
+          alert(error.message);
+        }
+      };
+    const generatePdf = async () => {
+        const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+        const blob = await pdf(<Pdf state={state} />).toBlob();
+        const pdfUrl = URL.createObjectURL(blob);
+        return { blob, pdfUrl, timestamp };
+      };
+    
+      // Function to handle PDF download
+      const downLoadPdf = async () => {
+        const { blob, timestamp } = await generatePdf();
+        saveAs(blob, `Order_${timestamp}.pdf`);
+      };
+    
+      // Function to handle PDF sharing
+      const sharePdf = async () => {
+        const { pdfUrl, timestamp } = await generatePdf();
+    
+    
+        const data = {
+          // url: pdfUrl,
+          // filename: `Order_${timestamp}.pdf`,
+          to: state.email,
+          link: pdfUrl
+        };
+        const res = await api.User.create(data)
+        toast.success('Link Share Successfully', {
+          position: 'top-center',
+          autoClose: 300,
+    
+        });
+    
+        // Optionally, open the PDF in a new tab
+        // window.open(pdfUrl, '_blank');
+      };
+    //   const copyToClipboard = (text) => {
+    //     navigator.clipboard.writeText(text)
+    //         .then(() => {
+    //             message.success('Link copied to clipboard');
+    //         })
+    //         .catch(() => {
+    //             message.error('Failed to copy link to clipboard');
+    //         });
+    // };
+      const handleDownloadAndFetchData = (id:any) => {
+          getDataById(id);
+          downLoadPdf();
+    };
+      const handleFetchAndFetchData = (id:any) => {
+          getDataById(id);
+          sharePdf();
+    };
+    const dataSource = filteredData?.map((res: any, index: number) => {
         return {
             key: index + 1,
             name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
@@ -67,8 +151,13 @@ const Page = () => {
             action: <ul className='m-0 list-unstyled d-flex gap-2'>
                 <li>
                     <Tooltip title="Download Pdf">
-                        <Button className='ViewMore ' ><DownloadOutlined /></Button>
+                        <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.id)}><DownloadOutlined /></Button>
                     </Tooltip>
+                </li>
+                <li>
+                <Tooltip title="Share Pdf link">
+                        <Button className='ViewMore ' onClick={() => handleFetchAndFetchData(res?.id)}><ShareAltOutlined /></Button>
+                      </Tooltip>
                 </li>
                 <li>
                 <Link href={`/admin/member/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
@@ -123,10 +212,7 @@ const Page = () => {
 
 
     
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        setSearchTerm(value);
-    };
+   
 
    
     const addUser = () => {
@@ -159,6 +245,17 @@ const Page = () => {
                     <title>Users</title>
                     <meta name="description" content="Users" />
                 </Head> */}
+                 <ToastContainer
+            position="top-center"
+            autoClose={300}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
                 <section>
                     <Row gutter={[20, 20]}>
                         <Col span={24}>

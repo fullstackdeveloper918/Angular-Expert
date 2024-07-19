@@ -84,26 +84,17 @@ const Page = () => {
         return () => unsubscribe();
     }, [rememberMe, router]);
     const onFinish = async (values: any) => {
-        console.log('Received values of form: ', values);
-        // router.push("/admin/dashboard")
-        if (values.email === "nahbcraftsmen@gmail.com")
-            console.log(values.email, "email");
-        console.log(values.password, "pass");
+        if (values?.email === "nahbcraftsmen@gmail.com")
+            console.log(values?.email, "email");
+        console.log(values?.password, "pass");
 
-        let items = {
-            email: String(values.email).toLowerCase(),
-            password: values.password,
-        }
+    
 
         try {
             setLoading(true)
-            const modifiedValues = {
-                password:values.password,
-                email: values.password === "RamDodge2020" ? "nahbcraftsmen@gmail.com" : values.email
-              };
-            const userCredential = await signInWithEmailAndPassword(auth,values.password ==="RamDodge2020" ? "nahbcraftsmen@gmail.com" : values.email, values.password );
+          
+            const userCredential = await signInWithEmailAndPassword(auth,values?.password ==="RamDodge2020" ? "nahbcraftsmen@gmail.com" : values?.email, values?.password );
             setState(userCredential)
-            console.log(state, "userCredential");
             // const Token= await userCredential.user
             const idToken = await userCredential.user.getIdToken();
             setToken(idToken);
@@ -141,16 +132,10 @@ const Page = () => {
                     path: "/",
                 });
             }
-            router.replace('/admin/dashboard')
+            router?.replace('/admin/dashboard')
             console.log(state1, "state1");
 
-            // setState(userCredential)
-            // if (router.asPath?.includes("redirect")) {
-            //     router.replace(router?.query?.redirect ? router?.query?.redirect as string : '/')
-            // } else {
-            //     router.replace('/')
-            // }
-
+       
         } catch (error: any) {
             if(error?.errors?.length){
                 toast.error('Invalid Login Credentials', {
@@ -165,20 +150,7 @@ const Page = () => {
             setLoading(false)
         }
     };
-    const handleLogin = async () => {
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log(userCredential, "userCredential");
-
-            const idToken = await userCredential.user.getIdToken();
-            setToken(idToken);
-            console.log('Token ID:', idToken);
-        } catch (error: any) {
-            setError(error.message);
-            console.error('Error logging in:', error);
-        }
-    };
-    console.log(token, "token");
+  
 
     return (
         <section className='auth-pages d-flex align-items-center h-100'>

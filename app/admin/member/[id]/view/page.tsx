@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import Link from 'next/link';
 import User from "../../../../assests/images/placeholder.png"
-import { Avatar, Breadcrumb, Divider, Spin, Tag, Typography, theme } from 'antd';
+import { Avatar, Breadcrumb, Divider, Spin, Tag, Tooltip, Typography, theme } from 'antd';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 // import Head from 'next/head';
 import { useParams, useRouter } from 'next/navigation';
@@ -15,6 +15,7 @@ import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver'
 import Pdf from '@/app/common/Pdf';
 import { toast, ToastContainer } from 'react-toastify';
+import { DownloadOutlined, ShareAltOutlined } from '@ant-design/icons';
 // import React from 'react'
 const { Row, Col, Card, Button, Space, Popconfirm } = {
   Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -132,7 +133,7 @@ const Page = () => {
     const data = {
       // url: pdfUrl,
       // filename: `Order_${timestamp}.pdf`,
-      to: "abhay@cybersify.tech",
+      to: state.email,
       link: pdfUrl
     };
     const res = await api.User.create(data)
@@ -180,12 +181,17 @@ const Page = () => {
                       <Typography.Title level={3} className='m-0 fw-bold'>Club Member Details</Typography.Title>
                     </div>
                     <div className=" ">
-
-                      <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn' onClick={downLoadPdf}>
-                        Download Pdf
-                      </Button>
-
-                      <Button
+                      <Tooltip title="Download Pdf">
+                        <Button className='ViewMore ' onClick={downLoadPdf}><DownloadOutlined /></Button>
+                      </Tooltip>
+                      {/* <ShareAltOutlined /> */}
+                      {/* <Button size='large' type="primary" htmlType='button' className='w-100' onClick={downLoadPdf}>
+                      <DownloadOutlined /> Download Pdf
+                      </Button> */}
+                      <Tooltip title="Share Pdf link">
+                        <Button className='ViewMore ' onClick={sharePdf}><ShareAltOutlined /></Button>
+                      </Tooltip>
+                      {/* <Button
                         size='large'
                         // type="primary"
                         // htmlType='button'
@@ -193,7 +199,7 @@ const Page = () => {
                         onClick={sharePdf}
                       >
                         Share a Link
-                      </Button>
+                      </Button> */}
                     </div>
                   </div>
                   {/* Car Listing  */}

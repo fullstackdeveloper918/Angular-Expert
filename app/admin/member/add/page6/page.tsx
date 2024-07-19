@@ -174,7 +174,7 @@ const Page = () => {
                                 </div> */}
                                 {/* Title  */}
                                 <div className='mb-2 d-flex justify-content-between'>
-                                    <Typography.Title level={3} className='m-0 fw-bold'>FALL 2023 MEETING REVIEW</Typography.Title>
+                                    <Typography.Title level={3} className='m-0 fw-bold'>SPRING 2024 MEETING REVIEW</Typography.Title>
                                     <Button size={'large'} type="primary" className="text-white" disabled>6/8</Button>
                                 </div>
 
@@ -196,7 +196,7 @@ const Page = () => {
                                                 }}
                                             />
                                         </Form.Item>
-                                        <Form.Item name="personal_finances" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Have you implemented any of Jim Weber’s estate/financial planning reccomendations into your business and/or personal finances?">
+                                        <Form.Item name="personal_finances" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Have you implemented any recommendations from Bart Smith’s financial analysis &/or Fred Reikowsky’s project management skills?">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 onKeyPress={(e: any) => {
                                                     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {

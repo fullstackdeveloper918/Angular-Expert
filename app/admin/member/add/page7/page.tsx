@@ -178,7 +178,7 @@ const Page = () => {
                                 </div> */}
                                 {/* Title  */}
                                 <div className='mb-2 d-flex justify-content-between'>
-                                    <Typography.Title level={3} className='m-0 fw-bold'>SPRING 2024 MEETING PREPARATION</Typography.Title>
+                                    <Typography.Title level={3} className='m-0 fw-bold'>FALL 2024 MEETING PREPARATION</Typography.Title>
                                     <Button size={'large'} type="primary" className="text-white" disabled>7/8</Button>
                                 </div>
 
@@ -188,8 +188,7 @@ const Page = () => {
 
 
                                         <div className='mt-3 mb-1'>
-                                            <Typography.Title level={5} className='m-0 fw-bold'>LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER WITH SPRING MEETING (IN ORDER OF
-                                                IMPORTANCE)</Typography.Title>
+                                            <Typography.Title level={5} className='m-0 fw-bold'>LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER IN OUR FALL MEETING (IN ORDER OF IMPORTANCE)</Typography.Title>
                                         </div>
                                         <Divider plain></Divider>
                                         {/* First Name  */}

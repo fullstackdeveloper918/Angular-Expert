@@ -1,6 +1,6 @@
 "use client"
 import dynamic from 'next/dynamic';
-import React, { Fragment,  useEffect } from 'react'
+import React, { Fragment,  useEffect, useState } from 'react'
 import { Input, Breadcrumb, Collapse,  Typography, Pagination, Popconfirm, Table } from 'antd';
 import Link from 'next/link';
 import MainLayout from '@/app/layouts/page';
@@ -20,47 +20,23 @@ const Page = () => {
 
     const [deleteLoading, setDeleteLoading] = React.useState("")
     const [state, setState] = React.useState<any>([])
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredData, setFilteredData] = useState(state);
 
+    useEffect(() => {
+        // Filter data when searchTerm or state changes
+        const filtered = state?.filter((res:any) => {
+            const question = res?.question || "";
+            const questionType = res?.question_type || "";
+            return question.toLowerCase().includes(searchTerm.toLowerCase()) || questionType.toLowerCase().includes(searchTerm.toLowerCase());
+        });
+        setFilteredData(filtered);
+    }, [searchTerm, state]);
 
-
-    const dataSource = [
-        {
-            key: '1',
-            question: <p >
-                <span>Describe your current financial position:</span>
-            </p>,
-            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-                <li>
-                   <CustomModal type={"Edit"}/>
-                </li>
-                <li>
-                    <Popconfirm
-                        title="Delete"
-                        description="Are you sure you want to delete ?"
-                        onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
-                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                    >
-                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                    </Popconfirm>
-                </li>
-            </ul>
-        },
-      
-    ];
-   
-    const onChangeRouter = (key: string, value: string) => {
-      
-    }
-
-    const onSearch = (value: string) => {
-        if (timer) {
-            clearTimeout(timer)
-        }
-        timer = setTimeout(() => {
-            onChangeRouter("search", String(value).trim())
-        }, 2000);
-    }
-
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+    };
 
     const initialise = async () => {
         try {
@@ -93,7 +69,7 @@ const Page = () => {
         }
 
     }
-    const dataSource2 = state?.map((res: any, index: number) => {
+    const dataSource2 = filteredData?.map((res: any, index: number) => {
         return {
             key: index+1,
             question:res?.question,
@@ -163,8 +139,9 @@ const Page = () => {
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
-                                    <Search size="large" placeholder="Search..." onSearch={onSearch} onChange={(e) => onSearch(e.target.value)} enterButton />
-                                    <CustomModal type={"Add"} initialise={initialise}/>
+                                <Search size='large' className='' placeholder="Search..." enterButton value={searchTerm}
+                                        onChange={handleSearch} />
+                                    {/* <CustomModal type={"Add"} initialise={initialise}/> */}
                                 </div>
 
                                 {/* Accordion  */}

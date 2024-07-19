@@ -80,6 +80,7 @@ const Home: Page = (props: any) => {
   const[upcoming,setUpcoming]=useState<any>([])
   const[next,setNext]=useState<any>([])
 
+  const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
 
   const DashboardData = [
     {
@@ -108,7 +109,7 @@ const Home: Page = (props: any) => {
       textColor: "#B76E00",
       title: "20",
       count: "Total Club Members",
-      link: "/"
+      link:hasClubMemberPermission? `/admin/member`:"/"
 
 
     },
@@ -123,7 +124,6 @@ const Home: Page = (props: any) => {
 
   const completed = state1.filter((res:any) => res?.is_completed === true);
   const non_completed=state1.filter((res:any)=>res?.is_completed==false)
-  const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
   const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,

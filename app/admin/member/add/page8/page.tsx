@@ -37,9 +37,9 @@ const Page = () => {
     const [loading, setLoading] = useState(false);
 
     const handlePreview = async (file: UploadFile<any>) => {
-        if (!file.url && !file.preview) {
+        // if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj as File);
-        }
+        // }
         setPreviewImage(file.url || file.preview);
         setPreviewOpen(true);
     };
@@ -48,17 +48,17 @@ const Page = () => {
         const newFileLists = { ...fileLists, [id]: info.fileList };
         setFileLists(newFileLists);
 
-        if (info.file.status === 'done') {
-            try {
-                const formData = new FormData();
-                formData.append('file', info.file.originFileObj);
-                const response = await api.ImageUpload.add(formData);
-                const newUploadedUrls = { ...uploadedUrls, [id]: [...(uploadedUrls[id] || []), response.data.url] };
-                setUploadedUrls(newUploadedUrls);
-            } catch (error) {
-                console.error('Error uploading file:', error);
-            }
-        }
+        // if (info.file.status === 'done') {
+        //     try {
+        //         const formData = new FormData();
+        //         formData.append('file', info.file.originFileObj);
+        //         const response = await api.ImageUpload.add(formData);
+        //         const newUploadedUrls = { ...uploadedUrls, [id]: [...(uploadedUrls[id] || []), response.data.url] };
+        //         setUploadedUrls(newUploadedUrls);
+        //     } catch (error) {
+        //         console.error('Error uploading file:', error);
+        //     }
+        // }
     };
 
     const addInputPair = () => {
@@ -111,17 +111,22 @@ const Page = () => {
                         is_draft: "completed"
                     }
             } as any
+          
             setLoading(true)
             let res = await api.User.edit(items)
                 console.log(res,"yyyy");
-                router.push(`/admin/member`)
+                // router.push(`/admin/member`)
             }else{
-
+                // const check={
+                //     file: photoComment,
+                // }
                 setLoading(true)
+                // let res2 = await api.ImageUpload.add(check as any)
                 let res =await api.Auth.signUp(item)
-                console.log(res,"qqqq");
+                // console.log(res2,"qqqq");
+                console.log(res,"wwww");
                 
-                router.push(`/admin/member`)
+                // router.push(`/admin/member`)
             }
         } catch (error) {
             console.error(error);

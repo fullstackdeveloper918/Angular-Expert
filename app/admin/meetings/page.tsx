@@ -206,7 +206,7 @@ const Page = () => {
     
         }
       }
-    const dataSource = areas?.map((res: any, index: number) => {
+    const dataSource = areas?.length &&areas?.map((res: any, index: number) => {
         return {
             key: index+1,
             meeting:res?.meeting_name,

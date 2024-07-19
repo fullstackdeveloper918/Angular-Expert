@@ -264,8 +264,9 @@ let userInfo={
         // src={User.src}
          size={40}>A</Avatar>
         {!collapsed && <div>
-          <Typography.Title level={5} className='m-0 fw-bold text-capitalize'>{'Super Admin'}</Typography.Title> 
-          <Typography.Paragraph className='m-0'>Admin</Typography.Paragraph>
+          {getUserdata?.email === "nahbcraftsmen@gmail.com" &&
+          <Typography.Title level={5} className='m-0 fw-bold text-capitalize'>{'Super Admin'}</Typography.Title> }
+          <Typography.Paragraph className='m-0'>{getUserdata?.firstname} {getUserdata?.lastname}</Typography.Paragraph>
         </div>}
       </div>
 
