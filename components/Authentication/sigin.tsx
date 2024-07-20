@@ -53,12 +53,11 @@ const Sigin = () => {
             if (user) {
                 try {
                     const idToken = await user.getIdToken();
-                    console.log('try block me hu me bawa')
                     setToken(idToken);
                     setState(user);
-                    setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
-                        path: "/",
-                    });
+                    // setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
+                    //     path: "/",
+                    // });
                 } catch (error: any) {
                     console.error("Error getting ID token: ", error);
                     if (error.response && error.response.status === 401) {

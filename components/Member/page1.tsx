@@ -209,7 +209,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
 
                                         {/* Button  */}
                                         <div className="d-flex gap-3 justify-content-center">
-                                        <Button size={'large'} type="primary" className="login-form-button " onClick={onPrevious}>
+                                        <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
                                             Previous
                                         </Button>
                                         <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>

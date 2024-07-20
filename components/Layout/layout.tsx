@@ -97,7 +97,7 @@ const MainLayout = ({ children }: any) => {
 
   const handleLogout = async () => {
     if (accessToken) {
-      destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN");
+      destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
       toast.success("Logout Successful", {
         position: "top-center",
