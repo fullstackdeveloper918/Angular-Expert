@@ -1,6 +1,6 @@
 "use client";
 // import loginImg from "../../../assests/images/nahb.png";
-import loginImg from "../../assests/images/nbhaColor.png"
+import loginImg from "../../assests/images/nbhaColor.8f7cf6ff.png"
 import logo from "../../assests/images/image.png";
 import React, { useEffect, useState } from "react";
 import { Form, Input } from "antd";
@@ -53,15 +53,13 @@ const Sigin = () => {
             if (user) {
                 try {
                     const idToken = await user.getIdToken();
+                    console.log('try block me hu me bawa')
                     setToken(idToken);
                     setState(user);
-                    // Refresh the cookie
                     setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
-                        maxAge: rememberMe ? 60 * 60 * 24 * 30 : undefined, // 30 days for remember me, session cookie otherwise
                         path: "/",
                     });
                 } catch (error: any) {
-                    // Token expiration error handling
                     console.error("Error getting ID token: ", error);
                     if (error.response && error.response.status === 401) {
                         router.push('/auth/signin');
@@ -69,12 +67,12 @@ const Sigin = () => {
                     router.push('/auth/signin');
                 }
             } else {
-                // User is signed out, redirect to sign-in
+              
                 router.push('/auth/signin');
             }
         });
 
-        // Cleanup subscription on unmount
+       
         return () => unsubscribe();
     }, [rememberMe, router]);
     const onFinish = async (values: any) => {

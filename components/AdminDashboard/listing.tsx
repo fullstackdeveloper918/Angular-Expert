@@ -96,8 +96,8 @@ const AdminDashboard: Page = (props: any) => {
 
 
 
-  const completed = state1.filter((res:any) => res?.is_completed === true);
-  const non_completed=state1.filter((res:any)=>res?.is_completed==false)
+  const completed = state1?.filter((res:any) => res?.is_completed === true);
+  const non_completed=state1?.filter((res:any)=>res?.is_completed==false)
   const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
@@ -331,7 +331,7 @@ useEffect(()=>{
           <Row gutter={[20, 20]} className="mb-4 ">
 {getUserdata?.is_admin==true?
 <>
-{DashboardData.map((data: any, index: number) => {
+{DashboardData && DashboardData?.map((data: any, index: number) => {
   return (
     <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
       <Link className='text-decoration-none' href={data.link}>
@@ -349,7 +349,7 @@ useEffect(()=>{
   )
 })}
 </>:<>
-{DashboardData2.map((data: any, index: number) => {
+{DashboardData2 && DashboardData2?.map((data: any, index: number) => {
   return (
     <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
       <Link className='text-decoration-none' href={data.link}>

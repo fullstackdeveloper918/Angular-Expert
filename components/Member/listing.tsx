@@ -24,6 +24,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
 import saveAs from "file-saver";
+import axios from "axios";
 // const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -69,8 +70,9 @@ const MemberList = () => {
       is_archive: ""
     })
   const [state1, setState1] = useState<any>([])
-  const [copiedText, setCopiedText] = useState('');
-
+  const cookies = parseCookies();
+  const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
+console.log(accessToken,"qwertyui");
   const [loading, setLoading] = React.useState(false)
   const [exportModal, setExportModal] = React.useState(false);
   const [areas, setAreas] = useState<any>([]);
@@ -103,42 +105,65 @@ const MemberList = () => {
     };
   const generatePdf = async () => {
       const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
-      const blob = await pdf(<Pdf state={state} />).toBlob()
-      const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
-    return { file, blob, timestamp };
+      const blob = await pdf(<Pdf state={state} />).toBlob();
+      const pdfUrl = URL.createObjectURL(blob);
+      return { blob, pdfUrl, timestamp };
     };
   
     // Function to handle PDF download
     const downLoadPdf = async () => {
       const { blob, timestamp } = await generatePdf();
-      
       saveAs(blob, `Order_${timestamp}.pdf`);
     };
   
     // Function to handle PDF sharing
     const sharePdf = async () => {
-        const { file } = await generatePdf();
 
+      const { pdfUrl , timestamp } = await generatePdf();
+      console.log(pdfUrl, 'pdfUrl')
+      const response = await fetch(pdfUrl);
+      const blob = await response.blob();
+      console.log(blob,'blob')
+
+        // Convert the blob to a file
+        const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
+        console.log(file, 'file pdf');
         const formData = new FormData();
         formData.append('file', file);
-        console.log(formData, 'checkfordata')
-        
-        try {
-            const res = await api.User.create(formData);
-            console.log(res?.fileUrl, 'response from api')
-           
-            await navigator.clipboard.writeText(res?.fileUrl);
-            toast.success('PDF copied to clipboard!', {
-              position: 'top-center',
-              autoClose: 300
-            });
-          } catch (err) {
-            console.error('Failed to copy: ', err);
-          }
+   
+  console.log(formData,"formData");
   
-    };
- 
+        const res = await fetch('https://frontend.goaideme.com/save-pdf', {
+            
+            method: 'POST',
+            body: formData,
+            headers: {
+                Token: `${accessToken}`,
+                // 'Content-Type': 'application/json',
+            }
+          },);
 
+          console.log(res,'res')
+       
+    //   })
+    //   toast.success('Link Share Successfully', {
+    //     position: 'top-center',
+    //     autoClose: 300,
+  
+    //   });
+  
+      // Optionally, open the PDF in a new tab
+      // window.open(pdfUrl, '_blank');
+    };
+  //   const copyToClipboard = (text) => {
+  //     navigator.clipboard.writeText(text)
+  //         .then(() => {
+  //             message.success('Link copied to clipboard');
+  //         })
+  //         .catch(() => {
+  //             message.error('Failed to copy link to clipboard');
+  //         });
+  // };
     const handleDownloadAndFetchData = (id:any) => {
         getDataById(id);
         downLoadPdf();
@@ -227,8 +252,7 @@ const MemberList = () => {
       router.push("/admin/member/add")
   }
 
-  const cookies = parseCookies();
-  const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
+ 
 
   const getData = async (query: string) => {
       try {
