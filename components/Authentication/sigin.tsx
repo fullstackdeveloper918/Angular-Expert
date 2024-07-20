@@ -129,13 +129,22 @@ const Sigin = () => {
 
        
         } catch (error: any) {
-            if(error?.errors?.length){
-                toast.error('Invalid Login Credentials', {
-                    position: 'top-center',
-                    autoClose: 300,
-                });
-            }
-            router.push('/auth/signin');
+            // if(error?.errors?.length){
+            //     toast.error('Invalid Login Credentials', {
+            //         position: 'top-center',
+            //         autoClose: 300,
+            //     });
+            // }
+            if (error.code === 'auth/session-expired' || error.message.includes('session')) {
+                console.error('Session expired. Please sign in again.');
+                // Show error message to user
+                setError('Session expired. Please sign in again.');
+                router.push('/auth/signin');
+              } else {
+                console.error('Sign-in error:', error.message);
+                // Show a generic error message to user
+                setError('Sign-in failed. Please try again.');
+              }
             // Toast.error(error)
             // setLoading(false)
         } finally {

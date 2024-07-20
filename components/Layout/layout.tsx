@@ -90,7 +90,6 @@ const MainLayout = ({ children }: any) => {
   console.log(getUserdata, "qwertyu");
 
   useEffect(() => {
-    // Get the access token from cookies
     const cookies = parseCookies();
     const token = cookies["COOKIES_USER_ACCESS_TOKEN"];
     setAccessToken(token);

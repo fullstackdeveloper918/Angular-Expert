@@ -43,6 +43,7 @@ const Page1 = () => {
   const router = useRouter()
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false)
+  const [loading1, setLoading1] = useState(false)
   const [state, setState] = useState<any>("")
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
@@ -208,7 +209,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
 
                                         {/* Button  */}
                                         <div className="d-flex gap-3 justify-content-center">
-                                        <Button size={'large'} type="primary" className="login-form-button " loading={loading} onClick={onPrevious}>
+                                        <Button size={'large'} type="primary" className="login-form-button " onClick={onPrevious}>
                                             Previous
                                         </Button>
                                         <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>

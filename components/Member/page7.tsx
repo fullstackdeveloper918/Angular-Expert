@@ -222,7 +222,7 @@ What CRM systems do you use?"
 
                                 {/* Button  */}
                                 <div className="d-flex gap-3 justify-content-center">
-                                <Button size={'large'} type="primary" className="login-form-button " loading={loading} onClick={onPrevious}>
+                                <Button size={'large'} type="primary" className="login-form-button "  onClick={onPrevious}>
                                     Previous
                                 </Button>
                                 <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
