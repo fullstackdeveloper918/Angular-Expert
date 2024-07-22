@@ -151,72 +151,72 @@ const Page1 = () => {
                                         {/* First Name  */}
                                         <Form.Item name="financial_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your current financial position:">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                                onKeyPress={(e: any) => {
-                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                        e.preventDefault();
-                                                    } else {
-                                                        e.target.value = String(e.target.value).trim()
-                                                    }
-                                                }}
+                                                // onKeyPress={(e: any) => {
+                                                //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                //         e.preventDefault();
+                                                //     } else {
+                                                //         e.target.value = String(e.target.value).trim()
+                                                //     }
+                                                // }}
                                             />
                                         </Form.Item>
                                         {/* Last Name  */}
                                         <Form.Item name="sales_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your current sales positions, hot prospects, recently contracted work:">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                                onKeyPress={(e: any) => {
-                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                        e.preventDefault();
-                                                    } else {
-                                                        e.target.value = String(e.target.value).trim()
-                                                    }
-                                                }}
+                                                // onKeyPress={(e: any) => {
+                                                //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                //         e.preventDefault();
+                                                //     } else {
+                                                //         e.target.value = String(e.target.value).trim()
+                                                //     }
+                                                // }}
                                             />
                                         </Form.Item>
                                         <Form.Item name="accomplishments" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your accomplishments in the last 6 months:">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                                onKeyPress={(e: any) => {
-                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                        e.preventDefault();
-                                                    } else {
-                                                        e.target.value = String(e.target.value).trim()
-                                                    }
-                                                }}
+                                                // onKeyPress={(e: any) => {
+                                                //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                //         e.preventDefault();
+                                                //     } else {
+                                                //         e.target.value = String(e.target.value).trim()
+                                                //     }
+                                                // }}
                                             />
                                         </Form.Item>
                                         <Form.Item name="hr_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your HR position &/or needs:">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                                onKeyPress={(e: any) => {
-                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                        e.preventDefault();
-                                                    } else {
-                                                        e.target.value = String(e.target.value).trim()
-                                                    }
-                                                }}
+                                                // onKeyPress={(e: any) => {
+                                                //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                //         e.preventDefault();
+                                                //     } else {
+                                                //         e.target.value = String(e.target.value).trim()
+                                                //     }
+                                                // }}
                                             />
                                         </Form.Item>
                                         <Form.Item name="current_challenges" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any current challenges your business is facing (i.e. problem client, personnel
 issue(s), trade availability, rising costs, supply chain, etc.):">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                                onKeyPress={(e: any) => {
-                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                        e.preventDefault();
-                                                    } else {
-                                                        e.target.value = String(e.target.value).trim()
-                                                    }
-                                                }}
+                                                // onKeyPress={(e: any) => {
+                                                //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                //         e.preventDefault();
+                                                //     } else {
+                                                //         e.target.value = String(e.target.value).trim()
+                                                //     }
+                                                // }}
                                             />
                                         </Form.Item>
 
 
                                         <Form.Item name="craftsmen_support" rules={[{ required: true, message: 'Please Fill Field' }]} label="How can the Craftsmen aid or support you with these challenges?">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                                onKeyPress={(e: any) => {
-                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                        e.preventDefault();
-                                                    } else {
-                                                        e.target.value = String(e.target.value).trim()
-                                                    }
-                                                }}
+                                                // onKeyPress={(e: any) => {
+                                                //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                //         e.preventDefault();
+                                                //     } else {
+                                                //         e.target.value = String(e.target.value).trim()
+                                                //     }
+                                                // }}
                                             />
                                         </Form.Item>
 
@@ -226,7 +226,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                             Previous
                                         </Button>
                                         <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                            Next
+                                           Save & Next
                                         </Button>
                                         </div>
                                     </Form>

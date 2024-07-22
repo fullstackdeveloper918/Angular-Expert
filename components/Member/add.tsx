@@ -1,5 +1,5 @@
 "use client";
-import { Button, Card, Col, Form, Input, Row, Typography } from "antd";
+import { Button, Card, Col, Form, Input, Row, Select, Typography } from "antd";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
@@ -20,6 +20,7 @@ import { toast, ToastContainer } from "react-toastify";
 //     ssr: false,
 //   }),
 // };
+const { Option } = Select;
 const Add = () => {
  
   const router = useRouter()
@@ -28,10 +29,12 @@ const Add = () => {
   const [state, setState] = useState<any>("")
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
-
+  const [companyType, setCompanyType] = useState<any>('');
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 0 ? entries[1][0] : '';
-
+  const handleChange = (value: any) => {
+    setCompanyType(value);
+};
   const onFinish = async (values: any) => {
     // country_code: values.country_code ?? "+93",
     let items = {
@@ -40,7 +43,7 @@ const Add = () => {
         lastname: String(values.lastname).trim(),
         email: String(values.email).trim(),
         password: String(values.password).trim(),
-        mobile: String(values.mobile).trim(),
+        mobile: values.phone_number,
         roles: values.roles,
         company_name: values?.company_name,
         position: values?.position,
@@ -58,7 +61,7 @@ const Add = () => {
             lastname: String(values.lastname).trim(),
             email: String(values.email).trim(),
             password: String(values.password).trim(),
-            mobile: String(values.phone_number).trim(),
+            mobile: values.phone_number,
             roles: "",
             company_name: values?.company_name,
             position: values?.position,
@@ -150,29 +153,29 @@ if(error){
                   <div className='row mt-4'>
                     <Form.Item name="firstname" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter First Name' }]} label="First Name">
                       <Input size={'large'} placeholder="First Name"
-                        onKeyPress={(e: any) => {
-                          if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                            e.preventDefault();
-                          } else {
-                            e.target.value = String(e.target.value).trim()
-                          }
-                        }}
+                        // onKeyPress={(e: any) => {
+                        //   if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                        //     e.preventDefault();
+                        //   } else {
+                        //     e.target.value = String(e.target.value).trim()
+                        //   }
+                        // }}
                       />
                     </Form.Item>
                     {/* Last Name  */}
                     <Form.Item name="lastname" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Last Name' }]} label="Last Name">
                       <Input size={'large'} placeholder="Last Name"
-                        onKeyPress={(e: any) => {
-                          if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                            e.preventDefault();
-                          } else {
-                            e.target.value = String(e.target.value).trim()
-                          }
-                        }}
+                        // onKeyPress={(e: any) => {
+                        //   if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                        //     e.preventDefault();
+                        //   } else {
+                        //     e.target.value = String(e.target.value).trim()
+                        //   }
+                        // }}
                       />
                     </Form.Item>
-                    <Form.Item name="company_name" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Club Name' }]} label="Club Name">
-                      <Input size={'large'} placeholder="Club Name"
+                    <Form.Item name="company_name" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Company Name' }]} label="Company Name">
+                      {/* <Input size={'large'} placeholder="Club Name"
                         onKeyPress={(e: any) => {
                           if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
                             e.preventDefault();
@@ -180,7 +183,32 @@ if(error){
                             e.target.value = String(e.target.value).trim()
                           }
                         }}
-                      />
+                      /> */}
+                      <Select
+                                            size={'large'}
+                                            placeholder="Select Company Name"
+                                            onChange={handleChange}
+                                        >
+                                            <Option value="augusta">Augusta Homes, Inc.</Option>
+                                            <Option value="buffington">Buffington Homes, L.P.</Option>
+                                            <Option value="cabin">Cabin John Builders</Option>
+                                            <Option value="cataldo">Cataldo Custom Builders</Option>
+                                            <Option value="david_campbell">David Campbell Building</Option>
+                                            <Option value="dc_building">DC Building Inc.</Option>
+                                            <Option value="Ddenman_construction">Denman Construction, Inc.</Option>
+                                            <Option value="ellis">Ellis Custom Homes</Option>
+                                            <Option value="tm_grady_builders">T.M. Grady Builders</Option>
+                                            <Option value="hardwick">Hardwick G. C.</Option>
+                                            <Option value="homeSource">HomeSource Construction</Option>
+                                            <Option value="ed_nikles">Ed Nikles Custom Builder, Inc.</Option>
+                                            <Option value="olsen">Olsen Custom Homes</Option>
+                                            <Option value="raykon">Raykon Construction</Option>
+                                            <Option value="matt_sitra">Matt Sitra Custom Homes</Option>
+                                            <Option value="schneider">Schneider Construction, LLC</Option>
+                                            <Option value="shaeffer">Shaeffer Hyde Construction</Option>
+                                            <Option value="split">Split Rock Custom Homes</Option>
+                                            <Option value="tiara">Tiara Sun Development</Option>
+                                        </Select>
                     </Form.Item>
 
                     <Form.Item name="phone_number" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">

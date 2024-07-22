@@ -203,46 +203,22 @@ const Page5 = () => {
                                 {/* First Name  */}
                                 <Form.Item name="commitment" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="What is your level of commitment to our club?">
                                     <TextArea size={'large'} placeholder="Enter..."
-                                        onKeyPress={(e: any) => {
-                                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                e.preventDefault();
-                                            } else {
-                                                e.target.value = String(e.target.value).trim()
-                                            }
-                                        }}
+                                        
                                     />
                                 </Form.Item>
                                 <Form.Item name="contribute" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="List Something(s) you can do to contribute to our club.">
                                     <TextArea size={'large'} placeholder="Enter..."
-                                        onKeyPress={(e: any) => {
-                                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                e.preventDefault();
-                                            } else {
-                                                e.target.value = String(e.target.value).trim()
-                                            }
-                                        }}
+                                       
                                     />
                                 </Form.Item>
                                 <Form.Item name="wellbeing" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="How is your present health, wellbeing, family life?">
                                     <TextArea size={'large'} placeholder="Enter..."
-                                        onKeyPress={(e: any) => {
-                                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                e.preventDefault();
-                                            } else {
-                                                e.target.value = String(e.target.value).trim()
-                                            }
-                                        }}
+                                       
                                     />
                                 </Form.Item>
                                 <Form.Item name="contact_info" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Have any items on your contact info changed?">
                                     <TextArea size={'large'} placeholder="Enter..."
-                                        onKeyPress={(e: any) => {
-                                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                e.preventDefault();
-                                            } else {
-                                                e.target.value = String(e.target.value).trim()
-                                            }
-                                        }}
+                                        
                                     />
                                 </Form.Item>
 
@@ -253,7 +229,7 @@ const Page5 = () => {
                                     Previous
                                 </Button>
                                 <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                    Next
+                                Save & Next
                                 </Button>
                                 </div>
                             </Form>

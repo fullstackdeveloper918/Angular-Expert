@@ -329,13 +329,7 @@ const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
                                                 <TextArea
                                                     size="large"
                                                     placeholder="Enter..."
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim();
-                                                        }
-                                                    }}
+                                                   
                                                 />
                                             </Form.Item>
                                             {inputPairs.length > 1 && (

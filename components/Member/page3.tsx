@@ -227,13 +227,13 @@ const Page3 = () => {
                                                 <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim();
-                                                        }
-                                                    }}
+                                                    // onKeyPress={(e: any) => {
+                                                    //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                    //         e.preventDefault();
+                                                    //     } else {
+                                                    //         e.target.value = String(e.target.value).trim();
+                                                    //     }
+                                                    // }}
                                                 />
                                             </Form.Item>
                                             <Form.Item
@@ -244,13 +244,13 @@ const Page3 = () => {
                                                 <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim();
-                                                        }
-                                                    }}
+                                                    // onKeyPress={(e: any) => {
+                                                    //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                    //         e.preventDefault();
+                                                    //     } else {
+                                                    //         e.target.value = String(e.target.value).trim();
+                                                    //     }
+                                                    // }}
                                                 />
                                             </Form.Item>
                                            
@@ -297,13 +297,13 @@ const Page3 = () => {
                                                 <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim();
-                                                        }
-                                                    }}
+                                                    // onKeyPress={(e: any) => {
+                                                    //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                                    //         e.preventDefault();
+                                                    //     } else {
+                                                    //         e.target.value = String(e.target.value).trim();
+                                                    //     }
+                                                    // }}
                                                 />
                                                 <Select
                                                     defaultValue={field.status1}
@@ -336,7 +336,7 @@ const Page3 = () => {
                                         Previous
                                     </Button>
                                     <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                        Next
+                                    Save & Next
                                     </Button>
                                 </div>
                             </Form>

@@ -104,7 +104,7 @@ const Sigin = () => {
 
             // const encodedResponseData = encodeURIComponent(JSON.stringify(responseData));
             console.log(res, "ereree");
-            // Toast.success("Login successfully")
+            toast.success("Login successfully")
             if (rememberMe) {
                 setCookie(this, "COOKIES_USER_ACCESS_TOKEN", idToken, {
                     maxAge: 60 * 60 * 24 * 30,

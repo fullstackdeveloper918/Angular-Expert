@@ -198,24 +198,12 @@ const Page6 = () => {
                                         {/* First Name  */}
                                         <Form.Item name="fall_meeting" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="What was your most valuable take away from our fall meeting?">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                                onKeyPress={(e: any) => {
-                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                        e.preventDefault();
-                                                    } else {
-                                                        e.target.value = String(e.target.value).trim()
-                                                    }
-                                                }}
+                                                
                                             />
                                         </Form.Item>
                                         <Form.Item name="personal_finances" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Have you implemented any recommendations from Bart Smith’s financial analysis &/or Fred Reikowsky’s project management skills?">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                                onKeyPress={(e: any) => {
-                                                    if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                        e.preventDefault();
-                                                    } else {
-                                                        e.target.value = String(e.target.value).trim()
-                                                    }
-                                                }}
+                                               
                                             />
                                         </Form.Item>
                                       
@@ -227,7 +215,7 @@ const Page6 = () => {
                                             Previous
                                         </Button>
                                         <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                            Next
+                                        Save & Next
                                         </Button>
                                         </div>
                                     </Form>

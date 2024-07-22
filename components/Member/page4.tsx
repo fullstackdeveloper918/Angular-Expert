@@ -192,35 +192,35 @@ const Page4 = () => {
                                 {/* First Name  */}
                                 <Form.Item name="technology" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any new technology you started using and share the name of the app or website:">
                                     <TextArea size={'large'} placeholder="Enter..."
-                                        onKeyPress={(e: any) => {
-                                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                e.preventDefault();
-                                            } else {
-                                                e.target.value = String(e.target.value).trim()
-                                            }
-                                        }}
+                                        // onKeyPress={(e: any) => {
+                                        //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                        //         e.preventDefault();
+                                        //     } else {
+                                        //         e.target.value = String(e.target.value).trim()
+                                        //     }
+                                        // }}
                                     />
                                 </Form.Item>
                                 <Form.Item name="products" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any new products you have used in the last 6 months & share the name and website:">
                                     <TextArea size={'large'} placeholder="Enter..."
-                                        onKeyPress={(e: any) => {
-                                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                e.preventDefault();
-                                            } else {
-                                                e.target.value = String(e.target.value).trim()
-                                            }
-                                        }}
+                                        // onKeyPress={(e: any) => {
+                                        //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                        //         e.preventDefault();
+                                        //     } else {
+                                        //         e.target.value = String(e.target.value).trim()
+                                        //     }
+                                        // }}
                                     />
                                 </Form.Item>
                                 <Form.Item name="project" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe something that you do with each project that sets you apart from your competition:">
                                     <TextArea size={'large'} placeholder="Enter..."
-                                        onKeyPress={(e: any) => {
-                                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                e.preventDefault();
-                                            } else {
-                                                e.target.value = String(e.target.value).trim()
-                                            }
-                                        }}
+                                        // onKeyPress={(e: any) => {
+                                        //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
+                                        //         e.preventDefault();
+                                        //     } else {
+                                        //         e.target.value = String(e.target.value).trim()
+                                        //     }
+                                        // }}
                                     />
                                 </Form.Item>
 
@@ -231,7 +231,7 @@ const Page4 = () => {
                                     Previous
                                 </Button>
                                 <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                    Next
+                                Save & Next
                                 </Button>
                                 </div>
                             </Form>

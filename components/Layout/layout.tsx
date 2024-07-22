@@ -14,6 +14,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuth, signOut } from "firebase/auth";
+import { auth } from "@/utils/firebase";
+
 const { Button, Dropdown, Tooltip } = {
   Dropdown: dynamic(() => import("antd").then((module) => module.Dropdown), {
     ssr: false,
@@ -95,30 +97,35 @@ const MainLayout = ({ children }: any) => {
     const token = cookies["COOKIES_USER_ACCESS_TOKEN"];
     setAccessToken(token);
   }, []);
-
   const handleLogout = async () => {
-    const auth = getAuth();
-    signOut(auth).then(() => {
+    // const auth = getAuth();
+    signOut(auth)
+    .then(() => {
       // Sign-out successful.
-    }).catch((error:any) => {
+      console.log("Signed out successfully.");
+    })
+    .catch((error: Error) => {
       // An error happened.
+      console.error("Sign-out error:", error.message);
     });
     // if (accessToken) {
       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-      toast.success("Logout Successful", {
-        position: "top-center",
-        autoClose: 300,
-        onClose: () => {
-          router.push("/auth/signin");
-        },
-      });
+     
     // }
     dispatch(clearUserData({}));
+    toast.success("Logout Successful", {
+      position: "top-center",
+      autoClose: 300,
+      onClose: () => {
+      },
+    });
+    router.push("/auth/signin");
   };
+ 
 
   return (
     <>
-      {/* <ToastContainer
+      <ToastContainer
         position="top-center"
         autoClose={3000}
         hideProgressBar
@@ -128,7 +135,7 @@ const MainLayout = ({ children }: any) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-      /> */}
+      />
       <Layout className="layout" hasSider>
         <Sider
           trigger={null}
