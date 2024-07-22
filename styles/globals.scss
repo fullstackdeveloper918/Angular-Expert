@@ -110,6 +110,7 @@ i.fa-trash-can{
   color: #000 !important;
   font-size: 20px;
   border: 0 !important;
+  padding: 0 4px;
 }
 .blackViewBtn {
   color: #fff !important;
@@ -190,7 +191,8 @@ a.forgotPassword {
     background: transparent !important;
     color: #000 !important;
   }
-  :where(.css-dev-only-do-not-override-f7vrd6).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector {
+  :where(.css-dev-only-do-not-override-f7vrd6).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector,
+  :where(.css-dev-only-do-not-override-98ntnt).ant-input-outlined:hover {
     border-color: #000000  !important;
 }
 :where(.css-dev-only-do-not-override-f7vrd6).ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):active{
@@ -215,11 +217,55 @@ a.forgotPassword {
   color: #fff !important;
   background-color: #FF4D4F !important;
 }
-@media screen and (max-width:1280x) {
+
+:where(.css-dev-only-do-not-override-98ntnt).ant-menu-light .ant-menu-item-selected{
+  background-color: #000000 !important;
+    color: #fff !important;
+}
+:where(.css-dev-only-do-not-override-98ntnt).ant-input-outlined:focus, :where(.css-dev-only-do-not-override-98ntnt).ant-input-outlined:focus-within {
+  border-color: #000000;
+  box-shadow: none !important;
+}
+.ant-pagination{
+  justify-content: center;
+}
+.remove_row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-weight: 400;
+  margin-bottom: 40px;
+}
+
+:where(.css-dev-only-do-not-override-98ntnt).ant-btn-dashed:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+:where(.css-dev-only-do-not-override-98ntnt).ant-btn:not(:disabled):focus-visible {
+  outline: 0 !important;
+}
+
+@media screen and (max-width:1290px) {
   .auth-pages .image-wrapper{
-    height: 520px;
+    max-height: 520px;
     padding: 0 30px;
   }
+//   .ant-table-content ,
+//   .ant-table-container,
+//   .ant-table,
+//   .ant-table-wrapper {
+//     width: 100% !important;
+//     overflow: hidden !important;
+//     overflow-x: auto !important;
+//     scrollbar-width: thin !important;
+// }
+.tabs-wrapper .ant-table-container{
+  width: 100%;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+
 }
 @media screen and (max-width:991x) {
   .ant-card .ant-card-body {
@@ -243,5 +289,17 @@ a.forgotPassword {
 @media screen and (max-width:575px) {
   :where(.css-dev-only-do-not-override-f7vrd6).ant-btn-primary {
     max-width: 100%;
+}
+.club_member .ant-col.ant-col-sm-22.ant-col-md-24.ant-col-lg-16.ant-col-xl-16.ant-col-xxl-12 {
+  width: 100%;
+}
+
+}
+
+@media screen and (max-width:480px) {
+.responiveSelect{
+  top: -3px !important;
+  width: 80px !important;
+  height: 28px;
 }
 }

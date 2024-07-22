@@ -274,9 +274,9 @@ const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
     <MainLayout>
     <Fragment>
    
-        <section>
-            <DynamicRow justify="center" gutter={[20, 20]}>
-                <DynamicCol sm={22} md={24} lg={11} xl={10} xxl={9}>
+    <section className="club_member">     
+            <DynamicRow justify="center" gutter={[20, 20]} className='heightCenter'>
+                <DynamicCol sm={22} md={20} lg={16} xl={14} xxl={12}>
                     <DynamicCard className='common-card'>
                         {/* Title  */}
                         <div className='mb-2 d-flex justify-content-between'>

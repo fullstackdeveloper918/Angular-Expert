@@ -7,7 +7,8 @@
     .image-wrapper {
         border-radius: 40px 0 0 40px;
         overflow: hidden;
-        height: 600px;
+        max-height: 600px;
+        height: 100%;
         box-shadow: $shadow-md;
         background-color: #fff;
         padding: 0 40px;
@@ -162,3 +163,5 @@
         }
     }
 }
+
+

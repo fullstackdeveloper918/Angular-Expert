@@ -196,9 +196,9 @@ const Page3 = () => {
     <MainLayout>
     <Fragment>
 
-        <section>
+    <section className="club_member">     
             <Row justify="center" gutter={[20, 20]}>
-                <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
+            <Col sm={22} md={24} lg={16} xl={16} xxl={12}>
                     <Card className='common-card'>
                         
                         <div className='mb-2 d-flex justify-content-between'>
@@ -254,7 +254,7 @@ const Page3 = () => {
                                                 />
                                             </Form.Item>
                                            
-                                            <Select
+                                            <Select className="responiveSelect"
                                                 defaultValue={pair.status}
                                                 style={{ position: 'absolute', top: '-14px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
                                                 onChange={(value) => handleStatusChange(pair.id, value)}>
@@ -266,14 +266,17 @@ const Page3 = () => {
                                             {/* </Form.Item> */}
                                             {/* </div> */}
                                             {inputPairs.length > 1 && (
+                                                <div className="remove_row">
+                                                <p className="m-0">Removed Row</p>
                                                 <MinusCircleOutlined
-                                                    style={{ position: 'absolute', top: '0', right: '0', fontSize: '24px', cursor: 'pointer' }}
-                                                    onClick={() => removeInputPair(pair.id)}
-                                                />
+                                                    // style={{ position: 'absolute', top: '0', right: '0', fontSize: '24px', cursor: 'pointer' }}
+                                                    onClick={() => removeInputPair(pair.id)}  
+                                                    />
+                                                    </div>
                                             )}
                                         </div>
                                     ))}
-                                    <Button type="dashed" onClick={addInputPair} block icon={<PlusOutlined />}>
+                                    <Button type="dashed" className="add_goal" onClick={addInputPair} block icon={<PlusOutlined />}>
                                         Add Goal and Comment
                                     </Button>
                                 </div>
@@ -312,10 +315,12 @@ const Page3 = () => {
                                                         { value: 'low', label: 'Low' },
                                                     ]}
                                                 />
-                                                {inputFields.length > 1 && (
+                                                {inputFields.length > 1 && ( 
+                                                    
                                                     <MinusCircleOutlined
                                                         style={{ position: 'absolute', top: '-30px', right: '0', fontSize: '24px', cursor: 'pointer' }}
                                                         onClick={() => removeInputField(index)}
+                                                      
                                                     />
                                                 )}
                                             </div>
@@ -326,7 +331,7 @@ const Page3 = () => {
                                     </Button>
                                 </div>
                                 {/* Button  */}
-                                <div className="d-flex gap-3 justify-content-center">
+                                <div className="d-flex gap-3 justify-content-center mt-3">
                                     <Button size={'large'} type="primary" className="login-form-button "  onClick={onPrevious}>
                                         Previous
                                     </Button>
