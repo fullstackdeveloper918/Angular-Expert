@@ -241,7 +241,9 @@ a.forgotPassword {
   color: #000000 !important;
   border-color: #000000 !important;
 }
-
+:where(.css-dev-only-do-not-override-98ntnt).ant-btn:not(:disabled):focus-visible {
+  outline: 0 !important;
+}
 
 @media screen and (max-width:1290px) {
   .auth-pages .image-wrapper{
