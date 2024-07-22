@@ -118,7 +118,7 @@ const MainLayout = ({ children }: any) => {
 
   return (
     <>
-      <ToastContainer
+      {/* <ToastContainer
         position="top-center"
         autoClose={3000}
         hideProgressBar
@@ -128,7 +128,7 @@ const MainLayout = ({ children }: any) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-      />
+      /> */}
       <Layout className="layout" hasSider>
         <Sider
           trigger={null}

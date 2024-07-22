@@ -9,6 +9,9 @@ import api from "@/utils/api";
 import type { UploadFile } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { toast, ToastContainer } from "react-toastify";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { parseCookies } from "nookies";
 
 const { Title } = Typography;
 
@@ -44,35 +47,30 @@ const Page8 = () => {
   const router = useRouter();
     const [form] = Form.useForm();
     const [inputPairs, setInputPairs] = useState([{ id: Date.now(), goalName: 'goal1', goalLabel: 'Project 1', commentName: 'comment1', commentLabel: 'Comment 1' }]);
-    const [fileLists, setFileLists] = useState<Record<string, UploadFile<any>[]>>({});
+    const [fileLists, setFileLists] = useState<any>({});
     const [uploadedUrls, setUploadedUrls] = useState<Record<string, string[]>>({});
     const [previewImage, setPreviewImage] = useState<any>('');
     const [previewOpen, setPreviewOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
+const images=JSON.stringify(fileLists)
+const getUserdata = useSelector((state: any) => state?.user?.userData);
+const cookies = parseCookies();
+const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
     const handlePreview = async (file: UploadFile<any>) => {
         // if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj as File);
+            
+            
         // }
         setPreviewImage(file.url || file.preview);
         setPreviewOpen(true);
     };
 
-    const handleChange = async (info: any, id: string) => {
-        const newFileLists = { ...fileLists, [id]: info.fileList };
-        setFileLists(newFileLists);
-
-        // if (info.file.status === 'done') {
-        //     try {
-        //         const formData = new FormData();
-        //         formData.append('file', info.file.originFileObj);
-        //         const response = await api.ImageUpload.add(formData);
-        //         const newUploadedUrls = { ...uploadedUrls, [id]: [...(uploadedUrls[id] || []), response.data.url] };
-        //         setUploadedUrls(newUploadedUrls);
-        //     } catch (error) {
-        //         console.error('Error uploading file:', error);
-        //     }
-        // }
+    const handleChange = async (info:any, id:any) => {
+      const newFileLists = { ...fileLists, [id]: info.fileList };
+      console.log(newFileLists, "newFileLists");
+      setFileLists(newFileLists);
     };
 
     const addInputPair = () => {
@@ -97,20 +95,15 @@ const Page8 = () => {
     const entries = Array.from(searchParams.entries());
     const value = entries.length > 0 ? entries[0][0] : '';
     const type = entries.length > 1 ? entries[1][0] : '';
-// console.log(uploadedUrls,"chchhc");
-
+    // const id = "commonID";
     const submit = async (values: any) => {
         setLoading(true);
-        console.log(values?.goal1,"dfghjlsjd");
         
-        try {
-            console.log(inputPairs,"qwetyui");
-            
-            const photoComment = inputPairs.map(pair =>
-                console.log(pair,"asdfasdfasdf")
-               
-        );
-console.log(photoComment,'photoComment');
+        try {     
+          const photoComment = inputPairs.map((pair) => ({
+            comment: values[pair.commentName],
+            files: values[pair.goalName],
+          }));
 
         // return
             const item = {
@@ -132,8 +125,8 @@ console.log(photoComment,'photoComment');
           
             setLoading(true)
             let res = await api.User.edit(items)
-                console.log(res,"yyyy");
-                router.push(`/admin/member`)
+            
+                // router.push(`/admin/member`)
             }else{
                 // const check={
                 //     userId: value,
@@ -141,13 +134,106 @@ console.log(photoComment,'photoComment');
                 // }
                 setLoading(true)
                 // let res2 = await api.ImageUpload.add(check as any)
-                let res =await api.Auth.signUp(item)
-                // console.log(res2,"qqqq");
+                
+            
+                // let res =await api.Auth.signUp(item);
+                // axios.post('https://frontend.goaideme.com/uploadFile', )
+
+
+                // if (fileLists.length === 0) {
+                //     toast.error('Please select files to upload.');
+                //     return;
+                //   }
+
+              
+              
+                //   const formData:any = new FormData();
+                //   for (let i = 0; i < fileLists.length; i++) {
+                //     formData.append(`files`, fileLists[i]);
+                //   }
+
+
+                // try {
+                //   for (const id in fileLists) {
+                //     const formData = new FormData();
+                //     fileLists[id].forEach((file:any) => {
+                //       formData.append('file', file?.originFileObj);
+                //     });
+                //     formData.append('id', id);
+                //     formData.append('comment', "check comment");
+            
+                //     const response = await axios.post('https://frontend.goaideme.com/uploadFile', formData, {
+                //       headers: {
+                //         'Content-Type': 'multipart/form-data',
+                //       },
+                //     });
+            
+                //     console.log(`Files for ${id} uploaded successfully:`, response.data);
+                //   }
+                // } catch (error) {
+                //   console.error('Error uploading files:', error);
+                // }
+
+                const payload = Object.keys(fileLists).map(id => ({
+                  id,
+                  comment: "cehck comments" || '',
+                  files: fileLists[id].map((file:any) => file.originFileObj),
+                }));
+            
+                try {
+                  for (const item of payload) {
+                    const formData = new FormData();
+                    formData.append('id', item.id);
+                    formData.append('comment', item.comment);
+            
+                    // Append files to FormData
+                    item.files.forEach((file:any) => {
+                      formData.append('files', file);
+                    });
+            
+                    // Send to the backend
+                    const response = await axios.post('https://frontend.goaideme.com/uploadFile', formData, {
+                      headers: {
+                        'Content-Type': 'multipart/form-data',
+                      },
+                    });
+            
+                    console.log(`Files and comment for ID ${item.id} uploaded successfully:`, response.data);
+                  }
+                } catch (error) {
+                  console.error('Error uploading files:', error);
+                }
+
+
+
+              
+              
+                  // try {
+                  //   const response = await axios.post('https://frontend.goaideme.com/uploadFile', formData, {
+                  //     headers: {
+                  //       'Content-Type': 'multipart/form-data',
+                  //       Token: `${accessToken}`,
+                  //     },
+                  //   });
+                    
+                    // if (response?.data?.status == 400) {
+                    //     toast.error("Session Expired Login Again")
+                    //     router.replace("/auth/signin")
+                    //   }
+                  //   toast.success('Files uploaded successfully.');
+                   
+                  // } catch (error) {
+                  //   toast.error('An error occurred while uploading the files.');
+        
+                  // }
+
+
+              
                 toast.success('Add Successsfully', {
                     position: 'top-center',
                     autoClose: 300,
                 });
-                console.log(res,"wwww");
+              
                 
                 // router.push(`/admin/member`)
             }
@@ -159,14 +245,18 @@ console.log(photoComment,'photoComment');
     };
     const [state, setState] = useState<any>("")
     const getDataById = async () => {
-        // console.log(id);
+        
         const item = {
           user_id: value
         }
         try {
           const res = await api.User.getById(item as any);
-          console.log(res, "ressssss");
+         
           setState(res?.data || null);
+          if (res?.data?.status == 400) {
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+          }
           form.setFieldsValue(res?.data)
         } catch (error: any) {
           alert(error.message);
@@ -178,7 +268,7 @@ console.log(photoComment,'photoComment');
         }
       }, [type, value]);
       const onPrevious=()=>{
-        router.back()
+        router.replace(`/admin/member/add/page7?${value}&edit`)
       }
   return (
     <MainLayout>

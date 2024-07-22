@@ -6,6 +6,7 @@ import React, { Fragment, useCallback, useEffect, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
+import { toast } from "react-toastify";
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -120,7 +121,10 @@ const Page4 = () => {
 
               setLoading(true)
               let res =await api.Auth.signUp(items)
-              
+              if (res?.status == 400) {
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+              }
               router.push(`/admin/member/add/page5?${res?.userId}`)
           }
       } catch (error) {
@@ -139,6 +143,10 @@ const Page4 = () => {
       try {
         const res = await api.User.getById(item as any);
         setState(res?.data || null);
+        if (res?.status == 400) {
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+          }
         form.setFieldsValue(res?.data)
       } catch (error: any) {
         alert(error.message);
@@ -150,7 +158,7 @@ const Page4 = () => {
       }
     }, [type, form]);
     const onPrevious=()=>{
-      router.back()
+        router.replace(`/admin/member/add/page3?${value}&edit`)
     }
   return (
     <MainLayout>

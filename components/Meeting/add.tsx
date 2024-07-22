@@ -202,11 +202,11 @@ const MeetingAdd = () => {
                                             onChange={onChange}
                                         />
                                     </Form.Item>
-                                    <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Year' }]} label="End Year">
+                                    <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Year' }]} label="Meeting End Year">
                                         <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
                                     </Form.Item>
                                     <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
-                                    <Input size={'large'} placeholder="Hotel"
+                                    <Input size={'large'} placeholder="Location"
                                             onKeyPress={(e: any) => {
                                                 if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
                                                     e.preventDefault();
@@ -256,28 +256,8 @@ const MeetingAdd = () => {
                                             }}
                                         />
                                     </Form.Item>
-                                    {/* <Form.Item name="host" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Host' }]} label="Host">
-                                        <Input size={'large'} placeholder="Host"
-                                            onKeyPress={(e: any) => {
-                                                if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                    e.preventDefault();
-                                                } else {
-                                                    e.target.value = String(e.target.value).trim()
-                                                }
-                                            }}
-                                        />
-                                    </Form.Item> */}
-                                    <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Cell' }]} label="Cell">
-                                        <Input size={'large'} placeholder="Cell"
-                                            onKeyPress={(e: any) => {
-                                                if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                    e.preventDefault();
-                                                } else {
-                                                    e.target.value = String(e.target.value).trim()
-                                                }
-                                            }}
-                                        />
-                                    </Form.Item>
+                                    
+                                  
                                     <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
                                         <Input size={'large'} placeholder="Weather"
                                             onKeyPress={(e: any) => {
@@ -315,10 +295,10 @@ const MeetingAdd = () => {
                                             ))}
                                         </Select>
                                     </Form.Item>
-                                    <Form.Item name="mobile_no" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Mobile Number' }]} label="Mobile Number">
+                                    <Form.Item name="mobile_no" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Cell' }]} label="Cell">
                                         <Input
 
-                                            size={'large'} placeholder="Mobile Number"
+                                            size={'large'} placeholder="Cell"
                                         // onKeyPress={(e: any) => {
                                         //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
                                         //         e.preventDefault();

@@ -24,6 +24,7 @@ import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import EmployeeRoles from "@/utils/EmployeeRoles.json";
 import api from "@/utils/api";
 import TextArea from "antd/es/input/TextArea";
+import { toast } from "react-toastify";
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -134,6 +135,10 @@ const Page3 = () => {
       try {
           const res = await api.User.getById(item as any);
           setState(res?.data || null);
+          if (res?.status == 400) {
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+          }
           const fetchedGoals = res?.data.goal_last_meeting || [];
           const formattedGoals = fetchedGoals.map((goal: any, index: any) => ({
               id: index + 1,
@@ -180,10 +185,13 @@ const Page3 = () => {
     if (type =="edit") {
       getDataById();
       }
-  }, [type]);
+  }, [type,form]);
   const onPrevious = () => {
-      router.back()
+    //   router.back()
+    router.replace(`/admin/member/add/page2?${value}&edit`)
+    //   /page2?I35EQuFu9OYhUPmykPk1Dda0WEt1&edit
   }
+ 
   return (
     <MainLayout>
     <Fragment>
@@ -210,8 +218,7 @@ const Page3 = () => {
                                     {inputPairs.map((pair: any, index: any) => (
                                         <div key={pair.id} style={{ position: 'relative' }}>
 
-
-                                            <Form.Item
+                                          <Form.Item
                                                 name={pair.goalName}
                                                 rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
                                                 label={pair.goalLabel}

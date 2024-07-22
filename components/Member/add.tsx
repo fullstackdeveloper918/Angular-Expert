@@ -71,6 +71,10 @@ const Add = () => {
 
         let res = await api.Auth.signUp(items)
         router.push(`/admin/member/add/page2?${res?.user_id}`)
+        if (res?.status == 400) {
+          toast.error("Session Expired Login Again")
+          router.replace("/auth/signin")
+        }
       }
       
     } catch (error: any) {
@@ -99,6 +103,10 @@ if(error){
         try {
           const res = await api.User.getById(item as any);
           setState(res?.data || null);
+          if (res?.data?.status == 400) {
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+          }
           form.setFieldsValue(res?.data)
         } catch (error: any) {
           alert(error.message);

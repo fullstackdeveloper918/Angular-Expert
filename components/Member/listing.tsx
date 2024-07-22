@@ -258,6 +258,10 @@ const MemberList = () => {
         try {
             let res = await api.User.listing(query);
             setState1(res?.data || []);
+            if (res?.status == 400) {
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+              }
         } catch (error) {
             console.error(error);
         }

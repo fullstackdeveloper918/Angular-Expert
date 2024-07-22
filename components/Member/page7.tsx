@@ -6,6 +6,7 @@ import React, { Fragment, useCallback, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
+import { toast } from "react-toastify";
 
 const Page7 = () => {
   const router = useRouter()
@@ -112,7 +113,10 @@ const Page7 = () => {
                 setLoading(true)
                 let res =await api.Auth.signUp(items)
                 console.log(res,"qqqq");
-                
+                if (res?.status == 400) {
+                    toast.error("Session Expired Login Again")
+                    router.replace("/auth/signin")
+                  }
                 router.push(`/admin/member/add/page8?${res?.userId}`)
             }
         } catch (error) {
@@ -133,6 +137,10 @@ const Page7 = () => {
           const res = await api.User.getById(item as any);
           console.log(res, "ressssss");
           setState(res?.data || null);
+          if (res?.status == 400) {
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+          }
           form.setFieldsValue(res?.data)
         } catch (error: any) {
           alert(error.message);
@@ -144,7 +152,7 @@ const Page7 = () => {
         }
       }, [type, form]);
       const onPrevious=()=>{
-        router.back()
+        router.replace(`/admin/member/add/page6?${value}&edit`)
       }
   return (
     <MainLayout>
