@@ -115,7 +115,7 @@ if(error){
     <MainLayout>
     <Fragment>
 
-      <section>
+      <section className="club_member">
      
         <Row justify="center" gutter={[20, 20]} className='heightCenter'>
           <Col sm={22} md={20} lg={16} xl={14} xxl={12}>

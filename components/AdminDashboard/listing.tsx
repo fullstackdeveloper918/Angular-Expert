@@ -371,7 +371,7 @@ useEffect(()=>{
           <Row gutter={[20, 20]} className='dashboradTable'>
 
 {getUserdata?.is_admin==true?
-            <Col sm={24} md={24} xl={12}>
+             <Col sm={24} md={24} lg={24}  xxl={12}>
               <Card className='common-card'>
 
                 {/* title  */}
@@ -388,7 +388,7 @@ useEffect(()=>{
                 {/* Tabs  */}
                 <div className='tabs-wrapper'>
 
-                  <Table dataSource={dataSource1} columns={columns1} pagination={false} />
+                  <Table className="tableBox" dataSource={dataSource1} columns={columns1} pagination={false} />
                 </div>
 
                 {/* Pagination  */}
@@ -397,7 +397,7 @@ useEffect(()=>{
             </Col>
             :""}
 {getUserdata?.is_admin==true?
-            <Col sm={24} md={24} xl={12}>
+            <Col sm={24} md={24} lg={24}  xxl={12}>
               <Card className='common-card'>
 
                 {/* title  */}

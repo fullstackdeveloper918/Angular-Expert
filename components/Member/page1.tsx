@@ -125,7 +125,7 @@ const Page1 = () => {
 
                 <section>
                     <Row justify="center" gutter={[20, 20]}>
-                        <Col sm={22} md={24} lg={11} xl={10} xxl={9}>
+                        <Col sm={22} md={24} lg={16} xl={16} xxl={12}>
                             <Card className='common-card'>
                               
                                 <div className='mb-2 d-flex justify-content-between'>

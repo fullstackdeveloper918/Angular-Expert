@@ -211,7 +211,7 @@ const MainLayout = ({ children }: any) => {
                 title="Logout"
                 onConfirm={handleLogout}
                 description="Are you sure to Logout ?"
-                okText="Logout it!"
+                okText="Logout"
                 cancelText="No"
                 okButtonProps={{ type: "primary", danger: true }}
               >

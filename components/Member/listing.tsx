@@ -328,10 +328,10 @@ const MemberList = () => {
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
-                                    <Table dataSource={dataSource} columns={columns} pagination={false} />
+                                    <Table className="tableBox" dataSource={dataSource} columns={columns} pagination={false} />
                                 </div>
                                 {/* Pagination  */}
-                                <Row justify={'center'} className="mt-5" style={{ paddingLeft: "650px" }}>
+                                <Row justify={'center'} className="mt-5">
                                     <Col span={24}>
                                         <Pagination total={15} hideOnSinglePage={true} disabled={loading} />
                                     </Col>
