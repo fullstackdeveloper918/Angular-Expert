@@ -44,11 +44,12 @@ const Page3 = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false)
   const [state, setState] = useState<any>("")
-  const searchParam = useParams()
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
+
   const value = entries.length > 0 ? entries[0][0] : '';
-  const id: any = searchParam.id;
+  const type = entries.length > 1 ? entries[1][0] : '';
+//   const id: any = searchParam.id;
 
 
 
@@ -176,10 +177,10 @@ const Page3 = () => {
       }
   };
   useEffect(() => {
-      // if (id) {
+    if (type =="edit") {
       getDataById();
-      // }
-  }, []);
+      }
+  }, [type]);
   const onPrevious = () => {
       router.back()
   }
@@ -194,7 +195,7 @@ const Page3 = () => {
                         
                         <div className='mb-2 d-flex justify-content-between'>
                             <Typography.Title level={3} className='m-0 fw-bold'>GOALS</Typography.Title>
-                            <Button size={'large'} type="primary" className="text-white" disabled>3/8</Button>
+                            <Button size={'large'} type="primary" className="text-white" disabled>2/7</Button>
                         </div>
 
                         {/* form  */}

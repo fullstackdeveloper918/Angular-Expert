@@ -147,7 +147,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
         ]
       ),
     },
-    hasQUESTIONNAIREPermission||getUserdata?.is_admin==false && {
+    hasQUESTIONNAIREPermission && {
       key: henceofrthEnums.Roles.ORDER,
       view: getItem(
         <Link href="/admin/questionnaire" className="text-decoration-none">

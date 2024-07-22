@@ -149,10 +149,10 @@ const Page6 = () => {
       }
     };
     React.useEffect(() => {
-      // if (id) {
+      if (type =="edit") {
       getDataById();
-      // }
-    }, []);
+      }
+    }, [type, form]);
     const onPrevious=()=>{
       router.back()
     }
@@ -178,7 +178,7 @@ const Page6 = () => {
                                 {/* Title  */}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>SPRING 2024 MEETING REVIEW</Typography.Title>
-                                    <Button size={'large'} type="primary" className="text-white" disabled>6/8</Button>
+                                    <Button size={'large'} type="primary" className="text-white" disabled>5/7</Button>
                                 </div>
 
                                 {/* form  */}

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import api from "@/utils/api";
+import { toast, ToastContainer } from "react-toastify";
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -69,33 +70,43 @@ const Add = () => {
       } else {
 
         let res = await api.Auth.signUp(items)
-
         router.push(`/admin/member/add/page2?${res?.user_id}`)
       }
-
+      
     } catch (error: any) {
+      console.log(error,"qwertyui");
+      
+if(error){
+  console.log(error?.status,"uuu");
+  if(error?.status === 409){
+    toast.error("The email address is already in use by another account.");
+  }
+}
+  
+
     } finally {
       setLoading(false)
     }
   };
 
-  const getDataById = async () => {
-    const item = {
-      user_id: value
-    }
-    try {
-      const res = await api.User.getById(item as any);
-      setState(res?.data || null);
-      form.setFieldsValue(res?.data)
-    } catch (error: any) {
-      alert(error.message);
-    }
-  };
+  
   useEffect(() => {
-    // if (id) {
-    getDataById();
-    // }
-  }, []);
+    if (type =="edit") {
+      const getDataById = async () => {
+        const item = {
+          user_id: value
+        }
+        try {
+          const res = await api.User.getById(item as any);
+          setState(res?.data || null);
+          form.setFieldsValue(res?.data)
+        } catch (error: any) {
+          alert(error.message);
+        }
+      };
+      getDataById();
+    }
+  }, [type,form]);
   // form.setFieldsValue(res);
   const submit = () => {
     router.push("/admin/member/add/page2")
@@ -105,6 +116,7 @@ const Add = () => {
     <Fragment>
 
       <section>
+     
         <Row justify="center" gutter={[20, 20]} className='heightCenter'>
           <Col sm={22} md={20} lg={16} xl={14} xxl={12}>
             <Card className='common-card'>
@@ -119,7 +131,7 @@ const Add = () => {
               <div className='d-flex justify-content-between'>
 
                 <Typography.Title level={3} className='m-0 fw-bold'>Add Club Member</Typography.Title>
-                <Button size={'large'} type="primary" className="text-white" disabled>1/8</Button>
+                {/* <Button size={'large'} type="primary" className="text-white" disabled>1/8</Button> */}
               </div>
 
               {/* form  */}
@@ -164,7 +176,7 @@ const Add = () => {
                     </Form.Item>
 
                     <Form.Item name="phone_number" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
-                      <Input size={'large'} type="text" minLength={10} maxLength={10} placeholder="Phone No" />
+                      <Input size={'large'} type="text" minLength={6} maxLength={20} placeholder="Phone No" />
                     </Form.Item>
                     <Form.Item name="position" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Position' }]} label="Position">
                       <Input size={'large'} type='position' placeholder="Position" />

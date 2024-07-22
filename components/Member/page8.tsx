@@ -101,19 +101,16 @@ const Page8 = () => {
 
     const submit = async (values: any) => {
         setLoading(true);
+        console.log(values?.goal1,"dfghjlsjd");
+        
         try {
             console.log(inputPairs,"qwetyui");
             
             const photoComment = inputPairs.map(pair =>
-                // console.log(pair.goalName,"asdfasdfasdf")
-                 ({
-                // goal: values[pair.goalName],
-                
-                comment: values[pair.commentName],
-                files: values[pair.goalName],
-                // files: uploadedUrls[pair.id.toString()] || [],
-            })
+                console.log(pair,"asdfasdfasdf")
+               
         );
+console.log(photoComment,'photoComment');
 
         // return
             const item = {
@@ -152,7 +149,7 @@ const Page8 = () => {
                 });
                 console.log(res,"wwww");
                 
-                router.push(`/admin/member`)
+                // router.push(`/admin/member`)
             }
         } catch (error) {
             console.error(error);
@@ -176,27 +173,17 @@ const Page8 = () => {
         }
       };
       React.useEffect(() => {
-        // if (id) {
+        if (type =="edit") {
         getDataById();
-        // }
-      }, []);
+        }
+      }, [type, value]);
       const onPrevious=()=>{
         router.back()
       }
   return (
     <MainLayout>
     <Fragment>
-    <ToastContainer
-                    position="top-center"
-                    autoClose={300}
-                    hideProgressBar
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                />
+   
         <section>
             <DynamicRow justify="center" gutter={[20, 20]}>
                 <DynamicCol sm={22} md={24} lg={11} xl={10} xxl={9}>
@@ -204,7 +191,7 @@ const Page8 = () => {
                         {/* Title  */}
                         <div className='mb-2 d-flex justify-content-between'>
                             <Title level={3} className='m-0 fw-bold'>PHOTO SECTION</Title>
-                            <Button size={'large'} type="primary" className="text-white" disabled>8/8</Button>
+                            <Button size={'large'} type="primary" className="text-white" disabled>7/7</Button>
                         </div>
 
                         {/* form  */}

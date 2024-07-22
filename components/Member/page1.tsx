@@ -50,6 +50,8 @@ const Page1 = () => {
 
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 1 ? entries[1][0] : '';
+  console.log(type,"value");
+  
   const onFinish = async (values: any) => {
       let items = {
          bussiness_update:{
@@ -107,10 +109,12 @@ const Page1 = () => {
       }
     };
     useEffect(() => {
+        if (type =="edit") {
+
+         getDataById();
+        }
      
-      getDataById();
-     
-    }, []);
+    }, [type]);
   
   const onPrevious=()=>{
       router.replace(`/admin/member/add?${value}&edit`)
@@ -126,7 +130,7 @@ const Page1 = () => {
                               
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>BUSINESS UPDATE</Typography.Title>
-                                    <Button size={'large'} type="primary" className="text-white" disabled>2/8</Button>
+                                    <Button size={'large'} type="primary" className="text-white" disabled>1/7</Button>
                                 </div>
 
                                 {/* form  */}

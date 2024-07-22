@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
+import { getAuth, signOut } from "firebase/auth";
 const { Button, Dropdown, Tooltip } = {
   Dropdown: dynamic(() => import("antd").then((module) => module.Dropdown), {
     ssr: false,
@@ -96,9 +97,14 @@ const MainLayout = ({ children }: any) => {
   }, []);
 
   const handleLogout = async () => {
-    if (accessToken) {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      // Sign-out successful.
+    }).catch((error:any) => {
+      // An error happened.
+    });
+    // if (accessToken) {
       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-
       toast.success("Logout Successful", {
         position: "top-center",
         autoClose: 300,
@@ -106,7 +112,7 @@ const MainLayout = ({ children }: any) => {
           router.push("/auth/signin");
         },
       });
-    }
+    // }
     dispatch(clearUserData({}));
   };
 
