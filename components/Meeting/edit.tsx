@@ -1,5 +1,5 @@
 "use client";
-import { Breadcrumb, Form, Select, Input, Typography, DatePicker } from "antd";
+import { Breadcrumb, Form, Select, Input, Typography, DatePicker, TimePickerProps, TimePicker } from "antd";
 import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useState } from "react";
@@ -51,7 +51,9 @@ const MeetingEdit = () => {
   const handleChange = (value: any) => {
     setMeetingType(value);
   };
-
+  const onChange1: TimePickerProps['onChange'] = (time, timeString) => {
+    console.log(time, timeString);
+  };
   const onChange = (date: any, dateString: any) => {
     setState((prevState: any) => ({
       ...prevState,
@@ -86,7 +88,7 @@ const MeetingEdit = () => {
   };
   const onFinish = async (values: any) => {
     let items = {
-      meeting_name: values?.meeting_name,
+      meeting_name: "meeting_name",
       meeting_id: id,
       meeting_type: values?.meeting_type,
       start_time: dayjs(values?.start_time).utc().valueOf(),
@@ -150,7 +152,7 @@ const MeetingEdit = () => {
               <Card className='common-card'>
                 <div className='mb-4'>
                   <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
+                    <Breadcrumb.Item><Link href="/admin/dashboard" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                     <Breadcrumb.Item><Link href="/admin/meetings" className='text-decoration-none'>Meetings</Link></Breadcrumb.Item>
                     <Breadcrumb.Item className='text-decoration-none'>Edit Meeting</Breadcrumb.Item>
                   </Breadcrumb>
@@ -167,7 +169,7 @@ const MeetingEdit = () => {
                     <div className='row mt-4 selectPaddingBox'>
 
                       {/* First Name  */}
-                      <Form.Item name="meeting_name" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Meeting Agenda' }]} label="Meeting Agenda">
+                      {/* <Form.Item name="meeting_name" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Meeting Agenda' }]} label="Meeting Agenda">
                         <Input size={'large'} placeholder="Meeting Agenda"
                           onKeyPress={(e: any) => {
                             if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -177,7 +179,7 @@ const MeetingEdit = () => {
                             }
                           }}
                         />
-                      </Form.Item>
+                      </Form.Item> */}
                       <Form.Item name="meeting_type" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Type' }]} label="Meeting Type">
                         <Select
                           size={'large'}
@@ -191,31 +193,22 @@ const MeetingEdit = () => {
                       </Form.Item>
                       {/* Last Name  */}
 
-
+                      <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Time' }]} label="Meeting Time">
+                        <TimePicker onChange={onChange1} disabledTime={disabledTime} style={{ width: '100%' }} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} />
+                      </Form.Item>
                       {/* Email  */}
-                      <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Start Meeting' }]} label="Start Meeting">
+                      <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting date' }]} label="Meeting date">
                         <DatePicker
                           style={{ width: '100%' }}
                           // defaultValue={defaultValue}
-                          showTime
+                          // showTime
+                          disabledDate={disabledDate}
+                          // disabledTime={disabledTime}
                           // locale={buddhistLocale}
                           onChange={onChange}
-                          // value={state.start_time ? dayjs(state.start_time) : null}
-                          disabledDate={disabledDate}
-                          disabledTime={disabledTime}
                         />
                       </Form.Item>
-                      <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter End Meeting' }]} label="End Meeting">
-                        <DatePicker
-                          // defaultValue={defaultValue}
-                          style={{ width: '100%' }}
-                          showTime
-                          // locale={buddhistLocale}
-                          onChange={onChange}
-                          disabledDate={disabledDate}
-                          disabledTime={disabledTime}
-                        />
-                      </Form.Item>
+
                       <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Year' }]} label="End Year">
                         <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
                       </Form.Item>
@@ -274,16 +267,20 @@ const MeetingEdit = () => {
                                           }}
                                       />
                                   </Form.Item> */}
-                      <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Cell' }]} label="Cell">
-                        <Input size={'large'} placeholder="Cell"
-                          onKeyPress={(e: any) => {
-                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                              e.preventDefault();
-                            } else {
-                              e.target.value = String(e.target.value).trim()
+                      <Form.Item name="phone" className='col-lg-6 col-sm-12' rules={[
+
+                        { pattern: /^[0-9]*$/, message: 'Only numbers are allowed' }
+                      ]} label="Cell">
+                        <Input
+                          size={'large'} placeholder="Cell"
+                          // type="number"
+                          onKeyPress={(event) => {
+                            if (!/[0-9]/.test(event.key)) {
+                              event.preventDefault();
                             }
                           }}
                         />
+
                       </Form.Item>
                       <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
                         <Input size={'large'} placeholder="Weather"
@@ -323,36 +320,18 @@ const MeetingEdit = () => {
                                       </Select> */}
                         <Input size={'large'} placeholder="Host" />
                       </Form.Item>
-                      <Form.Item name="phone" className='col-lg-6 col-sm-12' label="Mobile Number">
+                      {/* <Form.Item name="phone" className='col-lg-6 col-sm-12' label="Mobile Number">
                         <Input size={'large'} placeholder="Mobile Number" />
-                      </Form.Item>
-                      <Form.Item name="comments" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Comment' }]} label="Comment">
-                        <Input.TextArea size={'large'} placeholder="Comment"
-                          onKeyPress={(e: any) => {
-                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                              e.preventDefault();
-                            } else {
-                              e.target.value = String(e.target.value).trim()
-                            }
-                          }}
-                        />
-                      </Form.Item>
-                      <Form.Item name="notes" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Note' }]} label="Note">
-                        <Input.TextArea size={'large'} placeholder="Note"
-                          onKeyPress={(e: any) => {
-                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                              e.preventDefault();
-                            } else {
-                              e.target.value = String(e.target.value).trim()
-                            }
-                          }}
-                        />
-                      </Form.Item>
+                      </Form.Item> */}
+
                     </div>
                     {/* Button  */}
-                    <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
-                      Edit Meeting
-                    </Button>
+                    <div className="text-center mt-3">
+
+                      <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-50" loading={loading}>
+                        Update
+                      </Button>
+                    </div>
                   </Form>
                 </div>
               </Card>

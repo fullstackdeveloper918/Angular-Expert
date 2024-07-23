@@ -25,6 +25,7 @@ import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
 import saveAs from "file-saver";
 import axios from "axios";
+import { useSelector } from "react-redux";
 // const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -57,6 +58,8 @@ type Page<P = {}> = NextPage<P> & {
 const MemberList = () => {
     const router = useRouter()
     //   const { userInfo, downloadCSV, Toast, uploadCSV } = React.useContext(GlobalContext)
+    const getUserdata=useSelector((state:any)=>state?.user?.userData)
+    const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
     const [show, setShow] = useState(true);
     const [state, setState] = React.useState<any>({
         id: "",
@@ -244,11 +247,11 @@ const MemberList = () => {
             dataIndex: 'city',
             key: 'city',
         },
-        {
+        ...(hasClubMemberPermission ? [{
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
-        },
+          }] : [])
     ];
 
 
@@ -306,19 +309,19 @@ const MemberList = () => {
                             <Card className='common-card'>
                                 <div className='mb-4'>
                                     <Breadcrumb separator=">">
-                                        <Breadcrumb.Item><Link className='text-decoration-none' href="/">General</Link></Breadcrumb.Item>
+                                        <Breadcrumb.Item><Link className='text-decoration-none' href="/admin/dashboard">General</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item className='text-decoration-none'>Club Members</Breadcrumb.Item>
                                     </Breadcrumb>
                                 </div>
                                 {/* title  */}
                                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>Club Members</Typography.Title>
-                                    
+                                    {hasClubMemberPermission?
                                     <div className='d-flex gap-2'>
                                         {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
                                         <Button type="primary" htmlType="button" size='large' className='primaryBtn' icon={<PlusOutlined />} onClick={addUser}>Add New Club Member</Button>
                                         {/* </Upload> */}
-                                    </div>
+                                    </div>:""}
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 '>

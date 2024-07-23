@@ -133,6 +133,44 @@ const Page4 = () => {
           setLoading(false)
       }
   }
+  const onFinish1 = async(values:any) => {
+      let items={
+          craftsmen_toolbox:{
+              userId:value,
+              technology:values?.technology,
+              products :values?.products,
+              project:values?.project
+          }
+      }
+      try {
+          if (type == "edit") {
+              let items = {
+                  craftsmen_toolbox:{
+                      userId:value,
+                      technology:values?.technology,
+                      products :values?.products,
+                      project:values?.project
+                  }
+          } as any
+          setLoading(true)
+          let res = await api.User.edit(items)
+            //   router.push(`/admin/member/add/page5?${value}&edit`)
+          }else{
+
+              setLoading(true)
+              let res =await api.Auth.signUp(items)
+              if (res?.status == 400) {
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+              }
+            //   router.push(`/admin/member/add/page5?${res?.userId}`)
+          }
+      } catch (error) {
+          
+      }finally{
+          setLoading(false)
+      }
+  }
 
   
   const getDataById = async () => {
@@ -226,14 +264,22 @@ const Page4 = () => {
 
 
                                 {/* Button  */}
-                                <div className="d-flex gap-3 justify-content-center">
-                                <Button size={'large'} type="primary" className="login-form-button "  onClick={onPrevious}>
-                                    Previous
-                                </Button>
-                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                Save & Next
-                                </Button>
-                                </div>
+                                <div className="d-flex mt-3">
+                                            <div className="col-2">
+
+                                        <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
+                                            Save
+                                        </Button>
+                                            </div>
+                                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                                        <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
+                                            Previous
+                                        </Button>
+                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                        Next
+                                        </Button>
+                                        </div>
+                                        </div>
                             </Form>
                         </div>
                     </Card>

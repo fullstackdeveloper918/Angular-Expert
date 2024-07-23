@@ -110,10 +110,19 @@ const MeetingView = () => {
     let items = {
       to: state?.email,
       link: `http://localhost:3000/auth/update_password?${state.email}`
+      
     };
     try {
       setLoading(true)
-      let res = await axios.post("https://frontend.goaideme.com/reset-password", items)
+      let res = await axios.post("https://frontend.goaideme.com/reset-password", 
+        items, // items is the body of the request
+        {
+          headers: {
+            Token: `${accessToken}`,
+            // 'Content-Type': 'application/json', // Uncomment if needed, axios sets this automatically for JSON
+          }
+        }
+      );
       getDataById()
     } catch (error) {
 
@@ -210,7 +219,7 @@ const sharePdf = async () => {
               <Card className='common-card'>
                 <div className='mb-4'>
                   <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
+                    <Breadcrumb.Item><Link href="/admin/dashboard" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                     <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>Club Member</Link></Breadcrumb.Item>
                     <Breadcrumb.Item className='text-decoration-none'>Club Member Details</Breadcrumb.Item>
                   </Breadcrumb>
@@ -281,6 +290,7 @@ const sharePdf = async () => {
                         Edit
                       </Button>
                     </Link>}
+                    {!getUserdata?.is_admin==false?
                     <Popconfirm
                       title={`${state?.is_activate ? 'Activate' : 'Deactivate'} the club member`}
                       // onConfirm={activeDeactive(id)}
@@ -291,7 +301,7 @@ const sharePdf = async () => {
                       okButtonProps={{ type: 'primary', danger: true }}
                     >
                       <Button size='large' type="primary" htmlType='button' className='flex-grow-1 activateBtn' ghost>   {state?.is_activate ? 'Deactivate' : 'Activate'}</Button>
-                    </Popconfirm>
+                    </Popconfirm>:""}
                     {/* <Popconfirm
                       title="Reset password the club member"
                       // onConfirm={deleteStaffById}archive
@@ -303,6 +313,7 @@ const sharePdf = async () => {
                     > */}
                     <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 primaryBtn' loading={loading} onClick={onFinish}>Reset Password</Button>
                     {/* </Popconfirm> */}
+                    {!getUserdata?.is_admin==false?
                     <Popconfirm
                       title="Archive the club member"
                       // onConfirm={deleteStaffById}
@@ -313,7 +324,7 @@ const sharePdf = async () => {
                       okButtonProps={{ type: 'primary', danger: true }}
                     >
                       <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 archiveBtn' danger>Archive</Button>
-                    </Popconfirm>
+                    </Popconfirm>:""}
                   </div>
                 </div>
               </Card>

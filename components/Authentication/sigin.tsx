@@ -153,7 +153,7 @@ const Sigin = () => {
 
   return (
     <section className='auth-pages d-flex align-items-center h-100'>
-             <ToastContainer
+             {/* <ToastContainer
                     position="top-center"
                     autoClose={3000}
                     hideProgressBar
@@ -163,7 +163,7 @@ const Sigin = () => {
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover
-                />
+                /> */}
             <div className="container">
                 {/* <div>
                     <h1>Login</h1>

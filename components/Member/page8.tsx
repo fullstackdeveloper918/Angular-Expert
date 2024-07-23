@@ -136,7 +136,7 @@ const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
                 // let res2 = await api.ImageUpload.add(check as any)
                 
             
-                // let res =await api.Auth.signUp(item);
+                let res =await api.Auth.signUp(item);
                 // axios.post('https://frontend.goaideme.com/uploadFile', )
 
 

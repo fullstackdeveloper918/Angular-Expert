@@ -78,7 +78,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
   const hasDashboardPermission =
     (getUserdata?.permission?.length &&getUserdata.permission.includes("DASHBOARD")) ||getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
   const hasMeetingPermission =(getUserdata?.permission?.length &&getUserdata.permission.includes("Meeting")) ||getUserdata?.email === "nahbcraftsmen@gmail.com";
-  const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) ||getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) ||getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
   const hasQUESTIONNAIREPermission =(getUserdata?.permission?.length &&getUserdata.permission.includes("QUESTIONNAIRE")) || getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
 
   const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
@@ -100,7 +100,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
         <DashboardOutlined style={iconSize} />
       ),
     },
-    hasClubMemberPermission||getUserdata?.is_admin==false && {
+    hasClubMemberPermission && {
       key: henceofrthEnums.Roles.USERS,
       view: getItem(
         <Link href="/admin/member" className="text-decoration-none">

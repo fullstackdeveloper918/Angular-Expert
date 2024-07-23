@@ -1,11 +1,17 @@
 "use client";
 import React, { Fragment, useEffect, useState } from "react";
-import { Input, Breadcrumb, Typography, Table, Card, Col, Row } from "antd";
+import { Input, Breadcrumb, Typography, Table, Card, Col, Row, Tooltip, Button, Collapse, theme, Popconfirm } from "antd";
 import MainLayout from "../../components/Layout/layout";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import QuestionFilter from "@/components/common/QuestionFilter";
 import api from "@/utils/api";
+import QuestionanirModal from "../common/QuestionnairModal";
+import { DownloadOutlined, PlusOutlined } from "@ant-design/icons";
+import { pdf } from "@react-pdf/renderer";
+import saveAs from "file-saver";
+ import QuestionnairPdf from "../common/QuestionnairPdf"
+import { useSelector } from "react-redux";
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -20,13 +26,29 @@ import api from "@/utils/api";
 //     ssr: false,
 //   }),
 // };
+const { Panel } = Collapse;
 const { Search } = Input;
 let timer: any;
 const QuestionnairList = () => {
+    const getUserdata=useSelector((state:any)=>state?.user?.userData)
   const [questionType, setQuestionType] = useState<any>(null);
-
-
+  const { token } = theme.useToken();
+//   getUserdata?.user_id
 const [state,setState]=useState<any>([])
+const [state1,setState1]=useState<any>("")
+
+
+// const getDataById = async () => {
+//     const item = {
+//       user_id: ""
+//     }
+//     try {
+//       const res = await api.User.getById(item as any);
+//       setState1(res?.data || null);
+//     } catch (error: any) {
+//       alert(error.message);
+//     }
+//   };
     const dataSource2 = [
         {
             key: '1',
@@ -71,7 +93,28 @@ const [state,setState]=useState<any>([])
             question:
             <p >
             <span>{res?.question}:</span>
-        </p>,     
+        </p>, 
+         action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+         {/* <li>
+            <QuestionanirModal {...res} type={"edit"} />
+         </li> */}
+         <li>
+                  <Link href={`/admin/questionnaire/${res?.id}`} >
+                      <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                  </Link>
+              </li>
+         {/* <li>
+             <Popconfirm
+                 title="Delete"
+                 description="Are you sure you want to delete ?"
+                 onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
+             // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+             >
+                 <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+             </Popconfirm>
+         </li> */}
+     </ul>
+            
         }})
     const columns = [
         {
@@ -84,7 +127,11 @@ const [state,setState]=useState<any>([])
             dataIndex: 'question',
             key: 'question',
         },
-
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            key: 'action',
+        },
        
     ];
    
@@ -111,6 +158,32 @@ const handleChange = (value:any) => {
     setQuestionType(value);
 };
 console.log(questionType,"tyrytryy");
+const generatePdf = async () => {
+    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+    const blob = await pdf(<QuestionnairPdf state={state} />).toBlob();
+    const pdfUrl = URL.createObjectURL(blob);
+    return { blob, pdfUrl, timestamp };
+};
+
+// Function to handle PDF download
+const downLoadPdf = async () => {
+    const { blob, timestamp } = await generatePdf();
+    saveAs(blob, `Order_${timestamp}.pdf`);
+};
+const panelStyle = {
+    marginBottom: 24,
+    background: token.colorFillAlter,
+    borderRadius: token.borderRadiusLG,
+    border: '1px solid #e6e6e6',
+};
+const genExtra = (res: any) => (<ul className='list-unstyled mb-0 gap-3 d-flex'>
+    <li>
+        <Link href={`/admin/questionnaire/${res?.id}`} >
+            <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+        </Link>
+    </li>
+   
+</ul>)
   return (
     <MainLayout>
     <Fragment>
@@ -119,8 +192,47 @@ console.log(questionType,"tyrytryy");
 <meta name="description" content="FAQs" />
 </Head> */}
         <section>
+        <Row gutter={[20, 20]}>
+                    <Col span={24}>
+                        <Card className='common-card'>
+                            <div className='mb-4'>
+                                <Breadcrumb separator=">">
+                                    <Breadcrumb.Item>Home</Breadcrumb.Item>
+                                    <Breadcrumb.Item className='text-decoration-none'>Questionnair</Breadcrumb.Item>
+                                </Breadcrumb>
+                            </div>
+                            {/* Title  */}
+                            <div className='d-flex justify-content-between align-items-center'>
+                                <Typography.Title level={3} className='m-0 fw-bold'>Questionnair</Typography.Title>
+                            </div>
+                            {/* Search  */}
+                            <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
+                                <Search size="large" placeholder="Search..."     enterButton />
+                                {/* <Link href="/faq/add"><Button type="primary" htmlType="button" icon={<PlusOutlined />} size={'large'}>Add FAQ</Button></Link> */}
+                            </div>
+                            {/* Accordion  */}
+                            <div className='accordion-wrapper'>
+                                <Collapse
+                                    bordered={false}
+                                    accordion
+                                    defaultActiveKey={['1']}
+                                >
+                                    {
+                                        state?.map((res: any, index: number) => {
+                                            return < Panel header={res.question} key={res._id} style={panelStyle} extra={genExtra(res)} >
+                                                {/* <span dangerouslySetInnerHTML={{ __html: res?.answer }}></span> */}
+                                                {/* <Typography.Paragraph className="m-0">{res.ans}</Typography.Paragraph> */}
+                                            </Panel>
+                                        })
+                                    }
 
-            <Row gutter={[20, 20]}>
+                                </Collapse>
+                            </div>
+                            {/* <Pagination current={Number(router.query.pagination) || 1} pageSize={Number(router.query.limit) || 10} total={state.count} hideOnSinglePage={true} disabled={loading} onChange={handlePagination} /> */}
+                        </Card>
+                    </Col>
+                </Row>
+            {/* <Row gutter={[20, 20]}>
                 <Col span={24}>
                     <Card className='common-card'>
                         <div className='mb-4'>
@@ -134,18 +246,21 @@ console.log(questionType,"tyrytryy");
                         </div>
                         <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
                             <Search size="large" placeholder="Search..."  enterButton />
-                                <QuestionFilter questionType={questionType} handleChange={handleChange}/>
-                            {/* <CustomModal type={"Add"}/> */}
+                                <Tooltip title="Download Pdf">
+                      <Button className='ViewMore ' onClick={downLoadPdf}><DownloadOutlined /></Button>
+                    </Tooltip>
                         </div>
-                        {/* Accordion  */}
-                        
                         <div className='accordion-wrapper'>
                             <Table dataSource={dataSource} columns={columns} pagination={false} />
                         </div>
-                        {/* <Pagination current={Number(router.query.pagination) || 1} pageSize={Number(router.query.limit) || 10} total={state.count} hideOnSinglePage={true} disabled={loading} onChange={handlePagination} /> */}
                     </Card>
                 </Col>
-            </Row>
+            </Row> */}
+                            {/* <CustomModal type={"Add"}/> */}
+                        {/* Accordion  */}
+                        
+                                {/* <QuestionFilter questionType={questionType} handleChange={handleChange}/> */}
+                        {/* <Pagination current={Number(router.query.pagination) || 1} pageSize={Number(router.query.limit) || 10} total={state.count} hideOnSinglePage={true} disabled={loading} onChange={handlePagination} /> */}
 
 
         </section>

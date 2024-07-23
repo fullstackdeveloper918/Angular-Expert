@@ -137,6 +137,47 @@ const Page6 = () => {
           setLoading(false)
       }
   }
+  const onFinish1 = async(values:any) => {
+      let items={
+          fall_meeting_review:{
+              userId:value,
+              fall_meeting:values?.fall_meeting,
+              personal_finances:values?.personal_finances,
+          }
+      }
+      try {
+          if (type == "edit") {
+              let items = {
+                  fall_meeting_review:{
+                      userId:value,
+                      fall_meeting:values?.fall_meeting,
+                      personal_finances:values?.personal_finances,
+                  }
+          } as any
+          setLoading(true)
+          let res = await api.User.edit(items)
+              console.log(res,"yyyy");
+              toast.success("Edit Successfully")
+            //   router.push(`/admin/member/add/page7?${value}&edit`)
+          }else{
+
+              setLoading(true)
+              let res =await api.Auth.signUp(items)
+              console.log(res,"qqqq");
+              toast.success("Save Successfully")
+              if (res?.status == 400) {
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+              }
+            //   router.push(`/admin/member/add/page7?${res?.userId}`)
+          }
+      } catch (error) {
+          console.log(error);
+          
+      }finally{
+          setLoading(false)
+      }
+  }
   const [state, setState] = useState<any>("")
   const getDataById = async () => {
       // console.log(id);
@@ -210,13 +251,21 @@ const Page6 = () => {
 
 
                                         {/* Button  */}
-                                        <div className="d-flex gap-3 justify-content-center">
-                                        <Button size={'large'} type="primary" className="login-form-button " onClick={onPrevious}>
+                                        <div className="d-flex mt-3">
+                                            <div className="col-2">
+
+                                        <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
+                                            Save
+                                        </Button>
+                                            </div>
+                                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                                        <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
                                             Previous
                                         </Button>
                                         <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                        Save & Next
+                                        Next
                                         </Button>
+                                        </div>
                                         </div>
                                     </Form>
                                 </div>

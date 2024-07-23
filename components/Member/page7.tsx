@@ -126,6 +126,49 @@ const Page7 = () => {
             setLoading(false)
         }
     }
+    const onFinish1 = async (values: any) => {
+        let items = {
+            spring_meeting: {
+                userId: value,
+                estimating: values?.estimating,
+                accountability: values?.accountability,
+                productivity: values?.productivity,
+            }
+        }
+        try {
+            if (type == "edit") {
+                let items = {
+                    spring_meeting: {
+                        userId: value,
+                        estimating: values?.estimating,
+                        accountability: values?.accountability,
+                        productivity: values?.productivity,
+                    }
+                } as any
+                setLoading(true)
+                let res = await api.User.edit(items)
+                console.log(res, "yyyy");
+                toast.success("Save successfully")
+                // router.push(`/admin/member/add/page8?${value}&edit`)
+            } else {
+
+                setLoading(true)
+                let res = await api.Auth.signUp(items)
+                console.log(res, "qqqq");
+                toast.success("Save Successfully")
+                if (res?.status == 400) {
+                    toast.error("Session Expired Login Again")
+                    router.replace("/auth/signin")
+                }
+                // router.push(`/admin/member/add/page8?${res?.userId}`)
+            }
+        } catch (error) {
+            console.log(error);
+
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const [state, setState] = useState<any>("")
     const getDataById = async () => {
@@ -211,13 +254,21 @@ What CRM systems do you use?"
 
 
                                         {/* Button  */}
-                                        <div className="d-flex gap-3 justify-content-center">
-                                            <Button size={'large'} type="primary" className="login-form-button " onClick={onPrevious}>
-                                                Previous
-                                            </Button>
-                                            <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
-                                                Save & Next
-                                            </Button>
+                                        <div className="d-flex mt-3">
+                                            <div className="col-2">
+
+                                        <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
+                                            Save
+                                        </Button>
+                                            </div>
+                                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                                        <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
+                                            Previous
+                                        </Button>
+                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                        Next
+                                        </Button>
+                                        </div>
                                         </div>
                                     </Form>
                                 </div>

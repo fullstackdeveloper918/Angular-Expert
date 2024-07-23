@@ -146,7 +146,7 @@ let item={
               <Card className='common-card'>
                 <div className='mb-4'>
                   <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
+                    <Breadcrumb.Item><Link href="/admin/dashboard" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                     <Breadcrumb.Item><Link href="/staff/page/1" className='text-decoration-none'>Admin</Link></Breadcrumb.Item>
                     {/* <Breadcrumb.Item><Link href={`/staff/${router.query._id}/view`} className='text-decoration-none text-capitalize'>{state?.firstname ? `${state?.firstname} ${state?.lastname}` : 'N/A'}</Link></Breadcrumb.Item> */}
                     <Breadcrumb.Item className='text-decoration-none'>Edit</Breadcrumb.Item>

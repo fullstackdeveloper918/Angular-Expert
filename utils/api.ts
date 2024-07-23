@@ -85,6 +85,8 @@ const User = {
     requests.post('update-user', info),
   listing: (q?: string) =>
     requests.get(`list${q ? `?${q}` : ""}`),
+  user_listing: (q?: string) =>
+    requests.get(`single-user-form-status`),
   export: (start_date?: number, end_date?: number) =>
     requests.get(`user?start_date=${start_date}&end_date=${end_date}`),
   getById: (info: any) =>
@@ -119,6 +121,12 @@ const Meeting={
   delete: (info: any) =>
     requests.post(`delete-meeting`, info),
 
+}
+const Questionnair={
+  add:(info:any)=>
+    requests.post("add-answer",info),
+  getById: (info: any) =>
+    requests.post(`answer-detail`,info),
 }
 const Manage_Question={
   create: (info: any) =>
@@ -289,6 +297,7 @@ const henceforthApi = {
   FILES,
   Meeting,
   Admin,
+  Questionnair,
   Manage_Question,
   Faq,
   Graph,

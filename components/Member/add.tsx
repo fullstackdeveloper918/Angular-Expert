@@ -22,7 +22,7 @@ import { toast, ToastContainer } from "react-toastify";
 // };
 const { Option } = Select;
 const Add = () => {
- 
+
   const router = useRouter()
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false)
@@ -34,7 +34,7 @@ const Add = () => {
   const type = entries.length > 0 ? entries[1][0] : '';
   const handleChange = (value: any) => {
     setCompanyType(value);
-};
+  };
   const onFinish = async (values: any) => {
     // country_code: values.country_code ?? "+93",
     let items = {
@@ -79,26 +79,86 @@ const Add = () => {
           router.replace("/auth/signin")
         }
       }
-      
+
     } catch (error: any) {
-      console.log(error,"qwertyui");
-      
-if(error){
-  console.log(error?.status,"uuu");
-  if(error?.status === 409){
-    toast.error("The email address is already in use by another account.");
-  }
-}
-  
+      console.log(error, "qwertyui");
+
+      if (error) {
+        console.log(error?.status, "uuu");
+        if (error?.status === 409) {
+          toast.error("The email address is already in use by another account.");
+        }
+      }
+
+
+    } finally {
+      setLoading(false)
+    }
+  };
+  const onPrevious = async (values: any) => {
+    // country_code: values.country_code ?? "+93",
+    let items = {
+      first_step: {
+        firstname: String(values.firstname).trim(),
+        lastname: String(values.lastname).trim(),
+        email: String(values.email).trim(),
+        password: String(values.password).trim(),
+        mobile: values.phone_number,
+        roles: values.roles,
+        company_name: values?.company_name,
+        position: values?.position,
+        home_city: values?.home_city,
+      }
+    } as any
+
+    try {
+      setLoading(true)
+      if (type == "edit") {
+        let items = {
+          first_step: {
+            userId: value,
+            firstname: String(values.firstname).trim(),
+            lastname: String(values.lastname).trim(),
+            email: String(values.email).trim(),
+            password: String(values.password).trim(),
+            mobile: values.phone_number,
+            roles: "",
+            company_name: values?.company_name,
+            position: values?.position,
+            home_city: values?.home_city,
+          }
+        } as any
+        let res = await api.User.edit(items)
+        // router.push(`/admin/member/add/page2?${value}&edit`)
+      } else {
+
+        let res = await api.Auth.signUp(items)
+        // router.push(`/admin/member/add/page2?${res?.user_id}`)
+        if (res?.status == 400) {
+          toast.error("Session Expired Login Again")
+          router.replace("/auth/signin")
+        }
+      }
+
+    } catch (error: any) {
+      console.log(error, "qwertyui");
+
+      if (error) {
+        console.log(error?.status, "uuu");
+        if (error?.status === 409) {
+          toast.error("The email address is already in use by another account.");
+        }
+      }
+
 
     } finally {
       setLoading(false)
     }
   };
 
-  
+
   useEffect(() => {
-    if (type =="edit") {
+    if (type == "edit") {
       const getDataById = async () => {
         const item = {
           user_id: value
@@ -117,42 +177,42 @@ if(error){
       };
       getDataById();
     }
-  }, [type,form]);
+  }, [type, form]);
   // form.setFieldsValue(res);
   const submit = () => {
     router.push("/admin/member/add/page2")
   }
   return (
     <MainLayout>
-    <Fragment>
+      <Fragment>
 
-      <section className="club_member">
-     
-        <Row justify="center" gutter={[20, 20]} className='heightCenter'>
-          <Col sm={22} md={20} lg={16} xl={14} xxl={12}>
-            <Card className='common-card'>
-              {/* <div className='mb-4'>
+        <section className="club_member">
+
+          <Row justify="center" gutter={[20, 20]} className='heightCenter'>
+            <Col sm={22} md={20} lg={16} xl={14} xxl={12}>
+              <Card className='common-card'>
+                {/* <div className='mb-4'>
                 <Breadcrumb separator=">">
                   <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                   <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>Club Members</Link></Breadcrumb.Item>
                   <Breadcrumb.Item className='text-decoration-none'>Add Club Member</Breadcrumb.Item>
                 </Breadcrumb>
               </div> */}
-              {/* Title  */}
-              <div className='d-flex justify-content-between'>
+                {/* Title  */}
+                <div className='d-flex justify-content-between'>
 
-                <Typography.Title level={3} className='m-0 fw-bold'>Add Club Member</Typography.Title>
-                {/* <Button size={'large'} type="primary" className="text-white" disabled>1/8</Button> */}
-              </div>
+                  <Typography.Title level={3} className='m-0 fw-bold'>Add Club Member</Typography.Title>
+                  {/* <Button size={'large'} type="primary" className="text-white" disabled>1/8</Button> */}
+                </div>
 
-              {/* form  */}
-              <div className='card-form-wrapper'>
-                <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onFinish}>
+                {/* form  */}
+                <div className='card-form-wrapper'>
+                  <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onFinish}>
 
-                  {/* First Name  */}
-                  <div className='row mt-4'>
-                    <Form.Item name="firstname" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter First Name' }]} label="First Name">
-                      <Input size={'large'} placeholder="First Name"
+                    {/* First Name  */}
+                    <div className='row mt-4'>
+                      <Form.Item name="firstname" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter First Name' }]} label="First Name">
+                        <Input size={'large'} placeholder="First Name"
                         // onKeyPress={(e: any) => {
                         //   if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
                         //     e.preventDefault();
@@ -160,11 +220,11 @@ if(error){
                         //     e.target.value = String(e.target.value).trim()
                         //   }
                         // }}
-                      />
-                    </Form.Item>
-                    {/* Last Name  */}
-                    <Form.Item name="lastname" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Last Name' }]} label="Last Name">
-                      <Input size={'large'} placeholder="Last Name"
+                        />
+                      </Form.Item>
+                      {/* Last Name  */}
+                      <Form.Item name="lastname" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Last Name' }]} label="Last Name">
+                        <Input size={'large'} placeholder="Last Name"
                         // onKeyPress={(e: any) => {
                         //   if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
                         //     e.preventDefault();
@@ -172,10 +232,10 @@ if(error){
                         //     e.target.value = String(e.target.value).trim()
                         //   }
                         // }}
-                      />
-                    </Form.Item>
-                    <Form.Item name="company_name" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Company Name' }]} label="Company Name">
-                      {/* <Input size={'large'} placeholder="Club Name"
+                        />
+                      </Form.Item>
+                      <Form.Item name="company_name" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Company Name' }]} label="Company Name">
+                        {/* <Input size={'large'} placeholder="Club Name"
                         onKeyPress={(e: any) => {
                           if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
                             e.preventDefault();
@@ -184,55 +244,55 @@ if(error){
                           }
                         }}
                       /> */}
-                      <Select
-                                            size={'large'}
-                                            placeholder="Select Company Name"
-                                            onChange={handleChange}
-                                        >
-                                            <Option value="augusta">Augusta Homes, Inc.</Option>
-                                            <Option value="buffington">Buffington Homes, L.P.</Option>
-                                            <Option value="cabin">Cabin John Builders</Option>
-                                            <Option value="cataldo">Cataldo Custom Builders</Option>
-                                            <Option value="david_campbell">David Campbell Building</Option>
-                                            <Option value="dc_building">DC Building Inc.</Option>
-                                            <Option value="Ddenman_construction">Denman Construction, Inc.</Option>
-                                            <Option value="ellis">Ellis Custom Homes</Option>
-                                            <Option value="tm_grady_builders">T.M. Grady Builders</Option>
-                                            <Option value="hardwick">Hardwick G. C.</Option>
-                                            <Option value="homeSource">HomeSource Construction</Option>
-                                            <Option value="ed_nikles">Ed Nikles Custom Builder, Inc.</Option>
-                                            <Option value="olsen">Olsen Custom Homes</Option>
-                                            <Option value="raykon">Raykon Construction</Option>
-                                            <Option value="matt_sitra">Matt Sitra Custom Homes</Option>
-                                            <Option value="schneider">Schneider Construction, LLC</Option>
-                                            <Option value="shaeffer">Shaeffer Hyde Construction</Option>
-                                            <Option value="split">Split Rock Custom Homes</Option>
-                                            <Option value="tiara">Tiara Sun Development</Option>
-                                        </Select>
-                    </Form.Item>
+                        <Select
+                          size={'large'}
+                          placeholder="Select Company Name"
+                          onChange={handleChange}
+                        >
+                          <Option value="augusta">Augusta Homes, Inc.</Option>
+                          <Option value="buffington">Buffington Homes, L.P.</Option>
+                          <Option value="cabin">Cabin John Builders</Option>
+                          <Option value="cataldo">Cataldo Custom Builders</Option>
+                          <Option value="david_campbell">David Campbell Building</Option>
+                          <Option value="dc_building">DC Building Inc.</Option>
+                          <Option value="Ddenman_construction">Denman Construction, Inc.</Option>
+                          <Option value="ellis">Ellis Custom Homes</Option>
+                          <Option value="tm_grady_builders">T.M. Grady Builders</Option>
+                          <Option value="hardwick">Hardwick G. C.</Option>
+                          <Option value="homeSource">HomeSource Construction</Option>
+                          <Option value="ed_nikles">Ed Nikles Custom Builder, Inc.</Option>
+                          <Option value="olsen">Olsen Custom Homes</Option>
+                          <Option value="raykon">Raykon Construction</Option>
+                          <Option value="matt_sitra">Matt Sitra Custom Homes</Option>
+                          <Option value="schneider">Schneider Construction, LLC</Option>
+                          <Option value="shaeffer">Shaeffer Hyde Construction</Option>
+                          <Option value="split">Split Rock Custom Homes</Option>
+                          <Option value="tiara">Tiara Sun Development</Option>
+                        </Select>
+                      </Form.Item>
 
-                    <Form.Item name="phone_number" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
-                      <Input size={'large'} type="text" minLength={6} maxLength={20} placeholder="Phone No" />
-                    </Form.Item>
-                    <Form.Item name="position" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Position' }]} label="Position">
-                      <Input size={'large'} type='position' placeholder="Position" />
-                    </Form.Item>
-                    <Form.Item name="home_city" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Home City' }]} label="Home City">
-                      <Input size={'large'} type='homecity' placeholder="Home City" />
-                    </Form.Item>
+                      <Form.Item name="phone_number" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
+                        <Input size={'large'} type="text" minLength={6} maxLength={20} placeholder="Phone No" />
+                      </Form.Item>
+                      <Form.Item name="position" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Position' }]} label="Position">
+                        <Input size={'large'} type='position' placeholder="Position" />
+                      </Form.Item>
+                      <Form.Item name="home_city" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Home City' }]} label="Home City">
+                        <Input size={'large'} type='homecity' placeholder="Home City" />
+                      </Form.Item>
 
-                    {/* Email  */}
-                    <Form.Item name="email" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Email' }]} label="Email">
-                      <Input size={'large'} type='email' placeholder="Email" />
-                    </Form.Item>
-                    {/* Password  */}
-                    <Form.Item name="password" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Password!' }]} label="Password">
-                      <Input.Password size={'large'} type="password" placeholder="Password" />
-                    </Form.Item>
-                    {/* Phone No  */}
+                      {/* Email  */}
+                      <Form.Item name="email" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Email' }]} label="Email">
+                        <Input size={'large'} type='email' placeholder="Email" />
+                      </Form.Item>
+                      {/* Password  */}
+                      <Form.Item name="password" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Password!' }]} label="Password">
+                        <Input.Password size={'large'} type="password" placeholder="Password" />
+                      </Form.Item>
+                      {/* Phone No  */}
 
-                    {/* Roles  */}
-                    {/* <Form.Item name="roles" className=' col-sm-12' label="Roles" rules={[{ required: true, message: 'Please Select Roles' }]}>
+                      {/* Roles  */}
+                      {/* <Form.Item name="roles" className=' col-sm-12' label="Roles" rules={[{ required: true, message: 'Please Select Roles' }]}>
                       <Select
                         mode="tags"
                         size={'large'}
@@ -246,20 +306,25 @@ if(error){
                         })}
                       />
                     </Form.Item> */}
-                  </div>
-                  {/* Button  */}
-                  <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
-                    Save & Next
-                  </Button>
-                </Form>
-              </div>
-            </Card>
-          </Col>
-        </Row>
+                    </div>
+                    {/* Button  */}
+                    <div className="d-flex gap-3 justify-content-center">
+                      {/* <Button size={'large'} type="primary" onClick={onPrevious} className="" >
+                        Save
+                      </Button> */}
+                      <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                        Next
+                      </Button>
+                    </div>
+                  </Form>
+                </div>
+              </Card>
+            </Col>
+          </Row>
 
-      </section>
-    </Fragment >
-  </MainLayout>
+        </section>
+      </Fragment >
+    </MainLayout>
   );
 };
 

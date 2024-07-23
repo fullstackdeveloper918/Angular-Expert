@@ -61,123 +61,7 @@ const MeetingList = () => {
       }
 
   }
-  const dataSource1 = [
-      {
-          key: '1',
-          meeting: "abc",
-          start: '08:20 pm 15-07-2024',
-          end: "06:20 pm 18-07-2024",
-          action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-              <li>
-                  <Link href={`/admin/meetings/edit`} >
-                      <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                  </Link>
-              </li>
-              <li>
-                  <Popconfirm
-                      title="Delete"
-                      description="Are you sure you want to delete ?"
-                      onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
-                  // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                  >
-                      <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                  </Popconfirm>
-              </li>
-          </ul>
-      },
-      {
-          key: '2',
-          meeting: "abc",
-          start: '08:20 pm 15-07-2024',
-          end: "06:20 pm 18-07-2024",
-          action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-              <li>
-                  <Link href={`/admin/meetings/edit`} >
-                      <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                  </Link>
-              </li>
-              <li>
-                  <Popconfirm
-                      title="Delete"
-                      description="Are you sure you want to delete ?"
-                      onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
-                  // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                  >
-                      <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                  </Popconfirm>
-              </li>
-          </ul>
-      },
-      {
-          key: '3',
-          meeting: "abc",
-          start: '08:20 pm 15-07-2024',
-          end: "06:20 pm 18-07-2024",
-          action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-              <li>
-                  <Link href={`/admin/meetings/edit`} >
-                      <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                  </Link>
-              </li>
-              <li>
-                  <Popconfirm
-                      title="Delete"
-                      description="Are you sure you want to delete ?"
-                      onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
-                  // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                  >
-                      <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                  </Popconfirm>
-              </li>
-          </ul>
-      },
-      {
-          key: '4',
-          meeting: "abc",
-          start: '08:20 pm 15-07-2024',
-          end: "06:20 pm 18-07-2024",
-          action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-              <li>
-                  <Link href={`/admin/meetings/edit`} >
-                      <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                  </Link>
-              </li>
-              <li>
-                  <Popconfirm
-                      title="Delete"
-                      description="Are you sure you want to delete ?"
-                      onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
-                  // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                  >
-                      <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                  </Popconfirm>
-              </li>
-          </ul>
-      },
-      {
-          key: '5',
-          meeting: "abc",
-          start: '08:20 pm 15-07-2024',
-          end: "06:20 pm 18-07-2024",
-          action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-              <li>
-                  <Link href={`/admin/meetings/edit`} >
-                      <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                  </Link>
-              </li>
-              <li>
-                  <Popconfirm
-                      title="Delete"
-                      description="Are you sure you want to delete ?"
-                      onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
-                  // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                  >
-                      <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                  </Popconfirm>
-              </li>
-          </ul>
-      },
-  ];
+  
 
   const archive = async (id:any) => {
       const item = {
@@ -195,8 +79,8 @@ const MeetingList = () => {
       return {
           key: index+1,
           meeting:res?.meeting_name,
-          start: dayjs(res?.start_time).format('h A DD-MM-YYYY'),
-          end: dayjs(res?.end_time).format('h A DD-MM-YYYY'),
+          end: dayjs(res?.end_time).format('hh:mm:ss A'),
+          start: dayjs(res?.start_time).format('DD-MM-YYYY'),
           action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
               <li>
                   <Link href={`/admin/meetings/${res?.id}/edit`} >
@@ -227,15 +111,16 @@ const MeetingList = () => {
           key: 'meeting',
       },
       {
-          title: 'Start Time',
+        title: 'Meeting Time',
+        dataIndex: 'end',
+        key: 'end',
+    },
+      {
+          title: 'Meeting Date',
           dataIndex: 'start',
           key: 'start',
       },
-      {
-          title: 'End Time',
-          dataIndex: 'end',
-          key: 'end',
-      },
+      
       {
           title: 'Action',
           dataIndex: 'action',
@@ -290,7 +175,7 @@ useEffect(() => {
                     <Card className='common-card'>
                         <div className='mb-4'>
                             <Breadcrumb separator=">">
-                                <Breadcrumb.Item><Link className='text-decoration-none' href="/">General</Link></Breadcrumb.Item>
+                                <Breadcrumb.Item><Link className='text-decoration-none' href="/admin/dashboard">General</Link></Breadcrumb.Item>
                                 <Breadcrumb.Item className='text-decoration-none'>Meetings</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>

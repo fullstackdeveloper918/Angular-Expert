@@ -11,6 +11,8 @@ import {
     Button,
     Card,
     Col,
+    TimePicker,
+    TimePickerProps,
 } from "antd";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -22,23 +24,57 @@ import dayjs from "dayjs";
 import api from "@/utils/api";
 import TimezoneSelect from "react-timezone-select";
 import { InlineWidget } from 'react-calendly';
+import moment from 'moment-timezone';
 const { Option } = Select;
+const timezones = moment.tz.names();
+
 dayjs.extend(utc);
+
+const formatTimezone = (timezone: any) => {
+    const offset = moment.tz(timezone).utcOffset();
+    const sign = offset >= 0 ? '+' : '-';
+    const hours = Math.floor(Math.abs(offset) / 60).toString().padStart(2, '0');
+    const minutes = (Math.abs(offset) % 60).toString().padStart(2, '0');
+    return `UTC${sign}${hours}:${minutes} - ${timezone}`;
+};
 const MeetingAdd = () => {
     const router = useRouter()
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false)
-    const [selectedTimezone, setSelectedTimezone] = useState<any>(null);
+    const [selectedTimezone, setSelectedTimezone] = useState(moment.tz.guess()); // Default to local timezone
+    const [selectedDate, setSelectedDate] = useState<any>(null);
+
+    const onChangeDate = (date: any) => {
+        const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
+        setSelectedDate(dateWithTimezone);
+        console.log(dateWithTimezone,"dateWithTimezone");
+    };
+
+    const onTimezoneChange = (value: any) => {
+        setSelectedTimezone(value);
+        if (selectedDate) {
+            setSelectedDate(selectedDate.clone().tz(value));
+        }
+        console.log('Selected Timezone:', value);
+    };
+    // const [selectedTimezone, setSelectedTimezone] = useState<any>(null);
 
     // Handle timezone selection
     const handleTimezoneChange = (timezone: any) => {
         setSelectedTimezone(timezone);
     };
 
+    const onChangeYear = (date: any) => {
+        console.log(date);
+    };
+
+
     const [meetingType, setMeetingType] = useState<any>('');
     const onChange: DatePickerProps['onChange'] = (_, dateStr) => {
     };
-
+    const onChange1: TimePickerProps['onChange'] = (time, timeString) => {
+        console.log(time, timeString);
+    };
 
     const handleChange = (value: any) => {
         setMeetingType(value);
@@ -46,7 +82,7 @@ const MeetingAdd = () => {
 
     const onSubmit = async (values: any) => {
         let items = {
-            meeting_name: values?.meeting,
+            meeting_name: "iertierti",
             // "purpose": "Present new project proposal to client.",
             meeting_type: values?.meeting_type,
             start_time: dayjs(values?.start_time).utc().valueOf(),
@@ -74,7 +110,7 @@ const MeetingAdd = () => {
 
         try {
             let res = await api.Meeting.create(items as any);
-            router.back()
+            // router.back()
             // onAdd();
         } catch (error) {
 
@@ -146,7 +182,7 @@ const MeetingAdd = () => {
                             <Card className='common-card'>
                                 <div className='mb-4'>
                                     <Breadcrumb separator=">">
-                                        <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
+                                        <Breadcrumb.Item><Link href="/admin/dashboard" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item><Link href="/admin/meetings" className='text-decoration-none'>Meetings</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item className='text-decoration-none'>Add Meeting</Breadcrumb.Item>
                                     </Breadcrumb>
@@ -162,18 +198,7 @@ const MeetingAdd = () => {
 
                                         <div className='row mt-4 selectPaddingBox'>
 
-                                            {/* First Name  */}
-                                            <Form.Item name="meeting" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Meeting Agenda' }]} label="Meeting Agenda">
-                                                <Input size={'large'} placeholder="Meeting Agenda"
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim()
-                                                        }
-                                                    }}
-                                                />
-                                            </Form.Item>
+
                                             <Form.Item name="meeting_type" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Type' }]} label="Meeting Type">
                                                 <Select
                                                     size={'large'}
@@ -191,31 +216,48 @@ const MeetingAdd = () => {
                                             {/* <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Start Meeting' }]} label="Start Meeting">
                                           <InlineWidget url="https://calendly.com/your_scheduling_page" />
                                             </Form.Item> */}
-                                            <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Start Meeting' }]} label="Start Meeting">
+                                             <Form.Item
+                                                name="timezone"
+                                                className="col-lg-6 col-sm-12"
+                                                rules={[{ required: true, message: 'Please Select Timezone' }]}
+                                                label="Timezone"
+                                            >
+                                                <Select
+                                                    showSearch
+                                                    placeholder="Select a timezone"
+                                                    optionFilterProp="children"
+                                                    onChange={onTimezoneChange}
+                                                    filterOption={(input:any, option:any) =>
+                                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    }
+                                                    style={{ width: '100%' }}
+                                                    value={selectedTimezone}
+                                                >
+                                                    {timezones.map((timezone) => (
+                                                        <Option key={timezone} value={timezone}>
+                                                            {formatTimezone(timezone)}
+                                                        </Option>
+                                                    ))}
+                                                </Select>
+                                            </Form.Item>
+                                            <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Date' }]} label="Meeting Date">
                                                 <DatePicker
                                                     style={{ width: '100%' }}
                                                     // defaultValue={defaultValue}
-                                                    showTime
+                                                    // showTime
                                                     disabledDate={disabledDate}
-                                                    disabledTime={disabledTime}
+                                                    // disabledTime={disabledTime}
                                                     // locale={buddhistLocale}
-                                                    onChange={onChange}
+                                                    onChange={onChangeDate}
                                                 />
                                             </Form.Item>
-                                            <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter End Meeting' }]} label="End Meeting">
-                                                <DatePicker
-                                                    // defaultValue={defaultValue}
-                                                    style={{ width: '100%' }}
-                                                    showTime
-                                                    disabledDate={disabledDate}
-                                                    disabledTime={disabledTime}
-                                                    // locale={buddhistLocale}
-                                                    onChange={onChange}
-                                                />
+                                            <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Time' }]} label="Meeting Time">
+                                                <TimePicker onChange={onChange1} disabledTime={disabledTime} style={{ width: '100%' }} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} />
                                             </Form.Item>
-                                            <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Year' }]} label="Meeting End Year">
+                                            <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Year' }]} label="Meeting Year">
                                                 <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
                                             </Form.Item>
+                                           
                                             <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
                                                 <Input size={'large'} placeholder="Location"
                                                     onKeyPress={(e: any) => {
@@ -306,62 +348,30 @@ const MeetingAdd = () => {
                                                     ))}
                                                 </Select>
                                             </Form.Item>
-                                            <Form.Item name="mobile_no" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Cell' }]} label="Cell">
+                                            <Form.Item name="mobile_no" className='col-lg-6 col-sm-12' rules={[
+                                                { required: true, whitespace: true, message: 'Please Enter Cell' },
+                                                { pattern: /^[0-9]*$/, message: 'Only numbers are allowed' }
+                                            ]} label="Cell">
                                                 <Input
-
                                                     size={'large'} placeholder="Cell"
-                                                // onKeyPress={(e: any) => {
-                                                //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                //         e.preventDefault();
-                                                //     } else {
-                                                //         e.target.value = String(e.target.value).trim()
-                                                //     }
-                                                // }}
-                                                />
-                                                {/* <Select
-                                            mode="multiple"
-                                            size="large"
-                                            // placeholder="Select Club Members"
-                                            onSearch={handleSearch}
-                                            optionLabelProp="label"
-                                            defaultActiveFirstOption  // Ensure first option is active on dropdown open
-                                            value={searchValue} // Control the value with searchValue state
-                                            key={searchResults.length}
-                                        >
-                                            {searchResults.map((area: any) => (
-                                                <Option key={area.id} value={area.id} label={area.name}>
-                                                    {area.phone} 
-                                                </Option>
-                                            ))}
-                                        </Select> */}
-                                            </Form.Item>
-                                            <Form.Item name="comments" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Comment' }]} label="Comment">
-                                                <Input.TextArea size={'large'} placeholder="Comment"
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim()
+                                                    // type="number"
+                                                    onKeyPress={(event) => {
+                                                        if (!/[0-9]/.test(event.key)) {
+                                                            event.preventDefault();
                                                         }
                                                     }}
                                                 />
+
                                             </Form.Item>
-                                            <Form.Item name="notes" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Note' }]} label="Note">
-                                                <Input.TextArea size={'large'} placeholder="Note"
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim()
-                                                        }
-                                                    }}
-                                                />
-                                            </Form.Item>
+
                                         </div>
                                         {/* Button  */}
-                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading}>
-                                            Add Meeting
-                                        </Button>
+                                        <div className="text-center mt-3">
+
+                                            <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-50" loading={loading}>
+                                                Save
+                                            </Button>
+                                        </div>
                                     </Form>
                                 </div>
                             </Card>

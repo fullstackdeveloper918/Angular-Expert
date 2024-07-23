@@ -126,6 +126,36 @@ const Page3 = () => {
 
 
   }
+  const onFinish1 = async (values: any) => {
+      const goalsData = inputPairs.map(pair => ({
+          goal: values[pair.goalName],
+          comment: values[pair.commentName],
+          status: pair.status
+      }));
+      const goalsData1 = inputFields.map(field => ({
+          goal: values[field.name],
+          status: field.status1
+      }));
+      let items = {
+          goals: {
+              userId: value,
+              goal_last_meeting: goalsData,
+              goal_next_meeting: goalsData1
+          }
+      }
+      try {
+          setLoading(true)
+          let res = await api.Auth.signUp(items)
+
+        //   router.push(`/admin/member/add/page4?${res?.userId}`)
+      } catch (error) {
+
+      } finally {
+          setLoading(false)
+      }
+
+
+  }
 
 
   const getDataById = async () => {
@@ -331,14 +361,22 @@ const Page3 = () => {
                                     </Button>
                                 </div>
                                 {/* Button  */}
-                                <div className="d-flex gap-3 justify-content-center mt-3">
-                                    <Button size={'large'} type="primary" className="login-form-button "  onClick={onPrevious}>
-                                        Previous
-                                    </Button>
-                                    <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                    Save & Next
-                                    </Button>
-                                </div>
+                                <div className="d-flex mt-3">
+                                            <div className="col-2">
+
+                                        <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
+                                            Save
+                                        </Button>
+                                            </div>
+                                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                                        <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
+                                            Previous
+                                        </Button>
+                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                        Next
+                                        </Button>
+                                        </div>
+                                        </div>
                             </Form>
                         </div>
                     </Card>

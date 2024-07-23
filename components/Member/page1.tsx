@@ -124,7 +124,54 @@ const Page1 = () => {
         }
      
     }, [type]);
+    const onFinish1 = async (values: any) => {
+        let items = {
+           bussiness_update:{
+            userId:value,
+            financial_position:values?.financial_position,
+            sales_position:values?.sales_position,
+            accomplishments:values?.accomplishments,
+            hr_position:values?.hr_position,
+            current_challenges:values?.current_challenges,
+            craftsmen_support:values?.craftsmen_support,
+           }
+        } as any
+        
+     
+        try {
+            if (type == "edit") {
+                let items = {
+                    bussiness_update: {
+                    userId:value,
+                    financial_position:values?.financial_position,
+                    sales_position:values?.sales_position,
+                    accomplishments:values?.accomplishments,
+                    hr_position:values?.hr_position,
+                    current_challenges:values?.current_challenges,
+                    craftsmen_support:values?.craftsmen_support,
+                }
+            } as any
+            setLoading(true)
+            let res = await api.User.edit(items)
+                // router.push(`/admin/member/add/page3?${value}&edit`)
+            }else{
   
+                setLoading(true)
+                let res =await api.Auth.signUp(items)
+                if (res?.status == 400) {
+                  toast.error("Session Expired Login Again")
+                  router.replace("/auth/signin")
+                }
+                // router.push(`/admin/member/add/page3?${res?.user_id}`)
+            }
+  
+           
+        } catch (error: any) {
+            
+        } finally {
+            setLoading(false)
+        }
+    };
   const onPrevious=()=>{
       router.replace(`/admin/member/add?${value}&edit`)
     }
@@ -221,13 +268,21 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                         </Form.Item>
 
                                         {/* Button  */}
-                                        <div className="d-flex gap-3 justify-content-center">
+                                        <div className="d-flex">
+                                            <div className="col-2">
+
+                                        <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
+                                            Save
+                                        </Button>
+                                            </div>
+                                        <div className=" col-8 d-flex gap-5 justify-content-center">
                                         <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
                                             Previous
                                         </Button>
                                         <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                           Save & Next
+                                        Next
                                         </Button>
+                                        </div>
                                         </div>
                                     </Form>
                                 </div>

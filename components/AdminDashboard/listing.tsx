@@ -26,6 +26,7 @@ const AdminDashboard: Page = (props: any) => {
 console.log(getUserdata,"qwertyui");
 
   const[state1,setState1]=useState<any>([])
+  const[state2,setState2]=useState<any>([])
   const[upcoming,setUpcoming]=useState<any>("")
   const[next,setNext]=useState<any>("")
   const [areas, setAreas] = useState<any>([]);
@@ -99,6 +100,8 @@ console.log(getUserdata,"qwertyui");
 
   const completed = state1?.filter((res:any) => res?.is_completed === true);
   const non_completed=state1?.filter((res:any)=>res?.is_completed==false)
+  const completed2 = state2?.filter((res:any) => res?.is_completed === true);
+  const non_completed2=state2?.filter((res:any)=>res?.is_completed==false)
   const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
@@ -160,8 +163,85 @@ console.log(getUserdata,"qwertyui");
            
         // </ul>
     }})
-
-
+    const user_non_completed = non_completed2?.slice(0, 5).map((res: any, index: number) => {
+      return {
+        key: index + 1,
+        name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+        company: res?.company_name,
+        email: res?.email,
+        action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+          <Link href={`/admin/member/${res?.uid}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+        </ul>
+      }
+    }
+    );
+    const user_completed = completed2?.slice(0, 5).map((res: any, index: number) => {
+      return {
+        key: index + 1,
+        name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+        company: res?.company_name,
+        email: res?.email,
+        action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+        
+          <Link href={`/admin/member/${res?.uid}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+        </ul>
+      }
+    }
+    );
+    const user_completed_columns = [
+      {
+        title: 'Sr.No',
+        dataIndex: 'key',
+        key: 'key',
+      },
+      {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: 'Club Name',
+        dataIndex: 'company',
+        key: 'company',
+      },
+      {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+      },
+      {
+        title: 'Action',
+        dataIndex: 'action',
+        key: 'action',
+      },
+    ];
+    const user_non_completed_columns = [
+      {
+        title: 'Sr.No',
+        dataIndex: 'key',
+        key: 'key',
+      },
+      {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: 'Club Name',
+        dataIndex: 'company',
+        key: 'company',
+      },
+      {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+      },
+      {
+        title: 'Action',
+        dataIndex: 'action',
+        key: 'action',
+      },
+    ];
     const columns3 = [
       {
           title: 'Sr.no',
@@ -194,7 +274,7 @@ console.log(getUserdata,"qwertyui");
 
   const columns = [
     {
-      title: 'Key',
+      title: 'Sr.No',
       dataIndex: 'key',
       key: 'key',
     },
@@ -213,15 +293,15 @@ console.log(getUserdata,"qwertyui");
       dataIndex: 'email',
       key: 'email',
     },
-    {
+    ...(hasClubMemberPermission ? [{
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
-    },
+    }] : [])
   ];
   const columns1 = [
     {
-      title: 'Key',
+      title: 'Sr.No',
       dataIndex: 'key',
       key: 'key',
     },
@@ -240,15 +320,15 @@ console.log(getUserdata,"qwertyui");
       dataIndex: 'email',
       key: 'email',
     },
-    {
+    ...(hasClubMemberPermission ? [{
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
-    },
+    }] : [])
   ];
   const columns2 = [
     {
-      title: 'Key',
+      title: 'Sr.No',
       dataIndex: 'key',
       key: 'key',
     },
@@ -282,11 +362,11 @@ console.log(getUserdata,"qwertyui");
       dataIndex: 'city',
       key: 'city',
     },
-    {
+    ...(hasClubMemberPermission ? [{
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
-    },
+    }] : [])
   ];
 
   const getData=async()=>{
@@ -294,6 +374,7 @@ console.log(getUserdata,"qwertyui");
         let res=await api.User.listing()
         let res1=await api.dashboard.upcoming()
         let res2=await api.dashboard.next()
+       
         setState1(res?.data)
         setUpcoming(res1)
         setNext(res2)
@@ -304,6 +385,8 @@ console.log(getUserdata,"qwertyui");
 const initialise = async () => {
   try {
       let res = await api.Meeting.listing();
+      let apiRes=await api.User.user_listing()
+      setState2(apiRes?.data)
       setAreas(res); 
   } catch (error) {
       console.error('Error fetching meeting listing:', error);
@@ -318,6 +401,7 @@ useEffect(()=>{
     getData()
 
 },[])
+console.log(state2,"state2");
 
   return (
     <MainLayout>
@@ -371,7 +455,58 @@ useEffect(()=>{
           </Row>
           <Row gutter={[20, 20]} className='dashboradTable'>
 
-{/* {getUserdata?.is_admin==true? */}
+          {getUserdata?.is_admin==false?
+             <Col sm={24} md={24} lg={24}  xxl={12}>
+              <Card className='common-card'>
+
+                {/* title  */}
+                <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
+                  <Typography.Title level={4} className='m-0 fw-bold'>User Complete Updates</Typography.Title>
+
+                  {/* <Button className='text-center blackViewBtn'> View All</Button> */}
+
+                  {/* <Table dataSource={dataSource} columns={columns} />; */}
+
+                </div>
+                {/* Search  */}
+
+                {/* Tabs  */}
+                <div className='tabs-wrapper'>
+
+                  <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} pagination={false} />
+                </div>
+
+                {/* Pagination  */}
+
+              </Card>
+            </Col>
+        :""}
+  {getUserdata?.is_admin==false?
+            <Col sm={24} md={24} lg={24}  xxl={12}>
+              <Card className='common-card'>
+
+                {/* title  */}
+                <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
+                  <Typography.Title level={4} className='m-0 fw-bold'>User Non-Complete Updates</Typography.Title>
+
+                  {/* <Button className='text-center blackViewBtn'> View All</Button> */}
+
+                  {/* <Table dataSource={dataSource} columns={columns} />; */}
+
+
+                </div>
+                {/* Search  */}
+
+                {/* Tabs  */}
+                <div className='tabs-wrapper'>
+
+                  <Table dataSource={user_non_completed} columns={user_non_completed_columns} pagination={false} />
+                </div>
+
+                {/* Pagination  */}
+
+              </Card>
+            </Col>:""}
              <Col sm={24} md={24} lg={24}  xxl={12}>
               <Card className='common-card'>
 

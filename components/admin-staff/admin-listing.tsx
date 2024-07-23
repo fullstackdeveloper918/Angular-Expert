@@ -177,7 +177,7 @@ const Admin: Page = () => {
                             <Card className='common-card'>
                                 <div className='mb-4'>
                                     <Breadcrumb separator=">">
-                                        <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
+                                        <Breadcrumb.Item><Link href="/admin/dashboard" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                                         <Breadcrumb.Item className='text-decoration-none'>Admin</Breadcrumb.Item>
                                     </Breadcrumb>
                                 </div>

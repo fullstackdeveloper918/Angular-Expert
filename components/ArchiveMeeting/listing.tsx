@@ -84,7 +84,7 @@ const ArchiveMeeting = () => {
                     <Card className='common-card'>
                         <div className='mb-4'>
                             <Breadcrumb separator=">">
-                                <Breadcrumb.Item><Link className='text-decoration-none' href="/">General</Link></Breadcrumb.Item>
+                                <Breadcrumb.Item><Link className='text-decoration-none' href="/admin/dashboard">General</Link></Breadcrumb.Item>
                                 <Breadcrumb.Item className='text-decoration-none'>Archive Meetings</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
