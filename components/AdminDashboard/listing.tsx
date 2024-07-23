@@ -23,6 +23,7 @@ type Page<P = {}> = NextPage<P> & {
 
 const AdminDashboard: Page = (props: any) => {
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
+console.log(getUserdata,"qwertyui");
 
   const[state1,setState1]=useState<any>([])
   const[upcoming,setUpcoming]=useState<any>("")
@@ -108,7 +109,7 @@ const AdminDashboard: Page = (props: any) => {
       position: res?.position,
       city: res?.home_city,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        {hasClubMemberPermission? 
+        {hasClubMemberPermission ||getUserdata?.is_admin==false? 
         <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link>:
         <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}
         </li>
@@ -123,7 +124,7 @@ const AdminDashboard: Page = (props: any) => {
       company: res?.company_name,
       email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-       {hasClubMemberPermission? 
+       {hasClubMemberPermission||getUserdata?.is_admin==false? 
         <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link>:
         <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}</li>
       </ul>
@@ -137,7 +138,7 @@ const AdminDashboard: Page = (props: any) => {
       company: res?.company_name,
       email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-       {hasClubMemberPermission? 
+       {hasClubMemberPermission||getUserdata?.is_admin==false? 
         <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link>:
         <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}</li>
       </ul>
@@ -370,7 +371,7 @@ useEffect(()=>{
           </Row>
           <Row gutter={[20, 20]} className='dashboradTable'>
 
-{getUserdata?.is_admin==true?
+{/* {getUserdata?.is_admin==true? */}
              <Col sm={24} md={24} lg={24}  xxl={12}>
               <Card className='common-card'>
 
@@ -395,8 +396,8 @@ useEffect(()=>{
 
               </Card>
             </Col>
-            :""}
-{getUserdata?.is_admin==true?
+            {/* // :""} */}
+{/* {getUserdata?.is_admin==true? */}
             <Col sm={24} md={24} lg={24}  xxl={12}>
               <Card className='common-card'>
 
@@ -421,8 +422,9 @@ useEffect(()=>{
                 {/* Pagination  */}
 
               </Card>
-            </Col>:""}
-            {getUserdata?.is_admin==true?
+            </Col>
+            {/* :""} */}
+            {/* {getUserdata?.is_admin==true? */}
             <Col span={24} >
               <Card className='common-card'>
 
@@ -449,7 +451,8 @@ useEffect(()=>{
                 {/* Pagination  */}
 
               </Card>
-            </Col>:""}
+            </Col>
+            {/* :""} */}
             {getUserdata?.is_admin==false?
             <Col span={24} >
               <Card className='common-card'>
@@ -473,7 +476,8 @@ useEffect(()=>{
                 {/* Pagination  */}
 
               </Card>
-            </Col>:""}
+            </Col>
+         :""} 
           </Row>
           {/*  Graphs   */}
           {/* {GraphType.map((res)=><DashboardGraph key={res.heading} {...res}/>)} */}

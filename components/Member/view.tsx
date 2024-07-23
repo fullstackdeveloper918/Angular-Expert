@@ -14,6 +14,8 @@ import { saveAs } from "file-saver";
 import { toast, ToastContainer } from "react-toastify";
 import Pdf from "../common/Pdf";
 import { DownloadOutlined, ShareAltOutlined } from "@ant-design/icons";
+import { parseCookies } from "nookies";
+import { useSelector } from "react-redux";
 const { Row, Col, Card, Button, Space, Popconfirm } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
     ssr: false,
@@ -49,6 +51,7 @@ interface StaffDetailInterface {
 const MeetingView = () => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const getUserdata=useSelector((state:any)=>state?.user?.userData)
   const [state, setState] = React.useState<any>({
     id: "",
     name: "",
@@ -62,7 +65,8 @@ const MeetingView = () => {
   })
   const [isActive, setIsActive] = useState(false);
   const searchParam = useParams();
-
+  const cookies = parseCookies();
+  const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
   const id: any = searchParam.id;
   const getDataById = async () => {
     const item = {
@@ -127,35 +131,61 @@ const MeetingView = () => {
     const blob = await pdf(<Pdf state={state} />).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
-  };
+};
 
-  // Function to handle PDF download
-  const downLoadPdf = async () => {
+// Function to handle PDF download
+const downLoadPdf = async () => {
     const { blob, timestamp } = await generatePdf();
     saveAs(blob, `Order_${timestamp}.pdf`);
-  };
+};
 
-  // Function to handle PDF sharing
-  const sharePdf = async () => {
+// Function to handle PDF sharing
+const sharePdf = async () => {
+
     const { pdfUrl, timestamp } = await generatePdf();
+    console.log(pdfUrl, 'pdfUrl')
+    const response = await fetch(pdfUrl);
+    const blob = await response.blob();
+    console.log(blob, 'blob')
 
+    // Convert the blob to a file
+    const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
+    console.log(file, 'file pdf');
+    const formData = new FormData();
+    formData.append('file', file);
 
-    const data = {
-      // url: pdfUrl,
-      // filename: `Order_${timestamp}.pdf`,
-      to: state.email,
-      link: pdfUrl
-    };
-    const res = await api.User.create(data)
-    toast.success('Link Share Successfully', {
-      position: 'top-center',
-      autoClose: 300,
+    console.log(formData, "formData");
 
-    });
+    const res = await fetch('https://frontend.goaideme.com/save-pdf', {
+
+        method: 'POST',
+        body: formData,
+        headers: {
+            Token: `${accessToken}`,
+            // 'Content-Type': 'application/json',
+        }
+    },);
+
+    const apiRes:any = await res.json()
+    console.log(apiRes,"apiRes");
+      navigator.clipboard.writeText(apiRes?.fileUrl)
+                .then(() => {
+                    toast.success('Link copied to clipboard');
+                })
+                .catch(() => {
+                    toast.error('Failed to copy link to clipboard');
+                });
+
+    //   })
+    //   toast.success('Link Share Successfully', {
+    //     position: 'top-center',
+    //     autoClose: 300,
+
+    //   });
 
     // Optionally, open the PDF in a new tab
     // window.open(pdfUrl, '_blank');
-  };
+};
 
 
 
@@ -241,11 +271,16 @@ const MeetingView = () => {
                   </ul>
                   {/* Button  */}
                   <div className='card-listing-button d-inline-flex flex-wrap gap-3 w-100'>
+                    {getUserdata?.user_id===state?.uid?
                     <Link href={`/admin/member/add?${state?.uid}&edit`} className='text-decoration-none text-white flex-grow-1'>
                       <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn'>
                         Edit
                       </Button>
-                    </Link>
+                    </Link>:<Link href={`/admin/member/${state?.uid}/view`} className='text-decoration-none text-white flex-grow-1'>
+                      <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn'>
+                        Edit
+                      </Button>
+                    </Link>}
                     <Popconfirm
                       title={`${state?.is_activate ? 'Activate' : 'Deactivate'} the club member`}
                       // onConfirm={activeDeactive(id)}

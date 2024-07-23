@@ -100,7 +100,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
         <DashboardOutlined style={iconSize} />
       ),
     },
-    hasClubMemberPermission && {
+    hasClubMemberPermission||getUserdata?.is_admin==false && {
       key: henceofrthEnums.Roles.USERS,
       view: getItem(
         <Link href="/admin/member" className="text-decoration-none">

@@ -143,8 +143,24 @@ const MemberList = () => {
             }
         },);
 
-        console.log(res, 'res')
+        const apiRes:any = await res.json()
+    console.log(apiRes,"apiRes");
+      navigator.clipboard.writeText(apiRes?.fileUrl)
+                .then(() => {
+                    toast.success('Link copied to clipboard');
+                })
+                .catch(() => {
+                    toast.error('Failed to copy link to clipboard');
+                });
 
+        // const resData = await res.json();
+        // console.log(resData, 'resData');
+
+        // if (resData && resData.link) {
+        //     copyToClipboard(resData.link);
+        // } else {
+        //     throw new Error('Link not found in response');
+        // }
         //   })
         //   toast.success('Link Share Successfully', {
         //     position: 'top-center',
@@ -155,15 +171,7 @@ const MemberList = () => {
         // Optionally, open the PDF in a new tab
         // window.open(pdfUrl, '_blank');
     };
-    //   const copyToClipboard = (text) => {
-    //     navigator.clipboard.writeText(text)
-    //         .then(() => {
-    //             message.success('Link copied to clipboard');
-    //         })
-    //         .catch(() => {
-    //             message.error('Failed to copy link to clipboard');
-    //         });
-    // };
+    
     const handleDownloadAndFetchData = (id: any) => {
         getDataById(id);
         downLoadPdf();
@@ -305,6 +313,7 @@ const MemberList = () => {
                                 {/* title  */}
                                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>Club Members</Typography.Title>
+                                    
                                     <div className='d-flex gap-2'>
                                         {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
                                         <Button type="primary" htmlType="button" size='large' className='primaryBtn' icon={<PlusOutlined />} onClick={addUser}>Add New Club Member</Button>
