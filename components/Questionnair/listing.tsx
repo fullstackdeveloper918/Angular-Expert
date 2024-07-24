@@ -87,12 +87,12 @@ const [state1,setState1]=useState<any>("")
         
        
     ];
-    const getDataById = async (id: any) => {
+    const getDataById = async () => {
         const item = {
-            user_id: id
+            user_id: getUserdata?.user_id
         }
         try {
-            const res = await api.User.getById(item as any);
+            const res = await api.Questionnair.downloadPdf(item as any);
             setState(res?.data || null);
         } catch (error: any) {
             alert(error.message);
@@ -116,6 +116,7 @@ const initialise = async (questionType: any) => {
 
 useEffect(() => {
     initialise(questionType);
+    // getDataById()
 }, [questionType]);
 const handleChange = (value:any) => {
     setQuestionType(value);
@@ -135,11 +136,11 @@ const downLoadPdf = async () => {
 };
 
 const handleDownloadAndFetchData = (id: any) => {
-    getDataById(id);
+    // getDataById(id);
     downLoadPdf();
 };
 const handleFetchAndFetchData = (id: any) => {
-    getDataById(id);
+    // getDataById(id);
     // sharePdf();
 };
 const panelStyle = {
@@ -178,7 +179,7 @@ const genExtra = (res: any) => (<ul className='list-unstyled mb-0 gap-3 d-flex'>
                             <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
                                 <Search size="large" placeholder="Search..."     enterButton />
                                 <Tooltip title="Download Pdf">
-                      <Button type="primary" onClick={downLoadPdf}><DownloadOutlined /> Download Pdf</Button>
+                      <Button type="primary"><DownloadOutlined /> Download Pdf</Button>
                     </Tooltip>
                                 {/* <Link href="/faq/add"><Button type="primary" htmlType="button" icon={<PlusOutlined />} size={'large'}>Add FAQ</Button></Link> */}
                             </div>

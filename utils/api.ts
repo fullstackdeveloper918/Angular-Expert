@@ -127,6 +127,8 @@ const Questionnair={
     requests.post("add-answer",info),
   getById: (info: any) =>
     requests.post(`answer-detail`,info),
+  downloadPdf: (info: any) =>
+    requests.post(`question-answer-pdf`,info),
 }
 const Manage_Question={
   create: (info: any) =>

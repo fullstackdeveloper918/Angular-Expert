@@ -75,7 +75,7 @@ console.log(getUserdata,"qwertyui");
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: "2",
+      title: "0",
       textColor: "#007B55",
       count: "No. of Users fillled the Form for coming meeting",
       link: "/admin/dashboard"
@@ -86,7 +86,7 @@ console.log(getUserdata,"qwertyui");
       cardBackground: "#FFF5CC",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: "3",
+      title: "0",
       textColor: "#B76E00",
       count: "No. of Users remains to fill the Form for coming meeting",
       link: "/admin/dashboard"

@@ -329,11 +329,32 @@ const MemberUpdatePDF = (props) => {
               indicated below, and write a brief summary of each project in the
               comment section.
             </Text>
-            {props?.state?.photo_comment?.map((res, index) => (
-              <View style={styles.goal} key={index}>
+              <View style={styles.goal} >
                 <View style={styles.div_wrapper}>
+            {/* {props?.state?.photo_comment?.map((res, index) => ( */}
                   <View style={styles.Flex_div}>
-                    <Text style={styles.text}> PROJECT #{index + 1}: </Text>
+                    <Text style={styles.text}> PROJECT #1: </Text>
+                    <Image
+                      src={
+                        "https://pbs.twimg.com/profile_images/1797665112440045568/305XgPDq_400x400.png"
+                      }
+                      style={styles.imgg}
+                      width={500}
+                      height={500}
+                    />
+                  </View>
+            {/* ))} */}
+
+                  <View style={styles.Flex_div}>
+                    <Text style={styles.text}>
+                      {" "}
+                      PROJECT 1 COMMENTS::{" "}
+                    </Text>
+                    <Text style={styles.textarea}>    COMMENTSCOMMENTSCOMMENTSCOMMENTSCOMMENTS </Text>
+                  </View>
+
+                  <View style={styles.Flex_div}>
+                    <Text style={styles.text}> PROJECT #2: </Text>
                     <Image
                       src={
                         "https://pbs.twimg.com/profile_images/1797665112440045568/305XgPDq_400x400.png"
@@ -346,13 +367,12 @@ const MemberUpdatePDF = (props) => {
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}>
                       {" "}
-                      PROJECT {index + 1} COMMENTS::{" "}
+                      PROJECT 2 COMMENTS::{" "}
                     </Text>
-                    <Text style={styles.textarea}>  {res?.comment}   </Text>
+                    <Text style={styles.textarea}>  COMMENTS2,  COMMENTS2,   COMMENTS2,   COMMENTS2   </Text>
                   </View>
                 </View>
               </View>
-            ))}
           </View>
         </Page>
       </Document>
