@@ -157,7 +157,7 @@ const Page6 = () => {
           setLoading(true)
           let res = await api.User.edit(items)
               console.log(res,"yyyy");
-              toast.success("Edit Successfully")
+              toast.success("Save Successfully")
             //   router.push(`/admin/member/add/page7?${value}&edit`)
           }else{
 

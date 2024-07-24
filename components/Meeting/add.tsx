@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import api from "@/utils/api";
 import TimezoneSelect from "react-timezone-select";
 import { InlineWidget } from 'react-calendly';
+import CalendlyWidget from "../common/calender"
 import moment from 'moment-timezone';
 const { Option } = Select;
 const timezones = moment.tz.names();
@@ -47,7 +48,7 @@ const MeetingAdd = () => {
     const onChangeDate = (date: any) => {
         const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
         setSelectedDate(dateWithTimezone);
-        console.log(dateWithTimezone,"dateWithTimezone");
+        console.log(dateWithTimezone, "dateWithTimezone");
     };
 
     const onTimezoneChange = (value: any) => {
@@ -150,7 +151,7 @@ const MeetingAdd = () => {
         const loadGoogleMapScript = () => {
             if (!window.google) {
                 const googleMapScript = document.createElement('script');
-                googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDVyNgUZlibBRYwSzi7Fd1M_zULyKAPLWQ&libraries=places`;
+                googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCp49QdcWtVxJm7XmXZBjLCNxQNMudrbwM&libraries=places`;
                 googleMapScript.onload = initPlaceAPI;
                 document.body.appendChild(googleMapScript);
             } else {
@@ -164,12 +165,14 @@ const MeetingAdd = () => {
                 );
                 autocomplete.addListener('place_changed', () => {
                     let place = autocomplete.getPlace();
-
+                    // Handle place data if needed
                 });
             }
         };
         loadGoogleMapScript();
+        // Cleanup function if needed
         return () => {
+            // Cleanup code if any
         };
     }, []);
     return (
@@ -216,12 +219,16 @@ const MeetingAdd = () => {
                                             {/* <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Start Meeting' }]} label="Start Meeting">
                                           <InlineWidget url="https://calendly.com/your_scheduling_page" />
                                             </Form.Item> */}
-                                             <Form.Item
+                                            <Form.Item
                                                 name="timezone"
                                                 className="col-lg-6 col-sm-12"
                                                 rules={[{ required: true, message: 'Please Select Timezone' }]}
                                                 label="Timezone"
                                             >
+                                                {/* <div className="Div_contact">
+                                                   
+                                                    <CalendlyWidget />
+                                                </div> */}
                                                 <Select
                                                     showSearch
                                                     placeholder="Select a timezone"
@@ -257,17 +264,14 @@ const MeetingAdd = () => {
                                             <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Year' }]} label="Meeting Year">
                                                 <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
                                             </Form.Item>
-                                           
+
                                             <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
-                                                <Input size={'large'} placeholder="Location"
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim()
-                                                        }
-                                                    }}
-                                                />
+                                                {/* <Input size={'large'} placeholder="Location"   /> */}
+                                                <input
+                                        className="custom-input"
+                                        ref={(ref:any) => (locationSearchRef.current = ref)}
+                                        placeholder="Enter your address"
+                                    />
                                             </Form.Item>
                                             {/* <Form.Item
                             name="location"

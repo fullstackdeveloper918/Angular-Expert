@@ -146,7 +146,7 @@ const Page3 = () => {
       try {
           setLoading(true)
           let res = await api.Auth.signUp(items)
-
+          toast.success("Save Successfully")
         //   router.push(`/admin/member/add/page4?${res?.userId}`)
       } catch (error) {
 

@@ -165,6 +165,7 @@ const Page5 = () => {
           } as any
           setLoading(true)
           let res = await api.User.edit(items)
+          toast.success("Save Successfully")
               console.log(res,"yyyy");
             //   router.push(`/admin/member/add/page6?${value}&edit`)
           }else{
@@ -172,6 +173,7 @@ const Page5 = () => {
               setLoading(true)
               let res =await api.Auth.signUp(items)
               console.log(res,"qqqq");
+              toast.success("Save Successfully")
               if (res?.status == 400) {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
