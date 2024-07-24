@@ -280,16 +280,12 @@ const sharePdf = async () => {
                   </ul>
                   {/* Button  */}
                   <div className='card-listing-button d-inline-flex flex-wrap gap-3 w-100'>
-                    {getUserdata?.user_id===state?.uid?
+                    {/* {getUserdata?.user_id===state?.uid? */}
                     <Link href={`/admin/member/add?${state?.uid}&edit`} className='text-decoration-none text-white flex-grow-1'>
                       <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn'>
                         Edit
                       </Button>
-                    </Link>:<Link href={`/admin/member/${state?.uid}/view`} className='text-decoration-none text-white flex-grow-1'>
-                      <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn'>
-                        Edit
-                      </Button>
-                    </Link>}
+                    </Link>
                     {!getUserdata?.is_admin==false?
                     <Popconfirm
                       title={`${state?.is_activate ? 'Activate' : 'Deactivate'} the club member`}

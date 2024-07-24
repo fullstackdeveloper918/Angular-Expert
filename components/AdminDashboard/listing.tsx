@@ -40,7 +40,7 @@ console.log(getUserdata,"qwertyui");
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: "20",
+      title: "0",
       textColor: "#007B55",
       count: "Fall 2024 (80 days)",
       link: "/admin/dashboard"
@@ -52,7 +52,7 @@ console.log(getUserdata,"qwertyui");
       iconBackground: "linear-gradient(135deg, rgba(0, 184, 217, 0) 0%, rgba(0, 184, 217, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#006C9C",
-      title: "3",
+      title: "0",
       count: "Spring 2025 (408 days)",
       link: "/admin/dashboard"
     },
@@ -62,7 +62,7 @@ console.log(getUserdata,"qwertyui");
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#B76E00",
-      title: "20",
+      title: "0",
       count: "Total Club Members",
       link:hasClubMemberPermission? `/admin/member`:"/admin/dashboard"
 
@@ -284,7 +284,7 @@ console.log(getUserdata,"qwertyui");
       key: 'name',
     },
     {
-      title: 'Club Name',
+      title: 'Company Name',
       dataIndex: 'company',
       key: 'company',
     },
@@ -311,7 +311,7 @@ console.log(getUserdata,"qwertyui");
       key: 'name',
     },
     {
-      title: 'Club Name',
+      title: 'Company Name',
       dataIndex: 'company',
       key: 'company',
     },
@@ -338,7 +338,7 @@ console.log(getUserdata,"qwertyui");
       key: 'name',
     },
     {
-      title: 'Club Name',
+      title: 'Company Name',
       dataIndex: 'company',
       key: 'company',
     },
@@ -455,58 +455,35 @@ console.log(state2,"state2");
           </Row>
           <Row gutter={[20, 20]} className='dashboradTable'>
 
-          {getUserdata?.is_admin==false?
+          {/* {getUserdata?.is_admin==false?
              <Col sm={24} md={24} lg={24}  xxl={12}>
               <Card className='common-card'>
 
-                {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                   <Typography.Title level={4} className='m-0 fw-bold'>User Complete Updates</Typography.Title>
-
-                  {/* <Button className='text-center blackViewBtn'> View All</Button> */}
-
-                  {/* <Table dataSource={dataSource} columns={columns} />; */}
-
                 </div>
-                {/* Search  */}
-
-                {/* Tabs  */}
                 <div className='tabs-wrapper'>
 
                   <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} pagination={false} />
                 </div>
 
-                {/* Pagination  */}
-
               </Card>
             </Col>
-        :""}
-  {getUserdata?.is_admin==false?
+        :""} */}
+  {/* {getUserdata?.is_admin==false?
             <Col sm={24} md={24} lg={24}  xxl={12}>
               <Card className='common-card'>
 
-                {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                   <Typography.Title level={4} className='m-0 fw-bold'>User Non-Complete Updates</Typography.Title>
 
-                  {/* <Button className='text-center blackViewBtn'> View All</Button> */}
-
-                  {/* <Table dataSource={dataSource} columns={columns} />; */}
-
-
                 </div>
-                {/* Search  */}
-
-                {/* Tabs  */}
                 <div className='tabs-wrapper'>
 
                   <Table dataSource={user_non_completed} columns={user_non_completed_columns} pagination={false} />
                 </div>
-
-                {/* Pagination  */}
-
               </Card>
-            </Col>:""}
+            </Col>:""} */}
              <Col sm={24} md={24} lg={24}  xxl={12}>
               <Card className='common-card'>
 
@@ -560,10 +537,9 @@ console.log(state2,"state2");
             </Col>
             {/* :""} */}
             {/* {getUserdata?.is_admin==true? */}
+            {getUserdata?.is_admin==true?
             <Col span={24} >
               <Card className='common-card'>
-
-                {/* title  */}
                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                   <Typography.Title level={4} className='m-0 fw-bold'>Club Members</Typography.Title>
                   {hasClubMemberPermission?
@@ -571,22 +547,13 @@ console.log(state2,"state2");
                   <Button className='text-center blackViewBtn'> View All</Button>
                   </Link>:""}
                 </div>
-                {/* Search  */}
-
-                {/* Tabs  */}
                 <div className='tabs-wrapper'>
 
                   <Table dataSource={dataSource} columns={columns2} pagination={false} />
                 </div>
-                {/* <div className=' justify-content-center mt-4 d-flex'> */}
-
-
-                {/* <Table dataSource={dataSource} columns={columns} />; */}
-                {/* </div> */}
-                {/* Pagination  */}
 
               </Card>
-            </Col>
+            </Col>:""}
             {/* :""} */}
             {getUserdata?.is_admin==false?
             <Col span={24} >

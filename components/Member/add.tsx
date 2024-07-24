@@ -69,10 +69,13 @@ const Add = () => {
           }
         } as any
         let res = await api.User.edit(items)
+        toast.success(res?.message)
         router.push(`/admin/member/add/page2?${value}&edit`)
       } else {
 
         let res = await api.Auth.signUp(items)
+        console.log(res,"werrty");
+        toast.success(res?.message)
         router.push(`/admin/member/add/page2?${res?.user_id}`)
         if (res?.status == 400) {
           toast.error("Session Expired Login Again")
@@ -134,6 +137,9 @@ const Add = () => {
 
         let res = await api.Auth.signUp(items)
         // router.push(`/admin/member/add/page2?${res?.user_id}`)
+        console.log(res,"werrty");
+        toast.success("Added Successfully")
+        
         if (res?.status == 400) {
           toast.error("Session Expired Login Again")
           router.replace("/auth/signin")
@@ -253,7 +259,7 @@ const Add = () => {
                           <Option value="buffington">Buffington Homes, L.P.</Option>
                           <Option value="cabin">Cabin John Builders</Option>
                           <Option value="cataldo">Cataldo Custom Builders</Option>
-                          <Option value="david_campbell">David Campbell Building</Option>
+                          <Option value="david_campbell">The DCB</Option>
                           <Option value="dc_building">DC Building Inc.</Option>
                           <Option value="Ddenman_construction">Denman Construction, Inc.</Option>
                           <Option value="ellis">Ellis Custom Homes</Option>
@@ -272,7 +278,11 @@ const Add = () => {
                       </Form.Item>
 
                       <Form.Item name="phone_number" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
-                        <Input size={'large'} type="text" minLength={6} maxLength={20} placeholder="Phone No" />
+                        <Input size={'large'} type="text" minLength={6} maxLength={20} placeholder="Phone No" onKeyPress={(event) => {
+                            if (!/[0-9\s,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                              event.preventDefault();
+                            }
+                          }}/>
                       </Form.Item>
                       <Form.Item name="position" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Position' }]} label="Position">
                         <Input size={'large'} type='position' placeholder="Position" />

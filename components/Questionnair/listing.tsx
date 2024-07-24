@@ -12,43 +12,19 @@ import { pdf } from "@react-pdf/renderer";
 import saveAs from "file-saver";
  import QuestionnairPdf from "../common/QuestionnairPdf"
 import { useSelector } from "react-redux";
-// const { Row, Col, Card, Button } = {
-//   Button: dynamic(() => import("antd").then((module) => module.Button), {
-//     ssr: false,
-//   }),
-//   Row: dynamic(() => import("antd").then((module) => module.Row), {
-//     ssr: false,
-//   }),
-//   Col: dynamic(() => import("antd").then((module) => module.Col), {
-//     ssr: false,
-//   }),
-//   Card: dynamic(() => import("antd").then((module) => module.Card), {
-//     ssr: false,
-//   }),
-// };
 const { Panel } = Collapse;
 const { Search } = Input;
 let timer: any;
 const QuestionnairList = () => {
     const getUserdata=useSelector((state:any)=>state?.user?.userData)
+    console.log(getUserdata,"getUserdata");
+    
   const [questionType, setQuestionType] = useState<any>(null);
   const { token } = theme.useToken();
 //   getUserdata?.user_id
 const [state,setState]=useState<any>([])
 const [state1,setState1]=useState<any>("")
 
-
-// const getDataById = async () => {
-//     const item = {
-//       user_id: ""
-//     }
-//     try {
-//       const res = await api.User.getById(item as any);
-//       setState1(res?.data || null);
-//     } catch (error: any) {
-//       alert(error.message);
-//     }
-//   };
     const dataSource2 = [
         {
             key: '1',
@@ -94,26 +70,7 @@ const [state1,setState1]=useState<any>("")
             <p >
             <span>{res?.question}:</span>
         </p>, 
-         action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-         {/* <li>
-            <QuestionanirModal {...res} type={"edit"} />
-         </li> */}
-         <li>
-                  <Link href={`/admin/questionnaire/${res?.id}`} >
-                      <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                  </Link>
-              </li>
-         {/* <li>
-             <Popconfirm
-                 title="Delete"
-                 description="Are you sure you want to delete ?"
-                 onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
-             // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-             >
-                 <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-             </Popconfirm>
-         </li> */}
-     </ul>
+         
             
         }})
     const columns = [
@@ -127,14 +84,20 @@ const [state1,setState1]=useState<any>("")
             dataIndex: 'question',
             key: 'question',
         },
-        {
-            title: 'Action',
-            dataIndex: 'action',
-            key: 'action',
-        },
+        
        
     ];
-   
+    const getDataById = async (id: any) => {
+        const item = {
+            user_id: id
+        }
+        try {
+            const res = await api.User.getById(item as any);
+            setState(res?.data || null);
+        } catch (error: any) {
+            alert(error.message);
+        }
+    };
 const initialise = async (questionType: any) => {
     try {
        
@@ -170,6 +133,15 @@ const downLoadPdf = async () => {
     const { blob, timestamp } = await generatePdf();
     saveAs(blob, `Order_${timestamp}.pdf`);
 };
+
+const handleDownloadAndFetchData = (id: any) => {
+    getDataById(id);
+    downLoadPdf();
+};
+const handleFetchAndFetchData = (id: any) => {
+    getDataById(id);
+    // sharePdf();
+};
 const panelStyle = {
     marginBottom: 24,
     background: token.colorFillAlter,
@@ -187,11 +159,8 @@ const genExtra = (res: any) => (<ul className='list-unstyled mb-0 gap-3 d-flex'>
   return (
     <MainLayout>
     <Fragment>
-        {/* <Head>
-<title>FAQs</title>
-<meta name="description" content="FAQs" />
-</Head> */}
         <section>
+            {getUserdata?.is_admin==false?
         <Row gutter={[20, 20]}>
                     <Col span={24}>
                         <Card className='common-card'>
@@ -208,6 +177,9 @@ const genExtra = (res: any) => (<ul className='list-unstyled mb-0 gap-3 d-flex'>
                             {/* Search  */}
                             <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
                                 <Search size="large" placeholder="Search..."     enterButton />
+                                <Tooltip title="Download Pdf">
+                      <Button type="primary" onClick={downLoadPdf}><DownloadOutlined /> Download Pdf</Button>
+                    </Tooltip>
                                 {/* <Link href="/faq/add"><Button type="primary" htmlType="button" icon={<PlusOutlined />} size={'large'}>Add FAQ</Button></Link> */}
                             </div>
                             {/* Accordion  */}
@@ -231,8 +203,8 @@ const genExtra = (res: any) => (<ul className='list-unstyled mb-0 gap-3 d-flex'>
                             {/* <Pagination current={Number(router.query.pagination) || 1} pageSize={Number(router.query.limit) || 10} total={state.count} hideOnSinglePage={true} disabled={loading} onChange={handlePagination} /> */}
                         </Card>
                     </Col>
-                </Row>
-            {/* <Row gutter={[20, 20]}>
+                </Row>:
+            <Row gutter={[20, 20]}>
                 <Col span={24}>
                     <Card className='common-card'>
                         <div className='mb-4'>
@@ -247,7 +219,7 @@ const genExtra = (res: any) => (<ul className='list-unstyled mb-0 gap-3 d-flex'>
                         <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
                             <Search size="large" placeholder="Search..."  enterButton />
                                 <Tooltip title="Download Pdf">
-                      <Button className='ViewMore ' onClick={downLoadPdf}><DownloadOutlined /></Button>
+                      <Button type="primary" onClick={downLoadPdf}><DownloadOutlined /> Download Pdf</Button>
                     </Tooltip>
                         </div>
                         <div className='accordion-wrapper'>
@@ -255,7 +227,7 @@ const genExtra = (res: any) => (<ul className='list-unstyled mb-0 gap-3 d-flex'>
                         </div>
                     </Card>
                 </Col>
-            </Row> */}
+            </Row>}
                             {/* <CustomModal type={"Add"}/> */}
                         {/* Accordion  */}
                         

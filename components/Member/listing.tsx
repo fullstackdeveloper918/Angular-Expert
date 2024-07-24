@@ -73,6 +73,7 @@ const MemberList = () => {
         is_archive: ""
     })
     const [state1, setState1] = useState<any>([])
+    const [state2, setState2] = useState<any>([])
     const cookies = parseCookies();
     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
     console.log(accessToken, "qwertyui");
@@ -183,6 +184,65 @@ const MemberList = () => {
         getDataById(id);
         sharePdf();
     };
+    // const completed2 = state2?.filter((res:any) => res?.is_completed === true);
+    const user_completed = state2?.slice(0, 5).map((res: any, index: number) => {
+        return {
+          key: index + 1,
+          name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+          company: res?.company_name,
+          email: res?.email,
+          status:res?.is_completed==true?"Completed":"Pending",
+          action: <ul className='m-0 list-unstyled d-flex gap-2'>
+          <li>
+              <Tooltip title="Download Pdf">
+                  <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.uid)}><DownloadOutlined /></Button>
+              </Tooltip>
+          </li>
+          <li>
+              <Tooltip title="Share Pdf link">
+                  <Button className='ViewMore ' onClick={() => handleFetchAndFetchData(res?.uid)}><ShareAltOutlined /></Button>
+              </Tooltip>
+          </li>
+          <li>
+              <Link href={`/admin/member/${res?.uid}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
+          </li>
+
+      </ul>
+        }
+      }
+      );
+      const user_completed_columns = [
+        {
+          title: 'Sr.No',
+          dataIndex: 'key',
+          key: 'key',
+        },
+        {
+          title: 'Name',
+          dataIndex: 'name',
+          key: 'name',
+        },
+        {
+          title: 'Company Name',
+          dataIndex: 'company',
+          key: 'company',
+        },
+        {
+          title: 'Email',
+          dataIndex: 'email',
+          key: 'email',
+        },
+        {
+          title: 'Status',
+          dataIndex: 'status',
+          key: 'status',
+        },
+        {
+          title: 'Action',
+          dataIndex: 'action',
+          key: 'action',
+        },
+      ];
     const dataSource = filteredData?.map((res: any, index: number) => {
         return {
             key: index + 1,
@@ -269,6 +329,8 @@ const MemberList = () => {
         try {
             let res = await api.User.listing(query);
             setState1(res?.data || []);
+            let apiRes=await api.User.user_listing()
+            setState2(apiRes?.data)
             if (res?.status == 400) {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
@@ -344,14 +406,17 @@ const MemberList = () => {
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
+                                    {getUserdata?.is_admin==false?
+                                    <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} pagination={false} />:
                                     <Table className="tableBox" dataSource={dataSource} columns={columns} pagination={false} />
+                                }
                                 </div>
                                 {/* Pagination  */}
-                                <Row justify={'center'} className="mt-5">
+                                {/* <Row justify={'center'} className="mt-5">
                                     <Col span={24}>
                                         <Pagination total={15} hideOnSinglePage={true} disabled={loading} />
                                     </Col>
-                                </Row>
+                                </Row> */}
                             </Card>
                         </Col>
                     </Row>

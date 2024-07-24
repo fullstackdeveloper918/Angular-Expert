@@ -127,115 +127,51 @@ const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
             let res = await api.User.edit(items)
             
                 // router.push(`/admin/member`)
-            }else{
-                // const check={
-                //     userId: value,
-                //     file: photoComment,
-                // }
-                setLoading(true)
-                // let res2 = await api.ImageUpload.add(check as any)
-                
-            
-                let res =await api.Auth.signUp(item);
-                // axios.post('https://frontend.goaideme.com/uploadFile', )
-
-
-                // if (fileLists.length === 0) {
-                //     toast.error('Please select files to upload.');
-                //     return;
-                //   }
-
-              
-              
-                //   const formData:any = new FormData();
-                //   for (let i = 0; i < fileLists.length; i++) {
-                //     formData.append(`files`, fileLists[i]);
-                //   }
-
-
-                // try {
-                //   for (const id in fileLists) {
-                //     const formData = new FormData();
-                //     fileLists[id].forEach((file:any) => {
-                //       formData.append('file', file?.originFileObj);
-                //     });
-                //     formData.append('id', id);
-                //     formData.append('comment', "check comment");
-            
-                //     const response = await axios.post('https://frontend.goaideme.com/uploadFile', formData, {
-                //       headers: {
-                //         'Content-Type': 'multipart/form-data',
-                //       },
-                //     });
-            
-                //     console.log(`Files for ${id} uploaded successfully:`, response.data);
-                //   }
-                // } catch (error) {
-                //   console.error('Error uploading files:', error);
-                // }
-
-                const payload = Object.keys(fileLists).map(id => ({
-                  id,
-                  comment: "cehck comments" || '',
-                  files: fileLists[id].map((file:any) => file.originFileObj),
+            }
+            else {
+              setLoading(true);
+              const payload =
+                photoComment &&
+                photoComment.map((item, index) => ({
+                  comment: item?.comment,
+                  files: item?.files?.fileList.map(
+                    (file: any) => file?.originFileObj
+                  ),
                 }));
-            
-                try {
-                  for (const item of payload) {
-                    const formData = new FormData();
-                    formData.append('id', item.id);
-                    formData.append('comment', item.comment);
-            
-                    // Append files to FormData
-                    item.files.forEach((file:any) => {
-                      formData.append('files', file);
-                    });
-            
-                    // Send to the backend
-                    const response = await axios.post('https://frontend.goaideme.com/uploadFile', formData, {
-                      headers: {
-                        'Content-Type': 'multipart/form-data',
-                      },
-                    });
-            
-                    console.log(`Files and comment for ID ${item.id} uploaded successfully:`, response.data);
-                  }
-                } catch (error) {
-                  console.error('Error uploading files:', error);
-                }
-
-
-
-              
-              
-                  // try {
-                  //   const response = await axios.post('https://frontend.goaideme.com/uploadFile', formData, {
-                  //     headers: {
-                  //       'Content-Type': 'multipart/form-data',
-                  //       Token: `${accessToken}`,
-                  //     },
-                  //   });
-                    
-                    // if (response?.data?.status == 400) {
-                    //     toast.error("Session Expired Login Again")
-                    //     router.replace("/auth/signin")
-                    //   }
-                  //   toast.success('Files uploaded successfully.');
-                   
-                  // } catch (error) {
-                  //   toast.error('An error occurred while uploading the files.');
-        
-                  // }
-
-
-              
-                toast.success('Add Successsfully', {
-                    position: 'top-center',
-                    autoClose: 300,
+              const formData = new FormData();
+              formData.append("id", value);
+              payload.forEach((entry: any, entryIndex: number) => {
+                // Append other data if needed
+                formData.append(`comment_${entryIndex}`, entry?.comment);
+                // Append files
+                entry?.files?.forEach((file: any, fileIndex: number) => {
+                  formData.append(`comment_${entryIndex}_file${fileIndex}`, file);
                 });
-              
-                
-                // router.push(`/admin/member`)
+              });
+              try {
+                const response = await axios.post(
+                  "https://frontend.goaideme.com/uploadFile",
+                  formData,
+                  {
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                  }
+                );
+                if (response) {
+                  toast.success("Added Successsfully", {
+                    position: "top-center",
+                    autoClose: 300,
+                  });
+                }
+              } catch (error) {
+                if (error) {
+                  toast.error("Something went wrong please try again", {
+                    position: "top-center",
+                    autoClose: 300,
+                  });
+                }
+              }
             }
         } catch (error) {
             console.error(error);

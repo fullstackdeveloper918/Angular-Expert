@@ -44,6 +44,8 @@ const MeetingAdd = () => {
     const [loading, setLoading] = useState(false)
     const [selectedTimezone, setSelectedTimezone] = useState(moment.tz.guess()); // Default to local timezone
     const [selectedDate, setSelectedDate] = useState<any>(null);
+    const [selectedLocation, setSelectedLocation] = useState<any>('');
+    const [selectedHotel, setSelectedHotel] = useState<any>('');
 
     const onChangeDate = (date: any) => {
         const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
@@ -89,8 +91,8 @@ const MeetingAdd = () => {
             start_time: dayjs(values?.start_time).utc().valueOf(),
             end_time: dayjs(values?.end_time).utc().valueOf(),
             year: dayjs(values?.year).format("YYYY"),
-            location: values?.location,
-            hotel: values?.hotel,
+            location: selectedLocation,
+            hotel: selectedHotel,
             airport: values?.airport,
             host_company: values?.host_company,
             host: ["o7YFpiVNFSVOUbTScNZYo6X9jtB2"],
@@ -147,11 +149,12 @@ const MeetingAdd = () => {
     };
 
     const locationSearchRef = useRef(null);
+    const hotelSearchRef = useRef(null);
     useEffect(() => {
         const loadGoogleMapScript = () => {
             if (!window.google) {
                 const googleMapScript = document.createElement('script');
-                googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCp49QdcWtVxJm7XmXZBjLCNxQNMudrbwM&libraries=places`;
+                googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDVyNgUZlibBRYwSzi7Fd1M_zULyKAPLWQ&libraries=places`;
                 googleMapScript.onload = initPlaceAPI;
                 document.body.appendChild(googleMapScript);
             } else {
@@ -160,12 +163,22 @@ const MeetingAdd = () => {
         };
         const initPlaceAPI = () => {
             if (locationSearchRef.current) {
-                let autocomplete = new window.google.maps.places.Autocomplete(
+                let locationAutocomplete = new window.google.maps.places.Autocomplete(
                     locationSearchRef.current
                 );
-                autocomplete.addListener('place_changed', () => {
-                    let place = autocomplete.getPlace();
-                    // Handle place data if needed
+                locationAutocomplete.addListener('place_changed', () => {
+                    let place = locationAutocomplete.getPlace();
+                    setSelectedLocation(place.formatted_address || '');
+                });
+            }
+
+            if (hotelSearchRef.current) {
+                let hotelAutocomplete = new window.google.maps.places.Autocomplete(
+                    hotelSearchRef.current
+                );
+                hotelAutocomplete.addListener('place_changed', () => {
+                    let place = hotelAutocomplete.getPlace();
+                    setSelectedHotel(place.formatted_address || '');
                 });
             }
         };
@@ -175,6 +188,14 @@ const MeetingAdd = () => {
             // Cleanup code if any
         };
     }, []);
+    const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        const isAlphaOrSpace = /[a-zA-Z ]/.test(e.key);
+        const isSpecialKey = ['Backspace', 'Tab', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.key);
+
+        if (!isAlphaOrSpace && !isSpecialKey) {
+            e.preventDefault();
+        }
+    };
     return (
         <MainLayout>
             <Fragment>
@@ -269,7 +290,8 @@ const MeetingAdd = () => {
                                                 {/* <Input size={'large'} placeholder="Location"   /> */}
                                                 <input
                                         className="custom-input"
-                                        ref={(ref:any) => (locationSearchRef.current = ref)}
+                                        style={{ width: '100%' }}
+                                        ref={locationSearchRef}
                                         placeholder="Enter your address"
                                     />
                                             </Form.Item>
@@ -281,25 +303,16 @@ const MeetingAdd = () => {
                          <GoogleMap locationSearchRef={locationSearchRef.current}/>
                         </Form.Item> */}
                                             <Form.Item className='col-lg-6 col-sm-12' name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
-                                                <Input size={'large'} placeholder="Hotel"
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim()
-                                                        }
-                                                    }}
-                                                />
+                                            <input
+                                        className="custom-input"
+                                        style={{ width: '100%' }}
+                                        ref={hotelSearchRef}
+                                        placeholder="Enter your address"
+                                    />
                                             </Form.Item>
                                             <Form.Item name="airport" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Nearest Airport' }]} label="Nearest Airport">
                                                 <Input size={'large'} placeholder="Nearest Airport"
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim()
-                                                        }
-                                                    }}
+                                                    onKeyPress={onKeyPress}
                                                 />
                                             </Form.Item>
                                             <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">

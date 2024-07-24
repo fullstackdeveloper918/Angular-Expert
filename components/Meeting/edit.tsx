@@ -2,7 +2,7 @@
 import { Breadcrumb, Form, Select, Input, Typography, DatePicker, TimePickerProps, TimePicker } from "antd";
 import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
@@ -47,6 +47,8 @@ const MeetingEdit = () => {
     notes: "",
     phone: [],
   })
+  const [selectedLocation, setSelectedLocation] = useState<any>('');
+  const [selectedHotel, setSelectedHotel] = useState<any>('');
   const [meetingType, setMeetingType] = useState<any>(state?.meeting_type);
   const handleChange = (value: any) => {
     setMeetingType(value);
@@ -142,6 +144,55 @@ const MeetingEdit = () => {
     // Can not select years before this year
     return current && current.year() < dayjs().year();
   };
+
+  const locationSearchRef = useRef(null);
+  const hotelSearchRef = useRef(null);
+  useEffect(() => {
+      const loadGoogleMapScript = () => {
+          if (!window.google) {
+              const googleMapScript = document.createElement('script');
+              googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDVyNgUZlibBRYwSzi7Fd1M_zULyKAPLWQ&libraries=places`;
+              googleMapScript.onload = initPlaceAPI;
+              document.body.appendChild(googleMapScript);
+          } else {
+              initPlaceAPI();
+          }
+      };
+      const initPlaceAPI = () => {
+          if (locationSearchRef.current) {
+              let locationAutocomplete = new window.google.maps.places.Autocomplete(
+                  locationSearchRef.current
+              );
+              locationAutocomplete.addListener('place_changed', () => {
+                  let place = locationAutocomplete.getPlace();
+                  setSelectedLocation(place.formatted_address || '');
+              });
+          }
+
+          if (hotelSearchRef.current) {
+              let hotelAutocomplete = new window.google.maps.places.Autocomplete(
+                  hotelSearchRef.current
+              );
+              hotelAutocomplete.addListener('place_changed', () => {
+                  let place = hotelAutocomplete.getPlace();
+                  setSelectedHotel(place.formatted_address || '');
+              });
+          }
+      };
+      loadGoogleMapScript();
+      // Cleanup function if needed
+      return () => {
+          // Cleanup code if any
+      };
+  }, []);
+  const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      const isAlphaOrSpace = /[a-zA-Z ]/.test(e.key);
+      const isSpecialKey = ['Backspace', 'Tab', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.key);
+
+      if (!isAlphaOrSpace && !isSpecialKey) {
+          e.preventDefault();
+      }
+  };
   return (
     <MainLayout>
       <Fragment>
@@ -209,20 +260,18 @@ const MeetingEdit = () => {
                         />
                       </Form.Item>
 
-                      <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Year' }]} label="End Year">
+                      <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Year' }]} label="Meeting Year">
                         <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
                       </Form.Item>
-                      <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Location' }]} label="Location">
-                        <Input size={'large'} placeholder="Location"
-                          onKeyPress={(e: any) => {
-                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                              e.preventDefault();
-                            } else {
-                              e.target.value = String(e.target.value).trim()
-                            }
-                          }}
-                        />
-                      </Form.Item>
+                      <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
+                      <input
+                                        className="custom-input"
+                                        style={{ width: '100%' }}
+                                        ref={locationSearchRef}
+                                        placeholder="Enter your address"
+                                    />
+                                                {/* <Input size={'large'} placeholder="Location"   /> */}
+                                            </Form.Item>
                       <Form.Item className='col-lg-6 col-sm-12' name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
                         <Input size={'large'} placeholder="Hotel"
                           onKeyPress={(e: any) => {
@@ -269,13 +318,13 @@ const MeetingEdit = () => {
                                   </Form.Item> */}
                       <Form.Item name="phone" className='col-lg-6 col-sm-12' rules={[
 
-                        { pattern: /^[0-9]*$/, message: 'Only numbers are allowed' }
+{ pattern: /^[0-9\s,]*$/, message: 'Only numbers and spaces are allowed' }
                       ]} label="Cell">
                         <Input
                           size={'large'} placeholder="Cell"
                           // type="number"
                           onKeyPress={(event) => {
-                            if (!/[0-9]/.test(event.key)) {
+                            if (!/[0-9\s,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
                               event.preventDefault();
                             }
                           }}

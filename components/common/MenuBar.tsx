@@ -77,7 +77,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const hasDashboardPermission =
     (getUserdata?.permission?.length &&getUserdata.permission.includes("DASHBOARD")) ||getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
-  const hasMeetingPermission =(getUserdata?.permission?.length &&getUserdata.permission.includes("Meeting")) ||getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const hasMeetingPermission =(getUserdata?.permission?.length &&getUserdata.permission.includes("Meeting")) ||getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) ||getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
   const hasQUESTIONNAIREPermission =(getUserdata?.permission?.length &&getUserdata.permission.includes("QUESTIONNAIRE")) || getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
 
@@ -104,7 +104,8 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
       key: henceofrthEnums.Roles.USERS,
       view: getItem(
         <Link href="/admin/member" className="text-decoration-none">
-          Club Members
+          {getUserdata?.is_admin==false?"User":
+          "Club Members"}
         </Link>,
         "users",
         <UserOutlined style={iconSize} />
@@ -124,7 +125,8 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
             "meetings",
             <OrderedListOutlined style={iconSize} />
           ),
-          getItem(
+          
+          getUserdata?.is_admin && getItem(
             <Link
               href="/admin/manage_questions"
               className="text-decoration-none"

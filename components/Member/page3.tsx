@@ -115,9 +115,23 @@ const Page3 = () => {
       }
       try {
           setLoading(true)
-          let res = await api.Auth.signUp(items)
+          if (type == "edit") {
+            let items = {
+                goals: {
+                    userId: value,
+                    goal_last_meeting: goalsData,
+                    goal_next_meeting: goalsData1
+                }
+            } as any
+        setLoading(true)
+        let res = await api.User.edit(items)
+            router.push(`/admin/member/add/page4?${value}&edit`)
+        }else{
 
-          router.push(`/admin/member/add/page4?${res?.userId}`)
+            let res = await api.Auth.signUp(items)
+            
+            router.push(`/admin/member/add/page4?${res?.userId}`)
+        }
       } catch (error) {
 
       } finally {
