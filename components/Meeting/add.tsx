@@ -26,6 +26,7 @@ import TimezoneSelect from "react-timezone-select";
 import { InlineWidget } from 'react-calendly';
 import CalendlyWidget from "../common/calender"
 import moment from 'moment-timezone';
+import { toast } from "react-toastify";
 const { Option } = Select;
 const timezones = moment.tz.names();
 
@@ -95,13 +96,13 @@ const MeetingAdd = () => {
             hotel: selectedHotel,
             airport: values?.airport,
             host_company: values?.host_company,
-            host: ["o7YFpiVNFSVOUbTScNZYo6X9jtB2"],
+            host: ["D4ieiU2bsgVzbWKJjvGTmQrDkKu2","0JDurp3EdwggzPU8VnvrAOlOCYC2","2PXlHPwbYTa3efote4dIx9Ifdeu1" ,"5yYew8Hetcgd77eVRFVwZ8OhkSh2","CijVwc2zqQNfBESwGSugwqGZbzs2"],
             // host: values?.host,
             cell: values?.cell,
             weather: values?.weather,
             comments: values?.comments,
             notes: values?.notes,
-            phone: ["8521458798", "8796548596"],
+            phone: ["+16576455654", "+1679648596"],
         }
 
         const timestamp = 1720782277333;
@@ -113,7 +114,8 @@ const MeetingAdd = () => {
 
         try {
             let res = await api.Meeting.create(items as any);
-            // router.back()
+            toast.success(res?.message)
+            router.back()
             // onAdd();
         } catch (error) {
 
@@ -273,14 +275,16 @@ const MeetingAdd = () => {
                                                     style={{ width: '100%' }}
                                                     // defaultValue={defaultValue}
                                                     // showTime
-                                                    disabledDate={disabledDate}
+                                                    // disabledDate={disabledDate}
                                                     // disabledTime={disabledTime}
                                                     // locale={buddhistLocale}
                                                     onChange={onChangeDate}
                                                 />
                                             </Form.Item>
                                             <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Time' }]} label="Meeting Time">
-                                                <TimePicker onChange={onChange1} disabledTime={disabledTime} style={{ width: '100%' }} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} />
+                                                <TimePicker onChange={onChange1} 
+                                                // disabledTime={disabledTime} 
+                                                style={{ width: '100%' }} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} />
                                             </Form.Item>
                                             <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Year' }]} label="Meeting Year">
                                                 <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />

@@ -87,6 +87,10 @@ const User = {
     requests.get(`list${q ? `?${q}` : ""}`),
   user_listing: (q?: string) =>
     requests.get(`single-user-form-status`),
+  user_total_count: (q?: string) =>
+    requests.get(`total-member-count`),
+  user_remains_userfor_meeting: (q?: string) =>
+    requests.get(`remains-userfor-fill-meeting`),
   export: (start_date?: number, end_date?: number) =>
     requests.get(`user?start_date=${start_date}&end_date=${end_date}`),
   getById: (info: any) =>

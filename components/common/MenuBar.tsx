@@ -76,10 +76,11 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
   const [openKeys, setOpenKeys] = useState(["sub1"]);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const hasDashboardPermission =
-    (getUserdata?.permission?.length &&getUserdata.permission.includes("DASHBOARD")) ||getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
-  const hasMeetingPermission =(getUserdata?.permission?.length &&getUserdata.permission.includes("Meeting")) ||getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
-  const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) ||getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
-  const hasQUESTIONNAIREPermission =(getUserdata?.permission?.length &&getUserdata.permission.includes("QUESTIONNAIRE")) || getUserdata?.email === "nahbcraftsmen@gmail.com"||getUserdata?.is_admin==false;
+    (getUserdata?.permission?.length && getUserdata.permission.includes("DASHBOARD")) || getUserdata?.email === "nahbcraftsmen@gmail.com" || getUserdata?.is_admin == false;
+  const hasMeetingPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("Meeting")) || getUserdata?.email === "nahbcraftsmen@gmail.com" ;
+  const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com" ;
+  const hasQUESTIONNAIREPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("QUESTIONNAIRE")) || getUserdata?.email === "nahbcraftsmen@gmail.com" ;
+  const hasUser =  getUserdata?.is_admin == false;
 
   const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
@@ -104,8 +105,8 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
       key: henceofrthEnums.Roles.USERS,
       view: getItem(
         <Link href="/admin/member" className="text-decoration-none">
-          {getUserdata?.is_admin==false?"User":
-          "Club Members"}
+          {getUserdata?.is_admin == false ? "User" :
+            "Club Members"}
         </Link>,
         "users",
         <UserOutlined style={iconSize} />
@@ -125,7 +126,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
             "meetings",
             <OrderedListOutlined style={iconSize} />
           ),
-          
+
           getUserdata?.is_admin && getItem(
             <Link
               href="/admin/manage_questions"
@@ -161,6 +162,46 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
         </span>
       ),
     },
+    hasUser && {
+      key: henceofrthEnums.Roles.MY_PRIFILE_SETTINS,
+      view: getItem(
+        "My Updates",
+        "sub2",
+        <UsergroupAddOutlined style={iconSize} />,
+        [
+          getItem(
+            <Link
+              href="/admin/member"
+              className="text-decoration-none"
+            >
+              My Document
+            </Link>,
+            "profile",
+            <AppstoreAddOutlined style={iconSize} />
+          ),
+          getItem(
+
+            <Link href="/admin/meetings" className="text-decoration-none">
+              Meetings
+            </Link>,
+            "meetings",
+            <OrderedListOutlined style={iconSize} />
+          ),
+
+        
+          getItem(
+            <Link href="/admin/questionnaire" className="text-decoration-none">
+              Questionnaire
+            </Link>,
+            "questionnaire",
+            <span>
+              <BookOutlined style={iconSize} />
+            </span>
+          )
+        ]
+      ),
+    },
+  
   ];
 
   const general = [
@@ -282,6 +323,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
       "USERS",
       "PAGES",
       "CONTACT_US",
+      "MY_PRIFILE_SETTINGS",
       "CLOUD_MESSAGING",
       "DASHBOARD",
       "ORDERS",
@@ -354,19 +396,18 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
       </div>
 
       <div
-        className={`menu-profile-wrapper my-4 d-flex align-items-center gap-2 ${
-          !collapsed ? "bg-light" : "p-0 bg-tranaprent"
-        }`}
+        className={`menu-profile-wrapper my-4 d-flex align-items-center gap-2 ${!collapsed ? "bg-light" : "p-0 bg-tranaprent"
+          }`}
       >
         <Avatar size={50}>A</Avatar>
         {/* <Avatar size={50}>{getUserdata?.firstname.slice(0,1)}</Avatar> */}
         {!collapsed && (
           <div>
-            {getUserdata?.email === "nahbcraftsmen@gmail.com"?
-            <Typography.Title level={5} className="m-0 fw-bold text-capitalize">
-              {"Super Admin"}
-            </Typography.Title>
-            :""}
+            {getUserdata?.email === "nahbcraftsmen@gmail.com" ?
+              <Typography.Title level={5} className="m-0 fw-bold text-capitalize">
+                {"Super Admin"}
+              </Typography.Title>
+              : ""}
             <Typography.Paragraph className="m-0">{getUserdata?.firstname}</Typography.Paragraph>
           </div>
         )}

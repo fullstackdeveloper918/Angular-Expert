@@ -16,25 +16,27 @@ import { useSelector } from "react-redux";
 import Icons from "@/components/common/Icons";
 import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
-
+import Timmer from "../common/Timmer"
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
 };
 
 const AdminDashboard: Page = (props: any) => {
-  const getUserdata=useSelector((state:any)=>state?.user?.userData)
-console.log(getUserdata,"qwertyui");
+  const getUserdata = useSelector((state: any) => state?.user?.userData)
+  console.log(getUserdata, "qwertyui");
 
-  const[state1,setState1]=useState<any>([])
-  const[state2,setState2]=useState<any>([])
-  const[upcoming,setUpcoming]=useState<any>("")
-  const[next,setNext]=useState<any>("")
+  const [state1, setState1] = useState<any>([])
+  const [state2, setState2] = useState<any>([])
+  const [formRemainFill, setFormRemainFill] = useState<any>("")
+  const [upcoming, setUpcoming] = useState<any>("")
+  const [next, setNext] = useState<any>("")
+  const [total_count, setTotal_count] = useState<any>("")
   const [areas, setAreas] = useState<any>([]);
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
 
   const DashboardData = [
     // getUserdata?.is_admin==false?
-    
+
     // getUserdata?.is_admin==true?
     {
       cardBackground: "#C8FACD",
@@ -62,12 +64,12 @@ console.log(getUserdata,"qwertyui");
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#B76E00",
-      title: "0",
+      title: `${total_count?.data}`,
       count: "Total Club Members",
-      link:hasClubMemberPermission? `/admin/member`:"/admin/dashboard"
+      link: hasClubMemberPermission ? `/admin/member` : "/admin/dashboard"
 
     },
- 
+
   ]
   const DashboardData2 = [
     // getUserdata?.is_admin==false?
@@ -75,7 +77,7 @@ console.log(getUserdata,"qwertyui");
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: "0",
+      title: `${upcoming?.resutl}`,
       textColor: "#007B55",
       count: "No. of Users fillled the Form for coming meeting",
       link: "/admin/dashboard"
@@ -86,36 +88,36 @@ console.log(getUserdata,"qwertyui");
       cardBackground: "#FFF5CC",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: "0",
+      title: `${formRemainFill?.data}`,
       textColor: "#B76E00",
       count: "No. of Users remains to fill the Form for coming meeting",
       link: "/admin/dashboard"
 
     },
-   
- 
+
+
   ]
 
 
 
-  const completed = state1?.filter((res:any) => res?.is_completed === true);
-  const non_completed=state1?.filter((res:any)=>res?.is_completed==false)
-  const completed2 = state2?.filter((res:any) => res?.is_completed === true);
-  const non_completed2=state2?.filter((res:any)=>res?.is_completed==false)
+  const completed = state1?.filter((res: any) => res?.is_completed === true);
+  const non_completed = state1?.filter((res: any) => res?.is_completed == false)
+  const completed2 = state2?.filter((res: any) => res?.is_completed === true);
+  const non_completed2 = state2?.filter((res: any) => res?.is_completed == false)
   const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+      name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
       company: res?.company_name,
       email: res?.email,
       phone: res?.phone_number,
       position: res?.position,
       city: res?.home_city,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        {hasClubMemberPermission ||getUserdata?.is_admin==false? 
-        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link>:
-        <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}
-        </li>
+        {hasClubMemberPermission || getUserdata?.is_admin == false ?
+          <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link> :
+          <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}
+      </li>
       </ul>
     }
   }
@@ -123,13 +125,13 @@ console.log(getUserdata,"qwertyui");
   const dataSource1 = completed?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+      name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
       company: res?.company_name,
       email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-       {hasClubMemberPermission||getUserdata?.is_admin==false? 
-        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link>:
-        <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}</li>
+        {hasClubMemberPermission || getUserdata?.is_admin == false ?
+          <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link> :
+          <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}</li>
       </ul>
     }
   }
@@ -137,137 +139,131 @@ console.log(getUserdata,"qwertyui");
   const dataSource2 = non_completed?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
+      name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
       company: res?.company_name,
       email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-       {hasClubMemberPermission||getUserdata?.is_admin==false? 
-        <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link>:
-        <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}</li>
+        {hasClubMemberPermission || getUserdata?.is_admin == false ?
+          <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link> :
+          <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}</li>
       </ul>
     }
   }
   );
-  const dataSource3 = areas?.length &&areas?.map((res: any, index: number) => {
+  const dataSource3 = areas?.length && areas?.map((res: any, index: number) => {
     return {
-        key: index+1,
-        meeting:res?.meeting_name,
-        start: dayjs(res?.start_time).format('h A DD-MM-YYYY'),
-        end: dayjs(res?.end_time).format('h A DD-MM-YYYY'),
-        // action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-        //     <li>
-        //         <Link href={`/admin/meetings/${res?.id}/edit`} >
-        //             <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-        //         </Link>
-        //     </li>
-           
-        // </ul>
-    }})
-    const user_non_completed = non_completed2?.slice(0, 5).map((res: any, index: number) => {
-      return {
-        key: index + 1,
-        name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
-        company: res?.company_name,
-        email: res?.email,
-        action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-          <Link href={`/admin/member/${res?.uid}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
-        </ul>
-      }
+      key: index + 1,
+      meeting: res?.meeting_name,
+      start: dayjs(res?.start_time).format('h A DD-MM-YYYY'),
+      end: dayjs(res?.end_time).format('h A DD-MM-YYYY'),
+      action: <Timmer data={res?.start_time}/>
     }
-    );
-    const user_completed = completed2?.slice(0, 5).map((res: any, index: number) => {
-      return {
-        key: index + 1,
-        name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
-        company: res?.company_name,
-        email: res?.email,
-        action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        
-          <Link href={`/admin/member/${res?.uid}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
-        </ul>
-      }
+  })
+  const user_non_completed = non_completed2?.slice(0, 5).map((res: any, index: number) => {
+    return {
+      key: index + 1,
+      name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
+      company: res?.company_name,
+      email: res?.email,
+      action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+        <Link href={`/admin/member/${res?.uid}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+      </ul>
     }
-    );
-    const user_completed_columns = [
-      {
-        title: 'Sr.No',
-        dataIndex: 'key',
-        key: 'key',
-      },
-      {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: 'Club Name',
-        dataIndex: 'company',
-        key: 'company',
-      },
-      {
-        title: 'Email',
-        dataIndex: 'email',
-        key: 'email',
-      },
-      {
+  }
+  );
+  const user_completed = completed2?.slice(0, 5).map((res: any, index: number) => {
+    return {
+      key: index + 1,
+      name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
+      company: res?.company_name,
+      email: res?.email,
+      action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
+
+        <Link href={`/admin/member/${res?.uid}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+      </ul>
+    }
+  }
+  );
+  const user_completed_columns = [
+    {
+      title: 'Sr.No',
+      dataIndex: 'key',
+      key: 'key',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Club Name',
+      dataIndex: 'company',
+      key: 'company',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+    },
+  ];
+  const user_non_completed_columns = [
+    {
+      title: 'Sr.No',
+      dataIndex: 'key',
+      key: 'key',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Club Name',
+      dataIndex: 'company',
+      key: 'company',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+    },
+  ];
+  const columns3 = [
+    {
+      title: 'Sr.no',
+      dataIndex: 'key',
+      key: 'key',
+    },
+    {
+      title: 'Meeting Name',
+      dataIndex: 'meeting',
+      key: 'meeting',
+    },
+    {
+      title: 'Start Time',
+      dataIndex: 'start',
+      key: 'start',
+    },
+    {
+      title: 'End Time',
+      dataIndex: 'end',
+      key: 'end',
+    },
+    {
         title: 'Action',
         dataIndex: 'action',
         key: 'action',
-      },
-    ];
-    const user_non_completed_columns = [
-      {
-        title: 'Sr.No',
-        dataIndex: 'key',
-        key: 'key',
-      },
-      {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: 'Club Name',
-        dataIndex: 'company',
-        key: 'company',
-      },
-      {
-        title: 'Email',
-        dataIndex: 'email',
-        key: 'email',
-      },
-      {
-        title: 'Action',
-        dataIndex: 'action',
-        key: 'action',
-      },
-    ];
-    const columns3 = [
-      {
-          title: 'Sr.no',
-          dataIndex: 'key',
-          key: 'key',
-      },
-      {
-          title: 'Meeting Name',
-          dataIndex: 'meeting',
-          key: 'meeting',
-      },
-      {
-          title: 'Start Time',
-          dataIndex: 'start',
-          key: 'start',
-      },
-      {
-          title: 'End Time',
-          dataIndex: 'end',
-          key: 'end',
-      },
-      // {
-      //     title: 'Action',
-      //     dataIndex: 'action',
-      //     key: 'action',
-      // },
+    },
   ];
 
 
@@ -369,221 +365,177 @@ console.log(getUserdata,"qwertyui");
     }] : [])
   ];
 
-  const getData=async()=>{
+  const getData = async () => {
     try {
-        let res=await api.User.listing()
-        let res1=await api.dashboard.upcoming()
-        let res2=await api.dashboard.next()
-       
-        setState1(res?.data)
-        setUpcoming(res1)
-        setNext(res2)
+      let res = await api.User.listing()
+      let apiRes = await api.User.user_total_count()
+      let res1 = await api.dashboard.upcoming()
+      let res2 = await api.dashboard.next()
+      setTotal_count(apiRes)
+      
+      setState1(res?.data)
+      setUpcoming(res1)
+      setNext(res2)
     } catch (error) {
-        
+
     }
-}
-const initialise = async () => {
-  try {
-      let res = await api.Meeting.listing();
-      let apiRes=await api.User.user_listing()
-      setState2(apiRes?.data)
-      setAreas(res); 
-  } catch (error) {
-      console.error('Error fetching meeting listing:', error);
   }
-};
-useEffect(() => {
+  const initialise = async () => {
+    try {
+      let res = await api.Meeting.listing();
+      let apiRes = await api.User.user_listing()
+      let apiRes1 = await api.User.user_remains_userfor_meeting()
+      setFormRemainFill(apiRes1)
+      console.log(apiRes1, "apiRes1");
 
-initialise(); 
+      setState2(apiRes?.data)
+      setAreas(res);
+    } catch (error) {
+      console.error('Error fetching meeting listing:', error);
+    }
+  };
+  useEffect(() => {
 
-}, []);
-useEffect(()=>{
+    initialise();
+
+  }, []);
+  useEffect(() => {
     getData()
 
-},[])
-console.log(state2,"state2");
+  }, [])
+  console.log(state2, "state2");
 
   return (
     <MainLayout>
 
       <Fragment>
-        {/* <Head>
-          <title>Dashboard</title>
-          <meta name="description" content="Homepage desc" />
-        </Head> */}
         <section>
-          {/* <div className="container-fluid"> */}
           <Row gutter={[20, 20]} className="mb-4 ">
-{getUserdata?.is_admin==true?
-<>
-{DashboardData && DashboardData?.map((data: any, index: number) => {
-  return (
-    <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
-      <Link className='text-decoration-none' href={data.link}>
-        <Card className='dashboard-widget-card text-center h-100 border-0' style={{ background: data.cardBackground }} >
-          <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
-            {data.icon}
-          </div>
-          <div className='dashboard-widget-card-content'>
-            <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
-            <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
-          </div>
-        </Card>
-      </Link>
-    </Col>
-  )
-})}
-</>:<>
-{DashboardData2 && DashboardData2?.map((data: any, index: number) => {
-  return (
-    <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
-      <Link className='text-decoration-none' href={data.link}>
-        <Card className='dashboard-widget-card text-center h-100 border-0' style={{ background: data.cardBackground }} >
-          <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
-            {data.icon}
-          </div>
-          <div className='dashboard-widget-card-content'>
-            <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
-            <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
-          </div>
-        </Card>
-      </Link>
-    </Col>
-  )
-})}
-</>}
+            {getUserdata?.is_admin == true ?
+              <>
+                {DashboardData && DashboardData?.map((data: any, index: number) => {
+                  return (
+                    <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
+                      <Link className='text-decoration-none' href={data.link}>
+                        <Card className='dashboard-widget-card text-center h-100 border-0' style={{ background: data.cardBackground }} >
+                          <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
+                            {data.icon}
+                          </div>
+                          <div className='dashboard-widget-card-content'>
+                            <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
+                            <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
+                          </div>
+                        </Card>
+                      </Link>
+                    </Col>
+                  )
+                })}
+              </> : <>
+                {DashboardData2 && DashboardData2?.map((data: any, index: number) => {
+                  return (
+                    <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
+                      <Link className='text-decoration-none' href={data.link}>
+                        <Card className='dashboard-widget-card text-center h-100 border-0' style={{ background: data.cardBackground }} >
+                          <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
+                            {data.icon}
+                          </div>
+                          <div className='dashboard-widget-card-content'>
+                            <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
+                            <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
+                          </div>
+                        </Card>
+                      </Link>
+                    </Col>
+                  )
+                })}
+              </>}
           </Row>
           <Row gutter={[20, 20]} className='dashboradTable'>
 
-          {/* {getUserdata?.is_admin==false?
-             <Col sm={24} md={24} lg={24}  xxl={12}>
-              <Card className='common-card'>
+            {getUserdata?.is_admin == false ?
+              <Col sm={24} md={24} lg={24} xxl={12}>
+                <Card className='common-card'>
 
-                <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                  <Typography.Title level={4} className='m-0 fw-bold'>User Complete Updates</Typography.Title>
-                </div>
-                <div className='tabs-wrapper'>
+                  {/* title  */}
+                  <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates</Typography.Title>
 
-                  <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} pagination={false} />
-                </div>
+                    {/* <Button className='text-center blackViewBtn'> View All</Button> */}
 
-              </Card>
-            </Col>
-        :""} */}
-  {/* {getUserdata?.is_admin==false?
-            <Col sm={24} md={24} lg={24}  xxl={12}>
-              <Card className='common-card'>
+                    {/* <Table dataSource={dataSource} columns={columns} />; */}
 
-                <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                  <Typography.Title level={4} className='m-0 fw-bold'>User Non-Complete Updates</Typography.Title>
+                  </div>
+                  {/* Search  */}
 
-                </div>
-                <div className='tabs-wrapper'>
+                  {/* Tabs  */}
+                  <div className='tabs-wrapper'>
 
-                  <Table dataSource={user_non_completed} columns={user_non_completed_columns} pagination={false} />
-                </div>
-              </Card>
-            </Col>:""} */}
-             <Col sm={24} md={24} lg={24}  xxl={12}>
-              <Card className='common-card'>
+                    <Table className="tableBox" dataSource={dataSource1} columns={columns1} pagination={false} />
+                  </div>
 
-                {/* title  */}
-                <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                  <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates</Typography.Title>
+                  {/* Pagination  */}
 
-                  {/* <Button className='text-center blackViewBtn'> View All</Button> */}
+                </Card>
+              </Col> : ""}
+            {getUserdata?.is_admin == false ?
+              <Col sm={24} md={24} lg={24} xxl={12}>
+                <Card className='common-card'>
 
-                  {/* <Table dataSource={dataSource} columns={columns} />; */}
+                  {/* title  */}
+                  <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates</Typography.Title>
 
-                </div>
-                {/* Search  */}
+                    {/* <Button className='text-center blackViewBtn'> View All</Button> */}
 
-                {/* Tabs  */}
-                <div className='tabs-wrapper'>
-
-                  <Table className="tableBox" dataSource={dataSource1} columns={columns1} pagination={false} />
-                </div>
-
-                {/* Pagination  */}
-
-              </Card>
-            </Col>
-            {/* // :""} */}
-{/* {getUserdata?.is_admin==true? */}
-            <Col sm={24} md={24} lg={24}  xxl={12}>
-              <Card className='common-card'>
-
-                {/* title  */}
-                <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                  <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates</Typography.Title>
-
-                  {/* <Button className='text-center blackViewBtn'> View All</Button> */}
-
-                  {/* <Table dataSource={dataSource} columns={columns} />; */}
+                    {/* <Table dataSource={dataSource} columns={columns} />; */}
 
 
-                </div>
-                {/* Search  */}
+                  </div>
+                  {/* Search  */}
 
-                {/* Tabs  */}
-                <div className='tabs-wrapper'>
+                  {/* Tabs  */}
+                  <div className='tabs-wrapper'>
 
-                  <Table dataSource={dataSource2} columns={columns} pagination={false} />
-                </div>
+                    <Table dataSource={dataSource2} columns={columns} pagination={false} />
+                  </div>
 
-                {/* Pagination  */}
+                  {/* Pagination  */}
 
-              </Card>
-            </Col>
-            {/* :""} */}
-            {/* {getUserdata?.is_admin==true? */}
-            {getUserdata?.is_admin==true?
-            <Col span={24} >
-              <Card className='common-card'>
-                <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                  <Typography.Title level={4} className='m-0 fw-bold'>Club Members</Typography.Title>
-                  {hasClubMemberPermission?
-                  <Link href={'/admin/member'}>
-                  <Button className='text-center blackViewBtn'> View All</Button>
-                  </Link>:""}
-                </div>
-                <div className='tabs-wrapper'>
+                </Card>
+              </Col> : ""}
+            {getUserdata?.is_admin == true ?
+              <Col span={24} >
+                <Card className='common-card'>
+                  <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Club Members</Typography.Title>
+                    {hasClubMemberPermission ?
+                      <Link href={'/admin/member'}>
+                        <Button className='text-center blackViewBtn'> View All</Button>
+                      </Link> : ""}
+                  </div>
+                  <div className='tabs-wrapper'>
 
-                  <Table dataSource={dataSource} columns={columns2} pagination={false} />
-                </div>
+                    <Table dataSource={dataSource} columns={columns2} pagination={false} />
+                  </div>
 
-              </Card>
-            </Col>:""}
-            {/* :""} */}
-            {getUserdata?.is_admin==false?
-            <Col span={24} >
-              <Card className='common-card'>
+                </Card>
+              </Col> : ""}
 
-                {/* title  */}
-                <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                  <Typography.Title level={4} className='m-0 fw-bold'>Coming Meetings</Typography.Title>
-                </div>
-                {/* Search  */}
+            {getUserdata?.is_admin == false ?
+              <Col span={24} >
+                <Card className='common-card'>
+                  <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Coming Meetings</Typography.Title>
+                  </div>
+                  <div className='tabs-wrapper'>
 
-                {/* Tabs  */}
-                <div className='tabs-wrapper'>
+                    <Table dataSource={dataSource3} columns={columns3} pagination={false} />
+                  </div>
 
-                  <Table dataSource={dataSource3} columns={columns3} pagination={false} />
-                </div>
-                {/* <div className=' justify-content-center mt-4 d-flex'> */}
-
-
-                {/* <Table dataSource={dataSource} columns={columns} />; */}
-                {/* </div> */}
-                {/* Pagination  */}
-
-              </Card>
-            </Col>
-         :""} 
+                </Card>
+              </Col>
+              : ""}
           </Row>
-          {/*  Graphs   */}
-          {/* {GraphType.map((res)=><DashboardGraph key={res.heading} {...res}/>)} */}
-
         </section>
       </Fragment>
     </MainLayout>

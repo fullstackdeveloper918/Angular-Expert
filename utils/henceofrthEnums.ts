@@ -34,6 +34,7 @@ enum Roles {
     DASHBOARD = "DASHBOARD",
     STAFF = "STAFFS",
     USERS = "USERS",
+    MY_PRIFILE_SETTINS="MY_PRIFILE_SETTINGS",
     PAGES = "PAGES",
     FAQ = "FAQS",
     DB_BACKUP = "DB_BACKUP",
