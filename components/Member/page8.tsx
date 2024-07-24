@@ -154,6 +154,7 @@ const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
                   formData,
                   {
                     headers: {
+                      Token: `${accessToken}`,
                       "Content-Type": "multipart/form-data",
                     },
                   }
