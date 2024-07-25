@@ -179,7 +179,7 @@ export const capFirst = (str: string) => {
         return str; // Return the original value if it's null or undefined
     }
 }
-const henceforthValidations = {
+const validation = {
     remUndrscore,
     toUppCase,
     toLowCase,
@@ -211,4 +211,4 @@ const henceforthValidations = {
     showPrice,
     uppercaseWords
 }
-export default henceforthValidations
+export default validation

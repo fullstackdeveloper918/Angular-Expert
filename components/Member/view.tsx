@@ -16,6 +16,7 @@ import Pdf from "../common/Pdf";
 import { DownloadOutlined, ShareAltOutlined } from "@ant-design/icons";
 import { parseCookies } from "nookies";
 import { useSelector } from "react-redux";
+import validation from "@/utils/validation";
 const { Row, Col, Card, Button, Space, Popconfirm } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
     ssr: false,
@@ -222,15 +223,16 @@ const sharePdf = async () => {
                 <div className='mb-4'>
                   <Breadcrumb separator=">">
                     <Breadcrumb.Item><Link href="/admin/dashboard" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
-                    <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>Club Member</Link></Breadcrumb.Item>
-                    <Breadcrumb.Item className='text-decoration-none'>Club Member Details</Breadcrumb.Item>
+                    {getUserdata?.is_admin==true &&
+                    <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>Club Member</Link></Breadcrumb.Item>}
+                    <Breadcrumb.Item className='text-decoration-none'>{getUserdata?.firstname ? `${getUserdata?.firstname} ${getUserdata?.lastname}`:""} Details</Breadcrumb.Item>
                   </Breadcrumb>
                 </div>
                 {/* Title  */}
                 <div className='d-flex justify-content-between'>
                   <div className="">
 
-                    <Typography.Title level={3} className='m-0 fw-bold'>Club Member Details</Typography.Title>
+                    <Typography.Title level={3} className='m-0 fw-bold'>{getUserdata?.firstname ? `${getUserdata?.firstname} ${getUserdata?.lastname}`:""} Details</Typography.Title>
                   </div>
                   <div className=" ">
                     <Tooltip title="Download Pdf">
@@ -258,15 +260,15 @@ const sharePdf = async () => {
                 <div className='card-listing'>
 
                   <ul className='list-unstyled my-4 mb-4'>
-                    <li className='mb-3'><Typography.Text >Name:</Typography.Text > <Typography.Text className='ms-1 text-capitalize'>{state?.firstname ? `${state?.firstname} ${state?.lastname}` : 'N/A'}</Typography.Text ></li>
-                    <li className='mb-3'><Typography.Text >Club Name:</Typography.Text > <Typography.Text className='ms-1'>{state?.company_name || "N/A"}</Typography.Text ></li>
+                    <li className='mb-3'><Typography.Text >Name:</Typography.Text > <Typography.Text className='ms-1 text-capitalize'>{state?.firstname ? `${validation.capitalizeFirstLetter(state?.firstname)} ${validation.capitalizeFirstLetter(state?.lastname)}` : 'N/A'}</Typography.Text ></li>
+                    <li className='mb-3'><Typography.Text >Company Name:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.company_name) || "N/A"}</Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Email:</Typography.Text > <Typography.Text className='ms-1'>{state?.email || "N/A"}</Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Phone no:</Typography.Text > <Typography.Text className='ms-10'>
                       {/* {state?.mobile ? `+${String(state?.country_code).replace("+", "")} ${state?.mobile}` : 'N/A'} */}
                       {state?.phone_number || "N/A"}
                     </Typography.Text ></li>
-                    <li className='mb-3'><Typography.Text >Position:</Typography.Text > <Typography.Text className='ms-1'>{state?.position || "N/A"}</Typography.Text ></li>
-                    <li className='mb-3'><Typography.Text >Home City:</Typography.Text > <Typography.Text className='ms-1'>{state?.home_city || "N/A"}</Typography.Text ></li>
+                    <li className='mb-3'><Typography.Text >Position:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.position) || "N/A"}</Typography.Text ></li>
+                    <li className='mb-3'><Typography.Text >Home City:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.home_city) || "N/A"}</Typography.Text ></li>
                     {/* <li className='d-flex'>
                       <Typography.Text className='text-nowrap'>Roles:</Typography.Text >
                       <Typography>
@@ -275,19 +277,25 @@ const sharePdf = async () => {
                             <Tag key={resRole} color={(EmployeeRoles.find((resJson) => resJson.rol === resRole))?.color} >
                               {(EmployeeRoles.find((resJson) => resJson.rol === resRole))?.name}
                             </Tag>
-                          )}
+                          )}(`/admin/member/add/page2?${res?.user_id}`)
                         </Space>
                       </Typography>
                     </li> */}
                   </ul>
                   {/* Button  */}
                   <div className='card-listing-button d-inline-flex flex-wrap gap-3 w-100'>
-                    {/* {getUserdata?.user_id===state?.uid? */}
+                    {getUserdata?.is_admin==true?
                     <Link href={`/admin/member/add?${state?.uid}&edit`} className='text-decoration-none text-white flex-grow-1'>
                       <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn'>
                         Edit
                       </Button>
-                    </Link>
+                    </Link>:
+                    <Link href={`/admin/member/add/page2?${state?.uid}&edit`} className='text-decoration-none text-white flex-grow-1'>
+                    <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn'>
+                      Edit
+                    </Button>
+                  </Link>
+                    }
                     {!getUserdata?.is_admin==false?
                     <Popconfirm
                       title={`${state?.is_activate ? 'Activate' : 'Deactivate'} the club member`}

@@ -171,7 +171,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
         [
           getItem(
             <Link
-              href={`/admin/member/${getUserdata?.user_id}/view`}
+              href={`/admin/member/add/page2?${getUserdata?.user_id}/edit`}
               className="text-decoration-none"
             >
               My Document

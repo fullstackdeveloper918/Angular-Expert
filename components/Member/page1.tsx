@@ -26,6 +26,7 @@ import EmployeeRoles from "@/utils/EmployeeRoles.json";
 import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -48,7 +49,7 @@ const Page1 = () => {
   const [state, setState] = useState<any>("")
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
-
+  const getUserdata=useSelector((state:any)=>state?.user?.userData)
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 1 ? entries[1][0] : '';
   console.log(type,"value");
@@ -269,6 +270,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                         </Form.Item>
 
                                         {/* Button  */}
+                                        {getUserdata?.is_admin==true?
                                         <div className="d-flex">
                                             <div className="col-2">
 
@@ -284,7 +286,22 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                         Next
                                         </Button>
                                         </div>
+                                        </div>:<div className="d-flex">
+                                            <div className="col-2">
+
+                                        {/* <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
+                                            Save
+                                        </Button> */}
+                                            </div>
+                                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                                        <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
+                                            Save
+                                        </Button>
+                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                        Next
+                                        </Button>
                                         </div>
+                                        </div>}
                                     </Form>
                                 </div>
                             </Card>

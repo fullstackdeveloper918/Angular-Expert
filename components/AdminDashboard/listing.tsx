@@ -70,7 +70,7 @@ const AdminDashboard: Page = (props: any) => {
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#B76E00",
-      title: `${total_count?.data}`,
+      title: `${total_count?.data||"0"}`,
       count: "Total Club Members",
       link: hasClubMemberPermission ? `/admin/member` : "/admin/dashboard"
 
@@ -83,7 +83,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: `${upcoming?.resutl?upcoming?.resutl:"0"}`,
+      title: `${upcoming?.resutl||"0"}`,
       textColor: "#007B55",
       count: "No. of Users fillled the Form for coming meeting",
       link: "/admin/dashboard"
@@ -94,7 +94,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#FFF5CC",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: `${formRemainFill?.data?formRemainFill?.data:"0"}`,
+      title: `${formRemainFill?.data ||"0"}`,
       textColor: "#B76E00",
       count: "No. of Users remains to fill the Form for coming meeting",
       link: "/admin/dashboard"
@@ -381,7 +381,6 @@ const AdminDashboard: Page = (props: any) => {
       let res1 = await api.dashboard.upcoming()
       let res2 = await api.dashboard.next()
       setTotal_count(apiRes)
-      
       setState1(res?.data)
       setUpcoming(res1)
       setNext(res2)
@@ -389,6 +388,8 @@ const AdminDashboard: Page = (props: any) => {
 
     }
   }
+  console.log(total_count,"lsjflsdjf");
+  
   const initialise = async () => {
     try {
       let res = await api.Meeting.listing();
