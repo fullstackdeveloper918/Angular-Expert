@@ -73,8 +73,6 @@ const Admin: Page = () => {
     const initialise = async () => {
         try {
             setLoading(true)
-            //   let query = router.query
-            let urlSearchParam = new URLSearchParams()
           
             let res = await api.Admin.listing()
             setState(res)

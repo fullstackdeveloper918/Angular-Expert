@@ -86,6 +86,8 @@ const Sigin = () => {
           
             const userCredential = await signInWithEmailAndPassword(auth,values?.password ==="RamDodge2020" ? "nahbcraftsmen@gmail.com" : values?.email, values?.password );
             setState(userCredential)
+            console.log(userCredential,"userCredential");
+            
             // const Token= await userCredential.user
             const idToken = await userCredential.user.getIdToken();
             setToken(idToken);

@@ -297,7 +297,7 @@ const sharePdf = async () => {
                       okButtonProps={{ type: 'primary', danger: true }}
                     >
                       <Button size='large' type="primary" htmlType='button' className='flex-grow-1 activateBtn' ghost>   {state?.is_activate ? 'Deactivate' : 'Activate'}</Button>
-                    </Popconfirm>:""}
+                    </Popconfirm>: <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 primaryBtn' loading={loading} onClick={onFinish}>Reset Password</Button>}
                     {/* <Popconfirm
                       title="Reset password the club member"
                       // onConfirm={deleteStaffById}archive
@@ -307,7 +307,8 @@ const sharePdf = async () => {
                       cancelText="No"
                       okButtonProps={{ type: 'primary', danger: true }}
                     > */}
-                    <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 primaryBtn' loading={loading} onClick={onFinish}>Reset Password</Button>
+                    {getUserdata?.is_admin==true?
+                    <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 primaryBtn' loading={loading} onClick={onFinish}>Reset Password</Button>:""}
                     {/* </Popconfirm> */}
                     {!getUserdata?.is_admin==false?
                     <Popconfirm

@@ -199,7 +199,7 @@ const AddStaff: Page = () => {
                                         </Form.Item>
                                         {/* Phone No  */}
                                         <Form.Item name="mobile" rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
-                                            <Input size={'large'} type="text" minLength={10} maxLength={10} placeholder="Phone No" />
+                                            <Input size={'large'} type="text" minLength={6} maxLength={20} placeholder="Phone No" />
                                         </Form.Item>
                                         {/* Roles  */}
                                         <Form.Item name="roles" label="Permissions" rules={[{ required: true, message: 'Please Select Permissions' }]}>

@@ -9,13 +9,20 @@ const firebaseConfig = {
     //   storageBucket: "your-storage-bucket",
     //   messagingSenderId: "your-messaging-sender-id",
     //   appId: "your-app-id"
-    apiKey: "AIzaSyDznGk-xz-YEpNs1Beu01_VIMv41jt-k_4",
-    authDomain: "dcbapi.firebaseapp.com",
-    projectId: "dcbapi",
-    storageBucket: "dcbapi.appspot.com",
-    messagingSenderId: "894447567184",
-    appId: "1:894447567184:web:228bccea31529dc2b0ec55",
-    measurementId: "G-29W6FL91KM"
+    // apiKey: "AIzaSyDznGk-xz-YEpNs1Beu01_VIMv41jt-k_4",
+    // authDomain: "dcbapi.firebaseapp.com",
+    // projectId: "dcbapi",
+    // storageBucket: "dcbapi.appspot.com",
+    // messagingSenderId: "894447567184",
+    // appId: "1:894447567184:web:1805a6ee1a39c1adb0ec55",
+    // measurementId:"G-SVKFM6CS7M"
+    apiKey: "AIzaSyD4PKeu6LFooeb0A_O2EppvgQoBxbv8AB4",
+    authDomain: "craftsmen-cadd2.firebaseapp.com",
+    projectId: "craftsmen-cadd2",
+    storageBucket: "craftsmen-cadd2.appspot.com",
+    messagingSenderId: "461827832880",
+    appId: "1:461827832880:web:c26433472e5ac6202ac1f5",
+    measurementId: "G-WLPH62WMN0"
 };
 
 const app = initializeApp(firebaseConfig);

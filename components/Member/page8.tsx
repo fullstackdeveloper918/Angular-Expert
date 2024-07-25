@@ -243,6 +243,7 @@ const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
                                                     fileList={fileLists[pair.id] || []}
                                                     onPreview={handlePreview}
                                                     onChange={(info) => handleChange(info, pair.id.toString())}
+                                                    multiple
                                                 >
                                                     {(fileLists[pair.id] || []).length >= 8 ? null : <PlusOutlined />}
                                                 </Upload>
