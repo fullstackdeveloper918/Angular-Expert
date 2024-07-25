@@ -165,6 +165,7 @@ const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
                     autoClose: 300,
                   });
                 }
+                router.replace("/admin/member")
               } catch (error) {
                 if (error) {
                   toast.error("Something went wrong please try again", {

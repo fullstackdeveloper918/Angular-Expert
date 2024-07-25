@@ -168,12 +168,12 @@ const genExtra = (res: any) => (<ul className='list-unstyled mb-0 gap-3 d-flex'>
                             <div className='mb-4'>
                                 <Breadcrumb separator=">">
                                     <Breadcrumb.Item>Home</Breadcrumb.Item>
-                                    <Breadcrumb.Item className='text-decoration-none'>Questionnair</Breadcrumb.Item>
+                                    <Breadcrumb.Item className='text-decoration-none'>Questionnaire</Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
                             {/* Title  */}
                             <div className='d-flex justify-content-between align-items-center'>
-                                <Typography.Title level={3} className='m-0 fw-bold'>Questionnair</Typography.Title>
+                                <Typography.Title level={3} className='m-0 fw-bold'>Questionnaire</Typography.Title>
                             </div>
                             {/* Search  */}
                             <div className='my-4 d-flex justify-content-between align-items-center gap-3'>

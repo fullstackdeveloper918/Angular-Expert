@@ -14,19 +14,13 @@ var UUIDRegEx = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0
 var strongPasswordRegEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.* )(?=.*[^a-zA-Z0-9]).{8,16}$/
 
 const email = (email: string) => {
-    if (email.includes("+")) {
-        return false
-    }
     return EmailRegEx.test(String(email).toLowerCase());
 }
 const numberDataTypeValidation = (str: string) => {
     return typeof (str) === "number";
 }
 const nameValidation = (str: string) => {
-    if (str) {
-        return NameRegEx.test(String(str).trim());
-    }
-    return false
+    return NameRegEx.test(String(str).trim());
 }
 const UserNameValidation = (str: string) => {
     return UserNameRegEx.test(String(str).trim());
@@ -40,6 +34,7 @@ const NumberValidation = (str: string) => {
 const ResultValidation = (str: string) => {
     return NumericResultRegEx.test(str);
 }
+
 const MobileNumberWithInValidation = (str: string) => {
     return IndNumberRegEx.test(str);
 }
@@ -80,13 +75,41 @@ const ObjectValidation = (str: string) => {
 const LengthValidation = (str: string, length: number) => {
     return (String(str).trim().length > length)
 }
-
+const capitalizeFirstLetter = (string: string) => {
+    if (string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    } else {
+        return `_`
+    }
+}
+const uppercaseWords = (str: string) => str?.split("-")?.join(" ")?.toLowerCase()?.replace(/^(.)|\s+(.)/g, c => c?.toUpperCase())
 const strongPassword = (str: string) => {
     return strongPasswordRegEx.test(str);
 }
 const stringReplace = (str: string) => {
     let newStr = str?.toLocaleLowerCase()
-    return newStr.replace(/ /g, "-")
+    newStr = newStr?.split("&")?.join("-")
+    return newStr?.replace(/ /g, "-")
+}
+
+const replaceHyphen = (str: string) => {
+    let newStr = str?.toLocaleLowerCase()
+    if (newStr?.includes("_")) {
+        return newStr?.split("_")?.join("-")
+    }
+    else if (newStr?.includes("-")) {
+        let toUpC = newStr?.toUpperCase()
+        return toUpC?.split("-")?.join("_")
+    }
+    else {
+        return str?.toUpperCase()
+    }
+}
+const remUndrscore = (str: string) => {
+    let newStr = str?.toLocaleLowerCase()
+    if (newStr) {
+        return newStr?.split("-")?.join("_")
+    }
 }
 
 const roundOffCeil = (count: number, limit: number) => {
@@ -100,9 +123,70 @@ const showPrice = (price: number) => {
     return parts
 }
 
-const validation = {
+const subscribeFormatter = (number: number) => {
+    let num = Number(number)
+    // if (num > 999 && num < 1000000) {
+    //     return parseFloat((num / 1000).toFixed(2)) + 'K'; // convert to K for number from > 1000 < 1 million
+    // }
+    if (num >= 100000000000000) {
+        return parseFloat((num / 1000000000000).toFixed(2)) + 'T++'; // convert to M for number from > 1 million
+    }
+    else if (num >= 1000000000000) {
+        return parseFloat((num / 1000000000000).toFixed(2)) + 'T'; // convert to M for number from > 1 million
+    }
+    else if (num >= 1000000000) {
+        return parseFloat((num / 1000000000).toFixed(2)) + 'B'; // convert to M for number from > 1 million
+    }
+    else if (num >= 1000000) {
+        return parseFloat((num / 1000000).toFixed(2)) + 'M'; // convert to M for number from > 1 million
+    }
+    else if (num > 999 && num < 1000000) {
+        return parseFloat((num / 1000).toFixed(2)) + 'K'; // convert to K for number from > 1000 < 1 million
+    }
+    // else if (num >= 1000000000) {
+    //     return parseFloat((num / 1000000000).toFixed(2)) + 'B'; // convert to M for number from > 1 million
+    // }
+    // else if (num >= 1000000000000) {
+    //     return parseFloat((num / 1000000000000).toFixed(2)) + 'T'; // convert to M for number from > 1 million
+    // }
+    // else if (num >= 100000000000000) {
+    //     return parseFloat((num / 1000000000000).toFixed(2)) + 'T++'; // convert to M for number from > 1 million
+    // }
+    else if (num < 900 && num > 0) {
+        return num; // if value < 1000, nothing to do
+    }
+    else {
+        return num ? num : "0"
+    }
+}
+
+const toUppCase = (val: string) => {
+    if (val) {
+        const newVal = val?.toUpperCase()
+        return newVal
+    }
+}
+const toLowCase = (val: string) => {
+    if (val) {
+        const newVal = val?.toLowerCase()
+        return newVal
+    }
+}
+export const capFirst = (str: string) => {
+    if (str) {
+        return str[0]?.toUpperCase() + str.slice(1);
+    } else {
+        return str; // Return the original value if it's null or undefined
+    }
+}
+const henceforthValidations = {
+    remUndrscore,
+    toUppCase,
+    toLowCase,
+    replaceHyphen,
     roundOffCeil,
     stringReplace,
+    subscribeFormatter,
     email,
     numberDataTypeValidation,
     nameValidation,
@@ -122,8 +206,9 @@ const validation = {
     StringValidation,
     ObjectValidation,
     LengthValidation,
+    capitalizeFirstLetter,
     strongPassword,
     showPrice,
-    strongPasswordRegEx
+    uppercaseWords
 }
-export default validation
+export default henceforthValidations

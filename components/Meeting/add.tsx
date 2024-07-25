@@ -87,16 +87,19 @@ const MeetingAdd = () => {
     const onSubmit = async (values: any) => {
         let items = {
             meeting_name: "iertierti",
+            meeting_time_zone: selectedTimezone,
             // "purpose": "Present new project proposal to client.",
             meeting_type: values?.meeting_type,
             start_time: dayjs(values?.start_time).utc().valueOf(),
+            start_meeting_date:dayjs(values?.start_date).utc().valueOf(),
             end_time: dayjs(values?.end_time).utc().valueOf(),
+            end_meeting_date:dayjs(values?.end_date).utc().valueOf(),
             year: dayjs(values?.year).format("YYYY"),
             location: selectedLocation,
             hotel: selectedHotel,
             airport: values?.airport,
             host_company: values?.host_company,
-            host: ["D4ieiU2bsgVzbWKJjvGTmQrDkKu2","0JDurp3EdwggzPU8VnvrAOlOCYC2","2PXlHPwbYTa3efote4dIx9Ifdeu1" ,"5yYew8Hetcgd77eVRFVwZ8OhkSh2","CijVwc2zqQNfBESwGSugwqGZbzs2"],
+            host: ["Imk0oQS5wmfS8LOzbafnxPZToJB2","MFzsJNPPHwVYl0sksYfSlYDmzFP2"],
             // host: values?.host,
             cell: values?.cell,
             weather: values?.weather,
@@ -270,21 +273,43 @@ const MeetingAdd = () => {
                                                     ))}
                                                 </Select>
                                             </Form.Item>
-                                            <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Date' }]} label="Meeting Date">
+
+                                           
+                                            <Form.Item name="start_date" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Start Date' }]} label="Meeting Start Date">
                                                 <DatePicker
                                                     style={{ width: '100%' }}
                                                     // defaultValue={defaultValue}
                                                     // showTime
-                                                    // disabledDate={disabledDate}
-                                                    // disabledTime={disabledTime}
+                                                    disabledDate={disabledDate}
+                                                    disabledTime={disabledTime}
                                                     // locale={buddhistLocale}
                                                     onChange={onChangeDate}
                                                 />
                                             </Form.Item>
-                                            <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Time' }]} label="Meeting Time">
-                                                <TimePicker onChange={onChange1} 
+                                            <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Start Time' }]} label="Meeting Start Time">
+                                            <TimePicker onChange={onChange1} 
                                                 // disabledTime={disabledTime} 
-                                                style={{ width: '100%' }} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} />
+                                                style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
+                                            </Form.Item>
+                                            <Form.Item name="end_date" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting End Date' }]} label="Meeting End Date">
+                                                {/* <TimePicker onChange={onChange1} 
+                                                // disabledTime={disabledTime} 
+                                                style={{ width: '100%' }} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} /> */}
+                                                   <DatePicker
+                                                    style={{ width: '100%' }}
+                                                    // defaultValue={defaultValue}
+                                                    // showTime
+                                                    disabledDate={disabledDate}
+                                                    disabledTime={disabledTime}
+                                                    // locale={buddhistLocale}
+                                                    onChange={onChangeDate}
+                                                />
+                                                
+                                            </Form.Item>
+                                            <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting End Time' }]} label="Meeting End Time">
+                                            <TimePicker onChange={onChange1} 
+                                                // disabledTime={disabledTime} 
+                                                style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
                                             </Form.Item>
                                             <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Year' }]} label="Meeting Year">
                                                 <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />

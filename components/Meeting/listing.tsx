@@ -83,8 +83,10 @@ const MeetingList = () => {
         return {
             key: index + 1,
             meeting: res?.meeting_type,
-            end: dayjs(res?.end_time).format('hh:mm:ss A'),
-            start: dayjs(res?.start_time).format('DD-MM-YYYY'),
+            start_date: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
+            start_time: dayjs(res?.start_time).format('hh:mm A'),
+            end_date: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
+            end_time: dayjs(res?.end_time).format('hh:mm A'),
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
                 <li>
                     <Link href={`/admin/meetings/${res?.id}/edit`} >
@@ -117,14 +119,24 @@ const MeetingList = () => {
             key: 'meeting',
         },
         {
-            title: 'Meeting Time',
-            dataIndex: 'end',
-            key: 'end',
+            title: 'Meeting Start Date',
+            dataIndex: 'start_date',
+            key: 'start_date',
         },
         {
-            title: 'Meeting Date',
-            dataIndex: 'start',
-            key: 'start',
+            title: 'Meeting Start Time',
+            dataIndex: 'start_time',
+            key: 'start_time',
+        },
+        {
+            title: 'Meeting End Date',
+            dataIndex: 'end_date',
+            key: 'end_date',
+        },
+        {
+            title: 'Meeting End Time',
+            dataIndex: 'end_time',
+            key: 'end_time',
         },
 
         {

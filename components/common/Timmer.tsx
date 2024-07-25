@@ -1,46 +1,45 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 
-const Timmer = (props:any) => {
-    console.log(props,"werr");
-    
-    const countDownDate: number = new Date("August 5, 2024 15:37:25").getTime();
+dayjs.extend(duration);
 
-// Update the count down every 1 second
-const x = setInterval((): void => {
-  // Get today's date and time
-  const now: number = new Date().getTime();
-
-  // Find the distance between now and the count down date
-  const distance: number = countDownDate - now;
-
-  // Time calculations for days, hours, minutes and seconds
-  const days: number = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours: number = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes: number = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds: number = Math.floor((distance % (1000 * 60)) / 1000);
-
-  // Display the result in the element with id="demo"
-  const demoElement = document.getElementById("demo") as HTMLElement;
-  if (demoElement) {
-    demoElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s `;
-  }
-
-  // If the count down is finished, write some text
-  if (distance < 0) {
-    clearInterval(x);
-    if (demoElement) {
-      demoElement.innerHTML = "EXPIRED";
-    }
-  }
-}, 1000);
-console.log(countDownDate,"countDownDate");
-
-  return (
-    <div>
-
-        
-    </div>
-  )
+interface CountdownProps {
+    endDate: number;
 }
 
-export default Timmer
+const Timmer: React.FC<CountdownProps> = ({ endDate }) => {
+    const [timeRemaining, setTimeRemaining] = useState<string>('');
+
+    useEffect(() => {
+        const updateCountdown = () => {
+            const now = dayjs();
+            const end = dayjs(endDate);
+            const diff = end.diff(now);
+
+            if (diff <= 0) {
+                setTimeRemaining('00:00:00, 0 days');
+                return;
+            }
+
+            const duration = dayjs.duration(diff);
+            const days = Math.floor(duration.asDays());
+            const hours = duration.hours().toString().padStart(2, '0');
+            const minutes = duration.minutes().toString().padStart(2, '0');
+            const seconds = duration.seconds().toString().padStart(2, '0');
+
+            const dayDisplay = days === 1 ? '1 day' : `${days} days`;
+
+            setTimeRemaining(`${dayDisplay}, ${hours}:${minutes}:${seconds}`);
+        };
+
+        updateCountdown(); // Initial call to set the time immediately
+        const interval = setInterval(updateCountdown, 1000);
+
+        return () => clearInterval(interval);
+    }, [endDate]);
+
+    return <span>{timeRemaining}</span>;
+};
+
+export default Timmer;

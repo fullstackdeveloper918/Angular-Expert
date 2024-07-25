@@ -52,6 +52,8 @@ const MeetingView = () => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
+  console.log(getUserdata,"getUserdata");
+  
   const [state, setState] = React.useState<any>({
     id: "",
     name: "",
@@ -297,7 +299,7 @@ const sharePdf = async () => {
                       okButtonProps={{ type: 'primary', danger: true }}
                     >
                       <Button size='large' type="primary" htmlType='button' className='flex-grow-1 activateBtn' ghost>   {state?.is_activate ? 'Deactivate' : 'Activate'}</Button>
-                    </Popconfirm>: <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 primaryBtn' loading={loading} onClick={onFinish}>Reset Password</Button>}
+                    </Popconfirm>: <Button size='large' type="primary" htmlType='button' className='flex-grow-1  activateBtn' loading={loading} onClick={onFinish}>Reset Password</Button>}
                     {/* <Popconfirm
                       title="Reset password the club member"
                       // onConfirm={deleteStaffById}archive

@@ -16,7 +16,13 @@ import { useSelector } from "react-redux";
 import Icons from "@/components/common/Icons";
 import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
-import Timmer from "../common/Timmer"
+// import Timmer1 from "../common/Timmer"/
+import Countdown from "antd/es/statistic/Countdown";
+import Timmer from "../common/Timmer";
+// import { Timmer } from "../common/Timmer";
+import capitalizeFirstLetter from "../../utils/validation"
+import henceforthValidations from "../../utils/validation";
+import validation from "../../utils/validation";
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
 };
@@ -77,7 +83,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: `${upcoming?.resutl}`,
+      title: `${upcoming?.resutl?upcoming?.resutl:"0"}`,
       textColor: "#007B55",
       count: "No. of Users fillled the Form for coming meeting",
       link: "/admin/dashboard"
@@ -88,7 +94,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#FFF5CC",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: `${formRemainFill?.data}`,
+      title: `${formRemainFill?.data?formRemainFill?.data:"0"}`,
       textColor: "#B76E00",
       count: "No. of Users remains to fill the Form for coming meeting",
       link: "/admin/dashboard"
@@ -153,10 +159,13 @@ const AdminDashboard: Page = (props: any) => {
   const dataSource3 = areas?.length && areas?.map((res: any, index: number) => {
     return {
       key: index + 1,
-      meeting: res?.meeting_name,
-      start: dayjs(res?.start_time).format('h A DD-MM-YYYY'),
-      end: dayjs(res?.end_time).format('h A DD-MM-YYYY'),
-      action: <Timmer data={res?.start_time}/>
+      meeting:(res?.meeting_type),
+      // meeting: `${capitalizeFirstLetter(res?.meeting_type)} 2024`,
+      start: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
+      end: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
+      action:  <Timmer endDate={res?.start_meeting_date}/>
+      // <CountDown  />
+      // <Countdown  value={Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30}  />
     }
   })
   const user_non_completed = non_completed2?.slice(0, 5).map((res: any, index: number) => {
@@ -245,22 +254,22 @@ const AdminDashboard: Page = (props: any) => {
       key: 'key',
     },
     {
-      title: 'Meeting Name',
+      title: 'Meeting Type',
       dataIndex: 'meeting',
       key: 'meeting',
     },
     {
-      title: 'Start Time',
+      title: 'Start Date',
       dataIndex: 'start',
       key: 'start',
     },
     {
-      title: 'End Time',
+      title: 'End Date',
       dataIndex: 'end',
       key: 'end',
     },
     {
-        title: 'Action',
+        title: 'Countdown',
         dataIndex: 'action',
         key: 'action',
     },
