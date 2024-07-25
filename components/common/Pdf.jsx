@@ -124,7 +124,7 @@ const MemberUpdatePDF = (props) => {
             <Text>
               Member Update / <Text style={styles.itali_text}>Spring 2024</Text>
             </Text>
-            <Text style={styles.subheader}>{validation.capitalizeFirstLetter(props?.state?.company_name)}</Text>
+            <Text style={styles.subheader}>{validation.replaceUnderScore(props?.state?.company_name)}</Text>
           </View>
 
           <View style={styles.section}>

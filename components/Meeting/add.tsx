@@ -99,7 +99,7 @@ const MeetingAdd = () => {
             hotel: selectedHotel,
             airport: values?.airport,
             host_company: values?.host_company,
-            host: ["Imk0oQS5wmfS8LOzbafnxPZToJB2","MFzsJNPPHwVYl0sksYfSlYDmzFP2"],
+            host: values?.host,
             // host: values?.host,
             cell: values?.cell,
             weather: values?.weather,
@@ -377,7 +377,10 @@ const MeetingAdd = () => {
                                                 // ]}
                                                 label="Host"
                                             >
-                                                <Select
+                                                <Input size={'large'} placeholder="Weather"
+                                                   
+                                                />
+                                                {/* <Select
                                                     mode="multiple"
                                                     size="large"
                                                     placeholder="Select Host"
@@ -392,7 +395,7 @@ const MeetingAdd = () => {
                                                             {area.name} - {area.company}
                                                         </Option>
                                                     ))}
-                                                </Select>
+                                                </Select> */}
                                             </Form.Item>
                                             <Form.Item name="mobile_no" className='col-lg-6 col-sm-12' rules={[
                                                 { required: true, whitespace: true, message: 'Please Enter Cell' },

@@ -156,7 +156,7 @@ const AdminDashboard: Page = (props: any) => {
     }
   }
   );
-  const dataSource3 = areas?.length && areas?.map((res: any, index: number) => {
+  const dataSource3 = areas?.result?.length && areas?.result?.map((res: any, index: number) => {
     return {
       key: index + 1,
       meeting:(res?.meeting_type),
@@ -392,7 +392,7 @@ const AdminDashboard: Page = (props: any) => {
   
   const initialise = async () => {
     try {
-      let res = await api.Meeting.listing();
+      let res = await api.Meeting.upcoming_meeting();
       let apiRes = await api.User.user_listing()
       let apiRes1 = await api.User.user_remains_userfor_meeting()
       setFormRemainFill(apiRes1)
@@ -400,6 +400,8 @@ const AdminDashboard: Page = (props: any) => {
 
       setState2(apiRes?.data)
       setAreas(res);
+      console.log(res,"ressss");
+      
     } catch (error) {
       console.error('Error fetching meeting listing:', error);
     }

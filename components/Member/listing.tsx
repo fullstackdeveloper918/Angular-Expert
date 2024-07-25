@@ -26,6 +26,7 @@ import Pdf from "../common/Pdf";
 import saveAs from "file-saver";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import validation from "../../utils/validation";
 // const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -189,7 +190,7 @@ const MemberList = () => {
         return {
           key: index + 1,
           name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
-          company: res?.company_name,
+          company: validation?.replaceUnderScore(res?.company_name),
           email: res?.email,
           status:res?.is_completed==true?"Completed":"Pending",
           action: <ul className='m-0 list-unstyled d-flex gap-2'>
@@ -246,12 +247,12 @@ const MemberList = () => {
     const dataSource = filteredData?.map((res: any, index: number) => {
         return {
             key: index + 1,
-            name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
-            company: res?.company_name,
+            name: res?.firstname ? `${validation?.capitalizeFirstLetter(res?.firstname)} ${validation?.capitalizeFirstLetter(res?.lastname)}` : "N/A",
+            company: validation?.replaceUnderScore(validation?.capitalizeFirstLetter(res?.company_name)),
             email: res?.email,
             phone: res?.phone_number,
-            position: res?.position,
-            city: res?.home_city,
+            position: validation?.capitalizeFirstLetter(res?.position),
+            city: validation?.capitalizeFirstLetter(res?.home_city),
             action: <ul className='m-0 list-unstyled d-flex gap-2'>
                 <li>
                     <Tooltip title="Download Pdf">

@@ -108,7 +108,7 @@ const MeetingList = () => {
             </ul>
         }
     })
-    const columns = [
+    const baseColumns = [
         {
             title: 'Sr.No.',
             dataIndex: 'key',
@@ -139,12 +139,18 @@ const MeetingList = () => {
             dataIndex: 'end_time',
             key: 'end_time',
         },
-
-        {
-            title: 'Action',
-            dataIndex: 'action',
-            key: 'action',
-        },
+    ];
+    
+    // Conditionally add the 'Action' column
+    const columns = [
+        ...baseColumns,
+        ...(getUserdata?.is_admin ? [
+            {
+                title: 'Action',
+                dataIndex: 'action',
+                key: 'action',
+            }
+        ] : [])
     ];
     const [meeting, setMeeting] = useState<any>(null);
     let meetingId: any = 1

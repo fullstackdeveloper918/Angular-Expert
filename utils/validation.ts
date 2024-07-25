@@ -179,6 +179,10 @@ export const capFirst = (str: string) => {
         return str; // Return the original value if it's null or undefined
     }
 }
+export const replaceUnderScore = (str: string) => {
+    let newStr = str?.split("_")?.join(" ")
+    return newStr
+}
 const validation = {
     remUndrscore,
     toUppCase,
@@ -187,6 +191,7 @@ const validation = {
     roundOffCeil,
     stringReplace,
     subscribeFormatter,
+    replaceUnderScore,
     email,
     numberDataTypeValidation,
     nameValidation,

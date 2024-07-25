@@ -116,6 +116,8 @@ const Meeting={
     requests.post('add-meeting', info),
   listing: () =>
     requests.get(`meeting-list`),
+  upcoming_meeting: () =>
+    requests.get(`upcoming-meeting`),
   archive: () =>
     requests.get("meeting-archive"),
   getById: (info: any) =>
