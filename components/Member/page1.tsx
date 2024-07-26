@@ -52,6 +52,8 @@ const Page1 = () => {
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 1 ? entries[1][0] : '';
+  console.log(value,"dsdjfgljsdf");
+  
   const onFinish = async (values: any) => {
       let items = {
          bussiness_update:{
@@ -124,6 +126,7 @@ const Page1 = () => {
      
     }, [type]);
     const onFinish1 = async (values: any) => {
+        
         let items = {
            bussiness_update:{
             userId:value,
@@ -136,6 +139,7 @@ const Page1 = () => {
            }
         } as any
         
+    
      
         try {
             if (type == "edit") {
@@ -157,7 +161,7 @@ const Page1 = () => {
   
                 setLoading(true)
                 let res =await api.Auth.signUp(items)
-                toast.success("Save Successfully")
+                toast.success("Added Successfully")
                 if (res?.status == 400) {
                   toast.error("Session Expired Login Again")
                   router.replace("/auth/signin")
