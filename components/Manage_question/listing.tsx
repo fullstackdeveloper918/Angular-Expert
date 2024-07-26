@@ -1,14 +1,11 @@
 "use client";
-import dynamic from "next/dynamic";
 import React, { Fragment, useEffect, useState } from "react";
 import {
   Input,
   Breadcrumb,
   Collapse,
   Typography,
-  Popconfirm,
   Table,
-  Button,
   Row,
   Col,
   Card,
@@ -17,24 +14,8 @@ import Link from "next/link";
 import MainLayout from "../../components/Layout/layout";
 import CustomModal from "@/components/common/Modal";
 import api from "@/utils/api";
-// const { Row, Col, Card, Button } = {
-//   Button: dynamic(() => import("antd").then((module) => module.Button), {
-//     ssr: false,
-//   }),
-//   Row: dynamic(() => import("antd").then((module) => module.Row), {
-//     ssr: false,
-//   }),
-//   Col: dynamic(() => import("antd").then((module) => module.Col), {
-//     ssr: false,
-//   }),
-//   Card: dynamic(() => import("antd").then((module) => module.Card), {
-//     ssr: false,
-//   }),
-// };
-
 const { Panel } = Collapse;
 const { Search } = Input;
-let timer: any;
 const Manage_Question = () => {
   const [deleteLoading, setDeleteLoading] = React.useState("")
   const [state, setState] = React.useState<any>([])
@@ -42,7 +23,6 @@ const Manage_Question = () => {
   const [filteredData, setFilteredData] = useState(state);
 
   useEffect(() => {
-      // Filter data when searchTerm or state changes
       const filtered = state?.filter((res:any) => {
           const question = res?.question || "";
           const questionType = res?.question_type || "";
@@ -51,23 +31,13 @@ const Manage_Question = () => {
       setFilteredData(filtered);
   }, [searchTerm, state]);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-      setSearchTerm(value);
-  };
-
   const initialise = async () => {
       try {
-          // setLoading(true)
           let res=await api.Manage_Question.listing()
-          
           setState(res.data)
       } catch (error) {
-          // Toast.error(error)
-          
 
       } finally {
-          // setLoading(false)
       }
   }
 
@@ -75,18 +45,7 @@ const Manage_Question = () => {
       initialise()
   }, [])
 
-  const handleDelete = async (_id: string) => {
-      setDeleteLoading(_id)
-      try {
-          // let apiRes = await henceforthApi.Faq.delete(_id)
-          // Toast.success("FAQ is deleted successfully")
-          await initialise()
-      } catch (error) {
-      } finally {
-          setDeleteLoading("")
-      }
-
-  }
+ 
   const dataSource2 = filteredData?.map((res: any, index: number) => {
       return {
           key: index+1,
@@ -96,16 +55,6 @@ const Manage_Question = () => {
           <li>
              <CustomModal type={"Edit"} {...res} initialise={initialise}/>
           </li>
-          {/* <li>
-              <Popconfirm
-                  title="Delete"
-                  description="Are you sure you want to delete ?"
-                  onConfirm={(event) => { event?.stopPropagation(); handleDelete("res._id") }}
-              // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-              >
-                  <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-              </Popconfirm>
-          </li> */}
       </ul>
           
       }})

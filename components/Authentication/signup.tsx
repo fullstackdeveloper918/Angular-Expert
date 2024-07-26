@@ -3,7 +3,6 @@ import logo from "../../assests/images/image.png";
 import React from "react";
 import { Form, Input } from "antd";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
 
 const { Row, Col, Button } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
@@ -19,7 +18,6 @@ const { Row, Col, Button } = {
 
 const Signup = () => {
   const onFinish = async (values: any) => {
-    console.log("Received values of form: ", values);
     if (values.email == "") {
     }
 
@@ -31,7 +29,6 @@ const Signup = () => {
 
     try {
     } catch (error: any) {
-      console.log("login error message", error);
     }
   };
   return (

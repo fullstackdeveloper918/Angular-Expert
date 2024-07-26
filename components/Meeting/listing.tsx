@@ -16,7 +16,7 @@ import {
 import { clearUserData } from "../../lib/features/userSlice";
 import { parseCookies, destroyCookie } from "nookies";
 import Link from "next/link";
-import { PlusOutlined } from "@ant-design/icons";
+import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import MainLayout from "../../components/Layout/layout";
 import { useRouter } from "next/navigation";
@@ -55,7 +55,6 @@ const { Search } = Input;
 const MeetingList = () => {
     const router = useRouter()
     const dispatch = useDispatch();
-    const [loading, setLoading] = React.useState(false)
     const [areas, setAreas] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState('')
     const getUserdata=useSelector((state:any)=>state?.user?.userData)
@@ -105,6 +104,9 @@ const MeetingList = () => {
                         <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                     </Popconfirm>
                 </li>}
+                <li>
+              <Link href={`/admin/meetings/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
+          </li>
             </ul>
         }
     })
@@ -139,6 +141,11 @@ const MeetingList = () => {
             dataIndex: 'end_time',
             key: 'end_time',
         },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            key: 'action',
+        }
     ];
     
     // Conditionally add the 'Action' column
@@ -152,8 +159,6 @@ const MeetingList = () => {
             }
         ] : [])
     ];
-    const [meeting, setMeeting] = useState<any>(null);
-    let meetingId: any = 1
 
 
     const initialise = async () => {
@@ -169,7 +174,6 @@ const MeetingList = () => {
                 router.replace("/auth/signin")
             }
         } catch (error) {
-            console.error('Error fetching meeting listing:', error);
         }
     };
     useEffect(() => {
@@ -187,21 +191,10 @@ const MeetingList = () => {
     }
 
 
-    // const initialise=async()=>{
-    //     try {
-    //         let res= await api.Meeting.listing()
-    //     } catch (error) {
-
-    //     }
-    // }
     return (
         <MainLayout>
 
             <Fragment>
-                {/* <Head>
-            <title>Meetings</title>
-            <meta name="meetings" content="Meetings" />
-        </Head> */}
                 <section>
                     <Row gutter={[20, 20]}>
                         <Col span={24}>
@@ -217,9 +210,7 @@ const MeetingList = () => {
                                     <Typography.Title level={3} className='m-0 fw-bold'>Meetings</Typography.Title>
                                     {getUserdata?.is_admin==false?"":
                                     <div className='d-flex gap-2'>
-                                        {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
                                         <Button type="primary" style={{ width: 190 }} htmlType="button" size='large' icon={<PlusOutlined />} onClick={add}>Add Meeting</Button>
-                                        {/* </Upload> */}
                                     </div>
                                     }
                                 </div>
@@ -227,14 +218,13 @@ const MeetingList = () => {
                                 <div className='my-4 d-flex gap-3'>
                                     <Search size='large' placeholder="Search by Meeting Name or year" enterButton value={searchTerm}
                                     />
-                                    {/* <Button type="primary" size='large' htmlType="button"  icon={<DownloadOutlined />} onClick={() => setExportModal(true)}>Export</Button> */}
-                                    {/* <Space wrap> */}
+                                    
                                     {getUserdata?.is_admin==false?"":
                                     <FilterSelect />}
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
-                                    <Table dataSource={dataSource} columns={columns} pagination={false} />
+                                    <Table dataSource={dataSource} columns={baseColumns} pagination={false} />
                                 </div>
                                 {/* Pagination  */}
                                 {/* <Row justify={'center'} className="mt-5 d-flex paginationCenter">

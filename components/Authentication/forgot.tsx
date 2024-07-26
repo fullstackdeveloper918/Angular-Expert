@@ -32,10 +32,8 @@ const Forgotpaswrd = () => {
         };
         try {
             let res = await axios.post("https://frontend.goaideme.com/forgot-password", items)
-            console.log(res, "checkkkkkkk");
 
         } catch (error) {
-            console.log(error);
 
         }
     }

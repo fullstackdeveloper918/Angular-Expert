@@ -41,7 +41,6 @@ const GoogleMap = (props: any) => {
         autocomplete.addListener("place_changed", () => {
           let place = autocomplete.getPlace();
 
-          console.log(place, "place");
         });
       }
     };

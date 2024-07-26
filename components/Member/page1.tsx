@@ -52,8 +52,6 @@ const Page1 = () => {
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 1 ? entries[1][0] : '';
-  console.log(type,"value");
-  
   const onFinish = async (values: any) => {
       let items = {
          bussiness_update:{
@@ -289,9 +287,6 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                         </div>:<div className="d-flex">
                                             <div className="col-2">
 
-                                        {/* <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
-                                            Save
-                                        </Button> */}
                                             </div>
                                         <div className=" col-8 d-flex gap-5 justify-content-center">
                                         <Button size={'large'} type="primary" className=" " onClick={onFinish1}>

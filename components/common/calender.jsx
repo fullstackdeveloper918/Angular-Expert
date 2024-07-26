@@ -1,4 +1,3 @@
-// components/CalendlyWidget.js
 import { useEffect } from 'react'
 
 const CalendlyWidget = () => {

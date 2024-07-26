@@ -4,9 +4,9 @@ import {
   Page,
   Text,
   View,
+  Image,
   Document,
   StyleSheet,
-  Image,
 } from "@react-pdf/renderer";
 import validation from "@/utils/validation";
 const styles = StyleSheet.create({
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginBottom: 10,
     textTransform: "capitalize",
-    textDecoration:"underline",
+    textDecoration: "underline",
   },
   subheading: {
     fontSize: 13,
@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontSize: 12,
     color: "#000",
-    
   },
   textarea: {
     padding: 8,
@@ -113,34 +112,44 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   imgg: {
-    width: "100%",
-    maxWidth: "70%",
-    overflow: "hidden",
-    margin:"auto"
+    margin: "auto",
+    objectFit: "contain",
+    border: "10px solid red",
+    width: "400px",
+    height: "400px",
   },
   logoNew: {
-    width: "10%",
-    maxWidth: "10%",
-    overflow: "hidden",
-    margin:"auto"
+    width: "100%",
+    maxWidth: "100%",
+    margin: "auto",
   },
 });
 
 const MemberUpdatePDF = (props) => {
+  console.log(props, "bencho");
+  const photoSection = props?.state?.photo_section || [];
+
   return (
     <>
       <Document>
-        <Page size="A4" style={styles.page}> 
-
-          <View style={{textAlign:"center", display:"block"}}>
-          <img src={`${logo.src}`} alt="logo" className="img-fluid mx-auto d-bloxk"  style={styles.logoNew}
-                    />
+        <Page size="A4" style={styles.page}>
+          <View style={{ textAlign: "center", display: "block" }}>
+            <img
+              src={`https://storage.googleapis.com/craftsmen-cadd2.appspot.com/21484c0c-2ea0-4e62-b70c-3727fc6da6e3.png`}
+              alt="logo"
+              className="img-fluid mx-auto d-block"
+              style={styles.logoNew}
+              width={500}
+              height={500}
+            />
           </View>
           <View style={styles.header}>
             <Text>
               Member Update / <Text style={styles.itali_text}>Spring 2024</Text>
             </Text>
-            <Text style={styles.subheader}>{validation.replaceUnderScore(props?.state?.company_name)}</Text>
+            <Text style={styles.subheader}>
+              {validation.replaceUnderScore(props?.state?.company_name)}
+            </Text>
           </View>
 
           <View style={styles.section}>
@@ -346,50 +355,49 @@ const MemberUpdatePDF = (props) => {
               indicated below, and write a brief summary of each project in the
               comment section.
             </Text>
-              <View style={styles.goal} >
-                <View style={styles.div_wrapper}>
-            {/* {props?.state?.photo_comment?.map((res, index) => ( */}
-                  <View style={styles.Flex_div}>
-                    <Text style={styles.text}> PROJECT #1: </Text>
-                    <Image
-                      src={
-                        "https://pbs.twimg.com/profile_images/1797665112440045568/305XgPDq_400x400.png"
-                      }
-                      style={styles.imgg}
-                      width={500}
-                      height={500}
-                    />
-                  </View>
-            {/* ))} */}
-
-                  <View style={styles.Flex_div}>
-                    <Text style={styles.text}>
-                      {" "}
-                      PROJECT 1 COMMENTS::{" "}
-                    </Text>
-                    <Text style={styles.textarea}>    COMMENTSCOMMENTSCOMMENTSCOMMENTSCOMMENTS </Text>
-                  </View>
-
-                  <View style={styles.Flex_div}>
-                    <Text style={styles.text}> PROJECT #2: </Text>
-                    <Image
-                      src={
-                        "https://pbs.twimg.com/profile_images/1797665112440045568/305XgPDq_400x400.png"
-                      }
-                      style={styles.imgg}
-                      width={500}
-                      height={500}
-                    />
-                  </View>
-                  <View style={styles.Flex_div}>
-                    <Text style={styles.text}>
-                      {" "}
-                      PROJECT 2 COMMENTS::{" "}
-                    </Text>
-                    <Text style={styles.textarea}>  COMMENTS2,  COMMENTS2,   COMMENTS2,   COMMENTS2   </Text>
-                  </View>
+            <View style={styles.goal}>
+              <View style={styles.div_wrapper}>
+                {/* {props?.state?.photo_comment?.map((res, index) => ( */}
+                <View style={styles.Flex_div}>
+                  <Text style={styles.text}> PROJECT #1: </Text>
+                  <Image
+                    src={
+                      "https://pbs.twimg.com/profile_images/1797665112440045568/305XgPDq_400x400.png"
+                    }
+                    style={styles.imgg}
+                    width={500}
+                    height={500}
+                  />
                 </View>
+                {/* ))} */}
+
+                {photoSection.map((item, index) => (
+                  <View style={styles.goal} key={index}>
+                    {Object.entries(item.fileUrls).map(
+                      ([commentKey, { images, comment }]) => (
+                        <View key={commentKey} style={styles.goal}>
+                          <Text style={styles.subheading}>
+                            Comment: {comment}
+                          </Text>
+                          {images.map((imageUrl, imgIndex) => (
+                            <>
+                              {console.log(imageUrl, "imagurl bc")}
+                              <Image
+                                key={imgIndex}
+                                src={imageUrl}
+                                style={styles.imgg}
+                                width={500}
+                                height={500}
+                              />
+                            </>
+                          ))}
+                        </View>
+                      )
+                    )}
+                  </View>
+                ))}
               </View>
+            </View>
           </View>
         </Page>
       </Document>

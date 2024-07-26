@@ -10,7 +10,6 @@ import api from "@/utils/api";
 import axios from "axios";
 import { pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
-// import Pdf from "@/app/common/Pdf";
 import { toast, ToastContainer } from "react-toastify";
 import Pdf from "../common/Pdf";
 import { DownloadOutlined, ShareAltOutlined } from "@ant-design/icons";
@@ -38,22 +37,11 @@ const { Row, Col, Card, Button, Space, Popconfirm } = {
     { ssr: false }
   ),
 };
-interface StaffDetailInterface {
-  is_blocked: boolean;
-  email?: string;
-  firstname?: string;
-  lastname?: string;
-  profile_pic?: any;
-  roles?: Array<any>;
-  country_code?: number;
-  mobile?: number;
-  _id: string;
-}
+
 const MeetingView = () => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
-  console.log(getUserdata,"getUserdata");
   
   const [state, setState] = React.useState<any>({
     id: "",
@@ -66,7 +54,6 @@ const MeetingView = () => {
     is_activate: "",
     is_archive: ""
   })
-  const [isActive, setIsActive] = useState(false);
   const searchParam = useParams();
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
@@ -134,7 +121,6 @@ const MeetingView = () => {
     }
   }
   useEffect(() => {
-    // if (id) {
     getDataById();
     // }
   }, []);
@@ -155,18 +141,14 @@ const downLoadPdf = async () => {
 const sharePdf = async () => {
 
     const { pdfUrl, timestamp } = await generatePdf();
-    console.log(pdfUrl, 'pdfUrl')
     const response = await fetch(pdfUrl);
     const blob = await response.blob();
-    console.log(blob, 'blob')
 
     // Convert the blob to a file
     const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
-    console.log(file, 'file pdf');
     const formData = new FormData();
     formData.append('file', file);
 
-    console.log(formData, "formData");
 
     const res = await fetch('https://frontend.goaideme.com/save-pdf', {
 
@@ -179,7 +161,6 @@ const sharePdf = async () => {
     },);
 
     const apiRes:any = await res.json()
-    console.log(apiRes,"apiRes");
       navigator.clipboard.writeText(apiRes?.fileUrl)
                 .then(() => {
                     toast.success('Link copied to clipboard');
@@ -187,16 +168,6 @@ const sharePdf = async () => {
                 .catch(() => {
                     toast.error('Failed to copy link to clipboard');
                 });
-
-    //   })
-    //   toast.success('Link Share Successfully', {
-    //     position: 'top-center',
-    //     autoClose: 300,
-
-    //   });
-
-    // Optionally, open the PDF in a new tab
-    // window.open(pdfUrl, '_blank');
 };
 
 
@@ -205,17 +176,7 @@ const sharePdf = async () => {
     <MainLayout>
     <Fragment>
       <section>
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
+      
         <Spin spinning={loading}>
           <Row gutter={[20, 20]}>
             <Col sm={22} md={12} lg={11} xl={10} xxl={9} className='mx-auto'>
@@ -238,22 +199,11 @@ const sharePdf = async () => {
                     <Tooltip title="Download Pdf">
                       <Button className='ViewMore ' onClick={downLoadPdf}><DownloadOutlined /></Button>
                     </Tooltip>
-                    {/* <ShareAltOutlined /> */}
-                    {/* <Button size='large' type="primary" htmlType='button' className='w-100' onClick={downLoadPdf}>
-                    <DownloadOutlined /> Download Pdf
-                    </Button> */}
+                    
                     <Tooltip title="Share Pdf link">
                       <Button className='ViewMore ' onClick={sharePdf}><ShareAltOutlined /></Button>
                     </Tooltip>
-                    {/* <Button
-                      size='large'
-                      // type="primary"
-                      // htmlType='button'
-                      className='w-100 mt-3'
-                      onClick={sharePdf}
-                    >
-                      Share a Link
-                    </Button> */}
+                    
                   </div>
                 </div>
                 {/* Car Listing  */}
@@ -264,23 +214,11 @@ const sharePdf = async () => {
                     <li className='mb-3'><Typography.Text >Company Name:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.company_name) || "N/A"}</Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Email:</Typography.Text > <Typography.Text className='ms-1'>{state?.email || "N/A"}</Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Phone no:</Typography.Text > <Typography.Text className='ms-10'>
-                      {/* {state?.mobile ? `+${String(state?.country_code).replace("+", "")} ${state?.mobile}` : 'N/A'} */}
                       {state?.phone_number || "N/A"}
                     </Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Position:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.position) || "N/A"}</Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Home City:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.home_city) || "N/A"}</Typography.Text ></li>
-                    {/* <li className='d-flex'>
-                      <Typography.Text className='text-nowrap'>Roles:</Typography.Text >
-                      <Typography>
-                        <Space size={[0, 8]} wrap className='ms-1'>
-                          {state?.roles?.map((resRole: any) =>
-                            <Tag key={resRole} color={(EmployeeRoles.find((resJson) => resJson.rol === resRole))?.color} >
-                              {(EmployeeRoles.find((resJson) => resJson.rol === resRole))?.name}
-                            </Tag>
-                          )}(`/admin/member/add/page2?${res?.user_id}`)
-                        </Space>
-                      </Typography>
-                    </li> */}
+                   
                   </ul>
                   {/* Button  */}
                   <div className='card-listing-button d-inline-flex flex-wrap gap-3 w-100'>
@@ -308,22 +246,13 @@ const sharePdf = async () => {
                     >
                       <Button size='large' type="primary" htmlType='button' className='flex-grow-1 activateBtn' ghost>   {state?.is_activate ? 'Deactivate' : 'Activate'}</Button>
                     </Popconfirm>: <Button size='large' type="primary" htmlType='button' className='flex-grow-1  activateBtn' loading={loading} onClick={onFinish}>Reset Password</Button>}
-                    {/* <Popconfirm
-                      title="Reset password the club member"
-                      // onConfirm={deleteStaffById}archive
-                      onConfirm={(res: any) => onFinish}
-                      description="Are you sure to reset password this club member?"
-                      okText="Reset it!"
-                      cancelText="No"
-                      okButtonProps={{ type: 'primary', danger: true }}
-                    > */}
+                   
                     {getUserdata?.is_admin==true?
                     <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 primaryBtn' loading={loading} onClick={onFinish}>Reset Password</Button>:""}
                     {/* </Popconfirm> */}
                     {!getUserdata?.is_admin==false?
                     <Popconfirm
                       title="Archive the club member"
-                      // onConfirm={deleteStaffById}
                       onConfirm={(e: any) => archive(id)}
                       description="Are you sure to archive this club member?"
                       okText="Archive it!"

@@ -202,7 +202,6 @@ const MeetingAdd = () => {
                 locationAutocomplete.addListener('place_changed', () => {
                     let place = locationAutocomplete.getPlace();
                     setSelectedLocation(place.formatted_address || '');
-                    // console.log(place?.geometry);
                     if (!place.geometry) {
                         console.log("chla");
                         return;
@@ -304,9 +303,7 @@ const MeetingAdd = () => {
             }
         };
         loadGoogleMapScript();
-        // Cleanup function if needed
         return () => {
-            // Cleanup code if any
         };
     }, []);
     const initPlaceHotel = async () => {
@@ -542,7 +539,7 @@ const MeetingAdd = () => {
                                                 />
 
                                             </Form.Item>
-                                            <Form.Item name="mobile_no" className='col-lg-6 col-sm-12' rules={[
+                                            <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[
 
                                                 { pattern: /^[0-9\s,]*$/, message: 'Only numbers and spaces are allowed' }
                                             ]} label="Cell">

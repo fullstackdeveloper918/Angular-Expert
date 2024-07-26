@@ -76,7 +76,7 @@ const LengthValidation = (str: string, length: number) => {
     return (String(str).trim().length > length)
 }
 const capitalizeFirstLetter = (string: string) => {
-    if (string) {
+    if (typeof string=="string") {
         return string.charAt(0).toUpperCase() + string.slice(1);
     } else {
         return `_`
@@ -173,7 +173,7 @@ const toLowCase = (val: string) => {
     }
 }
 export const capFirst = (str: string) => {
-    if (str) {
+    if (typeof str=="string") {
         return str[0]?.toUpperCase() + str.slice(1);
     } else {
         return str; // Return the original value if it's null or undefined

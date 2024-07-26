@@ -1,99 +1,18 @@
 "use client";
 import { Button, Card, Col, Form, Row, Typography } from "antd";
-import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Fragment, useCallback, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
-// const { Row, Col, Card, Button } = {
-//   Button: dynamic(() => import("antd").then((module) => module.Button), {
-//     ssr: false,
-//   }),
-//   Row: dynamic(() => import("antd").then((module) => module.Row), {
-//     ssr: false,
-//   }),
-//   Col: dynamic(() => import("antd").then((module) => module.Col), {
-//     ssr: false,
-//   }),
-//   Card: dynamic(() => import("antd").then((module) => module.Card), {
-//     ssr: false,
-//   }),
-// };
 const Page6 = () => {
  
   const router = useRouter()
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false)
 
-  console.log(form, "form");
-
-  const onFinish = async (values: any) => {
-      console.log('Received values of form: ', values);
-      let items = {
-          firstname: String(values.firstname).trim(),
-          lastname: String(values.lastname).trim(),
-          email: String(values.email).trim(),
-          password: String(values.password).trim(),
-          country_code: values.country_code ?? "+93",
-          mobile: String(values.mobile).trim(),
-          roles: values.roles
-      } as any
-      if (!items.firstname) {
-          // return Toast.warn("Please Enter Valid First Name")
-      }
-      if (!items.lastname) {
-          // return Toast.warn("Please Enter Valid Last Name")
-      }
-      // if (!henceforthValidations.email(items.email)) {
-      //   return Toast.warn("Please Enter Valid E-mail")
-      // }
-      // if (!henceforthValidations.strongPassword(items.password)) {
-      //   return Toast.warn("Please Enter Valid Password")
-      // }
-      if (!Number(items.mobile)) {
-          // return Toast.warn("Please Enter Valid Phone No.")
-      }
-      if (!items.country_code) {
-          // return Toast.warn("Please Select Country Code")
-      }
-      if (!values?.profile_pic?.fileList[0].originFileObj) {
-          // return Toast.warn("Please Add Image")
-      }
-      try {
-          setLoading(true)
-
-
-          // setUserInfo((preValue: any) => {
-          //   return {
-          //     ...preValue,
-          //     profile_pic: apiImageRes
-          //   }
-          // })
-
-          // let apiRes = await henceforthApi.Staff.create(items)
-          // console.log('apiRes', apiRes);
-
-          // setUserInfo((preValue: any) => {
-          //   return {
-          //     ...preValue,
-          //     name: apiRes.name,
-          //     email: apiRes.email,
-          //     mobile: apiRes.mobile
-          //   }
-          // })
-
-          form.resetFields()
-          // Toast.success("Staff Added Successfully");
-          // router.replace(`/staff/${apiRes?._id}/view`)
-      } catch (error: any) {
-          // Toast.error(error)
-          console.log(error);
-      } finally {
-          setLoading(false)
-      }
-  };
+  
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : '';
@@ -117,13 +36,11 @@ const Page6 = () => {
           } as any
           setLoading(true)
           let res = await api.User.edit(items)
-              console.log(res,"yyyy");
               router.push(`/admin/member/add/page7?${value}&edit`)
           }else{
 
               setLoading(true)
               let res =await api.Auth.signUp(items)
-              console.log(res,"qqqq");
               if (res?.status == 400) {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
@@ -131,7 +48,6 @@ const Page6 = () => {
               router.push(`/admin/member/add/page7?${res?.userId}`)
           }
       } catch (error) {
-          console.log(error);
           
       }finally{
           setLoading(false)
@@ -156,23 +72,18 @@ const Page6 = () => {
           } as any
           setLoading(true)
           let res = await api.User.edit(items)
-              console.log(res,"yyyy");
               toast.success("Save Successfully")
-            //   router.push(`/admin/member/add/page7?${value}&edit`)
           }else{
 
               setLoading(true)
               let res =await api.Auth.signUp(items)
-              console.log(res,"qqqq");
               toast.success("Save Successfully")
               if (res?.status == 400) {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
               }
-            //   router.push(`/admin/member/add/page7?${res?.userId}`)
           }
       } catch (error) {
-          console.log(error);
           
       }finally{
           setLoading(false)
@@ -180,13 +91,11 @@ const Page6 = () => {
   }
   const [state, setState] = useState<any>("")
   const getDataById = async () => {
-      // console.log(id);
       const item = {
         user_id: value
       }
       try {
         const res = await api.User.getById(item as any);
-        console.log(res, "ressssss");
         setState(res?.data || null);
         if (res?.data?.status == 400) {
             toast.error("Session Expired Login Again")

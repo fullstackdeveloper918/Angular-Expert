@@ -36,29 +36,9 @@ const CustomModal = (props: any) => {
 
   const [addForm] = Form.useForm();
 
-  const [editForm] = Form.useForm();
-  const [state, setState] = useState<any>("");
-  const addGenre = async (values: any) => {
-    console.log("addGenre values", values);
-    setAddLoading(true);
-    try {
-      let items = {
-        name: String(values.addGenre).trim(),
-      };
-    } catch (error) {
-      console.log("error", error);
-    } finally {
-      setAddLoading(false);
-      setAddModalOpen(false);
-    }
-  };
+
   const [formValues, setFormValues] = useState<any>({});
 
-  const handleValuesChange = (changedValues: any, allValues: any) => {
-    setFormValues(allValues);
-    if (changedValues.questions) {
-    }
-  };
   const getDataById = useCallback(async (): Promise<void> => {
     const item = {
       question_id: props.id,
@@ -98,11 +78,9 @@ const CustomModal = (props: any) => {
       } else {
         let res = await api.Manage_Question.edit(item as any);
         props?.initialise();
-        console.log(res, "resCheck");
         setAddModalOpen(false);
       }
     } catch (error) {
-      console.log(error);
     }
   };
 

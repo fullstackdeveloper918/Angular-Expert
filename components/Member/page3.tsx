@@ -161,7 +161,6 @@ const Page3 = () => {
           setLoading(true)
           let res = await api.Auth.signUp(items)
           toast.success("Save Successfully")
-        //   router.push(`/admin/member/add/page4?${res?.userId}`)
       } catch (error) {
 
       } finally {
@@ -231,9 +230,7 @@ const Page3 = () => {
       }
   }, [type,form]);
   const onPrevious = () => {
-    //   router.back()
     router.replace(`/admin/member/add/page2?${value}&edit`)
-    //   /page2?I35EQuFu9OYhUPmykPk1Dda0WEt1&edit
   }
  
   return (
@@ -271,13 +268,7 @@ const Page3 = () => {
                                                 <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
-                                                    // onKeyPress={(e: any) => {
-                                                    //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                    //         e.preventDefault();
-                                                    //     } else {
-                                                    //         e.target.value = String(e.target.value).trim();
-                                                    //     }
-                                                    // }}
+                                                    
                                                 />
                                             </Form.Item>
                                             <Form.Item
@@ -288,13 +279,7 @@ const Page3 = () => {
                                                 <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
-                                                    // onKeyPress={(e: any) => {
-                                                    //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                    //         e.preventDefault();
-                                                    //     } else {
-                                                    //         e.target.value = String(e.target.value).trim();
-                                                    //     }
-                                                    // }}
+                                                   
                                                 />
                                             </Form.Item>
                                            
@@ -307,8 +292,7 @@ const Page3 = () => {
                                                 <Option value="struggling">Struggling</Option>
                                                 <Option value="not_started">Not Started</Option>
                                             </Select>
-                                            {/* </Form.Item> */}
-                                            {/* </div> */}
+                                           
                                             {inputPairs.length > 1 && (
                                                 <div className="remove_row">
                                                 <p className="m-0">Removed Row</p>
@@ -341,13 +325,6 @@ const Page3 = () => {
                                                 <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
-                                                    // onKeyPress={(e: any) => {
-                                                    //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                    //         e.preventDefault();
-                                                    //     } else {
-                                                    //         e.target.value = String(e.target.value).trim();
-                                                    //     }
-                                                    // }}
                                                 />
                                                 <Select
                                                     defaultValue={field.status1}

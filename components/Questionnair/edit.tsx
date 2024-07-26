@@ -1,21 +1,13 @@
 "use client"
-import type { GetServerSideProps, NextPage } from 'next'
+import type { NextPage } from 'next'
 import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 import { Breadcrumb, Form, Select, Input, Upload, Modal, Spin, Typography, SelectProps } from 'antd';
 import Link from 'next/link';
-import { PlusOutlined } from '@ant-design/icons';
-import type { RcFile, UploadProps } from 'antd/es/upload';
-import type { UploadFile } from 'antd/es/upload/interface';
-import EmployeeRoles from '@/utils/EmployeeRoles.json'
-import { useParams, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import type { UploadChangeParam } from 'antd/es/upload';
-import MainLayout from '../Layout/layout';
 import api from '@/utils/api';
-import { permission } from 'process';
-import { toast, ToastContainer } from 'react-toastify';
-import TextArea from 'antd/es/input/TextArea';
-import 'react-quill/dist/quill.snow.css';
+import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import MainLayout from '../Layout/layout';
 const { Row, Col, Card, Button } = {
   Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
   Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -33,22 +25,11 @@ const EditQuestionnair: Page = () => {
   const [form] = Form.useForm();
   const [state, setState] = useState({} as any)
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  console.log(state, "statestatestate");
+ 
   const [value, setValue] = useState('');
-  //   const prefixSelector = (
-  //     <Form.Item name="country_code" noStyle>
-  //       <Select style={{ width: 70 }}>
-  //         {CountryCode.map((res) =>
-  //           <Option key={res.dial_code} value={res.dial_code}>{res.dial_code}</Option>)}
-  //       </Select>
-  //     </Form.Item>
-  //   );
+  
   const searchParam = useParams();
   const id = searchParam.id;
-  console.log(searchParam, "iiiii");
 
   const options: SelectProps['options'] = [];
   for (let i = 0; i < 10; i++) {
@@ -84,8 +65,6 @@ const EditQuestionnair: Page = () => {
       router.back()
 
     } catch (error: any) {
-      console.error(error)
-      //   Toast.error(error)
     } finally {
       //   setLoading(false)
     }
@@ -102,22 +81,15 @@ const EditQuestionnair: Page = () => {
     try {
       const apiRes = await api.Questionnair.getById(item);
       setState(apiRes)
-      console.log('apiRes edit data', apiRes?.data[0]);
       form.setFieldsValue(apiRes)
             form.setFieldValue('answer',apiRes?.data[0].answer)
             form.setFieldValue('question', apiRes?.data[0].question)
             form.setFieldValue('type', apiRes.type)
 
     } catch (error) {
-      console.log(error)
     }
   }
 
-  // React.useEffect(() => {
-  //   if (state) {
-  //     form.setFieldsValue(state)
-  //   }
-  // }, [state])
 
   useEffect(() => {
     initialise()
@@ -138,23 +110,12 @@ const EditQuestionnair: Page = () => {
       // setAddModalOpen(false);
 
     } catch (error) {
-      console.log(error);
     }
   };
   return (
     <MainLayout>
       <Fragment>
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
+       
         <section>
           <Row gutter={[20, 20]}>
             <Col span={24}>

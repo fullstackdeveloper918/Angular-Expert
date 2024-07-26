@@ -62,7 +62,6 @@ const ArchiveMeeting = () => {
           let res = await api.Meeting.archive();
           setAreas(res?.data); 
       } catch (error) {
-          console.error('Error fetching meeting listing:', error);
       }
   };
   useEffect(() => {
@@ -74,10 +73,6 @@ const ArchiveMeeting = () => {
     <MainLayout>
 
     <Fragment>
-        {/* <Head>
-            <title>Meetings</title>
-            <meta name="meetings" content="Meetings" />
-        </Head> */}
         <section>
             <Row gutter={[20, 20]}>
                 <Col span={24}>
@@ -97,9 +92,6 @@ const ArchiveMeeting = () => {
                         <div className='my-4 d-flex gap-3'>
                             <Search size='large' placeholder="Search by Meeting Name or year" enterButton value={searchTerm}
                                 />
-                            {/* <Button type="primary" size='large' htmlType="button"  icon={<DownloadOutlined />} onClick={() => setExportModal(true)}>Export</Button> */}
-                            {/* <Space wrap> */}
-                            {/* <FilterSelect /> */}
                         </div>
                         {/* Tabs  */}
                         <div className='tabs-wrapper'>

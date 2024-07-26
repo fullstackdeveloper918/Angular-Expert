@@ -2,7 +2,6 @@ import React from "react";
 import { Select } from "antd";
 const { Option } = Select;
 const QuestionFilter = (props: any) => {
-  console.log(props, "yyyy");
 
   return (
     <Select

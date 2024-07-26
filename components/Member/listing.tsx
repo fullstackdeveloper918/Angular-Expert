@@ -15,7 +15,6 @@ import {
 } from "antd";
 import Link from "next/link";
 import { DownloadOutlined, EyeOutlined, PlusOutlined, ShareAltOutlined } from "@ant-design/icons";
-// import dynamic from "next/dynamic";
 import MainLayout from "../../components/Layout/layout";
 import { useRouter } from "next/navigation";
 import api from "@/utils/api";
@@ -24,33 +23,9 @@ import { toast, ToastContainer } from "react-toastify";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
 import saveAs from "file-saver";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import validation from "../../utils/validation";
-// const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
-//   Button: dynamic(() => import("antd").then((module) => module.Button), {
-//     ssr: false,
-//   }),
-//   Row: dynamic(() => import("antd").then((module) => module.Row), {
-//     ssr: false,
-//   }),
-//   Col: dynamic(() => import("antd").then((module) => module.Col), {
-//     ssr: false,
-//   }),
-//   Card: dynamic(() => import("antd").then((module) => module.Card), {
-//     ssr: false,
-//   }),
-//   Pagination: dynamic(
-//     () => import("antd").then((module) => module.Pagination),
-//     { ssr: false }
-//   ),
-//   Tooltip: dynamic(() => import("antd").then((module) => module.Tooltip), {
-//     ssr: false,
-//   }),
-//   Avatar: dynamic(() => import("antd").then((module) => module.Avatar), {
-//     ssr: false,
-//   }),
-// };
+
 const { Search } = Input;
 type Page<P = {}> = NextPage<P> & {
     getLayout?: (page: ReactNode) => ReactNode;
@@ -77,7 +52,6 @@ const MemberList = () => {
     const [state2, setState2] = useState<any>([])
     const cookies = parseCookies();
     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
-    console.log(accessToken, "qwertyui");
     const [loading, setLoading] = React.useState(false)
     const [exportModal, setExportModal] = React.useState(false);
     const [areas, setAreas] = useState<any>([]);
@@ -125,18 +99,14 @@ const MemberList = () => {
     const sharePdf = async () => {
 
         const { pdfUrl, timestamp } = await generatePdf();
-        console.log(pdfUrl, 'pdfUrl')
         const response = await fetch(pdfUrl);
         const blob = await response.blob();
-        console.log(blob, 'blob')
 
         // Convert the blob to a file
         const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
-        console.log(file, 'file pdf');
         const formData = new FormData();
         formData.append('file', file);
 
-        console.log(formData, "formData");
 
         const res = await fetch('https://frontend.goaideme.com/save-pdf', {
 
@@ -149,7 +119,6 @@ const MemberList = () => {
         },);
 
         const apiRes:any = await res.json()
-    console.log(apiRes,"apiRes");
       navigator.clipboard.writeText(apiRes?.fileUrl)
                 .then(() => {
                     toast.success('Link copied to clipboard');
@@ -158,23 +127,6 @@ const MemberList = () => {
                     toast.error('Failed to copy link to clipboard');
                 });
 
-        // const resData = await res.json();
-        // console.log(resData, 'resData');
-
-        // if (resData && resData.link) {
-        //     copyToClipboard(resData.link);
-        // } else {
-        //     throw new Error('Link not found in response');
-        // }
-        //   })
-        //   toast.success('Link Share Successfully', {
-        //     position: 'top-center',
-        //     autoClose: 300,
-
-        //   });
-
-        // Optionally, open the PDF in a new tab
-        // window.open(pdfUrl, '_blank');
     };
     
     const handleDownloadAndFetchData = (id: any) => {
@@ -337,7 +289,6 @@ const MemberList = () => {
                 router.replace("/auth/signin")
               }
         } catch (error) {
-            console.error(error);
         }
     };
 

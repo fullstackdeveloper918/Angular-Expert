@@ -1,18 +1,14 @@
 "use client"
-import type { GetServerSideProps, NextPage } from 'next'
+import type { NextPage } from 'next'
 import React, { Fragment, ReactNode, useEffect, useState } from 'react'
-import { Breadcrumb, Form, Select, Input, Upload, Modal, Spin, Typography, SelectProps } from 'antd';
+import { Breadcrumb, Form, Select, Input, Typography, SelectProps } from 'antd';
 import Link from 'next/link';
-import { PlusOutlined } from '@ant-design/icons';
-import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import { useParams, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import type { UploadChangeParam } from 'antd/es/upload';
 import MainLayout from '../Layout/layout';
 import api from '@/utils/api';
-import { permission } from 'process';
 import { toast, ToastContainer } from 'react-toastify';
 
 const { Row, Col, Card, Button } = {
@@ -31,23 +27,9 @@ const EditStaff: Page = () => {
   const router = useRouter()
   const [form] = Form.useForm();
   const [state, setState] = useState({} as any)
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-console.log(state,"statestatestate");
 
-//   const prefixSelector = (
-//     <Form.Item name="country_code" noStyle>
-//       <Select style={{ width: 70 }}>
-//         {CountryCode.map((res) =>
-//           <Option key={res.dial_code} value={res.dial_code}>{res.dial_code}</Option>)}
-//       </Select>
-//     </Form.Item>
-//   );
 const searchParam = useParams();
 const id = searchParam.id;
-console.log(searchParam,"iiiii");
 
   const options: SelectProps['options'] = [];
   for (let i = 0; i < 10; i++) {
@@ -69,8 +51,6 @@ let item={
 }
 
     try {
-    //   setLoading(true)
-
         let apiRes = await api.Admin.edit(item as any)
         toast.success('Edit Successful', {
             position: 'top-center',
@@ -83,15 +63,10 @@ let item={
         router.back()
       
     } catch (error: any) {
-      console.error(error)
-    //   Toast.error(error)
     } finally {
     //   setLoading(false)
     }
   };
-
-
-  const handleCancel = () => setPreviewOpen(false);
 
 
   const initialise = async () => {
@@ -101,17 +76,9 @@ let item={
     try {
       let apiRes = await api.Admin.getById(item as any)
       setState(apiRes?.data)
-      console.log('apiRes edit data', apiRes);
       form.setFieldsValue(apiRes)
       form.setFieldValue("phone_no", apiRes.mobile)
-    //   setFileList([{
-    //     uid: '-1',
-    //     name: '',
-    //     status: 'done',
-    //     url: apiRes.profile_pic ? s3bucket.getUrl(apiRes.profile_pic) : User.src
-    //   }])
     } catch (error) {
-      console.log(error)
     }
   }
 
@@ -128,19 +95,8 @@ let item={
   return (
     <MainLayout>
     <Fragment>
-    <ToastContainer
-                    position="top-center"
-                    autoClose={3000}
-                    hideProgressBar
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                />
+   
       <section>
-        {/* <Spin spinning={loading}> */}
           <Row gutter={[20, 20]}>
             <Col sm={22} md={12} lg={11} xl={10} xxl={9}>
               <Card className='common-card'>
@@ -148,7 +104,6 @@ let item={
                   <Breadcrumb separator=">">
                     <Breadcrumb.Item><Link href="/admin/dashboard" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                     <Breadcrumb.Item><Link href="/staff/page/1" className='text-decoration-none'>Admin</Link></Breadcrumb.Item>
-                    {/* <Breadcrumb.Item><Link href={`/staff/${router.query._id}/view`} className='text-decoration-none text-capitalize'>{state?.firstname ? `${state?.firstname} ${state?.lastname}` : 'N/A'}</Link></Breadcrumb.Item> */}
                     <Breadcrumb.Item className='text-decoration-none'>Edit</Breadcrumb.Item>
                   </Breadcrumb>
                 </div>
@@ -198,11 +153,6 @@ let item={
                     <Form.Item name="phone_number" rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
                       <Input size='large' type="text" minLength={10} maxLength={10} placeholder="Phone No" />
                     </Form.Item>
-                    {/* Password  */}
-                    {/* <Form.Item name="password" label="Password">
-                      <Input.Password type="password" placeholder="Password" />
-                    </Form.Item> */}
-                    {/* Roles  */}
                     <Form.Item name="permission" label="Roles" rules={[{ required: true, message: 'Please Select Roles' }]}>
                       <Select
                         mode="tags"

@@ -1,21 +1,12 @@
 "use client";
-import { Input, Space, Form, Select } from "antd";
+import {Space, Form, Select } from "antd";
 import dynamic from "next/dynamic";
 import React, { useCallback, useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import api from "@/utils/api";
 import TextArea from "antd/es/input/TextArea";
-const { Row, Col, Card, Button, Pagination } = {
+const {  Button, Pagination } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
-    ssr: false,
-  }),
-  Row: dynamic(() => import("antd").then((module) => module.Row), {
-    ssr: false,
-  }),
-  Col: dynamic(() => import("antd").then((module) => module.Col), {
-    ssr: false,
-  }),
-  Card: dynamic(() => import("antd").then((module) => module.Card), {
     ssr: false,
   }),
   Pagination: dynamic(
@@ -23,15 +14,11 @@ const { Row, Col, Card, Button, Pagination } = {
     { ssr: false }
   ),
 };
-const { Option } = Select;
 const AntModal = dynamic(() => import("antd").then((module) => module.Modal), {
   ssr: false,
 });
 
 const QuestionanirModal = (props: any) => {
-
-    console.log(props,"check props");
-    
   const [addModalOpen, setAddModalOpen] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -43,14 +30,12 @@ const QuestionanirModal = (props: any) => {
   const [editForm] = Form.useForm();
   const [state, setState] = useState<any>("");
   const addGenre = async (values: any) => {
-    console.log("addGenre values", values);
     setAddLoading(true);
     try {
       let items = {
         name: String(values.addGenre).trim(),
       };
     } catch (error) {
-      console.log("error", error);
     } finally {
       setAddLoading(false);
       setAddModalOpen(false);
@@ -63,41 +48,8 @@ const QuestionanirModal = (props: any) => {
     if (changedValues.questions) {
     }
   };
-  const getDataById = useCallback(async (): Promise<void> => {
-    const item = {
-      question_id: props.id,
-    };
-    try {
-      setLoading(true);
-      const res = await api.Questionnair.getById(item);
 
-      addForm.setFieldsValue(res.data);
-    } catch (error: any) {
-      alert(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [addForm, props.id]);
-  const getDataById1=async()=>{
-    const item = {
-        question_id: props.id,
-      };
-      try {
-        setLoading(true);
-        const res = await api.Questionnair.getById(item);
-  
-        addForm.setFieldsValue(res.data);
-      } catch (error: any) {
-        alert(error.message);
-      } finally {
-        setLoading(false);
-      }
-  }
-  useEffect(() => {
-    if (props?.type=="edit") {
-        // getDataById1()
-    }
-  }, [props?.type]);
+
   const addQuestion = async (values: any) => {
     let item = {
         question_id: props?.id,
@@ -116,7 +68,6 @@ const QuestionanirModal = (props: any) => {
         setAddModalOpen(false);
      
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -158,19 +109,7 @@ const QuestionanirModal = (props: any) => {
             form={addForm}
             autoComplete="off"
           >
-            {/* <Form.Item
-              name="question"
-              label={`Questions`}
-              rules={[
-                {
-                  required: true,
-                  whitespace: true,
-                  message: `Questions`,
-                },
-              ]}
-            >
-              <Input size={"large"} placeholder={`${props?.type} Questions`} />
-            </Form.Item> */}
+           
             <Form.Item
               name="answer"
               label={`Answer`}

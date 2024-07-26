@@ -25,7 +25,6 @@ interface User {
 }
 const Updatepswrd = () => {
   const params=useParams()
-    console.log(params,"kkkk");
     
  const onFinish = async (values: any) => {
         let items = {
@@ -34,10 +33,8 @@ const Updatepswrd = () => {
         };
         try {
             let res = await axios.post("https://frontend.goaideme.com/update-password", items)
-            console.log(res, "checkkkkkkk");
 
         } catch (error) {
-            console.log(error);
 
         }
     }

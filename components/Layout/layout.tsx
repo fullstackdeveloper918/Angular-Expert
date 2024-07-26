@@ -1,10 +1,10 @@
 "use client";
 
 import { MenuOutlined, CloseOutlined, LogoutOutlined } from "@ant-design/icons";
-import { Avatar, Badge, Grid, Layout, MenuProps, Popconfirm } from "antd";
+import { Grid, Layout, MenuProps, Popconfirm } from "antd";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { UsergroupAddOutlined, BellOutlined } from "@ant-design/icons";
+import { UsergroupAddOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import { clearUserData } from "../../lib/features/userSlice";
 import MenuBar from "../../components/common/MenuBar";
@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 
 const { Button, Dropdown, Tooltip } = {
@@ -90,7 +90,6 @@ const MainLayout = ({ children }: any) => {
   ];
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
-  console.log(getUserdata, "qwertyu");
 
   useEffect(() => {
     const cookies = parseCookies();
@@ -98,20 +97,12 @@ const MainLayout = ({ children }: any) => {
     setAccessToken(token);
   }, []);
   const handleLogout = async () => {
-    // const auth = getAuth();
     signOut(auth)
     .then(() => {
-      // Sign-out successful.
-      console.log("Signed out successfully.");
     })
     .catch((error: Error) => {
-      // An error happened.
-      console.error("Sign-out error:", error.message);
     });
-    // if (accessToken) {
       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-     
-    // }
     dispatch(clearUserData({}));
     toast.success("Logout Successful", {
       position: "top-center",
@@ -146,10 +137,8 @@ const MainLayout = ({ children }: any) => {
           breakpoint="lg"
           collapsedWidth="0"
           onBreakpoint={(broken) => {
-            console.log(broken);
           }}
           onCollapse={(collapsed, type) => {
-            console.log(collapsed, type);
           }}
           style={{
             overflow: "auto",

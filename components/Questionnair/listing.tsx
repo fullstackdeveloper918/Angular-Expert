@@ -2,72 +2,27 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Input, Breadcrumb, Typography, Table, Card, Col, Row, Tooltip, Button, Collapse, theme, Popconfirm } from "antd";
 import MainLayout from "../../components/Layout/layout";
-import dynamic from "next/dynamic";
 import Link from "next/link";
-import QuestionFilter from "@/components/common/QuestionFilter";
 import api from "@/utils/api";
-import QuestionanirModal from "../common/QuestionnairModal";
 import { DownloadOutlined, PlusOutlined } from "@ant-design/icons";
 import { pdf } from "@react-pdf/renderer";
 import saveAs from "file-saver";
-import QuestionnairPdf from "../common/QuestionnairPdf"
 import { useSelector } from "react-redux";
 import Pdf from "../common/Pdf";
 import { toast } from "react-toastify";
 import { parseCookies } from "nookies";
-const { Panel } = Collapse;
 const { Search } = Input;
-let timer: any;
 const { Title } = Typography;
 const QuestionnairList = () => {
     const getUserdata = useSelector((state: any) => state?.user?.userData)
-    console.log(getUserdata, "getUserdata");
     const cookies = parseCookies();
     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
     const [questionType, setQuestionType] = useState<any>(null);
     const { token } = theme.useToken();
-    //   getUserdata?.user_id
     const [state, setState] = useState<any>([])
     const [state1, setState1] = useState<any>("")
 
-    const dataSource2 = [
-        {
-            key: '1',
-            question: <p >
-                <span>Describe your current financial position:</span>
-            </p>,
-
-        },
-        {
-            key: '2',
-            question:
-                <p >
-                    <span>Describe your current sales positions, hot prospects, recently contracted work:</span>
-                </p>,
-
-        },
-        {
-            key: '3',
-            question: <p >
-                <span>Describe your accomplishments in the last 6 months:</span>
-            </p>,
-
-        },
-        {
-            key: '4',
-            question: <p >
-                <span>Describe your HR position &/or needs:</span>
-            </p>,
-
-        },
-        {
-            key: '5',
-            question: <p >
-                <span>Describe any current challenges your business is facing (i.e. problem client, personnel issue(s), trade availability, rising costs, supply chain, etc.):</span>
-            </p>,
-
-        },
-    ];
+ 
     const dataSource = state?.map((res: any, index: number) => {
         return {
             key: index + 1,
@@ -112,25 +67,17 @@ const QuestionnairList = () => {
 
             const params: any = questionType ? { searchFilter: questionType } : {};
             let res = await api.Questionnaire.listing(params);
-            console.log(res, "qwqwqwqw");
 
             setState(res.data);
         } catch (error) {
-            // Toast.error(error)
-            console.log(error);
         } finally {
-            // setLoading(false)
         }
     };
 
     useEffect(() => {
         initialise(questionType);
-        // getDataById()
     }, [questionType]);
-    const handleChange = (value: any) => {
-        setQuestionType(value);
-    };
-    console.log(questionType, "tyrytryy");
+   
     const generatePdf = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
         const blob = await pdf(<Pdf state={state1} />).toBlob();
@@ -148,18 +95,14 @@ const QuestionnairList = () => {
     const sharePdf = async () => {
     
         const { pdfUrl, timestamp } = await generatePdf();
-        console.log(pdfUrl, 'pdfUrl')
         const response = await fetch(pdfUrl);
         const blob = await response.blob();
-        console.log(blob, 'blob')
     
         // Convert the blob to a file
         const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
-        console.log(file, 'file pdf');
         const formData = new FormData();
         formData.append('file', file);
     
-        console.log(formData, "formData");
     
         const res = await fetch('https://frontend.goaideme.com/save-pdf', {
     
@@ -172,7 +115,6 @@ const QuestionnairList = () => {
         },);
     
         const apiRes:any = await res.json()
-        console.log(apiRes,"apiRes");
           navigator.clipboard.writeText(apiRes?.fileUrl)
                     .then(() => {
                         toast.success('Link copied to clipboard');
@@ -206,15 +148,7 @@ const QuestionnairList = () => {
         borderRadius: token.borderRadiusLG,
         border: '1px solid #e6e6e6',
     };
-    const genExtra = (res: any) => (<ul className='list-unstyled mb-0 gap-3 d-flex'>
-        <li>
-            <Link href={`/admin/questionnaire/${res?.id}`} >
-                <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-            </Link>
-        </li>
-
-
-    </ul>)
+  
     const data = [
         { title: 'Card 1', description: 'BUSINESS UPDATE', state: 0 },
         { title: 'Card 2', description: 'GOALS', state: 1},

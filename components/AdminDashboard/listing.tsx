@@ -1,14 +1,8 @@
 "use client";
 import type { NextPage } from "next";
 import React, { Fragment, ReactNode, useEffect, useState } from "react";
-// import MainLayout from "../../layouts/page";
-// import Icons from "../../common/Icons";
 import Link from "next/link";
-import { EyeOutlined, LoginOutlined } from "@ant-design/icons";
-import dynamic from "next/dynamic";
-import henceofrthEnums from "@/utils/henceofrthEnums";
-import { useRouter } from "next/navigation";
-import type { TabsProps } from "antd";
+import { EyeOutlined, FieldTimeOutlined, FormOutlined, LoginOutlined } from "@ant-design/icons";
 import "../../styles/globals.scss";
 import { Button, Card, Col, Popconfirm, Row, Table, Typography } from "antd";
 import api from "@/utils/api";
@@ -16,24 +10,17 @@ import { useSelector } from "react-redux";
 import Icons from "@/components/common/Icons";
 import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
-// import Timmer1 from "../common/Timmer"/
-import Countdown from "antd/es/statistic/Countdown";
 import Timmer from "../common/Timmer";
-// import { Timmer } from "../common/Timmer";
-import capitalizeFirstLetter from "../../utils/validation"
-import henceforthValidations from "../../utils/validation";
-import validation from "../../utils/validation";
+import validation from "@/utils/validation";
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
 };
 
 const AdminDashboard: Page = (props: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData)
-  console.log(getUserdata, "qwertyui");
 
   const [state1, setState1] = useState<any>([])
   const [state2, setState2] = useState<any>([])
-  const [formRemainFill, setFormRemainFill] = useState<any>("")
   const [upcoming, setUpcoming] = useState<any>("")
   const [next, setNext] = useState<any>("")
   const [total_count, setTotal_count] = useState<any>("")
@@ -41,12 +28,18 @@ const AdminDashboard: Page = (props: any) => {
   const [complete, setComplete] = useState<any>("")
   const [check, setCheck] = useState<any>("")
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
-  console.log(check, "check");
+  const Countdown = areas?.result?.length
+  ? areas?.result
+      .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime()) // Sort by start_meeting_date
+      .map((res: any, index: number) => (
+        <div key={index}>
+          <Timmer endDate={res?.start_meeting_date} />
+        </div>
+      ))
+  : [];
 
+  
   const DashboardData = [
-    // getUserdata?.is_admin==false?
-
-    // getUserdata?.is_admin==true?
     {
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
@@ -57,7 +50,6 @@ const AdminDashboard: Page = (props: any) => {
       link: "/admin/dashboard"
 
     },
-    // getUserdata?.is_admin==true?
     {
       cardBackground: "#CAFDF5",
       iconBackground: "linear-gradient(135deg, rgba(0, 184, 217, 0) 0%, rgba(0, 184, 217, 0.24) 97.35%)",
@@ -67,7 +59,6 @@ const AdminDashboard: Page = (props: any) => {
       count: "Spring 2025 (408 days)",
       link: "/admin/dashboard"
     },
-    // getUserdata?.is_admin==true?
     {
       cardBackground: "#FFF5CC",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
@@ -80,6 +71,7 @@ const AdminDashboard: Page = (props: any) => {
     },
 
   ]
+  const start_date=1725993000000
   const DashboardData2 = [
     // getUserdata?.is_admin==false?
     {
@@ -96,10 +88,20 @@ const AdminDashboard: Page = (props: any) => {
     {
       cardBackground: "#FFF5CC",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-      icon: <Icons.Users />,
+      icon: <FormOutlined style={{ fontSize: '40px', color: '#08c' }}/>,
       title: `${complete?.totalUncompleted || "0"}`,
       textColor: "#B76E00",
       count: "No. of Users remains to fill the Form for coming meeting",
+      link: "/admin/dashboard"
+
+    },
+    {
+      cardBackground: "#CAFDF5",
+      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
+      icon: <FieldTimeOutlined  style={{ fontSize: '40px', color: '#08c' }}/>,
+      title: <Timmer endDate={start_date} />,
+      textColor: "#006C9C",
+      count: "Countdown to Upcoming Meeting",
       link: "/admin/dashboard"
 
     },
@@ -134,8 +136,8 @@ const AdminDashboard: Page = (props: any) => {
   const dataSource1 = completed?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
-      company: res?.company_name,
+      name: res?.firstname ? `${validation.capitalizeFirstLetter(res?.firstname)} ${validation.capitalizeFirstLetter(res?.lastname)}` : "N/A",
+      company:validation.replaceUnderScore(validation.capitalizeFirstLetter(res?.company_name)),
       email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
         {hasClubMemberPermission || getUserdata?.is_admin == false ?
@@ -148,8 +150,8 @@ const AdminDashboard: Page = (props: any) => {
   const dataSource2 = non_completed?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
-      company: res?.company_name,
+      name: res?.firstname ? `${validation.capitalizeFirstLetter(validation.capitalizeFirstLetter(res?.firstname))} ${res?.lastname}` : "N/A",
+      company: validation.replaceUnderScore(validation.capitalizeFirstLetter(res?.company_name)),
       email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
         {hasClubMemberPermission || getUserdata?.is_admin == false ?
@@ -159,97 +161,22 @@ const AdminDashboard: Page = (props: any) => {
     }
   }
   );
-  const dataSource3 = areas?.result?.length && areas?.result?.map((res: any, index: number) => {
-    return {
-      key: index + 1,
-      meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${res?.meeting_type == "fall" ? "2024" : "2025"}`,
-      // meeting: `${capitalizeFirstLetter(res?.meeting_type)} 2024`,
-      start: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
-      end: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
-      action: <Timmer endDate={res?.start_meeting_date} />
-      // <CountDown  />
-      // <Countdown  value={Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30}  />
-    }
-  })
-  const user_non_completed = non_completed2?.slice(0, 5).map((res: any, index: number) => {
-    return {
-      key: index + 1,
-      name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
-      company: res?.company_name,
-      email: res?.email,
-      action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        <Link href={`/admin/member/${res?.uid}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
-      </ul>
-    }
-  }
-  );
-  const user_completed = completed2?.slice(0, 5).map((res: any, index: number) => {
-    return {
-      key: index + 1,
-      name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
-      company: res?.company_name,
-      email: res?.email,
-      action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-
-        <Link href={`/admin/member/${res?.uid}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
-      </ul>
-    }
-  }
-  );
-  const user_completed_columns = [
-    {
-      title: 'Sr.No',
-      dataIndex: 'key',
-      key: 'key',
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Club Name',
-      dataIndex: 'company',
-      key: 'company',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Action',
-      dataIndex: 'action',
-      key: 'action',
-    },
-  ];
-  const user_non_completed_columns = [
-    {
-      title: 'Sr.No',
-      dataIndex: 'key',
-      key: 'key',
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Club Name',
-      dataIndex: 'company',
-      key: 'company',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Action',
-      dataIndex: 'action',
-      key: 'action',
-    },
-  ];
+  const dataSource3 = areas?.result?.length 
+  ? areas?.result
+      .sort((a:any, b:any) => a.start_meeting_date - b.start_meeting_date).slice(0,2)
+      .map((res: any, index: number) => {
+        return {
+          key: index + 1,
+          meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`,
+          start: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
+          end: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
+          action: <Timmer endDate={res?.start_meeting_date} />,
+          action1:<ul className='m-0 list-unstyled d-flex gap-2'><li>
+            <Link href={`/admin/meetings/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+        </ul>
+        }
+      })
+  : [];
   const columns3 = [
     {
       title: 'Sr.no',
@@ -275,6 +202,11 @@ const AdminDashboard: Page = (props: any) => {
       title: 'Countdown',
       dataIndex: 'action',
       key: 'action',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action1',
+      key: 'action1',
     },
   ];
 
@@ -383,17 +315,14 @@ const AdminDashboard: Page = (props: any) => {
       let apiRes1 = await api.User.user_completed_noncompleted()
       let apiRes = await api.User.user_total_count()
       let res1 = await api.dashboard.upcoming()
-      // let res2 = await api.dashboard.next()
       setTotal_count(apiRes)
       setState1(res?.data)
       setUpcoming(res1)
       setComplete(apiRes1.data)
-      // setNext(res2)
     } catch (error) {
 
     }
   }
-  console.log(total_count, "lsjflsdjf");
 
   const initialise = async () => {
     try {
@@ -403,10 +332,8 @@ const AdminDashboard: Page = (props: any) => {
       setCheck(apiRes1)
       setState2(apiRes?.data)
       setAreas(res);
-      console.log(res, "ressss");
 
     } catch (error) {
-      console.error('Error fetching meeting listing:', error);
     }
   };
   useEffect(() => {
@@ -418,7 +345,6 @@ const AdminDashboard: Page = (props: any) => {
     getData()
 
   }, [])
-  console.log(state2, "state2");
 
   return (
     <MainLayout>
@@ -426,6 +352,7 @@ const AdminDashboard: Page = (props: any) => {
       <Fragment>
         <section>
           <Row gutter={[20, 20]} className="mb-4 ">
+          
             {getUserdata?.is_admin == true ?
               <>
                 {DashboardData && DashboardData?.map((data: any, index: number) => {
@@ -524,6 +451,7 @@ const AdminDashboard: Page = (props: any) => {
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                     <Typography.Title level={4} className='m-0 fw-bold'>Club Members</Typography.Title>
                     {hasClubMemberPermission ?
+                    state1?.length&&
                       <Link href={'/admin/member'}>
                         <Button className='text-center blackViewBtn'> View All</Button>
                       </Link> : ""}

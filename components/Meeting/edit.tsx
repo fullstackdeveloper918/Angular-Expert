@@ -54,7 +54,6 @@ const MeetingEdit = () => {
     setMeetingType(value);
   };
   const onChange1: TimePickerProps['onChange'] = (time, timeString) => {
-    console.log(time, timeString);
   };
   const onChange = (date: any, dateString: any) => {
     setState((prevState: any) => ({
@@ -107,7 +106,7 @@ const MeetingEdit = () => {
       airport: values?.airport,
       host_company: values?.host_company,
       host: values?.host,
-      cell: values?.cell,
+      cell: [values?.cell],
       weather: values?.weather,
       comments: values?.comments,
       notes: values?.notes,
@@ -327,24 +326,13 @@ const MeetingEdit = () => {
                          
                         />
                       </Form.Item>
-                      {/* <Form.Item name="host" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Host' }]} label="Host">
-                                      <Input size={'large'} placeholder="Host"
-                                          onKeyPress={(e: any) => {
-                                              if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                  e.preventDefault();
-                                              } else {
-                                                  e.target.value = String(e.target.value).trim()
-                                              }
-                                          }}
-                                      />
-                                  </Form.Item> */}
-                      <Form.Item name="phone" className='col-lg-6 col-sm-12' rules={[
+                
+                      <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[
 
                         { pattern: /^[0-9\s,]*$/, message: 'Only numbers and spaces are allowed' }
                       ]} label="Cell">
                         <Input
                           size={'large'} placeholder="Cell"
-                          // type="number"
                           onKeyPress={(event) => {
                             if (!/[0-9\s,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
                               event.preventDefault();
@@ -376,10 +364,6 @@ const MeetingEdit = () => {
 
                         <Input size={'large'} placeholder="Host" />
                       </Form.Item>
-                      {/* <Form.Item name="phone" className='col-lg-6 col-sm-12' label="Mobile Number">
-                        <Input size={'large'} placeholder="Mobile Number" />
-                      </Form.Item> */}
-
                     </div>
                     {/* Button  */}
                     <div className="text-center mt-3">

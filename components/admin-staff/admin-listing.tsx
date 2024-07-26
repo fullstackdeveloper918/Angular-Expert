@@ -1,17 +1,13 @@
 "use client"
-import type { GetServerSideProps, NextPage } from 'next'
+import type { NextPage } from 'next'
 import React, { Fragment, ReactNode } from 'react'
-import { Table, Input, Breadcrumb, Space, Tag, Typography, Avatar, Dropdown, Select, Popconfirm } from 'antd';
+import { Table, Input, Breadcrumb, Space, Tag, Typography, Popconfirm } from 'antd';
 import Link from 'next/link';
-import { PlusOutlined, EyeFilled, DownloadOutlined, DownOutlined } from '@ant-design/icons'
-import { useRouter } from 'next/navigation';
+import { PlusOutlined } from '@ant-design/icons'
 import dynamic from 'next/dynamic';
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
-import type { MenuProps } from 'antd';
 import MainLayout from '../Layout/layout';
-import { ApiError } from 'next/dist/server/api-utils';
 import api from '@/utils/api';
-import { permission } from 'process';
 
 const { Row, Col, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -23,53 +19,24 @@ const { Row, Col, Card, Button, Pagination, Tooltip } = {
 }
 let timer: any
 const { Search } = Input;
-interface DataType {
-    key: React.Key;
-}
-
 
 type Page<P = {}> = NextPage<P> & {
     getLayout?: (page: ReactNode) => ReactNode;
 };
 
 const Admin: Page = () => {
-    const router = useRouter()
-    const [exportModal, setExportModal] = React.useState(false);
     const [loading, setLoading] = React.useState(false)
-    //   const [state, setState] = React.useState({
-    //     data: [],
-    //     count: 0
-    //   })
     const [state, setState] = React.useState<any>([])
-
-    //   const onChangeRouter = (key: string, value: string) => {
-    //     router.replace({
-    //       query: { ...router.query, [key]: value }
-    //     })
-    //   }
-    console.log(state, "state");
-
     const onSearch = (value: string) => {
         console.log("onserach value", value);
         if (timer) {
             clearTimeout(timer)
         }
         timer = setTimeout(() => {
-            //   onChangeRouter("search", String(value).trim())
         }, 1000);
     }
 
-    const handleFilter = (value: any) => {
-        console.log("handleFilter called", value);
-        // onChangeRouter("filter", value)
-    }
-
-    const handlePagination = (page: number, pageSize: number) => {
-        console.log('page: number, pageSize', page, pageSize);
-        // router.replace({
-        //   query: { ...router.query, pagination: page, limit: pageSize }
-        // })
-    }
+ 
     const initialise = async () => {
         try {
             setLoading(true)
@@ -153,7 +120,6 @@ const Admin: Page = () => {
                     title="Delete"
                     description="Are you sure you want to delete ?"
                     onConfirm={(event:any) => {archive(res?.id)}}
-                // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                 >
                     <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                 </Popconfirm>
@@ -184,34 +150,12 @@ const Admin: Page = () => {
                                     <Typography.Title level={3} className='m-0 mb-3 mb-md-0 fw-bold'>Admin</Typography.Title>
                                     <div className='d-flex align-items-lg-stretch gap-3 overflow-auto flex-nowrap'>
                                         <Link href='/admin/admin-staff/add'><Button type="primary" size='large' icon={<PlusOutlined />} >Add Admin</Button></Link>
-                                        {/* <Button type="primary" htmlType="button" size='large' onClick={() => setExportModal(true)} icon={<DownloadOutlined />}>Export</Button> */}
                                     </div>
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 d-flex gap-4 align-items-center'>
                                     <Search size="large" placeholder="Search..." onSearch={onSearch} onChange={(e) => onSearch(e.target.value)} enterButton />
-                                    {/* <Space>
-                  < Select
-                    size="large"
-                    defaultValue="Filter"
-                    style={{ width: 120 }}
-                    onChange={handleFilter}
-                    options={[
-                      { value: 'Filter', label: 'Filter' },
-                      { value: 'dashboard', label: 'DASHBOARD' },
-                      { value: 'users', label: 'USERS' },
-                      { value: 'product', label: 'PRODUCT' },
-                      { value: 'notification', label: 'NOTIFICATION' },
-                      { value: 'contact', label: 'CONTACT' },
-                      { value: 'faq', label: 'FAQ' },
-                      { value: 'db_backup', label: 'DB_BACKUP' },
-                      { value: 'setting', label: 'SETTING' },
-                      { value: 'content', label: 'CONTENT' },
-                      { value: 'staff', label: 'STAFF' }
-
-                    ]}
-                  />
-                </Space> */}
+                                
 
                                 </div>
                                 {/* Table  */}
@@ -221,29 +165,12 @@ const Admin: Page = () => {
                                 {/* Pagination  */}
                                 <Row justify={'center'} className="mt-4">
                                     <Col span={24}>
-                                        {/* <Pagination current={Number(router.query.pagination) || 1} pageSize={Number(router.query.limit) || 10} total={state?.count} hideOnSinglePage={true} disabled={loading} onChange={handlePagination} /> */}
                                     </Col>
                                 </Row>
                             </Card>
                         </Col>
                     </Row>
-                    {/* <ExportFile open={exportModal} setOpen={setExportModal} title="Staff Export" export={async (start_date?: number, end_date?: number) => {
-          try {
-            setLoading(true)
-            let apiRes = await henceforthApi.Staff.export(start_date, end_date)
-            if (Array.isArray(apiRes?.data) && apiRes?.data.length > 0) {
-              downloadCSV("Staff", apiRes?.data)
-            }
-            if (Array.isArray(apiRes?.data) && apiRes?.data?.length == 0) {
-              Toast.success("No Data Found")
-            }
-          } catch (error) {
-            console.log(error);
-            Toast.error(error)
-          } finally {
-            setLoading(false)
-          }
-        }} /> */}
+                    
                 </section>
             </Fragment>
         </MainLayout>
