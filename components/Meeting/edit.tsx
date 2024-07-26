@@ -84,9 +84,9 @@ const MeetingEdit = () => {
       if (data.end_time) {
         data.end_time = dayjs(data.end_time);
       }
-      if (data.year) {
-        data.year = dayjs(data.year);
-      }
+      // if (data.year) {
+      //   data.year = dayjs(data.year);
+      // }
 
       setState(data);
       form.setFieldsValue(data);
@@ -101,7 +101,7 @@ const MeetingEdit = () => {
       meeting_type: values?.meeting_type,
       start_time: dayjs(values?.start_time).utc().valueOf(),
       end_time: dayjs(values?.end_time).utc().valueOf(),
-      year: dayjs(values?.year).format("YYYY"),
+      year: "",
       location: values?.location,
       hotel: values?.hotel,
       airport: values?.airport,
@@ -111,7 +111,7 @@ const MeetingEdit = () => {
       weather: values?.weather,
       comments: values?.comments,
       notes: values?.notes,
-      phone: ["7878787878", "9898989898"],
+      phone: [values?.phone],
     }
     try {
       setLoading(true)
@@ -288,9 +288,9 @@ const MeetingEdit = () => {
                           // disabledTime={disabledTime}
                           style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
                       </Form.Item>
-                      <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Year' }]} label="Meeting Year">
+                      {/* <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Year' }]} label="Meeting Year">
                         <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
-                      </Form.Item>
+                      </Form.Item> */}
                       <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
                         <input
                           className="custom-input"

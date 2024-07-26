@@ -83,7 +83,7 @@ const MeetingList = () => {
     const dataSource = areas?.length && areas?.map((res: any, index: number) => {
         return {
             key: index + 1,
-            meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)}`,
+            meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${res?.meeting_type=="fall"?"2024":"2025"}`,
             start_date: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
             start_time: dayjs(res?.start_time).format('hh:mm A'),
             end_date: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),

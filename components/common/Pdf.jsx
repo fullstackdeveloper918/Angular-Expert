@@ -1,4 +1,5 @@
 import React from "react";
+import logo from "../../assests/images/image.png";
 import {
   Page,
   Text,
@@ -57,6 +58,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginBottom: 10,
     textTransform: "capitalize",
+    textDecoration:"underline",
   },
   subheading: {
     fontSize: 13,
@@ -73,16 +75,18 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontSize: 12,
     color: "#000",
+    
   },
   textarea: {
     padding: 8,
-    border: "1px solid #ccc",
+    border: "1px solid #000",
     marginBottom: 10,
-    backgroundColor: "#f9f9f9",
     width: "100%",
     display: "inline-block",
     color: "#000",
     fontSize: 12,
+    // minHeight:"813px",
+    // maxHeight: "813px"
   },
   goal: {
     marginBottom: 20,
@@ -112,6 +116,13 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: "70%",
     overflow: "hidden",
+    margin:"auto"
+  },
+  logoNew: {
+    width: "10%",
+    maxWidth: "10%",
+    overflow: "hidden",
+    margin:"auto"
   },
 });
 
@@ -119,7 +130,12 @@ const MemberUpdatePDF = (props) => {
   return (
     <>
       <Document>
-        <Page size="A4" style={styles.page}>
+        <Page size="A4" style={styles.page}> 
+
+          <View style={{textAlign:"center", display:"block"}}>
+          <img src={`${logo.src}`} alt="logo" className="img-fluid mx-auto d-bloxk"  style={styles.logoNew}
+                    />
+          </View>
           <View style={styles.header}>
             <Text>
               Member Update / <Text style={styles.itali_text}>Spring 2024</Text>

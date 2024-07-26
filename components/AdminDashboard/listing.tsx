@@ -38,9 +38,10 @@ const AdminDashboard: Page = (props: any) => {
   const [next, setNext] = useState<any>("")
   const [total_count, setTotal_count] = useState<any>("")
   const [areas, setAreas] = useState<any>([]);
-  const [complete, setComplete]= useState<any>("")
+  const [complete, setComplete] = useState<any>("")
+  const [check, setCheck] = useState<any>("")
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
-console.log(complete,"complete");
+  console.log(check, "check");
 
   const DashboardData = [
     // getUserdata?.is_admin==false?
@@ -50,7 +51,7 @@ console.log(complete,"complete");
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: "0",
+      title: `${check?.data?.fall||"0"}`,
       textColor: "#007B55",
       count: "Fall 2024 (80 days)",
       link: "/admin/dashboard"
@@ -62,7 +63,7 @@ console.log(complete,"complete");
       iconBackground: "linear-gradient(135deg, rgba(0, 184, 217, 0) 0%, rgba(0, 184, 217, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#006C9C",
-      title: "0",
+      title: `${check?.data?.spring||"0"}`,
       count: "Spring 2025 (408 days)",
       link: "/admin/dashboard"
     },
@@ -72,7 +73,7 @@ console.log(complete,"complete");
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#B76E00",
-      title: `${total_count?.data||"0"}`,
+      title: `${total_count?.data || "0"}`,
       count: "Total Club Members",
       link: hasClubMemberPermission ? `/admin/member` : "/admin/dashboard"
 
@@ -85,7 +86,7 @@ console.log(complete,"complete");
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: `${complete?.totalCompleted||"0"}`,
+      title: `${complete?.totalCompleted || "0"}`,
       textColor: "#007B55",
       count: "No. of Users fillled the Form for coming meeting",
       link: "/admin/dashboard"
@@ -96,7 +97,7 @@ console.log(complete,"complete");
       cardBackground: "#FFF5CC",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: `${complete?.totalUncompleted||"0"}`,
+      title: `${complete?.totalUncompleted || "0"}`,
       textColor: "#B76E00",
       count: "No. of Users remains to fill the Form for coming meeting",
       link: "/admin/dashboard"
@@ -161,11 +162,11 @@ console.log(complete,"complete");
   const dataSource3 = areas?.result?.length && areas?.result?.map((res: any, index: number) => {
     return {
       key: index + 1,
-      meeting:(res?.meeting_type),
+      meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${res?.meeting_type == "fall" ? "2024" : "2025"}`,
       // meeting: `${capitalizeFirstLetter(res?.meeting_type)} 2024`,
       start: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
       end: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
-      action:  <Timmer endDate={res?.start_meeting_date}/>
+      action: <Timmer endDate={res?.start_meeting_date} />
       // <CountDown  />
       // <Countdown  value={Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30}  />
     }
@@ -271,9 +272,9 @@ console.log(complete,"complete");
       key: 'end',
     },
     {
-        title: 'Countdown',
-        dataIndex: 'action',
-        key: 'action',
+      title: 'Countdown',
+      dataIndex: 'action',
+      key: 'action',
     },
   ];
 
@@ -379,7 +380,7 @@ console.log(complete,"complete");
   const getData = async () => {
     try {
       let res = await api.User.listing()
-      let apiRes1=await api.User.user_completed_noncompleted()
+      let apiRes1 = await api.User.user_completed_noncompleted()
       let apiRes = await api.User.user_total_count()
       let res1 = await api.dashboard.upcoming()
       // let res2 = await api.dashboard.next()
@@ -392,17 +393,18 @@ console.log(complete,"complete");
 
     }
   }
-  console.log(total_count,"lsjflsdjf");
-  
+  console.log(total_count, "lsjflsdjf");
+
   const initialise = async () => {
     try {
       let res = await api.Meeting.upcoming_meeting();
       let apiRes = await api.User.user_listing()
-
+      let apiRes1 = await api.User.check_fall_spring()
+      setCheck(apiRes1)
       setState2(apiRes?.data)
       setAreas(res);
-      console.log(res,"ressss");
-      
+      console.log(res, "ressss");
+
     } catch (error) {
       console.error('Error fetching meeting listing:', error);
     }
@@ -538,7 +540,7 @@ console.log(complete,"complete");
               <Col span={24} >
                 <Card className='common-card'>
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                    <Typography.Title level={4} className='m-0 fw-bold'>Coming Meetings</Typography.Title>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Upcoming Meetings</Typography.Title>
                   </div>
                   <div className='tabs-wrapper'>
 

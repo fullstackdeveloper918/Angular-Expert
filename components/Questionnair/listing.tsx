@@ -12,6 +12,9 @@ import { pdf } from "@react-pdf/renderer";
 import saveAs from "file-saver";
 import QuestionnairPdf from "../common/QuestionnairPdf"
 import { useSelector } from "react-redux";
+import Pdf from "../common/Pdf";
+import { toast } from "react-toastify";
+import { parseCookies } from "nookies";
 const { Panel } = Collapse;
 const { Search } = Input;
 let timer: any;
@@ -19,7 +22,8 @@ const { Title } = Typography;
 const QuestionnairList = () => {
     const getUserdata = useSelector((state: any) => state?.user?.userData)
     console.log(getUserdata, "getUserdata");
-
+    const cookies = parseCookies();
+    const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
     const [questionType, setQuestionType] = useState<any>(null);
     const { token } = theme.useToken();
     //   getUserdata?.user_id
@@ -91,15 +95,18 @@ const QuestionnairList = () => {
     ];
     const getDataById = async () => {
         const item = {
-            user_id: getUserdata?.user_id
+          user_id: getUserdata?.user_id
         }
         try {
-            const res = await api.Questionnair.downloadPdf(item as any);
-            setState(res?.data || null);
+          const res = await api.User.getById(item as any);
+          setState1(res?.data || null);
         } catch (error: any) {
-            alert(error.message);
+          alert(error.message);
         }
-    };
+      };
+      useEffect(()=>{
+        getDataById()
+      },[])
     const initialise = async (questionType: any) => {
         try {
 
@@ -126,15 +133,63 @@ const QuestionnairList = () => {
     console.log(questionType, "tyrytryy");
     const generatePdf = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
-        const blob = await pdf(<QuestionnairPdf state={state} />).toBlob();
+        const blob = await pdf(<Pdf state={state1} />).toBlob();
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };
-
+    
     // Function to handle PDF download
     const downLoadPdf = async () => {
         const { blob, timestamp } = await generatePdf();
         saveAs(blob, `Order_${timestamp}.pdf`);
+    };
+    
+    // Function to handle PDF sharing
+    const sharePdf = async () => {
+    
+        const { pdfUrl, timestamp } = await generatePdf();
+        console.log(pdfUrl, 'pdfUrl')
+        const response = await fetch(pdfUrl);
+        const blob = await response.blob();
+        console.log(blob, 'blob')
+    
+        // Convert the blob to a file
+        const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
+        console.log(file, 'file pdf');
+        const formData = new FormData();
+        formData.append('file', file);
+    
+        console.log(formData, "formData");
+    
+        const res = await fetch('https://frontend.goaideme.com/save-pdf', {
+    
+            method: 'POST',
+            body: formData,
+            headers: {
+                Token: `${accessToken}`,
+                // 'Content-Type': 'application/json',
+            }
+        },);
+    
+        const apiRes:any = await res.json()
+        console.log(apiRes,"apiRes");
+          navigator.clipboard.writeText(apiRes?.fileUrl)
+                    .then(() => {
+                        toast.success('Link copied to clipboard');
+                    })
+                    .catch(() => {
+                        toast.error('Failed to copy link to clipboard');
+                    });
+    
+        //   })
+        //   toast.success('Link Share Successfully', {
+        //     position: 'top-center',
+        //     autoClose: 300,
+    
+        //   });
+    
+        // Optionally, open the PDF in a new tab
+        // window.open(pdfUrl, '_blank');
     };
 
     const handleDownloadAndFetchData = (id: any) => {

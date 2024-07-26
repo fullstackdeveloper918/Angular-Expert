@@ -105,7 +105,7 @@ const MeetingAdd = () => {
             start_meeting_date: dayjs(values?.start_date).utc().valueOf(),
             end_time: dayjs(values?.end_time).utc().valueOf(),
             end_meeting_date: dayjs(values?.end_date).utc().valueOf(),
-            year: dayjs(values?.year).format("YYYY"),
+            year: "",
             location: selectedLocation,
             hotel: selectedHotel,
             airport: values?.airport,
@@ -444,7 +444,7 @@ const MeetingAdd = () => {
                                             </Form.Item>
                                             <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Start Time' }]} label="Meeting Start Time">
                                                 <TimePicker onChange={onChange1}
-                                                    disabledTime={disabledTime} 
+                                                    // disabledTime={disabledTime} 
                                                     use12Hours
                                                     style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
                                             </Form.Item>
@@ -466,12 +466,12 @@ const MeetingAdd = () => {
                                             <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting End Time' }]} label="Meeting End Time">
                                                 <TimePicker onChange={onChange1}
                                                  use12Hours
-                                                    disabledTime={disabledTime} 
+                                                    // disabledTime={disabledTime} 
                                                     style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
                                             </Form.Item>
-                                            <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Year' }]} label="Meeting Year">
+                                            {/* <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Year' }]} label="Meeting Year">
                                                 <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
-                                            </Form.Item>
+                                            </Form.Item> */}
 
                                             <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
                                                 {/* <Input size={'large'} placeholder="Location"   /> */}

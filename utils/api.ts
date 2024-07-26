@@ -87,6 +87,8 @@ const User = {
     requests.get(`list${q ? `?${q}` : ""}`),
   user_listing: (q?: string) =>
     requests.get(`single-user-form-status`),
+  check_fall_spring: () =>
+    requests.get(`spring-fall-meeting-count`),
   user_completed_noncompleted: () =>
     requests.get(`complete-uncomplete-form`),
   user_total_count: (q?: string) =>
