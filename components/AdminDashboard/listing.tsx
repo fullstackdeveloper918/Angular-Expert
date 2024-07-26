@@ -38,7 +38,9 @@ const AdminDashboard: Page = (props: any) => {
   const [next, setNext] = useState<any>("")
   const [total_count, setTotal_count] = useState<any>("")
   const [areas, setAreas] = useState<any>([]);
+  const [complete, setComplete]= useState<any>("")
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
+console.log(complete,"complete");
 
   const DashboardData = [
     // getUserdata?.is_admin==false?
@@ -83,7 +85,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: `${upcoming?.resutl||"0"}`,
+      title: `${complete?.totalCompleted||"0"}`,
       textColor: "#007B55",
       count: "No. of Users fillled the Form for coming meeting",
       link: "/admin/dashboard"
@@ -94,7 +96,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#FFF5CC",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: `${formRemainFill?.data ||"0"}`,
+      title: `${complete?.totalUncompleted||"0"}`,
       textColor: "#B76E00",
       count: "No. of Users remains to fill the Form for coming meeting",
       link: "/admin/dashboard"
@@ -377,13 +379,15 @@ const AdminDashboard: Page = (props: any) => {
   const getData = async () => {
     try {
       let res = await api.User.listing()
+      let apiRes1=await api.User.user_completed_noncompleted()
       let apiRes = await api.User.user_total_count()
       let res1 = await api.dashboard.upcoming()
-      let res2 = await api.dashboard.next()
+      // let res2 = await api.dashboard.next()
       setTotal_count(apiRes)
       setState1(res?.data)
       setUpcoming(res1)
-      setNext(res2)
+      setComplete(apiRes1.data)
+      // setNext(res2)
     } catch (error) {
 
     }
@@ -394,9 +398,6 @@ const AdminDashboard: Page = (props: any) => {
     try {
       let res = await api.Meeting.upcoming_meeting();
       let apiRes = await api.User.user_listing()
-      let apiRes1 = await api.User.user_remains_userfor_meeting()
-      setFormRemainFill(apiRes1)
-      console.log(apiRes1, "apiRes1");
 
       setState2(apiRes?.data)
       setAreas(res);

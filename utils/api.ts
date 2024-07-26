@@ -87,6 +87,8 @@ const User = {
     requests.get(`list${q ? `?${q}` : ""}`),
   user_listing: (q?: string) =>
     requests.get(`single-user-form-status`),
+  user_completed_noncompleted: () =>
+    requests.get(`complete-uncomplete-form`),
   user_total_count: (q?: string) =>
     requests.get(`total-member-count`),
   user_remains_userfor_meeting: (q?: string) =>

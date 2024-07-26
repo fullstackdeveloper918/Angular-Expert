@@ -27,9 +27,10 @@ import { InlineWidget } from 'react-calendly';
 import CalendlyWidget from "../common/calender"
 import moment from 'moment-timezone';
 import { toast } from "react-toastify";
+import TextArea from "antd/es/input/TextArea";
 const { Option } = Select;
 const timezones = moment.tz.names();
-
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(utc);
 
 const formatTimezone = (timezone: any) => {
@@ -76,6 +77,16 @@ const MeetingAdd = () => {
     const [meetingType, setMeetingType] = useState<any>('');
     const onChange: DatePickerProps['onChange'] = (_, dateStr) => {
     };
+    const disabledHours = () => {
+        // Enable only 0 (12 AM) and 15 (3 PM)
+        const hours = Array.from({ length: 24 }, (_, i) => i);
+        return hours.filter(hour => hour !== 0 && hour !== 15);
+    };
+
+    const disabledMinutes = (selectedHour: number) => {
+        // Allow only 0 minutes for the enabled hours (12 AM and 3 PM)
+        return selectedHour === 0 || selectedHour === 15 ? [] : Array.from({ length: 60 }, (_, i) => i);
+    };
     const onChange1: TimePickerProps['onChange'] = (time, timeString) => {
         console.log(time, timeString);
     };
@@ -86,14 +97,14 @@ const MeetingAdd = () => {
 
     const onSubmit = async (values: any) => {
         let items = {
-            meeting_name: "iertierti",
+            meeting_name: "Meetings",
             meeting_time_zone: selectedTimezone,
             // "purpose": "Present new project proposal to client.",
             meeting_type: values?.meeting_type,
             start_time: dayjs(values?.start_time).utc().valueOf(),
-            start_meeting_date:dayjs(values?.start_date).utc().valueOf(),
+            start_meeting_date: dayjs(values?.start_date).utc().valueOf(),
             end_time: dayjs(values?.end_time).utc().valueOf(),
-            end_meeting_date:dayjs(values?.end_date).utc().valueOf(),
+            end_meeting_date: dayjs(values?.end_date).utc().valueOf(),
             year: dayjs(values?.year).format("YYYY"),
             location: selectedLocation,
             hotel: selectedHotel,
@@ -105,7 +116,7 @@ const MeetingAdd = () => {
             weather: values?.weather,
             comments: values?.comments,
             notes: values?.notes,
-            phone: ["+16576455654", "+1679648596"],
+            phone: [values?.mobile_no],
         }
 
         const timestamp = 1720782277333;
@@ -130,8 +141,20 @@ const MeetingAdd = () => {
     const [searchValue, setSearchValue] = useState('');
 
 
-    const disabledDate = (current: any) => {
-        return current && current < dayjs().startOf('day');
+    const disabledDate = (current: any): boolean => {
+        if (!current) {
+            return false;
+        }
+        const month = current.month();
+        const now = moment().startOf('day');
+        if (meetingType === 'spring') {
+            //  Jan to June
+            return current.isBefore(now) || month < 0 || month > 5;
+        } else if (meetingType === 'fall') {
+            // July to Dec
+            return current.isBefore(now) || month < 6 || month > 11;
+        }
+        return true;
     };
 
     const disabledTime = (current: any) => {
@@ -153,8 +176,13 @@ const MeetingAdd = () => {
         return current && current.year() < dayjs().year();
     };
 
+    const [shortCounrtyName, setShortCountryName] = useState("")
+
     const locationSearchRef = useRef(null);
     const hotelSearchRef = useRef(null);
+    const airportRef = useRef(null);
+
+
     useEffect(() => {
         const loadGoogleMapScript = () => {
             if (!window.google) {
@@ -174,12 +202,100 @@ const MeetingAdd = () => {
                 locationAutocomplete.addListener('place_changed', () => {
                     let place = locationAutocomplete.getPlace();
                     setSelectedLocation(place.formatted_address || '');
+                    // console.log(place?.geometry);
+                    if (!place.geometry) {
+                        console.log("chla");
+                        return;
+                    }
+                    const address = place?.address_components;
+                    const coordinate = place?.geometry?.location;
+
+
+                    let items: any = {};
+                    if (Array.isArray(address) && address?.length > 0) {
+                        let zipIndex = address.findIndex((res: any) =>
+                            res.types.includes("postal_code")
+                        );
+                        let administrativeAreaIndex = address?.findIndex((res: any) =>
+                            res?.types.includes("administrative_area_level_1", "political")
+                        );
+                        let localityIndex = address?.findIndex((res: any) =>
+                            res?.types?.includes("locality", "political")
+                        );
+                        let countryIndex = address?.findIndex((res: any) =>
+                            res?.types?.includes("country", "political")
+                        );
+
+                        if (zipIndex > -1) {
+                            items.postal_code = address[zipIndex]?.long_name;
+                        }
+                        if (administrativeAreaIndex > -1) {
+                            items.state = address[administrativeAreaIndex]?.long_name;
+                        }
+                        if (localityIndex > -1) {
+                            items.city = address[localityIndex]?.long_name;
+                        }
+                        if (countryIndex > -1) {
+                            items.country = address[countryIndex]?.long_name;
+                        }
+                        if (countryIndex > -1) {
+                            items.country_short_name = address[countryIndex]?.short_name;
+                        }
+                        setShortCountryName(address[countryIndex]?.short_name)
+                        console.log(address, "addressaddressaddress");
+
+                        const heheheh = {
+                            address: place.formatted_address,
+                            country: items?.country,
+                            state: items?.state,
+                            city: items?.city,
+                            postal_code: items?.postal_code,
+                            country_short_name: items?.country_short_name,
+                        } as any;
+                        console.log(heheheh, "hjehhehheheh");
+
+                        const errors = form.getFieldsError();
+                        if (errors.length) {
+                            form?.setFields(
+                                errors.flatMap((res: any) => {
+                                    if (!(res.name[0] in heheheh)) return [];
+                                    console.log(
+                                        !!heheheh[res.name[0]],
+                                        heheheh[res.name[0]],
+                                        heheheh,
+                                        res.name
+                                    );
+                                    return {
+                                        name: res.name,
+                                        errors: !!heheheh[res.name[0]]
+                                            ? []
+                                            : [
+                                                `Please enter ` +
+                                                res.name[0].toString().replace("_", " "),
+                                            ],
+                                    };
+                                })
+                            );
+                        }
+                        console.log(items);
+
+                        form?.setFieldValue("location", place.formatted_address);
+                        form?.setFieldValue("country", items?.country);
+                        form?.setFieldValue("city", items?.city);
+                    }
                 });
+
+
+
             }
 
             if (hotelSearchRef.current) {
+                var options = {
+                    types: ['establishment'],
+                    componentRestrictions: { country: "IN" }
+                };
                 let hotelAutocomplete = new window.google.maps.places.Autocomplete(
-                    hotelSearchRef.current
+                    hotelSearchRef.current, options
                 );
                 hotelAutocomplete.addListener('place_changed', () => {
                     let place = hotelAutocomplete.getPlace();
@@ -193,6 +309,40 @@ const MeetingAdd = () => {
             // Cleanup code if any
         };
     }, []);
+    const initPlaceHotel = async () => {
+        if (hotelSearchRef.current) {
+            var options = {
+                types: ['establishment'],
+                componentRestrictions: { country: shortCounrtyName }
+            };
+            let hotelAutocomplete = new window.google.maps.places.Autocomplete(
+                hotelSearchRef.current, options
+            );
+            hotelAutocomplete.addListener('place_changed', () => {
+                let place = hotelAutocomplete.getPlace();
+                setSelectedHotel(place.formatted_address || '');
+                form.setFieldValue("hotel", place?.formatted_address)
+            });
+        };
+    }
+    const initPlaceAirport = async () => {
+        if (airportRef.current) {
+            var options = {
+                types: ['establishment'],
+                componentRestrictions: { country: shortCounrtyName }
+            };
+            let hotelAutocomplete = new window.google.maps.places.Autocomplete(
+                airportRef.current, options
+            );
+            hotelAutocomplete.addListener('place_changed', () => {
+                let place = hotelAutocomplete.getPlace();
+                setSelectedHotel(place.formatted_address || '');
+                form.setFieldValue("airport", place?.formatted_address)
+            });
+        };
+    }
+    console.log(shortCounrtyName, "shortCounrtyNameshortCounrtyNameshortCounrtyName");
+
     const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         const isAlphaOrSpace = /[a-zA-Z ]/.test(e.key);
         const isSpecialKey = ['Backspace', 'Tab', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.key);
@@ -201,6 +351,12 @@ const MeetingAdd = () => {
             e.preventDefault();
         }
     };
+    useEffect(() => {
+        initPlaceHotel()
+    }, [shortCounrtyName])
+    useEffect(() => {
+        initPlaceAirport()
+    }, [shortCounrtyName])
     return (
         <MainLayout>
             <Fragment>
@@ -260,7 +416,7 @@ const MeetingAdd = () => {
                                                     placeholder="Select a timezone"
                                                     optionFilterProp="children"
                                                     onChange={onTimezoneChange}
-                                                    filterOption={(input:any, option:any) =>
+                                                    filterOption={(input: any, option: any) =>
                                                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                                     }
                                                     style={{ width: '100%' }}
@@ -274,42 +430,44 @@ const MeetingAdd = () => {
                                                 </Select>
                                             </Form.Item>
 
-                                           
+
                                             <Form.Item name="start_date" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Start Date' }]} label="Meeting Start Date">
                                                 <DatePicker
                                                     style={{ width: '100%' }}
                                                     // defaultValue={defaultValue}
                                                     // showTime
                                                     disabledDate={disabledDate}
-                                                    disabledTime={disabledTime}
+                                                    // disabledTime={disabledTime}
                                                     // locale={buddhistLocale}
                                                     onChange={onChangeDate}
                                                 />
                                             </Form.Item>
                                             <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Start Time' }]} label="Meeting Start Time">
-                                            <TimePicker onChange={onChange1} 
-                                                // disabledTime={disabledTime} 
-                                                style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
+                                                <TimePicker onChange={onChange1}
+                                                    disabledTime={disabledTime} 
+                                                    use12Hours
+                                                    style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
                                             </Form.Item>
                                             <Form.Item name="end_date" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting End Date' }]} label="Meeting End Date">
                                                 {/* <TimePicker onChange={onChange1} 
                                                 // disabledTime={disabledTime} 
                                                 style={{ width: '100%' }} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} /> */}
-                                                   <DatePicker
+                                                <DatePicker
                                                     style={{ width: '100%' }}
                                                     // defaultValue={defaultValue}
                                                     // showTime
                                                     disabledDate={disabledDate}
-                                                    disabledTime={disabledTime}
+                                                    // disabledTime={disabledTime}
                                                     // locale={buddhistLocale}
                                                     onChange={onChangeDate}
                                                 />
-                                                
+
                                             </Form.Item>
                                             <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting End Time' }]} label="Meeting End Time">
-                                            <TimePicker onChange={onChange1} 
-                                                // disabledTime={disabledTime} 
-                                                style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
+                                                <TimePicker onChange={onChange1}
+                                                 use12Hours
+                                                    disabledTime={disabledTime} 
+                                                    style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
                                             </Form.Item>
                                             <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Year' }]} label="Meeting Year">
                                                 <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
@@ -318,11 +476,12 @@ const MeetingAdd = () => {
                                             <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
                                                 {/* <Input size={'large'} placeholder="Location"   /> */}
                                                 <input
-                                        className="custom-input"
-                                        style={{ width: '100%' }}
-                                        ref={locationSearchRef}
-                                        placeholder="Enter your address"
-                                    />
+                                                    value={form.getFieldValue("location")}
+                                                    className="custom-input"
+                                                    style={{ width: '100%' }}
+                                                    ref={locationSearchRef}
+                                                    placeholder="Enter your address"
+                                                />
                                             </Form.Item>
                                             {/* <Form.Item
                             name="location"
@@ -332,27 +491,28 @@ const MeetingAdd = () => {
                          <GoogleMap locationSearchRef={locationSearchRef.current}/>
                         </Form.Item> */}
                                             <Form.Item className='col-lg-6 col-sm-12' name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
-                                            <input
-                                        className="custom-input"
-                                        style={{ width: '100%' }}
-                                        ref={hotelSearchRef}
-                                        placeholder="Enter your address"
-                                    />
+                                                <input
+                                                    className="custom-input"
+                                                    style={{ width: '100%' }}
+                                                    ref={hotelSearchRef}
+                                                    placeholder="Enter your address"
+                                                />
+
                                             </Form.Item>
                                             <Form.Item name="airport" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Nearest Airport' }]} label="Nearest Airport">
-                                                <Input size={'large'} placeholder="Nearest Airport"
+                                                {/* <Input size={'large'} placeholder="Nearest Airport"
                                                     onKeyPress={onKeyPress}
+                                                /> */}
+                                                <input
+                                                    className="custom-input"
+                                                    style={{ width: '100%' }}
+                                                    ref={airportRef}
+                                                    placeholder="Enter your address"
                                                 />
                                             </Form.Item>
                                             <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
                                                 <Input size={'large'} placeholder="Host Company"
-                                                    onKeyPress={(e: any) => {
-                                                        if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                                            e.preventDefault();
-                                                        } else {
-                                                            e.target.value = String(e.target.value).trim()
-                                                        }
-                                                    }}
+                                                   
                                                 />
                                             </Form.Item>
 
@@ -377,42 +537,37 @@ const MeetingAdd = () => {
                                                 // ]}
                                                 label="Host"
                                             >
-                                                <Input size={'large'} placeholder="Weather"
-                                                   
+                                                <Input size={'large'} placeholder="Host"
+
                                                 />
-                                                {/* <Select
-                                                    mode="multiple"
-                                                    size="large"
-                                                    placeholder="Select Host"
-                                                    // onSearch={handleSearch}
-                                                    optionLabelProp="label"
-                                                    defaultActiveFirstOption  // Ensure first option is active on dropdown open
-                                                    value={searchValue} // Control the value with searchValue state
-                                                    key={searchResults.length}
-                                                >
-                                                    {searchResults.map((area: any) => (
-                                                        <Option key={area.id} value={area.id} label={area.name}>
-                                                            {area.name} - {area.company}
-                                                        </Option>
-                                                    ))}
-                                                </Select> */}
+
                                             </Form.Item>
                                             <Form.Item name="mobile_no" className='col-lg-6 col-sm-12' rules={[
-                                                { required: true, whitespace: true, message: 'Please Enter Cell' },
-                                                { pattern: /^[0-9]*$/, message: 'Only numbers are allowed' }
+
+                                                { pattern: /^[0-9\s,]*$/, message: 'Only numbers and spaces are allowed' }
                                             ]} label="Cell">
                                                 <Input
                                                     size={'large'} placeholder="Cell"
                                                     // type="number"
                                                     onKeyPress={(event) => {
-                                                        if (!/[0-9]/.test(event.key)) {
+                                                        if (!/[0-9\s,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
                                                             event.preventDefault();
                                                         }
                                                     }}
                                                 />
 
                                             </Form.Item>
-
+                                            {meetingType == 'spring' && (
+                                                <Form.Item
+                                                    name="notes"
+                                                    className="col-lg-6 col-sm-12"
+                                                    label="Note"
+                                                >
+                                                    <TextArea
+                                                        size={'large'}
+                                                        placeholder="Note.."
+                                                    />
+                                                </Form.Item>)}
                                         </div>
                                         {/* Button  */}
                                         <div className="text-center mt-3">

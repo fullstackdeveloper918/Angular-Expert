@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assests/images/image.png";
 import { Typography, type MenuProps } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
@@ -24,9 +24,14 @@ import {
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import henceofrthEnums from "@/utils/henceofrthEnums";
-import { useRouter } from "next/navigation";
+
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+
 const iconSize = { fontSize: "18px" };
+
+
+
 const { Row, Col, Avatar, Card, Menu, Pagination, Tooltip, Button } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
     ssr: false,
@@ -75,21 +80,43 @@ function getItem(
 const MenuBar = ({ collapsed, setCollapsed }: any) => {
   const [openKeys, setOpenKeys] = useState(["sub1"]);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
+
   const hasDashboardPermission =
-    (getUserdata?.permission?.length && getUserdata.permission.includes("DASHBOARD")) || getUserdata?.email === "nahbcraftsmen@gmail.com" || getUserdata?.is_admin == false;
-  const hasMeetingPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("Meeting")) || getUserdata?.email === "nahbcraftsmen@gmail.com" ;
-  const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com" ;
-  const hasQUESTIONNAIREPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("QUESTIONNAIRE")) || getUserdata?.email === "nahbcraftsmen@gmail.com" ;
-  const hasUser =  getUserdata?.is_admin == false;
+    (getUserdata?.permission?.length &&
+      getUserdata.permission.includes("DASHBOARD")) ||
+    getUserdata?.email === "nahbcraftsmen@gmail.com" ||
+    getUserdata?.is_admin == false;
+  const hasMeetingPermission =
+    (getUserdata?.permission?.length &&
+      getUserdata.permission.includes("Meeting")) ||
+    getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const hasClubMemberPermission =
+    (getUserdata?.permission?.length &&
+      getUserdata.permission.includes("CLUB_MEMEBR")) ||
+    getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const hasQUESTIONNAIREPermission =
+    (getUserdata?.permission?.length &&
+      getUserdata.permission.includes("QUESTIONNAIRE")) ||
+    getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const hasUser = getUserdata?.is_admin == false;
 
   const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
     if (rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
       setOpenKeys(keys);
-    } else {
+    } 
+    else {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   };
+const router= useRouter()
+const[active,setActive]=useState<any>(null)
+  useEffect(()=>{
+    debugger
+let x=window.location.pathname.split('/')[2]
+setActive(x)  
+},[])
+
   const mainMenu = [
     hasDashboardPermission && {
       key: henceofrthEnums.Roles.DASHBOARD,
@@ -105,10 +132,9 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
       key: henceofrthEnums.Roles.USERS,
       view: getItem(
         <Link href="/admin/member" className="text-decoration-none">
-          {getUserdata?.is_admin == false ? "User" :
-            "Club Members"}
+          {getUserdata?.is_admin == false ? "User" : "Club Members"}
         </Link>,
-        "users",
+        "member",
         <UserOutlined style={iconSize} />
       ),
     },
@@ -127,16 +153,17 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
             <OrderedListOutlined style={iconSize} />
           ),
 
-          getUserdata?.is_admin && getItem(
-            <Link
-              href="/admin/manage_questions"
-              className="text-decoration-none"
-            >
-              Manage Questions for Meeting
-            </Link>,
-            "manage/-questions",
-            <AppstoreAddOutlined style={iconSize} />
-          ),
+          getUserdata?.is_admin &&
+            getItem(
+              <Link
+                href="/admin/manage_questions"
+                className="text-decoration-none"
+              >
+                Manage Questions for Meeting
+              </Link>,
+              "manage_questions",
+              <AppstoreAddOutlined style={iconSize} />
+            ),
           getItem(
             <Link
               href="/admin/archive_meeting"
@@ -166,7 +193,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
       key: henceofrthEnums.Roles.MY_PRIFILE_SETTINS,
       view: getItem(
         "My Updates",
-        "sub2",
+        "sub1",
         <UsergroupAddOutlined style={iconSize} />,
         [
           getItem(
@@ -176,11 +203,10 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
             >
               My Document
             </Link>,
-            "profile",
+            `my_documents`,
             <AppstoreAddOutlined style={iconSize} />
           ),
           getItem(
-
             <Link href="/admin/meetings" className="text-decoration-none">
               Meetings
             </Link>,
@@ -188,7 +214,6 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
             <OrderedListOutlined style={iconSize} />
           ),
 
-        
           getItem(
             <Link href="/admin/questionnaire" className="text-decoration-none">
               Questionnaire
@@ -197,11 +222,10 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
             <span>
               <BookOutlined style={iconSize} />
             </span>
-          )
+          ),
         ]
       ),
     },
-  
   ];
 
   const general = [
@@ -323,6 +347,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
       "USERS",
       "PAGES",
       "CONTACT_US",
+      "MY_DOCUMENT",
       "MY_PRIFILE_SETTINGS",
       "CLOUD_MESSAGING",
       "DASHBOARD",
@@ -396,19 +421,27 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
       </div>
 
       <div
-        className={`menu-profile-wrapper my-4 d-flex align-items-center gap-2 ${!collapsed ? "bg-light" : "p-0 bg-tranaprent"
-          }`}
+        className={`menu-profile-wrapper my-4 d-flex align-items-center gap-2 ${
+          !collapsed ? "bg-light" : "p-0 bg-tranaprent"
+        }`}
       >
         <Avatar size={50}>A</Avatar>
         {/* <Avatar size={50}>{getUserdata?.firstname.slice(0,1)}</Avatar> */}
         {!collapsed && (
           <div>
-            {getUserdata?.email === "nahbcraftsmen@gmail.com" ?
-              <Typography.Title level={5} className="m-0 fw-bold text-capitalize">
+            {getUserdata?.email === "nahbcraftsmen@gmail.com" ? (
+              <Typography.Title
+                level={5}
+                className="m-0 fw-bold text-capitalize"
+              >
                 {"Super Admin"}
               </Typography.Title>
-              : ""}
-            <Typography.Paragraph className="m-0">{getUserdata?.firstname}</Typography.Paragraph>
+            ) : (
+              ""
+            )}
+            <Typography.Paragraph className="m-0">
+              {getUserdata?.firstname}
+            </Typography.Paragraph>
           </div>
         )}
       </div>
@@ -418,6 +451,8 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
           openKeys={openKeys}
           onOpenChange={onOpenChange}
           defaultSelectedKeys={["dashboard"]}
+          
+          selectedKeys={active}
           mode="inline"
           items={items}
         />
