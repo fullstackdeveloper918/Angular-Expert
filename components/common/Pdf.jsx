@@ -129,19 +129,20 @@ const MemberUpdatePDF = (props) => {
   console.log(props, "bencho");
   const photoSection = props?.state?.photo_section || [];
 
+  const options = { httpHeaders: { 'crossOrigin': 'anonymous' }, };
+  // <Image key={imageIndex} style={{ width: 100, height: 100 }} options={options} src={{ uri: ${file.url}, method: "GET", headers: { Pragma: 'no-cache', "Cache-Control": "no-cache" }, body: "" }} />
+
+
+
+
+  const newArr = props?.state?.photo_section?.fileUrls?.length && Object.values(props?.state?.photo_section?.fileUrls[0])
+  console.log(newArr, "newarrrrra");
+
   return (
     <>
       <Document>
         <Page size="A4" style={styles.page}>
           <View style={{ textAlign: "center", display: "block" }}>
-            <img
-              src={`https://storage.googleapis.com/craftsmen-cadd2.appspot.com/21484c0c-2ea0-4e62-b70c-3727fc6da6e3.png`}
-              alt="logo"
-              className="img-fluid mx-auto d-block"
-              style={styles.logoNew}
-              width={500}
-              height={500}
-            />
           </View>
           <View style={styles.header}>
             <Text>
@@ -156,25 +157,25 @@ const MemberUpdatePDF = (props) => {
             <Text style={styles.main_heading}>Business Update</Text>
             <Text style={styles.text}>Current financial position:</Text>
             <Text style={styles.textarea}>
-                {props?.state?.financial_position}   
+              {props?.state?.financial_position}
             </Text>
             <Text style={styles.text}>
               {" "}
               Current sales positions, hot prospects, recently contracted work:{" "}
             </Text>
             <Text style={styles.textarea}>
-                 {props?.state?.sales_position}  
+              {props?.state?.sales_position}
             </Text>
             <Text style={styles.text}>
               {" "}
               Accomplishments in the last 6 months:{" "}
             </Text>
             <Text style={styles.textarea}>
-                 {props?.state?.accomplishments}  
+              {props?.state?.accomplishments}
             </Text>
             <Text style={styles.text}> HR position &/or needs: </Text>
             <Text style={styles.textarea}>
-                {props?.state?.hr_position}   
+              {props?.state?.hr_position}
             </Text>
             <Text style={styles.text}>
               {" "}
@@ -182,14 +183,14 @@ const MemberUpdatePDF = (props) => {
               trade availability, rising costs, supply chain):{" "}
             </Text>
             <Text style={styles.textarea}>
-                {props?.state?.current_challenges}   
+              {props?.state?.current_challenges}
             </Text>
             <Text style={styles.text}>
               {" "}
               How can the Craftsmen aid or support you with these challenges?{" "}
             </Text>
             <Text style={styles.textarea}>
-                {props?.state?.craftsmen_support}   
+              {props?.state?.craftsmen_support}
             </Text>
           </View>
 
@@ -241,7 +242,7 @@ const MemberUpdatePDF = (props) => {
                 of the app or website:{" "}
               </Text>
               <Text style={styles.textarea}>
-                   {props?.state?.technology}  
+                {props?.state?.technology}
               </Text>
 
               <Text style={styles.text}>
@@ -250,7 +251,7 @@ const MemberUpdatePDF = (props) => {
                 share the name and website:{" "}
               </Text>
               <Text style={styles.textarea}>
-                  {props?.state?.products}    
+                {props?.state?.products}
               </Text>
 
               <Text style={styles.text}>
@@ -270,7 +271,7 @@ const MemberUpdatePDF = (props) => {
                 What is your level of commitment to our club?{" "}
               </Text>
               <Text style={styles.textarea}>
-                   {props?.state?.commitment}   
+                {props?.state?.commitment}
               </Text>
 
               <Text style={styles.text}>
@@ -278,7 +279,7 @@ const MemberUpdatePDF = (props) => {
                 List Something(s) you can do to contribute to our club.{" "}
               </Text>
               <Text style={styles.textarea}>
-                   {props?.state?.contribute}   
+                {props?.state?.contribute}
               </Text>
 
               <Text style={styles.text}>
@@ -286,7 +287,7 @@ const MemberUpdatePDF = (props) => {
                 How is your present health, wellbeing, family life?{" "}
               </Text>
               <Text style={styles.textarea}>
-                    {props?.state?.wellbeing}  
+                {props?.state?.wellbeing}
               </Text>
 
               <Text style={styles.text}>
@@ -294,7 +295,7 @@ const MemberUpdatePDF = (props) => {
                 Have any items on your contact info changed?
               </Text>
               <Text style={styles.textarea}>
-                   {props?.state?.contact_info}   
+                {props?.state?.contact_info}
               </Text>
             </View>
           </View>
@@ -307,7 +308,7 @@ const MemberUpdatePDF = (props) => {
                 What was your most valuable take away from our fall meeting?{" "}
               </Text>
               <Text style={styles.textarea}>
-                   {props?.state?.fall_meeting}   
+                {props?.state?.fall_meeting}
               </Text>
 
               <Text style={styles.text}>
@@ -317,7 +318,7 @@ const MemberUpdatePDF = (props) => {
                 finances?{" "}
               </Text>
               <Text style={styles.textarea}>
-                   {props?.state?.personal_finances}   
+                {props?.state?.personal_finances}
               </Text>
             </View>
           </View>
@@ -332,14 +333,14 @@ const MemberUpdatePDF = (props) => {
             </Text>
             <View style={styles.goal}>
               <Text style={styles.textarea}>
-                   {props?.state?.estimating}   
+                {props?.state?.estimating}
               </Text>
 
               <Text style={styles.textarea}>
-                   {props?.state?.accountability}   
+                {props?.state?.accountability}
               </Text>
               <Text style={styles.textarea}>
-                   {props?.state?.productivity}   
+                {props?.state?.productivity}
               </Text>
             </View>
           </View>
@@ -357,45 +358,32 @@ const MemberUpdatePDF = (props) => {
             </Text>
             <View style={styles.goal}>
               <View style={styles.div_wrapper}>
-                {/* {props?.state?.photo_comment?.map((res, index) => ( */}
-                <View style={styles.Flex_div}>
-                  <Text style={styles.text}> PROJECT #1: </Text>
-                  <Image
-                    src={
-                      "https://pbs.twimg.com/profile_images/1797665112440045568/305XgPDq_400x400.png"
-                    }
-                    style={styles.imgg}
-                    width={500}
-                    height={500}
-                  />
-                </View>
-                {/* ))} */}
+                {Array.isArray(newArr) && newArr
+                  .sort((a, b) => a - b) // Sort newArr in descending order
+                  .map((item, index) => (
+                    <View style={styles.goal} key={index}>
+                      <View style={styles.goal}>
 
-                {photoSection.map((item, index) => (
-                  <View style={styles.goal} key={index}>
-                    {Object.entries(item.fileUrls).map(
-                      ([commentKey, { images, comment }]) => (
-                        <View key={commentKey} style={styles.goal}>
-                          <Text style={styles.subheading}>
-                            Comment: {comment}
-                          </Text>
-                          {images.map((imageUrl, imgIndex) => (
-                            <>
-                              {console.log(imageUrl, "imagurl bc")}
-                              <Image
-                                key={imgIndex}
-                                src={imageUrl}
-                                style={styles.imgg}
-                                width={500}
-                                height={500}
-                              />
-                            </>
-                          ))}
-                        </View>
-                      )
-                    )}
-                  </View>
-                ))}
+                        {Array.isArray(item?.images) && item.images.map((imageUrl, imgIndex) => (
+                          <>
+                            {console.log(imageUrl, "imagurl bc")}
+                            <Image
+                              style={{ width: 100, height: 100 }}
+                              options={options}
+                              src={imageUrl}
+                              method="GET"
+                              headers={{ Pragma: 'no-cache', "Cache-Control": "no-cache" }}
+                              body=""
+                            />
+                            {/* <Image SRC={{uri: ImageUrl, method : 'GET',headers: {}, body: '' "} */}
+                          </>
+                        ))}
+                        <Text style={styles.subheading}>
+                          Comment: {item?.comment}
+                        </Text>
+                      </View>
+                    </View>
+                  ))}
               </View>
             </View>
           </View>

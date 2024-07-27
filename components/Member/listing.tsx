@@ -34,7 +34,7 @@ type Page<P = {}> = NextPage<P> & {
 const MemberList = () => {
     const router = useRouter()
     //   const { userInfo, downloadCSV, Toast, uploadCSV } = React.useContext(GlobalContext)
-    const getUserdata=useSelector((state:any)=>state?.user?.userData)
+    const getUserdata = useSelector((state: any) => state?.user?.userData)
     const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
     const [show, setShow] = useState(true);
     const [state, setState] = React.useState<any>({
@@ -72,26 +72,30 @@ const MemberList = () => {
         setSearchTerm(value);
     };
     const getDataById = async (id: any) => {
+        debugger
         const item = {
             user_id: id
         }
         try {
             const res = await api.User.getById(item as any);
             setState(res?.data || null);
+            return res.data
         } catch (error: any) {
             alert(error.message);
         }
     };
-    const generatePdf = async () => {
+    const generatePdf = async (data?:any) => {
+        debugger
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
-        const blob = await pdf(<Pdf state={state} />).toBlob();
+        const blob = await pdf(<Pdf state={data} />).toBlob();
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };
 
     // Function to handle PDF download
-    const downLoadPdf = async () => {
-        const { blob, timestamp } = await generatePdf();
+    const downLoadPdf = async (res:any) => {
+        debugger
+        const { blob, timestamp } = await generatePdf(res);
         saveAs(blob, `Order_${timestamp}.pdf`);
     };
 
@@ -118,20 +122,21 @@ const MemberList = () => {
             }
         },);
 
-        const apiRes:any = await res.json()
-      navigator.clipboard.writeText(apiRes?.fileUrl)
-                .then(() => {
-                    toast.success('Link copied to clipboard');
-                })
-                .catch(() => {
-                    toast.error('Failed to copy link to clipboard');
-                });
+        const apiRes: any = await res.json()
+        navigator.clipboard.writeText(apiRes?.fileUrl)
+            .then(() => {
+                toast.success('Link copied to clipboard');
+            })
+            .catch(() => {
+                toast.error('Failed to copy link to clipboard');
+            });
 
     };
-    
-    const handleDownloadAndFetchData = (id: any) => {
-        getDataById(id);
-        downLoadPdf();
+
+    const handleDownloadAndFetchData = async (id: any) => {
+        debugger
+       let res = await getDataById(id);
+        await downLoadPdf(res);
     };
     const handleFetchAndFetchData = (id: any) => {
         getDataById(id);
@@ -140,62 +145,62 @@ const MemberList = () => {
     // const completed2 = state2?.filter((res:any) => res?.is_completed === true);
     const user_completed = state2?.slice(0, 5).map((res: any, index: number) => {
         return {
-          key: index + 1,
-          name: res?.firstname? `${res?.firstname} ${res?.lastname}`:"N/A",
-          company: validation?.replaceUnderScore(res?.company_name),
-          email: res?.email,
-          status:res?.is_completed==true?"Completed":"Pending",
-          action: <ul className='m-0 list-unstyled d-flex gap-2'>
-          <li>
-              <Tooltip title="Download Pdf">
-                  <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.uid)}><DownloadOutlined /></Button>
-              </Tooltip>
-          </li>
-          <li>
-              <Tooltip title="Share Pdf link">
-                  <Button className='ViewMore ' onClick={() => handleFetchAndFetchData(res?.uid)}><ShareAltOutlined /></Button>
-              </Tooltip>
-          </li>
-          <li>
-              <Link href={`/admin/member/${res?.uid}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
-          </li>
+            key: index + 1,
+            name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
+            company: validation?.replaceUnderScore(res?.company_name),
+            email: res?.email,
+            status: res?.is_completed == true ? "Completed" : "Pending",
+            action: <ul className='m-0 list-unstyled d-flex gap-2'>
+                <li>
+                    <Tooltip title="Download Pdf">
+                        <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.uid)}><DownloadOutlined /></Button>
+                    </Tooltip>
+                </li>
+                <li>
+                    <Tooltip title="Share Pdf link">
+                        <Button className='ViewMore ' onClick={() => handleFetchAndFetchData(res?.uid)}><ShareAltOutlined /></Button>
+                    </Tooltip>
+                </li>
+                <li>
+                    <Link href={`/admin/member/${res?.uid}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
+                </li>
 
-      </ul>
+            </ul>
         }
-      }
-      );
-      const user_completed_columns = [
+    }
+    );
+    const user_completed_columns = [
         {
-          title: 'Sr.No',
-          dataIndex: 'key',
-          key: 'key',
+            title: 'Sr.No',
+            dataIndex: 'key',
+            key: 'key',
         },
         {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'name',
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
         },
         {
-          title: 'Company Name',
-          dataIndex: 'company',
-          key: 'company',
+            title: 'Company Name',
+            dataIndex: 'company',
+            key: 'company',
         },
         {
-          title: 'Email',
-          dataIndex: 'email',
-          key: 'email',
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
         },
         {
-          title: 'Status',
-          dataIndex: 'status',
-          key: 'status',
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
         },
         {
-          title: 'Action',
-          dataIndex: 'action',
-          key: 'action',
+            title: 'Action',
+            dataIndex: 'action',
+            key: 'action',
         },
-      ];
+    ];
     const dataSource = filteredData?.map((res: any, index: number) => {
         return {
             key: index + 1,
@@ -264,7 +269,7 @@ const MemberList = () => {
             title: 'Action',
             dataIndex: 'action',
             key: 'action',
-          }] : [])
+        }] : [])
     ];
 
 
@@ -282,12 +287,12 @@ const MemberList = () => {
         try {
             let res = await api.User.listing(query);
             setState1(res?.data || []);
-            let apiRes=await api.User.user_listing()
+            let apiRes = await api.User.user_listing()
             setState2(apiRes?.data)
             if (res?.status == 400) {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
-              }
+            }
         } catch (error) {
         }
     };
@@ -330,12 +335,12 @@ const MemberList = () => {
                                 {/* title  */}
                                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>Club Members</Typography.Title>
-                                    {hasClubMemberPermission?
-                                    <div className='d-flex gap-2'>
-                                        {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
-                                        <Button type="primary" htmlType="button" size='large' className='primaryBtn' icon={<PlusOutlined />} onClick={addUser}>Add New Club Member</Button>
-                                        {/* </Upload> */}
-                                    </div>:""}
+                                    {hasClubMemberPermission ?
+                                        <div className='d-flex gap-2'>
+                                            {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
+                                            <Button type="primary" htmlType="button" size='large' className='primaryBtn' icon={<PlusOutlined />} onClick={addUser}>Add New Club Member</Button>
+                                            {/* </Upload> */}
+                                        </div> : ""}
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 '>
@@ -358,10 +363,10 @@ const MemberList = () => {
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
-                                    {getUserdata?.is_admin==false?
-                                    <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} pagination={false} />:
-                                    <Table className="tableBox" dataSource={dataSource} columns={columns} pagination={false} />
-                                }
+                                    {getUserdata?.is_admin == false ?
+                                        <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} pagination={false} /> :
+                                        <Table className="tableBox" dataSource={dataSource} columns={columns} pagination={false} />
+                                    }
                                 </div>
                                 {/* Pagination  */}
                                 {/* <Row justify={'center'} className="mt-5">
