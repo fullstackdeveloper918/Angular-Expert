@@ -11,6 +11,10 @@ import { useSelector } from "react-redux";
 import Pdf from "../common/Pdf";
 import { toast } from "react-toastify";
 import { parseCookies } from "nookies";
+import {destroyCookie } from "nookies";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import { clearUserData } from "@/lib/features/userSlice";
 const { Search } = Input;
 const { Title } = Typography;
 const QuestionnairList = () => {
@@ -21,8 +25,9 @@ const QuestionnairList = () => {
     const { token } = theme.useToken();
     const [state, setState] = useState<any>([])
     const [state1, setState1] = useState<any>("")
-
- 
+    const [areas, setAreas] = useState<any>([]);
+    const router = useRouter()
+    const dispatch = useDispatch();
     const dataSource = state?.map((res: any, index: number) => {
         return {
             key: index + 1,
@@ -48,6 +53,26 @@ const QuestionnairList = () => {
 
 
     ];
+    const initialise1 = async () => {
+        try {
+            let res = await api.Meeting.listing();
+            setAreas(res);
+            if (res?.status == 400) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+
+                // }
+                dispatch(clearUserData({}));
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
+        } catch (error) {
+        }
+    };
+    useEffect(() => {
+
+        initialise1();
+
+    }, []);
     const getDataById = async () => {
         const item = {
           user_id: getUserdata?.user_id
@@ -162,7 +187,8 @@ const QuestionnairList = () => {
     const getLinkForState = (state: any) => {
         const baseURL = '/admin/member/add';
         switch (state) {
-            case 0: return `${baseURL}/page2?${getUserdata?.user_id}&edit`;
+            
+            // case 0: return `${baseURL}/page2?${getUserdata?.user_id}&edit`;
             case 1: return `${baseURL}/page3?${getUserdata?.user_id}&edit`;
             case 2: return `${baseURL}/page4?${getUserdata?.user_id}&edit`;
             case 3: return `${baseURL}/page5?${getUserdata?.user_id}&edit`;

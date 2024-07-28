@@ -184,7 +184,7 @@ const AdminDashboard: Page = (props: any) => {
       key: 'key',
     },
     {
-      title: 'Meeting Type',
+      title: 'Meeting Name',
       dataIndex: 'meeting',
       key: 'meeting',
     },

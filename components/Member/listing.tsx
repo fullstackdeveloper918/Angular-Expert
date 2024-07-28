@@ -94,20 +94,20 @@ const MemberList = () => {
 
     // Function to handle PDF download
     const downLoadPdf = async (res:any) => {
-        debugger
         const { blob, timestamp } = await generatePdf(res);
-        saveAs(blob, `Order_${timestamp}.pdf`);
+        saveAs(blob, `Detail_${timestamp}.pdf`);
     };
 
     // Function to handle PDF sharing
-    const sharePdf = async () => {
+    const sharePdf = async (item:any) => {
+        debugger
 
-        const { pdfUrl, timestamp } = await generatePdf();
+        const { pdfUrl, timestamp } = await generatePdf(item);
         const response = await fetch(pdfUrl);
         const blob = await response.blob();
 
         // Convert the blob to a file
-        const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
+        const file = new File([blob], `Detail_${timestamp}.pdf`, { type: 'application/pdf' });
         const formData = new FormData();
         formData.append('file', file);
 
@@ -134,13 +134,13 @@ const MemberList = () => {
     };
 
     const handleDownloadAndFetchData = async (id: any) => {
-        debugger
        let res = await getDataById(id);
         await downLoadPdf(res);
     };
-    const handleFetchAndFetchData = (id: any) => {
-        getDataById(id);
-        sharePdf();
+    const handleFetchAndFetchData = async(id: any) => {
+        debugger
+      let item= await  getDataById(id);
+       await sharePdf(item);
     };
     // const completed2 = state2?.filter((res:any) => res?.is_completed === true);
     const user_completed = state2?.slice(0, 5).map((res: any, index: number) => {
@@ -338,7 +338,7 @@ const MemberList = () => {
                                     {hasClubMemberPermission ?
                                         <div className='d-flex gap-2'>
                                             {/* <Upload className='tooltip-img' showUploadList={false} accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'> */}
-                                            <Button type="primary" htmlType="button" size='large' className='primaryBtn' icon={<PlusOutlined />} onClick={addUser}>Add New Club Member</Button>
+                                            <Button type="primary" htmlType="button" size='large' className='primaryBtn' icon={<PlusOutlined />} onClick={addUser}>Add Member</Button>
                                             {/* </Upload> */}
                                         </div> : ""}
                                 </div>

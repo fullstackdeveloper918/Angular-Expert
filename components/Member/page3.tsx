@@ -78,7 +78,9 @@ const Page3 = () => {
       setInputFields(inputFields.map((field, i) => i === index ? { ...field, status1: value } : field));
   };
   const [inputPairs, setInputPairs] = useState([
-      { id: 1, goalName: 'goal1', goalLabel: 'GOAL #1', commentName: 'comments1', commentLabel: 'Comments:', status: 'Select...' }
+    { id: 1, goalName: 'goal1', goalLabel: 'GOAL #1', commentName: 'comments1', commentLabel: 'Comments:', status: 'Select...' },
+    { id: 2, goalName: 'goal2', goalLabel: 'GOAL #2', commentName: 'comments2', commentLabel: 'Comments:', status: 'Select...' },
+    { id: 3, goalName: 'goal3', goalLabel: 'GOAL #3', commentName: 'comments3', commentLabel: 'Comments:', status: 'Select...' }
   ]);
 
   const addInputPair = () => {

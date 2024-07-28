@@ -157,19 +157,22 @@ const Page7 = () => {
                                         <Divider plain></Divider>
                                         {/* First Name  */}
                                         <Form.Item name="estimating" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} >
-                                            <TextArea size={'large'} placeholder="Estimating should always be No.1"
+                                            <TextArea size={'large'} placeholder="Enter..."
+                                            // placeholder="Estimating should always be No.1"
 
                                             />
                                         </Form.Item>
                                         <Form.Item name="accountability" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}>
-                                            <TextArea size={'large'} placeholder="Accountability should always be No. 2"
+                                            <TextArea size={'large'} placeholder="Enter..."
+                                            //  placeholder="Accountability should always be No. 2"
 
                                             />
                                         </Form.Item>
                                         <Form.Item name="productivity" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}>
-                                            <TextArea size={'large'} placeholder="Productivity should always be No. 3
-Daily routine for everybody.
-What CRM systems do you use?"
+                                            <TextArea size={'large'}
+                                            //  placeholder="Productivity should always be No. 3
+// Daily routine for everybody.
+// What CRM systems do you use?"
 
                                             />
                                         </Form.Item>

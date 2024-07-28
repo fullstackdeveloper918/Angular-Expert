@@ -79,10 +79,12 @@ const MeetingList = () => {
 
         }
     }
-    const dataSource = areas?.length && areas?.map((res: any, index: number) => {
+    const dataSource = areas?.length && areas
+    .sort((a:any, b:any) => a.start_meeting_date - b.start_meeting_date)
+    .map((res: any, index: number) => {
         return {
             key: index + 1,
-            meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${res?.meeting_type=="fall"?"2024":"2025"}`,
+            meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`,
             start_date: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
             start_time: dayjs(res?.start_time).format('hh:mm A'),
             end_date: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
@@ -117,17 +119,17 @@ const MeetingList = () => {
             key: 'key',
         },
         {
-            title: 'Meeting Type',
+            title: 'Meeting Name',
             dataIndex: 'meeting',
             key: 'meeting',
         },
         {
-            title: 'Meeting Start Date',
+            title: 'Meeting Date',
             dataIndex: 'start_date',
             key: 'start_date',
         },
         {
-            title: 'Meeting Start Time',
+            title: 'Meeting Time',
             dataIndex: 'start_time',
             key: 'start_time',
         },

@@ -146,7 +146,7 @@ const Page6 = () => {
 
 
                                         {/* First Name  */}
-                                        <Form.Item name="fall_meeting" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="What was your most valuable take away from our fall meeting?">
+                                        <Form.Item name="fall_meeting" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="What was your most valuable take away from our spring meeting?">
                                             <TextArea size={'large'} placeholder="Enter..."
                                                 
                                             />

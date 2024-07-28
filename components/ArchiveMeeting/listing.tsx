@@ -15,6 +15,7 @@ import Link from "next/link";
 import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
 import api from "@/utils/api";
+import validation from "@/utils/validation";
 const { Search } = Input;
 
 const ArchiveMeeting = () => {
@@ -27,32 +28,45 @@ const ArchiveMeeting = () => {
 
   const dataSource = areas?.map((res: any, index: number) => {
       return {
-          key: index+1,
-          meeting:res?.meeting_name,
-          start: dayjs(res?.start_time).format('h A DD-MM-YYYY'),
-          end: dayjs(res?.end_time).format('h A DD-MM-YYYY'),
+        key: index + 1,
+        meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`,
+        start_date: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
+        start_time: dayjs(res?.start_time).format('hh:mm A'),
+        end_date: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
+        end_time: dayjs(res?.end_time).format('hh:mm A'),
       }})
   const columns = [
-      {
-          title: 'Key',
-          dataIndex: 'key',
-          key: 'key',
-      },
-      {
-          title: 'Meeting Name',
-          dataIndex: 'meeting',
-          key: 'meeting',
-      },
-      {
-          title: 'Start Time',
-          dataIndex: 'start',
-          key: 'start',
-      },
-      {
-          title: 'End Time',
-          dataIndex: 'end',
-          key: 'end',
-      },
+    {
+        title: 'Sr.No.',
+        dataIndex: 'key',
+        key: 'key',
+    },
+    {
+        title: 'Meeting Name',
+        dataIndex: 'meeting',
+        key: 'meeting',
+    },
+    {
+        title: 'Meeting Date',
+        dataIndex: 'start_date',
+        key: 'start_date',
+    },
+    {
+        title: 'Meeting Time',
+        dataIndex: 'start_time',
+        key: 'start_time',
+    },
+    {
+        title: 'Meeting End Date',
+        dataIndex: 'end_date',
+        key: 'end_date',
+    },
+    {
+        title: 'Meeting End Time',
+        dataIndex: 'end_time',
+        key: 'end_time',
+    },
+   
   ];
 
 

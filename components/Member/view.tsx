@@ -134,7 +134,7 @@ const MeetingView = () => {
 // Function to handle PDF download
 const downLoadPdf = async () => {
     const { blob, timestamp } = await generatePdf();
-    saveAs(blob, `Order_${timestamp}.pdf`);
+    saveAs(blob, `Detail_${timestamp}.pdf`);
 };
 
 // Function to handle PDF sharing
@@ -145,7 +145,7 @@ const sharePdf = async () => {
     const blob = await response.blob();
 
     // Convert the blob to a file
-    const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
+    const file = new File([blob], `Detail_${timestamp}.pdf`, { type: 'application/pdf' });
     const formData = new FormData();
     formData.append('file', file);
 
