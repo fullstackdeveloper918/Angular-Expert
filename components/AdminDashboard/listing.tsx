@@ -2,9 +2,9 @@
 import type { NextPage } from "next";
 import React, { Fragment, ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
-import { EyeOutlined, FieldTimeOutlined, FormOutlined, LoginOutlined } from "@ant-design/icons";
+import { DownloadOutlined, EyeOutlined, FieldTimeOutlined, FormOutlined, LoginOutlined } from "@ant-design/icons";
 import "../../styles/globals.scss";
-import { Button, Card, Col, Popconfirm, Row, Table, Typography } from "antd";
+import { Button, Card, Col, Popconfirm, Row, Table, Tooltip, Typography } from "antd";
 import api from "@/utils/api";
 import { useSelector } from "react-redux";
 import Icons from "@/components/common/Icons";
@@ -12,6 +12,9 @@ import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
 import Timmer from "../common/Timmer";
 import validation from "@/utils/validation";
+import { pdf } from "@react-pdf/renderer";
+import Pdf from "../common/Pdf";
+import saveAs from "file-saver";
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
 };
@@ -21,6 +24,8 @@ const AdminDashboard: Page = (props: any) => {
 
   const [state1, setState1] = useState<any>([])
   const [state2, setState2] = useState<any>([])
+  const [state3, setState3] = useState<any>("")
+  const [update, setUpdate] = useState<any>([])
   const [upcoming, setUpcoming] = useState<any>("")
   const [next, setNext] = useState<any>("")
   const [total_count, setTotal_count] = useState<any>("")
@@ -29,22 +34,57 @@ const AdminDashboard: Page = (props: any) => {
   const [check, setCheck] = useState<any>("")
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
   const Countdown = areas?.result?.length
-  ? areas?.result
+    ? areas?.result
       .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime()) // Sort by start_meeting_date
       .map((res: any, index: number) => (
         <div key={index}>
           <Timmer endDate={res?.start_meeting_date} />
         </div>
       ))
-  : [];
+    : [];
+  console.log(update, "check update");
 
-  
+  const updateDue = async () => {
+    let res = await api.Meeting.update()
+    setUpdate(res)
+    console.log(res, "qwerrsrs");
+
+  }
+  useEffect(() => {
+    if (getUserdata?.is_admin == false) {
+      updateDue()
+    }
+  }, [])
+  const start_date = 1725993000000;
+  const fiveDaysInMilliseconds = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
+
+  const new_date = start_date - fiveDaysInMilliseconds;
   const DashboardData = [
+    {
+      cardBackground: "#CAFDF5",
+      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
+      icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
+      title: <Timmer endDate={new_date} />,
+      textColor: "#006C9C",
+      count: "Update Due",
+      link: "/admin/dashboard"
+
+    },
+    {
+      cardBackground: "#CAFDF5",
+      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
+      icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
+      title: <Timmer endDate={start_date} />,
+      textColor: "#006C9C",
+      count: "Meeting Kick off",
+      link: "/admin/dashboard"
+
+    },
     {
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: `${check?.data?.fall||"0"}`,
+      title: `${check?.data?.fall || "0"}`,
       textColor: "#007B55",
       count: "Fall 2024 (80 days)",
       link: "/admin/dashboard"
@@ -55,7 +95,7 @@ const AdminDashboard: Page = (props: any) => {
       iconBackground: "linear-gradient(135deg, rgba(0, 184, 217, 0) 0%, rgba(0, 184, 217, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#006C9C",
-      title: `${check?.data?.spring||"0"}`,
+      title: `${check?.data?.spring || "0"}`,
       count: "Spring 2025 (408 days)",
       link: "/admin/dashboard"
     },
@@ -71,9 +111,29 @@ const AdminDashboard: Page = (props: any) => {
     },
 
   ]
-  const start_date=1725993000000
+ 
   const DashboardData2 = [
     // getUserdata?.is_admin==false?
+    {
+      cardBackground: "#CAFDF5",
+      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
+      icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
+      title: <Timmer endDate={new_date} />,
+      textColor: "#006C9C",
+      count: "Update Due",
+      link: "/admin/dashboard"
+
+    },
+    {
+      cardBackground: "#CAFDF5",
+      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
+      icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
+      title: <Timmer endDate={start_date} />,
+      textColor: "#006C9C",
+      count: "Meeting Kick off",
+      link: "/admin/dashboard"
+
+    },
     {
       cardBackground: "#C8FACD",
       iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
@@ -84,33 +144,53 @@ const AdminDashboard: Page = (props: any) => {
       link: "/admin/dashboard"
 
     },
-    // getUserdata?.is_admin==false?
     {
       cardBackground: "#FFF5CC",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-      icon: <FormOutlined style={{ fontSize: '40px', color: '#08c' }}/>,
+      icon: <FormOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: `${complete?.totalUncompleted || "0"}`,
       textColor: "#B76E00",
       count: "No. of Users remains to fill the Form for coming meeting",
       link: "/admin/dashboard"
-
     },
-    {
-      cardBackground: "#CAFDF5",
-      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-      icon: <FieldTimeOutlined  style={{ fontSize: '40px', color: '#08c' }}/>,
-      title: <Timmer endDate={start_date} />,
-      textColor: "#006C9C",
-      count: "Countdown to Upcoming Meeting",
-      link: "/admin/dashboard"
-
-    },
-
-
   ]
+  const getDataById = async (id: any) => {
+    const item = { user_id: id };
+    try {
+      const res = await api.User.getById(item as any);
+      console.log(res, "yyy");
+      setState3(res?.data || null);
+      return res?.data || null; // Ensure to return the data
+    } catch (error: any) {
+      alert(error.message);
+      return null; // Return null in case of error
+    }
+  };
 
+  const generatePdf = async (data?: any) => {
+    console.log(data, 'oooooo');
 
+    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+    const blob = await pdf(<Pdf state={data} />).toBlob();
+    const pdfUrl = URL.createObjectURL(blob);
+    return { blob, pdfUrl, timestamp };
+  };
 
+  const downLoadPdf = async (data: any) => {
+    const { blob, timestamp } = await generatePdf(data);
+    saveAs(blob, `Detail_${timestamp}.pdf`);
+  };
+
+  const handleDownloadAndFetchData = async (id: any) => {
+    const res = await getDataById(id);
+    console.log(res, "uuuuuu");
+
+    if (res) {
+      await downLoadPdf(res);
+    } else {
+      console.error("Failed to fetch data for PDF generation");
+    }
+  };
   const completed = state1?.filter((res: any) => res?.is_completed === true);
   const non_completed = state1?.filter((res: any) => res?.is_completed == false)
   const completed2 = state2?.filter((res: any) => res?.is_completed === true);
@@ -137,12 +217,22 @@ const AdminDashboard: Page = (props: any) => {
     return {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(res?.firstname)} ${validation.capitalizeFirstLetter(res?.lastname)}` : "N/A",
-      company:validation.replaceUnderScore(validation.capitalizeFirstLetter(res?.company_name)),
+      company: validation.replaceUnderScore(validation.capitalizeFirstLetter(res?.company_name)),
       email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
         {hasClubMemberPermission || getUserdata?.is_admin == false ?
           <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link> :
           <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}</li>
+      </ul>,
+      action1: <ul className='m-0 list-unstyled d-flex gap-2'>
+        <li>
+          <Tooltip title="Download Pdf">
+            <Button className='ViewMore '
+              onClick={() => handleDownloadAndFetchData(res?.id)}
+            ><DownloadOutlined /></Button>
+          </Tooltip>
+        </li>
+
       </ul>
     }
   }
@@ -152,18 +242,23 @@ const AdminDashboard: Page = (props: any) => {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(validation.capitalizeFirstLetter(res?.firstname))} ${res?.lastname}` : "N/A",
       company: validation.replaceUnderScore(validation.capitalizeFirstLetter(res?.company_name)),
-      email: res?.email,
-      action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        {hasClubMemberPermission || getUserdata?.is_admin == false ?
-          <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link> :
-          <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}</li>
-      </ul>
+      // email: res?.email,
+      action:<ul className='m-0 list-unstyled d-flex gap-2'>
+      <li>
+        <Tooltip title="Download Pdf">
+          <Button className='ViewMore '
+            onClick={() => handleDownloadAndFetchData(res?.id)}
+          ><DownloadOutlined /></Button>
+        </Tooltip>
+      </li>
+
+    </ul>
     }
   }
   );
-  const dataSource3 = areas?.result?.length 
-  ? areas?.result
-      .sort((a:any, b:any) => a.start_meeting_date - b.start_meeting_date).slice(0,2)
+  const dataSource3 = areas?.result?.length
+    ? areas?.result
+      .sort((a: any, b: any) => a.start_meeting_date - b.start_meeting_date)
       .map((res: any, index: number) => {
         return {
           key: index + 1,
@@ -171,12 +266,12 @@ const AdminDashboard: Page = (props: any) => {
           start: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
           end: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
           action: <Timmer endDate={res?.start_meeting_date} />,
-          action1:<ul className='m-0 list-unstyled d-flex gap-2'><li>
+          action1: <ul className='m-0 list-unstyled d-flex gap-2'><li>
             <Link href={`/admin/meetings/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
-        </ul>
+          </ul>
         }
       })
-  : [];
+    : [];
   const columns3 = [
     {
       title: 'Sr.no',
@@ -184,7 +279,7 @@ const AdminDashboard: Page = (props: any) => {
       key: 'key',
     },
     {
-      title: 'Meeting Name',
+      title: 'Meeting Type',
       dataIndex: 'meeting',
       key: 'meeting',
     },
@@ -218,26 +313,26 @@ const AdminDashboard: Page = (props: any) => {
       dataIndex: 'key',
       key: 'key',
     },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
+    // {
+    //   title: 'Name',
+    //   dataIndex: 'name',
+    //   key: 'name',
+    // },
     {
       title: 'Company Name',
       dataIndex: 'company',
       key: 'company',
     },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    ...(hasClubMemberPermission ? [{
-      title: 'Action',
-      dataIndex: 'action',
-      key: 'action',
-    }] : [])
+    // {
+    //   title: 'Email',
+    //   dataIndex: 'email',
+    //   key: 'email',
+    // },
+    // {
+    //   title: 'Action',
+    //   dataIndex: 'action',
+    //   key: 'action',
+    // }
   ];
   const columns1 = [
     {
@@ -245,26 +340,32 @@ const AdminDashboard: Page = (props: any) => {
       dataIndex: 'key',
       key: 'key',
     },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
+    // {
+    //   title: 'Name',
+    //   dataIndex: 'name',
+    //   key: 'name',
+    // },
     {
       title: 'Company Name',
       dataIndex: 'company',
       key: 'company',
     },
     {
+      title: 'Action',
+      dataIndex: 'action1',
+      key: 'action1',
+    },
+    ...(hasClubMemberPermission ? [{
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-    },
+    }] : []),
     ...(hasClubMemberPermission ? [{
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
-    }] : [])
+    }] : []),
+
   ];
   const columns2 = [
     {
@@ -352,7 +453,7 @@ const AdminDashboard: Page = (props: any) => {
       <Fragment>
         <section>
           <Row gutter={[20, 20]} className="mb-4 ">
-          
+
             {getUserdata?.is_admin == true ?
               <>
                 {DashboardData && DashboardData?.map((data: any, index: number) => {
@@ -377,7 +478,7 @@ const AdminDashboard: Page = (props: any) => {
                   return (
                     <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
                       <Link className='text-decoration-none' href={data.link}>
-                        <Card className='dashboard-widget-card text-center h-100 border-0' style={{ background: data.cardBackground }} >
+                        <Card className='dashboard-widget-card text-center h-80 border-0' style={{ background: data.cardBackground }} >
                           <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
                             {data.icon}
                           </div>
@@ -451,7 +552,7 @@ const AdminDashboard: Page = (props: any) => {
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                     <Typography.Title level={4} className='m-0 fw-bold'>Club Members</Typography.Title>
                     {hasClubMemberPermission ?
-                    state1?.length&&
+                      state1?.length &&
                       <Link href={'/admin/member'}>
                         <Button className='text-center blackViewBtn'> View All</Button>
                       </Link> : ""}

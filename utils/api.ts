@@ -71,6 +71,7 @@ const Admin={
   // admin/listadmin/add
   listing: (q?: string) =>
     requests.get(`admin/list${q ? `?${q}` : ""}`),
+  
   create: (info: any) =>
     requests.post('admin/add', info),
   delete: (info: any) =>
@@ -118,6 +119,8 @@ const Meeting={
   // add-meeting
   create: (info: any) =>
     requests.post('add-meeting', info),
+  update:()=>
+    requests.get("five-day-beforemeeting-countdown"),
   listing: () =>
     requests.get(`meeting-list`),
   upcoming_meeting: () =>

@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../assests/images/image.png";
+import logo from "../../assests/images/logo.png"
 import {
   Page,
   Text,
@@ -8,15 +8,16 @@ import {
   Document,
   StyleSheet,
 } from "@react-pdf/renderer";
+
+
+
 import validation from "@/utils/validation";
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
+    padding: 20,
     background: "#fff",
-    paddingLeft: 10,
-    paddingBottom: 20,
-    paddingRight: 10,
-    paddingTop: 20,
+    break: 'auto', // Ensure text can break across pages
+    overflow: 'wrap',
   },
   section: {
     padding: 10,
@@ -25,7 +26,6 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 15,
-    marginBottom: 30,
     textAlign: "center",
     display: "flex",
     justifyContent: "center",
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     marginBottom: "10px",
   },
   main_heading: {
-    fontSize: "14px",
+    fontSize: "16px",
     padding: "8px",
     textAlign: "center",
     display: "flex",
@@ -51,12 +51,13 @@ const styles = StyleSheet.create({
   },
   itali_text: {
     fontSize: "13px",
-    fontStyle: "italic",
+    fontStyle: 'italic',
     fontWeight: "400",
+    fontFamily: "Roboto",
   },
   subheader: {
-    fontSize: 13,
-    marginBottom: 10,
+    fontSize: 15,
+    // marginBottom: ,
     textTransform: "capitalize",
     textDecoration: "underline",
   },
@@ -75,6 +76,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontSize: 12,
     color: "#000",
+    break: 'auto',
+    overflow: "wrap",
   },
   textarea: {
     padding: 8,
@@ -84,14 +87,16 @@ const styles = StyleSheet.create({
     display: "inline-block",
     color: "#000",
     fontSize: 12,
-    // minHeight:"813px",
-    // maxHeight: "813px"
+    break: 'auto', 
+    minHeight:35,
+    overflow: 'wrap',
   },
   goal: {
     marginBottom: 20,
     display: "flex",
     flexDirection: "column",
   },
+
   div_wrapper: {
     display: "flex",
     gap: "30px",
@@ -114,7 +119,6 @@ const styles = StyleSheet.create({
   imgg: {
     margin: "auto",
     objectFit: "contain",
-    border: "10px solid red",
     width: "400px",
     height: "400px",
   },
@@ -122,6 +126,26 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: "100%",
     margin: "auto",
+  },
+  marginequal:{
+    marginVertical:10,
+  },
+  flexBox :{
+    display: "flex",
+  },
+  goal_two: {
+    display: "flex",
+    gap: 5,
+    width: "100%",
+    flexDirection:"row",
+    flexWrap:"wrap",
+  },
+  memberUpdate : {
+    fontWeight: 900 ,
+    fontSize:24,
+  },
+  heightGiven :{
+    minHeight:400,
   },
 });
 
@@ -143,10 +167,14 @@ const MemberUpdatePDF = (props) => {
       <Document>
         <Page size="A4" style={styles.page}>
           <View style={{ textAlign: "center", display: "block" }}>
-          </View>
+          <Image
+  src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"
+  style={{ width:"50%", objectFit: 'contain' , textAlign:"center", margin:"10px auto 15px"}}
+  alt="Image"
+/></View>
           <View style={styles.header}>
-            <Text>
-              Member Update / <Text style={styles.itali_text}>Spring 2024</Text>
+            <Text style={styles.memberUpdate}>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2024</Text>
             </Text>
             <Text style={styles.subheader}>
               {validation.replaceUnderScore(props?.state?.company_name)}
@@ -156,7 +184,7 @@ const MemberUpdatePDF = (props) => {
           <View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
             <Text style={styles.text}>Current financial position:</Text>
-            <Text style={styles.textarea}>
+            <Text style={[styles.textarea, styles.heightGiven]}>
               {props?.state?.financial_position}
             </Text>
             <Text style={styles.text}>
@@ -347,38 +375,38 @@ const MemberUpdatePDF = (props) => {
 
           <View style={styles.section}>
             <Text style={styles.main_heading}>PHOTO SECTION</Text>
-            <Text style={styles.subheading}>
+            {/* <Text style={styles.subheading}>
               Share photos of current projects or additional information
               regarding comments in your update.
-            </Text>
-            <Text style={styles.subheading}>
+            </Text> */}
+            {/* <Text style={styles.subheading} >
               Please paste a dropbox link for each project in the boxes
               indicated below, and write a brief summary of each project in the
               comment section.
-            </Text>
+            </Text> */}
             <View style={styles.goal}>
               <View style={styles.div_wrapper}>
                 {Array.isArray(newArr) && newArr
                   .sort((a, b) => a - b) // Sort newArr in descending order
                   .map((item, index) => (
                     <View style={styles.goal} key={index}>
-                      <View style={styles.goal}>
-
+                      <View  style={styles.goal_two}>
+                     
                         {Array.isArray(item?.images) && item.images.map((imageUrl, imgIndex) => (
                           <>
                             {console.log(imageUrl, "imagurl bc")}
+                         
                             <Image
-                              style={{ width: 100, height: 100 }}
+                              style={{ width: "100%",height:"100%", objectFit: "cover", }}
                               options={options}
                               src={imageUrl}
                               method="GET"
                               headers={{ Pragma: 'no-cache', "Cache-Control": "no-cache" }}
                               body=""
                             />
-                            {/* <Image SRC={{uri: ImageUrl, method : 'GET',headers: {}, body: '' "} */}
                           </>
                         ))}
-                        <Text style={styles.subheading}>
+                         <Text style={[styles.subheading, styles.marginequal, styles.block]} >
                           Comment: {item?.comment}
                         </Text>
                       </View>

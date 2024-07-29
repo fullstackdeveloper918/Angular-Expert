@@ -175,7 +175,7 @@ const QuestionnairList = () => {
     };
   
     const data = [
-        { title: 'Card 1', description: 'BUSINESS UPDATE', state: 0 },
+        // { title: 'Card 1', description: 'BUSINESS UPDATE', state: 0 },
         { title: 'Card 2', description: 'GOALS', state: 1},
         { title: 'Card 3', description: 'CRAFTSMEN TOOLBOX', state: 2 },
         { title: 'Card 4', description: 'CRAFTSMEN CHECK-UP', state: 3 },

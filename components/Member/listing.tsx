@@ -72,7 +72,7 @@ const MemberList = () => {
         setSearchTerm(value);
     };
     const getDataById = async (id: any) => {
-        debugger
+        // debugger
         const item = {
             user_id: id
         }
@@ -85,7 +85,9 @@ const MemberList = () => {
         }
     };
     const generatePdf = async (data?:any) => {
-        debugger
+        // debugger
+        console.log(data,"pppp");
+        
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
         const blob = await pdf(<Pdf state={data} />).toBlob();
         const pdfUrl = URL.createObjectURL(blob);

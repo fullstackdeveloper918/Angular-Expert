@@ -99,7 +99,7 @@ const MeetingView = () => {
   const onFinish = async () => {
     let items = {
       to: state?.email,
-      link: `http://localhost:3000/auth/update_password?${state.email}`
+      link: `https://angular-expert-mu.vercel.app/auth/update_password?${state.email}`
       
     };
     try {
