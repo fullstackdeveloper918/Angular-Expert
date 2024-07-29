@@ -15,6 +15,7 @@ import {destroyCookie } from "nookies";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { clearUserData } from "@/lib/features/userSlice";
+import QuestionanirModal from "../common/QuestionnairModal";
 const { Search } = Input;
 const { Title } = Typography;
 const QuestionnairList = () => {
@@ -41,7 +42,7 @@ const QuestionnairList = () => {
     })
     const columns = [
         {
-            title: 'Key',
+            title: 'Order No.',
             dataIndex: 'key',
             key: 'key',
         },
@@ -331,6 +332,7 @@ const QuestionnairList = () => {
                                         <Search size="large" placeholder="Search..." enterButton />
                                         <Tooltip title="Download Pdf">
                                             <Button type="primary" onClick={downLoadPdf}><DownloadOutlined /> Download Pdf</Button>
+                                            {/* <QuestionanirModal/> */}
                                         </Tooltip>
                                     </div>
                                     <div className='accordion-wrapper'>

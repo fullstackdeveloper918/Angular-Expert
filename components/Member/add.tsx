@@ -279,7 +279,7 @@ const Add = () => {
 
                       <Form.Item name="phone_number" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
                         <Input size={'large'} type="text" minLength={6} maxLength={20} placeholder="Phone No" onKeyPress={(event) => {
-                            if (!/[0-9\s,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                            if (!/[0-9\s,+]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
                               event.preventDefault();
                             }
                           }}/>

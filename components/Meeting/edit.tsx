@@ -8,6 +8,7 @@ import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
 import api from "@/utils/api";
 import utc from "dayjs/plugin/utc";
+import moment from "moment-timezone";
 const { Row, Col, Card, Button } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
     ssr: false,
@@ -22,14 +23,23 @@ const { Row, Col, Card, Button } = {
     ssr: false,
   }),
 };
+const timezones = moment.tz.names();
 const { Option } = Select;
 dayjs.extend(utc);
+const formatTimezone = (timezone: any) => {
+  const offset = moment.tz(timezone).utcOffset();
+  const sign = offset >= 0 ? '+' : '-';
+  const hours = Math.floor(Math.abs(offset) / 60).toString().padStart(2, '0');
+  const minutes = (Math.abs(offset) % 60).toString().padStart(2, '0');
+  return `UTC${sign}${hours}:${minutes} - ${timezone}`;
+};
 const MeetingEdit = () => {
 
   const router = useRouter()
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false)
-
+  const [selectedTimezone, setSelectedTimezone] = useState(moment.tz.guess()); // Default to local timezone
+  const [selectedDate, setSelectedDate] = useState<any>(null);
   const [state, setState] = React.useState<any>({
     meeting_name: "",
     meeting_type: "",
@@ -50,6 +60,19 @@ const MeetingEdit = () => {
   const [selectedLocation, setSelectedLocation] = useState<any>('');
   const [selectedHotel, setSelectedHotel] = useState<any>('');
   const [meetingType, setMeetingType] = useState<any>(state?.meeting_type);
+  const onChangeDate = (date: any) => {
+    const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
+    setSelectedDate(dateWithTimezone);
+    console.log(dateWithTimezone, "dateWithTimezone");
+};
+
+const onTimezoneChange = (value: any) => {
+    setSelectedTimezone(value);
+    if (selectedDate) {
+        setSelectedDate(selectedDate.clone().tz(value));
+    }
+    console.log('Selected Timezone:', value);
+};
   const handleChange = (value: any) => {
     setMeetingType(value);
   };
@@ -98,15 +121,18 @@ const MeetingEdit = () => {
       meeting_name: "meeting_name",
       meeting_id: id,
       meeting_type: values?.meeting_type,
+      meeting_time_zone: selectedTimezone,
       start_time: dayjs(values?.start_time).utc().valueOf(),
+      start_meeting_date: dayjs(values?.start_meeting_date).utc().valueOf(),
       end_time: dayjs(values?.end_time).utc().valueOf(),
+      end_meeting_date: dayjs(values?.end_meeting_date).utc().valueOf(),
       year: "",
       location: values?.location,
       hotel: values?.hotel,
       airport: values?.airport,
       host_company: values?.host_company,
       host: values?.host,
-      cell: [values?.cell],
+      cell: values?.cell,
       weather: values?.weather,
       comments: values?.comments,
       notes: values?.notes,
@@ -249,7 +275,34 @@ const MeetingEdit = () => {
                       </Form.Item>
                       {/* Last Name  */}
 
-
+                      <Form.Item
+                                                name="meeting_time_zone"
+                                                className="col-lg-6 col-sm-12"
+                                                rules={[{ required: true, message: 'Please Select Timezone' }]}
+                                                label="Timezone"
+                                            >
+                                                {/* <div className="Div_contact">
+                                                   
+                                                    <CalendlyWidget />
+                                                </div> */}
+                                                <Select
+                                                    showSearch
+                                                    placeholder="Select a timezone"
+                                                    optionFilterProp="children"
+                                                    onChange={onTimezoneChange}
+                                                    filterOption={(input: any, option: any) =>
+                                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    }
+                                                    style={{ width: '100%' }}
+                                                    value={selectedTimezone}
+                                                >
+                                                    {timezones.map((timezone:any) => (
+                                                        <Option key={timezone} value={timezone}>
+                                                            {formatTimezone(timezone)}
+                                                        </Option>
+                                                    ))}
+                                                </Select>
+                                            </Form.Item>
                       {/* Email  */}
                       <Form.Item name="start_meeting_date" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Start date' }]} label="Meeting Start date">
                         <DatePicker
@@ -321,26 +374,6 @@ const MeetingEdit = () => {
                           }}
                         />
                       </Form.Item>
-                      <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
-                        <Input size={'large'} placeholder="Host Company"
-                         
-                        />
-                      </Form.Item>
-                
-                      <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[
-
-                        { pattern: /^[0-9\s,]*$/, message: 'Only numbers and spaces are allowed' }
-                      ]} label="Cell">
-                        <Input
-                          size={'large'} placeholder="Cell"
-                          onKeyPress={(event) => {
-                            if (!/[0-9\s,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
-                              event.preventDefault();
-                            }
-                          }}
-                        />
-
-                      </Form.Item>
                       <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
                         <Input size={'large'} placeholder="Weather"
                           onKeyPress={(e: any) => {
@@ -352,6 +385,14 @@ const MeetingEdit = () => {
                           }}
                         />
                       </Form.Item>
+                      <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
+                        <Input size={'large'} placeholder="Host Company"
+                         
+                        />
+                      </Form.Item>
+                
+                     
+                     
                       <Form.Item
                         name="host"
                         className="col-lg-6 col-sm-12"
@@ -364,6 +405,20 @@ const MeetingEdit = () => {
 
                         <Input size={'large'} placeholder="Host" />
                       </Form.Item>
+                      <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[
+
+{ pattern: /^[0-9\s,+]*$/, message: 'Only numbers and spaces are allowed' }
+]} label="Cell">
+<Input
+  size={'large'} placeholder="Cell"
+  onKeyPress={(event) => {
+    if (!/[0-9\s,+]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      event.preventDefault();
+    }
+  }}
+/>
+
+</Form.Item>
                     </div>
                     {/* Button  */}
                     <div className="text-center mt-3">

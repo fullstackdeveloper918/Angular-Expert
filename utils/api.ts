@@ -121,6 +121,8 @@ const Meeting={
     requests.post('add-meeting', info),
   update:()=>
     requests.get("five-day-beforemeeting-countdown"),
+  past_meeting:()=>
+    requests.get("past-meetings"),
   listing: () =>
     requests.get(`meeting-list`),
   upcoming_meeting: () =>

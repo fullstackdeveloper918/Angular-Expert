@@ -52,7 +52,7 @@ const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
     }),
 };
 const { Search } = Input;
-const MeetingList = () => {
+const PastMeetingList = () => {
     const router = useRouter()
     const dispatch = useDispatch();
     const [areas, setAreas] = useState<any>([]);
@@ -89,27 +89,17 @@ const MeetingList = () => {
             start_time: dayjs(res?.start_time).format('hh:mm A'),
             end_date: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
             end_time: dayjs(res?.end_time).format('hh:mm A'),
-            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-                <li>
-                    <Link href={`/admin/meetings/${res?.id}/edit`} >
-                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                    </Link>
-                </li>
-                {getUserdata?.is_admin==false?"":
-                <li>
-                    <Popconfirm
-                        title="Delete"
-                        description="Are you sure you want to delete ?"
-                        onConfirm={(event: any) => { archive(res?.id) }}
-                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                    >
-                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                    </Popconfirm>
-                </li>}
-                <li>
-              <Link href={`/admin/meetings/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
-          </li>
-            </ul>
+        //     action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+        //         <li>
+        //             <Link href={`/admin/meetings/${res?.id}/edit`} >
+        //                 <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+        //             </Link>
+        //         </li>
+                
+        //         <li>
+        //       <Link href={`/admin/meetings/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
+        //   </li>
+        //     </ul>
         }
     })
     const baseColumns = [
@@ -143,32 +133,18 @@ const MeetingList = () => {
             dataIndex: 'end_time',
             key: 'end_time',
         },
-        {
-            title: 'Action',
-            dataIndex: 'action',
-            key: 'action',
-        }
+        // {
+        //     title: 'Action',
+        //     dataIndex: 'action',
+        //     key: 'action',
+        // }
     ];
     
-    // Conditionally add the 'Action' column
-    const columns = [
-        ...baseColumns,
-        ...(getUserdata?.is_admin ? [
-            {
-                title: 'Action',
-                dataIndex: 'action',
-                key: 'action',
-            }
-        ] : [])
-    ];
-
 
     const initialise = async () => {
         try {
-            let res = await api.Meeting.listing();
+            let res = await api.Meeting.past_meeting();
             setAreas(res);
-            console.log(res,"dfsdf");
-            
             if (res?.status == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
@@ -178,14 +154,6 @@ const MeetingList = () => {
                 router.replace("/auth/signin")
             }
         } catch (error) {
-            if (error) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-
-                // }
-                dispatch(clearUserData({}));
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
-            }
         }
     };
     useEffect(() => {
@@ -214,25 +182,17 @@ const MeetingList = () => {
                                 <div className='mb-4'>
                                     <Breadcrumb separator=">">
                                         <Breadcrumb.Item><Link className='text-decoration-none' href="/admin/dashboard">General</Link></Breadcrumb.Item>
-                                        <Breadcrumb.Item className='text-decoration-none'>Meetings</Breadcrumb.Item>
+                                        <Breadcrumb.Item className='text-decoration-none'>Past Meetings</Breadcrumb.Item>
                                     </Breadcrumb>
                                 </div>
                                 {/* title  */}
                                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3'>
-                                    <Typography.Title level={3} className='m-0 fw-bold'>Meetings</Typography.Title>
-                                    {getUserdata?.is_admin==false?"":
-                                    <div className='d-flex gap-2'>
-                                        <Button type="primary" style={{ width: 190 }} htmlType="button" size='large' icon={<PlusOutlined />} onClick={add}>Add Meeting</Button>
-                                    </div>
-                                    }
+                                    <Typography.Title level={3} className='m-0 fw-bold'>Past Meetings</Typography.Title>
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 d-flex gap-3'>
                                     <Search size='large' placeholder="Search by Meeting Name or year" enterButton value={searchTerm}
                                     />
-                                    
-                                    {getUserdata?.is_admin==false?"":
-                                    <FilterSelect />}
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
@@ -255,4 +215,4 @@ const MeetingList = () => {
     );
 };
 
-export default MeetingList;
+export default PastMeetingList;

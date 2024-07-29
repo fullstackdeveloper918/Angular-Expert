@@ -50,7 +50,7 @@ const Manage_Question = () => {
       return {
           key: index+1,
           question:res?.question,
-          question_type:res?.question_type,
+          // question_type:res?.question_type,
           action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
           <li>
              <CustomModal type={"Edit"} {...res} initialise={initialise}/>
@@ -69,11 +69,11 @@ const Manage_Question = () => {
           dataIndex: 'question',
           key: 'question',
       },
-      {
-          title: 'Questions Type',
-          dataIndex: 'question_type',
-          key: 'question_type',
-      },
+      // {
+      //     title: 'Questions Type',
+      //     dataIndex: 'question_type',
+      //     key: 'question_type',
+      // },
 
       {
           title: 'Action',

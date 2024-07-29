@@ -11,7 +11,7 @@ import Icons from "@/components/common/Icons";
 import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
 import Timmer from "../common/Timmer";
-import validation from "@/utils/validation";
+import validation, { capFirst } from "@/utils/validation";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
 import saveAs from "file-saver";
@@ -61,95 +61,96 @@ const AdminDashboard: Page = (props: any) => {
   const new_date = start_date - fiveDaysInMilliseconds;
   const DashboardData = [
     {
-      cardBackground: "#CAFDF5",
+      cardBackground: "#000000", // Black background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-      icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: <Timmer endDate={new_date} />,
-      textColor: "#006C9C",
+      icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#fff' }} />, // White icon color
+      title: <Timmer endDate={new_date} />, // White text color for the title
+      textColor: "#FFFFFF", // White text color
       count: "Update Due",
       link: "/admin/dashboard"
-
     },
     {
-      cardBackground: "#CAFDF5",
+      cardBackground: "#000000", // Black background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: <Timmer endDate={start_date} />,
-      textColor: "#006C9C",
+      textColor: "#FFFFFF",
       count: "Meeting Kick off",
       link: "/admin/dashboard"
 
     },
     {
-      cardBackground: "#C8FACD",
-      iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
+      cardBackground: "#000000", // Black background
+      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       title: `${check?.data?.fall || "0"}`,
-      textColor: "#007B55",
+      textColor: "#FFFFFF",
       count: "Fall 2024 (80 days)",
       link: "/admin/dashboard"
 
     },
     {
-      cardBackground: "#CAFDF5",
-      iconBackground: "linear-gradient(135deg, rgba(0, 184, 217, 0) 0%, rgba(0, 184, 217, 0.24) 97.35%)",
+      cardBackground: "#000000", // Black background
+      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      textColor: "#006C9C",
+      textColor: "#FFFFFF",
       title: `${check?.data?.spring || "0"}`,
       count: "Spring 2025 (408 days)",
       link: "/admin/dashboard"
     },
-    {
-      cardBackground: "#FFF5CC",
-      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-      icon: <Icons.Users />,
-      textColor: "#B76E00",
-      title: `${total_count?.data || "0"}`,
-      count: "Total Club Members",
-      link: hasClubMemberPermission ? `/admin/member` : "/admin/dashboard"
+    // {
+    //   cardBackground: "#FFF5CC",
+    //   iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
+    //   icon: <Icons.Users />,
+    //   textColor: "#B76E00",
+    //   title: `${total_count?.data || "0"}`,
+    //   count: "Total Club Members",
+    //   link: hasClubMemberPermission ? `/admin/member` : "/admin/dashboard"
 
-    },
+    // },
 
   ]
  
   const DashboardData2 = [
     // getUserdata?.is_admin==false?
     {
-      cardBackground: "#CAFDF5",
+      cardBackground: "#000000", // Black background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: <Timmer endDate={new_date} />,
-      textColor: "#006C9C",
+      textColor: "#FFFFFF",
       count: "Update Due",
       link: "/admin/dashboard"
 
     },
     {
-      cardBackground: "#CAFDF5",
+      cardBackground: "#000000", // Black background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: <Timmer endDate={start_date} />,
-      textColor: "#006C9C",
+      textColor: "#FFFFFF",
       count: "Meeting Kick off",
       link: "/admin/dashboard"
 
     },
     {
-      cardBackground: "#C8FACD",
-      iconBackground: "linear-gradient(135deg, rgba(0, 171, 85, 0) 0%, rgba(0, 171, 85, 0.24) 97.35%)",
+      cardBackground: "#000000", // Black background
+      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       title: `${complete?.totalCompleted || "0"}`,
-      textColor: "#007B55",
+      textColor: "#FFFFFF",
       count: "No. of Users fillled the Form for coming meeting",
       link: "/admin/dashboard"
 
     },
     {
-      cardBackground: "#FFF5CC",
+      // cardBackground: "#FFF5CC",
+      // iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
+      cardBackground: "#000000", // Black background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FormOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: `${complete?.totalUncompleted || "0"}`,
-      textColor: "#B76E00",
+      textColor: "#FFFFFF",
       count: "No. of Users remains to fill the Form for coming meeting",
       link: "/admin/dashboard"
     },
@@ -178,7 +179,7 @@ const AdminDashboard: Page = (props: any) => {
 
   const downLoadPdf = async (data: any) => {
     const { blob, timestamp } = await generatePdf(data);
-    saveAs(blob, `Detail_${timestamp}.pdf`);
+    saveAs(blob, `${capFirst(data?.company_name)}.pdf`);
   };
 
   const handleDownloadAndFetchData = async (id: any) => {
@@ -263,18 +264,20 @@ const AdminDashboard: Page = (props: any) => {
         return {
           key: index + 1,
           meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`,
+          host_name:res?.host,
+          host_city:res?.location,
           start: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
           end: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
           action: <Timmer endDate={res?.start_meeting_date} />,
           action1: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-            <Link href={`/admin/meetings/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link></li>
+            <Link href={`/admin/meetings/${res?.id}/view`}><Button type="primary" className='ViewMore primary'><EyeOutlined /></Button></Link></li>
           </ul>
         }
       })
     : [];
   const columns3 = [
     {
-      title: 'Sr.no',
+      title: 'Order No.',
       dataIndex: 'key',
       key: 'key',
     },
@@ -282,6 +285,16 @@ const AdminDashboard: Page = (props: any) => {
       title: 'Meeting Type',
       dataIndex: 'meeting',
       key: 'meeting',
+    },
+    {
+      title: 'Host Name',
+      dataIndex: 'host_name',
+      key: 'host_name',
+    },
+    {
+      title: 'Host City',
+      dataIndex: 'host_city',
+      key: 'host_city',
     },
     {
       title: 'Start Date',
@@ -308,11 +321,11 @@ const AdminDashboard: Page = (props: any) => {
 
 
   const columns = [
-    {
-      title: 'Sr.No',
-      dataIndex: 'key',
-      key: 'key',
-    },
+    // {
+    //   title: 'Order No.',
+    //   dataIndex: 'key',
+    //   key: 'key',
+    // },
     // {
     //   title: 'Name',
     //   dataIndex: 'name',
@@ -336,7 +349,7 @@ const AdminDashboard: Page = (props: any) => {
   ];
   const columns1 = [
     {
-      title: 'Sr.No',
+      title: 'Order No.',
       dataIndex: 'key',
       key: 'key',
     },
@@ -351,7 +364,7 @@ const AdminDashboard: Page = (props: any) => {
       key: 'company',
     },
     {
-      title: 'Action',
+      title: 'Pdf',
       dataIndex: 'action1',
       key: 'action1',
     },
@@ -369,7 +382,7 @@ const AdminDashboard: Page = (props: any) => {
   ];
   const columns2 = [
     {
-      title: 'Sr.No',
+      title: 'Order No.',
       dataIndex: 'key',
       key: 'key',
     },
@@ -461,9 +474,9 @@ const AdminDashboard: Page = (props: any) => {
                     <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
                       <Link className='text-decoration-none' href={data.link}>
                         <Card className='dashboard-widget-card text-center h-100 border-0' style={{ background: data.cardBackground }} >
-                          <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
+                          {/* <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
                             {data.icon}
-                          </div>
+                          </div> */}
                           <div className='dashboard-widget-card-content'>
                             <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
                             <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
@@ -479,9 +492,9 @@ const AdminDashboard: Page = (props: any) => {
                     <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
                       <Link className='text-decoration-none' href={data.link}>
                         <Card className='dashboard-widget-card text-center h-80 border-0' style={{ background: data.cardBackground }} >
-                          <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
+                          {/* <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
                             {data.icon}
-                          </div>
+                          </div> */}
                           <div className='dashboard-widget-card-content'>
                             <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
                             <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>

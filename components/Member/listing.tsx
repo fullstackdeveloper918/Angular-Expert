@@ -24,7 +24,7 @@ import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
 import saveAs from "file-saver";
 import { useSelector } from "react-redux";
-import validation from "../../utils/validation";
+import validation, { capFirst } from "../../utils/validation";
 
 const { Search } = Input;
 type Page<P = {}> = NextPage<P> & {
@@ -37,6 +37,7 @@ const MemberList = () => {
     const getUserdata = useSelector((state: any) => state?.user?.userData)
     const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
     const [show, setShow] = useState(true);
+    const [lastVisibleId, setLastVisibleId] = useState<any>(null);
     const [state, setState] = React.useState<any>({
         id: "",
         name: "",
@@ -57,6 +58,8 @@ const MemberList = () => {
     const [areas, setAreas] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState<any>('');
     const [filteredData, setFilteredData] = useState(state1);
+    const [data, setData] = useState<any>([]);
+    // const [lastVisibleId, setLastVisibleId] = useState(null);
     useEffect(() => {
         // Filter data when searchTerm or state1 changes
         const filtered = state1?.filter((res: any) => {
@@ -84,10 +87,10 @@ const MemberList = () => {
             alert(error.message);
         }
     };
-    const generatePdf = async (data?:any) => {
+    const generatePdf = async (data?: any) => {
         // debugger
-        console.log(data,"pppp");
-        
+        console.log(data, "pppp");
+
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
         const blob = await pdf(<Pdf state={data} />).toBlob();
         const pdfUrl = URL.createObjectURL(blob);
@@ -95,21 +98,24 @@ const MemberList = () => {
     };
 
     // Function to handle PDF download
-    const downLoadPdf = async (res:any) => {
+    const downLoadPdf = async (res: any) => {
+        console.log(res, "eeeee");
+
         const { blob, timestamp } = await generatePdf(res);
-        saveAs(blob, `Detail_${timestamp}.pdf`);
+        saveAs(blob, `${capFirst(res?.company_name)}.pdf`);
     };
 
     // Function to handle PDF sharing
-    const sharePdf = async (item:any) => {
-        debugger
+    const sharePdf = async (item: any) => {
+        // debugger
+        // console.log(item,"item");
 
         const { pdfUrl, timestamp } = await generatePdf(item);
         const response = await fetch(pdfUrl);
         const blob = await response.blob();
 
         // Convert the blob to a file
-        const file = new File([blob], `Detail_${timestamp}.pdf`, { type: 'application/pdf' });
+        const file = new File([blob], `${capFirst(item?.company_name)}.pdf`, { type: 'application/pdf' });
         const formData = new FormData();
         formData.append('file', file);
 
@@ -136,13 +142,13 @@ const MemberList = () => {
     };
 
     const handleDownloadAndFetchData = async (id: any) => {
-       let res = await getDataById(id);
+        let res = await getDataById(id);
         await downLoadPdf(res);
     };
-    const handleFetchAndFetchData = async(id: any) => {
+    const handleFetchAndFetchData = async (id: any) => {
         debugger
-      let item= await  getDataById(id);
-       await sharePdf(item);
+        let item = await getDataById(id);
+        await sharePdf(item);
     };
     // const completed2 = state2?.filter((res:any) => res?.is_completed === true);
     const user_completed = state2?.slice(0, 5).map((res: any, index: number) => {
@@ -173,7 +179,7 @@ const MemberList = () => {
     );
     const user_completed_columns = [
         {
-            title: 'Sr.No',
+            title: 'Order No.',
             dataIndex: 'key',
             key: 'key',
         },
@@ -233,7 +239,7 @@ const MemberList = () => {
     );
     const columns = [
         {
-            title: 'Sr.No',
+            title: 'Order No.',
             dataIndex: 'key',
             key: 'key',
         },
@@ -285,9 +291,19 @@ const MemberList = () => {
 
 
 
-    const getData = async (query: string) => {
+    const getData = async (query: string, lastVisibleId?: string) => {
         try {
+            let query = searchTerm ? `searchTerm=${searchTerm}` : '';
+            // if (lastVisibleId) {
+            //     query += query ? `&lastVisibleId=${lastVisibleId}` : `lastVisibleId=${lastVisibleId}`;
+            // }
             let res = await api.User.listing(query);
+            if (Array.isArray(res?.data)) {
+                setData((prevData: any) => [...prevData, ...res.data]);
+            } else {
+                console.error("Unexpected response format", res?.data);
+            }
+            setLastVisibleId(res.data.lastVisibleId);
             setState1(res?.data || []);
             let apiRes = await api.User.user_listing()
             setState2(apiRes?.data)
@@ -298,19 +314,25 @@ const MemberList = () => {
         } catch (error) {
         }
     };
+console.log(state1,"state1");
 
     useEffect(() => {
         const query = searchTerm ? `searchTerm=${searchTerm}` : '';
         getData(query);
     }, [searchTerm]);
 
-
+    const loadMore = () => {
+        if (!loading) {
+            const query = searchTerm ? `searchTerm=${searchTerm}` : '';
+            getData(query);
+        }
+    };
     return (
         <MainLayout>
 
             <Fragment>
                 {/* <Head>
-            <title>Users</title>
+            <title>Users</title> 
             <meta name="description" content="Users" />
         </Head> */}
                 <ToastContainer
@@ -371,11 +393,14 @@ const MemberList = () => {
                                     }
                                 </div>
                                 {/* Pagination  */}
-                                {/* <Row justify={'center'} className="mt-5">
+                               
+                                    {/* <button onClick={loadMore}>Load More</button> */}
+                                
+                                <Row justify={'center'} className="mt-5">
                                     <Col span={24}>
                                         <Pagination total={15} hideOnSinglePage={true} disabled={loading} />
                                     </Col>
-                                </Row> */}
+                                </Row>
                             </Card>
                         </Col>
                     </Row>

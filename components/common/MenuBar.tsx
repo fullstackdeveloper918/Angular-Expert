@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assests/images/image.png";
 import { Typography, type MenuProps } from "antd";
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, TeamOutlined } from "@ant-design/icons";
 import User from "../../assests/images/placeholder.png";
 import favicon from "../../assests/images/favicon.png";
 import {
@@ -152,7 +152,16 @@ setActive(x)
             "meetings",
             <OrderedListOutlined style={iconSize} />
           ),
-
+          getItem(
+            <Link
+              href="/admin/meetings/past_meeting"
+              className="text-decoration-none"
+            >
+              Past Meetings
+            </Link>,
+            "past_meeting",
+            <TeamOutlined  style={iconSize} />
+          ),
           getUserdata?.is_admin &&
             getItem(
               <Link
@@ -174,6 +183,7 @@ setActive(x)
             "archive_meeting",
             <FolderOpenOutlined style={iconSize} />
           ),
+         
         ]
       ),
     },
@@ -348,6 +358,7 @@ setActive(x)
       "PAGES",
       "CONTACT_US",
       "MY_DOCUMENT",
+      "PAST_MEETING",
       "MY_PRIFILE_SETTINGS",
       "CLOUD_MESSAGING",
       "DASHBOARD",

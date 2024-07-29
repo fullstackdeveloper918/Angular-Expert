@@ -37,7 +37,7 @@ const ArchiveMeeting = () => {
       }})
   const columns = [
     {
-        title: 'Sr.No.',
+        title: 'Order No.',
         dataIndex: 'key',
         key: 'key',
     },

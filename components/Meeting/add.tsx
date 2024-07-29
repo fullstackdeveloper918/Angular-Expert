@@ -507,13 +507,6 @@ const MeetingAdd = () => {
                                                     placeholder="Enter your address"
                                                 />
                                             </Form.Item>
-                                            <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
-                                                <Input size={'large'} placeholder="Host Company"
-                                                   
-                                                />
-                                            </Form.Item>
-
-
                                             <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
                                                 <Input size={'large'} placeholder="Weather"
                                                     onKeyPress={(e: any) => {
@@ -525,6 +518,14 @@ const MeetingAdd = () => {
                                                     }}
                                                 />
                                             </Form.Item>
+                                            <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
+                                                <Input size={'large'} placeholder="Host Company"
+                                                   
+                                                />
+                                            </Form.Item>
+
+
+                                         
                                             <Form.Item
                                                 name="host"
                                                 className="col-lg-6 col-sm-12"
@@ -541,13 +542,13 @@ const MeetingAdd = () => {
                                             </Form.Item>
                                             <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[
 
-                                                { pattern: /^[0-9\s,]*$/, message: 'Only numbers and spaces are allowed' }
+                                                { pattern: /^[0-9\s,+]*$/, message: 'Only numbers and spaces are allowed' }
                                             ]} label="Cell">
                                                 <Input
                                                     size={'large'} placeholder="Cell"
                                                     // type="number"
                                                     onKeyPress={(event) => {
-                                                        if (!/[0-9\s,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                                                        if (!/[0-9\s,+]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
                                                             event.preventDefault();
                                                         }
                                                     }}
