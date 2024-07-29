@@ -160,7 +160,6 @@ const MemberUpdatePDF = (props) => {
 
 
   const newArr = props?.state?.photo_section?.fileUrls?.length && Object.values(props?.state?.photo_section?.fileUrls[0])
-  console.log(newArr, "newarrrrra");
 
   return (
     <>

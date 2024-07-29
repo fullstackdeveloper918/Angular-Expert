@@ -61,39 +61,43 @@ const AdminDashboard: Page = (props: any) => {
   const new_date = start_date - fiveDaysInMilliseconds;
   const DashboardData = [
     {
-      cardBackground: "#000000", // Black background
+      cardBackground: "#D3D3D3", // Light gray background
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#fff' }} />, // White icon color
       title: <Timmer endDate={new_date} />, // White text color for the title
-      textColor: "#FFFFFF", // White text color
+      textColor: "#000000", // White text color
       count: "Update Due",
       link: "/admin/dashboard"
     },
     {
-      cardBackground: "#000000", // Black background
+      cardBackground: "#D3D3D3", // Light gray background
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: <Timmer endDate={start_date} />,
-      textColor: "#FFFFFF",
+      textColor: "#000000",
       count: "Meeting Kick off",
       link: "/admin/dashboard"
 
     },
     {
-      cardBackground: "#000000", // Black background
+      cardBackground: "#D3D3D3", // Light gray background
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       title: `${check?.data?.fall || "0"}`,
-      textColor: "#FFFFFF",
+      textColor: "#000000",
       count: "Fall 2024 (80 days)",
       link: "/admin/dashboard"
 
     },
     {
-      cardBackground: "#000000", // Black background
+      cardBackground: "#D3D3D3", // Light gray background
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      textColor: "#FFFFFF",
+      textColor: "#000000",
       title: `${check?.data?.spring || "0"}`,
       count: "Spring 2025 (408 days)",
       link: "/admin/dashboard"
