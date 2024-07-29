@@ -96,21 +96,25 @@ const MainLayout = ({ children }: any) => {
     const token = cookies["COOKIES_USER_ACCESS_TOKEN"];
     setAccessToken(token);
   }, []);
+  const [loading, setLoading] = useState(false)
   const handleLogout = async () => {
-    signOut(auth)
-    .then(() => {
-    })
-    .catch((error: Error) => {
-    });
-      destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-    dispatch(clearUserData({}));
-    toast.success("Logout Successful", {
-      position: "top-center",
-      autoClose: 300,
-      onClose: () => {
-      },
-    });
-    router.push("/auth/signin");
+    try {
+      setLoading(true)
+      await signOut(auth)
+       
+         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+       dispatch(clearUserData({}));
+       toast.success("Logout Successful", {
+         position: "top-center",
+         autoClose: 300,
+         onClose: () => {
+         },
+       });
+       router.push("/auth/signin");
+      
+    } catch (error) {
+      setLoading(false)
+    }
   };
  
 
@@ -213,6 +217,7 @@ const MainLayout = ({ children }: any) => {
               >
                 <Button
                   size={"large"}
+                  loading={loading}
                   type="primary"
                   htmlType="submit"
                   className="login-form-button "

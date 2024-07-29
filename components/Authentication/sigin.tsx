@@ -130,8 +130,8 @@ const Sigin = () => {
         } else {
           setError("Sign-in failed. Please try again.");
         }
-      } finally {
         setLoading(false);
+      } finally {
       }
     };
 
