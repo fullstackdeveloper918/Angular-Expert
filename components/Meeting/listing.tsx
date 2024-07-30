@@ -56,8 +56,19 @@ const MeetingList = () => {
     const router = useRouter()
     const dispatch = useDispatch();
     const [areas, setAreas] = useState<any>([]);
+    const [filteredData, setFilteredData] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState('')
     const getUserdata=useSelector((state:any)=>state?.user?.userData)
+    useEffect(() => {
+        // Filter data when searchTerm or state1 changes
+        const filtered = areas?.filter((res: any) => {
+            const name = res?.host ? `${res?.host}` : "";
+            const meeting_type = res?.meeting_type || "";
+            const city = res?.location || "";
+            return name.toLowerCase().includes(searchTerm.toLowerCase()) || meeting_type.toLowerCase().includes(searchTerm.toLowerCase())|| city.toLowerCase().includes(searchTerm.toLowerCase());
+        });
+        setFilteredData(filtered);
+    }, [searchTerm, areas]);
     const handleDelete = async (_id: string) => {
         try {
 
@@ -66,20 +77,24 @@ const MeetingList = () => {
 
     }
 
-
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+    };
     const archive = async (id: any) => {
         const item = {
             meeting_id: id,
         }
         try {
             let res = await api.Meeting.delete(item as any)
-            initialise()
+            initialise(id)
+            toast.success(res?.message)
             //   setAreas
         } catch (error) {
 
         }
     }
-    const dataSource = areas?.length && areas
+    const dataSource = filteredData?.length && filteredData
     .sort((a:any, b:any) => a.start_meeting_date - b.start_meeting_date)
     .map((res: any, index: number) => {
         return {
@@ -178,9 +193,10 @@ const MeetingList = () => {
     ];
 
 
-    const initialise = async () => {
+    const initialise = async (query: string) => {
         try {
-            let res = await api.Meeting.listing();
+            const query:any = searchTerm ? `searchTerm=${searchTerm}` : '';
+            let res = await api.Meeting.listing(query);
             setAreas(res);
             
             if (res?.status == 400) {
@@ -203,10 +219,9 @@ const MeetingList = () => {
         }
     };
     useEffect(() => {
-
-        initialise();
-
-    }, []);
+        const query:any = searchTerm ? `searchTerm=${searchTerm}` : '';
+        initialise(query);
+    }, [searchTerm]);
 
 
 
@@ -243,6 +258,7 @@ const MeetingList = () => {
                                 {/* Search  */}
                                 <div className='my-4 d-flex gap-3'>
                                     <Search size='large' placeholder="Search by Meeting Name or year" enterButton value={searchTerm}
+                                        onChange={handleSearch}
                                     />
                                     
                                     {getUserdata?.is_admin==false?"":
@@ -250,7 +266,9 @@ const MeetingList = () => {
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
-                                    <Table dataSource={dataSource} columns={baseColumns} pagination={false} />
+                                    <Table dataSource={dataSource} columns={baseColumns} pagination={{
+                                            position: ['bottomCenter'],
+                                          }} />
                                 </div>
                                 {/* Pagination  */}
                                 {/* <Row justify={'center'} className="mt-5 d-flex paginationCenter">

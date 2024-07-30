@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-const Logout = () => {
+const Logout = (props:any) => {
   
     const router = useRouter()
     const dispatch = useDispatch();
@@ -38,6 +38,10 @@ const Logout = () => {
           setLoading(false)
         }
       };
+      return(
+        <>
+        </>
+      )
 }
 
 export default Logout

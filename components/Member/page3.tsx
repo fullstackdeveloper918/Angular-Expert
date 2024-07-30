@@ -25,6 +25,7 @@ import EmployeeRoles from "@/utils/EmployeeRoles.json";
 import api from "@/utils/api";
 import TextArea from "antd/es/input/TextArea";
 import { toast } from "react-toastify";
+import { destroyCookie } from "nookies";
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -223,7 +224,13 @@ const Page3 = () => {
             }, {})
           });
       } catch (error: any) {
-          alert(error.message);
+        if (error) {
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+  
+            // }
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+        }
       }
   };
   useEffect(() => {
@@ -250,6 +257,7 @@ const Page3 = () => {
                         </div>
 
                         {/* form  */}
+                        
                         <div className='card-form-wrapper'>
                             <div className='mt-3 mb-1'>
                                 <Typography.Title level={5} className='m-0 fw-bold'>GOALS FROM LAST MEETING</Typography.Title>
@@ -270,7 +278,7 @@ const Page3 = () => {
                                                 <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
-                                                    
+                                                    disabled={state?.goal_last_meeting?.length > 0}
                                                 />
                                             </Form.Item>
                                             <Form.Item
@@ -281,11 +289,11 @@ const Page3 = () => {
                                                 <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
-                                                   
+                                                    disabled={state?.goal_last_meeting?.length > 0}
                                                 />
                                             </Form.Item>
                                            
-                                            <Select className="responiveSelect"
+                                            <Select className="responiveSelect" disabled={state?.goal_last_meeting?.length > 0}
                                                 defaultValue={pair.status}
                                                 style={{ position: 'absolute', top: '-14px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
                                                 onChange={(value) => handleStatusChange(pair.id, value)}>
@@ -294,7 +302,8 @@ const Page3 = () => {
                                                 <Option value="struggling">Struggling</Option>
                                                 <Option value="not_started">Not Started</Option>
                                             </Select>
-                                           
+                                          {/* {state?.goal_last_meeting?.length > 0 &&
+                                          <> */}
                                             {inputPairs.length > 1 && (
                                                 <div className="remove_row">
                                                 <p className="m-0">Removed Row</p>
@@ -304,6 +313,7 @@ const Page3 = () => {
                                                     />
                                                     </div>
                                             )}
+                                            {/* </>} */}
                                         </div>
                                     ))}
                                     <Button type="dashed" className="add_goal" onClick={addInputPair} block icon={<PlusOutlined />}>

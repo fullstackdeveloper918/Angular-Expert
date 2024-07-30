@@ -15,13 +15,16 @@ import validation, { capFirst } from "@/utils/validation";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
 import saveAs from "file-saver";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { destroyCookie } from "nookies";
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
 };
 
 const AdminDashboard: Page = (props: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData)
-
+const router =useRouter()
   const [state1, setState1] = useState<any>([])
   const [state2, setState2] = useState<any>([])
   const [state3, setState3] = useState<any>("")
@@ -116,31 +119,31 @@ const AdminDashboard: Page = (props: any) => {
   const DashboardData2 = [
     // getUserdata?.is_admin==false?
     {
-      cardBackground: "#000000", // Black background
+      cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: <Timmer endDate={new_date} />,
-      textColor: "#FFFFFF",
+      textColor: "#000000",
       count: "Update Due",
       link: "/admin/dashboard"
 
     },
     {
-      cardBackground: "#000000", // Black background
+      cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: <Timmer endDate={start_date} />,
-      textColor: "#FFFFFF",
+      textColor: "#000000",
       count: "Meeting Kick off",
       link: "/admin/dashboard"
 
     },
     {
-      cardBackground: "#000000", // Black background
+      cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       title: `${complete?.totalCompleted || "0"}`,
-      textColor: "#FFFFFF",
+      textColor: "#000000",
       count: "No. of Users fillled the Form for coming meeting",
       link: "/admin/dashboard"
 
@@ -148,11 +151,11 @@ const AdminDashboard: Page = (props: any) => {
     {
       // cardBackground: "#FFF5CC",
       // iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-      cardBackground: "#000000", // Black background
+      cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FormOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: `${complete?.totalUncompleted || "0"}`,
-      textColor: "#FFFFFF",
+      textColor: "#000000",
       count: "No. of Users remains to fill the Form for coming meeting",
       link: "/admin/dashboard"
     },
@@ -263,7 +266,9 @@ const AdminDashboard: Page = (props: any) => {
           key: index + 1,
           meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`||"N/A",
           host_name:res?.host||"N/A",
-          host_city:res?.location||"N/A",
+          host_city:<Tooltip title={res?.location}>
+          { res?.location? `${res?.location.slice(0,20)}...`:"N/A"}
+           </Tooltip>,
           start: dayjs(res?.start_meeting_date).format('DD-MM-YYYY')||"N/A",
           end: dayjs(res?.end_meeting_date).format('DD-MM-YYYY')||"N/A",
           action: <Timmer endDate={res?.start_meeting_date} />,
@@ -432,7 +437,7 @@ const AdminDashboard: Page = (props: any) => {
       setUpcoming(res1)
       setComplete(apiRes1.data)
     } catch (error) {
-
+     
     }
   }
 
@@ -445,7 +450,16 @@ const AdminDashboard: Page = (props: any) => {
       setState2(apiRes?.data)
       setAreas(res);
 
-    } catch (error) {
+    } catch (error){
+    //   if (error) {
+    //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+
+    //     // }
+    //     toast.error("Session Expired Login Again")
+    //     router.replace("/auth/signin")
+    // }
+
+
     }
   };
   useEffect(() => {

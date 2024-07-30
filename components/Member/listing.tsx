@@ -18,7 +18,7 @@ import { DownloadOutlined, EyeOutlined, PlusOutlined, ShareAltOutlined } from "@
 import MainLayout from "../../components/Layout/layout";
 import { useRouter } from "next/navigation";
 import api from "@/utils/api";
-import { parseCookies } from "nookies";
+import { destroyCookie, parseCookies } from "nookies";
 import { toast, ToastContainer } from "react-toastify";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
@@ -251,6 +251,11 @@ const MemberList = () => {
             key: 'company',
         },
         {
+            title: 'Home City',
+            dataIndex: 'city',
+            key: 'city',
+        },
+        {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
@@ -265,11 +270,7 @@ const MemberList = () => {
             dataIndex: 'position',
             key: 'position',
         },
-        {
-            title: 'Home City',
-            dataIndex: 'city',
-            key: 'city',
-        },
+       
         ...(hasClubMemberPermission ? [{
             title: 'Action',
             dataIndex: 'action',
@@ -305,6 +306,9 @@ const MemberList = () => {
         } catch (error) {
             
             if (error) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+      
+                // }
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
             }
@@ -383,19 +387,15 @@ const MemberList = () => {
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
                                     {getUserdata?.is_admin == false ?
-                                        <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} pagination={false} /> :
-                                        <Table className="tableBox" dataSource={dataSource} columns={columns} pagination={false} />
+                                        <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} pagination={{
+                                            position: ['bottomCenter'],
+                                          }} /> :
+                                        <Table className="tableBox" dataSource={dataSource} columns={columns}  pagination={{
+                                            position: ['bottomCenter'],
+                                          }}/>
                                     }
                                 </div>
-                                {/* Pagination  */}
                                
-                                    {/* <button onClick={loadMore}>Load More</button> */}
-                                
-                                <Row justify={'center'} className="mt-5">
-                                    <Col span={24}>
-                                        <Pagination total={15} hideOnSinglePage={true} disabled={loading} />
-                                    </Col>
-                                </Row>
                             </Card>
                         </Col>
                     </Row>

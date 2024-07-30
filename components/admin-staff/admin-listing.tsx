@@ -8,6 +8,9 @@ import dynamic from 'next/dynamic';
 import EmployeeRoles from '@/utils/EmployeeRoles.json'
 import MainLayout from '../Layout/layout';
 import api from '@/utils/api';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import { destroyCookie } from 'nookies';
 
 const { Row, Col, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -25,6 +28,7 @@ type Page<P = {}> = NextPage<P> & {
 };
 
 const Admin: Page = () => {
+    const router= useRouter()
     const [loading, setLoading] = React.useState(false)
     const [state, setState] = React.useState<any>([])
     const onSearch = (value: string) => {
@@ -61,7 +65,13 @@ const Admin: Page = () => {
           initialise()
         //   setAreas
         } catch (error) {
-    
+            if (error) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+      
+                // }
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
         }
       }
     const columns = [
@@ -158,13 +168,11 @@ const Admin: Page = () => {
                                 </div>
                                 {/* Table  */}
                                 <div className='tabs-wrapper'>
-                                    <Table dataSource={dataSource} columns={columns} pagination={false} scroll={{ x: '100%' }} className="w-100" />
+                                    <Table dataSource={dataSource} columns={columns} pagination={{
+                                            position: ['bottomCenter'],
+                                          }} scroll={{ x: '100%' }} className="w-100" />
                                 </div>
-                                {/* Pagination  */}
-                                <Row justify={'center'} className="mt-4">
-                                    <Col span={24}>
-                                    </Col>
-                                </Row>
+                                
                             </Card>
                         </Col>
                     </Row>

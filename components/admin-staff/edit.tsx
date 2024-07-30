@@ -10,6 +10,7 @@ import dynamic from 'next/dynamic';
 import MainLayout from '../Layout/layout';
 import api from '@/utils/api';
 import { toast, ToastContainer } from 'react-toastify';
+import { destroyCookie } from 'nookies';
 
 const { Row, Col, Card, Button } = {
   Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -63,6 +64,13 @@ let item={
         router.back()
       
     } catch (error: any) {
+      if (error) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+
+        // }
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
     } finally {
     //   setLoading(false)
     }

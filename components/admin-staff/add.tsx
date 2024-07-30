@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/utils/api';
 import { toast, ToastContainer } from 'react-toastify';
 import MainLayout from '../Layout/layout';
+import { destroyCookie } from 'nookies';
 
 
 
@@ -75,7 +76,10 @@ const AddStaff: Page = () => {
             form.resetFields()
 
         } catch (error: any) {
-        } finally {
+          
+      
+      
+          } finally {
             setLoading(false)
         }
     };

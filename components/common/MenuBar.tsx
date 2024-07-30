@@ -112,7 +112,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
 const router= useRouter()
 const[active,setActive]=useState<any>(null)
   useEffect(()=>{
-     
+    debugger
 let x=window.location.pathname.split('/')[2]
 setActive(x)  
 },[])
@@ -436,23 +436,32 @@ setActive(x)
           !collapsed ? "bg-light" : "p-0 bg-tranaprent"
         }`}
       >
-        <Avatar size={50}>A</Avatar>
+        {/* <Avatar size={50}>A</Avatar> */}
         {/* <Avatar size={50}>{getUserdata?.firstname.slice(0,1)}</Avatar> */}
         {!collapsed && (
           <div>
             {getUserdata?.email === "nahbcraftsmen@gmail.com" ? (
+              <>
               <Typography.Title
                 level={5}
                 className="m-0 fw-bold text-capitalize"
               >
                 {"Super Admin"}
               </Typography.Title>
+                <Typography.Paragraph className="m-0">
+                {getUserdata?.firstname} {getUserdata?.lastname}
+              </Typography.Paragraph>
+              </>
+
             ) : (
-              ""
+              <Typography.Title
+                level={5}
+                className="m-0 fw-bold text-capitalize"
+              >
+              {getUserdata?.firstname} {getUserdata?.lastname}
+              </Typography.Title>
             )}
-            <Typography.Paragraph className="m-0">
-              {getUserdata?.firstname}
-            </Typography.Paragraph>
+          
           </div>
         )}
       </div>

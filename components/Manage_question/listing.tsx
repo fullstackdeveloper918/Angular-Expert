@@ -14,6 +14,9 @@ import Link from "next/link";
 import MainLayout from "../../components/Layout/layout";
 import CustomModal from "@/components/common/Modal";
 import api from "@/utils/api";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { destroyCookie } from "nookies";
 const { Panel } = Collapse;
 const { Search } = Input;
 const Manage_Question = () => {
@@ -21,67 +24,74 @@ const Manage_Question = () => {
   const [state, setState] = React.useState<any>([])
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState(state);
-
+  const router = useRouter()
   useEffect(() => {
-      const filtered = state?.filter((res:any) => {
-          const question = res?.question || "";
-          const questionType = res?.question_type || "";
-          return question.toLowerCase().includes(searchTerm.toLowerCase()) || questionType.toLowerCase().includes(searchTerm.toLowerCase());
-      });
-      setFilteredData(filtered);
+    const filtered = state?.filter((res: any) => {
+      const question = res?.question || "";
+      const questionType = res?.question_type || "";
+      return question.toLowerCase().includes(searchTerm.toLowerCase()) || questionType.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+    setFilteredData(filtered);
   }, [searchTerm, state]);
 
   const initialise = async () => {
-      try {
-          let res=await api.Manage_Question.listing()
-          setState(res.data)
-      } catch (error) {
+    try {
+      let res = await api.Manage_Question.listing()
+      setState(res.data)
+    } catch (error) {
+      if (error) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
-      } finally {
-      }
+        // }
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
+    } finally {
+    }
   }
 
   useEffect(() => {
-      initialise()
+    initialise()
   }, [])
 
- 
-  const dataSource2 = filteredData?.map((res: any, index: number) => {
-      return {
-          key: index+1,
-          question:res?.question||"N/A",
-          // question_type:res?.question_type,
-          action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-          <li>
-             <CustomModal type={"Edit"} {...res} initialise={initialise}/>
-          </li>
-      </ul>
-          
-      }})
-  const columns = [
-      {
-          title: 'Key',
-          dataIndex: 'key',
-          key: 'key',
-      },
-      {
-          title: 'Questions',
-          dataIndex: 'question',
-          key: 'question',
-      },
-      // {
-      //     title: 'Questions Type',
-      //     dataIndex: 'question_type',
-      //     key: 'question_type',
-      // },
 
-      {
-          title: 'Action',
-          dataIndex: 'action',
-          key: 'action',
-      },
+  const dataSource2 = filteredData?.map((res: any, index: number) => {
+    return {
+      key: index + 1,
+      question: res?.question || "N/A",
+      // question_type:res?.question_type,
+      action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+        <li>
+          <CustomModal type={"Edit"} {...res} initialise={initialise} />
+        </li>
+      </ul>
+
+    }
+  })
+  const columns = [
+    {
+      title: 'Key',
+      dataIndex: 'key',
+      key: 'key',
+    },
+    {
+      title: 'Questions',
+      dataIndex: 'question',
+      key: 'question',
+    },
+    // {
+    //     title: 'Questions Type',
+    //     dataIndex: 'question_type',
+    //     key: 'question_type',
+    // },
+
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+    },
   ];
- 
+
 
   return (
     <MainLayout>
@@ -124,7 +134,9 @@ const Manage_Question = () => {
                   <Table
                     dataSource={dataSource2}
                     columns={columns}
-                    pagination={false}
+                    pagination={{
+                      position: ['bottomCenter'],
+                    }}
                   />
                 </div>
               </Card>

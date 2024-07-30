@@ -31,6 +31,7 @@ import TextArea from "antd/es/input/TextArea";
 const { Option } = Select;
 const timezones = moment.tz.names();
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { destroyCookie } from "nookies";
 dayjs.extend(utc);
 
 const formatTimezone = (timezone: any) => {
@@ -128,7 +129,7 @@ const MeetingAdd = () => {
             router.back()
             // onAdd();
         } catch (error) {
-
+           
         }
     }
 

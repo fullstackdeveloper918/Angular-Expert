@@ -9,6 +9,8 @@ import dayjs from "dayjs";
 import api from "@/utils/api";
 import utc from "dayjs/plugin/utc";
 import moment from "moment-timezone";
+import { toast } from "react-toastify";
+import { destroyCookie } from "nookies";
 const { Row, Col, Card, Button } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
     ssr: false,
@@ -111,7 +113,15 @@ const onTimezoneChange = (value: any) => {
       setState(data);
       form.setFieldsValue(data);
     } catch (error: any) {
-      alert(error.message);
+      if (error) {
+        if (error) {
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+
+          // }
+          toast.error("Session Expired Login Again")
+          router.replace("/auth/signin")
+      }
+       }
     }
   };
   const onFinish = async (values: any) => {

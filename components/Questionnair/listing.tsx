@@ -27,14 +27,26 @@ const QuestionnairList = () => {
     const [state, setState] = useState<any>([])
     const [state1, setState1] = useState<any>("")
     const [areas, setAreas] = useState<any>([]);
+    const [filteredData, setFilteredData] = useState<any>([]);
+    const [searchTerm, setSearchTerm] = useState('')
     const router = useRouter()
     const dispatch = useDispatch();
-    const dataSource = state?.map((res: any, index: number) => {
+    useEffect(() => {
+        // Filter data when searchTerm or state1 changes
+        const filtered = areas?.filter((res: any) => {
+            const name = res?.question ? `${res?.question}` : "";
+            const meeting_type = res?.index || "";
+            const city = res?.location || "";
+            return name.toLowerCase().includes(searchTerm.toLowerCase()) || meeting_type.toLowerCase().includes(searchTerm.toLowerCase())|| city.toLowerCase().includes(searchTerm.toLowerCase());
+        });
+        setFilteredData(filtered);
+    }, [searchTerm, areas]);
+    const dataSource = filteredData?.map((res: any, index: number) => {
         return {
             key: index + 1,
             question:
                 <p >
-                    <span>{res?.question}:</span>
+                    <span>{res?.question}</span>
                 </p>,
 
 
@@ -82,17 +94,28 @@ const QuestionnairList = () => {
           const res = await api.User.getById(item as any);
           setState1(res?.data || null);
         } catch (error: any) {
-          alert(error.message);
+            if (error) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+      
+                // }
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
         }
       };
       useEffect(()=>{
         getDataById()
       },[])
-    const initialise = async (questionType: any) => {
+      
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+};
+    const initialise = async (query:any) => {
         try {
-
+            const query:any = searchTerm ? `searchTerm=${searchTerm}` : '';
             const params: any = questionType ? { searchFilter: questionType } : {};
-            let res = await api.Questionnaire.listing(params);
+            let res = await api.Questionnaire.listing(query);
 
             setState(res.data);
         } catch (error) {
@@ -101,8 +124,9 @@ const QuestionnairList = () => {
     };
 
     useEffect(() => {
-        initialise(questionType);
-    }, [questionType]);
+        const query:any = searchTerm ? `searchTerm=${searchTerm}` : '';
+        initialise(query);
+    }, [searchTerm]);
    
     const generatePdf = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
@@ -329,14 +353,16 @@ const QuestionnairList = () => {
                                         <Typography.Title level={3} className='m-0 fw-bold' >Manage Questionnaire</Typography.Title>
                                     </div>
                                     <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
-                                        <Search size="large" placeholder="Search..." enterButton />
+                                        <Search size="large" placeholder="Search..." enterButton value={searchTerm} onChange={handleSearch} />
                                         <Tooltip title="Download Pdf">
                                             <Button type="primary" onClick={downLoadPdf}><DownloadOutlined /> Download Pdf</Button>
                                             {/* <QuestionanirModal/> */}
                                         </Tooltip>
                                     </div>
                                     <div className='accordion-wrapper'>
-                                        <Table dataSource={dataSource} columns={columns} pagination={false} />
+                                        <Table dataSource={dataSource} columns={columns} pagination={{
+                                            position: ['bottomCenter'],
+                                          }} />
                                     </div>
                                 </Card>
                             </Col>

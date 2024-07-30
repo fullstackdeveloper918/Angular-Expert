@@ -7,6 +7,7 @@ import MainLayout from "../../components/Layout/layout";
 import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
+import { destroyCookie } from "nookies";
 const Page4 = () => {
   
   const router = useRouter()
@@ -110,7 +111,13 @@ const Page4 = () => {
           }
         form.setFieldsValue(res?.data)
       } catch (error: any) {
-        alert(error.message);
+        if (error) {
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+  
+            // }
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+        }
       }
     };
     useEffect(() => {

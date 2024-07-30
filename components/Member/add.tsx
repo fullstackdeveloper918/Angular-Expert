@@ -6,6 +6,7 @@ import React, { Fragment, useCallback, useEffect, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import api from "@/utils/api";
 import { toast, ToastContainer } from "react-toastify";
+import { destroyCookie } from "nookies";
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -144,11 +145,7 @@ const Add = () => {
 
     } catch (error: any) {
 
-      if (error) {
-        if (error?.status === 409) {
-          toast.error("The email address is already in use by another account.");
-        }
-      }
+     
 
 
     } finally {

@@ -27,6 +27,7 @@ import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { destroyCookie } from "nookies";
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -96,7 +97,7 @@ const Page1 = () => {
 
          
       } catch (error: any) {
-          
+       
       } finally {
           setLoading(false)
       }
@@ -114,7 +115,13 @@ const Page1 = () => {
           }
         form.setFieldsValue(res?.data)
       } catch (error: any) {
-        alert(error.message);
+        if (error) {
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+  
+            // }
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+        }
       }
     };
     useEffect(() => {

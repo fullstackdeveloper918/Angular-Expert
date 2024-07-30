@@ -123,12 +123,12 @@ const Meeting={
     requests.get("five-day-beforemeeting-countdown"),
   past_meeting:()=>
     requests.get("past-meetings"),
-  listing: () =>
-    requests.get(`meeting-list`),
+  listing: (q?: string) =>
+    requests.get(`meeting-list${q ? `?${q}` : ""}`),
   upcoming_meeting: () =>
     requests.get(`upcoming-meeting`),
-  archive: () =>
-    requests.get("meeting-archive"),
+  archive: (q?: string) =>
+    requests.get(`meeting-archive${q ? `?${q}` : ""}`),
   getById: (info: any) =>
     requests.post(`meeting-detail`,info),
   edit: ( info: any) =>

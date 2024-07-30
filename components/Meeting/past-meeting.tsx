@@ -169,6 +169,13 @@ const PastMeetingList = () => {
                 router.replace("/auth/signin")
             }
         } catch (error) {
+            if (error) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+      
+                // }
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
         }
     };
     useEffect(() => {
@@ -211,7 +218,9 @@ const PastMeetingList = () => {
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
-                                    <Table dataSource={dataSource} columns={baseColumns} pagination={false} />
+                                    <Table dataSource={dataSource} columns={baseColumns} pagination={{
+                                            position: ['bottomCenter'],
+                                          }} />
                                 </div>
                                 {/* Pagination  */}
                                 {/* <Row justify={'center'} className="mt-5 d-flex paginationCenter">
