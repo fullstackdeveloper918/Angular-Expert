@@ -104,16 +104,7 @@ const Sigin = () => {
         dispatch(getuserData(responseData));
   
         toast.success("Login successfully");
-        if (rememberMe) {
-          setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
-            maxAge: 60 * 60 * 24 * 30,
-            path: "/",
-          });
-          setCookie(null, "user_data", responseData, {
-            maxAge: 60 * 60 * 24 * 30,
-            path: "/",
-          });
-        } else {
+       
           setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
             path: "/",
           });
@@ -121,8 +112,8 @@ const Sigin = () => {
             maxAge: 60 * 60 * 24 * 30,
             path: "/",
           });
-        }
-        router?.replace("/admin/dashboard");
+        
+        router?.push("/admin/dashboard");
       } catch (error: any) {
         if (error.code === "auth/session-expired" || error.message.includes("session")) {
           setError("Session expired. Please sign in again.");
