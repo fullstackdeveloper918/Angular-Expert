@@ -112,7 +112,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
 const router= useRouter()
 const[active,setActive]=useState<any>(null)
   useEffect(()=>{
-    debugger
+     
 let x=window.location.pathname.split('/')[2]
 setActive(x)  
 },[])

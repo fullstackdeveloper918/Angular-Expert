@@ -52,7 +52,6 @@ const MeetingAdd = () => {
     const onChangeDate = (date: any) => {
         const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
         setSelectedDate(dateWithTimezone);
-        console.log(dateWithTimezone, "dateWithTimezone");
     };
 
     const onTimezoneChange = (value: any) => {
@@ -60,7 +59,6 @@ const MeetingAdd = () => {
         if (selectedDate) {
             setSelectedDate(selectedDate.clone().tz(value));
         }
-        console.log('Selected Timezone:', value);
     };
     // const [selectedTimezone, setSelectedTimezone] = useState<any>(null);
 
@@ -70,7 +68,6 @@ const MeetingAdd = () => {
     };
 
     const onChangeYear = (date: any) => {
-        console.log(date);
     };
 
 
@@ -88,7 +85,6 @@ const MeetingAdd = () => {
         return selectedHour === 0 || selectedHour === 15 ? [] : Array.from({ length: 60 }, (_, i) => i);
     };
     const onChange1: TimePickerProps['onChange'] = (time, timeString) => {
-        console.log(time, timeString);
     };
 
     const handleChange = (value: any) => {
@@ -203,7 +199,6 @@ const MeetingAdd = () => {
                     let place = locationAutocomplete.getPlace();
                     setSelectedLocation(place.formatted_address || '');
                     if (!place.geometry) {
-                        console.log("chla");
                         return;
                     }
                     const address = place?.address_components;
@@ -241,7 +236,6 @@ const MeetingAdd = () => {
                             items.country_short_name = address[countryIndex]?.short_name;
                         }
                         setShortCountryName(address[countryIndex]?.short_name)
-                        console.log(address, "addressaddressaddress");
 
                         const heheheh = {
                             address: place.formatted_address,
@@ -251,19 +245,13 @@ const MeetingAdd = () => {
                             postal_code: items?.postal_code,
                             country_short_name: items?.country_short_name,
                         } as any;
-                        console.log(heheheh, "hjehhehheheh");
 
                         const errors = form.getFieldsError();
                         if (errors.length) {
                             form?.setFields(
                                 errors.flatMap((res: any) => {
                                     if (!(res.name[0] in heheheh)) return [];
-                                    console.log(
-                                        !!heheheh[res.name[0]],
-                                        heheheh[res.name[0]],
-                                        heheheh,
-                                        res.name
-                                    );
+                                    
                                     return {
                                         name: res.name,
                                         errors: !!heheheh[res.name[0]]
@@ -276,7 +264,6 @@ const MeetingAdd = () => {
                                 })
                             );
                         }
-                        console.log(items);
 
                         form?.setFieldValue("location", place.formatted_address);
                         form?.setFieldValue("country", items?.country);
@@ -338,7 +325,6 @@ const MeetingAdd = () => {
             });
         };
     }
-    console.log(shortCounrtyName, "shortCounrtyNameshortCounrtyNameshortCounrtyName");
 
     const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         const isAlphaOrSpace = /[a-zA-Z ]/.test(e.key);

@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
 });
 
 const MemberUpdatePDF = (props) => {
-  console.log(props, "bencho");
   const photoSection = props?.state?.photo_section || [];
 
   const options = { httpHeaders: { 'crossOrigin': 'anonymous' }, };
@@ -393,7 +392,6 @@ const MemberUpdatePDF = (props) => {
                      
                         {Array.isArray(item?.images) && item.images.map((imageUrl, imgIndex) => (
                           <>
-                            {console.log(imageUrl, "imagurl bc")}
                          
                             <Image
                               style={{ width: "100%",height:"100%", objectFit: "cover", }}

@@ -69,7 +69,6 @@ const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
 
     const handleChange = async (info:any, id:any) => {
       const newFileLists = { ...fileLists, [id]: info.fileList };
-      console.log(newFileLists, "newFileLists");
       setFileLists(newFileLists);
     };
 

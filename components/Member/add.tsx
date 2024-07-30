@@ -74,7 +74,6 @@ const Add = () => {
       } else {
 
         let res = await api.Auth.signUp(items)
-        console.log(res,"werrty");
         toast.success(res?.message)
         router.push(`/admin/member/add/page2?${res?.user_id}`)
         if (res?.status == 400) {
@@ -84,10 +83,8 @@ const Add = () => {
       }
 
     } catch (error: any) {
-      console.log(error, "qwertyui");
 
       if (error) {
-        console.log(error?.status, "uuu");
         if (error?.status === 409) {
           toast.error("The email address is already in use by another account.");
         }
@@ -137,7 +134,6 @@ const Add = () => {
 
         let res = await api.Auth.signUp(items)
         // router.push(`/admin/member/add/page2?${res?.user_id}`)
-        console.log(res,"werrty");
         toast.success("Added Successfully")
         
         if (res?.status == 400) {
@@ -147,10 +143,8 @@ const Add = () => {
       }
 
     } catch (error: any) {
-      console.log(error, "qwertyui");
 
       if (error) {
-        console.log(error?.status, "uuu");
         if (error?.status === 409) {
           toast.error("The email address is already in use by another account.");
         }

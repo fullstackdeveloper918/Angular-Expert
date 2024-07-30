@@ -63,7 +63,6 @@ const MeetingEdit = () => {
   const onChangeDate = (date: any) => {
     const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
     setSelectedDate(dateWithTimezone);
-    console.log(dateWithTimezone, "dateWithTimezone");
 };
 
 const onTimezoneChange = (value: any) => {
@@ -71,7 +70,6 @@ const onTimezoneChange = (value: any) => {
     if (selectedDate) {
         setSelectedDate(selectedDate.clone().tz(value));
     }
-    console.log('Selected Timezone:', value);
 };
   const handleChange = (value: any) => {
     setMeetingType(value);

@@ -124,18 +124,14 @@ const downLoadPdf = async () => {
 const sharePdf = async () => {
 
     const { pdfUrl, timestamp } = await generatePdf();
-    console.log(pdfUrl, 'pdfUrl')
     const response = await fetch(pdfUrl);
     const blob = await response.blob();
-    console.log(blob, 'blob')
 
     // Convert the blob to a file
     const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
-    console.log(file, 'file pdf');
     const formData = new FormData();
     formData.append('file', file);
 
-    console.log(formData, "formData");
 
     const res = await fetch('https://frontend.goaideme.com/save-pdf', {
 
@@ -148,7 +144,6 @@ const sharePdf = async () => {
     },);
 
     const apiRes:any = await res.json()
-    console.log(apiRes,"apiRes");
       navigator.clipboard.writeText(apiRes?.fileUrl)
                 .then(() => {
                     toast.success('Link copied to clipboard');

@@ -26,7 +26,7 @@ import dayjs from "dayjs";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import validation from "@/utils/validation";
+import validation, { capFirst } from "@/utils/validation";
 const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then((module) => module.Button), {
         ssr: false,
@@ -84,11 +84,16 @@ const MeetingList = () => {
     .map((res: any, index: number) => {
         return {
             key: index + 1,
-            meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`,
-            start_date: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
-            start_time: dayjs(res?.start_time).format('hh:mm A'),
-            end_date: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
-            end_time: dayjs(res?.end_time).format('hh:mm A'),
+            meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`||"N/A",
+            host_name:capFirst(res?.host)||"N/A",
+            host_city:
+            <Tooltip title={res?.location}>
+           { res?.location? `${res?.location.slice(0,20)}...`:"N/A"}
+            </Tooltip>,
+            start_date: dayjs(res?.start_meeting_date).format('DD-MM-YYYY')||"N/A",
+            start_time: dayjs(res?.start_time).format('hh:mm A')||"N/A",
+            end_date: dayjs(res?.end_meeting_date).format('DD-MM-YYYY')||"N/A",
+            end_time: dayjs(res?.end_time).format('hh:mm A')||"N/A",
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
                 <li>
                     <Link href={`/admin/meetings/${res?.id}/edit`} >
@@ -123,6 +128,16 @@ const MeetingList = () => {
             dataIndex: 'meeting',
             key: 'meeting',
         },
+        {
+            title: 'Host Name',
+            dataIndex: 'host_name',
+            key: 'host_name',
+          },
+          {
+            title: 'Host City',
+            dataIndex: 'host_city',
+            key: 'host_city',
+          },
         {
             title: 'Meeting Date',
             dataIndex: 'start_date',
@@ -167,7 +182,6 @@ const MeetingList = () => {
         try {
             let res = await api.Meeting.listing();
             setAreas(res);
-            console.log(res,"dfsdf");
             
             if (res?.status == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });

@@ -28,7 +28,7 @@ const Admin: Page = () => {
     const [loading, setLoading] = React.useState(false)
     const [state, setState] = React.useState<any>([])
     const onSearch = (value: string) => {
-        console.log("onserach value", value);
+  
         if (timer) {
             clearTimeout(timer)
         }
@@ -44,7 +44,6 @@ const Admin: Page = () => {
             let res = await api.Admin.listing()
             setState(res)
         } catch (error) {
-            console.log(error)
         } finally {
             setLoading(false)
         }
@@ -59,7 +58,6 @@ const Admin: Page = () => {
         }
         try {
           let res = await api.Admin.delete(item as any)
-          console.log(res, "hhhh");
           initialise()
         //   setAreas
         } catch (error) {

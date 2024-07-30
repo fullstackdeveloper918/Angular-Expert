@@ -42,12 +42,10 @@ const AdminDashboard: Page = (props: any) => {
         </div>
       ))
     : [];
-  console.log(update, "check update");
 
   const updateDue = async () => {
     let res = await api.Meeting.update()
     setUpdate(res)
-    console.log(res, "qwerrsrs");
 
   }
   useEffect(() => {
@@ -163,7 +161,6 @@ const AdminDashboard: Page = (props: any) => {
     const item = { user_id: id };
     try {
       const res = await api.User.getById(item as any);
-      console.log(res, "yyy");
       setState3(res?.data || null);
       return res?.data || null; // Ensure to return the data
     } catch (error: any) {
@@ -173,7 +170,6 @@ const AdminDashboard: Page = (props: any) => {
   };
 
   const generatePdf = async (data?: any) => {
-    console.log(data, 'oooooo');
 
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
     const blob = await pdf(<Pdf state={data} />).toBlob();
@@ -188,12 +184,10 @@ const AdminDashboard: Page = (props: any) => {
 
   const handleDownloadAndFetchData = async (id: any) => {
     const res = await getDataById(id);
-    console.log(res, "uuuuuu");
 
     if (res) {
       await downLoadPdf(res);
     } else {
-      console.error("Failed to fetch data for PDF generation");
     }
   };
   const completed = state1?.filter((res: any) => res?.is_completed === true);
@@ -204,11 +198,11 @@ const AdminDashboard: Page = (props: any) => {
     return {
       key: index + 1,
       name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
-      company: res?.company_name,
-      email: res?.email,
-      phone: res?.phone_number,
-      position: res?.position,
-      city: res?.home_city,
+      company: res?.company_name||"N/A",
+      email: res?.email||"N/A",
+      phone: res?.phone_number||"N/A",
+      position: res?.position||"N/A",
+      city: res?.home_city||"N/A",
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
         {hasClubMemberPermission || getUserdata?.is_admin == false ?
           <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link> :
@@ -222,8 +216,8 @@ const AdminDashboard: Page = (props: any) => {
     return {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(res?.firstname)} ${validation.capitalizeFirstLetter(res?.lastname)}` : "N/A",
-      company: validation.replaceUnderScore(validation.capitalizeFirstLetter(res?.company_name)),
-      email: res?.email,
+      company: validation.replaceUnderScore(validation.capitalizeFirstLetter(res?.company_name))||"N/A",
+      email: res?.email||"N/A",
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
         {hasClubMemberPermission || getUserdata?.is_admin == false ?
           <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link> :
@@ -246,7 +240,7 @@ const AdminDashboard: Page = (props: any) => {
     return {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(validation.capitalizeFirstLetter(res?.firstname))} ${res?.lastname}` : "N/A",
-      company: validation.replaceUnderScore(validation.capitalizeFirstLetter(res?.company_name)),
+      company: validation.replaceUnderScore(validation.capitalizeFirstLetter(res?.company_name))||"N/A",
       // email: res?.email,
       action:<ul className='m-0 list-unstyled d-flex gap-2'>
       <li>
@@ -267,11 +261,11 @@ const AdminDashboard: Page = (props: any) => {
       .map((res: any, index: number) => {
         return {
           key: index + 1,
-          meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`,
-          host_name:res?.host,
-          host_city:res?.location,
-          start: dayjs(res?.start_meeting_date).format('DD-MM-YYYY'),
-          end: dayjs(res?.end_meeting_date).format('DD-MM-YYYY'),
+          meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`||"N/A",
+          host_name:res?.host||"N/A",
+          host_city:res?.location||"N/A",
+          start: dayjs(res?.start_meeting_date).format('DD-MM-YYYY')||"N/A",
+          end: dayjs(res?.end_meeting_date).format('DD-MM-YYYY')||"N/A",
           action: <Timmer endDate={res?.start_meeting_date} />,
           action1: <ul className='m-0 list-unstyled d-flex gap-2'><li>
             <Link href={`/admin/meetings/${res?.id}/view`}><Button type="primary" className='ViewMore primary'><EyeOutlined /></Button></Link></li>

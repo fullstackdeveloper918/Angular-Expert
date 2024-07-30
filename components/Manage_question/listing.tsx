@@ -49,7 +49,7 @@ const Manage_Question = () => {
   const dataSource2 = filteredData?.map((res: any, index: number) => {
       return {
           key: index+1,
-          question:res?.question,
+          question:res?.question||"N/A",
           // question_type:res?.question_type,
           action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
           <li>
@@ -93,7 +93,7 @@ const Manage_Question = () => {
                 <div className="mb-4">
                   <Breadcrumb separator=">">
                     <Breadcrumb.Item>
-                      <Link className="text-decoration-none" href="/">
+                      <Link className="text-decoration-none" href="/admin/dashboard">
                         Home
                       </Link>
                     </Breadcrumb.Item>

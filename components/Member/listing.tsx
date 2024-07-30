@@ -75,7 +75,7 @@ const MemberList = () => {
         setSearchTerm(value);
     };
     const getDataById = async (id: any) => {
-        // debugger
+        //  
         const item = {
             user_id: id
         }
@@ -88,8 +88,7 @@ const MemberList = () => {
         }
     };
     const generatePdf = async (data?: any) => {
-        // debugger
-        console.log(data, "pppp");
+        //  
 
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
         const blob = await pdf(<Pdf state={data} />).toBlob();
@@ -99,7 +98,6 @@ const MemberList = () => {
 
     // Function to handle PDF download
     const downLoadPdf = async (res: any) => {
-        console.log(res, "eeeee");
 
         const { blob, timestamp } = await generatePdf(res);
         saveAs(blob, `${capFirst(res?.company_name)}.pdf`);
@@ -107,8 +105,7 @@ const MemberList = () => {
 
     // Function to handle PDF sharing
     const sharePdf = async (item: any) => {
-        // debugger
-        // console.log(item,"item");
+        //  
 
         const { pdfUrl, timestamp } = await generatePdf(item);
         const response = await fetch(pdfUrl);
@@ -146,7 +143,7 @@ const MemberList = () => {
         await downLoadPdf(res);
     };
     const handleFetchAndFetchData = async (id: any) => {
-        debugger
+         
         let item = await getDataById(id);
         await sharePdf(item);
     };
@@ -155,8 +152,8 @@ const MemberList = () => {
         return {
             key: index + 1,
             name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
-            company: validation?.replaceUnderScore(res?.company_name),
-            email: res?.email,
+            company: validation?.replaceUnderScore(res?.company_name)||"N/A",
+            email: res?.email||"N/A",
             status: res?.is_completed == true ? "Completed" : "Pending",
             action: <ul className='m-0 list-unstyled d-flex gap-2'>
                 <li>
@@ -213,11 +210,11 @@ const MemberList = () => {
         return {
             key: index + 1,
             name: res?.firstname ? `${validation?.capitalizeFirstLetter(res?.firstname)} ${validation?.capitalizeFirstLetter(res?.lastname)}` : "N/A",
-            company: validation?.replaceUnderScore(validation?.capitalizeFirstLetter(res?.company_name)),
-            email: res?.email,
-            phone: res?.phone_number,
-            position: validation?.capitalizeFirstLetter(res?.position),
-            city: validation?.capitalizeFirstLetter(res?.home_city),
+            company: validation?.replaceUnderScore(validation?.capitalizeFirstLetter(res?.company_name))||"N/A",
+            email: res?.email||"N/A",
+            phone: res?.phone_number||"N/A",
+            position: validation?.capitalizeFirstLetter(res?.position)||"N/A",
+            city: validation?.capitalizeFirstLetter(res?.home_city)||"N/A",
             action: <ul className='m-0 list-unstyled d-flex gap-2'>
                 <li>
                     <Tooltip title="Download Pdf">
@@ -298,23 +295,21 @@ const MemberList = () => {
             //     query += query ? `&lastVisibleId=${lastVisibleId}` : `lastVisibleId=${lastVisibleId}`;
             // }
             let res = await api.User.listing(query);
-            if (Array.isArray(res?.data)) {
-                setData((prevData: any) => [...prevData, ...res.data]);
-            } else {
-                console.error("Unexpected response format", res?.data);
-            }
-            setLastVisibleId(res.data.lastVisibleId);
+            
+           
+          
             setState1(res?.data || []);
             let apiRes = await api.User.user_listing()
             setState2(apiRes?.data)
-            if (res?.status == 400) {
+            
+        } catch (error) {
+            
+            if (error) {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
             }
-        } catch (error) {
         }
     };
-console.log(state1,"state1");
 
     useEffect(() => {
         const query = searchTerm ? `searchTerm=${searchTerm}` : '';

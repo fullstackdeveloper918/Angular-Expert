@@ -52,7 +52,6 @@ const Page1 = () => {
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 1 ? entries[1][0] : '';
-  console.log(value,"dsdjfgljsdf");
   
   const onFinish = async (values: any) => {
       let items = {
