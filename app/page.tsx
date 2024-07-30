@@ -6,8 +6,8 @@ export default function Home() {
   return (
     <>
       {/* <Mainpage/> */}
-      {/* <SignIn /> */}
-      <Pdf/>
+      <SignIn />
+      {/* <Pdf/> */}
       {/* <MemberUpdatePDF /> */}
     </>
   );

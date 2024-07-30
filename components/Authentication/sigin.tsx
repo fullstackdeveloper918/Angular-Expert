@@ -115,12 +115,6 @@ const Sigin = () => {
         
         router?.push("/admin/dashboard");
       } catch (error: any) {
-        if (error.code === "auth/session-expired" || error.message.includes("session")) {
-          setError("Session expired. Please sign in again.");
-          router.push("/auth/signin");
-        } else {
-          setError("Sign-in failed. Please try again.");
-        }
         setLoading(false);
       } finally {
       }

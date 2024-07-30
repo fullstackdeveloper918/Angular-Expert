@@ -305,13 +305,13 @@ const MemberList = () => {
             
         } catch (error) {
             
-            if (error) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            // if (error) {
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
       
-                // }
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
-            }
+            //     // }
+            //     toast.error("Session Expired Login Again")
+            //     router.replace("/auth/signin")
+            // }
         }
     };
 
