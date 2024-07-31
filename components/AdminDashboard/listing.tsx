@@ -464,7 +464,8 @@ const AdminDashboard: Page = (props: any) => {
     <MainLayout>
 
       <Fragment>
-        <section>
+        <h1 className="">check main layout</h1>
+        {/* <section>
           <Row gutter={[20, 20]} className="mb-4 ">
 
             {getUserdata?.is_admin == true ?
@@ -474,9 +475,7 @@ const AdminDashboard: Page = (props: any) => {
                     <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
                       <Link className='text-decoration-none' href={data.link}>
                         <Card className='dashboard-widget-card text-center h-100 border-0' style={{ background: data.cardBackground }} >
-                          {/* <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
-                            {data.icon}
-                          </div> */}
+                          
                           <div className='dashboard-widget-card-content mt-3 mb-3'>
                             <Typography.Title level={3} className='m-0 mb-2 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
                             <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
@@ -492,9 +491,7 @@ const AdminDashboard: Page = (props: any) => {
                     <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={6} className="gutter-row" key={index}>
                       <Link className='text-decoration-none' href={data.link}>
                         <Card className='dashboard-widget-card text-center h-80 border-0' style={{ background: data.cardBackground }} >
-                          {/* <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
-                            {data.icon}
-                          </div> */}
+                       
                           <div className='dashboard-widget-card-content'>
                             <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
                             <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
@@ -511,57 +508,31 @@ const AdminDashboard: Page = (props: any) => {
             {getUserdata?.is_admin == false ?
               <Col sm={24} md={24} lg={24} xxl={12}>
                 <Card className='common-card'>
-
-                  {/* title  */}
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                     <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates</Typography.Title>
 
-                    {/* <Button className='text-center blackViewBtn'> View All</Button> */}
-
-                    {/* <Table dataSource={dataSource} columns={columns} />; */}
-
                   </div>
-                  {/* Search  */}
-
-                  {/* Tabs  */}
                   <div className='tabs-wrapper'>
-
                     <Table className="tableBox" dataSource={dataSource1} columns={columns1} pagination={{
                                             position: ['bottomCenter'],
                                             pageSize: 5,
                                           }}/>
                   </div>
-
-                  {/* Pagination  */}
-
                 </Card>
               </Col> : ""}
             {getUserdata?.is_admin == false ?
               <Col sm={24} md={24} lg={24} xxl={12}>
                 <Card className='common-card'>
 
-                  {/* title  */}
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                     <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates</Typography.Title>
-
-                    {/* <Button className='text-center blackViewBtn'> View All</Button> */}
-
-                    {/* <Table dataSource={dataSource} columns={columns} />; */}
-
-
                   </div>
-                  {/* Search  */}
-
-                  {/* Tabs  */}
                   <div className='tabs-wrapper'>
-
                     <Table dataSource={dataSource2} columns={columns}  pagination={{
                                             position: ['bottomCenter'],
                                             pageSize: 5,
                                           }}/>
                   </div>
-
-                  {/* Pagination  */}
 
                 </Card>
               </Col> : ""}
@@ -602,7 +573,7 @@ const AdminDashboard: Page = (props: any) => {
               </Col>
               : ""}
           </Row>
-        </section>
+        </section> */}
       </Fragment>
     </MainLayout>
   );

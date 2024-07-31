@@ -12,6 +12,7 @@ import {
     Tag,
     Select,
     Popconfirm,
+    Spin,
 } from "antd";
 import { clearUserData } from "../../lib/features/userSlice";
 import { parseCookies, destroyCookie } from "nookies";
@@ -271,7 +272,9 @@ const MeetingList = () => {
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
                                     {loading ? (
-                                        <p>Loading...</p>
+                                       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                                       <Spin />
+                                   </div>
                                     ) : (
                                         <Table dataSource={dataSource} columns={baseColumns} pagination={{
                                             position: ['bottomCenter'],
