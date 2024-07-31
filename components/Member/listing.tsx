@@ -12,6 +12,7 @@ import {
     Col,
     Card,
     Pagination,
+    Spin,
 } from "antd";
 import Link from "next/link";
 import { DownloadOutlined, EyeOutlined, PlusOutlined, ShareAltOutlined } from "@ant-design/icons";
@@ -33,6 +34,7 @@ type Page<P = {}> = NextPage<P> & {
 
 const MemberList = () => {
     const router = useRouter()
+    const [loading1, setLoading1] = useState(true);
     //   const { userInfo, downloadCSV, Toast, uploadCSV } = React.useContext(GlobalContext)
     const getUserdata = useSelector((state: any) => state?.user?.userData)
     const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
@@ -290,15 +292,16 @@ const MemberList = () => {
 
 
     const getData = async (query: string, lastVisibleId?: string) => {
+        setLoading1(true)
         try {
             let query = searchTerm ? `searchTerm=${searchTerm}` : '';
             let res = await api.User.listing(query);
             setState1(res?.data || []);
             let apiRes = await api.User.user_listing()
             setState2(apiRes?.data)
-            
+            setLoading1(false)
         } catch (error) {
-            
+            setLoading1(false)
             // if (error) {
             //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
       
@@ -380,14 +383,21 @@ const MemberList = () => {
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
+                                    {loading1 ? (
+                                       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '20vh' }}>
+                                       <Spin size="large"/>
+                                   </div>
+                                    ) : (
+                                        <>
                                     {getUserdata?.is_admin == false ?
                                         <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} pagination={{
                                             position: ['bottomCenter'],
-                                          }} /> :
+                                        }} /> :
                                         <Table className="tableBox" dataSource={dataSource} columns={columns}  pagination={{
                                             position: ['bottomCenter'],
-                                          }}/>
+                                        }}/>
                                     }
+                                    </>)}
                                 </div>
                                
                             </Card>

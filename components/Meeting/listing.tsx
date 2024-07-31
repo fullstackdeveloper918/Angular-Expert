@@ -272,7 +272,7 @@ const MeetingList = () => {
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
                                     {loading ? (
-                                       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                                       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '20vh' }}>
                                        <Spin size="large"/>
                                    </div>
                                     ) : (

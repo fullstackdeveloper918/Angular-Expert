@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
 
-    const accessToken = request.cookies.get('COOKIES_USER_ACCESS_TOKEN');
+    const accessToken = "request.cookies.get('COOKIES_USER_ACCESS_TOKEN')";
     if (!accessToken) {
         url.pathname = '/auth/signin';
         return NextResponse.redirect(url);
