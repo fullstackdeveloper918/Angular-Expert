@@ -5,6 +5,11 @@ import "../styles/globals.scss";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "../lib/store";
+// import { Router } from 'next/navigation';
+import NProgress from 'nprogress';
+import NextTopLoader from 'nextjs-toploader';
+import 'nprogress/nprogress.css'; 
+import { useRouter } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -33,6 +38,7 @@ export default function RootLayout({
         <body className={inter.className}>
           {/* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossOrigin="anonymous"></script> */}
 
+            <NextTopLoader />
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               {children}

@@ -27,7 +27,7 @@ import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import validation, { capFirst } from "@/utils/validation";
-const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
+const { Row, Col, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then((module) => module.Button), {
         ssr: false,
     }),
@@ -47,9 +47,7 @@ const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
     Tooltip: dynamic(() => import("antd").then((module) => module.Tooltip), {
         ssr: false,
     }),
-    Avatar: dynamic(() => import("antd").then((module) => module.Avatar), {
-        ssr: false,
-    }),
+   
 };
 const { Search } = Input;
 const MeetingList = () => {
@@ -249,11 +247,11 @@ const MeetingList = () => {
                                 {/* title  */}
                                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>Meetings</Typography.Title>
-                                    {getUserdata?.is_admin==false?"":
+                                    {/* {getUserdata?.is_admin==false?"":
                                     <div className='d-flex gap-2'>
                                         <Button type="primary" style={{ width: 190 }} htmlType="button" size='large' icon={<PlusOutlined />} onClick={add}>Add Meeting</Button>
                                     </div>
-                                    }
+                                    } */}
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 d-flex gap-3'>
@@ -262,7 +260,10 @@ const MeetingList = () => {
                                     />
                                     
                                     {getUserdata?.is_admin==false?"":
-                                    <FilterSelect />}
+                                    <div className='d-flex gap-2'>
+                                        <Button type="primary" style={{ width: 190 }} htmlType="button" size='large' icon={<PlusOutlined />} onClick={add}>Add Meeting</Button>
+                                    </div>
+                                    }
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>

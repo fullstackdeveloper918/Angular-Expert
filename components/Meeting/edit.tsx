@@ -65,14 +65,14 @@ const MeetingEdit = () => {
   const onChangeDate = (date: any) => {
     const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
     setSelectedDate(dateWithTimezone);
-};
+  };
 
-const onTimezoneChange = (value: any) => {
+  const onTimezoneChange = (value: any) => {
     setSelectedTimezone(value);
     if (selectedDate) {
-        setSelectedDate(selectedDate.clone().tz(value));
+      setSelectedDate(selectedDate.clone().tz(value));
     }
-};
+  };
   const handleChange = (value: any) => {
     setMeetingType(value);
   };
@@ -120,8 +120,8 @@ const onTimezoneChange = (value: any) => {
           // }
           toast.error("Session Expired Login Again")
           router.replace("/auth/signin")
+        }
       }
-       }
     }
   };
   const onFinish = async (values: any) => {
@@ -184,8 +184,12 @@ const onTimezoneChange = (value: any) => {
     return current && current.year() < dayjs().year();
   };
 
+  const [shortCounrtyName, setShortCountryName] = useState("")
+
   const locationSearchRef = useRef(null);
   const hotelSearchRef = useRef(null);
+  const airportRef = useRef(null);
+
   useEffect(() => {
     const loadGoogleMapScript = () => {
       if (!window.google) {
@@ -205,12 +209,90 @@ const onTimezoneChange = (value: any) => {
         locationAutocomplete.addListener('place_changed', () => {
           let place = locationAutocomplete.getPlace();
           setSelectedLocation(place.formatted_address || '');
+          if (!place.geometry) {
+            return;
+          }
+          const address = place?.address_components;
+          const coordinate = place?.geometry?.location;
+
+
+          let items: any = {};
+          if (Array.isArray(address) && address?.length > 0) {
+            let zipIndex = address.findIndex((res: any) =>
+              res.types.includes("postal_code")
+            );
+            let administrativeAreaIndex = address?.findIndex((res: any) =>
+              res?.types.includes("administrative_area_level_1", "political")
+            );
+            let localityIndex = address?.findIndex((res: any) =>
+              res?.types?.includes("locality", "political")
+            );
+            let countryIndex = address?.findIndex((res: any) =>
+              res?.types?.includes("country", "political")
+            );
+
+            if (zipIndex > -1) {
+              items.postal_code = address[zipIndex]?.long_name;
+            }
+            if (administrativeAreaIndex > -1) {
+              items.state = address[administrativeAreaIndex]?.long_name;
+            }
+            if (localityIndex > -1) {
+              items.city = address[localityIndex]?.long_name;
+            }
+            if (countryIndex > -1) {
+              items.country = address[countryIndex]?.long_name;
+            }
+            if (countryIndex > -1) {
+              items.country_short_name = address[countryIndex]?.short_name;
+            }
+            setShortCountryName(address[countryIndex]?.short_name)
+
+            const heheheh = {
+              address: place.formatted_address,
+              country: items?.country,
+              state: items?.state,
+              city: items?.city,
+              postal_code: items?.postal_code,
+              country_short_name: items?.country_short_name,
+            } as any;
+
+            const errors = form.getFieldsError();
+            if (errors.length) {
+              form?.setFields(
+                errors.flatMap((res: any) => {
+                  if (!(res.name[0] in heheheh)) return [];
+
+                  return {
+                    name: res.name,
+                    errors: !!heheheh[res.name[0]]
+                      ? []
+                      : [
+                        `Please enter ` +
+                        res.name[0].toString().replace("_", " "),
+                      ],
+                  };
+                })
+              );
+            }
+
+            form?.setFieldValue("location", place.formatted_address);
+            form?.setFieldValue("country", items?.country);
+            form?.setFieldValue("city", items?.city);
+          }
         });
+
+
+
       }
 
       if (hotelSearchRef.current) {
+        var options = {
+          types: ['establishment'],
+          componentRestrictions: { country: "IN" }
+        };
         let hotelAutocomplete = new window.google.maps.places.Autocomplete(
-          hotelSearchRef.current
+          hotelSearchRef.current, options
         );
         hotelAutocomplete.addListener('place_changed', () => {
           let place = hotelAutocomplete.getPlace();
@@ -219,19 +301,50 @@ const onTimezoneChange = (value: any) => {
       }
     };
     loadGoogleMapScript();
-    // Cleanup function if needed
     return () => {
-      // Cleanup code if any
     };
   }, []);
-  const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const isAlphaOrSpace = /[a-zA-Z ]/.test(e.key);
-    const isSpecialKey = ['Backspace', 'Tab', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.key);
+  const initPlaceHotel = async () => {
+    if (hotelSearchRef.current) {
+      var options = {
+        types: ['establishment'],
+        componentRestrictions: { country: shortCounrtyName }
+      };
+      let hotelAutocomplete = new window.google.maps.places.Autocomplete(
+        hotelSearchRef.current, options
+      );
+      hotelAutocomplete.addListener('place_changed', () => {
+        let place = hotelAutocomplete.getPlace();
+        setSelectedHotel(place.formatted_address || '');
+        form.setFieldValue("hotel", place?.formatted_address)
+      });
+    };
+  }
 
-    if (!isAlphaOrSpace && !isSpecialKey) {
-      e.preventDefault();
-    }
-  };
+  const initPlaceAirport = async () => {
+    if (airportRef.current) {
+      var options = {
+        types: ['establishment'],
+        componentRestrictions: { country: shortCounrtyName }
+      };
+      let hotelAutocomplete = new window.google.maps.places.Autocomplete(
+        airportRef.current, options
+      );
+      hotelAutocomplete.addListener('place_changed', () => {
+        let place = hotelAutocomplete.getPlace();
+        setSelectedHotel(place.formatted_address || '');
+        form.setFieldValue("airport", place?.formatted_address)
+      });
+    };
+  }
+
+
+  useEffect(() => {
+    initPlaceHotel()
+  }, [shortCounrtyName])
+  useEffect(() => {
+    initPlaceAirport()
+  }, [shortCounrtyName])
   return (
     <MainLayout>
       <Fragment>
@@ -284,33 +397,33 @@ const onTimezoneChange = (value: any) => {
                       {/* Last Name  */}
 
                       <Form.Item
-                                                name="meeting_time_zone"
-                                                className="col-lg-6 col-sm-12"
-                                                rules={[{ required: true, message: 'Please Select Timezone' }]}
-                                                label="Timezone"
-                                            >
-                                                {/* <div className="Div_contact">
+                        name="meeting_time_zone"
+                        className="col-lg-6 col-sm-12"
+                        rules={[{ required: true, message: 'Please Select Timezone' }]}
+                        label="Timezone"
+                      >
+                        {/* <div className="Div_contact">
                                                    
                                                     <CalendlyWidget />
                                                 </div> */}
-                                                <Select
-                                                    showSearch
-                                                    placeholder="Select a timezone"
-                                                    optionFilterProp="children"
-                                                    onChange={onTimezoneChange}
-                                                    filterOption={(input: any, option: any) =>
-                                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                    }
-                                                    style={{ width: '100%' }}
-                                                    value={selectedTimezone}
-                                                >
-                                                    {timezones.map((timezone:any) => (
-                                                        <Option key={timezone} value={timezone}>
-                                                            {formatTimezone(timezone)}
-                                                        </Option>
-                                                    ))}
-                                                </Select>
-                                            </Form.Item>
+                        <Select
+                          showSearch
+                          placeholder="Select a timezone"
+                          optionFilterProp="children"
+                          onChange={onTimezoneChange}
+                          filterOption={(input: any, option: any) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                          style={{ width: '100%' }}
+                          value={selectedTimezone}
+                        >
+                          {timezones.map((timezone: any) => (
+                            <Option key={timezone} value={timezone}>
+                              {formatTimezone(timezone)}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
                       {/* Email  */}
                       <Form.Item name="start_meeting_date" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Start date' }]} label="Meeting Start date">
                         <DatePicker
@@ -353,6 +466,7 @@ const onTimezoneChange = (value: any) => {
                       </Form.Item> */}
                       <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
                         <input
+                          value={form.getFieldValue("location")}
                           className="custom-input"
                           style={{ width: '100%' }}
                           ref={locationSearchRef}
@@ -361,25 +475,19 @@ const onTimezoneChange = (value: any) => {
                         {/* <Input size={'large'} placeholder="Location"   /> */}
                       </Form.Item>
                       <Form.Item className='col-lg-6 col-sm-12' name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
-                        <Input size={'large'} placeholder="Hotel"
-                          onKeyPress={(e: any) => {
-                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                              e.preventDefault();
-                            } else {
-                              e.target.value = String(e.target.value).trim()
-                            }
-                          }}
+                        <input
+                          className="custom-input"
+                          style={{ width: '100%' }}
+                          ref={hotelSearchRef}
+                          placeholder="Enter your address"
                         />
                       </Form.Item>
                       <Form.Item name="airport" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Nearest Airport' }]} label="Nearest Airport">
-                        <Input size={'large'} placeholder="Nearest Airport"
-                          onKeyPress={(e: any) => {
-                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                              e.preventDefault();
-                            } else {
-                              e.target.value = String(e.target.value).trim()
-                            }
-                          }}
+                        <input
+                          className="custom-input"
+                          style={{ width: '100%' }}
+                          ref={airportRef}
+                          placeholder="Enter your address"
                         />
                       </Form.Item>
                       <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
@@ -395,12 +503,12 @@ const onTimezoneChange = (value: any) => {
                       </Form.Item>
                       <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
                         <Input size={'large'} placeholder="Host Company"
-                         
+
                         />
                       </Form.Item>
-                
-                     
-                     
+
+
+
                       <Form.Item
                         name="host"
                         className="col-lg-6 col-sm-12"
@@ -415,18 +523,18 @@ const onTimezoneChange = (value: any) => {
                       </Form.Item>
                       <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[
 
-{ pattern: /^[0-9\s,+]*$/, message: 'Only numbers and spaces are allowed' }
-]} label="Cell">
-<Input
-  size={'large'} placeholder="Cell"
-  onKeyPress={(event) => {
-    if (!/[0-9\s,+]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
-      event.preventDefault();
-    }
-  }}
-/>
+                        { pattern: /^[0-9\s,+]*$/, message: 'Only numbers and spaces are allowed' }
+                      ]} label="Cell">
+                        <Input
+                          size={'large'} placeholder="Cell"
+                          onKeyPress={(event) => {
+                            if (!/[0-9\s,+]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                              event.preventDefault();
+                            }
+                          }}
+                        />
 
-</Form.Item>
+                      </Form.Item>
                     </div>
                     {/* Button  */}
                     <div className="text-center mt-3">

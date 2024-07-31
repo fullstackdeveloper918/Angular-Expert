@@ -60,7 +60,7 @@ const TheHeader = (props: any) => {
                     <li className="divider"></li>
                     <li className="px-2 py-2">
                       <button className="dropdown-item" onClick={logoutUser}>
-                        Logout
+                        {/* Logout */}
                       </button>
                     </li>
                   </ul>
