@@ -113,7 +113,7 @@ const Sigin = () => {
             path: "/",
           });
         
-        router?.push("/admin/dashboard");
+        router?.push("/admin/login");
       } catch (error: any) {
         setLoading(false);
       } finally {
