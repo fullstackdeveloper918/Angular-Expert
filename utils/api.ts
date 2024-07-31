@@ -86,6 +86,8 @@ const User = {
     requests.post('update-user', info),
   listing: (q?: string) =>
     requests.get(`list${q ? `?${q}` : ""}`),
+  listing1: () =>
+    requests.get(`list`),
   user_listing: (q?: string) =>
     requests.get(`single-user-form-status`),
   check_fall_spring: () =>

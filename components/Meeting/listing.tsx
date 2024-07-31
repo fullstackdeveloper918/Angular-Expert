@@ -47,7 +47,7 @@ const { Row, Col, Card, Button, Pagination, Tooltip } = {
     Tooltip: dynamic(() => import("antd").then((module) => module.Tooltip), {
         ssr: false,
     }),
-   
+
 };
 const { Search } = Input;
 const MeetingList = () => {
@@ -56,14 +56,15 @@ const MeetingList = () => {
     const [areas, setAreas] = useState<any>([]);
     const [filteredData, setFilteredData] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState('')
-    const getUserdata=useSelector((state:any)=>state?.user?.userData)
+    const [loading, setLoading] = useState(true);
+    const getUserdata = useSelector((state: any) => state?.user?.userData)
     useEffect(() => {
         // Filter data when searchTerm or state1 changes
         const filtered = areas?.filter((res: any) => {
             const name = res?.host ? `${res?.host}` : "";
             const meeting_type = res?.meeting_type || "";
             const city = res?.location || "";
-            return name.toLowerCase().includes(searchTerm.toLowerCase()) || meeting_type.toLowerCase().includes(searchTerm.toLowerCase())|| city.toLowerCase().includes(searchTerm.toLowerCase());
+            return name.toLowerCase().includes(searchTerm.toLowerCase()) || meeting_type.toLowerCase().includes(searchTerm.toLowerCase()) || city.toLowerCase().includes(searchTerm.toLowerCase());
         });
         setFilteredData(filtered);
     }, [searchTerm, areas]);
@@ -93,43 +94,43 @@ const MeetingList = () => {
         }
     }
     const dataSource = filteredData?.length && filteredData
-    .sort((a:any, b:any) => a.start_meeting_date - b.start_meeting_date)
-    .map((res: any, index: number) => {
-        return {
-            key: index + 1,
-            meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`||"N/A",
-            host_name:capFirst(res?.host)||"N/A",
-            host_city:
-            <Tooltip title={res?.location}>
-           { res?.location? `${res?.location.slice(0,20)}...`:"N/A"}
-            </Tooltip>,
-            start_date: dayjs(res?.start_meeting_date).format('DD-MM-YYYY')||"N/A",
-            start_time: dayjs(res?.start_time).format('hh:mm A')||"N/A",
-            end_date: dayjs(res?.end_meeting_date).format('DD-MM-YYYY')||"N/A",
-            end_time: dayjs(res?.end_time).format('hh:mm A')||"N/A",
-            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-                <li>
-                    <Link href={`/admin/meetings/${res?.id}/edit`} >
-                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                    </Link>
-                </li>
-                {getUserdata?.is_admin==false?"":
-                <li>
-                    <Popconfirm
-                        title="Delete"
-                        description="Are you sure you want to delete ?"
-                        onConfirm={(event: any) => { archive(res?.id) }}
-                    // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                    >
-                        <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                    </Popconfirm>
-                </li>}
-                <li>
-              <Link href={`/admin/meetings/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
-          </li>
-            </ul>
-        }
-    })
+        .sort((a: any, b: any) => a.start_meeting_date - b.start_meeting_date)
+        .map((res: any, index: number) => {
+            return {
+                key: index + 1,
+                meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}` || "N/A",
+                host_name: capFirst(res?.host) || "N/A",
+                host_city:
+                    <Tooltip title={res?.location}>
+                        {res?.location ? `${res?.location.slice(0, 20)}...` : "N/A"}
+                    </Tooltip>,
+                start_date: dayjs(res?.start_meeting_date).format('DD-MM-YYYY') || "N/A",
+                start_time: dayjs(res?.start_time).format('hh:mm A') || "N/A",
+                end_date: dayjs(res?.end_meeting_date).format('DD-MM-YYYY') || "N/A",
+                end_time: dayjs(res?.end_time).format('hh:mm A') || "N/A",
+                action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                    <li>
+                        <Link href={`/admin/meetings/${res?.id}/edit`} >
+                            <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                        </Link>
+                    </li>
+                    {getUserdata?.is_admin == false ? "" :
+                        <li>
+                            <Popconfirm
+                                title="Delete"
+                                description="Are you sure you want to delete ?"
+                                onConfirm={(event: any) => { archive(res?.id) }}
+                            // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                            >
+                                <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                            </Popconfirm>
+                        </li>}
+                    <li>
+                        <Link href={`/admin/meetings/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
+                    </li>
+                </ul>
+            }
+        })
     const baseColumns = [
         {
             title: 'Order No.',
@@ -145,12 +146,12 @@ const MeetingList = () => {
             title: 'Host Name',
             dataIndex: 'host_name',
             key: 'host_name',
-          },
-          {
+        },
+        {
             title: 'Host City',
             dataIndex: 'host_city',
             key: 'host_city',
-          },
+        },
         {
             title: 'Meeting Date',
             dataIndex: 'start_date',
@@ -177,7 +178,7 @@ const MeetingList = () => {
             key: 'action',
         }
     ];
-    
+
     // Conditionally add the 'Action' column
     const columns = [
         ...baseColumns,
@@ -192,11 +193,12 @@ const MeetingList = () => {
 
 
     const initialise = async (query: string) => {
+        setLoading(true);
         try {
-            const query:any = searchTerm ? `searchTerm=${searchTerm}` : '';
+            const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
             let res = await api.Meeting.listing(query);
             setAreas(res);
-            
+            setLoading(false);
             if (res?.status == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
@@ -206,6 +208,7 @@ const MeetingList = () => {
                 router.replace("/auth/signin")
             }
         } catch (error) {
+            setLoading(false);
             // if (error) {
             //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
@@ -217,7 +220,7 @@ const MeetingList = () => {
         }
     };
     useEffect(() => {
-        const query:any = searchTerm ? `searchTerm=${searchTerm}` : '';
+        const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
         initialise(query);
     }, [searchTerm]);
 
@@ -258,18 +261,21 @@ const MeetingList = () => {
                                     <Search size='large' placeholder="Search by Meeting Name or year" enterButton value={searchTerm}
                                         onChange={handleSearch}
                                     />
-                                    
-                                    {getUserdata?.is_admin==false?"":
-                                    <div className='d-flex gap-2'>
-                                        <Button type="primary" style={{ width: 190 }} htmlType="button" size='large' icon={<PlusOutlined />} onClick={add}>Add Meeting</Button>
-                                    </div>
+
+                                    {getUserdata?.is_admin == false ? "" :
+                                        <div className='d-flex gap-2'>
+                                            <Button type="primary" style={{ width: 190 }} htmlType="button" size='large' icon={<PlusOutlined />} onClick={add}>Add Meeting</Button>
+                                        </div>
                                     }
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
-                                    <Table dataSource={dataSource} columns={baseColumns} pagination={{
+                                    {loading ? (
+                                        <p>Loading...</p>
+                                    ) : (
+                                        <Table dataSource={dataSource} columns={baseColumns} pagination={{
                                             position: ['bottomCenter'],
-                                          }} />
+                                        }} />)}
                                 </div>
                                 {/* Pagination  */}
                                 {/* <Row justify={'center'} className="mt-5 d-flex paginationCenter">

@@ -210,11 +210,11 @@ const MemberList = () => {
         return {
             key: index + 1,
             name: res?.firstname ? `${validation?.capitalizeFirstLetter(res?.firstname)} ${validation?.capitalizeFirstLetter(res?.lastname)}` : "N/A",
-            company: validation?.replaceUnderScore(validation?.capitalizeFirstLetter(res?.company_name))||"N/A",
+            company: validation?.replaceUnderScore(validation?.capitalizeFirstLetter(res?.company_name||"N/A")),
             email: res?.email||"N/A",
             phone: res?.phone_number||"N/A",
-            position: validation?.capitalizeFirstLetter(res?.position)||"N/A",
-            city: validation?.capitalizeFirstLetter(res?.home_city)||"N/A",
+            position: validation?.capitalizeFirstLetter(res?.position||"N/A"),
+            city: validation?.capitalizeFirstLetter(res?.home_city||"N/A"),
             action: <ul className='m-0 list-unstyled d-flex gap-2'>
                 <li>
                     <Tooltip title="Download Pdf">

@@ -1,6 +1,6 @@
 "use client"
 import type { NextPage } from 'next'
-import React, { Fragment, ReactNode } from 'react'
+import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 import { Table, Input, Breadcrumb, Space, Tag, Typography, Popconfirm } from 'antd';
 import Link from 'next/link';
 import { PlusOutlined } from '@ant-design/icons'
@@ -31,14 +31,22 @@ const Admin: Page = () => {
     const router= useRouter()
     const [loading, setLoading] = React.useState(false)
     const [state, setState] = React.useState<any>([])
-    const onSearch = (value: string) => {
-  
-        if (timer) {
-            clearTimeout(timer)
-        }
-        timer = setTimeout(() => {
-        }, 1000);
-    }
+    const [filteredData, setFilteredData] = useState<any>([]);
+    const [searchTerm, setSearchTerm] = useState('')
+    useEffect(() => {
+        // Filter data when searchTerm or state1 changes
+        const filtered = state?.filter((res: any) => {
+            const name = res?.firstname ? `${res?.firstname}` : "";
+            const meeting_type = res?.email || "";
+            const city = res?.location || "";
+            return name.toLowerCase().includes(searchTerm.toLowerCase()) || meeting_type.toLowerCase().includes(searchTerm.toLowerCase()) || city.toLowerCase().includes(searchTerm.toLowerCase());
+        });
+        setFilteredData(filtered);
+    }, [searchTerm, state]);
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+    };
 
  
     const initialise = async () => {
@@ -101,7 +109,7 @@ const Admin: Page = () => {
             key: 'action',
         },
     ];
-    const dataSource = state?.map((res: any, index: number) => {
+    const dataSource = filteredData?.map((res: any, index: number) => {
         return {
               key: index + 1,
             name: <div className='user-detail d-inline-flex gap-2 align-items-center' key={res._id}>
@@ -162,7 +170,9 @@ const Admin: Page = () => {
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 d-flex gap-4 align-items-center'>
-                                    <Search size="large" placeholder="Search..." onSearch={onSearch} onChange={(e) => onSearch(e.target.value)} enterButton />
+                                <Search size='large' placeholder="Search by Name or email" enterButton value={searchTerm}
+                                        onChange={handleSearch}
+                                    />
                                 
 
                                 </div>

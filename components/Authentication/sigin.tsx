@@ -132,6 +132,11 @@ const Sigin = () => {
 
                         </div>
                     </Col>
+                    <Link href={"/admin/login"}>
+                    <Button>
+                      Login
+                    </Button>
+                    </Link>
                     <Col className="gutter-row" xs={22} sm={18} md={12} lg={10} xl={10}>
                         <div className='form-wrapper d-flex justify-content-center align-items-center h-100 bg-white py-5 px-4 px-md-5'>
                             <div>

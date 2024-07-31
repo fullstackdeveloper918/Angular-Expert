@@ -19,12 +19,8 @@ export const AdminSlice = createSlice({
       setViewItem: (state, action) => {
         state.viewItem = action.payload
       },
-      getRecentProducts: (state, action) => {
-        state.recentProducts = action.payload
-      },
-      getRecentCustomers: (state, action) => {
-        state.recentCustomers = action.payload
-      },
+     
+     
       getuserData: (state, action) => {
         state.userData = action.payload
       },
@@ -36,5 +32,5 @@ export const AdminSlice = createSlice({
   })
 
 
-  export const {getTotalCount,setViewItem,getRecentCustomers,getRecentProducts,getuserData,clearUserData}  = AdminSlice.actions
+  export const {getTotalCount,setViewItem,getuserData,clearUserData}  = AdminSlice.actions
   export default AdminSlice.reducer
