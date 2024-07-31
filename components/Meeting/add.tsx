@@ -32,6 +32,7 @@ const { Option } = Select;
 const timezones = moment.tz.names();
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { destroyCookie } from "nookies";
+import axios from "axios";
 dayjs.extend(utc);
 
 const formatTimezone = (timezone: any) => {
@@ -42,6 +43,7 @@ const formatTimezone = (timezone: any) => {
     return `UTC${sign}${hours}:${minutes} - ${timezone}`;
 };
 const MeetingAdd = () => {
+    const apiKey = '74e3f4ac1ed2a986212bc7fa3ee09e22';
     const router = useRouter()
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false)
@@ -49,7 +51,22 @@ const MeetingAdd = () => {
     const [selectedDate, setSelectedDate] = useState<any>(null);
     const [selectedLocation, setSelectedLocation] = useState<any>('');
     const [selectedHotel, setSelectedHotel] = useState<any>('');
-
+    const [location, setLocation] = useState('');
+    const [weather, setWeather] = useState<any>(null);
+    const [error, setError] = useState('');
+    console.log(weather,"weather");
+    
+    const handleSearch = async () => {
+        try {
+            setError('');
+            const response = await axios.get(
+                `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`
+            );
+            setWeather(response.data);
+        } catch (err) {
+            setError('Failed to fetch weather data. Please check the location name.');
+        }
+    };
     const onChangeDate = (date: any) => {
         const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
         setSelectedDate(dateWithTimezone);
@@ -129,7 +146,7 @@ const MeetingAdd = () => {
             router.back()
             // onAdd();
         } catch (error) {
-           
+
         }
     }
 
@@ -252,7 +269,7 @@ const MeetingAdd = () => {
                             form?.setFields(
                                 errors.flatMap((res: any) => {
                                     if (!(res.name[0] in heheheh)) return [];
-                                    
+
                                     return {
                                         name: res.name,
                                         errors: !!heheheh[res.name[0]]
@@ -449,7 +466,7 @@ const MeetingAdd = () => {
                                             </Form.Item>
                                             <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting End Time' }]} label="Meeting End Time">
                                                 <TimePicker onChange={onChange1}
-                                                 use12Hours
+                                                    use12Hours
                                                     // disabledTime={disabledTime} 
                                                     style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
                                             </Form.Item>
@@ -504,15 +521,30 @@ const MeetingAdd = () => {
                                                         }
                                                     }}
                                                 />
+                                                {/* <input
+                                                    type="text"
+                                                    value={location}
+                                                    onChange={(e) => setLocation(e.target.value)}
+                                                    placeholder="Enter location"
+                                                />
+                                                <button onClick={handleSearch}>Search</button>
+                                                {error && <p>{error}</p>}
+                                                {weather && (
+                                                    <div>
+                                                        <h2>{weather.name}</h2>
+                                                        <p>Temperature: {weather.main.temp}°C</p>
+                                                        <p>Weather: {weather.weather[0].description}</p>
+                                                    </div>
+                                                )} */}
                                             </Form.Item>
                                             <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
                                                 <Input size={'large'} placeholder="Host Company"
-                                                   
+
                                                 />
                                             </Form.Item>
 
 
-                                         
+
                                             <Form.Item
                                                 name="host"
                                                 className="col-lg-6 col-sm-12"

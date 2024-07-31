@@ -215,7 +215,7 @@ const router =useRouter()
     }
   }
   );
-  const dataSource1 = completed?.slice(0, 5).map((res: any, index: number) => {
+  const dataSource1 = completed?.map((res: any, index: number) => {
     return {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(res?.firstname)} ${validation.capitalizeFirstLetter(res?.lastname)}` : "N/A",
@@ -239,7 +239,7 @@ const router =useRouter()
     }
   }
   );
-  const dataSource2 = non_completed?.slice(0, 5).map((res: any, index: number) => {
+  const dataSource2 = non_completed?.map((res: any, index: number) => {
     return {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(validation.capitalizeFirstLetter(res?.firstname))} ${res?.lastname}` : "N/A",
@@ -538,7 +538,10 @@ const router =useRouter()
                   {/* Tabs  */}
                   <div className='tabs-wrapper'>
 
-                    <Table className="tableBox" dataSource={dataSource1} columns={columns1} pagination={false} />
+                    <Table className="tableBox" dataSource={dataSource1} columns={columns1} pagination={{
+                                            position: ['bottomCenter'],
+                                            pageSize: 5,
+                                          }}/>
                   </div>
 
                   {/* Pagination  */}
@@ -564,7 +567,10 @@ const router =useRouter()
                   {/* Tabs  */}
                   <div className='tabs-wrapper'>
 
-                    <Table dataSource={dataSource2} columns={columns} pagination={false} />
+                    <Table dataSource={dataSource2} columns={columns}  pagination={{
+                                            position: ['bottomCenter'],
+                                            pageSize: 5,
+                                          }}/>
                   </div>
 
                   {/* Pagination  */}
@@ -598,7 +604,10 @@ const router =useRouter()
                   </div>
                   <div className='tabs-wrapper'>
 
-                    <Table dataSource={dataSource3} columns={columns3} pagination={false} />
+                    <Table dataSource={dataSource3} columns={columns3} pagination={{
+                                            position: ['bottomCenter'],
+                                            pageSize: 5,
+                                          }} />
                   </div>
 
                 </Card>
