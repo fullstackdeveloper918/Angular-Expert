@@ -112,7 +112,6 @@ const Sigin = () => {
             maxAge: 60 * 60 * 24 * 30,
             path: "/",
           });
-        
         router?.push("/admin/login");
       } catch (error: any) {
         setLoading(false);
