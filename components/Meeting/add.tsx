@@ -54,8 +54,7 @@ const MeetingAdd = () => {
     const [location, setLocation] = useState('');
     const [weather, setWeather] = useState<any>(null);
     const [error, setError] = useState('');
-    console.log(weather,"weather");
-    
+
     const handleSearch = async () => {
         try {
             setError('');
@@ -196,7 +195,6 @@ const MeetingAdd = () => {
     const hotelSearchRef = useRef(null);
     const airportRef = useRef(null);
 
-
     useEffect(() => {
         const loadGoogleMapScript = () => {
             if (!window.google) {
@@ -327,6 +325,7 @@ const MeetingAdd = () => {
             });
         };
     }
+
     const initPlaceAirport = async () => {
         if (airportRef.current) {
             var options = {
@@ -344,14 +343,7 @@ const MeetingAdd = () => {
         };
     }
 
-    const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        const isAlphaOrSpace = /[a-zA-Z ]/.test(e.key);
-        const isSpecialKey = ['Backspace', 'Tab', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.key);
 
-        if (!isAlphaOrSpace && !isSpecialKey) {
-            e.preventDefault();
-        }
-    };
     useEffect(() => {
         initPlaceHotel()
     }, [shortCounrtyName])
@@ -395,23 +387,14 @@ const MeetingAdd = () => {
                                                     <Option value="spring">Spring</Option>
                                                 </Select>
                                             </Form.Item>
-                                            {/* Last Name  */}
 
-
-                                            {/* Email  */}
-                                            {/* <Form.Item name="start_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Start Meeting' }]} label="Start Meeting">
-                                          <InlineWidget url="https://calendly.com/your_scheduling_page" />
-                                            </Form.Item> */}
                                             <Form.Item
                                                 name="timezone"
                                                 className="col-lg-6 col-sm-12"
                                                 rules={[{ required: true, message: 'Please Select Timezone' }]}
                                                 label="Timezone"
                                             >
-                                                {/* <div className="Div_contact">
-                                                   
-                                                    <CalendlyWidget />
-                                                </div> */}
+
                                                 <Select
                                                     showSearch
                                                     placeholder="Select a timezone"
@@ -435,11 +418,7 @@ const MeetingAdd = () => {
                                             <Form.Item name="start_date" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Start Date' }]} label="Meeting Start Date">
                                                 <DatePicker
                                                     style={{ width: '100%' }}
-                                                    // defaultValue={defaultValue}
-                                                    // showTime
                                                     disabledDate={disabledDate}
-                                                    // disabledTime={disabledTime}
-                                                    // locale={buddhistLocale}
                                                     onChange={onChangeDate}
                                                 />
                                             </Form.Item>
@@ -450,16 +429,9 @@ const MeetingAdd = () => {
                                                     style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
                                             </Form.Item>
                                             <Form.Item name="end_date" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting End Date' }]} label="Meeting End Date">
-                                                {/* <TimePicker onChange={onChange1} 
-                                                // disabledTime={disabledTime} 
-                                                style={{ width: '100%' }} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} /> */}
                                                 <DatePicker
                                                     style={{ width: '100%' }}
-                                                    // defaultValue={defaultValue}
-                                                    // showTime
                                                     disabledDate={disabledDate}
-                                                    // disabledTime={disabledTime}
-                                                    // locale={buddhistLocale}
                                                     onChange={onChangeDate}
                                                 />
 
@@ -490,7 +462,7 @@ const MeetingAdd = () => {
                             rules={[{ required: true, message: 'Please enter a location' }]}
                         >
                          <GoogleMap locationSearchRef={locationSearchRef.current}/>
-                        </Form.Item> */}
+                        </Form.Item> RamDodge2020 */}
                                             <Form.Item className='col-lg-6 col-sm-12' name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
                                                 <input
                                                     className="custom-input"

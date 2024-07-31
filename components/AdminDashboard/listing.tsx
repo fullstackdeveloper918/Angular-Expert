@@ -24,14 +24,7 @@ type Page<P = {}> = NextPage<P> & {
 
 const AdminDashboard: Page = (props: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData)
-const router =useRouter()
   const [state1, setState1] = useState<any>([])
-  const [state2, setState2] = useState<any>([])
-  const [state3, setState3] = useState<any>("")
-  const [update, setUpdate] = useState<any>([])
-  const [upcoming, setUpcoming] = useState<any>("")
-  const [next, setNext] = useState<any>("")
-  const [total_count, setTotal_count] = useState<any>("")
   const [areas, setAreas] = useState<any>([]);
   const [complete, setComplete] = useState<any>("")
   const [check, setCheck] = useState<any>("")
@@ -48,7 +41,6 @@ const router =useRouter()
 
   const updateDue = async () => {
     let res = await api.Meeting.update()
-    setUpdate(res)
 
   }
   useEffect(() => {
@@ -164,7 +156,7 @@ const router =useRouter()
     const item = { user_id: id };
     try {
       const res = await api.User.getById(item as any);
-      setState3(res?.data || null);
+      // setState3(res?.data || null);
       return res?.data || null; // Ensure to return the data
     } catch (error: any) {
       alert(error.message);
@@ -195,8 +187,6 @@ const router =useRouter()
   };
   const completed = state1?.filter((res: any) => res?.is_completed === true);
   const non_completed = state1?.filter((res: any) => res?.is_completed == false)
-  const completed2 = state2?.filter((res: any) => res?.is_completed === true);
-  const non_completed2 = state2?.filter((res: any) => res?.is_completed == false)
   const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
@@ -428,14 +418,12 @@ const router =useRouter()
 
   const getData = async () => {
     try {
-      let res = await api.User.listing()
+      
+        let res = await api.User.listing()
+        setState1(res?.data)
       let apiRes1 = await api.User.user_completed_noncompleted()
-      let apiRes = await api.User.user_total_count()
-      let res1 = await api.dashboard.upcoming()
-      setTotal_count(apiRes)
-      setState1(res?.data)
-      setUpcoming(res1)
       setComplete(apiRes1.data)
+      
     } catch (error) {
      
     }
@@ -443,13 +431,13 @@ const router =useRouter()
 
   const initialise = async () => {
     try {
-      let res = await api.Meeting.upcoming_meeting();
-      let apiRes = await api.User.user_listing()
-      let apiRes1 = await api.User.check_fall_spring()
-      setCheck(apiRes1)
-      setState2(apiRes?.data)
-      setAreas(res);
-
+      if(getUserdata?.is_admin==false){
+        let res = await api.Meeting.upcoming_meeting();
+        setAreas(res);
+      }else if(getUserdata?.is_admin==true){
+        let apiRes1 = await api.User.check_fall_spring()
+        setCheck(apiRes1)
+      }
     } catch (error){
     //   if (error) {
     //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });

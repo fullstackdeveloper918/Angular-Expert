@@ -105,54 +105,6 @@ const Page8 = () => {
         files: values[pair.goalName],
       }));
 
-      console.log(photoComment, "check");
-
-      // if (type == "edit") {
-      //   const item =
-      //   photoComment &&
-      //   photoComment.map((item, index) => ({
-      //     comment: item?.comment,
-      //     files: item?.files?.fileList.map(
-      //       (file: any) => file?.originFileObj
-      //     ),
-      //   })) as any
-      //   const formData:any = new FormData();
-      //   formData.append("id", value);
-      //   item.forEach((entry: any, entryIndex: number) => {
-      //     // Append other data if needed
-      //     console.log(entry?.comment,"qwerty");
-
-      //     formData.append(`comment_${entryIndex}`, entry?.comment);
-      //     // Append files
-
-      //     entry?.files?.forEach((file: any, fileIndex: number) => {
-      //       formData.append(`comment_${entryIndex}_file${fileIndex}`, file);
-      //     });
-      //   });
-      //   for (let pair of formData.entries()) {
-      //     console.log(`${pair[0]}: ${pair[1]}`,"checkFormdata");
-      //   }
-      // setLoading(true)
-      // const response = await axios.post(
-      //   "https://frontend.goaideme.com/update-photo-section",
-      //   formData,
-      //   {
-      //     headers: {
-      //       Token: `${accessToken}`,
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // );
-
-      // if (response) {
-      //   toast.success("Added Successsfully", {
-      //     position: "top-center",
-      //     autoClose: 300,
-      //   });
-      // }
-      // router.replace("/admin/member")
-      // }
-      // else {
       setLoading(true);
       const payload =
         photoComment &&
@@ -216,7 +168,6 @@ const Page8 = () => {
   };
   const [state, setState] = useState<any>("")
   const getDataById = async () => {
-
     const item = {
       user_id: value
     }
@@ -228,8 +179,6 @@ const Page8 = () => {
         toast.error("Session Expired Login Again")
         router.replace("/auth/signin")
       }
-      console.log(res?.data?.status, "status");
-
       const fetchedGoals = res?.data?.photo_section?.fileUrls || [];
       const formattedGoals = Object.keys(fetchedGoals[0] || {}).map((key, index) => ({
         id: index + 1,

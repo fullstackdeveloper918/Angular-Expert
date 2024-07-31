@@ -1,7 +1,7 @@
 import AdminDashboard from "@/components/AdminDashboard/listing";
 import React from "react";
 
-const page = () => {
+const page = async() => {
   return (
     <div>
       <AdminDashboard />
