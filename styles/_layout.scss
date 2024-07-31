@@ -97,3 +97,25 @@ footer {
 .transition-smooth {
     transition: all 0.5s ease-in-out;
 }
+
+.custom-input {
+    background: #ffffff;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #d9d9d9;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 9px 11px;
+    color: rgba(0, 0, 0, 0.88);
+    font-size: 14px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
+    transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  
+  .custom-input::placeholder{
+    color: #bfbfbf;
+    font-weight: 300;
+  }

@@ -246,6 +246,21 @@ a.forgotPassword {
 :where(.css-dev-only-do-not-override-98ntnt).ant-btn:not(:disabled):focus-visible {
   outline: 0 !important;
 }
+:where(.css-dev-only-do-not-override-98ntnt).ant-picker {
+  padding: 8px 11px !important;
+}
+:where(.css-dev-only-do-not-override-98ntnt).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector {
+  border-color: #000000;
+}
+.tabs-wrapper .ant-table-container{
+  width: 100%;
+  overflow: hidden;
+  overflow-x: auto;
+  scrollbar-width: thin !important;
+}
+.blackViewBtn:hover{
+  border-color: #000000 !important;
+}
 
 @media screen and (max-width:1290px) {
   .auth-pages .image-wrapper{
@@ -261,11 +276,7 @@ a.forgotPassword {
 //     overflow-x: auto !important;
 //     scrollbar-width: thin !important;
 // }
-.tabs-wrapper .ant-table-container{
-  width: 100%;
-  overflow: hidden;
-  overflow-x: auto;
-}
+
 
 
 }
