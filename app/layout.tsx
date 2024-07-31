@@ -38,7 +38,15 @@ export default function RootLayout({
         <body className={inter.className}>
           {/* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossOrigin="anonymous"></script> */}
 
-            <NextTopLoader />
+            <NextTopLoader  color="#2299DD"
+ initialPosition={0.08}
+ crawlSpeed={200}
+ height={3}
+ crawl={true}
+ showSpinner={true}
+ easing="ease"
+ speed={200}
+ shadow="0 0 10px #2299DD,0 0 5px #2299DD" />
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               {children}

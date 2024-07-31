@@ -16,8 +16,18 @@ const firebaseConfig = {
     // messagingSenderId: "894447567184",
     // appId: "1:894447567184:web:1805a6ee1a39c1adb0ec55",
     // measurementId:"G-SVKFM6CS7M"
+
+    // apiKey: "AIzaSyD4PKeu6LFooeb0A_O2EppvgQoBxbv8AB4",
+    // authDomain: "craftsmen-cadd2.firebaseapp.com",
+    // projectId: "craftsmen-cadd2",
+    // storageBucket: "craftsmen-cadd2.appspot.com",
+    // messagingSenderId: "461827832880",
+    // appId: "1:461827832880:web:c26433472e5ac6202ac1f5",
+    // measurementId: "G-WLPH62WMN0",
+
     apiKey: "AIzaSyD4PKeu6LFooeb0A_O2EppvgQoBxbv8AB4",
     authDomain: "craftsmen-cadd2.firebaseapp.com",
+    databaseURL: "https://craftsmen-cadd2-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "craftsmen-cadd2",
     storageBucket: "craftsmen-cadd2.appspot.com",
     messagingSenderId: "461827832880",
