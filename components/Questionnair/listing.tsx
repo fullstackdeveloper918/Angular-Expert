@@ -33,14 +33,14 @@ const QuestionnairList = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         // Filter data when searchTerm or state1 changes
-        const filtered = areas?.filter((res: any) => {
+        const filtered = state?.filter((res: any) => {
             const name = res?.question ? `${res?.question}` : "";
             const meeting_type = res?.index || "";
             const city = res?.location || "";
             return name.toLowerCase().includes(searchTerm.toLowerCase()) || meeting_type.toLowerCase().includes(searchTerm.toLowerCase())|| city.toLowerCase().includes(searchTerm.toLowerCase());
         });
         setFilteredData(filtered);
-    }, [searchTerm, areas]);
+    }, [searchTerm, state]);
     const dataSource = filteredData?.map((res: any, index: number) => {
         return {
             key: index + 1,

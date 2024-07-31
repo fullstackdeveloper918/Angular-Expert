@@ -477,8 +477,8 @@ const AdminDashboard: Page = (props: any) => {
                           {/* <div className='dashboard-widget-card-icon rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3' style={{ background: data.iconBackground }}>
                             {data.icon}
                           </div> */}
-                          <div className='dashboard-widget-card-content'>
-                            <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
+                          <div className='dashboard-widget-card-content mt-3 mb-3'>
+                            <Typography.Title level={3} className='m-0 mb-2 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
                             <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
                           </div>
                         </Card>

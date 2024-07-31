@@ -292,13 +292,7 @@ const MemberList = () => {
     const getData = async (query: string, lastVisibleId?: string) => {
         try {
             let query = searchTerm ? `searchTerm=${searchTerm}` : '';
-            // if (lastVisibleId) {
-            //     query += query ? `&lastVisibleId=${lastVisibleId}` : `lastVisibleId=${lastVisibleId}`;
-            // }
             let res = await api.User.listing(query);
-            
-           
-          
             setState1(res?.data || []);
             let apiRes = await api.User.user_listing()
             setState2(apiRes?.data)
