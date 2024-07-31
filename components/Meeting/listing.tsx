@@ -273,7 +273,7 @@ const MeetingList = () => {
                                 <div className='tabs-wrapper'>
                                     {loading ? (
                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                                       <Spin />
+                                       <Spin size="large"/>
                                    </div>
                                     ) : (
                                         <Table dataSource={dataSource} columns={baseColumns} pagination={{
