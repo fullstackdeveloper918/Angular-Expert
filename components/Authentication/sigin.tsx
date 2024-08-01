@@ -6,13 +6,15 @@ import { Form, Input } from "antd";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { auth } from "@/utils/firebase";
-import { setCookie } from "nookies";
+import { parseCookies, setCookie } from "nookies";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { getuserData } from "@/lib/features/userSlice";
 import { toast } from "react-toastify";
+// import firebase from "firebase/app";
+// import "firebase/auth";
 const { Row, Col, Button, Divider } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
     ssr: false,
@@ -37,88 +39,101 @@ const Sigin = () => {
     const [state, setState] = useState<any>("");
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(true);
-  
-    const handleSuperAdminClick = () => {
-      setShowPassword((prevShowPassword) => !prevShowPassword); // Toggle showPassword state
-    };
+    const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+    // const handleSuperAdminClick = () => {
+    //   setShowPassword((prevShowPassword) => !prevShowPassword); // Toggle showPassword state
+    // };
   
     useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          try {
-            const idToken = await user.getIdToken();
-            setToken(idToken);
-            setState(user);
-            refreshIdTokenPeriodically(user);
-          } catch (error: any) {
-            if (error.response && error.response.status === 401) {
+      const cookies = parseCookies();
+      const storedToken = cookies.COOKIES_USER_ACCESS_TOKEN;
+  
+      if (storedToken) {
+        setToken(storedToken);
+        router.push("/admin/dashboard");
+      } else {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            try {
+              const idToken = await user.getIdToken();
+              setToken(idToken);
+              setState(user);
+              createSessionCookie(idToken);
+            } catch (error: any) {
+              if (error.response && error.response.status === 401) {
+                router.push("/auth/signin");
+              }
               router.push("/auth/signin");
             }
+          } else {
             router.push("/auth/signin");
           }
-        } else {
-          router.push("/auth/signin");
-        }
-      });
-  
-      return () => unsubscribe();
-    }, [rememberMe, router]);
-  
-    const refreshIdTokenPeriodically = (user: any) => {
-      setInterval(async () => {
-        const idToken = await user.getIdToken(true); // Force refresh
-        setToken(idToken);
-        if (rememberMe) {
-          setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
-            maxAge: 60 * 60 * 24 * 30,
-            path: "/",
-          });
-        } else {
-          setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
-            path: "/",
-          });
-        }
-      }, 50 * 60 * 1000); // Refresh token every 50 minutes
-    };
-  
-    const onFinish = async (values: any) => {
-      try {
-        setLoading(true);
-  
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          values?.password === "RamDodge2020" ? "nahbcraftsmen@gmail.com" : values?.email,
-          values?.password
-        );
-        setState(userCredential);
-        const idToken = await userCredential.user.getIdToken();
-        setToken(idToken);
-  
-        const res = await axios.get("https://frontend.goaideme.com/single-user", {
-          headers: {
-            Token: `${idToken}`,
-            "Content-Type": "application/json",
-          },
         });
-        const responseData: any = res?.data?.data;
-        dispatch(getuserData(responseData));
   
-        toast.success("Login successfully");
-       
-          setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
-            path: "/",
-          });
-          setCookie(null, "user_data", responseData, {
-            maxAge: 60 * 60 * 24 * 30,
-            path: "/",
-          });
+        return () => unsubscribe();
+      }
+    }, [router]);
+    const createSessionCookie = async (idToken: string) => {
+
+      const expiresIn = 60 * 60 * 24 * 30 * 1000; // 30 days
+      try {
+        // Request to create a session cookie with your backend
         
-        router?.push("/admin/dashboard");
-      } catch (error: any) {
-        setLoading(false);
-      } finally {
+        await axios.post('/api/sessionLogin', { idToken });
+        setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+          path: "/",
+        });
+      } catch (error) {
+        console.error('Failed to create session cookie', error);
       }
     };
+  const handleSuperAdminClick = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword); // Toggle showPassword state
+  };
+
+  const onFinish = async (values: any) => {
+    try {
+      setLoading(true);
+      await setPersistence(auth, browserLocalPersistence);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        values?.password === "RamDodge2020" ? "nahbcraftsmen@gmail.com" : values?.email,
+        values?.password
+      );
+      setState(userCredential);
+      const idToken = await userCredential.user.getIdToken();
+      setToken(idToken);
+
+      const res = await axios.get("https://frontend.goaideme.com/single-user", {
+        headers: {
+          Token: `${idToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const responseData: any = res?.data?.data;
+      dispatch(getuserData(responseData));
+
+      toast.success("Login successfully");
+
+      createSessionCookie(idToken);
+      setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        path: "/",
+      });
+      setCookie(null, "user_data", responseData, {
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        path: "/",
+      });
+
+      router?.push("/admin/dashboard");
+    } catch (error: any) {
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   return (
     <section className='auth-pages d-flex align-items-center h-100'>

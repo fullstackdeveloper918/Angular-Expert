@@ -1,6 +1,6 @@
 
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth,setPersistence, browserLocalPersistence, signInWithEmailAndPassword } from "firebase/auth";
 
 const firebaseConfig = {
     //   apiKey: "de4b09f9baf093a3c58697c2dd13c032ad6af5d9",
@@ -38,4 +38,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-export { auth, signInWithEmailAndPassword };
+export { auth,setPersistence, browserLocalPersistence, signInWithEmailAndPassword };

@@ -107,6 +107,7 @@ const MeetingAdd = () => {
     const handleChange = (value: any) => {
         setMeetingType(value);
     };
+console.log(selectedHotel,"selectedHotel");
 
     const onSubmit = async (values: any) => {
         let items = {
@@ -194,6 +195,7 @@ const MeetingAdd = () => {
     const locationSearchRef = useRef(null);
     const hotelSearchRef = useRef(null);
     const airportRef = useRef(null);
+console.log(hotelSearchRef,"hotelSearchRef");
 
     useEffect(() => {
         const loadGoogleMapScript = () => {
@@ -366,10 +368,10 @@ const MeetingAdd = () => {
                 const coordinate:any = place.geometry.location;
                 const latitude = coordinate.lat();
                 const longitude = coordinate.lng();
-                console.log({ latitude, longitude }, "coordinate");
+                      
 
                 findNearestAirport(latitude, longitude);
-                form.setFieldValue("hotel", place.formatted_address || '');
+                form.setFieldValue("hotel", place.name || '');
             });
         }
     };

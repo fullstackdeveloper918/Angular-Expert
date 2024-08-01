@@ -11,7 +11,7 @@ import Icons from "@/components/common/Icons";
 import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
 import Timmer from "../common/Timmer";
-import validation, { capFirst } from "@/utils/validation";
+import validation, { capFirst, replaceUnderScore } from "@/utils/validation";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
 import saveAs from "file-saver";
@@ -198,12 +198,12 @@ const AdminDashboard: Page = (props: any) => {
   const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
     return {
       key: index + 1,
-      name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
-      company: res?.company_name || "N/A",
+      name: capFirst(res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A"),
+      company:capFirst(replaceUnderScore(res?.company_name || "N/A")),
       email: res?.email || "N/A",
       phone: res?.phone_number || "N/A",
-      position: res?.position || "N/A",
-      city: res?.home_city || "N/A",
+      position: capFirst(res?.position || "N/A"),
+      city: capFirst(res?.home_city || "N/A"),
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
         {hasClubMemberPermission || getUserdata?.is_admin == false ?
           <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link> :
