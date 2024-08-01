@@ -259,8 +259,8 @@ const Page8 = () => {
     console.log(pair, "pair pechi");
     const data = {
       imageUrl: file.url, // Ensure that file.url is the correct path
-      // commentId: pair.commentId || "", // Assuming you need the commentId from the pair object
-      // comment: pair.initialGoal || "", // Assuming you need the comment from the pair object
+      commentId: pair.commentId || "", // Assuming you need the commentId from the pair object
+      comment: pair.initialGoal || "", // Assuming you need the comment from the pair object
     };
 
     console.log(data, "data check");
