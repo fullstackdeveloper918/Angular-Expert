@@ -123,8 +123,8 @@ const Meeting={
     requests.post('add-meeting', info),
   update:()=>
     requests.get("five-day-beforemeeting-countdown"),
-  past_meeting:()=>
-    requests.get("past-meetings"),
+  past_meeting:(q?: string)=>
+    requests.get(`past-meetings${q ? `?${q}` : ""}`),
   listing: (q?: string) =>
     requests.get(`meeting-list${q ? `?${q}` : ""}`),
   upcoming_meeting: () =>

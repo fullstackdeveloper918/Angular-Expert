@@ -57,15 +57,23 @@ const PastMeetingList = () => {
     const dispatch = useDispatch();
     const [areas, setAreas] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState('')
+    const [filteredData, setFilteredData] = useState<any>([]);
     const getUserdata=useSelector((state:any)=>state?.user?.userData)
-    const handleDelete = async (_id: string) => {
-        try {
-
-        } catch (error) {
-        }
-
-    }
-
+    useEffect(() => {
+        // Filter data when searchTerm or state1 changes
+        const filtered = areas?.filter((res: any) => {
+            const name = res?.host ? `${res?.host}` : "";
+            const meeting_type = res?.meeting_type || "";
+            const city = res?.location || "";
+            return name.toLowerCase().includes(searchTerm.toLowerCase()) || meeting_type.toLowerCase().includes(searchTerm.toLowerCase()) || city.toLowerCase().includes(searchTerm.toLowerCase());
+        });
+        setFilteredData(filtered);
+    }, [searchTerm, areas]);
+   
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+    };
 
     const archive = async (id: any) => {
         const item = {
@@ -73,18 +81,19 @@ const PastMeetingList = () => {
         }
         try {
             let res = await api.Meeting.delete(item as any)
-            initialise()
+            initialise(id)
             //   setAreas
         } catch (error) {
 
         }
     }
-    const dataSource = areas?.length && areas
+    const dataSource = filteredData?.length && filteredData
     .sort((a:any, b:any) => a.start_meeting_date - b.start_meeting_date)
     .map((res: any, index: number) => {
         return {
             key: index + 1,
             meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`||"N/A",
+            host_company:capFirst(res?.host_company||"N/A"),
             host_name:capFirst(res?.host)||"N/A",
             host_city:
             <Tooltip title={res?.location}>
@@ -94,17 +103,17 @@ const PastMeetingList = () => {
             start_time: dayjs(res?.start_time).format('hh:mm A')||"N/A",
             end_date: dayjs(res?.end_meeting_date).format('DD-MM-YYYY')||"N/A",
             end_time: dayjs(res?.end_time).format('hh:mm A')||"N/A",
-        //     action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-        //         <li>
-        //             <Link href={`/admin/meetings/${res?.id}/edit`} >
-        //                 <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-        //             </Link>
-        //         </li>
+            action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                {/* <li>
+                    <Link href={`/admin/meetings/${res?.id}/edit`} >
+                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                    </Link>
+                </li> */}
                 
-        //         <li>
-        //       <Link href={`/admin/meetings/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
-        //   </li>
-        //     </ul>
+                <li>
+              <Link href={`/admin/meetings/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
+          </li>
+            </ul>
         }
     })
     const baseColumns = [
@@ -119,6 +128,11 @@ const PastMeetingList = () => {
             key: 'meeting',
         },
         {
+            title: 'Host Company',
+            dataIndex: 'host_company',
+            key: 'host_company',
+        },
+        {
             title: 'Host Name',
             dataIndex: 'host_name',
             key: 'host_name',
@@ -128,37 +142,38 @@ const PastMeetingList = () => {
             dataIndex: 'host_city',
             key: 'host_city',
         },
-        {
-            title: 'Meeting Date',
-            dataIndex: 'start_date',
-            key: 'start_date',
-        },
-        {
-            title: 'Meeting Time',
-            dataIndex: 'start_time',
-            key: 'start_time',
-        },
-        {
-            title: 'Meeting End Date',
-            dataIndex: 'end_date',
-            key: 'end_date',
-        },
-        {
-            title: 'Meeting End Time',
-            dataIndex: 'end_time',
-            key: 'end_time',
-        },
         // {
-        //     title: 'Action',
-        //     dataIndex: 'action',
-        //     key: 'action',
-        // }
+        //     title: 'Meeting Date',
+        //     dataIndex: 'start_date',
+        //     key: 'start_date',
+        // },
+        // {
+        //     title: 'Meeting Time',
+        //     dataIndex: 'start_time',
+        //     key: 'start_time',
+        // },
+        // {
+        //     title: 'Meeting End Date',
+        //     dataIndex: 'end_date',
+        //     key: 'end_date',
+        // },
+        // {
+        //     title: 'Meeting End Time',
+        //     dataIndex: 'end_time',
+        //     key: 'end_time',
+        // },
+        {
+            title: 'Information',
+            dataIndex: 'action',
+            key: 'action',
+        }
     ];
     
 
-    const initialise = async () => {
+    const initialise = async (query:string) => {
         try {
-            let res = await api.Meeting.past_meeting();
+            const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
+            let res = await api.Meeting.past_meeting(query);
             setAreas(res?.result);
             if (res?.status == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
@@ -179,8 +194,8 @@ const PastMeetingList = () => {
         }
     };
     useEffect(() => {
-
-        initialise();
+        const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
+        initialise(query);
 
     }, []);
 
@@ -213,7 +228,7 @@ const PastMeetingList = () => {
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 d-flex gap-3'>
-                                    <Search size='large' placeholder="Search by Meeting Name or year" enterButton value={searchTerm}
+                                    <Search size='large' placeholder="Search by Meeting Name or year" enterButton value={searchTerm} onChange={handleSearch}
                                     />
                                 </div>
                                 {/* Tabs  */}

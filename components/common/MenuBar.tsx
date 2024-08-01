@@ -222,7 +222,17 @@ setActive(x)
             "meetings",
             <OrderedListOutlined style={iconSize} />
           ),
-
+          
+          getItem(
+            <Link
+              href="/admin/meetings/past_meeting"
+              className="text-decoration-none"
+            >
+              Past Meetings
+            </Link>,
+            "past_meeting",
+            <TeamOutlined  style={iconSize} />
+          ),
           getItem(
             <Link href="/admin/questionnaire" className="text-decoration-none">
               Questionnaire

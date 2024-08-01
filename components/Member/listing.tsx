@@ -248,7 +248,7 @@ const MemberList = () => {
             key: 'name',
         },
         {
-            title: 'Club Name',
+            title: 'Company Name',
             dataIndex: 'company',
             key: 'company',
         },
