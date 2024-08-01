@@ -54,7 +54,7 @@ const MeetingAdd = () => {
     const [location, setLocation] = useState('');
     const [weather, setWeather] = useState<any>(null);
     const [error, setError] = useState('');
-
+    const [nearestAirport, setNearestAirport] = useState<any>(null);
     const handleSearch = async () => {
         try {
             setError('');
@@ -118,10 +118,10 @@ const MeetingAdd = () => {
             start_meeting_date: dayjs(values?.start_date).utc().valueOf(),
             end_time: dayjs(values?.end_time).utc().valueOf(),
             end_meeting_date: dayjs(values?.end_date).utc().valueOf(),
-            year: "",
+            year:dayjs(values?.end_date).utc().valueOf(),
             location: selectedLocation,
-            hotel: selectedHotel,
-            airport: values?.airport,
+            hotel: selectedHotel?.name,
+            airport: nearestAirport?.name,
             host_company: values?.host_company,
             host: values?.host,
             // host: values?.host,
@@ -309,47 +309,100 @@ const MeetingAdd = () => {
         return () => {
         };
     }, []);
+    // const initPlaceHotel = async () => {
+    //     if (hotelSearchRef.current) {
+    //         var options = {
+    //             types: ['establishment'],
+    //             componentRestrictions: { country: shortCounrtyName }
+    //         };
+    //         let hotelAutocomplete = new window.google.maps.places.Autocomplete(
+    //             hotelSearchRef.current, options
+    //         );
+    //         hotelAutocomplete.addListener('place_changed', () => {
+    //             let place = hotelAutocomplete.getPlace();
+    //             setSelectedHotel(place.formatted_address || '');
+    //             form.setFieldValue("hotel", place?.formatted_address)
+    //         });
+    //     };
+    // }
+
+    // const initPlaceAirport = async () => {
+    //     if (airportRef.current) {
+    //         var options = {
+    //             types: ['establishment'],
+    //             componentRestrictions: { country: shortCounrtyName }
+    //         };
+    //         let hotelAutocomplete = new window.google.maps.places.Autocomplete(
+    //             airportRef.current, options
+    //         );
+    //         hotelAutocomplete.addListener('place_changed', () => {
+    //             let place = hotelAutocomplete.getPlace();
+    //             setSelectedHotel(place.formatted_address || '');
+    //             form.setFieldValue("airport", place?.formatted_address)
+    //         });
+    //     };
+    // }
+
+
+    // useEffect(() => {
+    //     initPlaceHotel()
+    // }, [shortCounrtyName])
+
     const initPlaceHotel = async () => {
         if (hotelSearchRef.current) {
-            var options = {
+            const options = {
                 types: ['establishment'],
                 componentRestrictions: { country: shortCounrtyName }
             };
             let hotelAutocomplete = new window.google.maps.places.Autocomplete(
-                hotelSearchRef.current, options
-            );
-            hotelAutocomplete.addListener('place_changed', () => {
-                let place = hotelAutocomplete.getPlace();
-                setSelectedHotel(place.formatted_address || '');
-                form.setFieldValue("hotel", place?.formatted_address)
-            });
-        };
-    }
+                          hotelSearchRef.current, options
+                     );
+                    hotelAutocomplete.addListener('place_changed', () => {
+                         let place = hotelAutocomplete.getPlace();
+                             if (!place.geometry) {
+                               return;
+                          }
+                          setSelectedHotel(place || '');
+                const coordinate:any = place.geometry.location;
+                const latitude = coordinate.lat();
+                const longitude = coordinate.lng();
+                console.log({ latitude, longitude }, "coordinate");
 
-    const initPlaceAirport = async () => {
-        if (airportRef.current) {
-            var options = {
-                types: ['establishment'],
-                componentRestrictions: { country: shortCounrtyName }
-            };
-            let hotelAutocomplete = new window.google.maps.places.Autocomplete(
-                airportRef.current, options
-            );
-            hotelAutocomplete.addListener('place_changed', () => {
-                let place = hotelAutocomplete.getPlace();
-                setSelectedHotel(place.formatted_address || '');
-                form.setFieldValue("airport", place?.formatted_address)
+                findNearestAirport(latitude, longitude);
+                form.setFieldValue("hotel", place.formatted_address || '');
             });
-        };
-    }
-
+        }
+    };
 
     useEffect(() => {
-        initPlaceHotel()
-    }, [shortCounrtyName])
-    useEffect(() => {
-        initPlaceAirport()
-    }, [shortCounrtyName])
+        initPlaceHotel();
+    }, [shortCounrtyName]);
+
+    const findNearestAirport = (lat:any, lng:any) => {
+        const service = new window.google.maps.places.PlacesService(document.createElement('div'));
+        const request = {
+            location: new window.google.maps.LatLng(lat, lng),
+            radius: 50000, // 50 kilometers
+            type: ['airport']
+        } as any;
+        service.nearbySearch(request, (results:any, status) => {
+            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+                if (results.length > 0) {
+                    setNearestAirport(results[0]);
+                    console.log('Nearest airport:', results[0]);
+                } else {
+                    console.log('No airports found.');
+                }
+            } else {
+                console.error('Error finding airports:', status);
+            }
+        });
+    };
+
+    console.log(nearestAirport, "nearestAirport");
+    // useEffect(() => {
+    //     initPlaceAirport()
+    // }, [shortCounrtyName])
     return (
         <MainLayout>
             <Fragment>
@@ -472,16 +525,17 @@ const MeetingAdd = () => {
                                                 />
 
                                             </Form.Item>
-                                            <Form.Item name="airport" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Nearest Airport' }]} label="Nearest Airport">
+                                            <Form.Item name="airport" className='col-lg-6 col-sm-12'  label="Nearest Airport">
                                                 {/* <Input size={'large'} placeholder="Nearest Airport"
                                                     onKeyPress={onKeyPress}
                                                 /> */}
-                                                <input
+                                                <p className="custom-input" style={{ width: '100%' }}>{nearestAirport?.name}</p>
+                                                {/* <input
                                                     className="custom-input"
                                                     style={{ width: '100%' }}
                                                     ref={airportRef}
                                                     placeholder="Enter your address"
-                                                />
+                                                /> */}
                                             </Form.Item>
                                             <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
                                                 <Input size={'large'} placeholder="Weather"

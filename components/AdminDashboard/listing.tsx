@@ -56,22 +56,21 @@ const AdminDashboard: Page = (props: any) => {
   const DashboardData = [
     {
       cardBackground: "#D3D3D3", // Light gray background
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
-      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-      icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#fff' }} />, // White icon color
-      title: <Timmer endDate={new_date} />, // White text color for the title
-      textColor: "#000000", // White text color
-      count: "Update Due",
-      link: "/admin/dashboard"
-    },
-    {
-      cardBackground: "#D3D3D3", // Light gray background
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: <Timmer endDate={start_date} />,
+      title: "Update Due",
       textColor: "#000000",
-      count: "Meeting Kick off",
+      count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
+      link: "/admin/dashboard"
+
+    },
+    {
+      cardBackground: "#D3D3D3", // Light gray background
+      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
+      icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
+      title: "Meeting Kick off",
+      textColor: "#000000",
+      count:<span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
 
     },
@@ -80,9 +79,11 @@ const AdminDashboard: Page = (props: any) => {
       boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: `${check?.data?.fall || "0"}`,
+      title: "Fall 2024 (80 days)",
       textColor: "#000000",
-      count: "Fall 2024 (80 days)",
+      count: <span style={{ fontSize: '20px' }}>{check?.data?.fall || "0"}</span>
+      // "Fall 2024 (80 days)"
+      ,
       link: "/admin/dashboard"
 
     },
@@ -92,8 +93,10 @@ const AdminDashboard: Page = (props: any) => {
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#000000",
-      title: `${check?.data?.spring || "0"}`,
-      count: "Spring 2025 (408 days)",
+      title: "Spring 2025 (408 days)",
+      count: <span style={{ fontSize: '20px' }}>{check?.data?.spring || "0"}</span>
+      // "Spring 2025 (408 days)"
+      ,
       link: "/admin/dashboard"
     },
     // {
@@ -115,9 +118,9 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: <Timmer endDate={new_date} />,
+      title: "Update Due",
       textColor: "#000000",
-      count: "Update Due",
+      count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
 
     },
@@ -125,9 +128,9 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: <Timmer endDate={start_date} />,
+      title: "Meeting Kick off",
       textColor: "#000000",
-      count: "Meeting Kick off",
+      count:<span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
 
     },
@@ -135,9 +138,11 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: `${complete?.totalCompleted || "0"}`,
+      title: "Updates Completed",
       textColor: "#000000",
-      count: "No. of Users fillled the Form for coming meeting",
+      count: <span style={{ fontSize: '20px' }}>{complete?.totalCompleted || "0"}</span>
+      //  "No. of Users fillled the Form for coming meeting"
+       ,
       link: "/admin/dashboard"
 
     },
@@ -147,9 +152,11 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FormOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: `${complete?.totalUncompleted || "0"}`,
+      title: "Updates yet to be completed",
       textColor: "#000000",
-      count: "No. of Users remains to fill the Form for coming meeting",
+      count: <span style={{ fontSize: '20px' }}>{complete?.totalUncompleted || "0"}</span>
+      // "No. of Users remains to fill the Form for coming meeting"
+      ,
       link: "/admin/dashboard"
     },
   ]
@@ -276,7 +283,7 @@ const AdminDashboard: Page = (props: any) => {
       key: 'key',
     },
     {
-      title: 'Meeting Type',
+      title: 'Meeting Name',
       dataIndex: 'meeting',
       key: 'meeting',
     },
@@ -306,7 +313,7 @@ const AdminDashboard: Page = (props: any) => {
       key: 'action',
     },
     {
-      title: 'Action',
+      title: 'Information',
       dataIndex: 'action1',
       key: 'action1',
     },
@@ -511,7 +518,7 @@ const AdminDashboard: Page = (props: any) => {
               <Col sm={24} md={24} lg={24} xxl={12}>
                 <Card className='common-card'>
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                    <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates</Typography.Title>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates for Fall 2024</Typography.Title>
 
                   </div>
                   <div className='tabs-wrapper'>
@@ -527,7 +534,7 @@ const AdminDashboard: Page = (props: any) => {
                 <Card className='common-card'>
 
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                    <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates</Typography.Title>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates for Fall 2024</Typography.Title>
                   </div>
                   <div className='tabs-wrapper'>
                     <Table dataSource={dataSource2} columns={columns} pagination={{

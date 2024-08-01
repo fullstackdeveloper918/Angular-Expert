@@ -53,6 +53,7 @@ const Page8 = () => {
   const [previewImage, setPreviewImage] = useState<any>('');
   const [previewOpen, setPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [state, setState] = useState<any>("")
 
   const images = JSON.stringify(fileLists)
   const getUserdata = useSelector((state: any) => state?.user?.userData);
@@ -96,14 +97,23 @@ const Page8 = () => {
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 1 ? entries[1][0] : '';
   // const id = "commonID";
+  async function convertUrlToBlob(url:any) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return blob;
+  }
   const submit = async (values: any) => {
     setLoading(true);
+    const formData = new FormData();
 
+  
+  
     try {
       const photoComment = inputPairs.map((pair) => ({
         comment: values[pair.commentName],
         files: values[pair.goalName],
       }));
+console.log(photoComment,"photoComment");
 
       setLoading(true);
       const payload =
@@ -155,7 +165,7 @@ const Page8 = () => {
             autoClose: 300,
           });
         }
-        router.replace("/admin/member")
+        // router.replace("/admin/member")
       } catch (error) {
         
       }
@@ -166,7 +176,7 @@ const Page8 = () => {
       setLoading(false);
     }
   };
-  const [state, setState] = useState<any>("")
+
   const getDataById = async () => {
     const item = {
       user_id: value
@@ -230,6 +240,11 @@ const Page8 = () => {
   const onPrevious = () => {
     router.replace(`/admin/member/add/page7?${value}&edit`)
   }
+
+  const handleDelete=()=>{
+    console.log("delete check");
+    
+  }
   return (
     <MainLayout>
       <Fragment>
@@ -267,6 +282,7 @@ const Page8 = () => {
                               onPreview={handlePreview}
                               onChange={(info) => handleChange(info, pair.id.toString())}
                               multiple
+                              onRemove={handleDelete}
                             >
                               {(fileLists[pair.id] || []).length >= 8 ? null : <PlusOutlined />}
                             </Upload>
@@ -308,7 +324,7 @@ const Page8 = () => {
                     <div className="d-flex mt-5">
                       <div className="col-2">
 
-                        <Button size={'large'} type="primary" className=" " onClick={submit}>
+                        <Button size={'large'} type="primary" className=" "  htmlType="submit">
                           Save
                         </Button>
                       </div>

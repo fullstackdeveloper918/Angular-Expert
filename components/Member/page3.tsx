@@ -137,8 +137,8 @@ const Page3 = () => {
         }
       } catch (error) {
 
-      } finally {
           setLoading(false)
+      } finally {
       }
 
 

@@ -86,8 +86,8 @@ const Page6 = () => {
           }
       } catch (error) {
           
-      }finally{
           setLoading(false)
+      }finally{
       }
   }
   const [state, setState] = useState<any>("")

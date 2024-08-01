@@ -201,7 +201,7 @@ setActive(x)
     hasUser && {
       key: henceofrthEnums.Roles.MY_PRIFILE_SETTINS,
       view: getItem(
-        "My Updates",
+        "My Update",
         "sub1",
         <UsergroupAddOutlined style={iconSize} />,
         [

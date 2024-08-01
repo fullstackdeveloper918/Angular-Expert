@@ -54,8 +54,8 @@ const Page4 = () => {
           }
       } catch (error) {
           
-      }finally{
           setLoading(false)
+      }finally{
       }
   }
   const onFinish1 = async(values:any) => {

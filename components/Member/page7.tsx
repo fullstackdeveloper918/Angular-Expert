@@ -91,8 +91,8 @@ const Page7 = () => {
             }
         } catch (error) {
 
-        } finally {
             setLoading(false)
+        } finally {
         }
     }
 
