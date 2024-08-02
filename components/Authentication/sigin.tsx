@@ -73,17 +73,16 @@ const Sigin = () => {
         return () => unsubscribe();
       }
     }, [router]);
-    const createSessionCookie = async (idToken: string) => {
-
-      const expiresIn = 60 * 60 * 24 * 30 * 1000; // 30 days
+    const setCookie = (name:any, value:any, days:any) => {
+      const expires = new Date();
+      expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+    };
+    
+    const createSessionCookie = (idToken:any) => {
       try {
-        // Request to create a session cookie with your backend
-        
-        await axios.post('/api/sessionLogin', { idToken });
-        setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
-          maxAge: 60 * 60 * 24 * 30, // 30 days
-          path: "/",
-        });
+        // Directly set the session cookie on the frontend
+        setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days
       } catch (error) {
         console.error('Failed to create session cookie', error);
       }
@@ -117,15 +116,14 @@ const Sigin = () => {
       toast.success("Login successfully");
 
       createSessionCookie(idToken);
-      setCookie(null, "COOKIES_USER_ACCESS_TOKEN", idToken, {
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-        path: "/",
-      });
-      setCookie(null, "user_data", responseData, {
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-        path: "/",
-      });
-
+      setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, {maxAge: 60 * 60 * 24 * 30, // 30 days
+path: "/",
+       });
+      // setCookie(null, "user_data", responseData, {
+      //   maxAge: 60 * 60 * 24 * 30, // 30 days
+      //   path: "/",
+      // });
+      setCookie("user_data", JSON.stringify(responseData), 30); // 30 days
       router?.push("/admin/dashboard");
     } catch (error: any) {
       setLoading(false);

@@ -573,7 +573,7 @@ console.log(hotelSearchRef,"hotelSearchRef");
                                                 /> */}
                                             </Form.Item>
                                             <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
-                                                <Input size={'large'} placeholder="Weather"
+                                                {/* <Input size={'large'} placeholder="Weather"
                                                     onKeyPress={(e: any) => {
                                                         if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
                                                             e.preventDefault();
@@ -581,8 +581,8 @@ console.log(hotelSearchRef,"hotelSearchRef");
                                                             e.target.value = String(e.target.value).trim()
                                                         }
                                                     }}
-                                                />
-                                                {/* <p className="custom-input" style={{ width: '100%' }}>{data?.temperature}</p> */}
+                                                /> */}
+                                                <p className="custom-input" style={{ width: '100%' }}>{data?.temperature}</p>
                                                 {/* <input
                                                     type="text"
                                                     value={location}
