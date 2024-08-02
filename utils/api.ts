@@ -125,6 +125,8 @@ const Meeting={
     requests.get("five-day-beforemeeting-countdown"),
   past_meeting:(q?: string)=>
     requests.get(`past-meetings${q ? `?${q}` : ""}`),
+  meeting_user:(info: any)=>
+    requests.post(`past-meetings-user`,info),
   listing: (q?: string) =>
     requests.get(`meeting-list${q ? `?${q}` : ""}`),
   upcoming_meeting: () =>

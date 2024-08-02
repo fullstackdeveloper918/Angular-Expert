@@ -572,7 +572,7 @@ console.log(hotelSearchRef,"hotelSearchRef");
                                                     placeholder="Enter your address"
                                                 /> */}
                                             </Form.Item>
-                                            <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
+                                            <Form.Item name="weather" className='col-lg-6 col-sm-12' label="Weather">
                                                 {/* <Input size={'large'} placeholder="Weather"
                                                     onKeyPress={(e: any) => {
                                                         if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
