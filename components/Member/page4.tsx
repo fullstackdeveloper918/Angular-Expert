@@ -53,7 +53,10 @@ const Page4 = () => {
               router.push(`/admin/member/add/page5?${res?.userId}`)
           }
       } catch (error) {
-          
+        if (error) {
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+          }
           setLoading(false)
       }finally{
       }

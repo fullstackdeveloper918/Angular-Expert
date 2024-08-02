@@ -302,13 +302,13 @@ const MemberList = () => {
             setLoading1(false)
         } catch (error) {
             setLoading1(false)
-            // if (error) {
-            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            if (error) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
       
-            //     // }
-            //     toast.error("Session Expired Login Again")
-            //     router.replace("/auth/signin")
-            // }
+                // }
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
         }
     };
 

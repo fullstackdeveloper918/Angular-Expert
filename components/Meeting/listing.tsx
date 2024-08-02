@@ -232,14 +232,14 @@ const MeetingList = () => {
             }
         } catch (error) {
             setLoading(false);
-            // if (error) {
-            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            if (error) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
-            //     // }
-            //     dispatch(clearUserData({}));
-            //     toast.error("Session Expired Login Again")
-            //     router.replace("/auth/signin")
-            // }
+                // }
+                dispatch(clearUserData({}));
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
         }
     };
     useEffect(() => {
