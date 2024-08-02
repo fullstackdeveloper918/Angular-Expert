@@ -55,6 +55,9 @@ const MeetingAdd = () => {
     const [weather, setWeather] = useState<any>(null);
     const [error, setError] = useState('');
     const [nearestAirport, setNearestAirport] = useState<any>(null);
+    const [lat, setLat] = useState<any>(null);
+    const [long, setLong] = useState<any>(null);
+    const [data, setData] = useState<any>(null);
     const handleSearch = async () => {
         try {
             setError('');
@@ -368,8 +371,9 @@ console.log(hotelSearchRef,"hotelSearchRef");
                 const coordinate:any = place.geometry.location;
                 const latitude = coordinate.lat();
                 const longitude = coordinate.lng();
-                      
-
+                setLat(latitude);
+                setLong(longitude);
+                fetchWeatherData(latitude, longitude);
                 findNearestAirport(latitude, longitude);
                 form.setFieldValue("hotel", place.name || '');
             });
@@ -379,7 +383,36 @@ console.log(hotelSearchRef,"hotelSearchRef");
     useEffect(() => {
         initPlaceHotel();
     }, [shortCounrtyName]);
+    const fetchWeatherData = async (latitude:any, longitude:any) => {
+        try {
+          const response = await fetch(
+            // `https://api.openweathermap.org/data/2.5/weather/?lat=${latitude}&lon=${longitude}&units=metric&APPID=5838d6d5e70962258f159aa9acdb2546`
+          ` https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m`
+        );
+          const result = await response.json();
+                  // Extract the current weather data
+        const currentWeather = result.current;
+        const hourlyWeather = result.hourly;
 
+        // Example of extracting data
+        const rainPercentage = currentWeather.precipitation_sum || 'N/A';
+        const humidity = currentWeather.relative_humidity_2m || 'N/A';
+
+        // Set the data to state or handle it as needed
+        setData({
+            temperature: currentWeather.temperature_2m,
+            windSpeed: currentWeather.wind_speed_10m,
+            rainPercentage,
+            humidity
+        });
+
+        console.log(result, "Weather Data");
+        } catch (error) {
+          console.error('Error fetching weather data:', error);
+        }
+      };
+    console.log(data,"chachdata");
+    
     const findNearestAirport = (lat:any, lng:any) => {
         const service = new window.google.maps.places.PlacesService(document.createElement('div'));
         const request = {
@@ -549,6 +582,7 @@ console.log(hotelSearchRef,"hotelSearchRef");
                                                         }
                                                     }}
                                                 />
+                                                {/* <p className="custom-input" style={{ width: '100%' }}>{data?.temperature}</p> */}
                                                 {/* <input
                                                     type="text"
                                                     value={location}

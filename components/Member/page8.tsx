@@ -64,7 +64,7 @@ const Page8 = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState<any>("");
-
+  const [errorShown, setErrorShown] = useState(false);
   const images = JSON.stringify(fileLists);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const cookies = parseCookies();
@@ -79,8 +79,26 @@ const Page8 = () => {
   };
 
   const handleChange = async (info: any, id: any) => {
+    // let fileList = [...info.fileList];
+
+    // Limit the number of uploaded files to 10
+    // if (fileList.length <= 10) {
+    //   setErrorShown(false);
+    // }
+
+    // // Limit the number of uploaded files to 10
+    // if (fileList.length > 10) {
+    //   fileList = fileList.slice(0, 10);
+    //   if (!fileLists[id] || fileLists[id].length < 10) {
+    //     if (!errorShown) {
+    //       toast.error('You can only upload up to 10 images.');
+    //       setErrorShown(true);
+    //     }
+    //   }
+    // }
     const newFileLists = { ...fileLists, [id]: info.fileList };
     setFileLists(newFileLists);
+    
   };
 
   const addInputPair = () => {
@@ -381,9 +399,10 @@ const Page8 = () => {
                                 handleDelete(file, pair, index)
                               }
                             >
-                              {(fileLists[pair.id] || []).length >= 8 ? null : (
+                              {/* {(fileLists[pair.id] || []).length >= 8 ? null : (
                                 <PlusOutlined />
-                              )}
+                              )} */}
+                              {(fileLists[pair.id] || []).length >= 10 ? null : <PlusOutlined />}
                             </Upload>
                             {/* {previewImage && (
                       <Image

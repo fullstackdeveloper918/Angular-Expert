@@ -32,6 +32,28 @@ const router =useRouter()
 
   const [filteredData, setFilteredData] = useState<any>([]);
   const [hasError, setHasError] = useState(false);
+  const formatWithOrdinal = (date:any) => {
+    const day = dayjs(date).date();
+    
+    const getOrdinalSuffix = (day:any) => {
+      const j = day % 10,
+            k = day % 100;
+      if (j === 1 && k !== 11) {
+        return day + "st";
+      }
+      if (j === 2 && k !== 12) {
+        return day + "nd";
+      }
+      if (j === 3 && k !== 13) {
+        return day + "rd";
+      }
+      return day + "th";
+    };
+  
+    const monthYear = dayjs(date).format('MMMM YYYY');
+    const formattedDate = `${dayjs(date).format('MMMM')} ${getOrdinalSuffix(day)}, ${dayjs(date).format('YYYY')}`;
+    return formattedDate;
+  };
   useEffect(() => {
     // Filter data when searchTerm or state1 changes
     const filtered = areas?.filter((res: any) => {
@@ -51,9 +73,9 @@ const router =useRouter()
         <Tooltip title={res?.location}>
           {res?.location ? `${res?.location.slice(0, 20)}...` : "N/A"}
         </Tooltip>,
-      start_date: dayjs(res?.start_meeting_date).format('DD-MM-YYYY') || "N/A",
+      start_date: formatWithOrdinal(res?.start_meeting_date) || "N/A",
       start_time: dayjs(res?.start_time).format('hh:mm A') || "N/A",
-      end_date: dayjs(res?.end_meeting_date).format('DD-MM-YYYY') || "N/A",
+      end_date: formatWithOrdinal(res?.end_meeting_date) || "N/A",
       end_time: dayjs(res?.end_time).format('hh:mm A') || "N/A",
     }
   })

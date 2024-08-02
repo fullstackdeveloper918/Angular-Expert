@@ -163,7 +163,28 @@ const sharePdf = async () => {
     // window.open(pdfUrl, '_blank');
 };
 
+const formatWithOrdinal = (date:any) => {
+  const day = dayjs(date).date();
+  
+  const getOrdinalSuffix = (day:any) => {
+    const j = day % 10,
+          k = day % 100;
+    if (j === 1 && k !== 11) {
+      return day + "st";
+    }
+    if (j === 2 && k !== 12) {
+      return day + "nd";
+    }
+    if (j === 3 && k !== 13) {
+      return day + "rd";
+    }
+    return day + "th";
+  };
 
+  const monthYear = dayjs(date).format('MMMM YYYY');
+  const formattedDate = `${dayjs(date).format('MMMM')} ${getOrdinalSuffix(day)}, ${dayjs(date).format('YYYY')}`;
+  return formattedDate;
+};
 
   return (
     <MainLayout>
@@ -206,7 +227,7 @@ const sharePdf = async () => {
                   <ul className='list-unstyled my-4 mb-4'>
                     <li className='mb-3'><Typography.Text >Meeting Type:</Typography.Text > <Typography.Text className='ms-1 text-capitalize'>{`${validation.capitalizeFirstLetter(state?.meeting_type)}` || 'N/A'} {dayjs(state?.start_meeting_date).format("YYYY")  || "N/A"}</Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Location:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.location) || "N/A"}</Typography.Text ></li>
-                    <li className='mb-3'><Typography.Text >Meeting Dates:</Typography.Text > <Typography.Text className='ms-1'>{dayjs(state?.start_meeting_date).format("DD-MM-YYYY")  || "N/A"} to {dayjs(state?.end_meeting_date).format("DD-MM-YYYY")  || "N/A"} </Typography.Text ></li>
+                    <li className='mb-3'><Typography.Text >Meeting Dates:</Typography.Text > <Typography.Text className='ms-1'>{formatWithOrdinal(state?.start_meeting_date)  || "N/A"} to {formatWithOrdinal(state?.end_meeting_date)  || "N/A"} </Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Hotel:</Typography.Text > <Typography.Text className='ms-1'>{state?.hotel || "N/A"}</Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Nearest Airport:</Typography.Text > <Typography.Text className='ms-1'>{state?.airport || "N/A"}</Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Host Company:</Typography.Text > <Typography.Text className='ms-1'>{state?.host_company || "N/A"}</Typography.Text ></li>

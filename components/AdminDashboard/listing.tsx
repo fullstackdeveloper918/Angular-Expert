@@ -53,6 +53,29 @@ const AdminDashboard: Page = (props: any) => {
   const fiveDaysInMilliseconds = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
 
   const new_date = start_date - fiveDaysInMilliseconds;
+
+  const formatWithOrdinal = (date:any) => {
+    const day = dayjs(date).date();
+    
+    const getOrdinalSuffix = (day:any) => {
+      const j = day % 10,
+            k = day % 100;
+      if (j === 1 && k !== 11) {
+        return day + "st";
+      }
+      if (j === 2 && k !== 12) {
+        return day + "nd";
+      }
+      if (j === 3 && k !== 13) {
+        return day + "rd";
+      }
+      return day + "th";
+    };
+  
+    const monthYear = dayjs(date).format('MMMM YYYY');
+    const formattedDate = `${dayjs(date).format('MMMM')} ${getOrdinalSuffix(day)}, ${dayjs(date).format('YYYY')}`;
+    return formattedDate;
+  };
   const DashboardData = [
     {
       cardBackground: "#D3D3D3", // Light gray background
@@ -70,7 +93,7 @@ const AdminDashboard: Page = (props: any) => {
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: "Meeting Kick off",
       textColor: "#000000",
-      count:<span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
+      count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
 
     },
@@ -130,7 +153,7 @@ const AdminDashboard: Page = (props: any) => {
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: "Meeting Kick off",
       textColor: "#000000",
-      count:<span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
+      count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
 
     },
@@ -142,7 +165,7 @@ const AdminDashboard: Page = (props: any) => {
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}>{complete?.totalCompleted || "0"}</span>
       //  "No. of Users fillled the Form for coming meeting"
-       ,
+      ,
       link: "/admin/dashboard"
 
     },
@@ -199,7 +222,7 @@ const AdminDashboard: Page = (props: any) => {
     return {
       key: index + 1,
       name: capFirst(res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A"),
-      company:capFirst(replaceUnderScore(res?.company_name || "N/A")),
+      company: capFirst(replaceUnderScore(res?.company_name || "N/A")),
       email: res?.email || "N/A",
       phone: res?.phone_number || "N/A",
       position: capFirst(res?.position || "N/A"),
@@ -267,8 +290,8 @@ const AdminDashboard: Page = (props: any) => {
           host_city: <Tooltip title={res?.location}>
             {res?.location ? `${res?.location.slice(0, 20)}...` : "N/A"}
           </Tooltip>,
-          start: dayjs(res?.start_meeting_date).format('DD-MM-YYYY') || "N/A",
-          end: dayjs(res?.end_meeting_date).format('DD-MM-YYYY') || "N/A",
+          start: formatWithOrdinal(res?.start_meeting_date) || "N/A",
+          end: formatWithOrdinal(res?.end_meeting_date) || "N/A",
           action: <Timmer endDate={res?.start_meeting_date} />,
           action1: <ul className='m-0 list-unstyled d-flex gap-2'><li>
             <Link href={`/admin/meetings/${res?.id}/view`}><Button type="primary" className='ViewMore primary'><EyeOutlined /></Button></Link></li>
@@ -427,17 +450,26 @@ const AdminDashboard: Page = (props: any) => {
   const getData = async () => {
     setLoading(true)
     try {
-
-      let res = await api.User.listing()
-      setState1(res?.data)
       let apiRes1 = await api.User.user_completed_noncompleted()
-      setComplete(apiRes1.data)
+        setComplete(apiRes1.data)
       setLoading(false)
     } catch (error) {
       setLoading(false)
     }
   }
-
+const userlist=async()=>{
+  setLoading(true)
+try {
+  let res = await api.User.listing()
+  setState1(res?.data)
+setLoading(false)
+} catch (error) {
+  setLoading(false)
+}
+}
+useEffect(()=>{
+  userlist()
+},[])
   const initialise = async () => {
     try {
       if (getUserdata?.is_admin == false) {
@@ -563,7 +595,7 @@ const AdminDashboard: Page = (props: any) => {
                       </div>
                     ) : (
                       <Table dataSource={dataSource} columns={columns2} pagination={false} />
-                      )}
+                    )}
                   </div>
 
                 </Card>
