@@ -468,13 +468,13 @@ setLoading(false)
 }
 }
 useEffect(() => {
-  // const hasReloaded = localStorage.getItem('hasReloaded');
-  // if (!hasReloaded) {
-  //   localStorage.setItem('hasReloaded', 'true');
-  //   window.location.reload();
-  // } else {
+  const hasReloaded = localStorage.getItem('hasReloaded');
+  if (!hasReloaded) {
+    localStorage.setItem('hasReloaded', 'true');
+    window.location.reload();
+  } else {
     userlist();
-  // }
+  }
 }, []);
   const initialise = async () => {
     try {
