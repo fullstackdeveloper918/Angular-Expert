@@ -101,12 +101,15 @@ const Sigin = () => {
         values?.password
       );
       setState(userCredential);
+      const idTokenResult = await userCredential.user.getIdTokenResult(true);
+const refreshToken = idTokenResult.token; 
       const idToken = await userCredential.user.getIdToken();
-      setToken(idToken);
+      setToken(refreshToken);
+      console.log(refreshToken,"refreshToken");
 
       const res = await axios.get("https://frontend.goaideme.com/single-user", {
         headers: {
-          Token: `${idToken}`,
+          Token: `${refreshToken}`,
           "Content-Type": "application/json",
         },
       });
@@ -115,14 +118,15 @@ const Sigin = () => {
 
       toast.success("Login successfully");
 
-      createSessionCookie(idToken);
-      setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, {maxAge: 60 * 60 * 24 * 30, // 30 days
-path: "/",
-       });
+      createSessionCookie(refreshToken);
+//       setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, {maxAge: 60 * 60 * 24 * 30, // 30 days
+// path: "/",
+//        });
       // setCookie(null, "user_data", responseData, {
       //   maxAge: 60 * 60 * 24 * 30, // 30 days
       //   path: "/",
       // });
+      setCookie("COOKIES_USER_ACCESS_TOKEN", refreshToken, 30); // 30 days
       setCookie("user_data", JSON.stringify(responseData), 30); // 30 days
       router?.push("/admin/dashboard");
     } catch (error: any) {

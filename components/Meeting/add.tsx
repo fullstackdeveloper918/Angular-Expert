@@ -582,7 +582,7 @@ console.log(hotelSearchRef,"hotelSearchRef");
                                                         }
                                                     }}
                                                 /> */}
-                                                <p className="custom-input" style={{ width: '100%' }}>{data?.temperature}</p>
+                                                <p className="custom-input" style={{ width: '100%' }}>{data?.temperature}°C</p>
                                                 {/* <input
                                                     type="text"
                                                     value={location}
