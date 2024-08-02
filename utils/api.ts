@@ -18,6 +18,7 @@ const cookies = parseCookies();
 const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
 const encode = encodeURIComponent;
 const responseBody = (res: any) => res.body;
+console.log(accessToken,"accessToken");
 
 let token: any = accessToken;
 const tokenPlugin = (req: any) => {
