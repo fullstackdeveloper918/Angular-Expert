@@ -3,6 +3,7 @@ const SuperagentPromise = require('superagent-promise');
 const superagent = SuperagentPromise(_superagent, global.Promise);
 import { parseCookies } from 'nookies';
 
+// const API_ROOT = 'https://app-uilsndszlq-uc.a.run.app/';
 const API_ROOT = 'https://frontend.goaideme.com/';
 
 const BUCKET_ROOT = `https://shared2.fra1.digitaloceanspaces.com/shared2/`;

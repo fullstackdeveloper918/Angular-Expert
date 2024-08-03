@@ -49,9 +49,9 @@ const Page6 = () => {
               router.push(`/admin/member/add/page7?${res?.userId}`)
           }
       } catch (error) {
+          setLoading(false)
           
       }finally{
-          setLoading(false)
       }
   }
   const onFinish1 = async(values:any) => {
@@ -85,7 +85,6 @@ const Page6 = () => {
               }
           }
       } catch (error) {
-          
           setLoading(false)
       }finally{
       }

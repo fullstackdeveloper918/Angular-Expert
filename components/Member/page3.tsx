@@ -165,9 +165,9 @@ const Page3 = () => {
           let res = await api.Auth.signUp(items)
           toast.success("Save Successfully")
       } catch (error) {
+          setLoading(false)
 
       } finally {
-          setLoading(false)
       }
 
 

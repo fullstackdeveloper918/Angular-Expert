@@ -66,7 +66,9 @@ const AddStaff: Page = () => {
         try {
             setLoading(true)
             let res = await api.Admin.create(items)
-            toast.success('Add Successful', {
+            console.log(res,"tttttt");
+            
+            toast.success(res?.message, {
                 position: 'top-center',
                 autoClose: 300,
                 onClose: () => {
@@ -78,9 +80,9 @@ const AddStaff: Page = () => {
         } catch (error: any) {
           
       
+            setLoading(false)
       
           } finally {
-            setLoading(false)
         }
     };
 

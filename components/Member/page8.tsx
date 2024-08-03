@@ -12,6 +12,10 @@ import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { destroyCookie, parseCookies } from "nookies";
+import { pdf } from "@react-pdf/renderer";
+import Pdf from "../common/Pdf";
+import saveAs from "file-saver";
+import { capFirst } from "@/utils/validation";
 
 const { Title } = Typography;
 
@@ -60,6 +64,7 @@ const Page8 = () => {
   const [uploadedUrls, setUploadedUrls] = useState<Record<string, string[]>>(
     {}
   );
+  const [responseData,setResponseData]=useState<any>("")
   const [previewImage, setPreviewImage] = useState<any>("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -67,8 +72,12 @@ const Page8 = () => {
   const [errorShown, setErrorShown] = useState(false);
   const images = JSON.stringify(fileLists);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
+  console.log(getUserdata,"getUserdata");
+  
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
+  console.log(responseData,"responseData");
+  
   const handlePreview = async (file: UploadFile<any>) => {
     // if (!file.url && !file.preview) {
     file.preview = await getBase64(file.originFileObj as File);
@@ -166,6 +175,7 @@ const Page8 = () => {
         let response;
         if (state?.photo_section?.fileUrls?.length) {
           response = await axios.post(
+            // "https://app-uilsndszlq-uc.a.run.app/update-photo-section",
             "https://frontend.goaideme.com/update-photo-section",
             formData,
             {
@@ -178,6 +188,7 @@ const Page8 = () => {
         } else {
           response = await axios.post(
             "https://frontend.goaideme.com/uploadFile",
+            // "https://app-uilsndszlq-uc.a.run.app/uploadFile",
             formData,
             {
               headers: {
@@ -186,6 +197,9 @@ const Page8 = () => {
               },
             }
           );
+
+
+
         }
         if (response) {
           toast.success("Added Successsfully", {
@@ -193,7 +207,11 @@ const Page8 = () => {
             autoClose: 300,
           });
         }
-        // router.replace("/admin/member")
+console.log(response?.data,"response");
+
+setResponseData(response?.data?.pdfReponseData);
+router.replace("/admin/member")
+return response?.data?.pdfReponseData;
       } catch (error) {}
       // }
     } catch (error) {
@@ -285,6 +303,7 @@ const Page8 = () => {
 
     try {
       const res = await axios.post(
+        // "https://app-uilsndszlq-uc.a.run.app/remove-photo-section",
         "https://frontend.goaideme.com/remove-photo-section",
         data,
         {
@@ -330,6 +349,73 @@ const Page8 = () => {
   //   })
   // };
 
+  const generatePdf = async (data?: any) => {
+    //  
+
+    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+    const blob = await pdf(<Pdf state={data} />).toBlob();
+    const pdfUrl = URL.createObjectURL(blob);
+    return { blob, pdfUrl, timestamp };
+};
+
+// Function to handle PDF download
+// const downLoadPdf = async (res: any) => {
+
+//     const { blob, timestamp } = await generatePdf(res);
+//     saveAs(blob, `${capFirst(res?.company_name)}.pdf`);
+// };
+
+// Function to handle PDF sharing
+console.log(responseData,"PDFsharing");
+const sharePdf = async (responseData: any) => {
+    //  
+    console.log(responseData,"item12345");
+    
+
+    const { pdfUrl, timestamp } = await generatePdf(responseData);
+    const response = await fetch(pdfUrl);
+    const blob = await response.blob();
+console.log(pdfUrl,"pdfUrl");
+console.log(response,"11111");
+console.log(blob,"blob");
+
+    // Convert the blob to a file
+    const file = new File([blob], `check.pdf`, { type: 'application/pdf' });
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('user_id', getUserdata?.user_id);
+
+    const res = await fetch('https://frontend.goaideme.com/send-completeform-mail-to-superadmin', {
+    // const res = await fetch('https://app-uilsndszlq-uc.a.run.app/send-completeform-mail-to-superadmin', {
+
+        method: 'POST',
+        body: formData,
+        headers: {
+            Token: `${accessToken}`,
+            // 'Content-Type': 'application/json',
+        }
+    },);
+
+    // const apiRes: any = await res.json()
+    // navigator.clipboard.writeText(apiRes?.fileUrl)
+    //     .then(() => {
+    //         toast.success('Link copied to clipboard');
+    //     })
+    //     .catch(() => {
+    //         toast.error('Failed to copy link to clipboard');
+    //     });
+
+};
+  const handleFetchAndFetchData = async (values: any) => {
+         
+    let item = await submit(values);
+    console.log(item,"item check");
+    
+    if (item) {
+      await sharePdf(item);
+  }
+
+};
   return (
     <MainLayout>
       <Fragment>
@@ -378,7 +464,7 @@ const Page8 = () => {
                     className="add-staff-form"
                     scrollToFirstError
                     layout="vertical"
-                    onFinish={submit}
+                    onFinish={handleFetchAndFetchData}
                   >
                     <div>
                       {inputPairs.map((pair: any, index: number) => (

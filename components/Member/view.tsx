@@ -99,12 +99,14 @@ const MeetingView = () => {
   const onFinish = async () => {
     let items = {
       to: state?.email,
-      link: `https://angular-expert-mu.vercel.app/auth/update_password?${state.email}`
+      link: `https://nabh-app--nabh-41663.us-central1.hosted.app/auth/update_password?${state.email}`
+      // link: `https://angular-expert-mu.vercel.app/auth/update_password?${state.email}`
       
     };
     try {
       setLoading(true)
       let res = await axios.post("https://frontend.goaideme.com/reset-password", 
+      // let res = await axios.post("https://app-uilsndszlq-uc.a.run.app/reset-password", 
         items, // items is the body of the request
         {
           headers: {
@@ -151,6 +153,7 @@ const sharePdf = async () => {
 
 
     const res = await fetch('https://frontend.goaideme.com/save-pdf', {
+    // const res = await fetch('https://app-uilsndszlq-uc.a.run.app/save-pdf', {
 
         method: 'POST',
         body: formData,

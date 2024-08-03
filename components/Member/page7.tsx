@@ -53,8 +53,8 @@ const Page7 = () => {
             }
         } catch (error) {
 
-        } finally {
             setLoading(false)
+        } finally {
         }
     }
     const onFinish1 = async (values: any) => {
@@ -90,7 +90,6 @@ const Page7 = () => {
                 }
             }
         } catch (error) {
-
             setLoading(false)
         } finally {
         }

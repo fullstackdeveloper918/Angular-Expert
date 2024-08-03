@@ -98,8 +98,8 @@ const Page1 = () => {
          
       } catch (error: any) {
        
-      } finally {
           setLoading(false)
+      } finally {
       }
   };
   const getDataById = async () => {

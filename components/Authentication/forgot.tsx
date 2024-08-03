@@ -28,9 +28,11 @@ const Forgotpaswrd = () => {
     const onFinish = async (values: any) => {
         let items = {
             to: values.email,
-            link: `https://angular-expert-mu.vercel.app/auth/update_password?${values.email}`
+            link: `https://nabh-app--nabh-41663.us-central1.hosted.app/auth/update_password?${values.email}`
+            // link: `https://angular-expert-mu.vercel.app/auth/update_password?${values.email}`
         };
         try {
+            // let res = await axios.post("https://app-uilsndszlq-uc.a.run.app/forgot-password", items)
             let res = await axios.post("https://frontend.goaideme.com/forgot-password", items)
 
         } catch (error) {
