@@ -86,6 +86,22 @@ const Sigin = () => {
       console.error("Failed to create session cookie", error);
     }
   };
+
+  const refreshToken = async () => {
+   
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        user.getIdToken().then((idToken) => {
+          console.log("ID Token:", idToken);
+          setToken(idToken);
+        });
+      }}
+      )
+  };
+
+  setInterval(refreshToken, 55 * 60 * 1000);
+
+
   const handleSuperAdminClick = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword); // Toggle showPassword state
   };
@@ -99,6 +115,8 @@ const Sigin = () => {
         values?.password === "RamDodge2020" ? "nahbcraftsmen@gmail.com" : values?.email,
         values?.password
       );
+      console.log(userCredential, 'userCredential');
+      
       setState(userCredential);
       const idTokenResult = await userCredential.user.getIdTokenResult(true);
       const refreshToken = idTokenResult.token;

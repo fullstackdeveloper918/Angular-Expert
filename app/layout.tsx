@@ -10,6 +10,17 @@ import NProgress from 'nprogress';
 import NextTopLoader from 'nextjs-toploader';
 import 'nprogress/nprogress.css'; 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/utils/firebase";
+import nookies from 'nookies';
+
+const setCookie = (name:any, value:any, days:any) => {
+  nookies.set(null, name, value, {
+    maxAge: days * 24 * 60 * 60,
+    path: '/',
+  });
+};
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -17,6 +28,32 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  useEffect(() => {
+    const refreshToken = async () => {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          try {
+            const idToken = await user.getIdToken();
+            console.log("ID Token:", idToken);
+            // setToken(idToken);
+            setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days
+          } catch (error) {
+            console.error("Error getting ID token:", error);
+          }
+        }
+      });
+    };
+
+    // Refresh the token every 55 minutes
+    const intervalId = setInterval(refreshToken, 55 * 60 * 1000);
+
+    // Initial token refresh
+    refreshToken();
+
+    // Cleanup function to clear the interval
+    return () => clearInterval(intervalId);
+  }, [auth]);
   return (
     <>
       <html lang="en">
@@ -37,7 +74,7 @@ export default function RootLayout({
         </head>
         <body className={inter.className}>
           {/* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossOrigin="anonymous"></script> */}
-
+   
             <NextTopLoader  color="#2299DD"
  initialPosition={0.08}
  crawlSpeed={200}

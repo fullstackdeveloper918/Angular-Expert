@@ -27,7 +27,11 @@ import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { destroyCookie } from "nookies";
+import { destroyCookie, setCookie } from "nookies";
+import henceforthApi from "@/utils/api";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/utils/firebase";
+import nookies from 'nookies';
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -53,7 +57,12 @@ const Page1 = () => {
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 1 ? entries[1][0] : '';
-  
+  const setCookie = (name:any, value:any, days:any) => {
+    nookies.set(null, name, value, {
+      maxAge: days * 24 * 60 * 60,
+      path: '/',
+    });
+  };
   const onFinish = async (values: any) => {
       let items = {
          bussiness_update:{
@@ -115,15 +124,35 @@ const Page1 = () => {
           }
         form.setFieldsValue(res?.data)
       } catch (error: any) {
-        if (error) {
-            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-  
+        // const handleError = (error:any) =>{
+            if(error == "347347"){
+                // const refreshToken = async () => {
+                    onAuthStateChanged(auth, async (user) => {
+                      if (user) {
+                        try {
+                          const idToken = await user.getIdToken();
+                          console.log("ID Token:", idToken);
+                          // setToken(idToken);
+                          henceforthApi.setToken(idToken)
+                          setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days
+                        } catch (error) {
+                          console.error("Error getting ID token:", error);
+                        }
+                      }
+                    });
+                //   };
             // }
-            toast.error("Session Expired Login Again")
-            router.replace("/auth/signin")
         }
+        // if (error) {
+        //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+  
+        //     // }
+        //     toast.error("Session Expired Login Again")
+        //     router.replace("/auth/signin")
+        // }
       }
     };
+  
     useEffect(() => {
         if (type =="edit") {
 
