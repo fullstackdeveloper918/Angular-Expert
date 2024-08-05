@@ -132,12 +132,13 @@ const MeetingList = () => {
                 end_date: formatWithOrdinal(res?.end_meeting_date)|| "N/A",
                 end_time: dayjs(res?.end_time).format('hh:mm A') || "N/A",
                 action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                    {getUserdata?.is_admin == false ? "" :
+                    <>
                     <li>
                         <Link href={`/admin/meetings/${res?.id}/edit`} >
                             <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
                         </Link>
                     </li>
-                    {getUserdata?.is_admin == false ? "" :
                         <li>
                             <Popconfirm
                                 title="Delete"
@@ -147,7 +148,9 @@ const MeetingList = () => {
                             >
                                 <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                             </Popconfirm>
-                        </li>}
+                        </li>
+                    </>
+                        }
                     <li>
                         <Link href={`/admin/meetings/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
                     </li>

@@ -243,7 +243,7 @@ const sharePdf = async () => {
                         Edit
                       </Button>
                     </Link>:
-                    <Link href={`/admin/member/add/page2?${state?.uid}&edit`} className='text-decoration-none text-white flex-grow-1'>
+                    <Link href={`/admin/member/add?${state?.uid}&edit`} className='text-decoration-none text-white flex-grow-1'>
                     <Button size='large' type="primary" htmlType='button' className='w-100 primaryBtn'>
                       Edit
                     </Button>

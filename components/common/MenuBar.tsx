@@ -207,6 +207,17 @@ setActive(x)
         [
           getItem(
             <Link
+              href={`/admin/member/${getUserdata?.user_id}/view`}
+              // href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
+              className="text-decoration-none"
+            >
+              My Details
+            </Link>,
+            `my_details`,
+            <AppstoreAddOutlined style={iconSize} />
+          ),
+          getItem(
+            <Link
               href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
               className="text-decoration-none"
             >
