@@ -208,16 +208,18 @@ const formatWithOrdinal = (date:any) => {
                     <Breadcrumb.Item><Link href="/admin/dashboard" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
                     {getUserdata?.is_admin==true &&
                     <Breadcrumb.Item><Link href="/admin/meetings" className='text-decoration-none'>Meeting</Link></Breadcrumb.Item>}
-                    {getUserdata?.is_admin==false &&
-                    <Breadcrumb.Item><Link href="/admin/past_meeting" className='text-decoration-none'>Past Meeting</Link></Breadcrumb.Item>}
-                    <Breadcrumb.Item className='text-decoration-none'>{getUserdata?.is_admin==false?"Past":""} Meeting Details</Breadcrumb.Item>
+                    {/* {getUserdata?.is_admin==false &&
+                    <Breadcrumb.Item><Link href="/admin/meetings/past_meeting" className='text-decoration-none'>Past Meeting</Link></Breadcrumb.Item>} */}
+                    {/* <Breadcrumb.Item className='text-decoration-none'>{getUserdata?.is_admin==false?"Past":""} Meeting Details</Breadcrumb.Item> */}
+                    <Breadcrumb.Item className='text-decoration-none'> Meeting Details</Breadcrumb.Item>
                   </Breadcrumb>
                 </div>
                 {/* Title  */}
                 <div className='d-flex justify-content-between'>
                   <div className="">
 
-                    <Typography.Title level={3} className='m-0 fw-bold'>{getUserdata?.is_admin==false?"Past":""} Meeting Details</Typography.Title>
+                    {/* <Typography.Title level={3} className='m-0 fw-bold'>{getUserdata?.is_admin==false?"Past":""} Meeting Details</Typography.Title> */}
+                    <Typography.Title level={3} className='m-0 fw-bold'>Meeting Details</Typography.Title>
                   </div>
                   <div className=" ">
                     {/* <Tooltip title="Download Pdf">
