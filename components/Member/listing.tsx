@@ -303,9 +303,9 @@ const MemberList = () => {
             setLoading1(false)
         } catch (error) {
             setLoading1(false)
-            if (error==400) {
+            if ((error==400)||(!accessToken)) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-      
+                localStorage.removeItem('hasReloaded');
                 // }
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")

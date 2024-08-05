@@ -99,7 +99,9 @@ const Page1 = () => {
               let res =await api.Auth.signUp(items)
               if (res?.status == 400) {
                 toast.error("Session Expired Login Again")
+                localStorage.removeItem('hasReloaded');
                 router.replace("/auth/signin")
+
               }
               router.push(`/admin/member/add/page3?${res?.user_id}`)
           }
@@ -119,37 +121,40 @@ const Page1 = () => {
         const res = await api.User.getById(item as any);
         setState(res?.data || null);
         if (res?.data?.status == 400) {
+            localStorage.removeItem('hasReloaded');
             toast.error("Session Expired Login Again")
             router.replace("/auth/signin")
           }
         form.setFieldsValue(res?.data)
       } catch (error: any) {
+        // console.log(error,"error");
+        
         // const handleError = (error:any) =>{
-            if(error == 400){
-                // const refreshToken = async () => {
-                    onAuthStateChanged(auth, async (user) => {
-                      if (user) {
-                        try {
-                          const idToken = await user.getIdToken();
-                          console.log("ID Token:", idToken);
-                          // setToken(idToken);
-                          henceforthApi.setToken(idToken)
-                          setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days
-                        } catch (error) {
-                          console.error("Error getting ID token:", error);
-                        }
-                      }
-                    });
-                //   };
-            // }
-        }
-        // if (error) {
-        //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-  
+        //     if(error == 400){
+        //         // const refreshToken = async () => {
+        //             onAuthStateChanged(auth, async (user) => {
+        //               if (user) {
+        //                 try {
+        //                   const idToken = await user.getIdToken();
+        //                   console.log("ID Token:", idToken);
+        //                   // setToken(idToken);
+        //                   henceforthApi.setToken(idToken)
+        //                   setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days
+        //                 } catch (error) {
+        //                   console.error("Error getting ID token:", error);
+        //                 }
+        //               }
+        //             });
+        //         //   };
         //     // }
-        //     toast.error("Session Expired Login Again")
-        //     router.replace("/auth/signin")
         // }
+        if (error==400) {
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            localStorage.removeItem('hasReloaded');
+            // }
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+        }
       }
     };
   

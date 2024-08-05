@@ -226,6 +226,7 @@ const PastMeetingUserList = () => {
             if (error==400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 dispatch(clearUserData({}));
+                localStorage.removeItem('hasReloaded');
                 // }
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")

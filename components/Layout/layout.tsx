@@ -103,6 +103,7 @@ const MainLayout = ({ children }: any) => {
       await signOut(auth)
        
          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+         localStorage.removeItem('hasReloaded');
        dispatch(clearUserData({}));
        toast.success("Logout Successful", {
          position: "top-center",

@@ -14,10 +14,11 @@ import { saveAs } from "file-saver";
 import { toast, ToastContainer } from "react-toastify";
 import Pdf from "../common/Pdf";
 import { DownloadOutlined, ShareAltOutlined } from "@ant-design/icons";
-import { parseCookies } from "nookies";
+import { destroyCookie, parseCookies } from "nookies";
 import { useSelector } from "react-redux";
 import validation from "@/utils/validation";
 import dayjs from "dayjs";
+import { clearUserData } from "@/lib/features/userSlice";
 const { Row, Col, Card, Button, Space, Popconfirm } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
     ssr: false,
@@ -66,7 +67,7 @@ const MeetingViewPage = () => {
     is_archive: ""
   })
 
-  
+  const router =useRouter()
   const [isActive, setIsActive] = useState(false);
   const searchParam = useParams();
   const cookies = parseCookies();
@@ -98,7 +99,14 @@ const MeetingViewPage = () => {
       setState(data);
     //   form.setFieldsValue(data);
     } catch (error: any) {
-      alert(error.message);
+      if (error==400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        dispatch(clearUserData({}));
+        localStorage.removeItem('hasReloaded');
+        // }
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
     }
   };
 
@@ -259,3 +267,7 @@ const formatWithOrdinal = (date:any) => {
   );
 };
 export default MeetingViewPage;
+function dispatch(arg0: any) {
+  throw new Error("Function not implemented.");
+}
+

@@ -13,7 +13,7 @@ import { saveAs } from "file-saver";
 import { toast, ToastContainer } from "react-toastify";
 import Pdf from "../common/Pdf";
 import { DownloadOutlined, ShareAltOutlined } from "@ant-design/icons";
-import { parseCookies } from "nookies";
+import { destroyCookie, parseCookies } from "nookies";
 import { useSelector } from "react-redux";
 import validation from "@/utils/validation";
 const { Row, Col, Card, Button, Space, Popconfirm } = {
@@ -66,7 +66,13 @@ const MeetingView = () => {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
     } catch (error: any) {
-      alert(error.message);
+      if (error==400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+
+        // }
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
     }
   };
 
@@ -117,7 +123,13 @@ const MeetingView = () => {
       );
       getDataById()
     } catch (error) {
+      if (error==400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
+        // }
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
     } finally {
       setLoading(false)
     }

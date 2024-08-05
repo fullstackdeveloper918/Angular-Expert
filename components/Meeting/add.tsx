@@ -150,6 +150,8 @@ console.log(selectedHotel,"selectedHotel");
             // onAdd();
         } catch (error) {
             if (error==400) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
               }

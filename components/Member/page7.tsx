@@ -111,7 +111,7 @@ const Page7 = () => {
         } catch (error: any) {
             if (error==400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-      
+                localStorage.removeItem('hasReloaded');
                 // }
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")

@@ -226,7 +226,7 @@ const Page3 = () => {
       } catch (error: any) {
         if (error==400) {
             destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-  
+            localStorage.removeItem('hasReloaded');
             // }
             toast.error("Session Expired Login Again")
             router.replace("/auth/signin")
@@ -278,6 +278,7 @@ const Page3 = () => {
                                                 <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
+                                                    className="text-black"
                                                     disabled={state?.goal_last_meeting?.length > 0}
                                                 />
                                             </Form.Item>
@@ -289,6 +290,7 @@ const Page3 = () => {
                                                 <TextArea
                                                     size={'large'}
                                                     placeholder="Enter..."
+                                                    className="text-black"
                                                     disabled={state?.goal_last_meeting?.length > 0}
                                                 />
                                             </Form.Item>

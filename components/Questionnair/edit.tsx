@@ -8,6 +8,7 @@ import api from '@/utils/api';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import MainLayout from '../Layout/layout';
+import { destroyCookie } from 'nookies';
 const { Row, Col, Card, Button } = {
   Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
   Row: dynamic(() => import("antd").then(module => module.Row), { ssr: false }),
@@ -110,6 +111,13 @@ const EditQuestionnair: Page = () => {
       // setAddModalOpen(false);
 
     } catch (error) {
+      if (error==400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.removeItem('hasReloaded');
+        // }
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
     }
   };
   return (
