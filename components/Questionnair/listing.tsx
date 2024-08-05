@@ -79,7 +79,7 @@ const QuestionnairList = () => {
                 router.replace("/auth/signin")
             }
         } catch (error) {
-            if (error) {
+            if (error==400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 dispatch(clearUserData({}));
                 // }
@@ -101,7 +101,7 @@ const QuestionnairList = () => {
           const res = await api.User.getById(item as any);
           setState1(res?.data || null);
         } catch (error: any) {
-            if (error) {
+            if (error==400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
       
                 // }

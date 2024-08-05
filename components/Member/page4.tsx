@@ -54,10 +54,10 @@ const Page4 = () => {
           }
       } catch (error) {
         setLoading(false)
-        // if (error) {
-        //     toast.error("Session Expired Login Again")
-        //     router.replace("/auth/signin")
-        //   }
+        if (error==400) {
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+          }
           
       }finally{
       }
@@ -115,7 +115,7 @@ const Page4 = () => {
           }
         form.setFieldsValue(res?.data)
       } catch (error: any) {
-        if (error) {
+        if (error==400) {
             destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
   
             // }

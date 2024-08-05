@@ -39,7 +39,7 @@ const Manage_Question = () => {
       let res = await api.Manage_Question.listing()
       setState(res.data)
     } catch (error) {
-      if (error) {
+      if (error==400) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
         // }

@@ -149,7 +149,7 @@ console.log(selectedHotel,"selectedHotel");
             router.back()
             // onAdd();
         } catch (error) {
-            if (error) {
+            if (error==400) {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
               }

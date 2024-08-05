@@ -125,7 +125,7 @@ const Page1 = () => {
         form.setFieldsValue(res?.data)
       } catch (error: any) {
         // const handleError = (error:any) =>{
-            if(error == "347347"){
+            if(error == 400){
                 // const refreshToken = async () => {
                     onAuthStateChanged(auth, async (user) => {
                       if (user) {

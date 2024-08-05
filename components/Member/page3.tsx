@@ -224,7 +224,7 @@ const Page3 = () => {
             }, {})
           });
       } catch (error: any) {
-        if (error) {
+        if (error==400) {
             destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
   
             // }

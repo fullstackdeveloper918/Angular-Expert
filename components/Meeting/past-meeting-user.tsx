@@ -223,7 +223,7 @@ const PastMeetingUserList = () => {
                 router.replace("/auth/signin")
             }
         } catch (error) {
-            if (error) {
+            if (error==400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 dispatch(clearUserData({}));
                 // }

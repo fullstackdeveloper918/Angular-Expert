@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import nookies from 'nookies';
+import henceforthApi from "@/utils/api";
 
 const setCookie = (name:any, value:any, days:any) => {
   nookies.set(null, name, value, {
@@ -35,6 +36,7 @@ export default function RootLayout({
         if (user) {
           try {
             const idToken = await user.getIdToken();
+            henceforthApi.setToken(idToken)
             console.log("ID Token:", idToken);
             // setToken(idToken);
             setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days

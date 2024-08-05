@@ -109,7 +109,7 @@ const Page7 = () => {
             }
             form.setFieldsValue(res?.data)
         } catch (error: any) {
-            if (error) {
+            if (error==400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
       
                 // }

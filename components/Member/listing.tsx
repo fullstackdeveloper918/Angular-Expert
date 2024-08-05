@@ -303,7 +303,7 @@ const MemberList = () => {
             setLoading1(false)
         } catch (error) {
             setLoading1(false)
-            if (error) {
+            if (error==400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
       
                 // }

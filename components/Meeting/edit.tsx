@@ -113,8 +113,8 @@ const MeetingEdit = () => {
       setState(data);
       form.setFieldsValue(data);
     } catch (error: any) {
-      if (error) {
-        if (error) {
+      // if (error) {
+        if (error==400) {
           destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
           // }
@@ -122,7 +122,7 @@ const MeetingEdit = () => {
           router.replace("/auth/signin")
         }
       }
-    }
+    // }
   };
   const onFinish = async (values: any) => {
     let items = {

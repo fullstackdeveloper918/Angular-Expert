@@ -134,7 +134,7 @@ const router =useRouter()
       let res = await api.Meeting.archive(query);
       setAreas(res?.data);
     } catch (error) {
-      if (error) {
+      if (error==400) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
         // }
