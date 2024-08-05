@@ -38,6 +38,12 @@ const Manage_Question = () => {
     try {
       let res = await api.Manage_Question.listing()
       setState(res.data)
+      if (res?.data?.status == 400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.removeItem('hasReloaded');
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
     } catch (error) {
       if (error==400) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });

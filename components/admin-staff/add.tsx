@@ -13,6 +13,8 @@ import api from '@/utils/api';
 import { toast, ToastContainer } from 'react-toastify';
 import MainLayout from '../Layout/layout';
 import { destroyCookie } from 'nookies';
+import { useDispatch } from 'react-redux';
+import { clearUserData } from '@/lib/features/userSlice';
 
 
 
@@ -44,7 +46,7 @@ const AddStaff: Page = () => {
     const [previewTitle, setPreviewTitle] = useState('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [loading, setLoading] = useState<any>(false)
-
+    const dispatch = useDispatch()
     const options: SelectProps['options'] = [];
     for (let i = 0; i < 10; i++) {
         options.push({
@@ -66,8 +68,8 @@ const AddStaff: Page = () => {
         try {
             setLoading(true)
             let res = await api.Admin.create(items)
-            console.log(res,"tttttt");
-            
+            console.log(res, "tttttt");
+
             toast.success(res?.message, {
                 position: 'top-center',
                 autoClose: 300,
@@ -76,13 +78,20 @@ const AddStaff: Page = () => {
                 },
             });
             form.resetFields()
+            if (res?.status == 400) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
+                // }
+                dispatch(clearUserData({}));
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
         } catch (error: any) {
-          
-      
+
+
             setLoading(false)
-      
-          } finally {
+
+        } finally {
         }
     };
 
@@ -157,7 +166,12 @@ const AddStaff: Page = () => {
                                         </Form.Item>
                                         {/* Phone No  */}
                                         <Form.Item name="mobile" rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
-                                            <Input size={'large'} type="text" minLength={6} maxLength={20} placeholder="Phone No" />
+                                            <Input size={'large'} type="text" minLength={6} onKeyPress={(event) => {
+                                                // Allow digits, space, parentheses, hyphen, plus, comma, and special keys
+                                                if (!/[0-9\s\(\)\-\+\,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                                                    event.preventDefault();
+                                                }
+                                            }} placeholder="Phone No" />
                                         </Form.Item>
                                         {/* Roles  */}
                                         <Form.Item name="roles" label="Permissions" rules={[{ required: true, message: 'Please Select Permissions' }]}>

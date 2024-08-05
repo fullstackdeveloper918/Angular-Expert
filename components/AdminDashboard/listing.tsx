@@ -81,7 +81,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Update Due",
+      title: "Asheville Update Due",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
@@ -91,7 +91,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Meeting Kick off",
+      title: "Asheville Meeting Kick off",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
@@ -104,7 +104,8 @@ const AdminDashboard: Page = (props: any) => {
       icon: <Icons.Users />,
       title: "Fall 2024 (80 days)",
       textColor: "#000000",
-      count: <span style={{ fontSize: '20px' }}>{check?.data?.fall || "0"}</span>
+      count: <span style={{ fontSize: '20px' }}>1</span>
+      // count: <span style={{ fontSize: '20px' }}>{check?.data?.fall || "0"}</span>
       // "Fall 2024 (80 days)"
       ,
       link: "/admin/dashboard"
@@ -117,7 +118,8 @@ const AdminDashboard: Page = (props: any) => {
       icon: <Icons.Users />,
       textColor: "#000000",
       title: "Spring 2025 (408 days)",
-      count: <span style={{ fontSize: '20px' }}>{check?.data?.spring || "0"}</span>
+      count: <span style={{ fontSize: '20px' }}>1</span>
+      // count: <span style={{ fontSize: '20px' }}>{check?.data?.spring || "0"}</span>
       // "Spring 2025 (408 days)"
       ,
       link: "/admin/dashboard"
@@ -141,7 +143,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Update Due",
+      title: "Asheville Update Due",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
@@ -151,7 +153,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Meeting Kick off",
+      title: "Asheville Meeting Kick off",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
@@ -202,10 +204,31 @@ const AdminDashboard: Page = (props: any) => {
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
-
+  const companyNameMap:any = {
+    "augusta": "Augusta Homes, Inc.",
+    "buffington": "Buffington Homes, L.P.",
+    "cabin": "Cabin John Builders",
+    "cataldo": "Cataldo Custom Builders",
+    "david_campbell": "The DCB",
+    "dc_building": "DC Building Inc.",
+    "denman_construction": "Denman Construction, Inc.",
+    "ellis": "Ellis Custom Homes",
+    "tm_grady_builders": "T.M. Grady Builders",
+    "hardwick": "Hardwick G. C.",
+    "homeSource": "HomeSource Construction",
+    "ed_nikles": "Ed Nikles Custom Builder, Inc.",
+    "olsen": "Olsen Custom Homes",
+    "raykon": "Raykon Construction",
+    "matt_sitra": "Matt Sitra Custom Homes",
+    "schneider": "Schneider Construction, LLC",
+    "shaeffer": "Shaeffer Hyde Construction",
+    "split": "Split Rock Custom Homes",
+    "tiara": "Tiara Sun Development"
+};
   const downLoadPdf = async (data: any) => {
+    const companyName = companyNameMap[data?.company_name || ""] || "N/A";
     const { blob, timestamp } = await generatePdf(data);
-    saveAs(blob, `${capFirst(data?.company_name)}.pdf`);
+    saveAs(blob, `${capFirst(companyName)}.pdf`);
   };
 
   const handleDownloadAndFetchData = async (id: any) => {
@@ -219,10 +242,11 @@ const AdminDashboard: Page = (props: any) => {
   const completed = state1?.filter((res: any) => res?.is_completed === true);
   const non_completed = state1?.filter((res: any) => res?.is_completed == false)
   const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
+    const companyName = companyNameMap[res?.company_name || ""] || "N/A";
     return {
       key: index + 1,
       name: capFirst(res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A"),
-      company: capFirst(replaceUnderScore(res?.company_name || "N/A")),
+      company: companyName || "N/A",
       email: res?.email || "N/A",
       phone: res?.phone_number || "N/A",
       position: capFirst(res?.position || "N/A"),
@@ -237,10 +261,11 @@ const AdminDashboard: Page = (props: any) => {
   }
   );
   const dataSource1 = completed?.map((res: any, index: number) => {
+    const companyName = companyNameMap[res?.company_name || ""] || "N/A";
     return {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(res?.firstname)} ${validation.capitalizeFirstLetter(res?.lastname)}` : "N/A",
-      company: validation.replaceUnderScore(validation.capitalizeFirstLetter(res?.company_name)) || "N/A",
+      company: companyName|| "N/A",
       email: res?.email || "N/A",
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
         {hasClubMemberPermission || getUserdata?.is_admin == false ?
@@ -261,10 +286,11 @@ const AdminDashboard: Page = (props: any) => {
   }
   );
   const dataSource2 = non_completed?.map((res: any, index: number) => {
+    const companyName = companyNameMap[res?.company_name || ""] || "N/A";
     return {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(validation.capitalizeFirstLetter(res?.firstname))} ${res?.lastname}` : "N/A",
-      company: validation.replaceUnderScore(validation.capitalizeFirstLetter(res?.company_name)) || "N/A",
+      company: companyName || "N/A",
       // email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'>
         <li>

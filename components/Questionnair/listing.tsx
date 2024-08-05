@@ -125,6 +125,12 @@ const QuestionnairList = () => {
             let res = await api.Questionnaire.listing(query);
 
             setState(res.data);
+            if (res?.data?.status == 400) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                localStorage.removeItem('hasReloaded');
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
         } catch (error) {
         } finally {
         }
@@ -208,7 +214,7 @@ const QuestionnairList = () => {
     };
   
     const data = [
-        // { title: 'Card 1', description: 'BUSINESS UPDATE', state: 0 },
+        { title: 'Card 1', description: 'BUSINESS UPDATE', state: 0 },
         { title: 'Card 2', description: 'GOALS', state: 1},
         { title: 'Card 3', description: 'CRAFTSMEN TOOLBOX', state: 2 },
         { title: 'Card 4', description: 'CRAFTSMEN CHECK-UP', state: 3 },
@@ -221,13 +227,13 @@ const QuestionnairList = () => {
         const baseURL = '/admin/member/add';
         switch (state) {
             
-            // case 0: return `${baseURL}/page2?${getUserdata?.user_id}&edit`;
-            case 1: return `${baseURL}/page3?${getUserdata?.user_id}&edit`;
-            case 2: return `${baseURL}/page4?${getUserdata?.user_id}&edit`;
-            case 3: return `${baseURL}/page5?${getUserdata?.user_id}&edit`;
-            case 4: return `${baseURL}/page6?${getUserdata?.user_id}&edit`;
-            case 5: return `${baseURL}/page7?${getUserdata?.user_id}&edit`;
-            case 6: return `${baseURL}/page8?${getUserdata?.user_id}&edit`;
+            case 0: return `${baseURL}/page2?${getUserdata?.user_id}&edit&questionnair`;
+            case 1: return `${baseURL}/page3?${getUserdata?.user_id}&edit&questionnair`;
+            case 2: return `${baseURL}/page4?${getUserdata?.user_id}&edit&questionnair`;
+            case 3: return `${baseURL}/page5?${getUserdata?.user_id}&edit&questionnair`;
+            case 4: return `${baseURL}/page6?${getUserdata?.user_id}&edit&questionnair`;
+            case 5: return `${baseURL}/page7?${getUserdata?.user_id}&edit&questionnair`;
+            case 6: return `${baseURL}/page8?${getUserdata?.user_id}&edit&questionnair`;
             // Add more cases as needed
             default: return `${baseURL}/page-default?${getUserdata}&edit`;
         }
@@ -362,10 +368,9 @@ const QuestionnairList = () => {
                                     </div>
                                     <div className='my-4 d-flex justify-content-between align-items-center gap-3'>
                                         <Search size="large" placeholder="Search..." enterButton value={searchTerm} onChange={handleSearch} />
-                                        <Tooltip title="Download Pdf">
+                                        {/* <Tooltip title="Download Pdf">
                                             <Button type="primary" onClick={downLoadPdf}><DownloadOutlined /> Download Pdf</Button>
-                                            {/* <QuestionanirModal/> */}
-                                        </Tooltip>
+                                        </Tooltip> */}
                                     </div>
                                     <div className='accordion-wrapper'>
                                         <Table dataSource={dataSource} columns={columns} pagination={{

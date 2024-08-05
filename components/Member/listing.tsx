@@ -140,7 +140,27 @@ const MemberList = () => {
             });
 
     };
-
+    const companyNameMap:any = {
+        "augusta": "Augusta Homes, Inc.",
+        "buffington": "Buffington Homes, L.P.",
+        "cabin": "Cabin John Builders",
+        "cataldo": "Cataldo Custom Builders",
+        "david_campbell": "The DCB",
+        "dc_building": "DC Building Inc.",
+        "denman_construction": "Denman Construction, Inc.",
+        "ellis": "Ellis Custom Homes",
+        "tm_grady_builders": "T.M. Grady Builders",
+        "hardwick": "Hardwick G. C.",
+        "homeSource": "HomeSource Construction",
+        "ed_nikles": "Ed Nikles Custom Builder, Inc.",
+        "olsen": "Olsen Custom Homes",
+        "raykon": "Raykon Construction",
+        "matt_sitra": "Matt Sitra Custom Homes",
+        "schneider": "Schneider Construction, LLC",
+        "shaeffer": "Shaeffer Hyde Construction",
+        "split": "Split Rock Custom Homes",
+        "tiara": "Tiara Sun Development"
+    };
     const handleDownloadAndFetchData = async (id: any) => {
         let res = await getDataById(id);
         await downLoadPdf(res);
@@ -152,10 +172,11 @@ const MemberList = () => {
     };
     // const completed2 = state2?.filter((res:any) => res?.is_completed === true);
     const user_completed = state2?.slice(0, 5).map((res: any, index: number) => {
+        const companyName = companyNameMap[res?.company_name || ""] || "N/A";
         return {
             key: index + 1,
             name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
-            company: validation?.replaceUnderScore(res?.company_name)||"N/A",
+            company: companyName||"N/A",
             email: res?.email||"N/A",
             status: res?.is_completed == true ? "Completed" : "Pending",
             action: <ul className='m-0 list-unstyled d-flex gap-2'>
@@ -210,10 +231,11 @@ const MemberList = () => {
         },
     ];
     const dataSource = filteredData?.map((res: any, index: number) => {
+        const companyName = companyNameMap[res?.company_name || ""] || "N/A";
         return {
             key: index + 1,
             name: res?.firstname ? `${validation?.capitalizeFirstLetter(res?.firstname)} ${validation?.capitalizeFirstLetter(res?.lastname)}` : "N/A",
-            company: validation?.replaceUnderScore(validation?.capitalizeFirstLetter(res?.company_name||"N/A")),
+            company:companyName||"N/A",
             email: res?.email||"N/A",
             phone: res?.phone_number||"N/A",
             position: validation?.capitalizeFirstLetter(res?.position||"N/A"),
@@ -301,6 +323,12 @@ const MemberList = () => {
             let apiRes = await api.User.user_listing()
             setState2(apiRes?.data)
             setLoading1(false)
+            if (res?.data?.status == 400) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                localStorage.removeItem('hasReloaded');
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
         } catch (error) {
             setLoading1(false)
             if ((error==400)||(!accessToken)) {

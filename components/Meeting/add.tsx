@@ -110,7 +110,7 @@ const MeetingAdd = () => {
     const handleChange = (value: any) => {
         setMeetingType(value);
     };
-console.log(selectedHotel,"selectedHotel");
+    console.log(selectedHotel, "selectedHotel");
 
     const onSubmit = async (values: any) => {
         let items = {
@@ -122,7 +122,7 @@ console.log(selectedHotel,"selectedHotel");
             start_meeting_date: dayjs(values?.start_date).utc().valueOf(),
             end_time: dayjs(values?.end_time).utc().valueOf(),
             end_meeting_date: dayjs(values?.end_date).utc().valueOf(),
-            year:dayjs(values?.end_date).utc().valueOf(),
+            year: dayjs(values?.end_date).utc().valueOf(),
             location: selectedLocation,
             hotel: selectedHotel?.name,
             airport: nearestAirport?.name,
@@ -147,14 +147,15 @@ console.log(selectedHotel,"selectedHotel");
             let res = await api.Meeting.create(items as any);
             toast.success(res?.message)
             router.back()
+
             // onAdd();
         } catch (error) {
-            if (error==400) {
+            if (error == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
-              }
+            }
         }
     }
 
@@ -203,7 +204,7 @@ console.log(selectedHotel,"selectedHotel");
     const locationSearchRef = useRef(null);
     const hotelSearchRef = useRef(null);
     const airportRef = useRef(null);
-console.log(hotelSearchRef,"hotelSearchRef");
+    console.log(hotelSearchRef, "hotelSearchRef");
 
     useEffect(() => {
         const loadGoogleMapScript = () => {
@@ -365,15 +366,15 @@ console.log(hotelSearchRef,"hotelSearchRef");
                 componentRestrictions: { country: shortCounrtyName }
             };
             let hotelAutocomplete = new window.google.maps.places.Autocomplete(
-                          hotelSearchRef.current, options
-                     );
-                    hotelAutocomplete.addListener('place_changed', () => {
-                         let place = hotelAutocomplete.getPlace();
-                             if (!place.geometry) {
-                               return;
-                          }
-                          setSelectedHotel(place || '');
-                const coordinate:any = place.geometry.location;
+                hotelSearchRef.current, options
+            );
+            hotelAutocomplete.addListener('place_changed', () => {
+                let place = hotelAutocomplete.getPlace();
+                if (!place.geometry) {
+                    return;
+                }
+                setSelectedHotel(place || '');
+                const coordinate: any = place.geometry.location;
                 const latitude = coordinate.lat();
                 const longitude = coordinate.lng();
                 setLat(latitude);
@@ -388,44 +389,44 @@ console.log(hotelSearchRef,"hotelSearchRef");
     useEffect(() => {
         initPlaceHotel();
     }, [shortCounrtyName]);
-    const fetchWeatherData = async (latitude:any, longitude:any) => {
+    const fetchWeatherData = async (latitude: any, longitude: any) => {
         try {
-          const response = await fetch(
-            // `https://api.openweathermap.org/data/2.5/weather/?lat=${latitude}&lon=${longitude}&units=metric&APPID=5838d6d5e70962258f159aa9acdb2546`
-          ` https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m`
-        );
-          const result = await response.json();
-                  // Extract the current weather data
-        const currentWeather = result.current;
-        const hourlyWeather = result.hourly;
+            const response = await fetch(
+                // `https://api.openweathermap.org/data/2.5/weather/?lat=${latitude}&lon=${longitude}&units=metric&APPID=5838d6d5e70962258f159aa9acdb2546`
+                ` https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m`
+            );
+            const result = await response.json();
+            // Extract the current weather data
+            const currentWeather = result.current;
+            const hourlyWeather = result.hourly;
 
-        // Example of extracting data
-        const rainPercentage = currentWeather.precipitation_sum || 'N/A';
-        const humidity = currentWeather.relative_humidity_2m || 'N/A';
+            // Example of extracting data
+            const rainPercentage = currentWeather.precipitation_sum || 'N/A';
+            const humidity = currentWeather.relative_humidity_2m || 'N/A';
 
-        // Set the data to state or handle it as needed
-        setData({
-            temperature: currentWeather.temperature_2m,
-            windSpeed: currentWeather.wind_speed_10m,
-            rainPercentage,
-            humidity
-        });
+            // Set the data to state or handle it as needed
+            setData({
+                temperature: currentWeather.temperature_2m,
+                windSpeed: currentWeather.wind_speed_10m,
+                rainPercentage,
+                humidity
+            });
 
-        console.log(result, "Weather Data");
+            console.log(result, "Weather Data");
         } catch (error) {
-          console.error('Error fetching weather data:', error);
+            console.error('Error fetching weather data:', error);
         }
-      };
-    console.log(data,"chachdata");
-    
-    const findNearestAirport = (lat:any, lng:any) => {
+    };
+    console.log(data, "chachdata");
+
+    const findNearestAirport = (lat: any, lng: any) => {
         const service = new window.google.maps.places.PlacesService(document.createElement('div'));
         const request = {
             location: new window.google.maps.LatLng(lat, lng),
             radius: 50000, // 50 kilometers
             type: ['airport']
         } as any;
-        service.nearbySearch(request, (results:any, status) => {
+        service.nearbySearch(request, (results: any, status) => {
             if (status === window.google.maps.places.PlacesServiceStatus.OK) {
                 if (results.length > 0) {
                     setNearestAirport(results[0]);
@@ -443,6 +444,32 @@ console.log(hotelSearchRef,"hotelSearchRef");
     // useEffect(() => {
     //     initPlaceAirport()
     // }, [shortCounrtyName])
+    const weatherData = [
+        { day: 'Mon', temperature: 34, condition: 'sunny' },
+        { day: 'Tue', temperature: 33, condition: 'rain' },
+        { day: 'Wed', temperature: 31, condition: 'storm' },
+        { day: 'Thu', temperature: 33, condition: 'cloud' },
+        { day: 'Fri', temperature: 34, condition: 'storm' },
+        { day: 'Sat', temperature: 32, condition: 'storm' },
+        { day: 'Sun', temperature: 31, condition: 'storm' },
+        { day: 'Mon', temperature: 31, condition: 'storm' }
+    ];
+
+    const getWeatherIcon = (condition: string) => {
+        switch (condition) {
+            case 'sunny':
+                return '🌤';
+            case 'rain':
+                return '🌧';
+            case 'storm':
+                return '⛈';
+            case 'cloud':
+                return '☁️';
+            default:
+                return '🌤';
+        }
+    };
+
     return (
         <MainLayout>
             <Fragment>
@@ -565,7 +592,7 @@ console.log(hotelSearchRef,"hotelSearchRef");
                                                 />
 
                                             </Form.Item>
-                                            <Form.Item name="airport" className='col-lg-6 col-sm-12'  label="Nearest Airport">
+                                            <Form.Item name="airport" className='col-lg-6 col-sm-12' label="Nearest Airport">
                                                 {/* <Input size={'large'} placeholder="Nearest Airport"
                                                     onKeyPress={onKeyPress}
                                                 /> */}
@@ -604,6 +631,20 @@ console.log(hotelSearchRef,"hotelSearchRef");
                                                     </div>
                                                 )} */}
                                             </Form.Item>
+                                            {/* <Form.Item
+                                                name="weather"
+                                                label="Weather"
+                                                style={{ width: '100%' }}
+                                                className="weather-container"
+                                            >
+                                                <div className="custom-input" style={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}>
+                                                    {weatherData.map((day, index) => (
+                                                        <span key={index} style={{ margin: '0 10px' }}>
+                                                            {day.day}: {getWeatherIcon(day.condition)} {day.temperature}°C
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </Form.Item> */}
                                             <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
                                                 <Input size={'large'} placeholder="Host Company"
 
@@ -628,13 +669,14 @@ console.log(hotelSearchRef,"hotelSearchRef");
                                             </Form.Item>
                                             <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[
 
-                                                { pattern: /^[0-9\s,+]*$/, message: 'Only numbers and spaces are allowed' }
+                                                { pattern: /^[0-9\s\(\)\-\+\,]*$/, message: 'Only numbers and spaces are allowed' }
                                             ]} label="Cell">
                                                 <Input
                                                     size={'large'} placeholder="Cell"
                                                     // type="number"
                                                     onKeyPress={(event) => {
-                                                        if (!/[0-9\s,+]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                                                        // Allow digits, space, parentheses, hyphen, plus, comma, and special keys
+                                                        if (!/[0-9\s\(\)\-\+\,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
                                                             event.preventDefault();
                                                         }
                                                     }}

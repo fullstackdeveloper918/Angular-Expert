@@ -11,6 +11,7 @@ import api from '@/utils/api';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { destroyCookie } from 'nookies';
+import { clearUserData } from '@/lib/features/userSlice';
 
 const { Row, Col, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -55,6 +56,14 @@ const Admin: Page = () => {
           
             let res = await api.Admin.listing()
             setState(res)
+            if (res?.status == 400) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                localStorage.removeItem('hasReloaded');
+                // }
+                dispatch(clearUserData({}));
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
         } catch (error) {
         } finally {
             setLoading(false)
@@ -194,3 +203,7 @@ const Admin: Page = () => {
 }
 
 export default Admin
+function dispatch(arg0: any) {
+    throw new Error('Function not implemented.');
+}
+

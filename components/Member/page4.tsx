@@ -12,7 +12,7 @@ const Page4 = () => {
   
   const router = useRouter()
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<any>(false)
   const [state, setState] = useState<any>("")
 
  
@@ -20,7 +20,12 @@ const Page4 = () => {
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 1 ? entries[1][0] : '';
+  const questionnaire = entries.length > 2 ? entries[2][0] : '';
+  console.log(questionnaire,"hhhh");
+  
   const submit = async(values:any) => {
+    console.log(questionnaire,"checkquestionnair");
+    
       let items={
           craftsmen_toolbox:{
               userId:value,
@@ -40,8 +45,10 @@ const Page4 = () => {
                   }
           } as any
           setLoading(true)
-          let res = await api.User.edit(items)
+       
+              let res = await api.User.edit(items)
               router.push(`/admin/member/add/page5?${value}&edit`)
+            
           }else{
 
               setLoading(true)
@@ -53,7 +60,7 @@ const Page4 = () => {
               router.push(`/admin/member/add/page5?${res?.userId}`)
           }
       } catch (error) {
-        setLoading(false)
+        setLoading(false) 
         if (error==400) {
             toast.error("Session Expired Login Again")
             router.replace("/auth/signin")
@@ -63,14 +70,14 @@ const Page4 = () => {
       }
   }
   const onFinish1 = async(values:any) => {
-      let items={
-          craftsmen_toolbox:{
-              userId:value,
-              technology:values?.technology,
-              products :values?.products,
-              project:values?.project
-          }
-      }
+    let items = {
+        craftsmen_toolbox:{
+            userId:value,
+            technology:values?.technology,
+            products :values?.products,
+            project:values?.project
+        }
+} as any
       try {
           if (type == "edit") {
               let items = {
@@ -109,10 +116,12 @@ const Page4 = () => {
       try {
         const res = await api.User.getById(item as any);
         setState(res?.data || null);
-        if (res?.status == 400) {
+        if (res?.data?.status == 400) {
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            localStorage.removeItem('hasReloaded');
             toast.error("Session Expired Login Again")
             router.replace("/auth/signin")
-          }
+        }
         form.setFieldsValue(res?.data)
       } catch (error: any) {
         if (error==400) {
@@ -157,6 +166,11 @@ const Page4 = () => {
 
                         {/* form  */}
                         <div className='card-form-wrapper'>
+                        {/* {questionnaire=="questionnair"?
+                            <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onFinish1}>
+                            :
+                            <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={submit}>
+                          } */}
                             <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={submit}>
 
 
@@ -183,7 +197,7 @@ const Page4 = () => {
                                 <div className="d-flex mt-3">
                                             <div className="col-2">
 
-                                        <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
+                                        <Button size={'large'} type="primary" className=" " htmlType="submit" >
                                             Save
                                         </Button>
                                             </div>
@@ -191,7 +205,7 @@ const Page4 = () => {
                                         <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
                                             Previous
                                         </Button>
-                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={!questionnaire? loading:""}>
                                         Next
                                         </Button>
                                         </div>

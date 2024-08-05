@@ -230,9 +230,11 @@ return response?.data?.pdfReponseData;
 
       setState(res?.data || null);
       if (res?.data?.status == 400) {
-        toast.error("Session Expired Login Again");
-        router.replace("/auth/signin");
-      }
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.removeItem('hasReloaded');
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
       const fetchedGoals = res?.data?.photo_section?.fileUrls || [];
       const commentKey = fetchedGoals[0]?.commentId || "";
       const formattedGoals = Object.keys(fetchedGoals[0] || {}).map(

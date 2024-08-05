@@ -112,16 +112,23 @@ const MeetingEdit = () => {
 
       setState(data);
       form.setFieldsValue(data);
+      if (data?.status == 400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.removeItem('hasReloaded');
+
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
     } catch (error: any) {
       // if (error) {
-        if (error==400) {
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          localStorage.removeItem('hasReloaded');
-          // }
-          toast.error("Session Expired Login Again")
-          router.replace("/auth/signin")
-        }
+      if (error == 400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.removeItem('hasReloaded');
+        // }
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
       }
+    }
     // }
   };
   const onFinish = async (values: any) => {
@@ -186,165 +193,165 @@ const MeetingEdit = () => {
 
   const [shortCounrtyName, setShortCountryName] = useState("")
 
-    const locationSearchRef = useRef(null);
-    const hotelSearchRef = useRef(null);
-    const airportRef = useRef(null);
+  const locationSearchRef = useRef(null);
+  const hotelSearchRef = useRef(null);
+  const airportRef = useRef(null);
 
-    useEffect(() => {
-        const loadGoogleMapScript = () => {
-            if (!window.google) {
-                const googleMapScript = document.createElement('script');
-                googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDVyNgUZlibBRYwSzi7Fd1M_zULyKAPLWQ&libraries=places`;
-                googleMapScript.onload = initPlaceAPI;
-                document.body.appendChild(googleMapScript);
-            } else {
-                initPlaceAPI();
-            }
-        };
-        const initPlaceAPI = () => {
-            if (locationSearchRef.current) {
-                let locationAutocomplete = new window.google.maps.places.Autocomplete(
-                    locationSearchRef.current
-                );
-                locationAutocomplete.addListener('place_changed', () => {
-                    let place = locationAutocomplete.getPlace();
-                    setSelectedLocation(place.formatted_address || '');
-                    if (!place.geometry) {
-                        return;
-                    }
-                    const address = place?.address_components;
-                    const coordinate = place?.geometry?.location;
-
-
-                    let items: any = {};
-                    if (Array.isArray(address) && address?.length > 0) {
-                        let zipIndex = address.findIndex((res: any) =>
-                            res.types.includes("postal_code")
-                        );
-                        let administrativeAreaIndex = address?.findIndex((res: any) =>
-                            res?.types.includes("administrative_area_level_1", "political")
-                        );
-                        let localityIndex = address?.findIndex((res: any) =>
-                            res?.types?.includes("locality", "political")
-                        );
-                        let countryIndex = address?.findIndex((res: any) =>
-                            res?.types?.includes("country", "political")
-                        );
-
-                        if (zipIndex > -1) {
-                            items.postal_code = address[zipIndex]?.long_name;
-                        }
-                        if (administrativeAreaIndex > -1) {
-                            items.state = address[administrativeAreaIndex]?.long_name;
-                        }
-                        if (localityIndex > -1) {
-                            items.city = address[localityIndex]?.long_name;
-                        }
-                        if (countryIndex > -1) {
-                            items.country = address[countryIndex]?.long_name;
-                        }
-                        if (countryIndex > -1) {
-                            items.country_short_name = address[countryIndex]?.short_name;
-                        }
-                        setShortCountryName(address[countryIndex]?.short_name)
-
-                        const heheheh = {
-                            address: place.formatted_address,
-                            country: items?.country,
-                            state: items?.state,
-                            city: items?.city,
-                            postal_code: items?.postal_code,
-                            country_short_name: items?.country_short_name,
-                        } as any;
-
-                        const errors = form.getFieldsError();
-                        if (errors.length) {
-                            form?.setFields(
-                                errors.flatMap((res: any) => {
-                                    if (!(res.name[0] in heheheh)) return [];
-
-                                    return {
-                                        name: res.name,
-                                        errors: !!heheheh[res.name[0]]
-                                            ? []
-                                            : [
-                                                `Please enter ` +
-                                                res.name[0].toString().replace("_", " "),
-                                            ],
-                                    };
-                                })
-                            );
-                        }
-
-                        form?.setFieldValue("location", place.formatted_address);
-                        form?.setFieldValue("country", items?.country);
-                        form?.setFieldValue("city", items?.city);
-                    }
-                });
+  useEffect(() => {
+    const loadGoogleMapScript = () => {
+      if (!window.google) {
+        const googleMapScript = document.createElement('script');
+        googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDVyNgUZlibBRYwSzi7Fd1M_zULyKAPLWQ&libraries=places`;
+        googleMapScript.onload = initPlaceAPI;
+        document.body.appendChild(googleMapScript);
+      } else {
+        initPlaceAPI();
+      }
+    };
+    const initPlaceAPI = () => {
+      if (locationSearchRef.current) {
+        let locationAutocomplete = new window.google.maps.places.Autocomplete(
+          locationSearchRef.current
+        );
+        locationAutocomplete.addListener('place_changed', () => {
+          let place = locationAutocomplete.getPlace();
+          setSelectedLocation(place.formatted_address || '');
+          if (!place.geometry) {
+            return;
+          }
+          const address = place?.address_components;
+          const coordinate = place?.geometry?.location;
 
 
-
-            }
-
-            if (hotelSearchRef.current) {
-                var options = {
-                    types: ['establishment'],
-                    componentRestrictions: { country: "IN" }
-                };
-                let hotelAutocomplete = new window.google.maps.places.Autocomplete(
-                    hotelSearchRef.current, options
-                );
-                hotelAutocomplete.addListener('place_changed', () => {
-                    let place = hotelAutocomplete.getPlace();
-                    setSelectedHotel(place.formatted_address || '');
-                });
-            }
-        };
-        loadGoogleMapScript();
-        return () => {
-        };
-    }, []);
-    const initPlaceHotel = async () => {
-        if (hotelSearchRef.current) {
-            var options = {
-                types: ['establishment'],
-                componentRestrictions: { country: shortCounrtyName }
-            };
-            let hotelAutocomplete = new window.google.maps.places.Autocomplete(
-                hotelSearchRef.current, options
+          let items: any = {};
+          if (Array.isArray(address) && address?.length > 0) {
+            let zipIndex = address.findIndex((res: any) =>
+              res.types.includes("postal_code")
             );
-            hotelAutocomplete.addListener('place_changed', () => {
-                let place = hotelAutocomplete.getPlace();
-                setSelectedHotel(place.formatted_address || '');
-                form.setFieldValue("hotel", place?.formatted_address)
-            });
-        };
-    }
-
-    const initPlaceAirport = async () => {
-        if (airportRef.current) {
-            var options = {
-                types: ['establishment'],
-                componentRestrictions: { country: shortCounrtyName }
-            };
-            let hotelAutocomplete = new window.google.maps.places.Autocomplete(
-                airportRef.current, options
+            let administrativeAreaIndex = address?.findIndex((res: any) =>
+              res?.types.includes("administrative_area_level_1", "political")
             );
-            hotelAutocomplete.addListener('place_changed', () => {
-                let place = hotelAutocomplete.getPlace();
-                setSelectedHotel(place.formatted_address || '');
-                form.setFieldValue("airport", place?.formatted_address)
-            });
+            let localityIndex = address?.findIndex((res: any) =>
+              res?.types?.includes("locality", "political")
+            );
+            let countryIndex = address?.findIndex((res: any) =>
+              res?.types?.includes("country", "political")
+            );
+
+            if (zipIndex > -1) {
+              items.postal_code = address[zipIndex]?.long_name;
+            }
+            if (administrativeAreaIndex > -1) {
+              items.state = address[administrativeAreaIndex]?.long_name;
+            }
+            if (localityIndex > -1) {
+              items.city = address[localityIndex]?.long_name;
+            }
+            if (countryIndex > -1) {
+              items.country = address[countryIndex]?.long_name;
+            }
+            if (countryIndex > -1) {
+              items.country_short_name = address[countryIndex]?.short_name;
+            }
+            setShortCountryName(address[countryIndex]?.short_name)
+
+            const heheheh = {
+              address: place.formatted_address,
+              country: items?.country,
+              state: items?.state,
+              city: items?.city,
+              postal_code: items?.postal_code,
+              country_short_name: items?.country_short_name,
+            } as any;
+
+            const errors = form.getFieldsError();
+            if (errors.length) {
+              form?.setFields(
+                errors.flatMap((res: any) => {
+                  if (!(res.name[0] in heheheh)) return [];
+
+                  return {
+                    name: res.name,
+                    errors: !!heheheh[res.name[0]]
+                      ? []
+                      : [
+                        `Please enter ` +
+                        res.name[0].toString().replace("_", " "),
+                      ],
+                  };
+                })
+              );
+            }
+
+            form?.setFieldValue("location", place.formatted_address);
+            form?.setFieldValue("country", items?.country);
+            form?.setFieldValue("city", items?.city);
+          }
+        });
+
+
+
+      }
+
+      if (hotelSearchRef.current) {
+        var options = {
+          types: ['establishment'],
+          componentRestrictions: { country: "IN" }
         };
-    }
+        let hotelAutocomplete = new window.google.maps.places.Autocomplete(
+          hotelSearchRef.current, options
+        );
+        hotelAutocomplete.addListener('place_changed', () => {
+          let place = hotelAutocomplete.getPlace();
+          setSelectedHotel(place.formatted_address || '');
+        });
+      }
+    };
+    loadGoogleMapScript();
+    return () => {
+    };
+  }, []);
+  const initPlaceHotel = async () => {
+    if (hotelSearchRef.current) {
+      var options = {
+        types: ['establishment'],
+        componentRestrictions: { country: shortCounrtyName }
+      };
+      let hotelAutocomplete = new window.google.maps.places.Autocomplete(
+        hotelSearchRef.current, options
+      );
+      hotelAutocomplete.addListener('place_changed', () => {
+        let place = hotelAutocomplete.getPlace();
+        setSelectedHotel(place.formatted_address || '');
+        form.setFieldValue("hotel", place?.formatted_address)
+      });
+    };
+  }
+
+  const initPlaceAirport = async () => {
+    if (airportRef.current) {
+      var options = {
+        types: ['establishment'],
+        componentRestrictions: { country: shortCounrtyName }
+      };
+      let hotelAutocomplete = new window.google.maps.places.Autocomplete(
+        airportRef.current, options
+      );
+      hotelAutocomplete.addListener('place_changed', () => {
+        let place = hotelAutocomplete.getPlace();
+        setSelectedHotel(place.formatted_address || '');
+        form.setFieldValue("airport", place?.formatted_address)
+      });
+    };
+  }
 
 
-    useEffect(() => {
-        initPlaceHotel()
-    }, [shortCounrtyName])
-    useEffect(() => {
-        initPlaceAirport()
-    }, [shortCounrtyName])
+  useEffect(() => {
+    initPlaceHotel()
+  }, [shortCounrtyName])
+  useEffect(() => {
+    initPlaceAirport()
+  }, [shortCounrtyName])
   return (
     <MainLayout>
       <Fragment>
@@ -465,30 +472,30 @@ const MeetingEdit = () => {
                         <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
                       </Form.Item> */}
                       <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
-                      <input
-                                                    value={form.getFieldValue("location")}
-                                                    className="custom-input"
-                                                    style={{ width: '100%' }}
-                                                    ref={locationSearchRef}
-                                                    placeholder="Enter your address"
-                                                />
+                        <input
+                          value={form.getFieldValue("location")}
+                          className="custom-input"
+                          style={{ width: '100%' }}
+                          ref={locationSearchRef}
+                          placeholder="Enter your address"
+                        />
                         {/* <Input size={'large'} placeholder="Location"   /> */}
                       </Form.Item>
                       <Form.Item className='col-lg-6 col-sm-12' name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
-                      <input
-                                                    className="custom-input"
-                                                    style={{ width: '100%' }}
-                                                    ref={hotelSearchRef}
-                                                    placeholder="Enter your address"
-                                                />
+                        <input
+                          className="custom-input"
+                          style={{ width: '100%' }}
+                          ref={hotelSearchRef}
+                          placeholder="Enter your address"
+                        />
                       </Form.Item>
                       <Form.Item name="airport" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Nearest Airport' }]} label="Nearest Airport">
                         <input
-                                                    className="custom-input"
-                                                    style={{ width: '100%' }}
-                                                    ref={airportRef}
-                                                    placeholder="Enter your address"
-                                                />
+                          className="custom-input"
+                          style={{ width: '100%' }}
+                          ref={airportRef}
+                          placeholder="Enter your address"
+                        />
                       </Form.Item>
                       <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
                         <Input size={'large'} placeholder="Weather"
@@ -523,12 +530,14 @@ const MeetingEdit = () => {
                       </Form.Item>
                       <Form.Item name="cell" className='col-lg-6 col-sm-12' rules={[
 
-                        { pattern: /^[0-9\s,+]*$/, message: 'Only numbers and spaces are allowed' }
+                        { pattern: /^[0-9\s\(\)\-\+\,]*$/, message: 'Only numbers and spaces are allowed' }
                       ]} label="Cell">
                         <Input
                           size={'large'} placeholder="Cell"
+                          // type="number"
                           onKeyPress={(event) => {
-                            if (!/[0-9\s,+]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                            // Allow digits, space, parentheses, hyphen, plus, comma, and special keys
+                            if (!/[0-9\s\(\)\-\+\,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
                               event.preventDefault();
                             }
                           }}

@@ -98,9 +98,11 @@ const Page6 = () => {
         const res = await api.User.getById(item as any);
         setState(res?.data || null);
         if (res?.data?.status == 400) {
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            localStorage.removeItem('hasReloaded');
             toast.error("Session Expired Login Again")
             router.replace("/auth/signin")
-          }
+        }
         form.setFieldsValue(res?.data)
       } catch (error: any) {
         if (error==400) {

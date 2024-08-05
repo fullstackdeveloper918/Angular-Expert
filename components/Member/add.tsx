@@ -71,12 +71,12 @@ const Add = () => {
         } as any
         let res = await api.User.edit(items)
         toast.success(res?.message)
-        router.push(`/admin/member/add/page2?${value}&edit`)
+        // router.push(`/admin/member/add/page2?${value}&edit`)
       } else {
 
         let res = await api.Auth.signUp(items)
         toast.success(res?.message)
-        router.push(`/admin/member/add/page2?${res?.user_id}`)
+        // router.push(`/admin/member/add/page2?${res?.user_id}`)
         if (res?.status == 400) {
           toast.error("Session Expired Login Again")
           router.replace("/auth/signin")
@@ -131,12 +131,18 @@ const Add = () => {
         } as any
         let res = await api.User.edit(items)
         // router.push(`/admin/member/add/page2?${value}&edit`)
+        if (res?.status == 400) {
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          localStorage.removeItem('hasReloaded');
+          toast.error("Session Expired Login Again")
+          router.replace("/auth/signin")
+      }
       } else {
 
         let res = await api.Auth.signUp(items)
         // router.push(`/admin/member/add/page2?${res?.user_id}`)
         toast.success("Added Successfully")
-        
+router.back()
         if (res?.status == 400) {
           toast.error("Session Expired Login Again")
           router.replace("/auth/signin")
@@ -145,7 +151,7 @@ const Add = () => {
 
     } catch (error: any) {
 
-     
+
 
 
     } finally {
@@ -270,10 +276,10 @@ const Add = () => {
 
                       <Form.Item name="phone_number" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
                         <Input size={'large'} type="text" minLength={6} maxLength={20} placeholder="Phone No" onKeyPress={(event) => {
-                            if (!/[0-9\s,+]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
-                              event.preventDefault();
-                            }
-                          }}/>
+                          if (!/[0-9\s\(\)\-\+]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                            event.preventDefault();
+                          }
+                        }} />
                       </Form.Item>
                       <Form.Item name="position" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Position' }]} label="Position">
                         <Input size={'large'} type='position' placeholder="Position" />

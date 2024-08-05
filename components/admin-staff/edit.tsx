@@ -29,8 +29,8 @@ const EditStaff: Page = () => {
   const [form] = Form.useForm();
   const [state, setState] = useState({} as any)
 
-const searchParam = useParams();
-const id = searchParam.id;
+  const searchParam = useParams();
+  const id = searchParam.id;
 
   const options: SelectProps['options'] = [];
   for (let i = 0; i < 10; i++) {
@@ -41,46 +41,46 @@ const id = searchParam.id;
   }
 
   const onFinish = async (values: any) => {
- 
 
-let item={
-    admin_uuid: id,
-    firstname:values?.firstname,
-    lastname:values?.lastname,
-    phone_number:values?.phone_number,
-    permission:values?.permission,
-}
+
+    let item = {
+      admin_uuid: id,
+      firstname: values?.firstname,
+      lastname: values?.lastname,
+      phone_number: values?.phone_number,
+      permission: values?.permission,
+    }
 
     try {
-        let apiRes = await api.Admin.edit(item as any)
-        toast.success('Edit Successful', {
-            position: 'top-center',
-            autoClose: 300,
-            onClose: () => {
-                router.push('/admin/admin-staff');
-            },
-        });
-        setState(apiRes)
-        router.back()
-      
+      let apiRes = await api.Admin.edit(item as any)
+      toast.success('Edit Successful', {
+        position: 'top-center',
+        autoClose: 300,
+        onClose: () => {
+          router.push('/admin/admin-staff');
+        },
+      });
+      setState(apiRes)
+      router.back()
+
     } catch (error: any) {
-      if (error==400) {
+      if (error == 400) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         localStorage.removeItem('hasReloaded');
         // }
         toast.error("Session Expired Login Again")
         router.replace("/auth/signin")
-    }
+      }
     } finally {
-    //   setLoading(false)
+      //   setLoading(false)
     }
   };
 
 
   const initialise = async () => {
     const item = {
-        admin_uuid: id
-      }
+      admin_uuid: id
+    }
     try {
       let apiRes = await api.Admin.getById(item as any)
       setState(apiRes?.data)
@@ -102,9 +102,9 @@ let item={
 
   return (
     <MainLayout>
-    <Fragment>
-   
-      <section>
+      <Fragment>
+
+        <section>
           <Row gutter={[20, 20]}>
             <Col sm={22} md={12} lg={11} xl={10} xxl={9}>
               <Card className='common-card'>
@@ -128,7 +128,7 @@ let item={
                     scrollToFirstError
                     layout='vertical'
                   >
-                
+
                     {/* First Name  */}
                     <Form.Item name="firstname" rules={[{ required: true, whitespace: true, message: 'Please Enter First Name' }]} label="First Name">
                       <Input size='large' placeholder="First Name"
@@ -159,7 +159,12 @@ let item={
                     </Form.Item>
                     {/* Phone No  */}
                     <Form.Item name="phone_number" rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
-                      <Input size='large' type="text" minLength={10} maxLength={10} placeholder="Phone No" />
+                      <Input size='large' type="text" minLength={6} onKeyPress={(event) => {
+                        // Allow digits, space, parentheses, hyphen, plus, comma, and special keys
+                        if (!/[0-9\s\(\)\-\+\,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                          event.preventDefault();
+                        }
+                      }} placeholder="Phone No" />
                     </Form.Item>
                     <Form.Item name="permission" label="Roles" rules={[{ required: true, message: 'Please Select Roles' }]}>
                       <Select
@@ -183,9 +188,9 @@ let item={
               </Card>
             </Col>
           </Row>
-        {/* </Spin> */}
-      </section>
-    </Fragment>
+          {/* </Spin> */}
+        </section>
+      </Fragment>
     </MainLayout>
   )
 }
