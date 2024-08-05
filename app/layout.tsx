@@ -30,32 +30,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  useEffect(() => {
-    const refreshToken = async () => {
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          try {
-            const idToken = await user.getIdToken();
-            henceforthApi.setToken(idToken)
-            console.log("ID Token:", idToken);
-            // setToken(idToken);
-            setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days
-          } catch (error) {
-            console.error("Error getting ID token:", error);
-          }
-        }
-      });
-    };
+  // useEffect(() => {
+  //   const refreshToken = async () => {
+  //     onAuthStateChanged(auth, async (user) => {
+  //       if (user) {
+  //         try {
+  //           const idToken = await user.getIdToken();
+  //           henceforthApi.setToken(idToken)
+  //           console.log("ID Token:", idToken);
+  //           // setToken(idToken);
+  //           setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days
+  //         } catch (error) {
+  //           console.error("Error getting ID token:", error);
+  //         }
+  //       }
+  //     });
+  //   };
 
-    // Refresh the token every 55 minutes
-    const intervalId = setInterval(refreshToken, 55 * 60 * 1000);
+  //   // Refresh the token every 55 minutes
+  //   const intervalId = setInterval(refreshToken, 55 * 60 * 1000);
 
-    // Initial token refresh
-    refreshToken();
+  //   // Initial token refresh
+  //   refreshToken();
 
-    // Cleanup function to clear the interval
-    return () => clearInterval(intervalId);
-  }, [auth]);
+  //   // Cleanup function to clear the interval
+  //   return () => clearInterval(intervalId);
+  // }, [auth]);
   return (
     <>
       <html lang="en">
