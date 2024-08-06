@@ -133,7 +133,7 @@ const router =useRouter()
       const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
       let res = await api.Meeting.archive(query);
       setAreas(res?.data);
-    } catch (error) {
+    } catch (error:any) {
       if (error==400) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         localStorage.removeItem('hasReloaded');

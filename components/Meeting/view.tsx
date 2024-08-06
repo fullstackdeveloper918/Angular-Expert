@@ -99,7 +99,7 @@ const MeetingViewPage = () => {
       setState(data);
     //   form.setFieldsValue(data);
     } catch (error: any) {
-      if (error==400) {
+      if (error?.status==400) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         dispatch(clearUserData({}));
         localStorage.removeItem('hasReloaded');

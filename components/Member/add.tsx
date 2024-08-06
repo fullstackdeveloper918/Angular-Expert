@@ -151,7 +151,12 @@ router.back()
 
     } catch (error: any) {
 
-
+      if (error?.status==400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.removeItem('hasReloaded');
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
 
 
     } finally {
@@ -204,7 +209,7 @@ router.back()
                 {/* Title  */}
                 <div className='d-flex justify-content-between'>
 
-                  <Typography.Title level={3} className='m-0 fw-bold'>Add Club Member</Typography.Title>
+                  <Typography.Title level={3} className='m-0 fw-bold'>{type=="edit"?"Edit":"Add"} Club Member</Typography.Title>
                   {/* <Button size={'large'} type="primary" className="text-white" disabled>1/8</Button> */}
                 </div>
 
@@ -293,9 +298,10 @@ router.back()
                         <Input size={'large'} type='email' placeholder="Email" />
                       </Form.Item>
                       {/* Password  */}
+                      {type=="edit"?"":
                       <Form.Item name="password" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Password!' }]} label="Password">
                         <Input.Password size={'large'} type="password" placeholder="Password" />
-                      </Form.Item>
+                      </Form.Item>}
                       {/* Phone No  */}
 
                       {/* Roles  */}
@@ -320,7 +326,7 @@ router.back()
                         Save
                       </Button> */}
                       <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                        Next
+                        Save
                       </Button>
                     </div>
                   </Form>

@@ -224,6 +224,8 @@ const MeetingList = () => {
             const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
             let res = await api.Meeting.listing(query);
             setAreas(res);
+            console.log(res,"checkres");
+            
             setLoading(false);
             if (res?.status == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
@@ -233,9 +235,11 @@ const MeetingList = () => {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
             }
-        } catch (error) {
+        } catch (error:any) {
+            console.log(error.status,"errorres");
+            
             setLoading(false);
-            if (error==400) {
+            if (error?.status==400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 // }

@@ -59,12 +59,14 @@ const Page4 = () => {
               }
               router.push(`/admin/member/add/page5?${res?.userId}`)
           }
-      } catch (error) {
+      } catch (error:any) {
         setLoading(false) 
-        if (error==400) {
+        if (error?.status==400) {
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            localStorage.removeItem('hasReloaded');
             toast.error("Session Expired Login Again")
             router.replace("/auth/signin")
-          }
+        }
           
       }finally{
       }

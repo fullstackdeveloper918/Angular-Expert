@@ -90,7 +90,14 @@ const AddStaff: Page = () => {
 
 
             setLoading(false)
-
+            if (error?.status==400) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                localStorage.removeItem('hasReloaded');
+                // }
+                dispatch(clearUserData({}));
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
         } finally {
         }
     };

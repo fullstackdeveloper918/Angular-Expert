@@ -95,8 +95,15 @@ const Page5 = () => {
                 router.replace("/auth/signin")
               }
           }
-      } catch (error) {
+      } catch (error:any) {
           setLoading(false)
+          if (error?.status==400) {
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            localStorage.removeItem('hasReloaded');
+
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+        }
       }finally{
       }
   }
@@ -116,10 +123,9 @@ const Page5 = () => {
         }
         form.setFieldsValue(res?.data)
       } catch (error: any) {
-        if (error==400) {
+        if (error?.status==400) {
             destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
             localStorage.removeItem('hasReloaded');
-            // }
             toast.error("Session Expired Login Again")
             router.replace("/auth/signin")
         }

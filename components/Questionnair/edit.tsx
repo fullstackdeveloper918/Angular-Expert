@@ -110,11 +110,10 @@ const EditQuestionnair: Page = () => {
       // props?.initialise();
       // setAddModalOpen(false);
 
-    } catch (error) {
-      if (error==400) {
+    } catch (error:any) {
+       if (error?.status==400) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         localStorage.removeItem('hasReloaded');
-        // }
         toast.error("Session Expired Login Again")
         router.replace("/auth/signin")
     }

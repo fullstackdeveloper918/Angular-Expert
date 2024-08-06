@@ -121,7 +121,7 @@ const MeetingEdit = () => {
     }
     } catch (error: any) {
       // if (error) {
-      if (error == 400) {
+      if (error.status == 400) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         localStorage.removeItem('hasReloaded');
         // }

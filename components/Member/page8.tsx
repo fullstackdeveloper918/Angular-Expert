@@ -214,8 +214,13 @@ router.replace("/admin/member")
 return response?.data?.pdfReponseData;
       } catch (error) {}
       // }
-    } catch (error) {
-      console.error(error);
+    } catch (error:any) {
+      if (error?.status==400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.removeItem('hasReloaded');
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
     } finally {
       setLoading(false);
     }
@@ -275,13 +280,12 @@ return response?.data?.pdfReponseData;
 
       setFileLists(fileListsData);
     } catch (error: any) {
-      if (error==400) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      if (error?.status==400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         localStorage.removeItem('hasReloaded');
-        // }
-        toast.error("Session Expired Login Again");
-        router.replace("/auth/signin");
-      }
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
     }
   };
   React.useEffect(() => {
@@ -565,7 +569,7 @@ console.log(blob,"blob");
                           type="primary"
                           htmlType="submit"
                           className="login-form-button "
-                          loading={loading}
+                          // loading={loading}
                         >
                           Submit
                         </Button>

@@ -64,9 +64,17 @@ const Admin: Page = () => {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
             }
-        } catch (error) {
-        } finally {
+        } catch (error:any) {
+            if (error?.status==400) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                localStorage.removeItem('hasReloaded');
+                // }
+                dispatch(clearUserData({}));
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
             setLoading(false)
+        } finally {
         }
     }
 
