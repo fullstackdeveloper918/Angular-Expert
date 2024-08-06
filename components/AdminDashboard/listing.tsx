@@ -51,6 +51,7 @@ const AdminDashboard: Page = (props: any) => {
     }
   }, [])
   const start_date = 1725993000000;
+  const spring_start_date = 1745951400000;
   const fiveDaysInMilliseconds = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
 
   const new_date = start_date - fiveDaysInMilliseconds;
@@ -118,7 +119,7 @@ const AdminDashboard: Page = (props: any) => {
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#000000",
-      title: <span >St. George Spring 2025(<Timmerday endDate={start_date} />)</span>,
+      title: <span >St. George Spring 2025(<Timmerday endDate={spring_start_date} />)</span>,
       // title: "St. George Spring 2025",
       count: <span style={{ fontSize: '20px' }}>
 

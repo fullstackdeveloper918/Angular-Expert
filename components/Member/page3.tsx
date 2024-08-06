@@ -271,10 +271,11 @@ const Page3 = () => {
                                 {/* form  */}
 
                                 <div className='card-form-wrapper'>
-                                    {/* {state?.goal_last_meeting?.length ?
+                                    {/* {/* {state?.goal_last_meeting?.length ? */}
                                         <div className='mt-3 mb-1'>
                                             <Typography.Title level={5} className='m-0 fw-bold'>GOALS FROM LAST MEETING</Typography.Title>
-                                        </div> : ""} */}
+                                        </div> 
+                                        {/* : ""} */}
                                     <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={submit}>
                                         {/* First Name  */}
                                       {/* {state?.goal_last_meeting?.length ? */}
@@ -342,20 +343,7 @@ const Page3 = () => {
                                                     {console.log(field, "fieldfield")
                                                     }
                                                     <div style={{ position: 'relative' }}>
-                                                        <Form.Item
-                                                            // key={field.name}
-                                                            name={field.name}
-                                                            rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
-                                                            label={field.label}
-                                                        // initialValue={field.initialGoal1}
-                                                        >
-                                                            <TextArea
-                                                                size={'large'}
-                                                                placeholder="Enter..."
-                                                            />
-                                                        </Form.Item>
-
-                                                        <Form.Item
+                                                    <Form.Item
                                                             // key={field.name}
                                                             name={field.status1}
                                                         // initialValue={field.initialGoal1}
@@ -373,18 +361,32 @@ const Page3 = () => {
                                                         /> */}
                                                             <Select className="responiveSelect"
                                                                 defaultValue={field.status1}
-                                                                style={{ position: 'absolute', top: '-14px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
+                                                                style={{ position: 'absolute', top: '45px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
                                                                 onChange={(value) => handleStatusChange1(index, value)}>
                                                                 <Option value="high">High</Option>
                                                                 <Option value="medium">Medium</Option>
                                                                 <Option value="low">Low</Option>
                                                             </Select>
                                                         </Form.Item>
+                                                        <Form.Item
+                                                            // key={field.name}
+                                                            name={field.name}
+                                                            rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
+                                                            label={field.label}
+                                                        // initialValue={field.initialGoal1}
+                                                        >
+                                                            <TextArea
+                                                                size={'large'}
+                                                                placeholder="Enter..."
+                                                            />
+                                                        </Form.Item>
+
+                                                        
 
                                                         {inputFields.length > 1 && (
 
                                                             <MinusCircleOutlined
-                                                                style={{ position: 'absolute', top: '-30px', right: '0', fontSize: '24px', cursor: 'pointer' }}
+                                                                style={{ position: 'absolute', bottom: '-30px', right: '0', fontSize: '24px', cursor: 'pointer' }}
                                                                 onClick={() => removeInputField(index)}
 
                                                             />
