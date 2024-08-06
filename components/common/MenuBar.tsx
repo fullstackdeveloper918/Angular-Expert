@@ -218,7 +218,8 @@ setActive(x)
           ),
           getItem(
             <Link
-              href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
+              href={`/admin/user?${getUserdata?.user_id}`}
+              // href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
               className="text-decoration-none"
             >
               My Document
