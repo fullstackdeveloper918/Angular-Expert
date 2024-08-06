@@ -220,6 +220,7 @@ const Page3 = () => {
                 status1: goal.status,
                 initialGoal1: goal.goal
             }));
+            console.log(formattedGoalsNext, "formattedGoalsNext");
 
             setInputFields(formattedGoalsNext);
 
@@ -227,9 +228,11 @@ const Page3 = () => {
 
                 ...fetchedGoalsNext.reduce((acc: any, goal: any, index: any) => {
                     acc[`goal_next${index + 1}`] = goal.goal;
+                    console.log(acc, "acc");
                     return acc;
                 }, {})
             });
+
         } catch (error: any) {
             console.log(error, "llll");
 
@@ -268,20 +271,20 @@ const Page3 = () => {
                                 {/* form  */}
 
                                 <div className='card-form-wrapper'>
-                                    {state?.goal_last_meeting?.length?
-                                    <div className='mt-3 mb-1'>
-                                        <Typography.Title level={5} className='m-0 fw-bold'>GOALS FROM LAST MEETING</Typography.Title>
-                                    </div>:""}
+                                    {/* {state?.goal_last_meeting?.length ?
+                                        <div className='mt-3 mb-1'>
+                                            <Typography.Title level={5} className='m-0 fw-bold'>GOALS FROM LAST MEETING</Typography.Title>
+                                        </div> : ""} */}
                                     <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={submit}>
                                         {/* First Name  */}
-                                        {state?.goal_last_meeting?.length ?
+                                      {/* {state?.goal_last_meeting?.length ? */}
                                             <div className="">
                                                 {inputPairs.map((pair: any, index: any) => (
                                                     <div key={pair.id} style={{ position: 'relative' }}>
 
                                                         <Form.Item
                                                             name={pair.goalName}
-                                                            rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
+                                                            // rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
                                                             label={pair.goalLabel}
                                                         >
 
@@ -289,23 +292,24 @@ const Page3 = () => {
                                                                 size={'large'}
                                                                 placeholder="Enter..."
                                                                 className="text-black"
-                                                                disabled={state?.goal_last_meeting?.length > 0}
+                                                                // disabled={state?.goal_last_meeting?.length > 0}
                                                             />
                                                         </Form.Item>
                                                         <Form.Item
                                                             name={pair.commentName}
-                                                            rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
+                                                            // rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
                                                             label={pair.commentLabel}
                                                         >
                                                             <TextArea
                                                                 size={'large'}
                                                                 placeholder="Enter..."
                                                                 className="text-black"
-                                                                disabled={state?.goal_last_meeting?.length > 0}
+                                                                // disabled={state?.goal_last_meeting?.length > 0}
                                                             />
                                                         </Form.Item>
 
-                                                        <Select className="responiveSelect" disabled={state?.goal_last_meeting?.length > 0}
+                                                        <Select className="responiveSelect"
+                                                        //  disabled={state?.goal_last_meeting?.length > 0}
                                                             defaultValue={pair.status}
                                                             style={{ position: 'absolute', top: '-14px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
                                                             onChange={(value) => handleStatusChange(pair.id, value)}>
@@ -314,43 +318,50 @@ const Page3 = () => {
                                                             <Option value="struggling">Struggling</Option>
                                                             <Option value="not_started">Not Started</Option>
                                                         </Select>
-                                                        {/* {state?.goal_last_meeting?.length > 0 &&
-                                          <> */}
                                                         {inputPairs.length > 1 && (
                                                             <div className="remove_row">
                                                                 <p className="m-0">Removed Row</p>
                                                                 <MinusCircleOutlined
-                                                                    // style={{ position: 'absolute', top: '0', right: '0', fontSize: '24px', cursor: 'pointer' }}
                                                                     onClick={() => removeInputPair(pair.id)}
                                                                 />
                                                             </div>
                                                         )}
-                                                        {/* </>} */}
                                                     </div>
                                                 ))}
                                                 <Button type="dashed" className="add_goal" onClick={addInputPair} block icon={<PlusOutlined />}>
                                                     Add Goal and Comment
                                                 </Button>
-                                            </div> : ""}
+                                            </div>
+                                             {/* : ""}  */}
                                         <div className='mt-3 mb-1'>
                                             <Typography.Title level={5} className='m-0 fw-bold'>GOALS FOR NEXT MEETING</Typography.Title>
                                         </div>
                                         <div className="">
-                                            {inputFields.map((field, index) => (
-
-                                                <Form.Item
-                                                    key={field.name}
-                                                    name={field.name}
-                                                    rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
-                                                    label={field.label}
-                                                // initialValue={field.initialGoal}
-                                                >
+                                            {inputFields.map((field: any, index: number) => (
+                                                <>
+                                                    {console.log(field, "fieldfield")
+                                                    }
                                                     <div style={{ position: 'relative' }}>
-                                                        <TextArea
-                                                            size={'large'}
-                                                            placeholder="Enter..."
-                                                        />
-                                                        <Select
+                                                        <Form.Item
+                                                            // key={field.name}
+                                                            name={field.name}
+                                                            rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}
+                                                            label={field.label}
+                                                        // initialValue={field.initialGoal1}
+                                                        >
+                                                            <TextArea
+                                                                size={'large'}
+                                                                placeholder="Enter..."
+                                                            />
+                                                        </Form.Item>
+
+                                                        <Form.Item
+                                                            // key={field.name}
+                                                            name={field.status1}
+                                                        // initialValue={field.initialGoal1}
+                                                        >
+                                                            {/* <Select
+                                                        className="responiveSelect"
                                                             defaultValue={field.status1}
                                                             style={{ position: 'absolute', top: '-42px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
                                                             onChange={(value) => handleStatusChange1(index, value)}
@@ -359,7 +370,17 @@ const Page3 = () => {
                                                                 { value: 'medium', label: 'Medium' },
                                                                 { value: 'low', label: 'Low' },
                                                             ]}
-                                                        />
+                                                        /> */}
+                                                            <Select className="responiveSelect"
+                                                                defaultValue={field.status1}
+                                                                style={{ position: 'absolute', top: '-14px', right: '0px', fontSize: '24px', cursor: 'pointer', width: 120 }}
+                                                                onChange={(value) => handleStatusChange1(index, value)}>
+                                                                <Option value="high">High</Option>
+                                                                <Option value="medium">Medium</Option>
+                                                                <Option value="low">Low</Option>
+                                                            </Select>
+                                                        </Form.Item>
+
                                                         {inputFields.length > 1 && (
 
                                                             <MinusCircleOutlined
@@ -369,7 +390,10 @@ const Page3 = () => {
                                                             />
                                                         )}
                                                     </div>
-                                                </Form.Item>
+
+
+                                                </>
+
                                             ))}
                                             <Button type="dashed" onClick={addInputField} block icon={<PlusOutlined />}>
                                                 Add Goal
@@ -387,7 +411,7 @@ const Page3 = () => {
                                                 <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
                                                     Previous
                                                 </Button>
-                                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
                                                     Next
                                                 </Button>
                                             </div>

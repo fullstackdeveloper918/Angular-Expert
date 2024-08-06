@@ -246,7 +246,7 @@ return response?.data?.pdfReponseData;
         (key, index) => ({
           id: index + 1,
           goalName: `goal${index + 1}`,
-          goalLabel: `GOAL #${index + 1}`,
+          goalLabel: `Project #${index + 1}`,
           commentName: `comments${index + 1}`,
           commentLabel: "Comments:",
           initialGoal: key, // Assuming the goal is the key name, update if it's different

@@ -18,6 +18,7 @@ import saveAs from "file-saver";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
+import Timmerday from "../common/Timmerday";
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
 };
@@ -54,12 +55,12 @@ const AdminDashboard: Page = (props: any) => {
 
   const new_date = start_date - fiveDaysInMilliseconds;
 
-  const formatWithOrdinal = (date:any) => {
+  const formatWithOrdinal = (date: any) => {
     const day = dayjs(date).date();
-    
-    const getOrdinalSuffix = (day:any) => {
+
+    const getOrdinalSuffix = (day: any) => {
       const j = day % 10,
-            k = day % 100;
+        k = day % 100;
       if (j === 1 && k !== 11) {
         return day + "st";
       }
@@ -71,7 +72,7 @@ const AdminDashboard: Page = (props: any) => {
       }
       return day + "th";
     };
-  
+
     const monthYear = dayjs(date).format('MMMM YYYY');
     const formattedDate = `${dayjs(date).format('MMMM')} ${getOrdinalSuffix(day)}, ${dayjs(date).format('YYYY')}`;
     return formattedDate;
@@ -97,28 +98,31 @@ const AdminDashboard: Page = (props: any) => {
       link: "/admin/dashboard"
 
     },
-    {
-      cardBackground: "#D3D3D3", // Light gray background
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
-      iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-      icon: <Icons.Users />,
-      title: "Fall 2024 (80 days)",
-      textColor: "#000000",
-      count: <span style={{ fontSize: '20px' }}>1</span>
-      // count: <span style={{ fontSize: '20px' }}>{check?.data?.fall || "0"}</span>
-      // "Fall 2024 (80 days)"
-      ,
-      link: "/admin/dashboard"
+    // {
+    //   cardBackground: "#D3D3D3", // Light gray background
+    //   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
+    //   iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
+    //   icon: <Icons.Users />,
+    //   title: `Fall 2024 (80 days)`,
+    //   textColor: "#000000",
+    //   count: <span style={{ fontSize: '20px' }}><Timmerday /></span>
+    //   // count: <span style={{ fontSize: '20px' }}>{check?.data?.fall || "0"}</span>
+    //   // "Fall 2024 (80 days)"
+    //   ,
+    //   link: "/admin/dashboard"
 
-    },
+    // },
     {
       cardBackground: "#D3D3D3", // Light gray background
       boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#000000",
-      title: "Spring 2025 (408 days)",
-      count: <span style={{ fontSize: '20px' }}>1</span>
+      title: <span >St. George Spring 2025(<Timmerday endDate={start_date} />)</span>,
+      // title: "St. George Spring 2025",
+      count: <span style={{ fontSize: '20px' }}>
+
+      </span>
       // count: <span style={{ fontSize: '20px' }}>{check?.data?.spring || "0"}</span>
       // "Spring 2025 (408 days)"
       ,
@@ -204,7 +208,7 @@ const AdminDashboard: Page = (props: any) => {
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
-  const companyNameMap:any = {
+  const companyNameMap: any = {
     "augusta": "Augusta Homes, Inc.",
     "buffington": "Buffington Homes, L.P.",
     "cabin": "Cabin John Builders",
@@ -224,7 +228,7 @@ const AdminDashboard: Page = (props: any) => {
     "shaeffer": "Shaeffer Hyde Construction",
     "split": "Split Rock Custom Homes",
     "tiara": "Tiara Sun Development"
-};
+  };
   const downLoadPdf = async (data: any) => {
     const companyName = companyNameMap[data?.company_name || ""] || "N/A";
     const { blob, timestamp } = await generatePdf(data);
@@ -265,7 +269,7 @@ const AdminDashboard: Page = (props: any) => {
     return {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(res?.firstname)} ${validation.capitalizeFirstLetter(res?.lastname)}` : "N/A",
-      company: companyName|| "N/A",
+      company: companyName || "N/A",
       email: res?.email || "N/A",
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
         {hasClubMemberPermission || getUserdata?.is_admin == false ?
@@ -285,6 +289,7 @@ const AdminDashboard: Page = (props: any) => {
     }
   }
   );
+
   const dataSource2 = non_completed?.map((res: any, index: number) => {
     const companyName = companyNameMap[res?.company_name || ""] || "N/A";
     return {
@@ -305,6 +310,42 @@ const AdminDashboard: Page = (props: any) => {
     }
   }
   );
+  const columnData: any = [];
+  for (let i = 0; i < dataSource2.length; i += 5) {
+    columnData.push(dataSource2.slice(i, i + 5));
+  }
+
+  // Generate columns for the table
+  const columns: any = [];
+  for (let i = 0; i < columnData.length; i++) {
+    columns.push({
+      title: `Company Name`,
+      dataIndex: `column${i + 1}`,
+      key: `column${i + 1}`,
+      render: (_: any, __: any, rowIndex: any) => {
+        const item = columnData[i][rowIndex];
+        return item ? (
+          <>
+            {/* <div>{item.key}</div>
+            <div>{item.name}</div> */}
+            <div>{item.company}</div>
+            {/* <div>{item.action}</div> */}
+          </>
+        ) : null;
+      },
+    });
+  }
+
+  // Create data source for the table with rows based on the maximum number of items in any column
+  const maxRows = Math.max(...columnData.map((col: any) => col.length));
+  const tableData = Array.from({ length: maxRows }).map((_, rowIndex) => {
+    const row: any = {};
+    columnData.forEach((col: any, colIndex: any) => {
+      row[`column${colIndex + 1}`] = col[rowIndex] || {};
+    });
+    return row;
+  });
+
   const dataSource3 = areas?.result?.length
     ? areas?.result
       .sort((a: any, b: any) => a.start_meeting_date - b.start_meeting_date)
@@ -370,33 +411,16 @@ const AdminDashboard: Page = (props: any) => {
 
 
 
-  const columns = [
-    // {
-    //   title: 'Order No.',
-    //   dataIndex: 'key',
-    //   key: 'key',
-    // },
-    // {
-    //   title: 'Name',
-    //   dataIndex: 'name',
-    //   key: 'name',
-    // },
-    {
-      title: 'Company Name',
-      dataIndex: 'company',
-      key: 'company',
-    },
-    // {
-    //   title: 'Email',
-    //   dataIndex: 'email',
-    //   key: 'email',
-    // },
-    // {
-    //   title: 'Action',
-    //   dataIndex: 'action',
-    //   key: 'action',
-    // }
-  ];
+  // const columns = [
+  //   {
+  //     title: 'Key',
+  //     dataIndex: 'key',
+  //     key: 'key',
+  //     render: (_: any, record: any, index: any) => (
+  //       <CustomCell items={groupedData[index]} />
+  //     ),
+  //   },
+  // ];
   const columns1 = [
     {
       title: 'Order No.',
@@ -477,32 +501,32 @@ const AdminDashboard: Page = (props: any) => {
     setLoading(true)
     try {
       let apiRes1 = await api.User.user_completed_noncompleted()
-        setComplete(apiRes1.data)
+      setComplete(apiRes1.data)
       setLoading(false)
     } catch (error) {
       setLoading(false)
     }
   }
-const userlist=async()=>{
-  setLoading(true)
-try {
-  let res = await api.User.listing()
-  setState1(res?.data)
-setLoading(false)
-} catch (error) {
-  setLoading(false)
-}
-}
-useEffect(() => {
-  const hasReloaded = localStorage.getItem('hasReloaded');
-  if (!hasReloaded ) {
-  // if (!hasReloaded && state1?.status === '400') {
-    localStorage.setItem('hasReloaded', 'true');
-    window.location.reload();
-  } else {
-    userlist();
+  const userlist = async () => {
+    setLoading(true)
+    try {
+      let res = await api.User.listing()
+      setState1(res?.data)
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+    }
   }
-}, [state1?.status=== '400']);
+  useEffect(() => {
+    const hasReloaded = localStorage.getItem('hasReloaded');
+    if (!hasReloaded) {
+      // if (!hasReloaded && state1?.status === '400') {
+      localStorage.setItem('hasReloaded', 'true');
+      window.location.reload();
+    } else {
+      userlist();
+    }
+  }, [state1?.status === '400']);
   const initialise = async () => {
     try {
       if (getUserdata?.is_admin == false) {
@@ -602,10 +626,12 @@ useEffect(() => {
                     <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates for Fall 2024</Typography.Title>
                   </div>
                   <div className='tabs-wrapper'>
-                    <Table dataSource={dataSource2} columns={columns} pagination={{
-                      position: ['bottomCenter'],
-                      pageSize: 5,
-                    }} />
+                    <Table
+                      dataSource={tableData}
+                      columns={columns}
+                      pagination={false}
+                      rowKey={(record, index) => `row-${index}`}
+                    />
                   </div>
 
                 </Card>
