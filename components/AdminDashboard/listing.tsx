@@ -312,8 +312,8 @@ const AdminDashboard: Page = (props: any) => {
   }
   );
   const columnData: any = [];
-  for (let i = 0; i < dataSource2.length; i += 5) {
-    columnData.push(dataSource2.slice(i, i + 5));
+  for (let i = 0; i < dataSource2.length; i += 7) {
+    columnData.push(dataSource2.slice(i, i + 7));
   }
 
   // Generate columns for the table

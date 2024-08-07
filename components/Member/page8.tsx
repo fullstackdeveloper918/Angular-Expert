@@ -64,7 +64,7 @@ const Page8 = () => {
   const [uploadedUrls, setUploadedUrls] = useState<Record<string, string[]>>(
     {}
   );
-  const [responseData,setResponseData]=useState<any>("")
+  const [responseData, setResponseData] = useState<any>("");
   const [previewImage, setPreviewImage] = useState<any>("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -72,42 +72,21 @@ const Page8 = () => {
   const [errorShown, setErrorShown] = useState(false);
   const images = JSON.stringify(fileLists);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
-  console.log(getUserdata,"getUserdata");
-  
+console.log(getUserdata,"getUserdata");
+
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
-  console.log(responseData,"responseData");
-  
+
   const handlePreview = async (file: UploadFile<any>) => {
-    // if (!file.url && !file.preview) {
     file.preview = await getBase64(file.originFileObj as File);
 
-    // }
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
 
   const handleChange = async (info: any, id: any) => {
-    // let fileList = [...info.fileList];
-
-    // Limit the number of uploaded files to 10
-    // if (fileList.length <= 10) {
-    //   setErrorShown(false);
-    // }
-
-    // // Limit the number of uploaded files to 10
-    // if (fileList.length > 10) {
-    //   fileList = fileList.slice(0, 10);
-    //   if (!fileLists[id] || fileLists[id].length < 10) {
-    //     if (!errorShown) {
-    //       toast.error('You can only upload up to 10 images.');
-    //       setErrorShown(true);
-    //     }
-    //   }
-    // }
     const newFileLists = { ...fileLists, [id]: info.fileList };
     setFileLists(newFileLists);
-    
   };
 
   const addInputPair = () => {
@@ -138,44 +117,39 @@ const Page8 = () => {
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : "";
   const type = entries.length > 1 ? entries[1][0] : "";
-  // const id = "commonID";
   async function convertUrlToBlob(url: any) {
     const response = await fetch(url);
     const blob = await response.blob();
     return blob;
   }
+
   const submit = async (values: any) => {
     setLoading(true);
-    const formData = new FormData();
+    console.log(values, "valuesvaluesvalues");
 
     try {
-      const photoComment = inputPairs.map((pair) => ({
-        comment: values[pair.commentName],
-        files: values[pair.goalName],
-      }));
-
       setLoading(true);
-      const payload =
-        photoComment &&
-        photoComment.map((item, index) => ({
-          comment: item?.comment,
-          files: item?.files?.fileList.map((file: any) => file?.originFileObj),
-        }));
-      const formData = new FormData();
-      formData.append("id", value);
-      payload.forEach((entry: any, entryIndex: number) => {
-        // Append other data if needed
-        formData.append(`comment_${entryIndex}`, entry?.comment);
-        // Append files
-        entry?.files?.forEach((file: any, fileIndex: number) => {
-          formData.append(`comment_${entryIndex}_file${fileIndex}`, file);
-        });
-      });
+      const formData: any = new FormData();
+
       try {
         let response;
         if (state?.photo_section?.fileUrls?.length) {
+          formData.append("id", state?.photo_section?.commentId);
+          formData.append("user_id", value);
+          inputPairs.forEach((item: any, index) => {
+            formData.append(`${item?.initialGoal}`, values[item?.commentName]);
+            values[item.goalName]?.fileList?.forEach(
+              (file: any, index: number) => {
+                if (file?.originFileObj) {
+                  formData.append(
+                    `${item?.initialGoal}_file${index}`,
+                    file.originFileObj
+                  );
+                }
+              }
+            );
+          });
           response = await axios.post(
-            // "https://app-uilsndszlq-uc.a.run.app/update-photo-section",
             "https://frontend.goaideme.com/update-photo-section",
             formData,
             {
@@ -186,9 +160,22 @@ const Page8 = () => {
             }
           );
         } else {
+          formData.append("id", value);
+          inputPairs.forEach((item: any, index) => {
+            formData.append(`comment_${index}`, item?.commentLabel);
+            values[item.goalName]?.fileList?.forEach(
+              (file: any, fileIndex: number) => {
+                if (file?.originFileObj) {
+                  formData.append(
+                    `comment_${index}_file${fileIndex}`,
+                    file.originFileObj
+                  );
+                }
+              }
+            );
+          });
           response = await axios.post(
             "https://frontend.goaideme.com/uploadFile",
-            // "https://app-uilsndszlq-uc.a.run.app/uploadFile",
             formData,
             {
               headers: {
@@ -197,30 +184,45 @@ const Page8 = () => {
               },
             }
           );
-
-
-
         }
-        if (response) {
-          toast.success("Added Successsfully", {
+
+        const messages: any = {
+          200: "Updated Successfully",
+          201: "Added Successfully",
+        };
+
+        if (messages[response?.data?.status]) {
+          toast.success(messages[response?.data?.status], {
             position: "top-center",
             autoClose: 300,
           });
         }
-console.log(response?.data,"response");
 
-setResponseData(response?.data?.pdfReponseData);
-router.replace("/admin/member")
-return response?.data?.pdfReponseData;
-      } catch (error) {}
-      // }
-    } catch (error:any) {
-      if (error?.status==400) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        localStorage.removeItem('hasReloaded');
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
-    }
+        setResponseData(response?.data?.pdfReponseData);
+        console.log(response?.data?.pdfReponseData,"swws");
+        
+        // if (getUserdata?.is_admin == true) {
+        //   router.replace("/admin/member");
+        // } else {
+          router.replace(`/admin/user?${getUserdata?.user_id}`);
+
+        // }
+        return response?.data?.pdfReponseData;
+      } catch (error) {
+        if (error) {
+          toast.error("Something went wrong Please try again", {
+            position: "top-center",
+            autoClose: 300,
+          });
+        }
+      }
+    } catch (error: any) {
+      if (error?.status == 400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+        localStorage.removeItem("hasReloaded");
+        toast.error("Session Expired Login Again");
+        router.replace("/auth/signin");
+      }
     } finally {
       setLoading(false);
     }
@@ -235,23 +237,28 @@ return response?.data?.pdfReponseData;
 
       setState(res?.data || null);
       if (res?.data?.status == 400) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        localStorage.removeItem('hasReloaded');
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
-    }
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+        localStorage.removeItem("hasReloaded");
+        toast.error("Session Expired Login Again");
+        router.replace("/auth/signin");
+      }
       const fetchedGoals = res?.data?.photo_section?.fileUrls || [];
       const commentKey = fetchedGoals[0]?.commentId || "";
+
+      const hash = Object.keys(fetchedGoals[0] || {}).map((key, index) =>
+        console.log(key, "check indx")
+      );
+
       const formattedGoals = Object.keys(fetchedGoals[0] || {}).map(
         (key, index) => ({
-          id: index + 1,
-          goalName: `goal${index + 1}`,
-          goalLabel: `Project #${index + 1}`,
-          commentName: `comments${index + 1}`,
+          id: index,
+          goalName: `goal${index}`,
+          goalLabel: `Project #${index+1}`,
+          commentName: `comments${index}`,
           commentLabel: "Comments:",
-          initialGoal: key, // Assuming the goal is the key name, update if it's different
-          initialComment: fetchedGoals[0][key].comment,
-          images: fetchedGoals[0][key].images, // Capture the images for upload preview
+          initialGoal: key,
+          initialComment: fetchedGoals[0][key]?.comment,
+          images: fetchedGoals[0][key]?.images,
           commentId: commentKey,
         })
       );
@@ -280,12 +287,12 @@ return response?.data?.pdfReponseData;
 
       setFileLists(fileListsData);
     } catch (error: any) {
-      if (error?.status==400) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        localStorage.removeItem('hasReloaded');
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
-    }
+      if (error?.status == 400) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+        localStorage.removeItem("hasReloaded");
+        toast.error("Session Expired Login Again");
+        router.replace("/auth/signin");
+      }
     }
   };
   React.useEffect(() => {
@@ -298,14 +305,11 @@ return response?.data?.pdfReponseData;
   };
 
   const handleDelete = async (file: any, pair: any, index: number) => {
-    console.log(pair, "pair pechi");
     const data = {
-      imageUrl: file.url, // Ensure that file.url is the correct path
-      commentId: pair.commentId || "", // Assuming you need the commentId from the pair object
-      comment: pair.initialGoal || "", // Assuming you need the comment from the pair object
+      imageUrl: file.url,
+      commentId: state?.photo_section?.commentId,
+      comment: pair.initialGoal || "",
     };
-
-    console.log(data, "data check");
 
     try {
       const res = await axios.post(
@@ -338,69 +342,55 @@ return response?.data?.pdfReponseData;
     }
   };
 
-  // const handleDelete = async(file: any, pair: any, index: number) => {
-
-  //   const data = {
-  //     imageUrl: file.url,
-  //     commentId: '',
-  //     comment: ''
-  //   }
-  //   console.log(file);
-  //   const res = await axios.post("https://frontend.goaideme.com/remove-photo-section", data, {
-  //     {
-  //       headers: {
-  //         Token: `${accessToken}`,
-  //       }
-  //     }
-  //   })
-  // };
 
   const generatePdf = async (data?: any) => {
-    //  
+    //
 
-    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
     const blob = await pdf(<Pdf state={data} />).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
-};
+  };
 
-// Function to handle PDF download
-// const downLoadPdf = async (res: any) => {
+  // Function to handle PDF download
+  // const downLoadPdf = async (res: any) => {
 
-//     const { blob, timestamp } = await generatePdf(res);
-//     saveAs(blob, `${capFirst(res?.company_name)}.pdf`);
-// };
+  //     const { blob, timestamp } = await generatePdf(res);
+  //     saveAs(blob, `${capFirst(res?.company_name)}.pdf`);
+  // };
 
-// Function to handle PDF sharing
-console.log(responseData,"PDFsharing");
-const sharePdf = async (responseData: any) => {
-    //  
-    console.log(responseData,"item12345");
-    
+  // Function to handle PDF sharing
+  console.log(responseData, "PDFsharing");
+  const sharePdf = async (responseData: any) => {
+    //
+    console.log(responseData, "item12345");
 
     const { pdfUrl, timestamp } = await generatePdf(responseData);
     const response = await fetch(pdfUrl);
     const blob = await response.blob();
-console.log(pdfUrl,"pdfUrl");
-console.log(response,"11111");
-console.log(blob,"blob");
+    console.log(pdfUrl, "pdfUrl");
+    console.log(response, "11111");
+    console.log(blob, "blob");
 
     // Convert the blob to a file
-    const file = new File([blob], `check.pdf`, { type: 'application/pdf' });
+    const file = new File([blob], `check.pdf`, { type: "application/pdf" });
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('user_id', getUserdata?.user_id);
+    formData.append("file", file);
+    formData.append("user_id", getUserdata?.user_id);
 
-    const res = await fetch('https://frontend.goaideme.com/send-completeform-mail-to-superadmin', {
-    // const res = await fetch('https://app-uilsndszlq-uc.a.run.app/send-completeform-mail-to-superadmin', {
+    const res = await fetch(
+      "https://frontend.goaideme.com/send-completeform-mail-to-superadmin",
+      {
+        // const res = await fetch('https://app-uilsndszlq-uc.a.run.app/send-completeform-mail-to-superadmin', {
 
-        method: 'POST',
+        method: "POST",
         body: formData,
         headers: {
-            Token: `${accessToken}`,
-            // 'Content-Type': 'application/json',
-        }
-    },);
+          Token: `${accessToken}`,
+          // 'Content-Type': 'application/json',
+        },
+      }
+    );
 
     // const apiRes: any = await res.json()
     // navigator.clipboard.writeText(apiRes?.fileUrl)
@@ -410,18 +400,15 @@ console.log(blob,"blob");
     //     .catch(() => {
     //         toast.error('Failed to copy link to clipboard');
     //     });
-
-};
+  };
   const handleFetchAndFetchData = async (values: any) => {
-         
     let item = await submit(values);
-    console.log(item,"item check");
-    
+    console.log(item, "item check");
+
     if (item) {
       await sharePdf(item);
-  }
-
-};
+    }
+  };
   return (
     <MainLayout>
       <Fragment>
@@ -474,29 +461,36 @@ console.log(blob,"blob");
                   >
                     <div>
                       {inputPairs.map((pair: any, index: number) => (
-                        <div key={pair.id} style={{ position: "relative" }}>
-                          <Form.Item
-                            name={pair.goalName}
-                            label={pair.goalLabel}
-                          >
-                            <Upload
-                              listType="picture-card"
-                              fileList={fileLists[pair.id] || []}
-                              onPreview={handlePreview}
-                              onChange={(info) =>
-                                handleChange(info, pair.id.toString())
-                              }
-                              multiple
-                              onRemove={(file) =>
-                                handleDelete(file, pair, index)
-                              }
+                        <>
+                          {console.log(pair, "pair check")}
+                          {console.log(pair.commentName, "comment check")}
+
+                          <div key={pair.id} style={{ position: "relative" }}>
+                            <Form.Item
+                              name={pair.goalName}
+                              label={pair.goalLabel}
                             >
-                              {/* {(fileLists[pair.id] || []).length >= 8 ? null : (
+                              <Upload
+                                listType="picture-card"
+                                fileList={fileLists[pair.id] || []}
+                                onPreview={handlePreview}
+                                onChange={(info) =>
+                                  handleChange(info, pair.id.toString())
+                                }
+                                multiple
+                                onRemove={(file) =>
+                                  handleDelete(file, pair, index)
+                                }
+                              >
+                                {/* {(fileLists[pair.id] || []).length >= 8 ? null : (
                                 <PlusOutlined />
                               )} */}
-                              {(fileLists[pair.id] || []).length >= 10 ? null : <PlusOutlined />}
-                            </Upload>
-                            {/* {previewImage && (
+                                {(fileLists[pair.id] || []).length >=
+                                  10 ? null : (
+                                  <PlusOutlined />
+                                )}
+                              </Upload>
+                              {/* {previewImage && (
                       <Image
                         wrapperStyle={{ display: 'none' }}
                         preview={{
@@ -507,33 +501,34 @@ console.log(blob,"blob");
                         src={previewImage}
                       />
                     )} */}
-                          </Form.Item>
-                          <Form.Item
-                            name={pair.commentName}
-                            rules={[
-                              {
-                                required: true,
-                                whitespace: true,
-                                message: "Please Fill Field",
-                              },
-                            ]}
-                            label={pair.commentLabel}
-                          >
-                            <TextArea size="large" placeholder="Enter..." />
-                          </Form.Item>
-                          {inputPairs.length > 1 && (
-                            <MinusCircleOutlined
-                              style={{
-                                position: "absolute",
-                                top: "0",
-                                right: "0",
-                                fontSize: "24px",
-                                cursor: "pointer",
-                              }}
-                              onClick={() => removeInputPair(pair.id)}
-                            />
-                          )}
-                        </div>
+                            </Form.Item>
+                            <Form.Item
+                              name={pair.commentName}
+                              rules={[
+                                {
+                                  required: true,
+                                  whitespace: true,
+                                  message: "Please Fill Field",
+                                },
+                              ]}
+                              label={pair.commentLabel}
+                            >
+                              <TextArea size="large" placeholder="Enter..." />
+                            </Form.Item>
+                            {inputPairs.length > 1 && (
+                              <MinusCircleOutlined
+                                style={{
+                                  position: "absolute",
+                                  top: "0",
+                                  right: "0",
+                                  fontSize: "24px",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => removeInputPair(pair.id)}
+                              />
+                            )}
+                          </div>
+                        </>
                       ))}
                       <DynamicButton
                         type="dashed"
@@ -569,7 +564,7 @@ console.log(blob,"blob");
                           type="primary"
                           htmlType="submit"
                           className="login-form-button "
-                          // loading={loading}
+                          loading={loading}
                         >
                           Submit
                         </Button>

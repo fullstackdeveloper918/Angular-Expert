@@ -13,6 +13,8 @@ import {
     Col,
     TimePicker,
     TimePickerProps,
+    Menu,
+    Dropdown,
 } from "antd";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -46,17 +48,10 @@ interface WeatherData {
     }[];
     // other fields from the response
 }
-const weatherIcons: { [key: string]: string } = {
-    'clear sky': '🌤',
-    'few clouds': '🌥',
-    'scattered clouds': '☁️',
-    'broken clouds': '☁️',
-    'shower rain': '🌧',
-    'rain': '🌧',
-    'thunderstorm': '⛈',
-    'snow': '❄️',
-    'mist': '🌫',
-};
+interface WeatherMap {
+    icon: string;
+    temp: number;
+}
 const formatTimezone = (timezone: any) => {
     const offset = moment.tz(timezone).utcOffset();
     const sign = offset >= 0 ? '+' : '-';
@@ -362,44 +357,6 @@ const MeetingAdd = () => {
         return () => {
         };
     }, []);
-    // const initPlaceHotel = async () => {
-    //     if (hotelSearchRef.current) {
-    //         var options = {
-    //             types: ['establishment'],
-    //             componentRestrictions: { country: shortCounrtyName }
-    //         };
-    //         let hotelAutocomplete = new window.google.maps.places.Autocomplete(
-    //             hotelSearchRef.current, options
-    //         );
-    //         hotelAutocomplete.addListener('place_changed', () => {
-    //             let place = hotelAutocomplete.getPlace();
-    //             setSelectedHotel(place.formatted_address || '');
-    //             form.setFieldValue("hotel", place?.formatted_address)
-    //         });
-    //     };
-    // }
-
-    // const initPlaceAirport = async () => {
-    //     if (airportRef.current) {
-    //         var options = {
-    //             types: ['establishment'],
-    //             componentRestrictions: { country: shortCounrtyName }
-    //         };
-    //         let hotelAutocomplete = new window.google.maps.places.Autocomplete(
-    //             airportRef.current, options
-    //         );
-    //         hotelAutocomplete.addListener('place_changed', () => {
-    //             let place = hotelAutocomplete.getPlace();
-    //             setSelectedHotel(place.formatted_address || '');
-    //             form.setFieldValue("airport", place?.formatted_address)
-    //         });
-    //     };
-    // }
-
-
-    // useEffect(() => {
-    //     initPlaceHotel()
-    // }, [shortCounrtyName])
 
     const initPlaceHotel = async () => {
         if (hotelSearchRef.current) {
@@ -421,7 +378,7 @@ const MeetingAdd = () => {
                 const longitude = coordinate.lng();
                 setLat(latitude);
                 setLong(longitude);
-                fetchWeatherData(latitude, longitude, meetingStart, meetingEnd);
+                // fetchWeatherData(latitude, longitude, meetingStart, meetingEnd);
                 findNearestAirport(latitude, longitude);
                 form.setFieldValue("hotel", place.name || '');
             });
@@ -433,87 +390,35 @@ const MeetingAdd = () => {
     }, [shortCounrtyName]);
     const API_WEATHER_KEY = 'd0071f1a5d256028b91f0fdd1aedd36c';
     const API_WEATHER_PREFIX = 'https://api.openweathermap.org/data/2.5/forecast';
-    const getWeatherEmoji = (condition: string) => {
-        switch (condition) {
-            case "Clear":
-                return "🌤";
-            case "Clouds":
-                return "☁️";
-            case "Rain":
-                return "🌧";
-            case "Thunderstorm":
-                return "⛈";
-            default:
-                return "";
-        }
-    };
-    const displayWeatherData = (weatherData: any[]) => {
-        const formattedData = weatherData.map((entry) => {
-            const date = new Date(entry.date);
-            const day = date.toLocaleDateString("en-US", { weekday: 'short' });
-            const emoji = getWeatherEmoji(entry.main);
-            return `${day}: ${emoji} ${entry.temp}°C`;
-        });
-
-        console.log(formattedData.join("\n"));
-    };
-    const fetchWeatherData = async (latitude: number, longitude: number, startDate: string, endDate: string) => {
-        const dates = generateDateRange(startDate, endDate);
-
-        try {
-            const results = await Promise.all(dates.map(async (date) => {
-                const timestamp = new Date(date).getTime() / 1000; // Convert date to UNIX timestamp
-                const response = await fetch(
-                    `https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${latitude}&lon=${longitude}&dt=${timestamp}&units=metric&appid=d0071f1a5d256028b91f0fdd1aedd36c`
-                );
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return await response.json();
-            }));
-
-            // const filteredData = filterWeatherData(results);
-            // displayWeatherData(filteredData);
-            console.log(results, "checkdata");
-
-        } catch (error) {
-            console.error('Error fetching weather data:', error);
-        }
-    };
-
-    const generateDateRange = (startDate: string, endDate: string): string[] => {
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        const dateArray = [];
-
-        while (start <= end) {
-            dateArray.push(start.toISOString().split('T')[0]);
-            start.setDate(start.getDate() + 1);
-        }
-
-        return dateArray;
-    };
+    const [next7DaysWeather, setNext7DaysWeather] = useState<{ day: string; icon: string; temp: string }[]>([]);
     const weatherIcons: { [key: string]: string } = {
-        'clear sky': '🌤',
-        'few clouds': '🌥',
+        // Add more mappings if needed
+        'clear sky': '☀️',
+        'few clouds': '🌤️',
         'scattered clouds': '☁️',
-        'broken clouds': '☁️',
-        'shower rain': '🌧',
-        'rain': '🌧',
-        'thunderstorm': '⛈',
+        'broken clouds': '🌥️',
+        'shower rain': '🌧️',
+        'rain': '🌧️',
+        'thunderstorm': '⛈️',
         'snow': '❄️',
-        'mist': '🌫',
+        'mist': '🌫️',
     };
-  
+
     const lat1 = 40.7128; // Example latitude
     const lon = -74.0060; // Example longitude
 
     // Example start and end dates
-    const meetingStartDate = meetingestartDate;
-    const meetingEndDate = meetingendDate;
+    // const meetingStartDate = meetingestartDate;
+    // const meetingEndDate = meetingendDate;
 
-    const startDate = useMemo(() => new Date(meetingStartDate), [meetingStartDate]);
-    const endDate = useMemo(() => new Date(meetingEndDate), [meetingEndDate]);
+    // const startDate = useMemo(() => new Date(meetingStartDate), [meetingStartDate]);
+    // const endDate = useMemo(() => new Date(meetingEndDate), [meetingEndDate]);
+    const currentDate = useMemo(() => new Date(), []);
+    const endDate = useMemo(() => {
+        const date = new Date();
+        date.setDate(date.getDate() + 7);
+        return date;
+    }, []);
 
     useEffect(() => {
         const fetchAndFilterWeather = async (lat: number, lon: number, startDate: Date, endDate: Date) => {
@@ -533,51 +438,47 @@ const MeetingAdd = () => {
                 const startTimestamp = startDate.getTime() / 1000;
                 const endTimestamp = endDate.getTime() / 1000;
 
-                // Extend end date to include the whole day
-                const extendedEndDate = new Date(endDate);
-                extendedEndDate.setDate(endDate.getDate() + 1);
-                const extendedEndTimestamp = extendedEndDate.getTime() / 1000;
-
-                // Filter data
+                // Filter data for the next 7 days
                 const filteredWeather = weatherList.filter(weather => {
-                    return weather.dt >= startTimestamp && weather.dt < extendedEndTimestamp;
+                    return weather.dt >= startTimestamp && weather.dt < endTimestamp;
                 });
 
-                const weatherMap: { [key: string]: { icon: string; temp: number } } = {};
+                const weatherMap: { [key: string]: { icon: string; tempSum: number; count: number } } = {};
 
                 filteredWeather.forEach(weather => {
                     const date = new Date(weather.dt * 1000);
-                    const day = date.getDate().toString().padStart(2, '0');
+                    const day = date.toISOString().split('T')[0];
                     const temp = weather.main.temp;
                     const description = weather.weather[0].description;
                     const icon = weatherIcons[description] || '🌡';
 
-                    // If there's already data for this day, average the temperatures
                     if (weatherMap[day]) {
-                        weatherMap[day].temp = (weatherMap[day].temp + temp) / 2;
+                        weatherMap[day].tempSum += temp;
+                        weatherMap[day].count += 1;
                     } else {
-                        weatherMap[day] = { icon, temp };
+                        weatherMap[day] = { icon, tempSum: temp, count: 1 };
                     }
                 });
 
-                // Convert the map to an array of formatted strings
-                const formattedWeather = Object.entries(weatherMap).map(([day, { icon, temp }]) => {
-                    return { day, icon, temp: temp.toFixed(1) };
-                });
-console.log(formattedWeather,"formattedWeatherformattedWeather");
+                const formattedWeather = Object.entries(weatherMap).map(([day, { icon, tempSum, count }]) => {
+                    const averageTemp = tempSum / count;
+                    const date = new Date(day);
+                    const formattedDay = date.toLocaleDateString('en-US', { weekday: 'short' });
 
-                setWeatherData1(formattedWeather);
+                    return { day: formattedDay, icon, temp: averageTemp.toFixed(1) };
+                });
+                formattedWeather.sort((a, b) => new Date(a.day).getTime() - new Date(b.day).getTime());
+                console.log(filteredWeather,"formattedWeatherformattedWeather");
+                
+                setNext7DaysWeather(formattedWeather);
             } catch (error) {
                 console.error('Error fetching weather data:', error);
-                setWeatherData1([]);
+                setNext7DaysWeather([]);
             }
         };
 
-        fetchAndFilterWeather(lat, lon, startDate, endDate);
-    }, [lat, lon, startDate, endDate]);
-
-    // Example usage:
-    console.log(data, "chachdata");
+        fetchAndFilterWeather(lat, long, currentDate, endDate);
+    }, [lat, long, currentDate, endDate]);
 
     const findNearestAirport = (lat: any, lng: any) => {
         const service = new window.google.maps.places.PlacesService(document.createElement('div'));
@@ -629,7 +530,21 @@ console.log(formattedWeather,"formattedWeatherformattedWeather");
                 return '🌤';
         }
     };
-
+    const menu = (
+        <Menu>
+            {next7DaysWeather.map(({ day, icon, temp }) => (
+                <Menu.Item key={day} disabled>
+                    <div style={{ display: 'flex', flexDirection: 'column', color: "#000000", alignItems: 'flex-start' }}>
+                        <span style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '5px' }}>{day}</span>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <span style={{ fontSize: '24px', marginRight: '10px' }}>{icon}</span>
+                            <span style={{ fontSize: '16px' }}>{temp}°C</span>
+                        </div>
+                    </div>
+                </Menu.Item>
+            ))}
+        </Menu>
+    );
     return (
         <MainLayout>
             <Fragment>
@@ -762,38 +677,9 @@ console.log(formattedWeather,"formattedWeatherformattedWeather");
                                                     style={{ width: '100%' }}
                                                     // ref={airportRef}
                                                     placeholder="Enter your address"
-                                                /> 
+                                                />
                                             </Form.Item>
-                                            <Form.Item name="weather" className='col-lg-6 col-sm-12' label="Weather">
-                                            <Input
-                                                    className="custom-input"
-                                                    style={{ width: '100%' }}
-                                                    // ref={airportRef}
-                                                    placeholder="Weather"
-                                                /> 
-                                                {/* <p className="custom-input" style={{ width: '100%' }}> {weatherData1.map((dayData: any, index: any) => (
-                                                        <span key={index} style={{ margin: '0 10px' }}>
-                                                            {console.log(dayData, "dayData")
-                                                            }
-                                                            {dayData}
-                                                        </span>
-                                                    ))}</p> */}
-                                                {/* <Input
-                                                    type="text"
-                                                    // value={location}
-                                                    // onChange={(e) => setLocation(e.target.value)}
-                                                    placeholder="Enter Weather"
-                                                /> */}
-                                                {/* <button onClick={handleSearch}>Search</button>
-                                                {error && <p>{error}</p>}
-                                                {weather && (
-                                                    <div>
-                                                        <h2>{weather.name}</h2>
-                                                        <p>Temperature: {weather.main.temp}°C</p>
-                                                        <p>Weather: {weather.weather[0].description}</p>
-                                                    </div>
-                                                )} */}
-                                            </Form.Item>
+                                           
                                             {/* <Form.Item
                                                 name="weather"
                                                 label="Weather"
@@ -847,6 +733,44 @@ console.log(formattedWeather,"formattedWeatherformattedWeather");
                                                     }}
                                                 />
 
+                                            </Form.Item>
+                                            <Form.Item name="weather" className='col-lg-6 col-sm-12' label="Weather">
+                                                {/* <Input
+                                                    className="custom-input"
+                                                    style={{ width: '100%' }}
+                                                    // ref={airportRef}
+                                                    placeholder="Weather"
+                                                />  */}
+                                                <p className="custom-input" style={{ width: '100%' }}>
+                                                    {/* <Dropdown overlay={menu} trigger={['click']}> */}
+                                                    {next7DaysWeather.map(({ day, icon, temp }) => (
+                                                            <div className="gap-2" style={{ display: 'flex', flexDirection: 'column', color: "#000000", alignItems: 'flex-start', width: '100%'  }}>
+                                                                <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{day}</span>
+                                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                    <span style={{ fontSize: '24px', marginRight: '10px' }}>{icon}</span>
+                                                                </div>
+                                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                    <span style={{ fontSize: '12px' }}>{temp}°C</span>
+                                                                </div>
+                                                            </div>
+                                                    ))}
+                                                    {/* </Dropdown> */}
+                                                </p>
+                                                {/* <Input
+                                                    type="text"
+                                                    // value={location}
+                                                    // onChange={(e) => setLocation(e.target.value)}
+                                                    placeholder="Enter Weather"
+                                                /> */}
+                                                {/* <button onClick={handleSearch}>Search</button>
+                                                {error && <p>{error}</p>}
+                                                {weather && (
+                                                    <div>
+                                                        <h2>{weather.name}</h2>
+                                                        <p>Temperature: {weather.main.temp}°C</p>
+                                                        <p>Weather: {weather.weather[0].description}</p>
+                                                    </div>
+                                                )} */}
                                             </Form.Item>
                                             {meetingType == 'spring' && (
                                                 <Form.Item

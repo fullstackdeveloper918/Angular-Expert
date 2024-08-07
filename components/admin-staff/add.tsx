@@ -68,7 +68,6 @@ const AddStaff: Page = () => {
         try {
             setLoading(true)
             let res = await api.Admin.create(items)
-            console.log(res, "tttttt");
 
             toast.success(res?.message, {
                 position: 'top-center',
