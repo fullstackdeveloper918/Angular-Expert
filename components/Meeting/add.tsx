@@ -743,8 +743,8 @@ const MeetingAdd = () => {
                                                 />  */}
                                                 <p className="custom-input" style={{ width: '100%' }}>
                                                     {/* <Dropdown overlay={menu} trigger={['click']}> */}
-                                                    {next7DaysWeather.map(({ day, icon, temp }) => (
-                                                            <div className="gap-2" style={{ display: 'flex', flexDirection: 'column', color: "#000000", alignItems: 'flex-start', width: '100%'  }}>
+                                                    {next7DaysWeather.map(({ day, icon, temp },index:number) => (
+                                                            <div className="gap-2" key={index} style={{ display: 'flex', flexDirection: 'column', color: "#000000", alignItems: 'flex-start', width: '100%'  }}>
                                                                 <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{day}</span>
                                                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                                                     <span style={{ fontSize: '24px', marginRight: '10px' }}>{icon}</span>
