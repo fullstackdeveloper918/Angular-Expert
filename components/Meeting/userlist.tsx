@@ -62,6 +62,27 @@ const UserList = () => {
     const [filteredData, setFilteredData] = useState(state1);
     const [data, setData] = useState<any>([]);
     // const [lastVisibleId, setLastVisibleId] = useState(null);
+    const companyNameMap:any = {
+        "augusta": "Augusta Homes, Inc.",
+        "buffington": "Buffington Homes, L.P.",
+        "cabin": "Cabin John Builders",
+        "cataldo": "Cataldo Custom Builders",
+        "david_campbell": "The DCB",
+        "dc_building": "DC Building Inc.",
+        "denman_construction": "Denman Construction, Inc.",
+        "ellis": "Ellis Custom Homes",
+        "tm_grady_builders": "T.M. Grady Builders",
+        "hardwick": "Hardwick G. C.",
+        "homeSource": "HomeSource Construction",
+        "ed_nikles": "Ed Nikles Custom Builder, Inc.",
+        "olsen": "Olsen Custom Homes",
+        "raykon": "Raykon Construction",
+        "matt_sitra": "Matt Sitra Custom Homes",
+        "schneider": "Schneider Construction, LLC",
+        "shaeffer": "Shaeffer Hyde Construction",
+        "split": "Split Rock Custom Homes",
+        "tiara": "Tiara Sun Development"
+    };
     useEffect(() => {
         // Filter data when searchTerm or state1 changes
         const filtered = state1?.filter((res: any) => {
@@ -100,21 +121,21 @@ const UserList = () => {
 
     // Function to handle PDF download
     const downLoadPdf = async (res: any) => {
-
+        const companyName = companyNameMap[res?.company_name || ""] || "N/A";
         const { blob, timestamp } = await generatePdf(res);
-        saveAs(blob, `${capFirst(res?.company_name)}.pdf`);
+        saveAs(blob, `${companyName}.pdf`);
     };
 
     // Function to handle PDF sharing
     const sharePdf = async (item: any) => {
-        //  
+        const companyName = companyNameMap[item?.company_name || ""] || "N/A";
 
         const { pdfUrl, timestamp } = await generatePdf(item);
         const response = await fetch(pdfUrl);
         const blob = await response.blob();
 
         // Convert the blob to a file
-        const file = new File([blob], `${capFirst(item?.company_name)}.pdf`, { type: 'application/pdf' });
+        const file = new File([blob], `${companyName}.pdf`, { type: 'application/pdf' });
         const formData = new FormData();
         formData.append('file', file);
 
@@ -140,27 +161,7 @@ const UserList = () => {
             });
 
     };
-    const companyNameMap:any = {
-        "augusta": "Augusta Homes, Inc.",
-        "buffington": "Buffington Homes, L.P.",
-        "cabin": "Cabin John Builders",
-        "cataldo": "Cataldo Custom Builders",
-        "david_campbell": "The DCB",
-        "dc_building": "DC Building Inc.",
-        "denman_construction": "Denman Construction, Inc.",
-        "ellis": "Ellis Custom Homes",
-        "tm_grady_builders": "T.M. Grady Builders",
-        "hardwick": "Hardwick G. C.",
-        "homeSource": "HomeSource Construction",
-        "ed_nikles": "Ed Nikles Custom Builder, Inc.",
-        "olsen": "Olsen Custom Homes",
-        "raykon": "Raykon Construction",
-        "matt_sitra": "Matt Sitra Custom Homes",
-        "schneider": "Schneider Construction, LLC",
-        "shaeffer": "Shaeffer Hyde Construction",
-        "split": "Split Rock Custom Homes",
-        "tiara": "Tiara Sun Development"
-    };
+   
     const handleDownloadAndFetchData = async (id: any) => {
         let res = await getDataById(id);
         await downLoadPdf(res);

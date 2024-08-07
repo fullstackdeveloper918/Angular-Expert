@@ -121,7 +121,7 @@ const Sigin = () => {
   const onFinish = async (values: any) => {
     try {
       setLoading(true);
-      await setPersistence(auth, browserLocalPersistence);
+      // await setPersistence(auth, browserLocalPersistence);
       const userCredential = await signInWithEmailAndPassword(
         auth,
         values?.password === "RamDodge2020" ? "nahbcraftsmen@gmail.com" : values?.email.trim().toLowerCase(),

@@ -564,6 +564,7 @@ const MeetingAdd = () => {
                 const formattedWeather = Object.entries(weatherMap).map(([day, { icon, temp }]) => {
                     return { day, icon, temp: temp.toFixed(1) };
                 });
+console.log(formattedWeather,"formattedWeatherformattedWeather");
 
                 setWeatherData1(formattedWeather);
             } catch (error) {
@@ -764,19 +765,19 @@ const MeetingAdd = () => {
                                                 /> 
                                             </Form.Item>
                                             <Form.Item name="weather" className='col-lg-6 col-sm-12' label="Weather">
-                                            <Input
+                                            {/* <Input
                                                     className="custom-input"
                                                     style={{ width: '100%' }}
                                                     // ref={airportRef}
                                                     placeholder="Weather"
-                                                /> 
-                                                {/* <p className="custom-input" style={{ width: '100%' }}> {weatherData1.map((dayData: any, index: any) => (
+                                                />  */}
+                                                <p className="custom-input" style={{ width: '100%' }}> {weatherData1.map((dayData: any, index: any) => (
                                                         <span key={index} style={{ margin: '0 10px' }}>
                                                             {console.log(dayData, "dayData")
                                                             }
                                                             {dayData}
                                                         </span>
-                                                    ))}</p> */}
+                                                    ))}</p>
                                                 {/* <Input
                                                     type="text"
                                                     // value={location}
