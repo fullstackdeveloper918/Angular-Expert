@@ -125,7 +125,8 @@ const MeetingView = () => {
   const onFinish = async () => {
     let items = {
       to: state?.email,
-      link: `https://nabh-app--nabh-41663.us-central1.hosted.app/auth/update_password?${state.email}`
+      link: `https://nahbcraftsmen.com/auth/update_password?${state.email}`
+      // link: `https://nabh-app--nabh-41663.us-central1.hosted.app/auth/update_password?${state.email}`
       // link: `https://angular-expert-mu.vercel.app/auth/update_password?${state.email}`
       
     };
