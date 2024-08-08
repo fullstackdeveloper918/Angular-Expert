@@ -3,7 +3,7 @@ import logo from "../../assests/images/image.png";
 import React from "react";
 import { Form, Input } from "antd";
 import dynamic from "next/dynamic";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import axios from "axios";
 
 const { Row, Col, Button, Divider } = {
@@ -24,11 +24,13 @@ interface User {
   accessToken: string;
 }
 const Updatepswrd = () => {
-  const params=useParams()
-    
+  const searchParams = useSearchParams();
+  const entries = Array.from(searchParams.entries());
+  const value = entries.length > 0 ? entries[0][0] : '';
+  const type = entries.length > 1 ? entries[1][0] : '';
  const onFinish = async (values: any) => {
         let items = {
-            email:"",
+            email:value,
             password: values.new_password
         };
         try {
