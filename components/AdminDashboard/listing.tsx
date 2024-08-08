@@ -84,7 +84,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Member Update Due",
+      title: "Asheville Members Update Due",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
@@ -94,7 +94,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Member Meeting Kick off",
+      title: "Asheville Members Meeting Kick off",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
@@ -149,7 +149,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Member Update Due",
+      title: "Asheville Members Update Due",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
@@ -159,7 +159,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Member Meeting Kick off",
+      title: "Asheville Members Meeting Kick off",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
@@ -169,7 +169,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: "Member Updates Completed",
+      title: "Members Update Completed",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}>{complete?.totalCompleted || "0"}</span>
       //  "No. of Users fillled the Form for coming meeting"
@@ -183,7 +183,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FormOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Member Updates yet to be completed",
+      title: "Members Update yet to be completed",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}>{complete?.totalUncompleted || "0"}</span>
       // "No. of Users remains to fill the Form for coming meeting"
@@ -266,31 +266,51 @@ const AdminDashboard: Page = (props: any) => {
     }
   }
   );
-  const dataSource1 = state2?.map((res: any, index: number) => {
+  const dataSource1 = state2
+  ?.sort((a: any, b: any) => {
+    // Assuming created_at is an object similar to the timestamp you mentioned earlier
+    const dateA = new Date(a.updatedAt._seconds * 1000 + a.updatedAt._nanoseconds / 1000000);
+    const dateB = new Date(b.updatedAt._seconds * 1000 + b.updatedAt._nanoseconds / 1000000);
+    return   dateB.getTime() -dateA.getTime();
+  })
+  .map((res: any, index: number) => {
     const companyName = companyNameMap[res?.company_name || ""] || "N/A";
     return {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(res?.firstname)} ${validation.capitalizeFirstLetter(res?.lastname)}` : "N/A",
       company: companyName || "N/A",
       email: res?.email || "N/A",
-      action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
-        {hasClubMemberPermission || getUserdata?.is_admin == false ?
-          <Link href={`/admin/member/${res?.id}/view`}><Button className='ViewMore'><EyeOutlined /></Button></Link> :
-          <Link href={`/admin/dashboard`}><Button className='ViewMore'><EyeOutlined /></Button></Link>}</li>
-      </ul>,
-      action1: <ul className='m-0 list-unstyled d-flex gap-2'>
-        <li>
-          <Tooltip title="Download Pdf">
-            <Button className='ViewMore '
-              onClick={() => handleDownloadAndFetchData(res?.id)}
-            ><DownloadOutlined /></Button>
-          </Tooltip>
-        </li>
-
-      </ul>
-    }
-  }
-  );
+      action: (
+        <ul className='m-0 list-unstyled d-flex gap-2'>
+          <li>
+            {hasClubMemberPermission || getUserdata?.is_admin == false ? (
+              <Link href={`/admin/member/${res?.id}/view`}>
+                <Button className='ViewMore'><EyeOutlined /></Button>
+              </Link>
+            ) : (
+              <Link href={`/admin/dashboard`}>
+                <Button className='ViewMore'><EyeOutlined /></Button>
+              </Link>
+            )}
+          </li>
+        </ul>
+      ),
+      action1: (
+        <ul className='m-0 list-unstyled d-flex gap-2'>
+          <li>
+            <Tooltip title="Download Pdf">
+              <Button
+                className='ViewMore'
+                onClick={() => handleDownloadAndFetchData(res?.id)}
+              >
+                <DownloadOutlined />
+              </Button>
+            </Tooltip>
+          </li>
+        </ul>
+      ),
+    };
+  });
 
   const dataSource2 = non_completed?.map((res: any, index: number) => {
     const companyName = companyNameMap[res?.company_name || ""] || "N/A";
