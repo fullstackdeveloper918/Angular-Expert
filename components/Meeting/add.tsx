@@ -97,20 +97,26 @@ const MeetingAdd = () => {
         }
     };
     const onChangeDate = (date: any) => {
-        // const dateWithTimezone: any = date ?  moment.tz(date, selectedTimezone).toDate() : null;
-        const dateWithTimezone:any =date
-        const localTimeZone =moment.tz.guess()
-        const localMoment = moment.tz(dateWithTimezone, localTimeZone); 
-        const targetMoment = localMoment.clone().tz(selectedTimezone);
-        console.log(targetMoment,"checktarget");
-        
-        // const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
-        setSelectedDate(dateWithTimezone);
-
-        console.log((dateWithTimezone), "dateWithTimezone");
-        // console.log(dayjs(date).format("YYYY-MM-DD"), "dateWithTimezone");
-        setMeetingstartDate(dayjs(date).format("YYYY-MM-DD"))
+        const selectedTimezone1 = 'Australia/Sydney'; // Example timezone
+        console.log(date, "original date");
+    
+        // Parse the selected date without time
+        const localDate = moment(date).format("YYYY-MM-DD");
+        console.log(localDate, "localDate");
+    
+        // Create a moment object using the selected timezone
+        const dateInSelectedTimezone = moment.tz(localDate, selectedTimezone1);
+        console.log(dateInSelectedTimezone.format(), "dateInSelectedTimezone");
+    
+        // Format the date according to the selected timezone
+        const formattedDate = dateInSelectedTimezone.format("YYYY-MM-DD");
+        console.log(formattedDate, "formattedDate");
+    
+        // Set the date in the state
+        setMeetingstartDate(formattedDate);
     };
+    console.log(meetingestartDate,"meetingestartDate");
+    
     const onChangeDate1 = (date: any) => {
         const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
         setSelectedDate1(dateWithTimezone);
@@ -157,6 +163,7 @@ const MeetingAdd = () => {
     const [meetingStart, setMeetingStart] = useState<any>("")
     const [meetingEnd, setMeetingEnd] = useState<any>("")
     const onSubmit = async (values: any) => {
+console.log(values,"hkhskdhfksdfh");
 
         let start_date = dayjs(values?.start_date).format("YYYY-MM-DD")
         let end_date = dayjs(values?.end_date).format("YYYY-MM-DD")
@@ -168,9 +175,14 @@ const MeetingAdd = () => {
             // "purpose": "Present new project proposal to client.",
             meeting_type: values?.meeting_type,
             start_time: dayjs(values?.start_time).utc().valueOf(),
+            // start_time: dayjs(values?.start_time).valueOf(),
             start_meeting_date: dayjs(values?.start_date).utc().valueOf(),
+            // start_meeting_date: dayjs(values?.start_date).valueOf(),
+            // end_time: dayjs(values?.end_time).valueOf(),
             end_time: dayjs(values?.end_time).utc().valueOf(),
+            // end_meeting_date: dayjs(values?.end_date).valueOf(),
             end_meeting_date: dayjs(values?.end_date).utc().valueOf(),
+            // year: dayjs(values?.end_date).valueOf(),
             year: dayjs(values?.end_date).utc().valueOf(),
             location: selectedLocation,
             hotel: selectedHotel?.name,
@@ -184,7 +196,7 @@ const MeetingAdd = () => {
             notes: values?.notes,
             phone: [values?.mobile_no],
         }
-
+return
         const timestamp = 1720782277333;
 
         // Convert timestamp to date
