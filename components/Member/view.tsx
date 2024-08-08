@@ -10,7 +10,7 @@ import api from "@/utils/api";
 import axios from "axios";
 import { pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Pdf from "../common/Pdf";
 import { DownloadOutlined, ShareAltOutlined } from "@ant-design/icons";
 import { destroyCookie, parseCookies } from "nookies";
@@ -132,7 +132,7 @@ const MeetingView = () => {
     };
     try {
       setLoading(true)
-      let res = await axios.post("https://frontend.goaideme.com/reset-password", 
+      let res:any = await axios.post("https://frontend.goaideme.com/reset-password", 
       // let res = await axios.post("https://app-uilsndszlq-uc.a.run.app/reset-password", 
         items, // items is the body of the request
         {
@@ -142,9 +142,12 @@ const MeetingView = () => {
           }
         }
       );
+      console.log(res,"response");
+      
       getDataById()
-    } catch (error) {
-      if (error==400) {
+      toast.success(res?.data?.message)
+    } catch (error:any) {
+      if (error.status==400) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
         // }

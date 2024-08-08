@@ -141,6 +141,7 @@ const Add = () => {
 
         let res = await api.Auth.signUp(items)
         // router.push(`/admin/member/add/page2?${res?.user_id}`)
+        router.push(`/admin/member/additional_user`)
         toast.success("Added Successfully")
 router.back()
         if (res?.status == 400) {
@@ -326,7 +327,7 @@ router.back()
                         Save
                       </Button> */}
                       <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                        Save
+                        Next
                       </Button>
                     </div>
                   </Form>

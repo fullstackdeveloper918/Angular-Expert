@@ -127,6 +127,7 @@ setActive(x)
         <DashboardOutlined style={iconSize} />
       ),
     },
+   
     hasClubMemberPermission && {
       key: henceofrthEnums.Roles.USERS,
       view: getItem(
@@ -134,6 +135,16 @@ setActive(x)
           {getUserdata?.is_admin == false ? "User" : "Club Members"}
         </Link>,
         "member",
+        <UserOutlined style={iconSize} />
+      ),
+    },
+    hasClubMemberPermission && {
+      key: henceofrthEnums.Roles.USERS,
+      view: getItem(
+        <Link href="/admin/member/archive" className="text-decoration-none">
+          {getUserdata?.is_admin == false ? "User" : "Archive Members"}
+        </Link>,
+        "archive",
         <UserOutlined style={iconSize} />
       ),
     },

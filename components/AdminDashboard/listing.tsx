@@ -27,6 +27,7 @@ const AdminDashboard: Page = (props: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData)
   const [loading, setLoading] = useState<any>(true)
   const [state1, setState1] = useState<any>([])
+  const [state2, setState2] = useState<any>([])
   const [areas, setAreas] = useState<any>([]);
   const [complete, setComplete] = useState<any>("")
   const [check, setCheck] = useState<any>("")
@@ -83,7 +84,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Update Due",
+      title: "Asheville Member Update Due",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
@@ -93,7 +94,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Meeting Kick off",
+      title: "Asheville Member Meeting Kick off",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
@@ -119,7 +120,7 @@ const AdminDashboard: Page = (props: any) => {
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#000000",
-      title: <span >St. George Spring 2025(<Timmerday endDate={spring_start_date} />)</span>,
+      title: <span >St. George Spring Members 2025(<Timmerday endDate={spring_start_date} />)</span>,
       // title: "St. George Spring 2025",
       count: <span style={{ fontSize: '20px' }}>
 
@@ -148,7 +149,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Update Due",
+      title: "Asheville Member Update Due",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
@@ -158,7 +159,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Meeting Kick off",
+      title: "Asheville Member Meeting Kick off",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
@@ -168,7 +169,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: "Updates Completed",
+      title: "Member Updates Completed",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}>{complete?.totalCompleted || "0"}</span>
       //  "No. of Users fillled the Form for coming meeting"
@@ -182,7 +183,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FormOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Updates yet to be completed",
+      title: "Member Updates yet to be completed",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}>{complete?.totalUncompleted || "0"}</span>
       // "No. of Users remains to fill the Form for coming meeting"
@@ -265,7 +266,7 @@ const AdminDashboard: Page = (props: any) => {
     }
   }
   );
-  const dataSource1 = completed?.map((res: any, index: number) => {
+  const dataSource1 = state2?.map((res: any, index: number) => {
     const companyName = companyNameMap[res?.company_name || ""] || "N/A";
     return {
       key: index + 1,
@@ -512,7 +513,10 @@ const AdminDashboard: Page = (props: any) => {
     setLoading(true)
     try {
       let res = await api.User.listing()
+      let response = await api.User.completelist()
+      console.log(response,"response1");
       setState1(res?.data)
+      setState2(response)
       setLoading(false)
     } catch (error) {
       setLoading(false)

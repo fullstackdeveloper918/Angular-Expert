@@ -88,6 +88,10 @@ const User = {
     requests.post('update-user', info),
   listing: (q?: string) =>
     requests.get(`list${q ? `?${q}` : ""}`),
+  arcivelisting: (q?: string) =>
+    requests.get(`archive-user-listing${q ? `?${q}` : ""}`),
+  completelist: () =>
+    requests.get(`descending-completed-form`),
   listing1: () =>
     requests.get(`list`),
   user_listing: (q?: string) =>

@@ -177,6 +177,11 @@ const Sigin = () => {
       setCookie("user_data", JSON.stringify(responseData), 30); // 30 days
       router?.push("/admin/dashboard");
     } catch (error: any) {
+      if(error){
+        toast.error("Invalid Credentials")
+      }
+      console.log(error?.code,"errroe");
+      
       setLoading(false);
     } finally {
       // setLoading(false);

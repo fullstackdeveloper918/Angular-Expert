@@ -66,6 +66,7 @@ const MeetingAdd = () => {
     const [loading, setLoading] = useState(false)
     const [selectedTimezone, setSelectedTimezone] = useState(moment.tz.guess()); // Default to local timezone
     const [selectedDate, setSelectedDate] = useState<any>(null);
+    const [selectedDate1, setSelectedDate1] = useState<any>(null);
     const [selectedLocation, setSelectedLocation] = useState<any>('');
     const [selectedHotel, setSelectedHotel] = useState<any>('');
     const [location, setLocation] = useState('');
@@ -81,6 +82,7 @@ const MeetingAdd = () => {
     console.log(meetingendDate, "meetingendDate");
     console.log(meetingestartDate, "meetingestartDate");
     console.log(weatherData1, "weatherData1");
+    console.log(selectedTimezone, "selectedTimezone");
 
 
     const handleSearch = async () => {
@@ -95,13 +97,23 @@ const MeetingAdd = () => {
         }
     };
     const onChangeDate = (date: any) => {
-        const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
+        // const dateWithTimezone: any = date ?  moment.tz(date, selectedTimezone).toDate() : null;
+        const dateWithTimezone:any =date
+        const localTimeZone =moment.tz.guess()
+        const localMoment = moment.tz(dateWithTimezone, localTimeZone); 
+        const targetMoment = localMoment.clone().tz(selectedTimezone);
+        console.log(targetMoment,"checktarget");
+        
+        // const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
         setSelectedDate(dateWithTimezone);
+
+        console.log((dateWithTimezone), "dateWithTimezone");
+        // console.log(dayjs(date).format("YYYY-MM-DD"), "dateWithTimezone");
         setMeetingstartDate(dayjs(date).format("YYYY-MM-DD"))
     };
     const onChangeDate1 = (date: any) => {
         const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
-        setSelectedDate(dateWithTimezone);
+        setSelectedDate1(dateWithTimezone);
         setMeetingendDate(dayjs(date).format("YYYY-MM-DD"))
     };
 

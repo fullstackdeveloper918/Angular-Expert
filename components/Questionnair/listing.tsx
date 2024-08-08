@@ -9,6 +9,15 @@ import { pdf } from "@react-pdf/renderer";
 import saveAs from "file-saver";
 import { useSelector } from "react-redux";
 import Pdf from "../common/Pdf";
+import BussinessPdf from "../common/Bussinesspdf"
+import GoalsPdf from "../common/Goalspdf"
+import Toolboxpdf from "../common/Toolboxpdf"
+import Craftsmenpdf from "../common/Craftsmenpdf"
+import MeetingReviewpdf from "../common/Meetingreviewpdf"
+import Meetingpreparationpdf from "../common/Meetingpreparationpdf"
+import Photopdf from "../common/Photosectionpdf"
+
+
 import { toast } from "react-toastify";
 import { parseCookies } from "nookies";
 import {destroyCookie } from "nookies";
@@ -16,6 +25,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { clearUserData } from "@/lib/features/userSlice";
 import QuestionanirModal from "../common/QuestionnairModal";
+import PhotoSectionPdf from "../common/Photosectionpdf";
 const { Search } = Input;
 const { Title } = Typography;
 const QuestionnairList = () => {
@@ -149,7 +159,7 @@ const QuestionnairList = () => {
    
     const generatePdf = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
-        const blob = await pdf(<Pdf state={state1} />).toBlob();
+        const blob = await pdf(<BussinessPdf state={state1} />).toBlob();
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };
@@ -157,6 +167,78 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdf = async () => {
         const { blob, timestamp } = await generatePdf();
+        saveAs(blob, `Order_${timestamp}.pdf`);
+    };
+    const generatePdf2 = async () => {
+        const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+        const blob = await pdf(<GoalsPdf state={state1} />).toBlob();
+        const pdfUrl = URL.createObjectURL(blob);
+        return { blob, pdfUrl, timestamp };
+    };
+    
+    // Function to handle PDF download
+    const downLoadPdf2 = async () => {
+        const { blob, timestamp } = await generatePdf2();
+        saveAs(blob, `Order_${timestamp}.pdf`);
+    };
+    const generatePdf3 = async () => {
+        const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+        const blob = await pdf(<Toolboxpdf state={state1} />).toBlob();
+        const pdfUrl = URL.createObjectURL(blob);
+        return { blob, pdfUrl, timestamp };
+    };
+    
+    // Function to handle PDF download
+    const downLoadPdf3 = async () => {
+        const { blob, timestamp } = await generatePdf3();
+        saveAs(blob, `Order_${timestamp}.pdf`);
+    };
+    const generatePdf4 = async () => {
+        const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+        const blob = await pdf(<Craftsmenpdf state={state1} />).toBlob();
+        const pdfUrl = URL.createObjectURL(blob);
+        return { blob, pdfUrl, timestamp };
+    };
+    
+    // Function to handle PDF download
+    const downLoadPdf4 = async () => {
+        const { blob, timestamp } = await generatePdf4();
+        saveAs(blob, `Order_${timestamp}.pdf`);
+    };
+    const generatePdf5 = async () => {
+        const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+        const blob = await pdf(<MeetingReviewpdf state={state1} />).toBlob();
+        const pdfUrl = URL.createObjectURL(blob);
+        return { blob, pdfUrl, timestamp };
+    };
+    
+    // Function to handle PDF download
+    const downLoadPdf5 = async () => {
+        const { blob, timestamp } = await generatePdf5();
+        saveAs(blob, `Order_${timestamp}.pdf`);
+    };
+    const generatePdf6 = async () => {
+        const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+        const blob = await pdf(<Meetingpreparationpdf state={state1} />).toBlob();
+        const pdfUrl = URL.createObjectURL(blob);
+        return { blob, pdfUrl, timestamp };
+    };
+    
+    // Function to handle PDF download
+    const downLoadPdf6 = async () => {
+        const { blob, timestamp } = await generatePdf6();
+        saveAs(blob, `Order_${timestamp}.pdf`);
+    };
+    const generatePdf7 = async () => {
+        const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+        const blob = await pdf(<PhotoSectionPdf state={state1} />).toBlob();
+        const pdfUrl = URL.createObjectURL(blob);
+        return { blob, pdfUrl, timestamp };
+    };
+    
+    // Function to handle PDF download
+    const downLoadPdf7 = async () => {
+        const { blob, timestamp } = await generatePdf7();
         saveAs(blob, `Order_${timestamp}.pdf`);
     };
     
@@ -229,8 +311,8 @@ const QuestionnairList = () => {
         { title: 'Card 7', description: 'PHOTO SECTION', state: 6 },
         // Add more card data as needed
     ];
+    const baseURL = '/admin/member/add';
     const getLinkForState = (state: any) => {
-        const baseURL = '/admin/member/add';
         switch (state) {
             
             case 0: return `${baseURL}/page2?${getUserdata?.user_id}&edit&questionnair`;
@@ -264,18 +346,18 @@ const QuestionnairList = () => {
                                         </div>
 
                                         <Row gutter={[20, 20]}>
-                                            {data.map((item, index) => (
-                                                <Col key={index} span={8}>
+                                            {/* {data.map((item, index) => ( */}
+                                                <Col  span={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
-                                                                <h5 className="fw-bold text-start mb-4">{item.description}</h5>
+                                                                <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
                                                                 <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf}><DownloadOutlined /></Button>
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
-                                                                href={getLinkForState(item.state)}
+                                                                href={`${baseURL}/page2?${getUserdata?.user_id}&edit&questionnair`}
                                                                 className='text-decoration-none text-white flex-grow-1'
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
@@ -289,7 +371,151 @@ const QuestionnairList = () => {
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                            ))}
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">GOALS</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf2}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page3?${getUserdata?.user_id}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page4?${getUserdata?.user_id}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page5?${getUserdata?.user_id}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">SPRING 2024 MEETING REVIEW</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page6?${getUserdata?.user_id}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page7?${getUserdata?.user_id}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">PHOTO SECTION</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page8?${getUserdata?.user_id}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                            {/* ))} */}
                                         </Row>
 
                                         <style jsx>{`
