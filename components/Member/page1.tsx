@@ -344,7 +344,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
 
                                             </div>
                                         <div className=" col-8 d-flex gap-5 justify-content-center">
-                                        <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
+                                        <Button size={'large'} type="primary" className=" " htmlType="submit">
                                             Save
                                         </Button>
                                         <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>

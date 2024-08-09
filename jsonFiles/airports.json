@@ -73222,5 +73222,38 @@
         "type": "airport",
         "lat": "42.885662",
         "size": "medium"
+    },
+    {
+        "iata": "SGU",
+        "lon": "129.43936",
+        "iso": "CN",
+        "status": 1,
+        "name": "St. George, UT",
+        "continent": "AS",
+        "type": "airport",
+        "lat": "42.885662",
+        "size": "medium"
+    },
+    {
+        "iata": "CLL",
+        "lon": "129.43936",
+        "iso": "CN",
+        "status": 1,
+        "name": "Easterwood Airport",
+        "continent": "AS",
+        "type": "airport",
+        "lat": "42.885662",
+        "size": "medium"
+    },
+    {
+        "iata": "HNL",
+        "lon": "129.43936",
+        "iso": "CN",
+        "status": 1,
+        "name": "Daniel K. Inouye International Airport",
+        "continent": "AS",
+        "type": "airport",
+        "lat": "42.885662",
+        "size": "medium"
     }
 ]
