@@ -192,7 +192,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2024</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Fall 2024</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}

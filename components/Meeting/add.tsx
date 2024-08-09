@@ -79,7 +79,7 @@ const MeetingAdd = () => {
     const [weatherData1, setWeatherData1] = useState<any>([]);
     const [meetingendDate, setMeetingendDate] = useState<any>(null);
     const [meetingestartDate, setMeetingstartDate] = useState<any>(null);
-    console.log(selectedHotel, "selectedHotel");
+    console.log(selectedHotel?.formatted_address, "selectedHotel");
     console.log(meetingestartDate, "meetingestartDate");
     console.log(weatherData1, "weatherData1");
     console.log(nearestAirport, "nearestAirport");
@@ -185,7 +185,7 @@ console.log(values,"hkhskdhfksdfh");
             // year: dayjs(values?.end_date).valueOf(),
             year: dayjs(values?.end_date).utc().valueOf(),
             location: selectedLocation,
-            hotel: selectedHotel?.name,
+            hotel: selectedHotel?.formatted_address,
             airport: nearestAirport?.name,
             host_company: values?.host_company,
             host: values?.host,
