@@ -161,7 +161,7 @@ const PhotoSectionPdf = (props) => {
     "cataldo": "Cataldo Custom Builders",
     "david_campbell": "The DCB",
     "dc_building": "DC Building Inc.",
-    "denman_construction": "Denman Construction, Inc.",
+    "Ddenman_construction": "Denman Construction, Inc.",
     "ellis": "Ellis Custom Homes",
     "tm_grady_builders": "T.M. Grady Builders",
     "hardwick": "Hardwick G. C.",

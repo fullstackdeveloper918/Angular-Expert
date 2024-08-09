@@ -13,6 +13,7 @@ import {
     Card,
     Pagination,
     Spin,
+    Popconfirm,
 } from "antd";
 import Link from "next/link";
 import { DownloadOutlined, EyeOutlined, PlusOutlined, ShareAltOutlined } from "@ant-design/icons";
@@ -147,7 +148,7 @@ const ArchiveMemberList = () => {
         "cataldo": "Cataldo Custom Builders",
         "david_campbell": "The DCB",
         "dc_building": "DC Building Inc.",
-        "denman_construction": "Denman Construction, Inc.",
+        "Ddenman_construction": "Denman Construction, Inc.",
         "ellis": "Ellis Custom Homes",
         "tm_grady_builders": "T.M. Grady Builders",
         "hardwick": "Hardwick G. C.",
@@ -161,6 +162,7 @@ const ArchiveMemberList = () => {
         "split": "Split Rock Custom Homes",
         "tiara": "Tiara Sun Development"
     };
+
     const handleDownloadAndFetchData = async (id: any) => {
         let res = await getDataById(id);
         await downLoadPdf(res);
@@ -251,6 +253,16 @@ const ArchiveMemberList = () => {
                         <Button className='ViewMore ' onClick={() => handleFetchAndFetchData(res?.id)}><ShareAltOutlined /></Button>
                     </Tooltip>
                 </li>
+                <li>
+                            <Popconfirm
+                                title="Delete"
+                                description="Are you sure you want to delete ?"
+                                onConfirm={(event: any) => { archive(res?.id) }}
+                            // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                            >
+                                <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                            </Popconfirm>
+                        </li>
                 {/* <li>
                     <Link href={`/admin/member/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
                 </li> */}
@@ -343,7 +355,20 @@ const ArchiveMemberList = () => {
             }
         }
     };
+    const archive = async (id: any) => {
+        const item = {
+            userId: id,
+        }
+        try {
+            let res = await api.User.archive_user_delete(item as any)
+            // initialise(id)
+            getData(id)
+            toast.success(res?.message)
+            //   setAreas
+        } catch (error) {
 
+        }
+    }
     useEffect(() => {
         const query = searchTerm ? `searchTerm=${searchTerm}` : '';
         getData(query);

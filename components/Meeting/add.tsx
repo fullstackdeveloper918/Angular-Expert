@@ -522,7 +522,8 @@ const MeetingAdd = () => {
             } else {
                 console.error('Error finding airports:', status);
             }
-        });
+        }
+    );
     };
 
     console.log(nearestAirport, "nearestAirport");

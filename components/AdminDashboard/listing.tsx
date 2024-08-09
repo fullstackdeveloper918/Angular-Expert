@@ -84,7 +84,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Members Update Due",
+      title: "Asheville Member Update Due",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
@@ -94,7 +94,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Members Meeting Kick off",
+      title: "Asheville Member Meeting Kick off",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
@@ -120,7 +120,7 @@ const AdminDashboard: Page = (props: any) => {
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#000000",
-      title: <span >St. George Spring Members 2025(<Timmerday endDate={spring_start_date} />)</span>,
+      title: <span >St. George Spring Member 2025(<Timmerday endDate={spring_start_date} />)</span>,
       // title: "St. George Spring 2025",
       count: <span style={{ fontSize: '20px' }}>
 
@@ -149,7 +149,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Members Update Due",
+      title: "Asheville Member Update Due",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
@@ -159,7 +159,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Members Meeting Kick off",
+      title: "Asheville Member Meeting Kick off",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
       link: "/admin/dashboard"
@@ -169,7 +169,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
-      title: "Members Update Completed",
+      title: "Member Update Completed",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}>{complete?.totalCompleted || "0"}</span>
       //  "No. of Users fillled the Form for coming meeting"
@@ -183,7 +183,7 @@ const AdminDashboard: Page = (props: any) => {
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FormOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Members Update yet to be completed",
+      title: "Member Update yet to be completed",
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}>{complete?.totalUncompleted || "0"}</span>
       // "No. of Users remains to fill the Form for coming meeting"
@@ -217,7 +217,7 @@ const AdminDashboard: Page = (props: any) => {
     "cataldo": "Cataldo Custom Builders",
     "david_campbell": "The DCB",
     "dc_building": "DC Building Inc.",
-    "denman_construction": "Denman Construction, Inc.",
+    "Ddenman_construction": "Denman Construction, Inc.",
     "ellis": "Ellis Custom Homes",
     "tm_grady_builders": "T.M. Grady Builders",
     "hardwick": "Hardwick G. C.",

@@ -122,6 +122,8 @@ const User = {
     requests.file(`user`, 'file', file),
   create: (info: any) =>
     requests.post('save-pdf', info),
+  archive_user_delete: (info: any) =>
+    requests.post(`delete-archive-user`, info),
 };
 const Meeting={
   // add-meeting
