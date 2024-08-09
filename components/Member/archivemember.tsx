@@ -326,7 +326,7 @@ const ArchiveMemberList = () => {
 
 
 
-    const getData = async (query: string, lastVisibleId?: string) => {
+    const getData = async () => {
         setLoading1(true)
         try {
             let query = searchTerm ? `searchTerm=${searchTerm}` : '';
@@ -362,8 +362,8 @@ const ArchiveMemberList = () => {
         try {
             let res = await api.User.archive_user_delete(item as any)
             // initialise(id)
-            getData(id)
             toast.success(res?.message)
+            getData()
             //   setAreas
         } catch (error) {
 
@@ -371,13 +371,13 @@ const ArchiveMemberList = () => {
     }
     useEffect(() => {
         const query = searchTerm ? `searchTerm=${searchTerm}` : '';
-        getData(query);
+        getData();
     }, [searchTerm]);
 
     const loadMore = () => {
         if (!loading) {
             const query = searchTerm ? `searchTerm=${searchTerm}` : '';
-            getData(query);
+            getData();
         }
     };
     return (
@@ -388,17 +388,7 @@ const ArchiveMemberList = () => {
             <title>Users</title> 
             <meta name="description" content="Users" />
         </Head> */}
-                <ToastContainer
-                    position="top-center"
-                    autoClose={300}
-                    hideProgressBar
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                />
+               
                 <section>
                     <Row gutter={[20, 20]}>
                         <Col span={24}>

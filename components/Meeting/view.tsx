@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import validation from "@/utils/validation";
 import dayjs from "dayjs";
 import { clearUserData } from "@/lib/features/userSlice";
+import airportData from "../../jsonFiles/airports.json"
 const { Row, Col, Card, Button, Space, Popconfirm } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
     ssr: false,
@@ -322,7 +323,12 @@ const data={
     const formattedDate = `${dayjs(date).format('MMMM')} ${getOrdinalSuffix(day)}, ${dayjs(date).format('YYYY')}`;
     return formattedDate;
   };
-
+  const [hotelName, hotelAddress1] = state?.hotel.split(/,(.+)/);
+  const findAirportCode = (airportName: string) => {
+    const airport = airportData.find((a:any) => a.name === airportName);
+    return airport ? airport.iata : "N/A";
+  };
+  const airportCode = state?.airport ? findAirportCode(state.airport) : "N/A";
   return (
     <MainLayout>
       <Fragment>
@@ -367,8 +373,9 @@ const data={
                       <li className='mb-3'><Typography.Text >Meeting Type:</Typography.Text > <Typography.Text className='ms-1 text-capitalize'>{`${validation.capitalizeFirstLetter(state?.meeting_type)}` || 'N/A'} {dayjs(state?.start_meeting_date).format("YYYY") || "N/A"}</Typography.Text ></li>
                       <li className='mb-3'><Typography.Text >Location:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.location) || "N/A"}</Typography.Text ></li>
                       <li className='mb-3'><Typography.Text >Meeting Dates:</Typography.Text > <Typography.Text className='ms-1'>{formatWithOrdinal(state?.start_meeting_date) || "N/A"} to {formatWithOrdinal(state?.end_meeting_date) || "N/A"} </Typography.Text ></li>
-                      <li className='mb-3'><Typography.Text >Hotel:</Typography.Text > <Typography.Text className='ms-1'>{state?.hotel || "N/A"}</Typography.Text ></li>
-                      <li className='mb-3'><Typography.Text >Nearest Airport:</Typography.Text > <Typography.Text className='ms-1'>{state?.airport || "N/A"}</Typography.Text ></li>
+                      <li className='mb-3'><Typography.Text >Hotel:</Typography.Text > <Typography.Text className='ms-1'>{hotelName || "N/A"}</Typography.Text ></li>
+                      <li className='mb-3'><Typography.Text >Hotel Address:</Typography.Text > <Typography.Text className='ms-1'>{hotelAddress1 || "N/A"}</Typography.Text ></li>
+                      <li className='mb-3'><Typography.Text >Nearest Airport:</Typography.Text > <Typography.Text className='ms-1'>{state?.airport?`${state?.airport}, (${airportCode})` : "N/A"}</Typography.Text ></li>
                       <li className='mb-3'><Typography.Text >Host Company:</Typography.Text > <Typography.Text className='ms-1'>{state?.host_company || "N/A"}</Typography.Text ></li>
                       <li className='mb-3'><Typography.Text >Host:</Typography.Text > <Typography.Text className='ms-1'>{state?.host || "N/A"}</Typography.Text ></li>
                       <li className='mb-3'><Typography.Text >Cell:</Typography.Text > <Typography.Text className='ms-1'>{state?.cell || "N/A"}</Typography.Text ></li>
