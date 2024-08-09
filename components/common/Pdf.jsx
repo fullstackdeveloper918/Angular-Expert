@@ -8,10 +8,6 @@ import {
   Document,
   StyleSheet,
 } from "@react-pdf/renderer";
-
-
-
-import validation from "@/utils/validation";
 const styles = StyleSheet.create({
   page: {
     padding: 20,
