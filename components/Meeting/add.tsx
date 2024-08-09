@@ -79,10 +79,10 @@ const MeetingAdd = () => {
     const [weatherData1, setWeatherData1] = useState<any>([]);
     const [meetingendDate, setMeetingendDate] = useState<any>(null);
     const [meetingestartDate, setMeetingstartDate] = useState<any>(null);
-    console.log(meetingendDate, "meetingendDate");
+    console.log(selectedHotel, "selectedHotel");
     console.log(meetingestartDate, "meetingestartDate");
     console.log(weatherData1, "weatherData1");
-    console.log(selectedTimezone, "selectedTimezone");
+    console.log(nearestAirport, "nearestAirport");
 
 
     const handleSearch = async () => {
@@ -695,13 +695,13 @@ return
                                                 {/* <Input size={'large'} placeholder="Nearest Airport"
                                                     onKeyPress={onKeyPress}
                                                 /> */}
-                                                {/* <p className="custom-input" style={{ width: '100%' }}>{nearestAirport?.name}</p> */}
-                                                <Input
+                                                <p className="custom-input" style={{ width: '100%' }}>{nearestAirport?.name}</p>
+                                                {/* <Input
                                                     className="custom-input"
                                                     style={{ width: '100%' }}
                                                     // ref={airportRef}
                                                     placeholder="Enter your address"
-                                                />
+                                                /> */}
                                             </Form.Item>
                                            
                                             {/* <Form.Item

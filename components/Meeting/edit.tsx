@@ -54,7 +54,7 @@ const MeetingEdit = () => {
     host_company: "",
     host: [],
     cell: "",
-    weather: "",
+    // weather: "",
     comments: "",
     notes: "",
     phone: [],
@@ -148,7 +148,7 @@ const MeetingEdit = () => {
       host_company: values?.host_company,
       host: values?.host,
       cell: values?.cell,
-      weather: values?.weather,
+      // weather: values?.weather,
       comments: values?.comments,
       notes: values?.notes,
       phone: [values?.phone],
@@ -500,7 +500,7 @@ const MeetingEdit = () => {
                           placeholder="Enter your address"
                         />
                       </Form.Item>
-                      <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
+                      {/* <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
                         <Input size={'large'} placeholder="Weather"
                           onKeyPress={(e: any) => {
                             if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
@@ -510,7 +510,7 @@ const MeetingEdit = () => {
                             }
                           }}
                         />
-                      </Form.Item>
+                      </Form.Item> */}
                       <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
                         <Input size={'large'} placeholder="Host Company"
 

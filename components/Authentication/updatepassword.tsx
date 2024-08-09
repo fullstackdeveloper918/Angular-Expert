@@ -34,7 +34,7 @@ const Updatepswrd = () => {
             password: values.new_password
         };
         try {
-            let res = await axios.post("https://app-uilsndszlq-uc.a.run.app/update-password", items)
+            let res = await axios.post("https://frontend.goaideme.com/update-password", items)
 
         } catch (error) {
 
