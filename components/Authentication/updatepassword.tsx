@@ -5,6 +5,7 @@ import { Form, Input } from "antd";
 import dynamic from "next/dynamic";
 import { useParams, useSearchParams } from "next/navigation";
 import axios from "axios";
+import { parseCookies } from "nookies";
 
 const { Row, Col, Button, Divider } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
@@ -24,6 +25,8 @@ interface User {
   accessToken: string;
 }
 const Updatepswrd = () => {
+  const cookies = parseCookies();
+  const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : '';
@@ -34,7 +37,13 @@ const Updatepswrd = () => {
             password: values.new_password
         };
         try {
-            let res = await axios.put("https://frontend.goaideme.com/update-password", items)
+            let res = await axios.put("https://frontend.goaideme.com/update-password", items,
+              {
+                headers: {
+                  Token: `${accessToken}`,
+              }
+              }
+            )
 
         } catch (error) {
 

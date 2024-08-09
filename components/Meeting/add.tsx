@@ -99,24 +99,24 @@ const MeetingAdd = () => {
     const onChangeDate = (date: any) => {
         const selectedTimezone1 = 'Australia/Sydney'; // Example timezone
         console.log(date, "original date");
-    
+
         // Parse the selected date without time
         const localDate = moment(date).format("YYYY-MM-DD");
         console.log(localDate, "localDate");
-    
+
         // Create a moment object using the selected timezone
         const dateInSelectedTimezone = moment.tz(localDate, selectedTimezone1);
         console.log(dateInSelectedTimezone.format(), "dateInSelectedTimezone");
-    
+
         // Format the date according to the selected timezone
         const formattedDate = dateInSelectedTimezone.format("YYYY-MM-DD");
         console.log(formattedDate, "formattedDate");
-    
+
         // Set the date in the state
         setMeetingstartDate(formattedDate);
     };
-    console.log(meetingestartDate,"meetingestartDate");
-    
+    console.log(meetingestartDate, "meetingestartDate");
+
     const onChangeDate1 = (date: any) => {
         const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
         setSelectedDate1(dateWithTimezone);
@@ -163,8 +163,8 @@ const MeetingAdd = () => {
     const [meetingStart, setMeetingStart] = useState<any>("")
     const [meetingEnd, setMeetingEnd] = useState<any>("")
     const onSubmit = async (values: any) => {
-console.log(values,"hkhskdhfksdfh");
-
+        console.log(values, "hkhskdhfksdfh");
+        const hotel = selectedHotel ? `${selectedHotel?.name},${selectedHotel?.formatted_address}` : ""
         let start_date = dayjs(values?.start_date).format("YYYY-MM-DD")
         let end_date = dayjs(values?.end_date).format("YYYY-MM-DD")
         setMeetingStart(start_date)
@@ -185,7 +185,7 @@ console.log(values,"hkhskdhfksdfh");
             // year: dayjs(values?.end_date).valueOf(),
             year: dayjs(values?.end_date).utc().valueOf(),
             location: selectedLocation,
-            hotel: selectedHotel?.formatted_address,
+            hotel: hotel,
             airport: nearestAirport?.name,
             host_company: values?.host_company,
             host: values?.host,
@@ -196,7 +196,7 @@ console.log(values,"hkhskdhfksdfh");
             notes: values?.notes,
             phone: [values?.mobile_no],
         }
-return
+        // return
         const timestamp = 1720782277333;
 
         // Convert timestamp to date
@@ -492,8 +492,8 @@ return
                     return { day: formattedDay, icon, temp: averageTemp.toFixed(1) };
                 });
                 formattedWeather.sort((a, b) => new Date(a.day).getTime() - new Date(b.day).getTime());
-                console.log(filteredWeather,"formattedWeatherformattedWeather");
-                
+                console.log(filteredWeather, "formattedWeatherformattedWeather");
+
                 setNext7DaysWeather(formattedWeather);
             } catch (error) {
                 console.error('Error fetching weather data:', error);
@@ -703,7 +703,7 @@ return
                                                     placeholder="Enter your address"
                                                 /> */}
                                             </Form.Item>
-                                           
+
                                             {/* <Form.Item
                                                 name="weather"
                                                 label="Weather"
@@ -767,16 +767,16 @@ return
                                                 />  */}
                                                 <p className="custom-input" style={{ width: '100%' }}>
                                                     {/* <Dropdown overlay={menu} trigger={['click']}> */}
-                                                    {next7DaysWeather.map(({ day, icon, temp },index:number) => (
-                                                            <div className="gap-2" key={index} style={{ display: 'flex', flexDirection: 'column', color: "#000000", alignItems: 'flex-start', width: '100%'  }}>
-                                                                <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{day}</span>
-                                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                    <span style={{ fontSize: '24px', marginRight: '10px' }}>{icon}</span>
-                                                                </div>
-                                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                                    <span style={{ fontSize: '12px' }}>{temp}°C</span>
-                                                                </div>
+                                                    {next7DaysWeather.map(({ day, icon, temp }, index: number) => (
+                                                        <div className="gap-2" key={index} style={{ display: 'flex', flexDirection: 'column', color: "#000000", alignItems: 'flex-start', width: '100%' }}>
+                                                            <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{day}</span>
+                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                <span style={{ fontSize: '24px', marginRight: '10px' }}>{icon}</span>
                                                             </div>
+                                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                                <span style={{ fontSize: '12px' }}>{temp}°C</span>
+                                                            </div>
+                                                        </div>
                                                     ))}
                                                     {/* </Dropdown> */}
                                                 </p>
