@@ -130,11 +130,10 @@ const styles = StyleSheet.create({
     display: "flex",
   },
   goal_two: {
-    display: "flex",
-    gap: 5,
+    // display: "flex",
+    // gap: 5,
     width: "100%",
-    flexDirection:"row",
-    flexWrap:"wrap",
+    // flexWrap:"wrap",
   },
   memberUpdate : {
     fontWeight: 900 ,
@@ -146,8 +145,17 @@ const styles = StyleSheet.create({
   images_div:{
    display:'flex',
    flexWrap:'wrap',
-   gap:'20px',
+   gap:'10px',
+   flexDirection:"row",
   },
+  innderImg:{
+    width:`100%`,
+    maxWidth:'250px',
+    height:'auto',
+    minHeight:'250px',
+    maxHeight:'250px'
+    // flex:'1 0 47%'
+  }
 });
 
 const MemberUpdatePDF = (props) => {
@@ -411,12 +419,14 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                     <View style={styles.goal} key={index}>
                       <View  style={styles.goal_two}>
                      
-                        {/* <View style={styles.images_div}>  */}
+                        <View style={styles.images_div}> 
                         {Array.isArray(item?.images) && item.images.map((imageUrl, imgIndex) => (
                           <React.Fragment  key={imgIndex}>
+                           
                          <Image
                           
-                              style={{ width: "100%",height:"100%", objectFit: "cover", } }
+                              // style={{ width: "100%", height:"100%", objectFit: "cover", } }
+                              style={styles.innderImg}
                               options={options}
                               src={imageUrl}
                               method="GET"
@@ -424,9 +434,10 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                               body=""
                               
                             />
+                        
                             </React.Fragment>
                           ))}
-                          {/* </View>  */}
+                          </View> 
 
                          <Text style={[styles.subheading, styles.marginequal, styles.block]} >
                           Comment: {item?.comment}

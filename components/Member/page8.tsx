@@ -1,21 +1,19 @@
 "use client";
-import { Form, Input, Upload, Typography, Divider, Button } from "antd";
+import { Form, Upload, Typography, Divider, Button } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { Fragment, useCallback, useState } from "react";
+import React, { Fragment, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import api from "@/utils/api";
 import type { UploadFile } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { destroyCookie, parseCookies } from "nookies";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
-import saveAs from "file-saver";
-import { capFirst } from "@/utils/validation";
 
 const { Title } = Typography;
 
@@ -50,7 +48,6 @@ const getBase64 = (file: File): Promise<string> =>
 const Page8 = () => {
   const router = useRouter();
   const [form] = Form.useForm();
-  // const [inputPairs, setInputPairs] = useState([{ id: Date.now(), goalName: 'goal1', goalLabel: 'Project 1', commentName: 'comment1', commentLabel: 'Comment 1' }]);
   const [inputPairs, setInputPairs] = useState([
     {
       id: Date.now(),
@@ -98,7 +95,7 @@ console.log(getUserdata,"getUserdata");
         goalName: `goal${newId}`,
         goalLabel: `Project ${inputPairs.length + 1}`,
         commentName: `comment${newId}`,
-        commentLabel: `comment_${inputPairs.length + 1}`,
+        commentLabel: `Comment ${inputPairs.length + 1}`,
       },
     ]);
   };
@@ -125,25 +122,23 @@ console.log(getUserdata,"getUserdata");
 
   const submit = async (values: any) => {
     setLoading(true);
-    console.log(values, "valuesvaluesvalues");
-
+    
     try {
       setLoading(true);
       const formData: any = new FormData();
 
       try {
-        console.log(inputPairs, 'inputPairs')
         let response;
         if (state?.photo_section?.fileUrls?.length) {
           formData.append("id", state?.photo_section?.commentId);
           formData.append("user_id", value);
           inputPairs.forEach((item: any, index) => {
-            formData.append(`${item?.initialGoal ? item?.initialGoal : item?.commentLabel}`, values[item?.commentName]);
+            formData.append(`${item?.initialGoal}`, values[item?.commentName]);
             values[item.goalName]?.fileList?.forEach(
               (file: any, index: number) => {
                 if (file?.originFileObj) {
                   formData.append(
-                    `${item?.initialGoal ? item?.initialGoal : item?.commentLabel}_file${index}`,
+                    `${item?.initialGoal}_file${index}`,
                     file.originFileObj
                   );
                 }
