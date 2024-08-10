@@ -51,10 +51,10 @@ const Page8 = () => {
   const [inputPairs, setInputPairs] = useState([
     {
       id: Date.now(),
-      goalName: "goal1",
-      goalLabel: "Project 1",
-      commentName: "comment1",
-      commentLabel: "Comment 1",
+      goalName: "goal0",
+      goalLabel: "Project 0",
+      commentName: "comment0",
+      commentLabel: "comment_0",
     },
   ]);
   const [fileLists, setFileLists] = useState<any>({});
@@ -93,9 +93,9 @@ console.log(getUserdata,"getUserdata");
       {
         id: newId,
         goalName: `goal${newId}`,
-        goalLabel: `Project ${inputPairs.length + 1}`,
+        goalLabel: `Project ${inputPairs.length}`,
         commentName: `comment${newId}`,
-        commentLabel: `Comment ${inputPairs.length + 1}`,
+        commentLabel: `comment ${inputPairs.length }`,
       },
     ]);
   };
@@ -133,12 +133,12 @@ console.log(getUserdata,"getUserdata");
           formData.append("id", state?.photo_section?.commentId);
           formData.append("user_id", value);
           inputPairs.forEach((item: any, index) => {
-            formData.append(`${item?.initialGoal}`, values[item?.commentName]);
+            formData.append(`${item?.initialGoal ? item?.initialGoal :  item?.commentLabel}`, values[item?.commentName]);
             values[item.goalName]?.fileList?.forEach(
               (file: any, index: number) => {
                 if (file?.originFileObj) {
                   formData.append(
-                    `${item?.initialGoal}_file${index}`,
+                    `${item?.initialGoal ? item?.initialGoal :  item?.commentLabel}_file${index}`,
                     file.originFileObj
                   );
                 }
@@ -194,15 +194,9 @@ console.log(getUserdata,"getUserdata");
           });
         }
 
-        setResponseData(response?.data?.pdfReponseData);
-        console.log(response?.data?.pdfReponseData,"swws");
+        setResponseData(response?.data?.pdfReponseData);   
         
-        // if (getUserdata?.is_admin == true) {
-        //   router.replace("/admin/member");
-        // } else {
           router.replace(`/admin/user?${getUserdata?.user_id}`);
-
-        // }
         return response?.data?.pdfReponseData;
       } catch (error) {
         if (error) {
@@ -249,9 +243,9 @@ console.log(getUserdata,"getUserdata");
         (key, index) => ({
           id: index,
           goalName: `goal${index}`,
-          goalLabel: `Project #${index+1}`,
-          commentName: `comments${index}`,
-          commentLabel: "Comments:",
+          goalLabel: `Project ${index+1}`,
+          commentName: `comments${index+1}`,
+          commentLabel: `comment_${index+1}`,
           initialGoal: key,
           initialComment: fetchedGoals[0][key]?.comment,
           images: fetchedGoals[0][key]?.images,
@@ -348,25 +342,11 @@ console.log(getUserdata,"getUserdata");
     return { blob, pdfUrl, timestamp };
   };
 
-  // Function to handle PDF download
-  // const downLoadPdf = async (res: any) => {
-
-  //     const { blob, timestamp } = await generatePdf(res);
-  //     saveAs(blob, `${capFirst(res?.company_name)}.pdf`);
-  // };
-
-  // Function to handle PDF sharing
-  console.log(responseData, "PDFsharing");
+  
   const sharePdf = async (responseData: any) => {
-    //
-    console.log(responseData, "item12345");
-
     const { pdfUrl, timestamp } = await generatePdf(responseData);
     const response = await fetch(pdfUrl);
     const blob = await response.blob();
-    console.log(pdfUrl, "pdfUrl");
-    console.log(response, "11111");
-    console.log(blob, "blob");
 
     // Convert the blob to a file
     const file = new File([blob], `check.pdf`, { type: "application/pdf" });
@@ -387,16 +367,9 @@ console.log(getUserdata,"getUserdata");
         },
       }
     );
-
-    // const apiRes: any = await res.json()
-    // navigator.clipboard.writeText(apiRes?.fileUrl)
-    //     .then(() => {
-    //         toast.success('Link copied to clipboard');
-    //     })
-    //     .catch(() => {
-    //         toast.error('Failed to copy link to clipboard');
-    //     });
   };
+
+
   const handleFetchAndFetchData = async (values: any) => {
     let item = await submit(values);
     console.log(item, "item check");
