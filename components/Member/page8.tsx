@@ -98,7 +98,7 @@ console.log(getUserdata,"getUserdata");
         goalName: `goal${newId}`,
         goalLabel: `Project ${inputPairs.length + 1}`,
         commentName: `comment${newId}`,
-        commentLabel: `Comment ${inputPairs.length + 1}`,
+        commentLabel: `comment_${inputPairs.length + 1}`,
       },
     ]);
   };
@@ -132,17 +132,18 @@ console.log(getUserdata,"getUserdata");
       const formData: any = new FormData();
 
       try {
+        console.log(inputPairs, 'inputPairs')
         let response;
         if (state?.photo_section?.fileUrls?.length) {
           formData.append("id", state?.photo_section?.commentId);
           formData.append("user_id", value);
           inputPairs.forEach((item: any, index) => {
-            formData.append(`${item?.initialGoal}`, values[item?.commentName]);
+            formData.append(`${item?.initialGoal ? item?.initialGoal : item?.commentLabel}`, values[item?.commentName]);
             values[item.goalName]?.fileList?.forEach(
               (file: any, index: number) => {
                 if (file?.originFileObj) {
                   formData.append(
-                    `${item?.initialGoal}_file${index}`,
+                    `${item?.initialGoal ? item?.initialGoal : item?.commentLabel}_file${index}`,
                     file.originFileObj
                   );
                 }

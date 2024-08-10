@@ -143,6 +143,11 @@ const styles = StyleSheet.create({
   heightGiven :{
     minHeight:400,
   },
+  images_div:{
+   display:'flex',
+   flexWrap:'wrap',
+   gap:'20px',
+  },
 });
 
 const MemberUpdatePDF = (props) => {
@@ -406,19 +411,20 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                     <View style={styles.goal} key={index}>
                       <View  style={styles.goal_two}>
                      
+                        {/* <View style={styles.images_div}>  */}
                         {Array.isArray(item?.images) && item.images.map((imageUrl, imgIndex) => (
-                          <>
-                         
-                            <Image
-                              style={{ width: "100%",height:"100%", objectFit: "cover", }}
+                         <Image
+                              style={{ width: "100%",height:"100%", objectFit: "cover", } }
                               options={options}
                               src={imageUrl}
                               method="GET"
                               headers={{ Pragma: 'no-cache', "Cache-Control": "no-cache" }}
                               body=""
+                              
                             />
-                          </>
-                        ))}
+                          ))}
+                          {/* </View>  */}
+
                          <Text style={[styles.subheading, styles.marginequal, styles.block]} >
                           Comment: {item?.comment}
                         </Text>

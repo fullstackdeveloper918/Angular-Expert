@@ -71,11 +71,17 @@ const Add = () => {
         } as any
         let res = await api.User.edit(items)
         toast.success(res?.message)
+        if(res)  {
+          router.push('/admin/member')
+        }
         // router.push(`/admin/member/add/page2?${value}&edit`)
       } else {
-
         let res = await api.Auth.signUp(items)
         toast.success(res?.message)
+        // console.log('hello kane')
+        if(res)  {
+          router.push('/admin/member')
+        }
         // router.push(`/admin/member/add/page2?${res?.user_id}`)
         if (res?.status == 400) {
           toast.error("Session Expired Login Again")
@@ -295,14 +301,31 @@ router.back()
                       </Form.Item>
 
                       {/* Email  */}
-                      <Form.Item name="email" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Email' }]} label="Email">
+                      <Form.Item name="email" className='col-lg-6 col-sm-12'
+                      
+                      rules={[{ required: true, message: 'Please Enter Email' }]}
+                      
+                      label="Email">
                         <Input size={'large'} type='email' placeholder="Email" />
                       </Form.Item>
                       {/* Password  */}
                       {type=="edit"?"":
-                      <Form.Item name="password" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Password!' }]} label="Password">
+                      <Form.Item name="password" className='col-lg-6 col-sm-12'
+                      rules={[
+                        { required: true, message: 'Please Enter Password!' },
+                        {
+                          pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                          message: 'Password must contain at least 8 characters, including uppercase, lowercase, number, and special characters.',
+                        },
+                      ]}
+                       
+                       label="Password">
                         <Input.Password size={'large'} type="password" placeholder="Password" />
                       </Form.Item>}
+
+
+
+
                       {/* Phone No  */}
 
                       {/* Roles  */}
