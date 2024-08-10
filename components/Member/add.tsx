@@ -206,14 +206,7 @@ router.back()
           <Row justify="center" gutter={[20, 20]} className='heightCenter'>
             <Col sm={22} md={20} lg={16} xl={14} xxl={12}>
               <Card className='common-card'>
-                {/* <div className='mb-4'>
-                <Breadcrumb separator=">">
-                  <Breadcrumb.Item><Link href="/" className='text-decoration-none'>Home</Link></Breadcrumb.Item>
-                  <Breadcrumb.Item><Link href="/admin/member" className='text-decoration-none'>Club Members</Link></Breadcrumb.Item>
-                  <Breadcrumb.Item className='text-decoration-none'>Add Club Member</Breadcrumb.Item>
-                </Breadcrumb>
-              </div> */}
-                {/* Title  */}
+                
                 <div className='d-flex justify-content-between'>
 
                   <Typography.Title level={3} className='m-0 fw-bold'>{type=="edit"?"Edit":"Add"} Club Member</Typography.Title>
