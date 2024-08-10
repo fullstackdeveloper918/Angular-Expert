@@ -95,7 +95,7 @@ console.log(getUserdata,"getUserdata");
         goalName: `goal${newId}`,
         goalLabel: `Project ${inputPairs.length}`,
         commentName: `comment${newId}`,
-        commentLabel: `comment ${inputPairs.length }`,
+        commentLabel: `comment_${inputPairs.length }`,
       },
     ]);
   };
