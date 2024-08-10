@@ -413,7 +413,9 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                      
                         {/* <View style={styles.images_div}>  */}
                         {Array.isArray(item?.images) && item.images.map((imageUrl, imgIndex) => (
+                          <React.Fragment  key={imgIndex}>
                          <Image
+                          
                               style={{ width: "100%",height:"100%", objectFit: "cover", } }
                               options={options}
                               src={imageUrl}
@@ -422,6 +424,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                               body=""
                               
                             />
+                            </React.Fragment>
                           ))}
                           {/* </View>  */}
 

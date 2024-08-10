@@ -173,7 +173,7 @@ const AddStaff: Page = () => {
                                         {/* Phone No  */}
                                         <Form.Item name="mobile" rules={[{ required: true, whitespace: true, message: 'Please Enter Phone No' }]} label="Phone No">
                                             <Input size={'large'} type="text" minLength={6} onKeyPress={(event) => {
-                                                // Allow digits, space, parentheses, hyphen, plus, comma, and special keys
+                                                
                                                 if (!/[0-9\s\(\)\-\+\,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
                                                     event.preventDefault();
                                                 }
