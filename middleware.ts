@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('COOKIES_USER_ACCESS_TOKEN');
+  const token =" request.cookies.get('COOKIES_USER_ACCESS_TOKEN');"
 
   if (!token) {
       // If not authenticated, redirect to login
