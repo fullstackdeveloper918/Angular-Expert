@@ -23,7 +23,7 @@ import Link from "next/link";
 import MainLayout from "../../components/Layout/layout";
 import utc from "dayjs/plugin/utc";
 import dayjs from "dayjs";
-import api from "@/utils/api";
+// import api from "@/utils/api";
 import TimezoneSelect from "react-timezone-select";
 import { InlineWidget } from 'react-calendly';
 import CalendlyWidget from "../common/calender"
@@ -35,6 +35,7 @@ const timezones = moment.tz.names();
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { destroyCookie } from "nookies";
 import axios from "axios";
+import api from "../../utils/api";
 dayjs.extend(utc);
 interface WeatherData {
     dt: number; // timestamp
