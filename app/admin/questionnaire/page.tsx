@@ -1,5 +1,6 @@
-import QuestionnairList from "@/components/Questionnair/listing";
+// import QuestionnairList from "@/components/Questionnair/listing";
 import React from "react";
+import QuestionnairList from "../../../components/Questionnair/listing";
 
 const page = () => {
   return (

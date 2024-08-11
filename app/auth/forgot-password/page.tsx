@@ -1,5 +1,6 @@
-import Forgotpaswrd from "@/components/Authentication/forgot";
+// import Forgotpaswrd from "@/components/Authentication/forgot";
 import React from "react";
+import Forgotpaswrd from "../../../components/Authentication/forgot";
 
 const page = () => {
   return (

@@ -23,10 +23,11 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import henceofrthEnums from "@/utils/henceofrthEnums";
+// import henceofrthEnums from "@/utils/henceofrthEnums";
 
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import henceofrthEnums from "../../utils/henceofrthEnums";
 
 const iconSize = { fontSize: "18px" };
 

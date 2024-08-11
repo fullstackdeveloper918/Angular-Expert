@@ -1,5 +1,6 @@
-import EditQuestionnair from '@/components/Questionnair/edit'
+// import EditQuestionnair from '@/components/Questionnair/edit'
 import React from 'react'
+import EditQuestionnair from '../../../../components/Questionnair/edit'
 
 const page = () => {
   return (

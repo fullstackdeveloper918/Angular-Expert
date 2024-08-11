@@ -1,5 +1,6 @@
-import EditStaff from '@/components/admin-staff/edit'
+// import EditStaff from '@/components/admin-staff/edit'
 import React from 'react'
+import EditStaff from '../../../../../components/admin-staff/edit'
 
 const page=()=> {
   return (

@@ -1,5 +1,6 @@
-import ArchiveMeeting from "@/components/ArchiveMeeting/listing";
+// import ArchiveMeeting from "@/components/ArchiveMeeting/listing";
 import React from "react";
+import ArchiveMeeting from "../../../components/ArchiveMeeting/listing";
 
 const page = () => {
   return (

@@ -5,13 +5,15 @@ import { Table, Input, Breadcrumb, Space, Tag, Typography, Popconfirm } from 'an
 import Link from 'next/link';
 import { PlusOutlined } from '@ant-design/icons'
 import dynamic from 'next/dynamic';
-import EmployeeRoles from '@/utils/EmployeeRoles.json'
+import EmployeeRoles from '../../utils/EmployeeRoles.json'
 import MainLayout from '../Layout/layout';
-import api from '@/utils/api';
+// import api from '@/utils/api';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { destroyCookie } from 'nookies';
-import { clearUserData } from '@/lib/features/userSlice';
+import api from '../../utils/api';
+import { clearUserData } from '../../lib/features/userSlice';
+// import { clearUserData } from '@/lib/features/userSlice';
 
 const { Row, Col, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -137,7 +139,7 @@ const Admin: Page = () => {
                     Array.isArray(res.permission) && res.permission.length > 0 &&
                     res.permission?.map((resRole: any, index: number) =>
                         <Tag key={index + 1} >
-                            {(EmployeeRoles.find((resJson) => resJson.rol === resRole))?.name}
+                            {(EmployeeRoles.find((resJson:any) => resJson.rol === resRole))?.name}
                         </Tag>
                         )
                 }

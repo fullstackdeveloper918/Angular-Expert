@@ -1,5 +1,6 @@
-import MeetingList from "@/components/Meeting/listing";
+// import MeetingList from "@/components/Meeting/listing";
 import React from "react";
+import MeetingList from "../../../components/Meeting/listing";
 
 const page = () => {
   return (

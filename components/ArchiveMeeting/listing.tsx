@@ -15,12 +15,14 @@ import {
 import Link from "next/link";
 import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
-import api from "@/utils/api";
-import validation, { capFirst } from "@/utils/validation";
+// import api from "@/utils/api";
+// import validation, { capFirst } from "@/utils/validation";
 import Logout from "../common/Logout";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
+import validation, { capFirst } from "../../utils/validation";
+import api from "../../utils/api";
 // import Logout1 from "../common/Logout"
 const { Search } = Input;
 

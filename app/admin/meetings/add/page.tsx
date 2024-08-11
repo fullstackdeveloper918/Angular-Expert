@@ -1,5 +1,6 @@
-import MeetingAdd from "@/components/Meeting/add";
+// import MeetingAdd from "@/components/Meeting/add";
 import React from "react";
+import MeetingAdd from "../../../../components/Meeting/add";
 
 const page = () => {
   return (

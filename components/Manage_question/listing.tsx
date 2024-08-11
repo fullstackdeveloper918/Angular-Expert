@@ -12,11 +12,13 @@ import {
 } from "antd";
 import Link from "next/link";
 import MainLayout from "../../components/Layout/layout";
-import CustomModal from "@/components/common/Modal";
-import api from "@/utils/api";
+// import CustomModal from "@/components/common/Modal";
+// import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
+import api from "../../utils/api";
+import CustomModal from "../common/Modal";
 const { Panel } = Collapse;
 const { Search } = Input;
 const Manage_Question = () => {

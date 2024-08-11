@@ -12,9 +12,7 @@ import 'nprogress/nprogress.css';
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/utils/firebase";
 import nookies from 'nookies';
-import henceforthApi from "@/utils/api";
 
 const setCookie = (name:any, value:any, days:any) => {
   nookies.set(null, name, value, {

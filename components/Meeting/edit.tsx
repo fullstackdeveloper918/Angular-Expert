@@ -6,11 +6,12 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
-import api from "@/utils/api";
+// import api from "@/utils/api";
 import utc from "dayjs/plugin/utc";
 import moment from "moment-timezone";
 import { toast } from "react-toastify";
 import { destroyCookie } from "nookies";
+import api from "../../utils/api";
 const { Row, Col, Card, Button } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
     ssr: false,

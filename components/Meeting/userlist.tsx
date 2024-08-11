@@ -18,7 +18,7 @@ import Link from "next/link";
 import { DownloadOutlined, EyeOutlined, PlusOutlined, ShareAltOutlined } from "@ant-design/icons";
 import MainLayout from "../../components/Layout/layout";
 import { useRouter } from "next/navigation";
-import api from "@/utils/api";
+// import api from "@/utils/api";
 import { destroyCookie, parseCookies } from "nookies";
 import { toast, ToastContainer } from "react-toastify";
 import { pdf } from "@react-pdf/renderer";
@@ -26,6 +26,7 @@ import Pdf from "../common/Pdf";
 import saveAs from "file-saver";
 import { useSelector } from "react-redux";
 import validation, { capFirst } from "../../utils/validation";
+import api from "@/utils/api";
 
 const { Search } = Input;
 type Page<P = {}> = NextPage<P> & {

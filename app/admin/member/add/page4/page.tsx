@@ -1,5 +1,6 @@
-import Page4 from "@/components/Member/page4";
+// import Page4 from "@/components/Member/page4";
 import React from "react";
+import Page4 from "../../../../../components/Member/page4";
 
 const page = () => {
   return (

@@ -14,7 +14,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "firebase/auth";
-import { auth } from "@/utils/firebase";
+import { auth } from "../../utils/firebase";
+// import { auth } from "@/utils/firebase";
 
 const { Button, Dropdown, Tooltip } = {
   Dropdown: dynamic(() => import("antd").then((module) => module.Dropdown), {

@@ -1,5 +1,6 @@
-import Manage_Question from "@/components/Manage_question/listing";
+// import Manage_Question from "@/components/Manage_question/listing";
 import React from "react";
+import Manage_Question from "../../../components/Manage_question/listing";
 
 const page = () => {
   return (

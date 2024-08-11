@@ -7,12 +7,14 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence } from "firebase/auth";
-import { auth } from "@/utils/firebase";
+// import { auth } from "@/utils/firebase";
 import { parseCookies, setCookie } from "nookies";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { getuserData } from "@/lib/features/userSlice";
+// import { getuserData } from "@/lib/features/userSlice";
 import { toast } from "react-toastify";
+import { auth } from "../../utils/firebase";
+import { getuserData } from "../../lib/features/userSlice";
 // import firebase from "firebase/app";
 // import "firebase/auth";
 const { Row, Col, Button, Divider } = {
@@ -128,7 +130,9 @@ const Sigin = () => {
         values?.password
       );
       console.log(userCredential, 'userCredential');
-      
+      if(userCredential){
+        toast.error("Invalid Credentials")
+      }
       setState(userCredential);
       const idTokenResult = await userCredential.user.getIdTokenResult(true);
       const refreshToken = idTokenResult.token;

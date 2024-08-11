@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { parseCookies } from 'nookies';
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('COOKIES_USER_ACCESS_TOKEN');

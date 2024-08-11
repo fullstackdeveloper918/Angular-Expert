@@ -6,15 +6,17 @@ import Link from 'next/link';
 import { PlusOutlined } from '@ant-design/icons';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadChangeParam, UploadFile } from 'antd/es/upload/interface';
-import EmployeeRoles from '@/utils/EmployeeRoles.json'
+import EmployeeRoles from '../../utils/EmployeeRoles.json'
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import api from '@/utils/api';
+// import api from '@/utils/api';
 import { toast, ToastContainer } from 'react-toastify';
 import MainLayout from '../Layout/layout';
 import { destroyCookie } from 'nookies';
 import { useDispatch } from 'react-redux';
-import { clearUserData } from '@/lib/features/userSlice';
+import api from '../../utils/api';
+import { clearUserData } from '../../lib/features/userSlice';
+// import { clearUserData } from '@/lib/features/userSlice';
 
 
 

@@ -1,5 +1,6 @@
-import Updatepswrd from "@/components/Authentication/updatepassword";
+// import Updatepswrd from "@/components/Authentication/updatepassword";
 import React from "react";
+import Updatepswrd from "../../../components/Authentication/updatepassword";
 
 const page = () => {
   return (

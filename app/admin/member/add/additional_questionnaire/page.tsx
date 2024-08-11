@@ -1,5 +1,6 @@
-import AdditionalQuestion from "@/components/Member/additionaquestion";
+// import AdditionalQuestion from "@/components/Member/additionaquestion";
 import React from "react";
+import AdditionalQuestion from "../../../../../components/Member/additionaquestion";
 
 const page = () => {
   return (

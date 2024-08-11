@@ -1,5 +1,6 @@
-import MemberList from "@/components/Member/listing";
+// import MemberList from "@/components/Member/listing";
 import React from "react";
+import MemberList from "../../../components/Member/listing";
 
 const page = () => {
   return (
