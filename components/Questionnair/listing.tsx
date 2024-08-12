@@ -321,7 +321,8 @@ const QuestionnairList = () => {
             case 3: return `${baseURL}/page5?${getUserdata?.user_id}&edit&questionnair`;
             case 4: return `${baseURL}/page6?${getUserdata?.user_id}&edit&questionnair`;
             case 5: return `${baseURL}/page7?${getUserdata?.user_id}&edit&questionnair`;
-            case 6: return `${baseURL}/page8?${getUserdata?.user_id}&edit&questionnair`;
+            case 6: return `${baseURL}/additional_questionnaire?${getUserdata?.user_id}&edit&questionnair`;
+            case 7: return `${baseURL}/page8?${getUserdata?.user_id}&edit&questionnair`;
             // Add more cases as needed
             default: return `${baseURL}/page-default?${getUserdata}&edit`;
         }
@@ -478,6 +479,30 @@ const QuestionnairList = () => {
                                                             </div>
                                                             <Link
                                                                 href={`${baseURL}/page7?${getUserdata?.user_id}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">ADDITIONAL QUESTIONS</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/additional_questionnaire?${getUserdata?.user_id}&edit&questionnair`}
                                                                 className='text-decoration-none text-white flex-grow-1'
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">

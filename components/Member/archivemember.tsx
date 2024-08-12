@@ -384,11 +384,6 @@ const ArchiveMemberList = () => {
         <MainLayout>
 
             <Fragment>
-                {/* <Head>
-            <title>Users</title> 
-            <meta name="description" content="Users" />
-        </Head> */}
-               
                 <section>
                     <Row gutter={[20, 20]}>
                         <Col span={24}>

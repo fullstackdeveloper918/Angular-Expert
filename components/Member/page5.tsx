@@ -161,7 +161,7 @@ const Page5 = () => {
                         {/* Title  */}
                         <div className='mb-2 d-flex justify-content-between'>
                             <Typography.Title level={3} className='m-0 fw-bold'>CRAFTSMEN CHECK-UP</Typography.Title>
-                            <Button size={'large'} type="primary" className="text-white" disabled>4/7</Button>
+                            <Button size={'large'} type="primary" className="text-white" disabled>4/8</Button>
                         </div>
 
                         {/* form  */}

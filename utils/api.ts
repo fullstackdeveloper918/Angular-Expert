@@ -108,6 +108,8 @@ const User = {
     requests.get(`user?start_date=${start_date}&end_date=${end_date}`),
   getById: (info: any) =>
     requests.post(`single-user-detail`,info),
+  getQuestion: () =>
+    requests.get(`new-questions`),
   getPurchase: (_id: string, q?: string) =>
     requests.get(`user/${_id}/purchase${q ? `?${q}` : ""}`),
   detailPurchase: (_id: string) =>

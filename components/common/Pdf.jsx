@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../assests/images/logo.png"
+import logo from "../../assests/images/logo.png";
 import {
   Page,
   Text,
@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
   page: {
     padding: 20,
     background: "#fff",
-    break: 'auto', // Ensure text can break across pages
-    overflow: 'wrap',
+    break: "auto", // Ensure text can break across pages
+    overflow: "wrap",
   },
   section: {
     padding: 10,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   itali_text: {
     fontSize: "13px",
-    fontStyle: 'italic',
+    fontStyle: "italic",
     fontWeight: "400",
     fontFamily: "Roboto",
   },
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontSize: 12,
     color: "#000",
-    break: 'auto',
+    break: "auto",
     overflow: "wrap",
   },
   textarea: {
@@ -83,9 +83,9 @@ const styles = StyleSheet.create({
     display: "inline-block",
     color: "#000",
     fontSize: 12,
-    break: 'auto', 
-    minHeight:35,
-    overflow: 'wrap',
+    break: "auto",
+    minHeight: 35,
+    overflow: "wrap",
   },
   goal: {
     marginBottom: 20,
@@ -123,10 +123,10 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     margin: "auto",
   },
-  marginequal:{
-    marginVertical:10,
+  marginequal: {
+    marginVertical: 10,
   },
-  flexBox :{
+  flexBox: {
     display: "flex",
   },
   goal_two: {
@@ -135,77 +135,93 @@ const styles = StyleSheet.create({
     width: "100%",
     // flexWrap:"wrap",
   },
-  memberUpdate : {
-    fontWeight: 900 ,
-    fontSize:24,
+  memberUpdate: {
+    fontWeight: 900,
+    fontSize: 24,
   },
-  heightGiven :{
-    minHeight:400,
+  heightGiven: {
+    minHeight: 400,
   },
-  images_div:{
-   display:'flex',
-   flexWrap:'wrap',
-   gap:'10px',
-   flexDirection:"row",
+  images_div: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "10px",
+    flexDirection: "row",
   },
-  innderImg:{
-    width:`100%`,
-    maxWidth:'250px',
-    height:'auto',
-    minHeight:'250px',
-    maxHeight:'250px'
+  innderImg: {
+    width: `100%`,
+    maxWidth: "250px",
+    height: "auto",
+    minHeight: "250px",
+    maxHeight: "250px",
+    objectFit: "cover",
     // flex:'1 0 47%'
-  }
+  },
 });
 
 const MemberUpdatePDF = (props) => {
   const photoSection = props?.state?.photo_section || [];
 
-  const options = { httpHeaders: { 'crossOrigin': 'anonymous' }, };
+  const options = { httpHeaders: { crossOrigin: "anonymous" } };
   // <Image key={imageIndex} style={{ width: 100, height: 100 }} options={options} src={{ uri: ${file.url}, method: "GET", headers: { Pragma: 'no-cache', "Cache-Control": "no-cache" }, body: "" }} />
   const companyNameMap = {
-    "augusta": "Augusta Homes, Inc.",
-    "buffington": "Buffington Homes, L.P.",
-    "cabin": "Cabin John Builders",
-    "cataldo": "Cataldo Custom Builders",
-    "david_campbell": "The DCB",
-    "dc_building": "DC Building Inc.",
-    "Ddenman_construction": "Denman Construction, Inc.",
-    "ellis": "Ellis Custom Homes",
-    "tm_grady_builders": "T.M. Grady Builders",
-    "hardwick": "Hardwick G. C.",
-    "homeSource": "HomeSource Construction",
-    "ed_nikles": "Ed Nikles Custom Builder, Inc.",
-    "olsen": "Olsen Custom Homes",
-    "raykon": "Raykon Construction",
-    "matt_sitra": "Matt Sitra Custom Homes",
-    "schneider": "Schneider Construction, LLC",
-    "shaeffer": "Shaeffer Hyde Construction",
-    "split": "Split Rock Custom Homes",
-    "tiara": "Tiara Sun Development"
-};
+    augusta: "Augusta Homes, Inc.",
+    buffington: "Buffington Homes, L.P.",
+    cabin: "Cabin John Builders",
+    cataldo: "Cataldo Custom Builders",
+    david_campbell: "The DCB",
+    dc_building: "DC Building Inc.",
+    Ddenman_construction: "Denman Construction, Inc.",
+    ellis: "Ellis Custom Homes",
+    tm_grady_builders: "T.M. Grady Builders",
+    hardwick: "Hardwick G. C.",
+    homeSource: "HomeSource Construction",
+    ed_nikles: "Ed Nikles Custom Builder, Inc.",
+    olsen: "Olsen Custom Homes",
+    raykon: "Raykon Construction",
+    matt_sitra: "Matt Sitra Custom Homes",
+    schneider: "Schneider Construction, LLC",
+    shaeffer: "Shaeffer Hyde Construction",
+    split: "Split Rock Custom Homes",
+    tiara: "Tiara Sun Development",
+  };
 
-const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
+  const companyName = companyNameMap[props?.state?.company_name || ""] || "N/A";
 
-  const newArr = props?.state?.photo_section?.fileUrls?.length && Object.values(props?.state?.photo_section?.fileUrls[0])
+  const newArr =
+    props?.state?.photo_section?.fileUrls?.length &&
+    Object.values(props?.state?.photo_section?.fileUrls[0]);
 
   return (
     <>
       <Document>
         <Page size="A4" style={styles.page}>
           <View style={{ textAlign: "center", display: "block" }}>
-          <Image
-  src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"
-  style={{ width:"50%", objectFit: 'contain' , textAlign:"center", margin:"10px auto 15px"}}
-  alt="Image"
-/></View>
+            <Image
+              src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"
+              style={{
+                width: "50%",
+                objectFit: "contain",
+                textAlign: "center",
+                margin: "10px auto 15px",
+              }}
+              alt="Image"
+            />
+          </View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Fall 2024</Text>
+              Member Update /{" "}
+              <Text
+                style={{
+                  fontStyle: "italic",
+                  fontSize: 18,
+                  textTransform: "capitalize",
+                }}
+              >
+                Fall 2024
+              </Text>
             </Text>
-            <Text style={styles.subheader}>
-              {companyName}
-            </Text>
+            <Text style={styles.subheader}>{companyName}</Text>
           </View>
 
           <View style={styles.section}>
@@ -218,20 +234,14 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
               {" "}
               Current sales positions, hot prospects, recently contracted work:{" "}
             </Text>
-            <Text style={styles.textarea}>
-              {props?.state?.sales_position}
-            </Text>
+            <Text style={styles.textarea}>{props?.state?.sales_position}</Text>
             <Text style={styles.text}>
               {" "}
               Accomplishments in the last 6 months:{" "}
             </Text>
-            <Text style={styles.textarea}>
-              {props?.state?.accomplishments}
-            </Text>
+            <Text style={styles.textarea}>{props?.state?.accomplishments}</Text>
             <Text style={styles.text}> HR position &/or needs: </Text>
-            <Text style={styles.textarea}>
-              {props?.state?.hr_position}
-            </Text>
+            <Text style={styles.textarea}>{props?.state?.hr_position}</Text>
             <Text style={styles.text}>
               {" "}
               Current challenges (e.g., problem client, personnel issue(s),
@@ -296,18 +306,14 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                 Describe any new technology you started using and share the name
                 of the app or website:{" "}
               </Text>
-              <Text style={styles.textarea}>
-                {props?.state?.technology}
-              </Text>
+              <Text style={styles.textarea}>{props?.state?.technology}</Text>
 
               <Text style={styles.text}>
                 {" "}
                 Describe any new products you have used in the last 6 months &
                 share the name and website:{" "}
               </Text>
-              <Text style={styles.textarea}>
-                {props?.state?.products}
-              </Text>
+              <Text style={styles.textarea}>{props?.state?.products}</Text>
 
               <Text style={styles.text}>
                 {" "}
@@ -325,33 +331,25 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                 {" "}
                 What is your level of commitment to our club?{" "}
               </Text>
-              <Text style={styles.textarea}>
-                {props?.state?.commitment}
-              </Text>
+              <Text style={styles.textarea}>{props?.state?.commitment}</Text>
 
               <Text style={styles.text}>
                 {" "}
                 List Something(s) you can do to contribute to our club.{" "}
               </Text>
-              <Text style={styles.textarea}>
-                {props?.state?.contribute}
-              </Text>
+              <Text style={styles.textarea}>{props?.state?.contribute}</Text>
 
               <Text style={styles.text}>
                 {" "}
                 How is your present health, wellbeing, family life?{" "}
               </Text>
-              <Text style={styles.textarea}>
-                {props?.state?.wellbeing}
-              </Text>
+              <Text style={styles.textarea}>{props?.state?.wellbeing}</Text>
 
               <Text style={styles.text}>
                 {" "}
                 Have any items on your contact info changed?
               </Text>
-              <Text style={styles.textarea}>
-                {props?.state?.contact_info}
-              </Text>
+              <Text style={styles.textarea}>{props?.state?.contact_info}</Text>
             </View>
           </View>
 
@@ -362,9 +360,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                 {" "}
                 What was your most valuable take away from our fall meeting?{" "}
               </Text>
-              <Text style={styles.textarea}>
-                {props?.state?.fall_meeting}
-              </Text>
+              <Text style={styles.textarea}>{props?.state?.fall_meeting}</Text>
 
               <Text style={styles.text}>
                 {" "}
@@ -387,19 +383,39 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
               MEETING (IN ORDER OF IMPORTANCE)
             </Text>
             <View style={styles.goal}>
-              <Text style={styles.textarea}>
-                {props?.state?.estimating}
-              </Text>
+              <Text style={styles.textarea}>{props?.state?.estimating}</Text>
 
               <Text style={styles.textarea}>
                 {props?.state?.accountability}
               </Text>
-              <Text style={styles.textarea}>
-                {props?.state?.productivity}
-              </Text>
+              <Text style={styles.textarea}>{props?.state?.productivity}</Text>
             </View>
           </View>
+          {/* <View style={styles.section}>
+            <Text style={styles.main_heading}>
+             ADDITIONAL QUESTIONS
+            </Text>
+            <View style={styles.goal}>
+              <Text style={styles.textarea}>{props?.state?.estimating}</Text>
 
+            
+            </View>
+          </View> */}
+          <View style={styles.section}>
+            <Text style={styles.main_heading}>  ADDITIONAL QUESTIONS</Text>
+            {props?.state?.questions?.map((res, index) => (
+              <View style={styles.goal} key={index}>
+                <View style={styles.div_wrapper}>
+                  <View style={styles.Flex_div}>
+                    <Text style={styles.text}> {res?.question} </Text>
+                    <Text style={styles.textarea}>   {res?.answer}  </Text>
+                  </View>
+                
+                </View>
+              
+              </View>
+            ))}
+          </View>
           <View style={styles.section}>
             <Text style={styles.main_heading}>PHOTO SECTION</Text>
             {/* <Text style={styles.subheading}>
@@ -413,38 +429,44 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
             </Text> */}
             <View style={styles.goal}>
               <View style={styles.div_wrapper}>
-                {Array.isArray(newArr) && newArr
-                  .sort((a, b) => a - b) // Sort newArr in descending order
-                  .map((item, index) => (
-                    <View style={styles.goal} key={index}>
-                      <View  style={styles.goal_two}>
-                     
-                        <View style={styles.images_div}> 
-                        {Array.isArray(item?.images) && item.images.map((imageUrl, imgIndex) => (
-                          <React.Fragment  key={imgIndex}>
-                           
-                         <Image
-                          
-                              // style={{ width: "100%", height:"100%", objectFit: "cover", } }
-                              style={styles.innderImg}
-                              options={options}
-                              src={imageUrl}
-                              method="GET"
-                              headers={{ Pragma: 'no-cache', "Cache-Control": "no-cache" }}
-                              body=""
-                              
-                            />
-                        
-                            </React.Fragment>
-                          ))}
-                          </View> 
+                {Array.isArray(newArr) &&
+                  newArr
+                    .sort((a, b) => a - b) // Sort newArr in descending order
+                    .map((item, index) => (
+                      <View style={styles.goal} key={index}>
+                        <View style={styles.goal_two}>
+                          <View style={styles.images_div}>
+                            {Array.isArray(item?.images) &&
+                              item.images.map((imageUrl, imgIndex) => (
+                                <React.Fragment key={imgIndex}>
+                                  <Image
+                                    // style={{ width: "100%", height:"100%", objectFit: "cover", } }
+                                    style={styles.innderImg}
+                                    options={options}
+                                    src={imageUrl}
+                                    method="GET"
+                                    headers={{
+                                      Pragma: "no-cache",
+                                      "Cache-Control": "no-cache",
+                                    }}
+                                    alt={item?.comment}
+                                  />
+                                </React.Fragment>
+                              ))}
+                          </View>
 
-                         <Text style={[styles.subheading, styles.marginequal, styles.block]} >
-                          Comment: {item?.comment}
-                        </Text>
+                          <Text
+                            style={[
+                              styles.subheading,
+                              styles.marginequal,
+                              styles.block,
+                            ]}
+                          >
+                            Comment: {item?.comment}
+                          </Text>
+                        </View>
                       </View>
-                    </View>
-                  ))}
+                    ))}
               </View>
             </View>
           </View>

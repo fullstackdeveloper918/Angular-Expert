@@ -1,27 +1,12 @@
 "use client";
-import { Button, Card, Col, Form, Input, Row, Select, Typography } from "antd";
-import dynamic from "next/dynamic";
+import { Button, Card, Col, Divider, Form, Input, Row, Select, Typography } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { Fragment, useCallback, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import api from "@/utils/api";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { destroyCookie } from "nookies";
 import { MinusCircleOutlined } from "@ant-design/icons";
-// const { Row, Col, Card, Button } = {
-//   Button: dynamic(() => import("antd").then((module) => module.Button), {
-//     ssr: false,
-//   }),
-//   Row: dynamic(() => import("antd").then((module) => module.Row), {
-//     ssr: false,
-//   }),
-//   Col: dynamic(() => import("antd").then((module) => module.Col), {
-//     ssr: false,
-//   }),
-//   Card: dynamic(() => import("antd").then((module) => module.Card), {
-//     ssr: false,
-//   }),
-// };
 const { Option } = Select;
 const Additionaladd = () => {
 
@@ -183,6 +168,7 @@ console.log(formattedData,"formattedData");
                                         <Button type="dashed" onClick={addFieldSet} className='col-lg-12 mt-4 mb-3'>
                                             Add More Fields
                                         </Button>
+                                        {/* <Divider /> */}
                                         {/* Button  */}
                                         <div className="d-flex gap-3 justify-content-center">
                                             {/* <Button size={'large'} type="primary" onClick={onPrevious} className="" >

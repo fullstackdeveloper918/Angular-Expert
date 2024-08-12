@@ -37,7 +37,7 @@ const Page6 = () => {
           } as any
           setLoading(true)
           let res = await api.User.edit(items)
-              router.push(`/admin/member/add/page7?${value}&edit`)
+              router.push(`/admin/member/add/additional_questionnaire?${value}&edit`)
           }else{
 
               setLoading(true)
@@ -46,7 +46,7 @@ const Page6 = () => {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
               }
-              router.push(`/admin/member/add/page7?${res?.userId}`)
+              router.push(`/admin/member/add/additional_questionnaire?${value}&edit`)
           }
       } catch (error) {
           setLoading(false)
@@ -150,7 +150,7 @@ const Page6 = () => {
                                 {/* Title  */}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>SPRING 2024 MEETING REVIEW</Typography.Title>
-                                    <Button size={'large'} type="primary" className="text-white" disabled>5/7</Button>
+                                    <Button size={'large'} type="primary" className="text-white" disabled>5/8</Button>
                                 </div>
 
                                 {/* form  */}

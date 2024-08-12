@@ -51,7 +51,7 @@ const Page8 = () => {
   const [inputPairs, setInputPairs] = useState([
     {
       id: Date.now(),
-      goalName: "goal0",
+      goalName: "goalcomment_0",
       goalLabel: "Project 0",
       commentName: "comment0",
       commentLabel: "comment_0",
@@ -69,8 +69,6 @@ const Page8 = () => {
   const [errorShown, setErrorShown] = useState(false);
   const images = JSON.stringify(fileLists);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
-console.log(getUserdata,"getUserdata");
-
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
 
@@ -93,9 +91,9 @@ console.log(getUserdata,"getUserdata");
       {
         id: newId,
         goalName: `goal${newId}`,
-        goalLabel: `Project ${inputPairs.length}`,
+        goalLabel: `Project comment_${inputPairs.length}`,
         commentName: `comment${newId}`,
-        commentLabel: `comment_${inputPairs.length }`,
+        commentLabel: `comment_${inputPairs.length}`,
       },
     ]);
   };
@@ -122,7 +120,12 @@ console.log(getUserdata,"getUserdata");
 
   const submit = async (values: any) => {
     setLoading(true);
-    
+
+    const photoComment = inputPairs.map((pair) => ({
+      comment: values[pair.commentName],
+      files: values[pair.goalName],
+    }));
+
     try {
       setLoading(true);
       const formData: any = new FormData();
@@ -132,19 +135,26 @@ console.log(getUserdata,"getUserdata");
         if (state?.photo_section?.fileUrls?.length) {
           formData.append("id", state?.photo_section?.commentId);
           formData.append("user_id", value);
+
+          console.log(inputPairs, "check inputpairs");
           inputPairs.forEach((item: any, index) => {
-            formData.append(`${item?.initialGoal ? item?.initialGoal :  item?.commentLabel}`, values[item?.commentName]);
+            formData.append(`${item?.commentLabel}`, values[item?.commentName]);
             values[item.goalName]?.fileList?.forEach(
               (file: any, index: number) => {
                 if (file?.originFileObj) {
                   formData.append(
-                    `${item?.initialGoal ? item?.initialGoal :  item?.commentLabel}_file${index}`,
+                    `${item?.commentLabel}_file${index}`,
                     file.originFileObj
                   );
                 }
               }
             );
           });
+
+          formData.forEach((value: any, key: any) => {
+            console.log(`${key}:`, value, "formdata");
+          });
+
           response = await axios.post(
             "https://frontend.goaideme.com/update-photo-section",
             formData,
@@ -157,18 +167,18 @@ console.log(getUserdata,"getUserdata");
           );
         } else {
           formData.append("id", value);
-          inputPairs.forEach((item: any, index) => {
-            formData.append(`comment_${index}`, item?.commentLabel);
-            values[item.goalName]?.fileList?.forEach(
-              (file: any, fileIndex: number) => {
-                if (file?.originFileObj) {
-                  formData.append(
-                    `comment_${index}_file${fileIndex}`,
-                    file.originFileObj
-                  );
-                }
+          photoComment.forEach((item: any, index) => {
+            console.log("item label", item);
+            // console.log(values[item?.commentLabel], "hash label");
+            formData.append(`comment_${index}`, item?.comment);
+            item?.files?.fileList.forEach((file: any, fileIndex: number) => {
+              if (file?.originFileObj) {
+                formData.append(
+                  `comment_${index}_file${fileIndex}`,
+                  file.originFileObj
+                );
               }
-            );
+            });
           });
           response = await axios.post(
             "https://frontend.goaideme.com/uploadFile",
@@ -194,13 +204,14 @@ console.log(getUserdata,"getUserdata");
           });
         }
 
-        setResponseData(response?.data?.pdfReponseData);   
-        
-          router.replace(`/admin/user?${getUserdata?.user_id}`);
+        setResponseData(response?.data?.pdfReponseData);
+
+        // router.replace(`/admin/user?${getUserdata?.user_id}`);
         return response?.data?.pdfReponseData;
       } catch (error) {
+        console.log(error, "error message");
         if (error) {
-          toast.error("Something went wrong Please try again", {
+          toast.error("Somethingdasfasfasf went wrong Please try again", {
             position: "top-center",
             autoClose: 300,
           });
@@ -235,28 +246,33 @@ console.log(getUserdata,"getUserdata");
       const fetchedGoals = res?.data?.photo_section?.fileUrls || [];
       const commentKey = fetchedGoals[0]?.commentId || "";
 
-      const hash = Object.keys(fetchedGoals[0] || {}).map((key, index) =>
-        console.log(key, "check indx")
-      );
+      // const hash = Object.keys(fetchedGoals[0] || {}).map((key, index) =>
 
-      const formattedGoals = Object.keys(fetchedGoals[0] || {}).map(
-        (key, index) => ({
-          id: index,
-          goalName: `goal${index}`,
-          goalLabel: `Project ${index+1}`,
-          commentName: `comments${index+1}`,
-          commentLabel: `comment_${index+1}`,
-          initialGoal: key,
-          initialComment: fetchedGoals[0][key]?.comment,
-          images: fetchedGoals[0][key]?.images,
-          commentId: commentKey,
-        })
+      // );
+
+      const formattedGoals: any = Object.keys(fetchedGoals[0] || {}).map(
+        (key, index) => {
+          console.log(
+            `Key: ${key}, Initial Comment: ${fetchedGoals[0][key]?.images}`
+          );
+          return {
+            id: index,
+            goalName: `goal${key}`,
+            goalLabel: `Project ${key}`,
+            commentName: key,
+            commentLabel: key,
+            // initialGoal: key,
+            initialComment: fetchedGoals[0][key]?.comment,
+            images: fetchedGoals[0][key]?.images,
+            commentId: commentKey,
+          };
+        }
       );
 
       setInputPairs(formattedGoals);
 
       const formValues: any = {};
-      formattedGoals.forEach((goal) => {
+      formattedGoals.forEach((goal: any) => {
         formValues[goal.goalName] = goal.initialGoal;
         formValues[goal.commentName] = goal.initialComment;
       });
@@ -264,7 +280,7 @@ console.log(getUserdata,"getUserdata");
       form.setFieldsValue(formValues);
 
       const fileListsData: any = {};
-      formattedGoals.forEach((goal) => {
+      formattedGoals.forEach((goal: any) => {
         fileListsData[goal.id] = (goal.images || []).map(
           (url: any, index: number) => ({
             uid: index,
@@ -285,20 +301,21 @@ console.log(getUserdata,"getUserdata");
       }
     }
   };
+
   React.useEffect(() => {
     if (type == "edit") {
       getDataById();
     }
   }, [type, value]);
   const onPrevious = () => {
-    router.replace(`/admin/member/add/page7?${value}&edit`);
+    router.replace(`/admin/member/add/additional_questionnaire?${value}&edit`);
   };
 
   const handleDelete = async (file: any, pair: any, index: number) => {
     const data = {
       imageUrl: file.url,
       commentId: state?.photo_section?.commentId,
-      comment: pair.initialGoal || "",
+      comment: pair.commentLabel || "",
     };
 
     try {
@@ -314,7 +331,6 @@ console.log(getUserdata,"getUserdata");
         // Handle response as needed
       );
 
-      console.log("Response:", res?.data?.message);
       if (res) {
         toast.success(res?.data?.message, {
           position: "top-center",
@@ -322,7 +338,6 @@ console.log(getUserdata,"getUserdata");
         });
       }
     } catch (error: any) {
-      console.log("Error removing photo:", error);
       if (error?.response?.data?.status === 500) {
         toast.error("Something went wrong", {
           position: "top-center",
@@ -331,7 +346,6 @@ console.log(getUserdata,"getUserdata");
       }
     }
   };
-
 
   const generatePdf = async (data?: any) => {
     //
@@ -342,7 +356,6 @@ console.log(getUserdata,"getUserdata");
     return { blob, pdfUrl, timestamp };
   };
 
-  
   const sharePdf = async (responseData: any) => {
     const { pdfUrl, timestamp } = await generatePdf(responseData);
     const response = await fetch(pdfUrl);
@@ -369,11 +382,8 @@ console.log(getUserdata,"getUserdata");
     );
   };
 
-
   const handleFetchAndFetchData = async (values: any) => {
     let item = await submit(values);
-    console.log(item, "item check");
-
     if (item) {
       await sharePdf(item);
     }
@@ -400,7 +410,7 @@ console.log(getUserdata,"getUserdata");
                     className="text-white"
                     disabled
                   >
-                    7/7
+                    8/8
                   </Button>
                 </div>
 
@@ -429,76 +439,71 @@ console.log(getUserdata,"getUserdata");
                     onFinish={handleFetchAndFetchData}
                   >
                     <div>
-                      {inputPairs.map((pair: any, index: number) => (
-                        <>
-                          {console.log(pair, "pair check")}
-                          {console.log(pair.commentName, "comment check")}
-
-                          <div key={pair.id} style={{ position: "relative" }}>
-                            <Form.Item
-                              name={pair.goalName}
-                              label={pair.goalLabel}
-                            >
-                              <Upload
-                                listType="picture-card"
-                                fileList={fileLists[pair.id] || []}
-                                onPreview={handlePreview}
-                                onChange={(info) =>
-                                  handleChange(info, pair.id.toString())
-                                }
-                                multiple
-                                onRemove={(file) =>
-                                  handleDelete(file, pair, index)
-                                }
+                      {inputPairs
+                        .sort((a: any, b: any) => {
+                          const numA = parseInt(
+                            a?.commentName.split("_")[1],
+                            10
+                          );
+                          const numB = parseInt(
+                            b?.commentName.split("_")[1],
+                            10
+                          );
+                          return numA - numB;
+                        })
+                        .map((pair: any, index: number) => (
+                          <>
+                            <div key={pair.id} style={{ position: "relative" }}>
+                              <Form.Item
+                                name={pair.goalName}
+                                label={pair.goalLabel}
                               >
-                                {/* {(fileLists[pair.id] || []).length >= 8 ? null : (
-                                <PlusOutlined />
-                              )} */}
-                                {(fileLists[pair.id] || []).length >=
+                                <Upload
+                                  listType="picture-card"
+                                  fileList={fileLists[pair.id] || []}
+                                  onPreview={handlePreview}
+                                  onChange={(info) =>
+                                    handleChange(info, pair.id.toString())
+                                  }
+                                  multiple
+                                  onRemove={(file) =>
+                                    handleDelete(file, pair, index)
+                                  }
+                                >
+                                  {(fileLists[pair.id] || []).length >=
                                   10 ? null : (
-                                  <PlusOutlined />
-                                )}
-                              </Upload>
-                              {/* {previewImage && (
-                      <Image
-                        wrapperStyle={{ display: 'none' }}
-                        preview={{
-                          visible: previewOpen,
-                          onVisibleChange: (visible) => setPreviewOpen(visible),
-                          afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                        }}
-                        src={previewImage}
-                      />
-                    )} */}
-                            </Form.Item>
-                            <Form.Item
-                              name={pair.commentName}
-                              rules={[
-                                {
-                                  required: true,
-                                  whitespace: true,
-                                  message: "Please Fill Field",
-                                },
-                              ]}
-                              label={pair.commentLabel}
-                            >
-                              <TextArea size="large" placeholder="Enter..." />
-                            </Form.Item>
-                            {inputPairs.length > 1 && (
-                              <MinusCircleOutlined
-                                style={{
-                                  position: "absolute",
-                                  top: "0",
-                                  right: "0",
-                                  fontSize: "24px",
-                                  cursor: "pointer",
-                                }}
-                                onClick={() => removeInputPair(pair.id)}
-                              />
-                            )}
-                          </div>
-                        </>
-                      ))}
+                                    <PlusOutlined />
+                                  )}
+                                </Upload>
+                              </Form.Item>
+                              <Form.Item
+                                name={pair.commentName}
+                                rules={[
+                                  {
+                                    required: true,
+                                    whitespace: true,
+                                    message: "Please Fill Field",
+                                  },
+                                ]}
+                                label={pair.commentLabel}
+                              >
+                                <TextArea size="large" placeholder="Enter..." />
+                              </Form.Item>
+                              {inputPairs.length > 1 && (
+                                <MinusCircleOutlined
+                                  style={{
+                                    position: "absolute",
+                                    top: "0",
+                                    right: "0",
+                                    fontSize: "24px",
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() => removeInputPair(pair.id)}
+                                />
+                              )}
+                            </div>
+                          </>
+                        ))}
                       <DynamicButton
                         type="dashed"
                         onClick={addInputPair}
