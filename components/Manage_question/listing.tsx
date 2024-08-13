@@ -9,6 +9,8 @@ import {
   Row,
   Col,
   Card,
+  Popconfirm,
+  Button,
 } from "antd";
 import Link from "next/link";
 import MainLayout from "../../components/Layout/layout";
@@ -61,7 +63,19 @@ const Manage_Question = () => {
   useEffect(() => {
     initialise()
   }, [])
+  const archive = async (id: any) => {
+    const item = {
+        question_id: id,
+    }
+    try {
+        let res = await api.Manage_Question.delete(item as any)
+        initialise()
+        toast.success(res?.message)
+        //   setAreas
+    } catch (error) {
 
+    }
+}
 
   const dataSource2 = filteredData?.map((res: any, index: number) => {
     return {
@@ -72,6 +86,16 @@ const Manage_Question = () => {
         <li>
           <CustomModal type={"Edit"} {...res} initialise={initialise} />
         </li>
+        <li>
+                            <Popconfirm
+                                title="Delete"
+                                description="Are you sure you want to delete ?"
+                                onConfirm={(event: any) => { archive(res?.id) }}
+                            // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                            >
+                                <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                            </Popconfirm>
+                        </li>
       </ul>
 
     }

@@ -86,6 +86,8 @@ const Admin={
 const User = {
   edit: (info: any) =>
     requests.post('update-user', info),
+  add_additional_user: (info: any) =>
+    requests.post('add-adtional-user', info),
   listing: (q?: string) =>
     requests.get(`list${q ? `?${q}` : ""}`),
   arcivelisting: (q?: string) =>
@@ -168,6 +170,8 @@ const Manage_Question={
     requests.get(`question-list`),
   getById: (info: any) =>
     requests.post(`single-question`,info),
+  delete: (info: any) =>
+    requests.post(`question-delete`, info),
 }
 const Questionnaire={
   listing: (q?: string) =>

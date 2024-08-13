@@ -124,6 +124,8 @@ const data={
   const API_WEATHER_KEY = 'd0071f1a5d256028b91f0fdd1aedd36c';
   const API_WEATHER_PREFIX = 'https://api.openweathermap.org/data/2.5/forecast';
   const [next7DaysWeather, setNext7DaysWeather] = useState<{ day: string; icon: string; temp: string }[]>([]);
+  console.log(next7DaysWeather,"next7DaysWeather");
+  
   const weatherIcons: { [key: string]: string } = {
     // Add more mappings if needed
     'clear sky': '☀️',
@@ -187,6 +189,7 @@ const data={
           const averageTemp = tempSum / count;
           const date = new Date(day);
           const formattedDay = date.toLocaleDateString('en-US', { weekday: 'short' });
+console.log(formattedDay,"formattedDay");
 
           return { day: formattedDay, icon, temp: averageTemp.toFixed(1) };
         });
@@ -388,7 +391,7 @@ const data={
                           className='weather-container ms-1'
                           style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', overflowX: 'auto' }}
                         >
-                          {next7DaysWeather.map(({ day, icon, temp }) => (
+                          {next7DaysWeather.map(({ day, icon, temp }:any) => (
                             <div
                               key={day}
                               className="weather-day"
@@ -399,7 +402,7 @@ const data={
                                 <span style={{ fontSize: '24px', marginRight: '10px' }}>{icon}</span>
                               </div>
                               <div style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
-                                <span style={{ fontSize: '12px' }}>{temp}°C</span>
+                                <span style={{ fontSize: '12px' }}> {((temp * 9) / 5 + 32).toFixed(1)}°F</span>
                               </div>
                             </div>
                           ))}

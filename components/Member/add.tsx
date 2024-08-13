@@ -79,10 +79,10 @@ const Add = () => {
         let res = await api.Auth.signUp(items)
         toast.success(res?.message)
         // console.log('hello kane')
-        if(res)  {
-          router.push('/admin/member')
-        }
-        // router.push(`/admin/member/add/page2?${res?.user_id}`)
+        // if(res)  {
+        //   router.push('/admin/member')
+        // }
+        router.push(`/admin/member/additional_user?${res?.user_id}`)
         if (res?.status == 400) {
           toast.error("Session Expired Login Again")
           router.replace("/auth/signin")

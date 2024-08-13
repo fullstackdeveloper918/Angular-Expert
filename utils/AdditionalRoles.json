@@ -1,0 +1,51 @@
+[
+    {
+        "sr": 1,
+        "name": "Bussiness Update",
+        "rol": "bussiness_update",
+        "color": "magenta"
+    },
+    {
+        "sr": 2,
+        "name": "Goals",
+        "rol": "goals",
+        "color": "geekblue"
+    },
+    {
+        "sr": 3,
+        "name": "Craftsmen Toolbox",
+        "rol": "craftsmen_toolbox",
+        "color": "red"
+    },
+    {
+        "sr": 4,
+        "name": "Craftsmen Checkup",
+        "rol": "craftsmen_checkup",
+        "color": "volcano"
+    },
+    {
+        "sr": 5,
+        "name": "Fall Meeting Review",
+        "rol": "fall_meeting_review",
+        "color": "volcano"
+    },
+    {
+        "sr": 6,
+        "name": "Spring Meeting",
+        "rol": "spring_meeting",
+        "color": "volcano"
+    },
+    {
+        "sr": 7,
+        "name": "Additional Question",
+        "rol": "additional_question",
+        "color": "volcano"
+    },
+    {
+        "sr": 8,
+        "name": "Photo Section",
+        "rol": "photo_section",
+        "color": "volcano"
+    }
+   
+]

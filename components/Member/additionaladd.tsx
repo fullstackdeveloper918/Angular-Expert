@@ -7,6 +7,7 @@ import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { destroyCookie } from "nookies";
 import { MinusCircleOutlined } from "@ant-design/icons";
+import AdditionalRoles from "../../utils/AdditionalRoles.json"
 const { Option } = Select;
 const Additionaladd = () => {
 
@@ -17,21 +18,61 @@ const Additionaladd = () => {
     const searchParams = useSearchParams();
     const entries = Array.from(searchParams.entries());
     const [companyType, setCompanyType] = useState<any>('');
+
     const value = entries.length > 0 ? entries[0][0] : '';
-    const type = entries.length > 0 ? entries[1][0] : '';
+    // const type = entries.length > 0 ? entries[1][0] : '';
+    const [fieldList, setFieldList] = useState([{ id: Date.now() }]);
+    const [isAddMoreDisabled, setIsAddMoreDisabled] = useState(true);
+    const [selectedRoles, setSelectedRoles] = useState<any>([]); // Track selected roles
+    const [allFieldsFilled, setAllFieldsFilled] = useState<any>(false);
     const handleChange = (value: any) => {
         setCompanyType(value);
     };
 
-    const [fieldList, setFieldList] = useState([{ id: Date.now() }]);
-
     const addFieldSet = () => {
-        setFieldList([...fieldList, { id: Date.now() }]);
+        form.validateFields().then(() => {
+            const newFieldId = Date.now();
+            setFieldList([...fieldList, { id: newFieldId }]);
+            const currentFields = form.getFieldsValue();
+            const newSelectedRoles = Object.values(currentFields)
+                .filter((_, index) => index % 5 === 4)
+                .flat();
+            setSelectedRoles([...selectedRoles, ...newSelectedRoles]);
+            saveDataToLocalStorage(newFieldId, currentFields);
+        });
     };
 
     const removeFieldSet = (id: any) => {
-        setFieldList(fieldList.filter(field => field.id !== id));
+        setFieldList(fieldList.filter((field) => field.id !== id));
     };
+
+    const saveDataToLocalStorage = (id: any, currentFields: any) => {
+        const dataToStore = fieldList.map((field) => ({
+            id: field.id,
+            firstname: currentFields[`firstname_${field.id}`],
+            lastname: currentFields[`lastname_${field.id}`],
+            email: currentFields[`email_${field.id}`],
+            password: currentFields[`password_${field.id}`],
+            template_access: currentFields[`roles_${field.id}`] || [],
+        }));
+
+        localStorage.setItem("formData", JSON.stringify(dataToStore));
+    };
+    const onFieldsChange = () => {
+        const currentFields = form.getFieldsValue();
+        const areAllFieldsFilled = fieldList.every((field) => {
+            return (
+                currentFields[`firstname_${field.id}`] &&
+                currentFields[`lastname_${field.id}`] &&
+                currentFields[`email_${field.id}`] &&
+                currentFields[`password_${field.id}`] &&
+                currentFields[`roles_${field.id}`]?.length > 0
+            );
+        });
+        setAllFieldsFilled(areAllFieldsFilled);
+    };
+
+
 
     const onFinish = async (values: any) => {
         // country_code: values.country_code ?? "+93",
@@ -39,13 +80,24 @@ const Additionaladd = () => {
             firstname: values[`firstname_${field.id}`],
             lastname: values[`lastname_${field.id}`],
             email: values[`email_${field.id}`],
-            password: values[`password_${field.id}`]
-          })) as any;
-console.log(formattedData,"formattedData");
+            password: values[`password_${field.id}`],
+            template_access: values[`roles_${field.id}`] || [],
+        })) as any;
+        console.log(formattedData, "formattedData");
+
+        localStorage.setItem('formData', JSON.stringify(formattedData));
+        console.log(formattedData, "formattedData");
+
+        let item = {
+            parent_user_id: value,
+            additionalUsers: formattedData
+        }
+        // console.log(updatedData, "updatedData");
 
         try {
             setLoading(true)
-           
+            let res = await api.User.add_additional_user(item)
+            toast.success(res?.message)
 
         } catch (error: any) {
 
@@ -61,28 +113,27 @@ console.log(formattedData,"formattedData");
         }
     };
 
-
     useEffect(() => {
-        if (type == "edit") {
-            const getDataById = async () => {
-                const item = {
-                    user_id: value
+        // if (type == "edit") {
+        const getDataById = async () => {
+            const item = {
+                user_id: value
+            }
+            try {
+                const res = await api.User.getById(item as any);
+                setState(res?.data || null);
+                if (res?.data?.status == 400) {
+                    toast.error("Session Expired Login Again")
+                    router.replace("/auth/signin")
                 }
-                try {
-                    const res = await api.User.getById(item as any);
-                    setState(res?.data || null);
-                    if (res?.data?.status == 400) {
-                        toast.error("Session Expired Login Again")
-                        router.replace("/auth/signin")
-                    }
-                    form.setFieldsValue(res?.data)
-                } catch (error: any) {
-                    alert(error.message);
-                }
-            };
+                form.setFieldsValue(res?.data)
+            } catch (error: any) {
+                alert(error.message);
+            }
+            // };
             getDataById();
         }
-    }, [type, form]);
+    }, [form]);
     // form.setFieldsValue(res);
     const submit = () => {
         router.push("/admin/member/add/page2")
@@ -112,19 +163,19 @@ console.log(formattedData,"formattedData");
 
                                 {/* form  */}
                                 <div className='card-form-wrapper'>
-                                    <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onFinish}>
+                                    <Form form={form} name="add_staff" className="add-staff-form" onFieldsChange={onFieldsChange} scrollToFirstError layout='vertical' onFinish={onFinish}>
 
                                         {/* First Name  */}
                                         {fieldList.map((field, index) => (
 
                                             <div key={field.id} className='row mt-4' style={{ position: 'relative' }}>
-                                              
+
                                                 <Form.Item
                                                     name={`firstname_${field.id}`}
                                                     className='col-lg-6 col-sm-12'
                                                     // rules={[{ required: true, whitespace: true, message: 'Please Enter First Name' }]}
                                                     label={`First Name`}
-                                                    // label={`First Name ${index + 1}`}
+                                                // label={`First Name ${index + 1}`}
                                                 >
                                                     <Input size='large' placeholder="First Name" />
                                                 </Form.Item>
@@ -133,7 +184,7 @@ console.log(formattedData,"formattedData");
                                                     className='col-lg-6 col-sm-12'
                                                     // rules={[{ required: true, whitespace: true, message: 'Please Enter Last Name' }]}
                                                     label={`Last Name`}
-                                                    // label={`Last Name ${index + 1}`}
+                                                // label={`Last Name ${index + 1}`}
                                                 >
                                                     <Input size='large' placeholder="Last Name" />
                                                 </Form.Item>
@@ -142,7 +193,7 @@ console.log(formattedData,"formattedData");
                                                     className='col-lg-6 col-sm-12'
                                                     // rules={[{ required: true, message: 'Please Enter Email' }]}
                                                     label={`Email`}
-                                                    // label={`Email ${index + 1}`}
+                                                // label={`Email ${index + 1}`}
                                                 >
                                                     <Input size='large' type='email' placeholder="Email" />
                                                 </Form.Item>
@@ -151,21 +202,37 @@ console.log(formattedData,"formattedData");
                                                     className='col-lg-6 col-sm-12'
                                                     // rules={[{ required: true, message: 'Please Enter Password!' }]}
                                                     label={`Password`}
-                                                    // label={`Password ${index + 1}`}
+                                                // label={`Password ${index + 1}`}
                                                 >
                                                     <Input.Password size='large' type="password" placeholder="Password" />
+                                                </Form.Item>
+                                                <Form.Item name={`roles_${field.id}`} label="Permissions" rules={[{ required: true, message: 'Please Select Permissions' }]}>
+                                                    <Select
+                                                        mode="tags"
+                                                        size={'large'}
+
+                                                        placeholder="Please select"
+                                                        style={{ width: '100%' }}
+                                                        // onChange={(value) => validateFirstFieldSet(value, field.id)}
+                                                        options={AdditionalRoles.filter(
+                                                            (role) => !selectedRoles.includes(role.rol)
+                                                        ).map((res) => ({
+                                                            value: res.rol,
+                                                            label: res.name,
+                                                        }))}
+                                                    />
                                                 </Form.Item>
                                                 {/* <Button  onClick={() => removeFieldSet(field.id)} className='col-lg-12'>
                                                     Remove
                                                 </Button> */}
-                                                  <MinusCircleOutlined
-                                                                style={{ position: 'absolute', top: '1px', left: '700px', fontSize: '24px', cursor: 'pointer' }}
-                                                                onClick={() => removeFieldSet(field.id)}
+                                                <MinusCircleOutlined
+                                                    style={{ position: 'absolute', top: '1px', left: '700px', fontSize: '24px', cursor: 'pointer' }}
+                                                    onClick={() => removeFieldSet(field.id)}
 
-                                                            />
+                                                />
                                             </div>
                                         ))}
-                                        <Button type="dashed" onClick={addFieldSet} className='col-lg-12 mt-4 mb-3'>
+                                        <Button type="dashed" onClick={addFieldSet} className='col-lg-12 mt-4 mb-3' disabled={!allFieldsFilled}>
                                             Add More Fields
                                         </Button>
                                         {/* <Divider /> */}
