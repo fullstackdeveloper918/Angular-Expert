@@ -57,6 +57,7 @@ const Page1 = () => {
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 1 ? entries[1][0] : '';
+  const pagetype = entries.length > 2 ? entries[2][0] : '';
   const setCookie = (name:any, value:any, days:any) => {
     nookies.set(null, name, value, {
       maxAge: days * 24 * 60 * 60,
@@ -92,7 +93,11 @@ const Page1 = () => {
           } as any
           setLoading(true)
           let res = await api.User.edit(items)
-              router.push(`/admin/member/add/page3?${value}&edit`)
+          if (!pagetype) {
+            router.push(`/admin/member/add/page3?${value}&edit`)
+        }else{
+            router?.back()
+        }
           }else{
 
               setLoading(true)
@@ -116,7 +121,13 @@ const Page1 = () => {
             toast.error("Session Expired Login Again")
             router.replace("/auth/signin")
         }
+        if(!pagetype){
+            setLoading(false)
+        }
       } finally {
+        if(pagetype){
+            setLoading(false)
+        }
       }
   };
   const getDataById = async () => {
@@ -327,7 +338,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                         <div className="d-flex">
                                             <div className="col-2">
 
-                                        <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
+                                        <Button size={'large'} type="primary" className=" " htmlType="submit">
                                             Save
                                         </Button>
                                             </div>

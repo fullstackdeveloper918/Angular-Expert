@@ -19,6 +19,7 @@ const Page7 = () => {
     const entries = Array.from(searchParams.entries());
     const value = entries.length > 0 ? entries[0][0] : '';
     const type = entries.length > 1 ? entries[1][0] : '';
+    const pagetype = entries.length > 2 ? entries[2][0] : '';
     const submit = async (values: any) => {
         let items = {
             spring_meeting: {
@@ -40,7 +41,11 @@ const Page7 = () => {
                 } as any
                 setLoading(true)
                 let res = await api.User.edit(items)
-                router.push(`/admin/member/add/page8?${value}&edit`)
+                if (!pagetype) {
+                    router.push(`/admin/member/add/page8?${value}&edit`)
+                }else{
+                    router?.back()
+                }
             } else {
 
                 setLoading(true)
@@ -49,12 +54,21 @@ const Page7 = () => {
                     toast.error("Session Expired Login Again")
                     router.replace("/auth/signin")
                 }
-                router.push(`/admin/member/add/page8?${res?.userId}`)
+                if (!pagetype) {
+                    router.push(`/admin/member/add/page8?${res?.userId}`)
+                }else{
+                    router?.back()
+                }
             }
         } catch (error) {
 
-            setLoading(false)
+            if(!pagetype){
+                setLoading(false)
+            }
         } finally {
+            if(pagetype){
+                setLoading(false)
+            }
         }
     }
     const onFinish1 = async (values: any) => {
@@ -194,20 +208,30 @@ const Page7 = () => {
 
                                         {/* Button  */}
                                         <div className="d-flex mt-3">
-                                            <div className="col-2">
+                                            {!pagetype ?
+                                                <div className="col-2">
 
-                                        <Button size={'large'} type="primary" className=" " onClick={onFinish1}>
-                                            Save
-                                        </Button>
+                                                    <Button size={'large'} type="primary" className=" " htmlType="submit">
+                                                        Save
+                                                    </Button>
+                                                </div> : ""}
+                                                {!pagetype?
+                                            <div className=" col-8 d-flex gap-5 justify-content-center">
+                                                {!pagetype ?
+                                                    <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
+                                                        Previous
+                                                    </Button> : ""}
+                                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                                    {!pagetype ? "Next" : "Save"}
+                                                </Button>
                                             </div>
-                                        <div className=" col-8 d-flex gap-5 justify-content-center">
-                                        <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
-                                            Previous
-                                        </Button>
-                                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                        Next
-                                        </Button>
-                                        </div>
+                                            :
+                                            <div className=" col-12 d-flex gap-5 justify-content-center">
+                                            <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                            Save
+                                            </Button>
+                                        </div>}
+                                            
                                         </div>
                                     </Form>
                                 </div>

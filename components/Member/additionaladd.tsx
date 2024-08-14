@@ -20,7 +20,10 @@ const Additionaladd = () => {
     const [companyType, setCompanyType] = useState<any>('');
 
     const value = entries.length > 0 ? entries[0][0] : '';
-    // const type = entries.length > 0 ? entries[1][0] : '';
+    console.log(value,"value");
+    
+    let type = entries.length > 0 ? entries[1][0] : '';
+    console.log(type,"type");
     const [fieldList, setFieldList] = useState([{ id: Date.now() }]);
     const [isAddMoreDisabled, setIsAddMoreDisabled] = useState(true);
     const [selectedRoles, setSelectedRoles] = useState<any>([]); // Track selected roles
@@ -95,9 +98,17 @@ const Additionaladd = () => {
         // console.log(updatedData, "updatedData");
 
         try {
+
             setLoading(true)
-            let res = await api.User.add_additional_user(item)
-            toast.success(res?.message)
+            if(type="edit"){
+
+                let res = await api.User.edit_additional_user(item)
+                toast.success(res?.message)
+            }else{
+                let res = await api.User.add_additional_user(item)
+                toast.success(res?.message)
+
+            }
 
         } catch (error: any) {
 
@@ -112,28 +123,57 @@ const Additionaladd = () => {
             setLoading(false)
         }
     };
-
-    useEffect(() => {
-        // if (type == "edit") {
-        const getDataById = async () => {
-            const item = {
-                user_id: value
-            }
-            try {
-                const res = await api.User.getById(item as any);
-                setState(res?.data || null);
-                if (res?.data?.status == 400) {
-                    toast.error("Session Expired Login Again")
-                    router.replace("/auth/signin")
-                }
-                form.setFieldsValue(res?.data)
-            } catch (error: any) {
-                alert(error.message);
-            }
-            // };
-            getDataById();
+    const getDataById = async () => {
+        const item = {
+            parent_user_id: value
         }
-    }, [form]);
+        try {
+            const res = await api.User.getById1(item as any);
+            console.log(res,"rrsrsrsr");
+            
+            setState(res || null);
+            if (res?.data?.status == 400) {
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
+            const formattedData: any = {};
+            const users = res || [];
+    
+            // Clear current field list before setting new values
+            const newFieldList = users.map((user:any) => ({ id: user.id }));
+    
+            setFieldList(newFieldList);
+    
+            users.forEach((user:any) => {
+                formattedData[`firstname_${user.id}`] = user.firstname;
+                formattedData[`lastname_${user.id}`] = user.lastname;
+                formattedData[`email_${user.id}`] = user.email;
+                formattedData[`password_${user.id}`] = user.password;
+                formattedData[`roles_${user.id}`] = user.template_access;
+            });
+    
+            // Set fields value in the form
+            form.setFieldsValue(formattedData);
+    
+            // Check if all fields are filled
+            const currentFields = form.getFieldsValue();
+            const areAllFieldsFilled = newFieldList.every((field:any) => {
+                return (
+                    currentFields[`firstname_${field.id}`] &&
+                    currentFields[`lastname_${field.id}`] &&
+                    currentFields[`email_${field.id}`] &&
+                    currentFields[`password_${field.id}`] &&
+                    currentFields[`roles_${field.id}`]?.length > 0
+                );
+            });
+    
+            setAllFieldsFilled(areAllFieldsFilled);
+        } catch (error: any) {
+            alert(error.message);
+        }}
+    useEffect(() => {
+            getDataById();
+    }, []);
     // form.setFieldsValue(res);
     const submit = () => {
         router.push("/admin/member/add/page2")

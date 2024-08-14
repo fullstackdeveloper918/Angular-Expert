@@ -112,6 +112,7 @@ const Page8 = () => {
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : "";
   const type = entries.length > 1 ? entries[1][0] : "";
+  const pagetype = entries.length > 2 ? entries[2][0] : '';
   async function convertUrlToBlob(url: any) {
     const response = await fetch(url);
     const blob = await response.blob();
@@ -207,6 +208,11 @@ const Page8 = () => {
         setResponseData(response?.data?.pdfReponseData);
 
         // router.replace(`/admin/user?${getUserdata?.user_id}`);
+        if (!pagetype) {
+          router.push(`/admin/user?${getUserdata?.user_id}`)
+      }else{
+          router?.back()
+      }
         return response?.data?.pdfReponseData;
       } catch (error) {
         console.log(error, "error message");
@@ -225,7 +231,9 @@ const Page8 = () => {
         router.replace("/auth/signin");
       }
     } finally {
-      setLoading(false);
+      if(pagetype){
+        setLoading(false)
+    }
     }
   };
 
@@ -514,36 +522,31 @@ const Page8 = () => {
                       </DynamicButton>
                     </div>
                     <div className="d-flex mt-5">
-                      <div className="col-2">
-                        <Button
-                          size={"large"}
-                          type="primary"
-                          className=" "
-                          htmlType="submit"
-                        >
-                          Save
-                        </Button>
-                      </div>
-                      <div className=" col-8 d-flex gap-5 justify-content-center">
-                        <Button
-                          size={"large"}
-                          type="primary"
-                          className=" "
-                          onClick={onPrevious}
-                        >
-                          Previous
-                        </Button>
-                        <Button
-                          size={"large"}
-                          type="primary"
-                          htmlType="submit"
-                          className="login-form-button "
-                          loading={loading}
-                        >
-                          Submit
-                        </Button>
-                      </div>
-                    </div>
+                                            {!pagetype ?
+                                                <div className="col-2">
+
+                                                    <Button size={'large'} type="primary" className=" " htmlType="submit">
+                                                        Save
+                                                    </Button>
+                                                </div> : ""}
+                                                {!pagetype?
+                                            <div className=" col-8 d-flex gap-5 justify-content-center">
+                                                {!pagetype ?
+                                                    <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
+                                                        Previous
+                                                    </Button> : ""}
+                                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                                    {!pagetype ? "Next" : "Save"}
+                                                </Button>
+                                            </div>
+                                            :
+                                            <div className=" col-12 d-flex gap-5 justify-content-center">
+                                            <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                            Save
+                                            </Button>
+                                        </div>}
+                                            
+                                        </div>
                     {/* <div className="d-flex gap-3 justify-content-center">
                                 <DynamicButton size={'large'} type="primary" className="login-form-button mt-4" onClick={onPrevious}>
                                     Previous

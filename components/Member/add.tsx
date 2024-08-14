@@ -7,6 +7,7 @@ import MainLayout from "../../components/Layout/layout";
 import api from "@/utils/api";
 import { toast, ToastContainer } from "react-toastify";
 import { destroyCookie } from "nookies";
+import { useSelector } from "react-redux";
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -33,6 +34,7 @@ const Add = () => {
   const [companyType, setCompanyType] = useState<any>('');
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 0 ? entries[1][0] : '';
+  const getUserdata = useSelector((state: any) => state?.user?.userData)
   const handleChange = (value: any) => {
     setCompanyType(value);
   };
@@ -71,9 +73,9 @@ const Add = () => {
         } as any
         let res = await api.User.edit(items)
         toast.success(res?.message)
-        if(res)  {
-          router.push('/admin/member')
-        }
+        // if(res)  {
+          router.push(`/admin/member/additional_user?${value}&edit`)
+        // }
         // router.push(`/admin/member/add/page2?${value}&edit`)
       } else {
         let res = await api.Auth.signUp(items)

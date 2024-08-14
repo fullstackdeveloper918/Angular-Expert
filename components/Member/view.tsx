@@ -42,6 +42,8 @@ const MeetingView = () => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
+  console.log(getUserdata,"getUserdata");
+  
   const companyNameMap:any = {
     "augusta": "Augusta Homes, Inc.",
     "buffington": "Buffington Homes, L.P.",
@@ -210,7 +212,9 @@ const sharePdf = async () => {
 };
 
 
-const companyName = companyNameMap[state?.company_name || ""] || "N/A";
+const companyName = companyNameMap[state?.company_name || state?.master_user_detail?.company_name] || "N/A";
+console.log(state,"state");
+
   return (
     <MainLayout>
     <Fragment>
@@ -252,14 +256,17 @@ const companyName = companyNameMap[state?.company_name || ""] || "N/A";
                     <li className='mb-3'><Typography.Text >Name:</Typography.Text > <Typography.Text className='ms-1 text-capitalize'>{state?.firstname ? `${validation.capitalizeFirstLetter(state?.firstname)} ${validation.capitalizeFirstLetter(state?.lastname)}` : 'N/A'}</Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Company Name:</Typography.Text > <Typography.Text className='ms-1'>{companyName || "N/A"}</Typography.Text ></li>
                     <li className='mb-3'><Typography.Text >Email:</Typography.Text > <Typography.Text className='ms-1'>{state?.email || "N/A"}</Typography.Text ></li>
+                   {getUserdata?.parent_user_id?"":
                     <li className='mb-3'><Typography.Text >Phone no:</Typography.Text > <Typography.Text className='ms-10'>
                       {state?.phone_number || "N/A"}
-                    </Typography.Text ></li>
-                    <li className='mb-3'><Typography.Text >Position:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.position) || "N/A"}</Typography.Text ></li>
-                    <li className='mb-3'><Typography.Text >Home City:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.home_city) || "N/A"}</Typography.Text ></li>
+                    </Typography.Text ></li>}
+                    {getUserdata?.parent_user_id?"":
+                    <li className='mb-3'><Typography.Text >Position:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.position) || "N/A"}</Typography.Text ></li>}
+                    <li className='mb-3'><Typography.Text >Home City:</Typography.Text > <Typography.Text className='ms-1'>{validation.capitalizeFirstLetter(state?.home_city|| getUserdata?.master_user_detail?.home_city) || "N/A"}</Typography.Text ></li>
                    
                   </ul>
                   {/* Button  */}
+                  {getUserdata?.parent_user_id?"":
                   <div className='card-listing-button d-inline-flex flex-wrap gap-3 w-100'>
                     {getUserdata?.is_admin==true?
                     <Link href={`/admin/member/add?${state?.uid}&edit`} className='text-decoration-none text-white flex-grow-1'>
@@ -300,7 +307,7 @@ const companyName = companyNameMap[state?.company_name || ""] || "N/A";
                     >
                       <Button size='large' type="primary" htmlType='button' className='flex-grow-1 w-100 archiveBtn' danger>Archive</Button>
                     </Popconfirm>:""}
-                  </div>
+                  </div>}
                 </div>
               </Card>
             </Col>

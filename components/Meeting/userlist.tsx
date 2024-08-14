@@ -174,7 +174,7 @@ const UserList = () => {
     };
     // const completed2 = state2?.filter((res:any) => res?.is_completed === true);
     const user_completed = state2?.slice(0, 5).map((res: any, index: number) => {
-        const companyName = companyNameMap[res?.company_name || ""] || "N/A";
+        const companyName = companyNameMap[res?.company_name||getUserdata?.master_user_detail?.company_name] || "N/A";
         return {
             key: index + 1,
             name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
@@ -192,12 +192,13 @@ const UserList = () => {
                         <Button className='ViewMore ' onClick={() => handleFetchAndFetchData(res?.uid)}><ShareAltOutlined /></Button>
                     </Tooltip>
                 </li>
+                {getUserdata?.parent_user_id?"":
                 <li>
                     <Link href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}> <Tooltip title="Edit Documents"><Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button> </Tooltip></Link>
                     {/* <Link href={`/admin/meetings/${res?.id}/edit`} >
                             <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
                         </Link> */}
-                </li>
+                </li>}
 
             </ul>
         }
@@ -236,7 +237,7 @@ const UserList = () => {
         },
     ];
     const dataSource = filteredData?.map((res: any, index: number) => {
-        const companyName = companyNameMap[res?.company_name || ""] || "N/A";
+        const companyName = companyNameMap[res?.company_name || res?.master_user_detail?.company_name] || "N/A";
         return {
             key: index + 1,
             name: res?.firstname ? `${validation?.capitalizeFirstLetter(res?.firstname)} ${validation?.capitalizeFirstLetter(res?.lastname)}` : "N/A",

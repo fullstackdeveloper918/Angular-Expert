@@ -52,6 +52,7 @@ const Page3 = () => {
     const value = entries.length > 0 ? entries[0][0] : '';
     const type = entries.length > 1 ? entries[1][0] : '';
     const questionnair = entries.length > 2 ? entries[2][1] : "";;
+    const pagetype = entries.length > 2 ? entries[2][0] : '';
     //   const id: any = searchParam.id;
 
 
@@ -132,18 +133,30 @@ const Page3 = () => {
                 setLoading(true)
                 let res = await api.User.edit(items)
                 // if (!questionnair) {
-                router.push(`/admin/member/add/page4?${value}&edit`)
+                    if (!pagetype) {
+                        router.push(`/admin/member/add/page4?${value}&edit`)
+                    }else{
+                        router?.back()
+                    }
                 // }
             } else {
 
                 let res = await api.Auth.signUp(items)
-
-                router.push(`/admin/member/add/page4?${res?.userId}`)
+                if (!pagetype) {
+                    router.push(`/admin/member/add/page4?${res?.userId}`)
+                }else{
+                    router?.back()
+                }
             }
         } catch (error) {
 
-            setLoading(false)
+            if(!pagetype){
+                setLoading(false)
+            }
         } finally {
+            if(pagetype){
+                setLoading(false)
+            }
         }
 
 
@@ -403,20 +416,30 @@ const Page3 = () => {
                                         </div>
                                         {/* Button  */}
                                         <div className="d-flex mt-3">
-                                            <div className="col-2">
+                                            {!pagetype ?
+                                                <div className="col-2">
 
-                                                <Button size={'large'} type="primary" htmlType="submit" className=" " >
-                                                    Save
-                                                </Button>
-                                            </div>
+                                                    <Button size={'large'} type="primary" className=" " htmlType="submit">
+                                                        Save
+                                                    </Button>
+                                                </div> : ""}
+                                                {!pagetype?
                                             <div className=" col-8 d-flex gap-5 justify-content-center">
-                                                <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
-                                                    Previous
-                                                </Button>
-                                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
-                                                    Next
+                                                {!pagetype ?
+                                                    <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
+                                                        Previous
+                                                    </Button> : ""}
+                                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                                    {!pagetype ? "Next" : "Save"}
                                                 </Button>
                                             </div>
+                                            :
+                                            <div className=" col-12 d-flex gap-5 justify-content-center">
+                                            <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                            Save
+                                            </Button>
+                                        </div>}
+                                            
                                         </div>
                                     </Form>
                                 </div>

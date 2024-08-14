@@ -5,6 +5,8 @@ import { Form, Input } from "antd";
 import dynamic from "next/dynamic";
 
 import axios from "axios";
+import { toast } from "react-toastify";
+import api from "@/utils/api";
 const { Row, Col, Button, Divider } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
     ssr: false,
@@ -26,17 +28,28 @@ const Forgotpaswrd = () => {
  
     const [loading, setLoading] = useState<any>(false)
     const onFinish = async (values: any) => {
+        setLoading(true)
         let items = {
             to: values.email,
             link: `https://nahbcraftsmen.com/auth/update_password?${values.email}`
             // link: `https://angular-expert-mu.vercel.app/auth/update_password?${values.email}`
         };
-        setLoading(true)
         try {
-            // let res = await axios.post("https://app-uilsndszlq-uc.a.run.app/forgot-password", items)
-            let res = await axios.post("https://frontend.goaideme.com/forgot-password", items)
+            let res = await api.Auth.forgotPassword(items)
+            console.log(res,"srdtsd");
+            toast.success(res?.message)
+            // if(res.status == 200) {
+            //     toast.success('OTP sent to your email', {
+            //         position: 'top-center',
+            //         autoClose: 1500
+            //     })
+            //     setLoading(false)
+            // }
 
         } catch (error) {
+            setLoading(false)
+        }
+        finally{
             setLoading(false)
         }
     }

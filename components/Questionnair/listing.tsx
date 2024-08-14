@@ -30,6 +30,8 @@ const { Search } = Input;
 const { Title } = Typography;
 const QuestionnairList = () => {
     const getUserdata = useSelector((state: any) => state?.user?.userData)
+    console.log(getUserdata,"getUserdata");
+    
     const cookies = parseCookies();
     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
     const [questionType, setQuestionType] = useState<any>(null);
@@ -327,6 +329,11 @@ const QuestionnairList = () => {
             default: return `${baseURL}/page-default?${getUserdata}&edit`;
         }
     };
+    const xyz =getUserdata?.is_additional_user==true?getUserdata?.parent_user_id:getUserdata?.user_id
+    console.log(xyz,"xyz");
+    const userData= getUserdata?.is_additional_user==true
+    console.log(userData,"userData");
+    
     return (
         <MainLayout>
             <Fragment>
@@ -348,6 +355,7 @@ const QuestionnairList = () => {
 
                                         <Row gutter={[20, 20]}>
                                             {/* {data.map((item, index) => ( */}
+                                            {getUserdata?.template_access?.includes("bussiness_update")&&
                                                 <Col  span={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
@@ -358,7 +366,211 @@ const QuestionnairList = () => {
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
-                                                                href={`${baseURL}/page2?${getUserdata?.user_id}&edit&questionnair`}
+                                                                href={`${baseURL}/page2?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>}
+                                                {getUserdata?.template_access?.includes("goals")&&
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">GOALS</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf2}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page3?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>}
+                                                {getUserdata?.template_access?.includes("craftsmen_toolbox")&&
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page4?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>}
+                                                {getUserdata?.template_access?.includes("craftsmen_checkup")&&
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page5?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>}
+                                                {getUserdata?.template_access?.includes("fall_meeting_review")&&
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">SPRING 2024 MEETING REVIEW</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page6?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>}
+                                                {getUserdata?.template_access?.includes("spring_meeting")&&
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page7?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>}
+                                                {getUserdata?.template_access?.includes("additional_question")&&
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">ADDITIONAL QUESTIONS</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/additional_questionnaire?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>}
+                                                {getUserdata?.template_access?.includes("photo_section")&&
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">PHOTO SECTION</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page8?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>}
+                                            {/* ))} */}
+                                        </Row>
+                                        {getUserdata?.is_additional_user==false &&
+                                        <Row gutter={[20, 20]}>
+                                            {/* {data.map((item, index) => ( */}
+                                                <Col  span={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button onClick={downLoadPdf}><DownloadOutlined /></Button>
+                                                                </Tooltip>
+                                                            </div>
+                                                            <Link
+                                                                href={`${baseURL}/page2?${xyz}&edit&questionnair`}
                                                                 className='text-decoration-none text-white flex-grow-1'
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
@@ -382,7 +594,7 @@ const QuestionnairList = () => {
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
-                                                                href={`${baseURL}/page3?${getUserdata?.user_id}&edit&questionnair`}
+                                                                href={`${baseURL}/page3?${xyz}&edit&questionnair`}
                                                                 className='text-decoration-none text-white flex-grow-1'
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
@@ -406,7 +618,7 @@ const QuestionnairList = () => {
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
-                                                                href={`${baseURL}/page4?${getUserdata?.user_id}&edit&questionnair`}
+                                                                href={`${baseURL}/page4?${xyz}&edit&questionnair`}
                                                                 className='text-decoration-none text-white flex-grow-1'
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
@@ -430,7 +642,7 @@ const QuestionnairList = () => {
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
-                                                                href={`${baseURL}/page5?${getUserdata?.user_id}&edit&questionnair`}
+                                                                href={`${baseURL}/page5?${xyz}&edit&questionnair`}
                                                                 className='text-decoration-none text-white flex-grow-1'
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
@@ -454,7 +666,7 @@ const QuestionnairList = () => {
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
-                                                                href={`${baseURL}/page6?${getUserdata?.user_id}&edit&questionnair`}
+                                                                href={`${baseURL}/page6?${xyz}&edit&questionnair`}
                                                                 className='text-decoration-none text-white flex-grow-1'
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
@@ -478,7 +690,7 @@ const QuestionnairList = () => {
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
-                                                                href={`${baseURL}/page7?${getUserdata?.user_id}&edit&questionnair`}
+                                                                href={`${baseURL}/page7?${xyz}&edit&questionnair`}
                                                                 className='text-decoration-none text-white flex-grow-1'
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
@@ -502,7 +714,7 @@ const QuestionnairList = () => {
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
-                                                                href={`${baseURL}/additional_questionnaire?${getUserdata?.user_id}&edit&questionnair`}
+                                                                href={`${baseURL}/additional_questionnaire?${xyz}&edit&questionnair`}
                                                                 className='text-decoration-none text-white flex-grow-1'
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
@@ -526,7 +738,7 @@ const QuestionnairList = () => {
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
-                                                                href={`${baseURL}/page8?${getUserdata?.user_id}&edit&questionnair`}
+                                                                href={`${baseURL}/page8?${xyz}&edit&questionnair`}
                                                                 className='text-decoration-none text-white flex-grow-1'
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
@@ -541,7 +753,7 @@ const QuestionnairList = () => {
                                                     </Card>
                                                 </Col>
                                             {/* ))} */}
-                                        </Row>
+                                        </Row>}
 
                                         <style jsx>{`
                            .common-card {

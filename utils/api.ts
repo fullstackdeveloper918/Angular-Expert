@@ -88,6 +88,8 @@ const User = {
     requests.post('update-user', info),
   add_additional_user: (info: any) =>
     requests.post('add-adtional-user', info),
+  edit_additional_user: (info: any) =>
+    requests.post('update-additional-users', info),
   listing: (q?: string) =>
     requests.get(`list${q ? `?${q}` : ""}`),
   arcivelisting: (q?: string) =>
@@ -110,6 +112,8 @@ const User = {
     requests.get(`user?start_date=${start_date}&end_date=${end_date}`),
   getById: (info: any) =>
     requests.post(`single-user-detail`,info),
+  getById1: (info: any) =>
+    requests.post(`get-additional-users`,info),
   getQuestion: () =>
     requests.get(`new-questions`),
   getPurchase: (_id: string, q?: string) =>
