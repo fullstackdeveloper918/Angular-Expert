@@ -1,5 +1,5 @@
 "use client";
-import { Form, Upload, Typography, Divider, Button } from "antd";
+import { Form, Upload, Typography, Divider, Button, Popconfirm } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -62,6 +62,7 @@ const Page8 = () => {
     {}
   );
   const [responseData, setResponseData] = useState<any>("");
+  const [screenLoader, setScreenLoader] = useState(false);
   const [previewImage, setPreviewImage] = useState<any>("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -98,14 +99,59 @@ const Page8 = () => {
     ]);
   };
 
-  const removeInputPair = (id: number) => {
-    setInputPairs(inputPairs.filter((pair) => pair.id !== id));
-    const newFileLists = { ...fileLists };
-    delete newFileLists[id];
-    setFileLists(newFileLists);
-    const newUploadedUrls = { ...uploadedUrls };
-    delete newUploadedUrls[id];
-    setUploadedUrls(newUploadedUrls);
+  const removeInputPair = async (id: number, comment_key: any) => {
+    setScreenLoader(true);
+    try {
+      let formData = new FormData();
+      formData.append("project_key", comment_key);
+      formData.append("comment_id", state?.photo_section?.commentId || "");
+
+      const response = await axios.post(
+        "https://frontend.goaideme.com/remove-project",
+        formData,
+        {
+          headers: {
+            Token: `${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+       
+        const formattedGoals: any = Object.keys(response?.data?.fileUrls).map(
+          (key, index) => {
+           
+            return {
+              id: index,
+              goalName: `goal${key}`,
+              goalLabel: `Project ${key}`,
+              commentName: key,
+              commentLabel: key,
+              // initialGoal: key,
+              initialComment: response?.data?.fileUrls[key]?.comment,
+              images: response?.data?.fileUrls[key]?.images,
+              // commentId: commentKey,
+            };
+          }
+        );
+        setInputPairs(formattedGoals)
+        setScreenLoader(false);
+        toast.success("Project successfully deleted", {
+          position: "top-center",
+          autoClose: 400,
+        });
+      } else {
+        setScreenLoader(false);
+        throw new Error(`Unexpected response status: ${response.status}`);
+      }
+    } catch (err: any) {
+      setScreenLoader(false);
+      toast.error("Failed to delete project", {
+        position: "top-center",
+        autoClose: 400,
+      });
+    }
   };
 
   const searchParams = useSearchParams();
@@ -137,7 +183,6 @@ const Page8 = () => {
           formData.append("id", state?.photo_section?.commentId);
           formData.append("user_id", value);
 
-          console.log(inputPairs, "check inputpairs");
           inputPairs.forEach((item: any, index) => {
             formData.append(`${item?.commentLabel}`, values[item?.commentName]);
             values[item.goalName]?.fileList?.forEach(
@@ -153,24 +198,17 @@ const Page8 = () => {
           });
 
           formData.forEach((value: any, key: any) => {
-            console.log(`${key}:`, value, "formdata");
+           
           });
 
-          response = await axios.post(
-            "https://frontend.goaideme.com/update-photo-section",
-            formData,
-            {
-              headers: {
-                Token: `${accessToken}`,
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
+       response = await api.photo_section.update_file(formData)
+
+
+         
         } else {
           formData.append("id", value);
           photoComment.forEach((item: any, index) => {
-            console.log("item label", item);
-            // console.log(values[item?.commentLabel], "hash label");
+           
             formData.append(`comment_${index}`, item?.comment);
             item?.files?.fileList.forEach((file: any, fileIndex: number) => {
               if (file?.originFileObj) {
@@ -181,33 +219,25 @@ const Page8 = () => {
               }
             });
           });
-          response = await axios.post(
-            "https://frontend.goaideme.com/uploadFile",
-            formData,
-            {
-              headers: {
-                Token: `${accessToken}`,
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
+         
+       response = await api.photo_section.upload_file(formData)
         }
-
         const messages: any = {
           200: "Updated Successfully",
           201: "Added Successfully",
         };
 
-        if (messages[response?.data?.status]) {
-          toast.success(messages[response?.data?.status], {
+        if (messages[response?.status]) {
+          toast.success(messages[response?.status], {
             position: "top-center",
             autoClose: 300,
           });
         }
-
         setResponseData(response?.data?.pdfReponseData);
+        if(response) {
+          router.replace(`/admin/user?${getUserdata?.user_id}`);
+        }
 
-        // router.replace(`/admin/user?${getUserdata?.user_id}`);
         if (!pagetype) {
           router.push(`/admin/user?${getUserdata?.user_id}`)
       }else{
@@ -215,7 +245,7 @@ const Page8 = () => {
       }
         return response?.data?.pdfReponseData;
       } catch (error) {
-        console.log(error, "error message");
+       
         if (error) {
           toast.error("Somethingdasfasfasf went wrong Please try again", {
             position: "top-center",
@@ -254,15 +284,9 @@ const Page8 = () => {
       const fetchedGoals = res?.data?.photo_section?.fileUrls || [];
       const commentKey = fetchedGoals[0]?.commentId || "";
 
-      // const hash = Object.keys(fetchedGoals[0] || {}).map((key, index) =>
-
-      // );
-
       const formattedGoals: any = Object.keys(fetchedGoals[0] || {}).map(
         (key, index) => {
-          console.log(
-            `Key: ${key}, Initial Comment: ${fetchedGoals[0][key]?.images}`
-          );
+         
           return {
             id: index,
             goalName: `goal${key}`,
@@ -327,20 +351,10 @@ const Page8 = () => {
     };
 
     try {
-      const res = await axios.post(
-        // "https://app-uilsndszlq-uc.a.run.app/remove-photo-section",
-        "https://frontend.goaideme.com/remove-photo-section",
-        data,
-        {
-          headers: {
-            Token: `${accessToken}`,
-          },
-        }
-        // Handle response as needed
-      );
+      const res = await api.photo_section.remove_photo(data);
 
       if (res) {
-        toast.success(res?.data?.message, {
+        toast.success(res?.message, {
           position: "top-center",
           autoClose: 300,
         });
@@ -498,16 +512,29 @@ const Page8 = () => {
                                 <TextArea size="large" placeholder="Enter..." />
                               </Form.Item>
                               {inputPairs.length > 1 && (
-                                <MinusCircleOutlined
-                                  style={{
-                                    position: "absolute",
-                                    top: "0",
-                                    right: "0",
-                                    fontSize: "24px",
-                                    cursor: "pointer",
-                                  }}
-                                  onClick={() => removeInputPair(pair.id)}
-                                />
+                                <Popconfirm
+                                  title="Delete the task"
+                                  onConfirm={() => 
+                                    removeInputPair(
+                                      pair.id,
+                                      pair.commentLabel
+                                    )
+                                  }
+                                  description="Are you sure to delete this task?"
+                                  okText="Yes"
+                                  cancelText="No"
+                                >
+                                 
+                                  <MinusCircleOutlined
+                                    style={{
+                                      position: "absolute",
+                                      top: "0",
+                                      right: "0",
+                                      fontSize: "24px",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </Popconfirm>
                               )}
                             </div>
                           </>

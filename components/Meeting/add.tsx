@@ -80,10 +80,7 @@ const MeetingAdd = () => {
     const [weatherData1, setWeatherData1] = useState<any>([]);
     const [meetingendDate, setMeetingendDate] = useState<any>(null);
     const [meetingestartDate, setMeetingstartDate] = useState<any>(null);
-    console.log(selectedHotel?.formatted_address, "selectedHotel");
-    console.log(meetingestartDate, "meetingestartDate");
-    console.log(weatherData1, "weatherData1");
-    console.log(nearestAirport, "nearestAirport");
+    
 
 
     const handleSearch = async () => {
@@ -99,24 +96,23 @@ const MeetingAdd = () => {
     };
     const onChangeDate = (date: any) => {
         const selectedTimezone1 = 'Australia/Sydney'; // Example timezone
-        console.log(date, "original date");
+       
 
         // Parse the selected date without time
         const localDate = moment(date).format("YYYY-MM-DD");
-        console.log(localDate, "localDate");
+       
 
         // Create a moment object using the selected timezone
         const dateInSelectedTimezone = moment.tz(localDate, selectedTimezone1);
-        console.log(dateInSelectedTimezone.format(), "dateInSelectedTimezone");
+       
 
         // Format the date according to the selected timezone
         const formattedDate = dateInSelectedTimezone.format("YYYY-MM-DD");
-        console.log(formattedDate, "formattedDate");
+       
 
         // Set the date in the state
         setMeetingstartDate(formattedDate);
     };
-    console.log(meetingestartDate, "meetingestartDate");
 
     const onChangeDate1 = (date: any) => {
         const dateWithTimezone: any = date ? moment.tz(date, selectedTimezone) : null;
@@ -160,11 +156,11 @@ const MeetingAdd = () => {
     const handleChange = (value: any) => {
         setMeetingType(value);
     };
-    console.log(selectedHotel, "selectedHotel");
+   
     const [meetingStart, setMeetingStart] = useState<any>("")
     const [meetingEnd, setMeetingEnd] = useState<any>("")
     const onSubmit = async (values: any) => {
-        console.log(values, "hkhskdhfksdfh");
+       
         const hotel = selectedHotel ? `${selectedHotel?.name},${selectedHotel?.formatted_address}` : ""
         let start_date = dayjs(values?.start_date).format("YYYY-MM-DD")
         let end_date = dayjs(values?.end_date).format("YYYY-MM-DD")
@@ -266,7 +262,7 @@ const MeetingAdd = () => {
     const locationSearchRef = useRef(null);
     const hotelSearchRef = useRef(null);
     const airportRef = useRef(null);
-    console.log(hotelSearchRef, "hotelSearchRef");
+   
 
     useEffect(() => {
         const loadGoogleMapScript = () => {
@@ -493,7 +489,7 @@ const MeetingAdd = () => {
                     return { day: formattedDay, icon, temp: averageTemp.toFixed(1) };
                 });
                 formattedWeather.sort((a, b) => new Date(a.day).getTime() - new Date(b.day).getTime());
-                console.log(filteredWeather, "formattedWeatherformattedWeather");
+               
 
                 setNext7DaysWeather(formattedWeather);
             } catch (error) {
@@ -516,9 +512,9 @@ const MeetingAdd = () => {
             if (status === window.google.maps.places.PlacesServiceStatus.OK) {
                 if (results.length > 0) {
                     setNearestAirport(results[0]);
-                    console.log('Nearest airport:', results[0]);
+                  
                 } else {
-                    console.log('No airports found.');
+                    console.error('No airports found.');
                 }
             } else {
                 console.error('Error finding airports:', status);
@@ -527,7 +523,7 @@ const MeetingAdd = () => {
     );
     };
 
-    console.log(nearestAirport, "nearestAirport");
+  
     // useEffect(() => {
     //     initPlaceAirport()
     // }, [shortCounrtyName])
@@ -716,7 +712,7 @@ const MeetingAdd = () => {
                                                 <div className="custom-input" >
                                                     {weatherData1.map((dayData: any, index: any) => (
                                                         <span key={index} style={{ margin: '0 10px' }}>
-                                                            {console.log(dayData, "dayData")
+                                                         
                                                             }
                                                             {dayData}
                                                         </span>

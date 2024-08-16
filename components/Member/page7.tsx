@@ -20,6 +20,8 @@ const Page7 = () => {
     const value = entries.length > 0 ? entries[0][0] : '';
     const type = entries.length > 1 ? entries[1][0] : '';
     const pagetype = entries.length > 2 ? entries[2][0] : '';
+   
+    
     const submit = async (values: any) => {
         let items = {
             spring_meeting: {
@@ -208,7 +210,7 @@ const Page7 = () => {
 
                                         {/* Button  */}
                                         <div className="d-flex mt-3">
-                                            {!pagetype ?
+                                        {!pagetype ?
                                                 <div className="col-2">
 
                                                     <Button size={'large'} type="primary" className=" " htmlType="submit">

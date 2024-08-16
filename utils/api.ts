@@ -2,6 +2,7 @@ import _superagent, { search } from "superagent";
 const SuperagentPromise = require('superagent-promise');
 const superagent = SuperagentPromise(_superagent, global.Promise);
 import { parseCookies } from 'nookies';
+import { info } from "console";
 
 // const API_ROOT = 'https://app-uilsndszlq-uc.a.run.app/';
 const API_ROOT = 'https://frontend.goaideme.com/';
@@ -19,7 +20,7 @@ const cookies = parseCookies();
 const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
 const encode = encodeURIComponent;
 const responseBody = (res: any) => res.body;
-console.log(accessToken,"accessToken");
+
 
 let token: any = accessToken;
 const tokenPlugin = (req: any) => {
@@ -83,7 +84,20 @@ const Admin={
   getById: (info: any) =>
     requests.post(`admin/detail`,info),
 }
+
+const photo_section={
+  remove_photo: (info: any) =>
+    requests.post('remove-photo-section', info),
+  upload_file: (info: any) => 
+    requests.post('upload-file',info),
+  update_file: (info: any) => 
+    requests.post('update-photo-section', info),
+  remove_project: (info: any) => 
+    requests.post('remove-project', info)
+}
 const User = {
+  delete1: (info: any) =>
+    requests.post(`delete-additional-user`, info),
   edit: (info: any) =>
     requests.post('update-user', info),
   add_additional_user: (info: any) =>
@@ -92,6 +106,10 @@ const User = {
     requests.post('update-additional-users', info),
   listing: (q?: string) =>
     requests.get(`list${q ? `?${q}` : ""}`),
+  // additional_user_listing: (q?: string) =>
+  //   requests.get(`addtional-user-list${q ? `?${q}` : ""}`),
+  additional_user_listing: (info: any) =>
+    requests.post(`addtional-user-list`,info),
   arcivelisting: (q?: string) =>
     requests.get(`archive-user-listing${q ? `?${q}` : ""}`),
   completelist: () =>
@@ -114,6 +132,8 @@ const User = {
     requests.post(`single-user-detail`,info),
   getById1: (info: any) =>
     requests.post(`get-additional-users`,info),
+  getAdditionalId: (info: any) =>
+    requests.post(`single-additional-users`,info),
   getQuestion: () =>
     requests.get(`new-questions`),
   getPurchase: (_id: string, q?: string) =>
@@ -335,6 +355,7 @@ const henceforthApi = {
   ImageUpload,
   FILES,
   Meeting,
+  photo_section,
   Admin,
   Questionnair,
   Manage_Question,

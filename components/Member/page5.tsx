@@ -45,7 +45,7 @@ const Page5 = () => {
                 } as any
                 setLoading(true)
                 let res = await api.User.edit(items)
-                console.log(res,"rrrr");
+             
                 
                 toast.success(res?.message)
                 if (!pagetype) {

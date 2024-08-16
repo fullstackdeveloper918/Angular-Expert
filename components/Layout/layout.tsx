@@ -134,7 +134,7 @@ const MainLayout = ({ children }: any) => {
         pauseOnHover
       />
       <Layout className="layout" hasSider>
-        <Sider
+       {!collapsed && <Sider
           trigger={null}
           collapsible
           collapsed={collapsed}
@@ -157,8 +157,8 @@ const MainLayout = ({ children }: any) => {
             zIndex: screens.lg ? 1 : 9,
           }}
         >
-          <MenuBar />
-        </Sider>
+           <MenuBar collapsed={collapsed} setCollapsed={setCollapsed}/>
+        </Sider>}
         <Layout
           className="site-layout"
           style={{

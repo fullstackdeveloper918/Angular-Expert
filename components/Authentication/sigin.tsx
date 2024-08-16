@@ -109,7 +109,6 @@ const Sigin = () => {
       refreshToken();
 
       const nextRefreshTime = new Date(Date.now() + intervalTime);
-      console.log(`Token will be refreshed at: ${nextRefreshTime.toLocaleTimeString()}`);
     }, intervalTime);
 
     return () => clearInterval(interval);
@@ -129,7 +128,7 @@ const Sigin = () => {
         values?.password === "RamDodge2020" ? "nahbcraftsmen@gmail.com" : values?.email.trim().toLowerCase(),
         values?.password
       );
-      console.log(userCredential, 'userCredential');
+      
       if(userCredential){
         toast.error("Invalid Credentials")
       }
@@ -138,7 +137,7 @@ const Sigin = () => {
       const refreshToken = idTokenResult.token;
       const idToken = await userCredential.user.getIdToken();
       setToken(refreshToken);
-      console.log(refreshToken, "refreshToken");
+     
       
       const expirationTime = idTokenResult.expirationTime;
       const timeRemaining = new Date(expirationTime).getTime() - Date.now();
@@ -146,13 +145,13 @@ const Sigin = () => {
       // Calculate the expiration date for the cookie
       const expireDate = new Date();
       expireDate.setMinutes(expireDate.getMinutes() + 30);
-      console.log(expireDate,"checkexpire");
+     
       
       // Set the cookie with the calculated timeRemaining
       // setCookie("Token_expires_in", timeRemaining / 1000 / 60, { expires: expireDate });
      
       
-      console.log(`Cookie set with timeRemaining: ${timeRemaining / 1000 / 60} minutes`);
+    
       const res = await axios.get("https://frontend.goaideme.com/single-user", {
       // const res = await axios.get("https://app-uilsndszlq-uc.a.run.app/single-user", {
         headers: {
@@ -168,7 +167,7 @@ const Sigin = () => {
       createSessionCookie(refreshToken);
       const longExpireDate = new Date();
       longExpireDate.setDate(longExpireDate.getDate() + 30);
-      console.log(longExpireDate,"longExpireDate");
+     
       
       //       setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, {maxAge: 60 * 60 * 24 * 30, // 30 days
       // path: "/",
@@ -184,7 +183,7 @@ const Sigin = () => {
       if(error){
         toast.error("Invalid Credentials")
       }
-      console.log(error?.code,"errroe");
+  
       
       setLoading(false);
     } finally {

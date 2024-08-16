@@ -331,7 +331,7 @@ const ArchiveMemberList = () => {
         try {
             let query = searchTerm ? `searchTerm=${searchTerm}` : '';
             let res = await api.User.arcivelisting(query);
-            console.log(res,"qwqwq");
+          
             
             setState1(res?.data);
             if (res?.data?.status == 400||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {

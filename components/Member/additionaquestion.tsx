@@ -21,9 +21,10 @@ const AdditionalQuestion = () => {
     const value = entries.length > 0 ? entries[0][0] : '';
     const type = entries.length > 1 ? entries[1][0] : '';
     const questionnaire = entries.length > 2 ? entries[2][0] : '';
-
+    const pagetype = entries.length > 2 ? entries[2][0] : '';
+  
     const submit = async (values: any) => {
-        console.log(questionnaire, "checkquestionnair");
+       
 
         let items = {
             additional_question: {
@@ -37,7 +38,7 @@ const AdditionalQuestion = () => {
 
         }
         try {
-            if (state.questions.length) {
+            if (type == "edit") {
                 let items = {
                     additional_question: {
                         userId: value,
@@ -51,8 +52,11 @@ const AdditionalQuestion = () => {
                 setLoading(true)
 
                 let res = await api.User.edit(items)
-                router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
-
+                if (!pagetype) {
+                    router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
+                }else{
+                    router?.back()
+                }
             } else {
 
                 setLoading(true)
@@ -61,10 +65,16 @@ const AdditionalQuestion = () => {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
             }
-            router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
+            if (!pagetype) {
+                router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
+            }else{
+                router?.back()
+            }
             }
         } catch (error: any) {
-            setLoading(false)
+            if(!pagetype){
+                setLoading(false)
+            }
             if (error?.status == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
@@ -73,13 +83,16 @@ const AdditionalQuestion = () => {
             }
 
         } finally {
+            if(pagetype){
+                setLoading(false)
+            }
         }
     }
     const getQuestion = async () => {
         try {
             const res = await api.User.getQuestion()
             setQuestion(res)
-            console.log(res, "checkRes");
+         
             if (res?.data?.status == 400 || res?.data?.message == "Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
@@ -106,20 +119,20 @@ const AdditionalQuestion = () => {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
             }
-            console.log(res, "rseseesse");
+        
             const questionsAnswers = res?.data || [];
-            console.log(questionsAnswers, "questionsAnswers");
+         
 
             // Prepare an object to set form values
             const formValues = res?.data?.questions.reduce((acc: any, question: any) => {
                 acc[`question_${question.question_id}`] = question.answer;
                 return acc;
-                // console.log(question?.answer, "qqqaqqa");
+               
 
             }, {});
 
             form.setFieldsValue(formValues);
-            console.log(formValues, "formValues");
+         
             // form.setFieldsValue(res?.data)
         } catch (error: any) {
             if (error == 400) {
@@ -176,22 +189,29 @@ const AdditionalQuestion = () => {
 
 
                                         {/* Button  */}
-                                        <div className="d-flex mt-3">
-                                            <div className="col-2">
+                                        {!pagetype ?
+                                                <div className="col-2">
 
-                                                <Button size={'large'} type="primary" className=" " htmlType="submit" >
-                                                    Save
-                                                </Button>
-                                            </div>
+                                                    <Button size={'large'} type="primary" className=" " htmlType="submit">
+                                                        Save
+                                                    </Button>
+                                                </div> : ""}
+                                                {!pagetype?
                                             <div className=" col-8 d-flex gap-5 justify-content-center">
-                                                <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
-                                                    Previous
-                                                </Button>
-                                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
-                                                    Next
+                                                {!pagetype ?
+                                                    <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
+                                                        Previous
+                                                    </Button> : ""}
+                                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                                    {!pagetype ? "Next" : "Save"}
                                                 </Button>
                                             </div>
-                                        </div>
+                                            :
+                                            <div className=" col-12 d-flex gap-5 justify-content-center">
+                                            <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                            Save
+                                            </Button>
+                                        </div>}
                                     </Form>
                                 </div>
                             </Card>

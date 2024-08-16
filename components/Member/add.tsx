@@ -80,7 +80,7 @@ const Add = () => {
       } else {
         let res = await api.Auth.signUp(items)
         toast.success(res?.message)
-        // console.log('hello kane')
+     
         // if(res)  {
         //   router.push('/admin/member')
         // }

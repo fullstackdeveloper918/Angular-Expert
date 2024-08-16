@@ -22,10 +22,10 @@ const Page4 = () => {
     const type = entries.length > 1 ? entries[1][0] : '';
     const questionnaire = entries.length > 2 ? entries[2][0] : '';
     const pagetype = entries.length > 2 ? entries[2][0] : '';
-    console.log(questionnaire, "hhhh");
+   
 
     const submit = async (values: any) => {
-        console.log(questionnaire, "checkquestionnair");
+      
 
         let items = {
             craftsmen_toolbox: {

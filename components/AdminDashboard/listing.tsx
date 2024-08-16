@@ -28,7 +28,7 @@ type Page<P = {}> = NextPage<P> & {
 
 const AdminDashboard: Page = (props: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData)
-  console.log(getUserdata,"jgjg");
+  
   
   const [loading, setLoading] = useState<any>(true)
   const [state1, setState1] = useState<any>([])
@@ -252,18 +252,18 @@ const AdminDashboard: Page = (props: any) => {
   };
   const completed = state1?.filter((res: any) => res?.is_completed === true);
   const filteredData = state1?.reduce((acc: any[], res: any) => {
-    console.log(res,"resesesesese");
+    
     
     if (!res?.is_additional_user) {
       acc.push(res);
     }
-    console.log(acc,"accaccaccaccacc");
+    
     return acc;
   }, []);
-  console.log(filteredData,"filteredData");
+  
 
   const non_completed = filteredData?.filter((res: any) => res?.is_completed === false);
-  console.log(non_completed,"non_completed");
+  
   
   const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
     const companyName = companyNameMap[res?.company_name || ""] || "N/A";
@@ -552,7 +552,7 @@ const AdminDashboard: Page = (props: any) => {
     try {
       let res = await api.User.listing()
       let response = await api.User.completelist()
-      console.log(response,"response1");
+      
       setState1(res?.data)
       setState2(response)
       setLoading(false)

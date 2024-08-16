@@ -144,7 +144,7 @@ const Page1 = () => {
           }
         form.setFieldsValue(res?.data)
       } catch (error: any) {
-        // console.log(error,"error");
+       
         
         // const handleError = (error:any) =>{
         //     if(error == 400){
@@ -153,7 +153,7 @@ const Page1 = () => {
         //               if (user) {
         //                 try {
         //                   const idToken = await user.getIdToken();
-        //                   console.log("ID Token:", idToken);
+      
         //                   // setToken(idToken);
         //                   henceforthApi.setToken(idToken)
         //                   setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days

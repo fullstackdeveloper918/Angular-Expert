@@ -35,7 +35,7 @@ export default function RootLayout({
   //         try {
   //           const idToken = await user.getIdToken();
   //           henceforthApi.setToken(idToken)
-  //           console.log("ID Token:", idToken);
+  //           
   //           // setToken(idToken);
   //           setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days
   //         } catch (error) {

@@ -30,7 +30,7 @@ const { Search } = Input;
 const { Title } = Typography;
 const QuestionnairList = () => {
     const getUserdata = useSelector((state: any) => state?.user?.userData)
-    console.log(getUserdata,"getUserdata");
+   
     
     const cookies = parseCookies();
     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
@@ -330,9 +330,9 @@ const QuestionnairList = () => {
         }
     };
     const xyz =getUserdata?.is_additional_user==true?getUserdata?.parent_user_id:getUserdata?.user_id
-    console.log(xyz,"xyz");
+
     const userData= getUserdata?.is_additional_user==true
-    console.log(userData,"userData");
+   
     
     return (
         <MainLayout>

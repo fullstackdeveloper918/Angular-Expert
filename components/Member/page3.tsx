@@ -102,7 +102,7 @@ const Page3 = () => {
         setInputPairs(inputPairs.map(pair => pair.id === id ? { ...pair, status: value } : pair));
     };
     const submit = async (values: any) => {
-        console.log(questionnair, "questionnair");
+        
 
         const goalsData = inputPairs.map(pair => ({
             goal: values[pair.goalName],
@@ -233,7 +233,7 @@ const Page3 = () => {
                 status1: goal.status,
                 initialGoal1: goal.goal
             }));
-            console.log(formattedGoalsNext, "formattedGoalsNext");
+           
 
             setInputFields(formattedGoalsNext);
 
@@ -241,13 +241,13 @@ const Page3 = () => {
 
                 ...fetchedGoalsNext.reduce((acc: any, goal: any, index: any) => {
                     acc[`goal_next${index + 1}`] = goal.goal;
-                    console.log(acc, "acc");
+                  
                     return acc;
                 }, {})
             });
 
         } catch (error: any) {
-            console.log(error, "llll");
+           
 
             if (error.status == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
@@ -353,8 +353,7 @@ const Page3 = () => {
                                         <div className="">
                                             {inputFields.map((field: any, index: number) => (
                                                 <>
-                                                    {console.log(field, "fieldfield")
-                                                    }
+                                                   
                                                     <div style={{ position: 'relative' }}>
                                                     <Form.Item
                                                             // key={field.name}

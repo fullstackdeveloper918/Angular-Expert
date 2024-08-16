@@ -15,6 +15,7 @@ body {
     margin: 12px 24px;
 }
 
+
 .ant-layout-content {
     min-height: unset !important;
 }
@@ -118,4 +119,16 @@ footer {
   .custom-input::placeholder{
     color: #bfbfbf;
     font-weight: 300;
+  }
+
+  @media (max-width:991px){
+    .hans.end-0 {
+        top: -3px !important;
+        right: 10px !important;
+        cursor: pointer;
+    }
+    
+    .menu-wrapper .logo {
+        padding-top: 30px;
+    }
   }

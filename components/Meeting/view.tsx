@@ -90,7 +90,6 @@ const MeetingViewPage = () => {
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
   const id: any = searchParam.id;
-console.log(state?.hotel,"state?.hotel");
 const data={
   hotel:"Asheville, NC 28801"
 }
@@ -124,7 +123,7 @@ const data={
   const API_WEATHER_KEY = 'd0071f1a5d256028b91f0fdd1aedd36c';
   const API_WEATHER_PREFIX = 'https://api.openweathermap.org/data/2.5/forecast';
   const [next7DaysWeather, setNext7DaysWeather] = useState<{ day: string; icon: string; temp: string }[]>([]);
-  console.log(next7DaysWeather,"next7DaysWeather");
+ 
   
   const weatherIcons: { [key: string]: string } = {
     // Add more mappings if needed
@@ -189,12 +188,12 @@ const data={
           const averageTemp = tempSum / count;
           const date = new Date(day);
           const formattedDay = date.toLocaleDateString('en-US', { weekday: 'short' });
-console.log(formattedDay,"formattedDay");
+
 
           return { day: formattedDay, icon, temp: averageTemp.toFixed(1) };
         });
         formattedWeather.sort((a, b) => new Date(a.day).getTime() - new Date(b.day).getTime());
-        console.log(filteredWeather, "formattedWeatherformattedWeather");
+       
 
         setNext7DaysWeather(formattedWeather);
       } catch (error) {

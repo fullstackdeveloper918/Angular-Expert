@@ -79,6 +79,8 @@ function getItem(
 }
 
 const MenuBar = ({ collapsed, setCollapsed }: any) => {
+
+  
   const [openKeys, setOpenKeys] = useState(["sub1"]);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
 
@@ -237,6 +239,17 @@ setActive(x)
               My Document
             </Link>,
             `my_documents`,
+            <AppstoreAddOutlined style={iconSize} />
+          ),
+          getItem(
+            <Link
+              href={`/admin/additional_users`}
+              // href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
+              className="text-decoration-none"
+            >
+              Additional Users
+            </Link>,
+            `additonal_users`,
             <AppstoreAddOutlined style={iconSize} />
           ),
           getItem(
@@ -452,7 +465,7 @@ setActive(x)
         <Link href="/admin/dashboard">
           <img src={`${logo.src}`} alt="logo" className="img-fluid" />
         </Link>
-        <div className="position-absolute end-0" style={{ top: "-10px" }}>
+        <div className="position-absolute end-0 hans" style={{ top: "-10px" }}>
           <Button
             className="d-lg-none p-0"
             shape="circle"

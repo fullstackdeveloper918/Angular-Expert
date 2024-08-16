@@ -224,7 +224,7 @@ const MeetingList = () => {
             const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
             let res = await api.Meeting.listing(query);
             setAreas(res);
-            console.log(res,"checkres");
+         
             
             setLoading(false);
             if (res?.status == 400) {
@@ -236,7 +236,7 @@ const MeetingList = () => {
                 router.replace("/auth/signin")
             }
         } catch (error:any) {
-            console.log(error.status,"errorres");
+            console.error(error.status);
             
             setLoading(false);
             if (error?.status==400) {

@@ -36,7 +36,6 @@ const Forgotpaswrd = () => {
         };
         try {
             let res = await api.Auth.forgotPassword(items)
-            console.log(res,"srdtsd");
             toast.success(res?.message)
             // if(res.status == 200) {
             //     toast.success('OTP sent to your email', {

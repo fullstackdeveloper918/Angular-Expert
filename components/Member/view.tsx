@@ -42,7 +42,7 @@ const MeetingView = () => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
-  console.log(getUserdata,"getUserdata");
+
   
   const companyNameMap:any = {
     "augusta": "Augusta Homes, Inc.",
@@ -144,7 +144,7 @@ const MeetingView = () => {
           }
         }
       );
-      console.log(res,"response");
+      
       
       getDataById()
       toast.success(res?.data?.message)
@@ -213,7 +213,7 @@ const sharePdf = async () => {
 
 
 const companyName = companyNameMap[state?.company_name || state?.master_user_detail?.company_name] || "N/A";
-console.log(state,"state");
+
 
   return (
     <MainLayout>
