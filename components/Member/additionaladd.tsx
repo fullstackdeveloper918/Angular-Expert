@@ -103,11 +103,16 @@ const Additionaladd = () => {
             if(type){
 
                 let res = await api.User.edit_additional_user(item)
-                toast.success(res?.message)
+                toast.success(res?.data?.message)
+                if(res) {
+                    router.back()
+                }
             }else{
                 let res = await api.User.add_additional_user(item)
-                toast.success(res?.message)
-
+                toast.success(res?.data?.message)
+                if(res) {
+                    router.back()
+                }
             }
 
         } catch (error: any) {

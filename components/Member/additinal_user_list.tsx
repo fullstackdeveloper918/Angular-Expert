@@ -108,11 +108,13 @@ const AdditionalList = () => {
         }
         try {
             let res = await api.User.delete1(item as any)
-            toast.success(res?.message)
+            // if(res) {
+            //     toast.success(res?.message)
+            // }
             getData()
-            //   setAreas
+         
         } catch (error) {
-
+           
         }
     }
     const dataSource = state1?.map((res: any, index: number) => {
@@ -188,16 +190,18 @@ const AdditionalList = () => {
             parent_user_id:getUserdata?.user_id
         } as any
         try {
-            let query:any = searchTerm ? `searchTerm=${searchTerm}` : '';
+          
             let res = await api.User.additional_user_listing(item);
-        
+            
             setState1(res?.data || []);
-            if (res?.data?.status == 400||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
+            if (res?.data?.status == 400 || res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
             }
+
+            console.log('app crashed')
             
         } catch (error:any) {
             setLoading1(false)
@@ -215,7 +219,7 @@ const AdditionalList = () => {
     };
 
     useEffect(() => {
-        // const query = searchTerm ? `searchTerm=${searchTerm}` : '';
+     
         getData();
     }, [searchTerm]);
 
