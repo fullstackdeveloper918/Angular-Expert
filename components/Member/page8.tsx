@@ -118,10 +118,8 @@ const Page8 = () => {
       );
 
       if (response.status === 200) {
-       
         const formattedGoals: any = Object.keys(response?.data?.fileUrls).map(
           (key, index) => {
-           
             return {
               id: index,
               goalName: `goal${key}`,
@@ -135,7 +133,7 @@ const Page8 = () => {
             };
           }
         );
-        setInputPairs(formattedGoals)
+        setInputPairs(formattedGoals);
         setScreenLoader(false);
         toast.success("Project successfully deleted", {
           position: "top-center",
@@ -158,7 +156,7 @@ const Page8 = () => {
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : "";
   const type = entries.length > 1 ? entries[1][0] : "";
-  const pagetype = entries.length > 2 ? entries[2][0] : '';
+  const pagetype = entries.length > 2 ? entries[2][0] : "";
   async function convertUrlToBlob(url: any) {
     const response = await fetch(url);
     const blob = await response.blob();
@@ -197,18 +195,12 @@ const Page8 = () => {
             );
           });
 
-          formData.forEach((value: any, key: any) => {
-           
-          });
+          formData.forEach((value: any, key: any) => {});
 
-       response = await api.photo_section.update_file(formData)
-
-
-         
+          response = await api.photo_section.update_file(formData);
         } else {
           formData.append("id", value);
           photoComment.forEach((item: any, index) => {
-           
             formData.append(`comment_${index}`, item?.comment);
             item?.files?.fileList.forEach((file: any, fileIndex: number) => {
               if (file?.originFileObj) {
@@ -219,8 +211,8 @@ const Page8 = () => {
               }
             });
           });
-         
-       response = await api.photo_section.upload_file(formData)
+
+          response = await api.photo_section.upload_file(formData);
         }
         const messages: any = {
           200: "Updated Successfully",
@@ -234,18 +226,17 @@ const Page8 = () => {
           });
         }
         setResponseData(response?.data?.pdfReponseData);
-        if(response) {
+        if (response) {
           router.replace(`/admin/user?${getUserdata?.user_id}`);
         }
 
-        if (!pagetype) {
-          router.push(`/admin/user?${getUserdata?.user_id}`)
-      }else{
-          router?.back()
-      }
+        // console.log(pagetype, "pagetype");
+        // if (!pagetype) {
+        //   router.push(`/admin/user?${getUserdata?.user_id}`);
+        // }
+
         return response?.data?.pdfReponseData;
       } catch (error) {
-       
         if (error) {
           toast.error("Somethingdasfasfasf went wrong Please try again", {
             position: "top-center",
@@ -261,9 +252,9 @@ const Page8 = () => {
         router.replace("/auth/signin");
       }
     } finally {
-      if(pagetype){
-        setLoading(false)
-    }
+      if (pagetype) {
+        setLoading(false);
+      }
     }
   };
 
@@ -286,7 +277,6 @@ const Page8 = () => {
 
       const formattedGoals: any = Object.keys(fetchedGoals[0] || {}).map(
         (key, index) => {
-         
           return {
             id: index,
             goalName: `goal${key}`,
@@ -392,13 +382,10 @@ const Page8 = () => {
     const res = await fetch(
       "https://frontend.goaideme.com/send-completeform-mail-to-superadmin",
       {
-        // const res = await fetch('https://app-uilsndszlq-uc.a.run.app/send-completeform-mail-to-superadmin', {
-
         method: "POST",
         body: formData,
         headers: {
           Token: `${accessToken}`,
-          // 'Content-Type': 'application/json',
         },
       }
     );
@@ -514,17 +501,13 @@ const Page8 = () => {
                               {inputPairs.length > 1 && (
                                 <Popconfirm
                                   title="Delete the task"
-                                  onConfirm={() => 
-                                    removeInputPair(
-                                      pair.id,
-                                      pair.commentLabel
-                                    )
+                                  onConfirm={() =>
+                                    removeInputPair(pair.id, pair.commentLabel)
                                   }
                                   description="Are you sure to delete this task?"
                                   okText="Yes"
                                   cancelText="No"
                                 >
-                                 
                                   <MinusCircleOutlined
                                     style={{
                                       position: "absolute",
@@ -549,39 +532,58 @@ const Page8 = () => {
                       </DynamicButton>
                     </div>
                     <div className="d-flex mt-5">
-                                            {!pagetype ?
-                                                <div className="col-2">
-
-                                                    <Button size={'large'} type="primary" className=" " htmlType="submit">
-                                                        Save
-                                                    </Button>
-                                                </div> : ""}
-                                                {!pagetype?
-                                            <div className=" col-8 d-flex gap-5 justify-content-center">
-                                                {!pagetype ?
-                                                    <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
-                                                        Previous
-                                                    </Button> : ""}
-                                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                                    {!pagetype ? "Next" : "Save"}
-                                                </Button>
-                                            </div>
-                                            :
-                                            <div className=" col-12 d-flex gap-5 justify-content-center">
-                                            <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                            Save
-                                            </Button>
-                                        </div>}
-                                            
-                                        </div>
-                    {/* <div className="d-flex gap-3 justify-content-center">
-                                <DynamicButton size={'large'} type="primary" className="login-form-button mt-4" onClick={onPrevious}>
-                                    Previous
-                                </DynamicButton>
-                                <DynamicButton size="large" type="primary" htmlType="submit" className="login-form-button  mt-4" loading={loading}>
-                                    Submit
-                                </DynamicButton>
-                                </div> */}
+                      {!pagetype ? (
+                        <div className="col-2">
+                          <Button
+                            size={"large"}
+                            type="primary"
+                            className=" "
+                            htmlType="submit"
+                          >
+                            Save
+                          </Button>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                      {!pagetype ? (
+                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                          {!pagetype ? (
+                            <Button
+                              size={"large"}
+                              type="primary"
+                              className=" "
+                              onClick={onPrevious}
+                            >
+                              Previous
+                            </Button>
+                          ) : (
+                            ""
+                          )}
+                          <Button
+                            size={"large"}
+                            type="primary"
+                            htmlType="submit"
+                            className="login-form-button "
+                            loading={loading}
+                          >
+                            {!pagetype ? "Next" : "Save"}
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className=" col-12 d-flex gap-5 justify-content-center">
+                          <Button
+                            size={"large"}
+                            type="primary"
+                            htmlType="submit"
+                            className="login-form-button"
+                            loading={loading}
+                          >
+                            Submit
+                          </Button>
+                        </div>
+                      )}
+                    </div>
                   </Form>
                 </div>
               </DynamicCard>

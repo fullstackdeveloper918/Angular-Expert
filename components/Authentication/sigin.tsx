@@ -1,12 +1,17 @@
 "use client";
-import loginImg from "../../assests/images/nbhaColor.8f7cf6ff.png"
+import loginImg from "../../assests/images/nbhaColor.8f7cf6ff.png";
 import logo from "../../assests/images/image.png";
 import React, { useEffect, useState } from "react";
 import { Form, Input } from "antd";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence,
+} from "firebase/auth";
 // import { auth } from "@/utils/firebase";
 import { parseCookies, setCookie } from "nookies";
 import axios from "axios";
@@ -76,6 +81,7 @@ const Sigin = () => {
       return () => unsubscribe();
     }
   }, [router]);
+
   const setCookie = (name: string, value: string, days: number) => {
     const expires = new Date();
     expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
@@ -93,12 +99,15 @@ const Sigin = () => {
   const refreshToken = async () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        user.getIdToken(true).then((idToken) => {
-          setToken(idToken);
-          createSessionCookie(idToken);
-        }).catch((error) => {
-          console.error('Failed to refresh token', error);
-        });
+        user
+          .getIdToken(true)
+          .then((idToken) => {
+            setToken(idToken);
+            createSessionCookie(idToken);
+          })
+          .catch((error) => {
+            console.error("Failed to refresh token", error);
+          });
       }
     });
   };
@@ -114,147 +123,141 @@ const Sigin = () => {
     return () => clearInterval(interval);
   }, []);
 
-
   const handleSuperAdminClick = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword); // Toggle showPassword state
+    setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   const onFinish = async (values: any) => {
     try {
       setLoading(true);
-      // await setPersistence(auth, browserLocalPersistence);
+
       const userCredential = await signInWithEmailAndPassword(
         auth,
-        values?.password === "RamDodge2020" ? "nahbcraftsmen@gmail.com" : values?.email.trim().toLowerCase(),
+        values?.password === "RamDodge2020"
+          ? "nahbcraftsmen@gmail.com"
+          : values?.email.trim().toLowerCase(),
         values?.password
       );
-      
-      if(userCredential){
-        toast.error("Invalid Credentials")
-      }
+
       setState(userCredential);
       const idTokenResult = await userCredential.user.getIdTokenResult(true);
       const refreshToken = idTokenResult.token;
       const idToken = await userCredential.user.getIdToken();
       setToken(refreshToken);
-     
-      
       const expirationTime = idTokenResult.expirationTime;
       const timeRemaining = new Date(expirationTime).getTime() - Date.now();
-      
-      // Calculate the expiration date for the cookie
       const expireDate = new Date();
       expireDate.setMinutes(expireDate.getMinutes() + 30);
-     
-      
-      // Set the cookie with the calculated timeRemaining
-      // setCookie("Token_expires_in", timeRemaining / 1000 / 60, { expires: expireDate });
-     
-      
-    
       const res = await axios.get("https://frontend.goaideme.com/single-user", {
-      // const res = await axios.get("https://app-uilsndszlq-uc.a.run.app/single-user", {
         headers: {
           Token: `${refreshToken}`,
           "Content-Type": "application/json",
         },
       });
       const responseData: any = res?.data?.data;
-      dispatch(getuserData(responseData));
-
       toast.success("Login successfully");
+      dispatch(getuserData(responseData));
+      router?.push("/admin/dashboard");
 
       createSessionCookie(refreshToken);
       const longExpireDate = new Date();
       longExpireDate.setDate(longExpireDate.getDate() + 30);
-     
-      
-      //       setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, {maxAge: 60 * 60 * 24 * 30, // 30 days
-      // path: "/",
-      //        });
-      // setCookie(null, "user_data", responseData, {
-      //   maxAge: 60 * 60 * 24 * 30, // 30 days
-      //   path: "/",
-      // });
-      setCookie("COOKIES_USER_ACCESS_TOKEN", refreshToken, 30); // 30 days
-      setCookie("user_data", JSON.stringify(responseData), 30); // 30 days
-      router?.push("/admin/dashboard");
+      setCookie("COOKIES_USER_ACCESS_TOKEN", refreshToken, 30);
+      setCookie("user_data", JSON.stringify(responseData), 30);
     } catch (error: any) {
-      if(error){
-        toast.error("Invalid Credentials")
+      if (error) {
+        toast.error("Invalid Credentials");
       }
-  
-      
       setLoading(false);
-    } finally {
-      // setLoading(false);
     }
   };
 
-
   return (
-    <section className='auth-pages d-flex align-items-center h-100'>
-
+    <section className="auth-pages d-flex align-items-center h-100">
       <div className="container">
-
         <Row justify="center">
-          <Col className="gutter-row d-none d-md-block" xs={0} sm={6} md={12} lg={10} xl={8}>
-            <div className='image-wrapper '>
+          <Col
+            className="gutter-row d-none d-md-block"
+            xs={0}
+            sm={6}
+            md={12}
+            lg={10}
+            xl={8}
+          >
+            <div className="image-wrapper ">
               <img src={loginImg.src} alt="login" style={{ width: "100%" }} />
-
             </div>
           </Col>
 
           <Col className="gutter-row" xs={22} sm={18} md={12} lg={10} xl={10}>
-            <div className='form-wrapper d-flex justify-content-center align-items-center h-100 bg-white py-5 px-4 px-md-5'>
+            <div className="form-wrapper d-flex justify-content-center align-items-center h-100 bg-white py-5 px-4 px-md-5">
               <div>
                 <div className="logo mb-5">
-                  <img src={`${logo.src}`} alt="logo" className='img-fluid' />
-
+                  <img src={`${logo.src}`} alt="logo" className="img-fluid" />
                 </div>
-                {!showPassword &&
+                {!showPassword && (
                   <div className="logo text-center mb-3">
                     <h3 className="">Super Admin</h3>
-
                   </div>
-                }
-                <Form name="normal_login" className="login-form" initialValues={{ remember: false }} onFinish={onFinish} scrollToFirstError>
-                  {showPassword &&
-                    <Form.Item name="email"  >
-                      <Input size={'large'} prefix={<i className="fa-regular fa-envelope"></i>} placeholder="Email" />
-                    </Form.Item>}
+                )}
+                <Form
+                  name="normal_login"
+                  className="login-form"
+                  initialValues={{ remember: false }}
+                  onFinish={onFinish}
+                  scrollToFirstError
+                >
+                  {showPassword && (
+                    <Form.Item name="email">
+                      <Input
+                        size={"large"}
+                        prefix={<i className="fa-regular fa-envelope"></i>}
+                        placeholder="Email"
+                      />
+                    </Form.Item>
+                  )}
 
-
-                  {!showPassword &&
-                    <label>
-                      Master Password
-                    </label>}
-                  <Form.Item name="password" rules={[{ message: 'Please enter password' }]} >
-                    <Input.Password size={'large'} prefix={<i className="fa-solid fa-lock"></i>} type="password" placeholder="Password" />
+                  {!showPassword && <label>Master Password</label>}
+                  <Form.Item
+                    name="password"
+                    rules={[{ message: "Please enter password" }]}
+                  >
+                    <Input.Password
+                      size={"large"}
+                      prefix={<i className="fa-solid fa-lock"></i>}
+                      type="password"
+                      placeholder="Password"
+                    />
                   </Form.Item>
-                  {showPassword &&
+                  {showPassword && (
                     <div className="text-end">
-                      <Link href={"/auth/forgot-password"} className="forgotPassword">
+                      <Link
+                        href={"/auth/forgot-password"}
+                        className="forgotPassword"
+                      >
                         Forgot your password?
                       </Link>
                     </div>
-                  }
+                  )}
                   {/* Button  */}
-                  <Button size={'large'} type="primary" htmlType="submit" className="login-form-button w-100" loading={loading} >
+                  <Button
+                    size={"large"}
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button w-100"
+                    loading={loading}
+                  >
                     Log In
                   </Button>
                 </Form>
                 <Divider plain className="hrdivider"></Divider>
                 <div className="d-flex justify-content-center align-items-baseline">
-
                   <Button onClick={handleSuperAdminClick} className="signBtn">
-                    {showPassword ?
-                      <span className="mt-2">
-                        Login as Super Admin
-                      </span> :
-                      <span className="mt-2">
-                        Login as Admin
-                      </span>}
+                    {showPassword ? (
+                      <span className="mt-2">Login as Super Admin</span>
+                    ) : (
+                      <span className="mt-2">Login as Admin</span>
+                    )}
                   </Button>
                 </div>
               </div>
