@@ -54,7 +54,6 @@ const Sigin = () => {
   useEffect(() => {
     const cookies = parseCookies();
     const storedToken = cookies.COOKIES_USER_ACCESS_TOKEN;
-
     if (storedToken) {
       setToken(storedToken);
       router.push("/admin/dashboard");

@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { destroyCookie, parseCookies } from "nookies";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
+import useBroadcastLogout from "../../components/useBroadCastLogout";
 
 const { Title } = Typography;
 
@@ -47,6 +48,7 @@ const getBase64 = (file: File): Promise<string> =>
 
 const Page8 = () => {
   const router = useRouter();
+  useBroadcastLogout();
   const [form] = Form.useForm();
   const [inputPairs, setInputPairs] = useState([
     {
@@ -238,7 +240,7 @@ const Page8 = () => {
         return response?.data?.pdfReponseData;
       } catch (error) {
         if (error) {
-          toast.error("Somethingdasfasfasf went wrong Please try again", {
+          toast.error("Something went wrong Please try again", {
             position: "top-center",
             autoClose: 300,
           });
