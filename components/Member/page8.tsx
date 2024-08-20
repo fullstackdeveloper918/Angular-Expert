@@ -1,6 +1,7 @@
 "use client";
 import { Form, Upload, Typography, Divider, Button, Popconfirm } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
+// import ReactImageCompressor from "react-image-compressor";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Fragment, useState } from "react";
@@ -187,6 +188,10 @@ const Page8 = () => {
             values[item.goalName]?.fileList?.forEach(
               (file: any, index: number) => {
                 if (file?.originFileObj) {
+                  // const imageCompressor = new ReactImageCompressor(
+                  //   file.originFileObj
+                  // );
+                  // imageCompressor.compress(`new_image_${index}`);
                   formData.append(
                     `${item?.commentLabel}_file${index}`,
                     file.originFileObj
@@ -432,13 +437,13 @@ const Page8 = () => {
                       regarding comments in your update.
                     </Title>
                   </div>
-                  <div className="mt-3 mb-1">
+                  {/* <div className="mt-3 mb-1">
                     <Title level={5} className="m-0 fw-bold">
                       Please paste a dropbox link for each project in the boxes
                       indicated below, and write a brief summary of each project
                       in the comment section
                     </Title>
-                  </div>
+                  </div> */}
                   <Divider plain></Divider>
                   <Form
                     form={form}
