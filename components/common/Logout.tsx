@@ -6,11 +6,9 @@ import { destroyCookie, parseCookies } from "nookies";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import useBroadcastLogout from "../useBroadCastLogout";
 
 const Logout = (props: any) => {
   const router = useRouter();
-  useBroadcastLogout();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const getUserdata = useSelector((state: any) => state?.user?.userData);

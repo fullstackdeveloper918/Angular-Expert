@@ -14,7 +14,6 @@ import { useSelector } from "react-redux";
 import { destroyCookie, parseCookies } from "nookies";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
-import useBroadcastLogout from "../../components/useBroadCastLogout";
 
 const { Title } = Typography;
 
@@ -48,7 +47,7 @@ const getBase64 = (file: File): Promise<string> =>
 
 const Page8 = () => {
   const router = useRouter();
-  useBroadcastLogout();
+
   const [form] = Form.useForm();
   const [inputPairs, setInputPairs] = useState([
     {
