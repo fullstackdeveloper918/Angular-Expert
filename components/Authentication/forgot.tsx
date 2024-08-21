@@ -3,9 +3,9 @@ import logo from "../../assests/images/image.png";
 import React, { useState } from "react";
 import { Form, Input } from "antd";
 import dynamic from "next/dynamic";
-
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import api from "@/utils/api";
 const { Row, Col, Button, Divider } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
@@ -36,6 +36,8 @@ const Forgotpaswrd = () => {
         };
         try {
             let res = await api.Auth.forgotPassword(items)
+            console.log(res,"reeeeee");
+            
             toast.success(res?.message)
             // if(res.status == 200) {
             //     toast.success('OTP sent to your email', {
@@ -47,6 +49,7 @@ const Forgotpaswrd = () => {
 
         } catch (error) {
             setLoading(false)
+            toast.error("Invalid Email")
         }
         finally{
             setLoading(false)
@@ -55,6 +58,17 @@ const Forgotpaswrd = () => {
 
   return (
     <section className='auth-pages d-flex align-items-center h-100'>
+         <ToastContainer
+         position="top-right"
+         autoClose={1000}
+         hideProgressBar={false}
+         newestOnTop={false}
+         closeOnClick
+         rtl={false}
+         pauseOnFocusLoss
+         draggable
+         pauseOnHover
+       />
     <div className="container">
         <Row justify="center">
 

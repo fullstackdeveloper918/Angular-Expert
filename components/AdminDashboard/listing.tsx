@@ -560,16 +560,16 @@ const AdminDashboard: Page = (props: any) => {
       setLoading(false)
     }
   }
-  // useEffect(() => {
-  //   const hasReloaded = localStorage.getItem('hasReloaded');
-  //   if (!hasReloaded) {
-  //     // if (!hasReloaded && state1?.status === '400') {
-  //     localStorage.setItem('hasReloaded', 'true');
-  //     window.location.reload();
-  //   } else {
-  //     userlist();
-  //   }
-  // }, [state1?.status === '400']);
+  useEffect(() => {
+    const hasReloaded = localStorage.getItem('hasReloaded');
+    if (!hasReloaded) {
+      // if (!hasReloaded && state1?.status === '400') {
+      localStorage.setItem('hasReloaded', 'true');
+      window.location.reload();
+    } else {
+      userlist();
+    }
+  }, [state1?.status === '400']);
   const initialise = async () => {
     try {
       if (getUserdata?.is_admin == false) {

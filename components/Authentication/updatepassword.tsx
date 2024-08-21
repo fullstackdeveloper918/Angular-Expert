@@ -7,6 +7,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { parseCookies } from "nookies";
 import api from "@/utils/api";
+import { toast } from "react-toastify";
 
 const { Row, Col, Button, Divider } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
@@ -39,7 +40,9 @@ const Updatepswrd = () => {
         };
         try {
             let res = await api.Auth.updatePassword(items)
-
+            console.log(res,"reeeeeeee");
+            
+toast.success(res?.message)
         } catch (error) {
 
         }
