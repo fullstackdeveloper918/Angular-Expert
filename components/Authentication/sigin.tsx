@@ -189,17 +189,17 @@ const Sigin = () => {
         // Refresh the token
         const newIdToken = await user.getIdToken(true);
   
-        // Calculate new expiration time
-        const newExpirationTime = Date.now() + 20 * 1000; // 20 seconds
+        // Calculate new expiration time (1 hour from now)
+        const newExpirationTime = Date.now() + 60 * 60 * 1000; // 1 hour
   
         // Update cookies with the new token and expiration time
         setToken(newIdToken);
-        setCookie("COOKIES_USER_ACCESS_TOKEN", newIdToken, 20 / (24 * 60 * 60)); // 20 seconds
-        setCookie("expirationTime", newExpirationTime, 20 / (24 * 60 * 60)); // 20 seconds
+        setCookie("COOKIES_USER_ACCESS_TOKEN", newIdToken, 1); // 1 hour
+        setCookie("expirationTime", newExpirationTime, 1); // 1 hour
   
         console.log("Token refreshed:", newIdToken);
   
-        // Schedule the next token refresh
+        // Schedule the next token refresh (40 minutes interval)
         const timeRemaining = newExpirationTime - Date.now();
         scheduleTokenRefresh(timeRemaining, auth, setToken, setCookie);
       }
@@ -210,7 +210,7 @@ const Sigin = () => {
   
   // Function to schedule the token refresh
   const scheduleTokenRefresh = (timeRemaining: number, auth: any, setToken: Function, setCookie: Function) => {
-    const refreshBefore = 10 * 1000; // Refresh 10 seconds before expiration
+    const refreshBefore = 40 * 60 * 1000; // Refresh 40 minutes before expiration
   
     if (timeRemaining > refreshBefore) {
       setTimeout(() => refreshTokenAndSchedule(auth, setToken, setCookie), timeRemaining - refreshBefore);
@@ -237,16 +237,16 @@ const Sigin = () => {
   
       // Get the ID token and set custom expiration time
       const idToken = await userCredential.user.getIdToken(true);
-      const customExpirationTime:any = Date.now() + 20 * 1000; // 20 seconds
+      const customExpirationTime:any = Date.now() + 60 * 60 * 1000; // 1 hour
   
       // Store expiration time and token in cookies
-      setCookie("expirationTime", customExpirationTime, 20 / (24 * 60 * 60)); // 20 seconds
-      setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 20 / (24 * 60 * 60)); // 20 seconds
+      setCookie("expirationTime", customExpirationTime, 1); // 1 hour
+      setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 1); // 1 hour
   
-      console.log("Session will expire in 20 seconds");
+      console.log("Session will expire in 1 hour");
   
       // Schedule token refresh
-      scheduleTokenRefresh(20 * 1000, auth, setToken, setCookie);
+      scheduleTokenRefresh(60 * 60 * 1000, auth, setToken, setCookie); // 1 hour
   
       // Call API with the token
       const res = await axios.get("https://frontend.goaideme.com/single-user", {
@@ -266,7 +266,7 @@ const Sigin = () => {
       toast.error("Invalid Credentials");
       setLoading(false);
     }
-  };
+  }
   
   
   
