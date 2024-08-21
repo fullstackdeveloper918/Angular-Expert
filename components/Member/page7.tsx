@@ -8,6 +8,7 @@ import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { destroyCookie } from "nookies";
+import { StepBackwardOutlined } from "@ant-design/icons";
 
 const Page7 = () => {
     const router = useRouter()
@@ -20,8 +21,8 @@ const Page7 = () => {
     const value = entries.length > 0 ? entries[0][0] : '';
     const type = entries.length > 1 ? entries[1][0] : '';
     const pagetype = entries.length > 2 ? entries[2][0] : '';
-   
-    
+
+
     const submit = async (values: any) => {
         let items = {
             spring_meeting: {
@@ -45,7 +46,7 @@ const Page7 = () => {
                 let res = await api.User.edit(items)
                 if (!pagetype) {
                     router.push(`/admin/member/add/page8?${value}&edit`)
-                }else{
+                } else {
                     router?.back()
                 }
             } else {
@@ -58,17 +59,17 @@ const Page7 = () => {
                 }
                 if (!pagetype) {
                     router.push(`/admin/member/add/page8?${res?.userId}`)
-                }else{
+                } else {
                     router?.back()
                 }
             }
         } catch (error) {
 
-            if(!pagetype){
+            if (!pagetype) {
                 setLoading(false)
             }
         } finally {
-            if(pagetype){
+            if (pagetype) {
                 setLoading(false)
             }
         }
@@ -105,9 +106,9 @@ const Page7 = () => {
                     router.replace("/auth/signin")
                 }
             }
-        } catch (error:any) {
+        } catch (error: any) {
             setLoading(false)
-            if (error?.status==400) {
+            if (error?.status == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")
@@ -133,7 +134,7 @@ const Page7 = () => {
             }
             form.setFieldsValue(res?.data)
         } catch (error: any) {
-            if (error?.status==400) {
+            if (error?.status == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")
@@ -148,6 +149,9 @@ const Page7 = () => {
     }, [type, form]);
     const onPrevious = () => {
         router.replace(`/admin/member/add/page6?${value}&edit`)
+    }
+    const hnandleBack = () => {
+        router.back()
     }
     return (
         <MainLayout>
@@ -170,6 +174,16 @@ const Page7 = () => {
                             </Breadcrumb>
                         </div> */}
                                 {/* Title  */}
+                                {pagetype ?
+                                    <div className="mb-3">
+                                        <Button
+                                            size={"small"}
+                                            className="text-black"
+                                            onClick={hnandleBack}
+                                        >
+                                            <StepBackwardOutlined />
+                                        </Button>
+                                    </div> : ""}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>FALL 2024 MEETING PREPARATION</Typography.Title>
                                     <Button size={'large'} type="primary" className="text-white" disabled>6/8</Button>
@@ -200,8 +214,8 @@ const Page7 = () => {
                                         <Form.Item name="productivity" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]}>
                                             <TextArea size={'large'}
                                             //  placeholder="Productivity should always be No. 3
-// Daily routine for everybody.
-// What CRM systems do you use?"
+                                            // Daily routine for everybody.
+                                            // What CRM systems do you use?"
 
                                             />
                                         </Form.Item>
@@ -210,30 +224,30 @@ const Page7 = () => {
 
                                         {/* Button  */}
                                         <div className="d-flex mt-3">
-                                        {!pagetype ?
+                                            {!pagetype ?
                                                 <div className="col-2">
 
                                                     <Button size={'large'} type="primary" className=" " htmlType="submit">
                                                         Save
                                                     </Button>
                                                 </div> : ""}
-                                                {!pagetype?
-                                            <div className=" col-8 d-flex gap-5 justify-content-center">
-                                                {!pagetype ?
-                                                    <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
-                                                        Previous
-                                                    </Button> : ""}
-                                                <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                                    {!pagetype ? "Next" : "Save"}
-                                                </Button>
-                                            </div>
-                                            :
-                                            <div className=" col-12 d-flex gap-5 justify-content-center">
-                                            <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                            Save
-                                            </Button>
-                                        </div>}
-                                            
+                                            {!pagetype ?
+                                                <div className=" col-8 d-flex gap-5 justify-content-center">
+                                                    {!pagetype ?
+                                                        <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
+                                                            Previous
+                                                        </Button> : ""}
+                                                    <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                                        {!pagetype ? "Next" : "Save"}
+                                                    </Button>
+                                                </div>
+                                                :
+                                                <div className=" col-12 d-flex gap-5 justify-content-center">
+                                                    <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                                        Save
+                                                    </Button>
+                                                </div>}
+
                                         </div>
                                     </Form>
                                 </div>

@@ -17,7 +17,7 @@ import {
 import dynamic from "next/dynamic";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, StepBackwardOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import validation from "@/utils/validation";
 import MainLayout from "../../components/Layout/layout";
@@ -241,6 +241,9 @@ const Page1 = () => {
   const onPrevious=()=>{
       router.replace(`/admin/member/add?${value}&edit`)
     }
+    const hnandleBack= ()=>{
+        router.back()
+      }
   return (
     <MainLayout>
             <Fragment>
@@ -249,7 +252,16 @@ const Page1 = () => {
                     <Row justify="center" gutter={[20, 20]}>
                         <Col sm={22} md={24} lg={16} xl={16} xxl={12}>
                             <Card className='common-card'>
-                              
+                            {pagetype ?
+                                    <div className="mb-3">
+                                        <Button
+                                            size={"small"}
+                                            className="text-black"
+                                            onClick={hnandleBack}
+                                        >
+                                            <StepBackwardOutlined />
+                                        </Button>
+                                    </div> : ""}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>BUSINESS UPDATE</Typography.Title>
                                     <Button size={'large'} type="primary" className="text-white" disabled>1/8</Button>

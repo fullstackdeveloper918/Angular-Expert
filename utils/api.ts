@@ -58,7 +58,7 @@ const Auth = {
   forgotPassword: (info: any) =>
     requests.post('forgot-password', info),
   updatePassword: (info: any) =>
-    requests.put('change-password', info),
+    requests.put('update-password', info),
   profile: () =>
     requests.get(`profile`),
   // edit: (info: any) =>

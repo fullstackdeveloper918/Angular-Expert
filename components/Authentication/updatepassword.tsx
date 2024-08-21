@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { useParams, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { parseCookies } from "nookies";
+import api from "@/utils/api";
 
 const { Row, Col, Button, Divider } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
@@ -37,13 +38,7 @@ const Updatepswrd = () => {
             password: values.new_password
         };
         try {
-            let res = await axios.put("https://frontend.goaideme.com/update-password", items,
-              {
-                headers: {
-                  Token: `${accessToken}`,
-              }
-              }
-            )
+            let res = await api.Auth.updatePassword(items)
 
         } catch (error) {
 

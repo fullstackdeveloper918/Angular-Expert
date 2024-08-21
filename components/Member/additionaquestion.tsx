@@ -7,6 +7,7 @@ import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { destroyCookie } from "nookies";
+import { StepBackwardOutlined } from "@ant-design/icons";
 const AdditionalQuestion = () => {
 
     const router = useRouter()
@@ -152,7 +153,9 @@ const AdditionalQuestion = () => {
     const onPrevious = () => {
         router.replace(`/admin/member/add/page7?${value}&edit`)
     }
-
+    const hnandleBack= ()=>{
+        router.back()
+      }
     return (
         <MainLayout>
             <Fragment>
@@ -161,6 +164,16 @@ const AdditionalQuestion = () => {
                         <Col sm={22} md={20} lg={16} xl={14} xxl={12}>
                             <Card className='common-card'>
                                 {/* Title  */}
+                                {pagetype ?
+                                    <div className="mb-3">
+                                        <Button
+                                            size={"small"}
+                                            className="text-black"
+                                            onClick={hnandleBack}
+                                        >
+                                            <StepBackwardOutlined />
+                                        </Button>
+                                    </div> : ""}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>Additional Questionnaire</Typography.Title>
                                     <Button size={'large'} type="primary" className="text-white" disabled>7/8</Button>

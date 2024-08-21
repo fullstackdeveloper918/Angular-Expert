@@ -20,7 +20,7 @@ import React, { Fragment, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import validation from "@/utils/validation";
 import MainLayout from "../../components/Layout/layout";
-import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { PlusOutlined, MinusCircleOutlined, StepBackwardOutlined } from "@ant-design/icons";
 import EmployeeRoles from "@/utils/EmployeeRoles.json";
 import api from "@/utils/api";
 import TextArea from "antd/es/input/TextArea";
@@ -266,7 +266,9 @@ const Page3 = () => {
     const onPrevious = () => {
         router.replace(`/admin/member/add/page2?${value}&edit`)
     }
-
+    const hnandleBack= ()=>{
+        router.back()
+      }
     return (
         <MainLayout>
             <Fragment>
@@ -275,7 +277,16 @@ const Page3 = () => {
                     <Row justify="center" gutter={[20, 20]}>
                         <Col sm={22} md={24} lg={16} xl={16} xxl={12}>
                             <Card className='common-card'>
-
+                            {pagetype ?
+                                    <div className="mb-3">
+                                        <Button
+                                            size={"small"}
+                                            className="text-black"
+                                            onClick={hnandleBack}
+                                        >
+                                            <StepBackwardOutlined />
+                                        </Button>
+                                    </div> : ""}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>GOALS</Typography.Title>
                                     <Button size={'large'} type="primary" className="text-white" disabled>2/8</Button>

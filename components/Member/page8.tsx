@@ -1,6 +1,6 @@
 "use client";
 import { Form, Upload, Typography, Divider, Button, Popconfirm } from "antd";
-import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { PlusOutlined, MinusCircleOutlined, StepBackwardOutlined } from "@ant-design/icons";
 // import ReactImageCompressor from "react-image-compressor";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -403,6 +403,9 @@ const Page8 = () => {
       await sharePdf(item);
     }
   };
+  const hnandleBack= ()=>{
+    router.back()
+  }
   return (
     <MainLayout>
       <Fragment>
@@ -415,6 +418,16 @@ const Page8 = () => {
             <DynamicCol sm={22} md={20} lg={16} xl={14} xxl={12}>
               <DynamicCard className="common-card">
                 {/* Title  */}
+                {pagetype?
+                <div className="mb-3">
+                <Button
+                    size={"small"}
+                    className="text-black"
+                    onClick={hnandleBack}
+                  >
+                 <StepBackwardOutlined />
+                  </Button>
+                </div>:""}
                 <div className="mb-2 d-flex justify-content-between">
                   <Title level={3} className="m-0 fw-bold">
                     PHOTO SECTION
@@ -546,7 +559,7 @@ const Page8 = () => {
                             className=" "
                             htmlType="submit"
                           >
-                            Submit
+                            Save
                           </Button>
                         </div>
                       ) : (
@@ -585,7 +598,7 @@ const Page8 = () => {
                             className="login-form-button"
                             loading={loading}
                           >
-                            Submit
+                            Save
                           </Button>
                         </div>
                       )}

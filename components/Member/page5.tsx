@@ -8,6 +8,7 @@ import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { destroyCookie } from "nookies";
+import { StepBackwardOutlined } from "@ant-design/icons";
 
 const Page5 = () => {
 
@@ -153,6 +154,9 @@ const Page5 = () => {
     const onPrevious = () => {
         router.replace(`/admin/member/add/page4?${value}&edit`)
     }
+    const hnandleBack= ()=>{
+        router.back()
+      }
     return (
         <MainLayout>
             <Fragment>
@@ -173,6 +177,16 @@ const Page5 = () => {
                             </Breadcrumb>
                         </div> */}
                                 {/* Title  */}
+                                {pagetype ?
+                                    <div className="mb-3">
+                                        <Button
+                                            size={"small"}
+                                            className="text-black"
+                                            onClick={hnandleBack}
+                                        >
+                                            <StepBackwardOutlined />
+                                        </Button>
+                                    </div> : ""}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>CRAFTSMEN CHECK-UP</Typography.Title>
                                     <Button size={'large'} type="primary" className="text-white" disabled>4/8</Button>

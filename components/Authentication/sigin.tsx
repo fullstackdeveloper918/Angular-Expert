@@ -197,14 +197,14 @@ const Sigin = () => {
       // Get the ID token and refresh token
       const idToken = await userCredential.user.getIdToken(true); // Get a fresh ID token
       const idTokenResult = await userCredential.user.getIdTokenResult(true);
-      const expirationTime = idTokenResult.expirationTime;
+      const expirationTime = new Date(idTokenResult.expirationTime).getTime(); // Get expiration time in milliseconds
   
       // Log token details
       console.log(idToken, "idToken");
   
       // Set token in state and cookies
       setToken(idToken);
-      setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30);
+      setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30 ); // Ensure the cookie expiration is set correctly
   
       // Call API with the token
       const res = await axios.get("https://frontend.goaideme.com/single-user", {
@@ -223,9 +223,9 @@ const Sigin = () => {
       dispatch(getuserData(responseData));
       router.push("/admin/dashboard");
   
-      // Schedule token refresh before expiration
-      const timeRemaining = new Date(expirationTime).getTime() - Date.now();
-      scheduleTokenRefresh(timeRemaining - 60000); // 1 minute before expiration
+      // Schedule token refresh 2 minutes before expiration
+      const timeRemaining = expirationTime - Date.now();
+      scheduleTokenRefresh(timeRemaining - 2 * 60 * 1000); // Refresh 2 minutes before expiration
   
     } catch (error: any) {
       toast.error("Invalid Credentials");
@@ -234,28 +234,38 @@ const Sigin = () => {
   };
   
   const scheduleTokenRefresh = (timeRemaining: number) => {
+    if (timeRemaining <= 0) {
+      return; // No need to schedule if the time is already expired
+    }
+  
     setTimeout(async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
+      try {
+        const auth = getAuth();
+        const user = auth.currentUser;
   
-      if (user) {
-        // Force token refresh
-        const idToken = await user.getIdToken(true);
-        
-        console.log("Token refreshed:", idToken);
+        if (user) {
+          // Force token refresh
+          const idToken = await user.getIdToken(true);
   
-        // Update cookies or state with the new token
-        setToken(idToken);
-        setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30);
+          console.log("Token refreshed:", idToken);
   
-        // Reschedule the next token refresh
-        const idTokenResult = await user.getIdTokenResult(true);
-        const expirationTime = idTokenResult.expirationTime;
-        const newTimeRemaining = new Date(expirationTime).getTime() - Date.now();
-        scheduleTokenRefresh(newTimeRemaining - 60000); // Schedule next refresh
+          // Update cookies or state with the new token
+          setToken(idToken);
+          setCookie("COOKIES_USER_ACCESS_TOKEN", idToken,  30 ); // Ensure the cookie expiration is set correctly
+  
+          // Reschedule the next token refresh
+          const idTokenResult = await user.getIdTokenResult(true);
+          const newExpirationTime = new Date(idTokenResult.expirationTime).getTime();
+          const newTimeRemaining = newExpirationTime - Date.now();
+          scheduleTokenRefresh(newTimeRemaining - 2 * 60 * 1000); // Schedule next refresh 2 minutes before expiration
+        }
+      } catch (error) {
+        console.error("Error refreshing token:", error);
       }
     }, timeRemaining);
   };
+  
+  
   
   return (
     <section className="auth-pages d-flex align-items-center h-100">
