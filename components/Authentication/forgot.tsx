@@ -49,7 +49,7 @@ const Forgotpaswrd = () => {
 
         } catch (error) {
             setLoading(false)
-            toast.error("Invalid Email")
+            toast.error("")
         }
         finally{
             setLoading(false)

@@ -13,6 +13,7 @@ import {
   browserLocalPersistence,
   getAuth,
 } from "firebase/auth";
+import {  destroyCookie } from 'nookies';
 // import { auth } from "@/utils/firebase";
 import { parseCookies, setCookie } from "nookies";
 import axios from "axios";
@@ -52,7 +53,9 @@ const Sigin = () => {
   // const handleSuperAdminClick = () => {
   //   setShowPassword((prevShowPassword) => !prevShowPassword); // Toggle showPassword state
   // };
-
+  const removeCookie = (cookieName: string) => {
+    destroyCookie(null, cookieName); // This removes the cookie
+  };
   useEffect(() => {
     const cookies = parseCookies();
     const storedToken = cookies.COOKIES_USER_ACCESS_TOKEN;
@@ -97,32 +100,32 @@ const Sigin = () => {
     }
   };
 
-  const refreshToken = async () => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        user
-          .getIdToken(true)
-          .then((idToken) => {
-            setToken(idToken);
-            createSessionCookie(idToken);
-          })
-          .catch((error) => {
-            console.error("Failed to refresh token", error);
-          });
-      }
-    });
-  };
+  // const refreshToken = async () => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       user
+  //         .getIdToken(true)
+  //         .then((idToken) => {
+  //           setToken(idToken);
+  //           createSessionCookie(idToken);
+  //         })
+  //         .catch((error) => {
+  //           console.error("Failed to refresh token", error);
+  //         });
+  //     }
+  //   });
+  // };
 
-  useEffect(() => {
-    const intervalTime = 55 * 60 * 1000; // 55 minutes
-    const interval = setInterval(() => {
-      refreshToken();
+  // useEffect(() => {
+  //   const intervalTime = 55 * 60 * 1000; // 55 minutes
+  //   const interval = setInterval(() => {
+  //     refreshToken();
 
-      const nextRefreshTime = new Date(Date.now() + intervalTime);
-    }, intervalTime);
+  //     const nextRefreshTime = new Date(Date.now() + intervalTime);
+  //   }, intervalTime);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const handleSuperAdminClick = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -179,9 +182,47 @@ const Sigin = () => {
       setLoading(false);
     }
   };
+  const refreshTokenAndSchedule = async (auth: any, setToken: Function, setCookie: Function) => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        // Refresh the token
+        const newIdToken = await user.getIdToken(true);
+  
+        // Calculate new expiration time
+        const newExpirationTime = Date.now() + 20 * 1000; // Assuming 20 seconds for demonstration
+  
+        // Update cookies with the new token and expiration time
+        setToken(newIdToken);
+        setCookie("COOKIES_USER_ACCESS_TOKEN", newIdToken, 20 / (24 * 60 * 60)); // 20 seconds
+        setCookie("expirationTime", newExpirationTime, 20 / (24 * 60 * 60)); // 20 seconds
+  
+        console.log("Token refreshed:", newIdToken);
+  
+        // Schedule the next token refresh
+        const timeRemaining = newExpirationTime - Date.now();
+        scheduleTokenRefresh(timeRemaining, auth, setToken, setCookie);
+      }
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+    }
+  };
+  
+  // Function to schedule the token refresh
+  const scheduleTokenRefresh = (timeRemaining: number, auth: any, setToken: Function, setCookie: Function) => {
+    const refreshBefore = 10 * 1000; // Refresh 10 seconds before expiration
+  
+    if (timeRemaining > refreshBefore) {
+      setTimeout(() => refreshTokenAndSchedule(auth, setToken, setCookie), timeRemaining - refreshBefore);
+    }
+  };
+  
   const onFinish = async (values: any) => {
     try {
       setLoading(true);
+  
+      // Initialize Firebase Auth
+      const auth = getAuth();
   
       // Sign in with email and password
       const userCredential = await signInWithEmailAndPassword(
@@ -194,38 +235,32 @@ const Sigin = () => {
   
       setState(userCredential);
   
-      // Get the ID token and refresh token
-      const idToken = await userCredential.user.getIdToken(true); // Get a fresh ID token
-      const idTokenResult = await userCredential.user.getIdTokenResult(true);
-      const expirationTime = new Date(idTokenResult.expirationTime).getTime(); // Get expiration time in milliseconds
+      // Get the ID token and set custom expiration time
+      const idToken = await userCredential.user.getIdToken(true);
+      const customExpirationTime:any = Date.now() + 20 * 1000; // 20 seconds
   
-      // Log token details
-      console.log(idToken, "idToken");
+      // Store expiration time and token in cookies
+      setCookie("expirationTime", customExpirationTime, 20 / (24 * 60 * 60)); // 20 seconds
+      setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 20 / (24 * 60 * 60)); // 20 seconds
   
-      // Set token in state and cookies
-      setToken(idToken);
-      setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30 ); // Ensure the cookie expiration is set correctly
+      console.log("Session will expire in 20 seconds");
+  
+      // Schedule token refresh
+      scheduleTokenRefresh(20 * 1000, auth, setToken, setCookie);
   
       // Call API with the token
       const res = await axios.get("https://frontend.goaideme.com/single-user", {
         headers: {
-          Token: idToken,  // Correct token sent here
+          Token: idToken,
           "Content-Type": "application/json",
         },
       });
   
       const responseData: any = res?.data?.data;
   
-      // Show success notification
       toast.success("Login successfully");
-  
-      // Dispatch data and navigate
       dispatch(getuserData(responseData));
       router.push("/admin/dashboard");
-  
-      // Schedule token refresh 2 minutes before expiration
-      const timeRemaining = expirationTime - Date.now();
-      scheduleTokenRefresh(timeRemaining - 2 * 60 * 1000); // Refresh 2 minutes before expiration
   
     } catch (error: any) {
       toast.error("Invalid Credentials");
@@ -233,37 +268,8 @@ const Sigin = () => {
     }
   };
   
-  const scheduleTokenRefresh = (timeRemaining: number) => {
-    if (timeRemaining <= 0) {
-      return; // No need to schedule if the time is already expired
-    }
   
-    setTimeout(async () => {
-      try {
-        const auth = getAuth();
-        const user = auth.currentUser;
   
-        if (user) {
-          // Force token refresh
-          const idToken = await user.getIdToken(true);
-  
-          console.log("Token refreshed:", idToken);
-  
-          // Update cookies or state with the new token
-          setToken(idToken);
-          setCookie("COOKIES_USER_ACCESS_TOKEN", idToken,  30 ); // Ensure the cookie expiration is set correctly
-  
-          // Reschedule the next token refresh
-          const idTokenResult = await user.getIdTokenResult(true);
-          const newExpirationTime = new Date(idTokenResult.expirationTime).getTime();
-          const newTimeRemaining = newExpirationTime - Date.now();
-          scheduleTokenRefresh(newTimeRemaining - 2 * 60 * 1000); // Schedule next refresh 2 minutes before expiration
-        }
-      } catch (error) {
-        console.error("Error refreshing token:", error);
-      }
-    }, timeRemaining);
-  };
   
   
   

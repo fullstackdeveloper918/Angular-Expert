@@ -179,19 +179,20 @@ const Page4 = () => {
                             </Breadcrumb>
                         </div> */}
                                 {/* Title  */}
-                                {pagetype ?
-                                    <div className="mb-3">
-                                        <Button
-                                            size={"small"}
-                                            className="text-black"
-                                            onClick={hnandleBack}
-                                        >
-                                            <StepBackwardOutlined />
-                                        </Button>
-                                    </div> : ""}
+                              
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>CRAFTSMEN TOOLBOX</Typography.Title>
-                                    <Button size={'large'} type="primary" className="text-white" disabled>3/8</Button>
+                                    {/* <Button size={'large'} type="primary" className="text-white" disabled>3/8</Button> */}
+                                    {!pagetype &&
+                                        <Button
+                                            size={"large"}
+                                            type="primary"
+                                            className="text-white"
+                                            disabled
+                                        >
+                                            3/8
+                                        </Button>
+                                    }
                                 </div>
 
                                 {/* form  */}
@@ -243,11 +244,15 @@ const Page4 = () => {
                                                 </Button>
                                             </div>
                                             :
-                                            <div className=" col-12 d-flex gap-5 justify-content-center">
-                                            <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                            Save
-                                            </Button>
-                                        </div>}
+                                            <div className=" col-8 d-flex gap-5 justify-content-center">
+                                                     <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
+                                                            Back
+                                                        </Button>
+                                                  
+                                                    <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                                        Save
+                                                    </Button>
+                                                </div>}
                                             
                                         </div>
                                     </Form>

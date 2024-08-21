@@ -418,7 +418,7 @@ const Page8 = () => {
             <DynamicCol sm={22} md={20} lg={16} xl={14} xxl={12}>
               <DynamicCard className="common-card">
                 {/* Title  */}
-                {pagetype?
+                {/* {pagetype?
                 <div className="mb-3">
                 <Button
                     size={"small"}
@@ -427,11 +427,12 @@ const Page8 = () => {
                   >
                  <StepBackwardOutlined />
                   </Button>
-                </div>:""}
+                </div>:""} */}
                 <div className="mb-2 d-flex justify-content-between">
                   <Title level={3} className="m-0 fw-bold">
                     PHOTO SECTION
                   </Title>
+                  {!pagetype&&
                   <Button
                     size={"large"}
                     type="primary"
@@ -440,6 +441,8 @@ const Page8 = () => {
                   >
                     8/8
                   </Button>
+                  }
+
                 </div>
 
                 {/* form  */}
@@ -590,17 +593,15 @@ const Page8 = () => {
                           </Button>
                         </div>
                       ) : (
-                        <div className=" col-12 d-flex gap-5 justify-content-center">
-                          <Button
-                            size={"large"}
-                            type="primary"
-                            htmlType="submit"
-                            className="login-form-button"
-                            loading={loading}
-                          >
-                            Save
-                          </Button>
-                        </div>
+                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                        <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
+                               Back
+                           </Button>
+                     
+                       <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                           Save
+                       </Button>
+                   </div>
                       )}
                     </div>
                   </Form>

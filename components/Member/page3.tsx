@@ -277,7 +277,7 @@ const Page3 = () => {
                     <Row justify="center" gutter={[20, 20]}>
                         <Col sm={22} md={24} lg={16} xl={16} xxl={12}>
                             <Card className='common-card'>
-                            {pagetype ?
+                            {/* {pagetype ?
                                     <div className="mb-3">
                                         <Button
                                             size={"small"}
@@ -286,10 +286,20 @@ const Page3 = () => {
                                         >
                                             <StepBackwardOutlined />
                                         </Button>
-                                    </div> : ""}
+                                    </div> : ""} */}
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>GOALS</Typography.Title>
-                                    <Button size={'large'} type="primary" className="text-white" disabled>2/8</Button>
+                                    {/* <Button size={'large'} type="primary" className="text-white" disabled>2/8</Button> */}
+                                    {!pagetype &&
+                                        <Button
+                                            size={"large"}
+                                            type="primary"
+                                            className="text-white"
+                                            disabled
+                                        >
+                                            2/8
+                                        </Button>
+                                    }
                                 </div>
 
                                 {/* form  */}
@@ -444,11 +454,15 @@ const Page3 = () => {
                                                 </Button>
                                             </div>
                                             :
-                                            <div className=" col-12 d-flex gap-5 justify-content-center">
-                                            <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                                            Save
-                                            </Button>
-                                        </div>}
+                                            <div className=" col-8 d-flex gap-5 justify-content-center">
+                                                     <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
+                                                            Back
+                                                        </Button>
+                                                  
+                                                    <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                                        Save
+                                                    </Button>
+                                                </div>}
                                             
                                         </div>
                                     </Form>

@@ -225,9 +225,20 @@ setActive(x)
               // href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
               className="text-decoration-none"
             >
-              My Details
+              My Profile
             </Link>,
             `my_details`,
+            <AppstoreAddOutlined style={iconSize} />
+          ),
+          getItem(
+            <Link
+              href={`/admin/member/add/page2?${getUserdata?.user_id}`}
+              // href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
+              className="text-decoration-none"
+            >
+              My Updates
+            </Link>,
+            `my_documents`,
             <AppstoreAddOutlined style={iconSize} />
           ),
           getItem(
@@ -241,6 +252,7 @@ setActive(x)
             `my_documents`,
             <AppstoreAddOutlined style={iconSize} />
           ),
+         
           getItem(
             <Link
               href={`/admin/additional_users`}
