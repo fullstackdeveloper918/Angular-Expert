@@ -91,7 +91,7 @@ const photo_section={
   remove_photo: (info: any) =>
     requests.post('remove-photo-section', info),
   upload_file: (info: any) => 
-    requests.post('upload-file',info),
+    requests.post('uploadFile',info),
   update_file: (info: any) => 
     requests.post('update-photo-section', info),
   remove_project: (info: any) => 
