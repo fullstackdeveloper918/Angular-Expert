@@ -133,11 +133,18 @@ const Page3 = () => {
                 setLoading(true)
                 let res = await api.User.edit(items)
                 // if (!questionnair) {
-                    if (!pagetype) {
-                        router.push(`/admin/member/add/page4?${value}&edit`)
-                    }else{
-                        router?.back()
-                    }
+                    // if (!pagetype) {
+                    //     router.push(`/admin/member/add/page4?${value}&edit`)
+                    // }else{
+                    //     router?.back()
+                    // }
+                    setTimeout(() => {
+                        if (!pagetype) {
+                          router.push(`/admin/member/add/page4?${value}&edit`);
+                        } else {
+                          router.back();
+                        }
+                      }, 1000);
                 // }
             } else {
 

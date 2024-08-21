@@ -39,12 +39,16 @@ const Page6 = () => {
           } as any
           setLoading(true)
           let res = await api.User.edit(items)
-          toast.success("Update spring meeting review")
-          if (!pagetype) {
-            router.push(`/admin/member/add/additional_questionnaire?${value}&edit`)
-        }else{
-            router?.back()
-        }
+          toast.success("Update spring meeting review", {
+            autoClose: 10000, // 10 seconds
+          })
+          setTimeout(() => {
+            if (!pagetype) {
+              router.push(`/admin/member/add/additional_questionnaire?${value}&edit`);
+            } else {
+              router.back();
+            }
+          }, 1000);
           }else{
 
               setLoading(true)

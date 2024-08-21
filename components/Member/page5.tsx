@@ -49,11 +49,18 @@ const Page5 = () => {
              
                 
                 toast.success(res?.message)
-                if (!pagetype) {
-                    router.push(`/admin/member/add/page6?${value}&edit`)
-                }else{
-                    router?.back()
-                }
+                // if (!pagetype) {
+                //     router.push(`/admin/member/add/page6?${value}&edit`)
+                // }else{
+                //     router?.back()
+                // }
+                setTimeout(() => {
+                    if (!pagetype) {
+                      router.push(`/admin/member/add/page6?${value}&edit`);
+                    } else {
+                      router.back();
+                    }
+                  }, 1000);
             } else {
 
                 setLoading(true)

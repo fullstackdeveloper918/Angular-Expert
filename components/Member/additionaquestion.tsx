@@ -53,11 +53,20 @@ const AdditionalQuestion = () => {
                 setLoading(true)
 
                 let res = await api.User.edit(items)
-                if (!pagetype) {
-                    router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
-                }else{
-                    router?.back()
-                }
+                toast.success(res?.message)
+                // if (!pagetype) {
+                //     router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
+                // }else{
+                //     router?.back()
+                // }
+                 // }
+                 setTimeout(() => {
+                    if (!pagetype) {
+                        router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
+                    } else {
+                      router.back();
+                    }
+                  }, 1000);
             } else {
 
                 setLoading(true)

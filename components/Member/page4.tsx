@@ -49,12 +49,20 @@ const Page4 = () => {
                 setLoading(true)
 
                 let res = await api.User.edit(items)
-                if (!pagetype) {
-                    router.push(`/admin/member/add/page5?${value}&edit`)
-                }else{
-                    router?.back()
-                }
-
+                toast.success("Update Craftsmen Toolbox")
+                // toast.success(res?.message)
+                // if (!pagetype) {
+                //     router.push(`/admin/member/add/page5?${value}&edit`)
+                // }else{
+                //     router?.back()
+                // }
+                setTimeout(() => {
+                    if (!pagetype) {
+                      router.push(`/admin/member/add/page5?${value}&edit`);
+                    } else {
+                      router.back();
+                    }
+                  }, 1000);
             } else {
 
                 setLoading(true)

@@ -93,13 +93,29 @@ const Page1 = () => {
                 } as any
                 setLoading(true)
                 let res = await api.User.edit(items)
-                if (!pagetype) {
-                    router.push(`/admin/member/add/page3?${value}&edit`)
-                } else {
-                    router?.back()
-                }
+                // if (!pagetype) {
+                //     router.push(`/admin/member/add/page3?${value}&edit`)
+                // } else {
+                //     router?.back()
+                // }
+                setTimeout(() => {
+                    if (!pagetype) {
+                      router.push(`/admin/member/add/page3?${value}&edit`);
+                    } else {
+                      router.back();
+                    }
+                  }, 1000);
                 toast.success(res?.message)
-
+                // toast.success(message, {
+                //     onClose: () => {
+                //       if (message) {
+                //         console.log("Message received in toast:", message);
+                //         // Now perform your logic, such as showing the link or redirecting
+                //         router.push(`/admin/member/add/page1?${value}&edit`);
+                //       }
+                //     },
+                //     autoClose: 10000, // 10 seconds
+                //   });
             } else {
 
                 setLoading(true)

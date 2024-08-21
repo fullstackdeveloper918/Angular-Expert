@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   },
   innderImg: {
     width: `100%`,
-    maxWidth: "250px",
+    maxWidth: "270px",
     height: "auto",
     minHeight: "350px",
     maxHeight: "350px",
@@ -224,30 +224,36 @@ const MemberUpdatePDF = (props) => {
           <View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
             <Text style={styles.text}>Current financial position:</Text>
-            <Text style={[styles.textarea, styles.heightGiven]}>
+            <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
               {props?.state?.financial_position}
             </Text>
-            <Text style={styles.text}>
+            <Text style={styles.text} wrap={false}>
               Current sales positions, hot prospects, recently contracted work:
             </Text>
-            <Text style={styles.textarea}>{props?.state?.sales_position}</Text>
+            <Text style={styles.textarea} wrap={false}>
+              {props?.state?.sales_position}
+            </Text>
             <Text style={styles.text}>
               Accomplishments in the last 6 months:
             </Text>
-            <Text style={styles.textarea}>{props?.state?.accomplishments}</Text>
+            <Text style={styles.textarea} wrap={false}>
+              {props?.state?.accomplishments}
+            </Text>
             <Text style={styles.text}> HR position &/or needs: </Text>
-            <Text style={styles.textarea}>{props?.state?.hr_position}</Text>
+            <Text style={styles.textarea} wrap={false}>
+              {props?.state?.hr_position}
+            </Text>
             <Text style={styles.text}>
               Current challenges (e.g., problem client, personnel issue(s),
               trade availability, rising costs, supply chain):
             </Text>
-            <Text style={styles.textarea}>
+            <Text style={styles.textarea} wrap={false}>
               {props?.state?.current_challenges}
             </Text>
             <Text style={styles.text}>
               How can the Craftsmen aid or support you with these challenges?
             </Text>
-            <Text style={styles.textarea}>
+            <Text style={styles.textarea} wrap={false}>
               {props?.state?.craftsmen_support}
             </Text>
           </View>
@@ -260,15 +266,21 @@ const MemberUpdatePDF = (props) => {
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Goal #{index + 1}: </Text>
-                    <Text style={styles.textarea}>   {res?.goal}  </Text>
+                    <Text style={styles.textarea} wrap={false}>
+                         {res?.goal}  
+                    </Text>
                   </View>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Status of Goal: </Text>
-                    <Text style={styles.textarea}>   {res?.status}  </Text>
+                    <Text style={styles.textarea} wrap={false}>
+                         {res?.status}  
+                    </Text>
                   </View>
                 </View>
                 <Text style={styles.text}> Comments: </Text>
-                <Text style={styles.textarea}>  {res?.comment}   </Text>
+                <Text style={styles.textarea} wrap={false}>
+                    {res?.comment}   
+                </Text>
               </View>
             ))}
           </View>
@@ -280,85 +292,105 @@ const MemberUpdatePDF = (props) => {
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Goal #{index + 1}: </Text>
-                    <Text style={styles.textarea}>   {res?.goal}  </Text>
+                    <Text style={styles.textarea} wrap={false}>
+                         {res?.goal}  
+                    </Text>
                   </View>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Priority: </Text>
-                    <Text style={styles.textarea}>  {res?.status}   </Text>
+                    <Text style={styles.textarea} wrap={false}>
+                        {res?.status}   
+                    </Text>
                   </View>
                 </View>
               </View>
             ))}
           </View>
 
-          <View style={styles.section} wrap={false}>
+          <View style={styles.section}>
             <Text style={styles.main_heading}>CRAFTSMEN TOOLBOX</Text>
             <View style={styles.goal}>
               <Text style={styles.text}>
                 Describe any new technology you started using and share the name
                 of the app or website:
               </Text>
-              <Text style={styles.textarea}>{props?.state?.technology}</Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.technology}
+              </Text>
 
               <Text style={styles.text}>
                 Describe any new products you have used in the last 6 months &
                 share the name and website:
               </Text>
-              <Text style={styles.textarea}>{props?.state?.products}</Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.products}
+              </Text>
 
               <Text style={styles.text}>
                 Describe something that you do with each project that sets you
                 apart from your competition:
               </Text>
-              <Text style={styles.textarea}>   {props?.state?.project}   </Text>
+              <Text style={styles.textarea} wrap={false}>
+                   {props?.state?.project}   
+              </Text>
             </View>
           </View>
 
-          <View style={styles.section} wrap={false}>
+          <View style={styles.section}>
             <Text style={styles.main_heading}>CRAFTSMEN CHECK-UP</Text>
             <View style={styles.goal}>
               <Text style={styles.text}>
                 What is your level of commitment to our club?
               </Text>
-              <Text style={styles.textarea}>{props?.state?.commitment}</Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.commitment}
+              </Text>
 
               <Text style={styles.text}>
                 List Something(s) you can do to contribute to our club.
               </Text>
-              <Text style={styles.textarea}>{props?.state?.contribute}</Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.contribute}
+              </Text>
 
               <Text style={styles.text}>
                 How is your present health, wellbeing, family life?
               </Text>
-              <Text style={styles.textarea}>{props?.state?.wellbeing}</Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.wellbeing}
+              </Text>
 
               <Text style={styles.text}>
                 Have any items on your contact info changed?
               </Text>
-              <Text style={styles.textarea}>{props?.state?.contact_info}</Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.contact_info}
+              </Text>
             </View>
           </View>
 
-          <View style={styles.section} wrap={false}>
+          <View style={styles.section}>
             <Text style={styles.main_heading}>FALL 2023 MEETING REVIEW</Text>
             <View style={styles.goal}>
               <Text style={styles.text}>
                 What was your most valuable take away from our fall meeting?
               </Text>
-              <Text style={styles.textarea}>{props?.state?.fall_meeting}</Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.fall_meeting}
+              </Text>
 
               <Text style={styles.text}>
                 Have you implemented any of Jim Weber’s estate/financial
                 planning reccomendations into your business and/or personal
                 finances?
               </Text>
-              <Text style={styles.textarea}>
+              <Text style={styles.textarea} wrap={false}>
                 {props?.state?.personal_finances}
               </Text>
             </View>
           </View>
 
-          <View style={styles.section} wrap={false}>
+          <View style={styles.section}>
             <Text style={styles.main_heading}>
               SPRING 2024 MEETING PREPARATION
             </Text>
@@ -367,12 +399,16 @@ const MemberUpdatePDF = (props) => {
               MEETING (IN ORDER OF IMPORTANCE)
             </Text>
             <View style={styles.goal}>
-              <Text style={styles.textarea}>{props?.state?.estimating}</Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.estimating}
+              </Text>
 
-              <Text style={styles.textarea}>
+              <Text style={styles.textarea} wrap={false}>
                 {props?.state?.accountability}
               </Text>
-              <Text style={styles.textarea}>{props?.state?.productivity}</Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.productivity}
+              </Text>
             </View>
           </View>
 
@@ -383,7 +419,9 @@ const MemberUpdatePDF = (props) => {
                 <View style={styles.div_wrapper}>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> {res?.question} </Text>
-                    <Text style={styles.textarea}>   {res?.answer}  </Text>
+                    <Text style={styles.textarea} wrap={false}>
+                         {res?.answer}  
+                    </Text>
                   </View>
                 </View>
               </View>
