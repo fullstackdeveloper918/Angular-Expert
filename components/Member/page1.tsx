@@ -98,7 +98,7 @@ const Page1 = () => {
                 } else {
                     router?.back()
                 }
-                toast.success("shfksdjfgasjgdfsagdf")
+                toast.success(res?.message)
 
             } else {
 
