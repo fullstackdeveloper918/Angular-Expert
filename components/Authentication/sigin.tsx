@@ -11,13 +11,15 @@ import {
   onAuthStateChanged,
   setPersistence,
   browserLocalPersistence,
+  getAuth,
 } from "firebase/auth";
 // import { auth } from "@/utils/firebase";
 import { parseCookies, setCookie } from "nookies";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 // import { getuserData } from "@/lib/features/userSlice";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import { auth } from "../../utils/firebase";
 import { getuserData } from "../../lib/features/userSlice";
 // import firebase from "firebase/app";
@@ -129,7 +131,8 @@ const Sigin = () => {
   const onFinish = async (values: any) => {
     try {
       setLoading(true);
-
+  
+      // Sign in with email and password
       const userCredential = await signInWithEmailAndPassword(
         auth,
         values?.password === "RamDodge2020"
@@ -137,16 +140,21 @@ const Sigin = () => {
           : values?.email.trim().toLowerCase(),
         values?.password
       );
-
+  
       setState(userCredential);
+      
+      // Get the ID token and refresh token
       const idTokenResult = await userCredential.user.getIdTokenResult(true);
-      const refreshToken = idTokenResult.token;
       const idToken = await userCredential.user.getIdToken();
+      const refreshToken = userCredential.user.refreshToken;
+      
       setToken(refreshToken);
+      
+      // Fetch the expiration time
       const expirationTime = idTokenResult.expirationTime;
       const timeRemaining = new Date(expirationTime).getTime() - Date.now();
-      const expireDate = new Date();
-      expireDate.setMinutes(expireDate.getMinutes() + 30);
+      
+      // Make API call
       const res = await axios.get("https://frontend.goaideme.com/single-user", {
         headers: {
           Token: `${refreshToken}`,
@@ -154,25 +162,73 @@ const Sigin = () => {
         },
       });
       const responseData: any = res?.data?.data;
+  
       toast.success("Login successfully");
       dispatch(getuserData(responseData));
-      router?.push("/admin/dashboard");
-
+      router.push("/admin/dashboard");
+  
+      // Set session cookie and data cookies
       createSessionCookie(refreshToken);
-      const longExpireDate = new Date();
-      longExpireDate.setDate(longExpireDate.getDate() + 30);
       setCookie("COOKIES_USER_ACCESS_TOKEN", refreshToken, 30);
       setCookie("user_data", JSON.stringify(responseData), 30);
+  
+      // Refresh token before it expires
+      scheduleTokenRefresh(timeRemaining - 60000); // 1 minute before expiration
     } catch (error: any) {
-      if (error) {
-        toast.error("Invalid Credentials");
-      }
+      toast.error("Invalid Credentials");
       setLoading(false);
     }
   };
-
+  
+  const scheduleTokenRefresh = (timeRemaining: number) => {
+    setTimeout(async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        const idToken = await user.getIdToken(true); // Force token refresh
+        console.log("Token refreshed:", idToken);
+        
+        // Optionally, update cookies or state with the new token
+        setToken(idToken);
+        setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30);
+  
+        // Reschedule token refresh
+        const idTokenResult = await user.getIdTokenResult();
+        const expirationTime = idTokenResult.expirationTime;
+        const newTimeRemaining = new Date(expirationTime).getTime() - Date.now();
+        scheduleTokenRefresh(newTimeRemaining - 60000); // Schedule next refresh
+      }
+    }, timeRemaining);
+  };
+  const handleLogin = async (values:any) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        values?.password === "RamDodge2020"
+          ? "nahbcraftsmen@gmail.com"
+          : values?.email.trim().toLowerCase(),
+        values?.password
+      );
+      // Successful login logic here
+      toast.success("Login successful!");
+    } catch (error:any) {
+      // Handle error and show toast
+      toast.error(`Error: ${error.message || "Invalid credentials"}`);
+    }
+  };
   return (
     <section className="auth-pages d-flex align-items-center h-100">
+        <ToastContainer
+         position="top-right"
+         autoClose={1000}
+         hideProgressBar={false}
+         newestOnTop={false}
+         closeOnClick
+         rtl={false}
+         pauseOnFocusLoss
+         draggable
+         pauseOnHover
+       />
       <div className="container">
         <Row justify="center">
           <Col
