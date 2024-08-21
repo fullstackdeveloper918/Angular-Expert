@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   textarea: {
-    // padding: 8,
-    // border: "1px solid #000",
+    padding: 8,
+    border: "1px solid #000",
     marginBottom: 10,
     width: "100%",
     display: "inline-block",
