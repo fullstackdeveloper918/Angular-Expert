@@ -7,8 +7,8 @@ import { useParams, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { parseCookies } from "nookies";
 import api from "@/utils/api";
-import { toast } from "react-toastify";
-
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 const { Row, Col, Button, Divider } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
     ssr: false,
@@ -49,6 +49,17 @@ toast.success(res?.message)
     }
   return (
     <section className='auth-pages d-flex align-items-center h-100'>
+       <ToastContainer
+         position="top-right"
+         autoClose={1000}
+         hideProgressBar={false}
+         newestOnTop={false}
+         closeOnClick
+         rtl={false}
+         pauseOnFocusLoss
+         draggable
+         pauseOnHover
+       />
     <div className="container">
         <Row justify="center">
 

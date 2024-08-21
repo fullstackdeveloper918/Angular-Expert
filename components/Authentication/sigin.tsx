@@ -190,7 +190,7 @@ const Sigin = () => {
         const newIdToken = await user.getIdToken(true);
   
         // Calculate new expiration time
-        const newExpirationTime = Date.now() + 20 * 1000; // Assuming 20 seconds for demonstration
+        const newExpirationTime = Date.now() + 20 * 1000; // 20 seconds
   
         // Update cookies with the new token and expiration time
         setToken(newIdToken);
@@ -267,6 +267,7 @@ const Sigin = () => {
       setLoading(false);
     }
   };
+  
   
   
   

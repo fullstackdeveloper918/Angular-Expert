@@ -21,11 +21,11 @@ import { PlusOutlined, StepBackwardOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import validation from "@/utils/validation";
 import MainLayout from "../../components/Layout/layout";
-
+import 'react-toastify/dist/ReactToastify.css';
 import EmployeeRoles from "@/utils/EmployeeRoles.json";
 import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { destroyCookie, setCookie } from "nookies";
 import henceforthApi from "@/utils/api";
@@ -98,6 +98,8 @@ const Page1 = () => {
                 } else {
                     router?.back()
                 }
+                toast.success("shfksdjfgasjgdfsagdf")
+
             } else {
 
                 setLoading(true)
@@ -212,6 +214,7 @@ const Page1 = () => {
                 } as any
                 setLoading(true)
                 let res = await api.User.edit(items)
+                toast.success(res?.message)
                 // router.push(`/admin/member/add/page3?${value}&edit`)
             } else {
 
@@ -249,10 +252,22 @@ const Page1 = () => {
             <Fragment>
 
                 <section>
+                    <ToastContainer
+                        className="toast-container-center"
+                        position="top-right"
+                        autoClose={false} // Disable auto-close
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                    />
                     <Row justify="center" gutter={[20, 20]}>
                         <Col sm={22} md={24} lg={16} xl={16} xxl={12}>
                             <Card className='common-card'>
-                               
+
                                 <div className='mb-2 d-flex justify-content-between'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>BUSINESS UPDATE</Typography.Title>
                                     {/* <Button size={'large'} type="primary" className="text-white" disabled>1/8</Button> */}
@@ -367,10 +382,10 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                                 </div>
                                                 :
                                                 <div className=" col-8 d-flex gap-5 justify-content-center">
-                                                     <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
-                                                            Back
-                                                        </Button>
-                                                  
+                                                    <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
+                                                        Back
+                                                    </Button>
+
                                                     <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
                                                         Save
                                                     </Button>

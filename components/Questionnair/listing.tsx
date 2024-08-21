@@ -16,9 +16,9 @@ import Craftsmenpdf from "../common/Craftsmenpdf"
 import MeetingReviewpdf from "../common/Meetingreviewpdf"
 import Meetingpreparationpdf from "../common/Meetingpreparationpdf"
 import Photopdf from "../common/Photosectionpdf"
+import 'react-toastify/dist/ReactToastify.css';
 
-
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { parseCookies } from "nookies";
 import {destroyCookie } from "nookies";
 import { useDispatch } from "react-redux";
@@ -341,6 +341,18 @@ const QuestionnairList = () => {
         <MainLayout>
             <Fragment>
                 <section>
+                <ToastContainer
+                        className="toast-container-center"
+                        position="top-right"
+                        autoClose={1000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                    />
                     {getUserdata?.is_admin == false ?
                         <Row gutter={[20, 20]}>
                             <Col span={24}>
