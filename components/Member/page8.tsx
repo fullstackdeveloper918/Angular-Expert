@@ -1,10 +1,10 @@
 "use client";
 import { Form, Upload, Typography, Divider, Button, Popconfirm } from "antd";
-import { PlusOutlined, MinusCircleOutlined, StepBackwardOutlined } from "@ant-design/icons";
+import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 // import ReactImageCompressor from "react-image-compressor";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import api from "@/utils/api";
 import type { UploadFile } from "antd";
@@ -48,6 +48,8 @@ const getBase64 = (file: File): Promise<string> =>
 
 const Page8 = () => {
   const router = useRouter();
+  const canvasRef = useRef(null);
+  const [imageSrc, setImageSrc] = useState(null);
 
   const [form] = Form.useForm();
   const [inputPairs, setInputPairs] = useState([
@@ -168,58 +170,69 @@ const Page8 = () => {
   const submit = async (values: any) => {
     setLoading(true);
 
+    // Function to convert image files to PNG format
+    const convertToPng = async (file: File): Promise<Blob> => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            if (!ctx) {
+              reject(new Error("Failed to get canvas context"));
+              return;
+            }
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob((blob) => {
+              if (blob) {
+                resolve(blob);
+              } else {
+                reject(new Error("Failed to convert image to PNG"));
+              }
+            }, "image/png");
+          };
+          img.src = e.target.result;
+        };
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(file);
+      });
+    };
+
     const photoComment = inputPairs.map((pair) => ({
       comment: values[pair.commentName],
       files: values[pair.goalName],
     }));
 
     try {
-      setLoading(true);
       const formData: any = new FormData();
 
-      try {
-        let response;
-        if (state?.photo_section?.fileUrls?.length) {
-          formData.append("id", state?.photo_section?.commentId);
-          formData.append("user_id", value);
+      if (state?.photo_section?.fileUrls?.length) {
+        formData.append("id", state?.photo_section?.commentId);
+        formData.append("user_id", value);
 
-          inputPairs.forEach((item: any, index) => {
-            formData.append(`${item?.commentLabel}`, values[item?.commentName]);
-            values[item.goalName]?.fileList?.forEach(
-              (file: any, index: number) => {
-                if (file?.originFileObj) {
-                  // const imageCompressor = new ReactImageCompressor(
-                  //   file.originFileObj
-                  // );
-                  // imageCompressor.compress(`new_image_${index}`);
-                  formData.append(
-                    `${item?.commentLabel}_file${index}`,
-                    file.originFileObj
-                  );
-                }
-              }
-            );
-          });
+        // Using `for...of` to handle async operations in a loop
+        for (const item of inputPairs) {
+          formData.append(`${item?.commentLabel}`, values[item?.commentName]);
 
-          formData.forEach((value: any, key: any) => {});
-
-          response = await api.photo_section.update_file(formData);
-        } else {
-          formData.append("id", value);
-          photoComment.forEach((item: any, index) => {
-            formData.append(`comment_${index}`, item?.comment);
-            item?.files?.fileList.forEach((file: any, fileIndex: number) => {
-              if (file?.originFileObj) {
-                formData.append(
-                  `comment_${index}_file${fileIndex}`,
-                  file.originFileObj
-                );
-              }
-            });
-          });
-
-          response = await api.photo_section.upload_file(formData);
+          // Converting images to PNG format
+          for (const file of values[item.goalName]?.fileList || []) {
+            if (file?.originFileObj) {
+              const pngFile = await convertToPng(file.originFileObj);
+              formData.append(
+                `${item?.commentLabel}_file`,
+                pngFile,
+                `${item?.commentLabel}_file.png`
+              );
+            }
+          }
         }
+
+        const response = await api.photo_section.update_file(formData);
+
         const messages: any = {
           200: "Updated Successfully",
           201: "Added Successfully",
@@ -236,26 +249,60 @@ const Page8 = () => {
           router.replace(`/admin/user?${getUserdata?.user_id}`);
         }
 
-        // console.log(pagetype, "pagetype");
-        // if (!pagetype) {
-        //   router.push(`/admin/user?${getUserdata?.user_id}`);
-        // }
-
         return response?.data?.pdfReponseData;
-      } catch (error) {
-        if (error) {
-          toast.error("Something went wrong Please try again", {
+      } else {
+        formData.append("id", value);
+
+        // Using `for...of` to handle async operations in a loop
+        for (const [index, item] of photoComment.entries()) {
+          formData.append(`comment_${index}`, item?.comment);
+
+          // Converting images to PNG format
+          for (const [fileIndex, file] of (
+            item?.files?.fileList || []
+          ).entries()) {
+            if (file?.originFileObj) {
+              const pngFile = await convertToPng(file.originFileObj);
+              formData.append(
+                `comment_${index}_file${fileIndex}`,
+                pngFile,
+                `comment_${index}_file${fileIndex}.png`
+              );
+            }
+          }
+        }
+
+        const response = await api.photo_section.upload_file(formData);
+
+        const messages: any = {
+          200: "Updated Successfully",
+          201: "Added Successfully",
+        };
+
+        if (messages[response?.status]) {
+          toast.success(messages[response?.status], {
             position: "top-center",
             autoClose: 300,
           });
         }
+        setResponseData(response?.data?.pdfReponseData);
+        if (response) {
+          router.replace(`/admin/user?${getUserdata?.user_id}`);
+        }
+
+        return response?.data?.pdfReponseData;
       }
     } catch (error: any) {
-      if (error?.status == 400) {
+      if (error?.status === 400) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
         localStorage.removeItem("hasReloaded");
         toast.error("Session Expired Login Again");
         router.replace("/auth/signin");
+      } else {
+        toast.error("Something went wrong Please try again", {
+          position: "top-center",
+          autoClose: 300,
+        });
       }
     } finally {
       if (pagetype) {
@@ -263,6 +310,100 @@ const Page8 = () => {
       }
     }
   };
+
+  // const submit = async (values: any) => {
+  //   setLoading(true);
+
+  //   const photoComment = inputPairs.map((pair) => ({
+  //     comment: values[pair.commentName],
+  //     files: values[pair.goalName],
+  //   }));
+  //   try {
+  //     setLoading(true);
+  //     const formData: any = new FormData();
+
+  //     try {
+  //       let response;
+  //       if (state?.photo_section?.fileUrls?.length) {
+  //         formData.append("id", state?.photo_section?.commentId);
+  //         formData.append("user_id", value);
+
+  //         inputPairs.forEach((item: any, index) => {
+  //           formData.append(`${item?.commentLabel}`, values[item?.commentName]);
+  //           values[item.goalName]?.fileList?.forEach(
+  //             (file: any, index: number) => {
+  //               if (file?.originFileObj) {
+  //                 formData.append(
+  //                   `${item?.commentLabel}_file${index}`,
+  //                   file.originFileObj
+  //                 );
+  //               }
+  //             }
+  //           );
+  //         });
+
+  //         formData.forEach((value: any, key: any) => {});
+
+  //         response = await api.photo_section.update_file(formData);
+  //       } else {
+  //         formData.append("id", value);
+  //         photoComment.forEach((item: any, index) => {
+  //           formData.append(`comment_${index}`, item?.comment);
+  //           item?.files?.fileList.forEach((file: any, fileIndex: number) => {
+  //             if (file?.originFileObj) {
+  //               formData.append(
+  //                 `comment_${index}_file${fileIndex}`,
+  //                 file.originFileObj
+  //               );
+  //             }
+  //           });
+  //         });
+
+  //         response = await api.photo_section.upload_file(formData);
+  //       }
+  //       const messages: any = {
+  //         200: "Updated Successfully",
+  //         201: "Added Successfully",
+  //       };
+
+  //       if (messages[response?.status]) {
+  //         toast.success(messages[response?.status], {
+  //           position: "top-center",
+  //           autoClose: 300,
+  //         });
+  //       }
+  //       setResponseData(response?.data?.pdfReponseData);
+  //       if (response) {
+  //         router.replace(`/admin/user?${getUserdata?.user_id}`);
+  //       }
+
+  //       // console.log(pagetype, "pagetype");
+  //       // if (!pagetype) {
+  //       //   router.push(`/admin/user?${getUserdata?.user_id}`);
+  //       // }
+
+  //       return response?.data?.pdfReponseData;
+  //     } catch (error) {
+  //       if (error) {
+  //         toast.error("Something went wrong Please try again", {
+  //           position: "top-center",
+  //           autoClose: 300,
+  //         });
+  //       }
+  //     }
+  //   } catch (error: any) {
+  //     if (error?.status == 400) {
+  //       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+  //       localStorage.removeItem("hasReloaded");
+  //       toast.error("Session Expired Login Again");
+  //       router.replace("/auth/signin");
+  //     }
+  //   } finally {
+  //     if (pagetype) {
+  //       setLoading(false);
+  //     }
+  //   }
+  // };
 
   const getDataById = async () => {
     const item = {
@@ -366,8 +507,6 @@ const Page8 = () => {
   };
 
   const generatePdf = async (data?: any) => {
-    //
-
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
     const blob = await pdf(<Pdf state={data} />).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
@@ -379,12 +518,10 @@ const Page8 = () => {
     const response = await fetch(pdfUrl);
     const blob = await response.blob();
 
-    // Convert the blob to a file
     const file = new File([blob], `check.pdf`, { type: "application/pdf" });
     const formData = new FormData();
     formData.append("file", file);
     formData.append("user_id", getUserdata?.user_id);
-
     const res = await fetch(
       "https://frontend.goaideme.com/send-completeform-mail-to-superadmin",
       {
@@ -403,9 +540,6 @@ const Page8 = () => {
       await sharePdf(item);
     }
   };
-  const hnandleBack= ()=>{
-    router.back()
-  }
   return (
     <MainLayout>
       <Fragment>
@@ -418,21 +552,10 @@ const Page8 = () => {
             <DynamicCol sm={22} md={20} lg={16} xl={14} xxl={12}>
               <DynamicCard className="common-card">
                 {/* Title  */}
-                {/* {pagetype?
-                <div className="mb-3">
-                <Button
-                    size={"small"}
-                    className="text-black"
-                    onClick={hnandleBack}
-                  >
-                 <StepBackwardOutlined />
-                  </Button>
-                </div>:""} */}
                 <div className="mb-2 d-flex justify-content-between">
                   <Title level={3} className="m-0 fw-bold">
                     PHOTO SECTION
                   </Title>
-                  {!pagetype&&
                   <Button
                     size={"large"}
                     type="primary"
@@ -441,8 +564,6 @@ const Page8 = () => {
                   >
                     8/8
                   </Button>
-                  }
-
                 </div>
 
                 {/* form  */}
@@ -593,15 +714,17 @@ const Page8 = () => {
                           </Button>
                         </div>
                       ) : (
-                        <div className=" col-8 d-flex gap-5 justify-content-center">
-                        <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
-                               Back
-                           </Button>
-                     
-                       <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
-                           Save
-                       </Button>
-                   </div>
+                        <div className=" col-12 d-flex gap-5 justify-content-center">
+                          <Button
+                            size={"large"}
+                            type="primary"
+                            htmlType="submit"
+                            className="login-form-button"
+                            loading={loading}
+                          >
+                            Submit
+                          </Button>
+                        </div>
                       )}
                     </div>
                   </Form>
