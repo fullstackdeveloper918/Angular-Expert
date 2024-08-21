@@ -546,7 +546,7 @@ const Page8 = () => {
                             className=" "
                             htmlType="submit"
                           >
-                            Save
+                            Submit
                           </Button>
                         </div>
                       ) : (

@@ -18,6 +18,8 @@ const API_FILE_ROOT_DOCUMENTS = `${BUCKET_ROOT}documents/`;
 const API_FILE_ROOT_DB_BACKUP = `${BUCKET_ROOT}backup/`;
 const cookies = parseCookies();
 const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
+console.log(accessToken,"accessToken");
+
 const encode = encodeURIComponent;
 const responseBody = (res: any) => res.body;
 
