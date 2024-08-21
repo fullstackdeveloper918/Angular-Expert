@@ -57,7 +57,7 @@ const Forgotpaswrd = () => {
     }
 
   return (
-    <section className='auth-pages d-flex align-items-center h-100'>
+    <section className='auth-pages d-flex align-items-center h-100 forgot-auth'>
          <ToastContainer
          position="top-right"
          autoClose={1000}

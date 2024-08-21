@@ -113,7 +113,7 @@ const EditStaff: Page = () => {
 
         <section>
           <Row gutter={[20, 20]}>
-            <Col sm={22} md={12} lg={11} xl={10} xxl={9}>
+            <Col xs={24} sm={24} md={12} lg={11} xl={10} xxl={9}>
               <Card className='common-card'>
                 <div className='mb-4'>
                   <Breadcrumb separator=">">

@@ -415,7 +415,7 @@ const Page8 = () => {
             gutter={[20, 20]}
             className="heightCenter"
           >
-            <DynamicCol sm={22} md={20} lg={16} xl={14} xxl={12}>
+            <DynamicCol xs={24} sm={22} md={20} lg={16} xl={14} xxl={12}>
               <DynamicCard className="common-card">
                 {/* Title  */}
                 {pagetype?
