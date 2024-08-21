@@ -39,6 +39,7 @@ const Page6 = () => {
           } as any
           setLoading(true)
           let res = await api.User.edit(items)
+          toast.success("Update spring meeting review")
           if (!pagetype) {
             router.push(`/admin/member/add/additional_questionnaire?${value}&edit`)
         }else{

@@ -194,14 +194,13 @@ const Sigin = () => {
   
         // Update cookies with the new token and expiration time
         setToken(newIdToken);
-        setCookie("COOKIES_USER_ACCESS_TOKEN", newIdToken, 1); // 1 hour
-        setCookie("expirationTime", newExpirationTime, 1); // 1 hour
+        setCookie("COOKIES_USER_ACCESS_TOKEN", newIdToken, { expires: new Date(newExpirationTime) });
+        setCookie("expirationTime", newExpirationTime, { expires: new Date(newExpirationTime) });
   
         console.log("Token refreshed:", newIdToken);
   
-        // Schedule the next token refresh (40 minutes interval)
-        const timeRemaining = newExpirationTime - Date.now();
-        scheduleTokenRefresh(timeRemaining, auth, setToken, setCookie);
+        // Schedule the next token refresh (every 1 minute)
+        scheduleTokenRefresh(60 * 1000, auth, setToken, setCookie); // 1 minute
       }
     } catch (error) {
       console.error("Error refreshing token:", error);
@@ -209,12 +208,9 @@ const Sigin = () => {
   };
   
   // Function to schedule the token refresh
-  const scheduleTokenRefresh = (timeRemaining: number, auth: any, setToken: Function, setCookie: Function) => {
-    const refreshBefore = 40 * 60 * 1000; // Refresh 40 minutes before expiration
-  
-    if (timeRemaining > refreshBefore) {
-      setTimeout(() => refreshTokenAndSchedule(auth, setToken, setCookie), timeRemaining - refreshBefore);
-    }
+  const scheduleTokenRefresh = (refreshInterval: number, auth: any, setToken: Function, setCookie: Function) => {
+    // Use setTimeout to refresh the token every minute
+    setTimeout(() => refreshTokenAndSchedule(auth, setToken, setCookie), refreshInterval);
   };
   
   const onFinish = async (values: any) => {
@@ -245,8 +241,8 @@ const Sigin = () => {
   
       console.log("Session will expire in 1 hour");
   
-      // Schedule token refresh
-      scheduleTokenRefresh(60 * 60 * 1000, auth, setToken, setCookie); // 1 hour
+      // Schedule token refresh every 1 minute
+      scheduleTokenRefresh(60 * 1000, auth, setToken, setCookie); // 1 minute
   
       // Call API with the token
       const res = await axios.get("https://frontend.goaideme.com/single-user", {
@@ -266,7 +262,8 @@ const Sigin = () => {
       toast.error("Invalid Credentials");
       setLoading(false);
     }
-  }
+  };
+  
   
   
   

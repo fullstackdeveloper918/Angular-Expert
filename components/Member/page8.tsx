@@ -167,40 +167,52 @@ const Page8 = () => {
     return blob;
   }
 
-  const submit = async (values: any) => {
-    setLoading(true);
+  const convertToPng = async (
+    file: File,
+    targetSizeMB: number = 1
+  ): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const img = new Image();
+        img.onload = () => {
+          let scale = 1; // Start with no scaling
+          let canvas = document.createElement("canvas");
+          let ctx = canvas.getContext("2d");
+          if (!ctx) {
+            reject(new Error("Failed to get canvas context"));
+            return;
+          }
 
-    // Function to convert image files to PNG format
-    const convertToPng = async (file: File): Promise<Blob> => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            if (!ctx) {
-              reject(new Error("Failed to get canvas context"));
-              return;
-            }
+          const reduceScale = () => {
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
             canvas.toBlob((blob) => {
-              if (blob) {
+              if (blob && blob.size / 1024 / 1024 <= targetSizeMB) {
                 resolve(blob);
+              } else if (scale > 0.1) {
+                // Reduce scale if needed
+                scale -= 0.1;
+                reduceScale();
               } else {
-                reject(new Error("Failed to convert image to PNG"));
+                reject(new Error("Failed to achieve target size"));
               }
             }, "image/png");
           };
-          img.src = e.target.result;
+
+          reduceScale();
         };
-        reader.onerror = (error) => reject(error);
-        reader.readAsDataURL(file);
-      });
-    };
+        img.src = e.target.result;
+      };
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const submit = async (values: any) => {
+    setLoading(true);
 
     const photoComment = inputPairs.map((pair) => ({
       comment: values[pair.commentName],
@@ -214,17 +226,19 @@ const Page8 = () => {
         formData.append("id", state?.photo_section?.commentId);
         formData.append("user_id", value);
 
-        // Using `for...of` to handle async operations in a loop
         for (const item of inputPairs) {
           formData.append(`${item?.commentLabel}`, values[item?.commentName]);
 
-          // Converting images to PNG format
           for (const file of values[item.goalName]?.fileList || []) {
             if (file?.originFileObj) {
-              const pngFile = await convertToPng(file.originFileObj);
+              // Use JPEG compression to target around 1 MB
+              const compressedJpegFile = await convertToPng(
+                file.originFileObj,
+                1
+              );
               formData.append(
                 `${item?.commentLabel}_file`,
-                pngFile,
+                compressedJpegFile,
                 `${item?.commentLabel}_file.png`
               );
             }
@@ -253,19 +267,21 @@ const Page8 = () => {
       } else {
         formData.append("id", value);
 
-        // Using `for...of` to handle async operations in a loop
         for (const [index, item] of photoComment.entries()) {
           formData.append(`comment_${index}`, item?.comment);
 
-          // Converting images to PNG format
           for (const [fileIndex, file] of (
             item?.files?.fileList || []
           ).entries()) {
             if (file?.originFileObj) {
-              const pngFile = await convertToPng(file.originFileObj);
+              // Use JPEG compression to target around 1 MB
+              const compressedJpegFile = await convertToPng(
+                file.originFileObj,
+                1
+              );
               formData.append(
                 `comment_${index}_file${fileIndex}`,
-                pngFile,
+                compressedJpegFile,
                 `comment_${index}_file${fileIndex}.png`
               );
             }
@@ -310,6 +326,150 @@ const Page8 = () => {
       }
     }
   };
+
+  // const submit = async (values: any) => {
+  //   setLoading(true);
+
+  //   // Function to convert image files to PNG format
+  //   const convertToPng = async (file: File): Promise<Blob> => {
+  //     return new Promise((resolve, reject) => {
+  //       const reader = new FileReader();
+  //       reader.onload = (e: any) => {
+  //         const img = new Image();
+  //         img.onload = () => {
+  //           const canvas = document.createElement("canvas");
+  //           const ctx = canvas.getContext("2d");
+  //           if (!ctx) {
+  //             reject(new Error("Failed to get canvas context"));
+  //             return;
+  //           }
+
+  //           canvas.width = img.width;
+  //           canvas.height = img.height;
+  //           ctx.drawImage(img, 0, 0);
+  //           canvas.toBlob((blob) => {
+  //             if (blob) {
+  //               resolve(blob);
+  //             } else {
+  //               reject(new Error("Failed to convert image to PNG"));
+  //             }
+  //           }, "image/png");
+  //         };
+  //         img.src = e.target.result;
+  //       };
+  //       reader.onerror = (error) => reject(error);
+  //       reader.readAsDataURL(file);
+  //     });
+  //   };
+
+  //   const photoComment = inputPairs.map((pair) => ({
+  //     comment: values[pair.commentName],
+  //     files: values[pair.goalName],
+  //   }));
+
+  //   try {
+  //     const formData: any = new FormData();
+
+  //     if (state?.photo_section?.fileUrls?.length) {
+  //       formData.append("id", state?.photo_section?.commentId);
+  //       formData.append("user_id", value);
+
+  //       // Using `for...of` to handle async operations in a loop
+  //       for (const item of inputPairs) {
+  //         formData.append(`${item?.commentLabel}`, values[item?.commentName]);
+
+  //         // Converting images to PNG format
+  //         for (const file of values[item.goalName]?.fileList || []) {
+  //           if (file?.originFileObj) {
+  //             const pngFile = await convertToPng(file.originFileObj);
+  //             formData.append(
+  //               `${item?.commentLabel}_file`,
+  //               pngFile,
+  //               `${item?.commentLabel}_file.jpg`
+  //             );
+  //           }
+  //         }
+  //       }
+
+  //       const response = await api.photo_section.update_file(formData);
+
+  //       const messages: any = {
+  //         200: "Updated Successfully",
+  //         201: "Added Successfully",
+  //       };
+
+  //       if (messages[response?.status]) {
+  //         toast.success(messages[response?.status], {
+  //           position: "top-center",
+  //           autoClose: 300,
+  //         });
+  //       }
+  //       setResponseData(response?.data?.pdfReponseData);
+  //       if (response) {
+  //         router.replace(`/admin/user?${getUserdata?.user_id}`);
+  //       }
+
+  //       return response?.data?.pdfReponseData;
+  //     } else {
+  //       formData.append("id", value);
+
+  //       // Using `for...of` to handle async operations in a loop
+  //       for (const [index, item] of photoComment.entries()) {
+  //         formData.append(`comment_${index}`, item?.comment);
+
+  //         // Converting images to PNG format
+  //         for (const [fileIndex, file] of (
+  //           item?.files?.fileList || []
+  //         ).entries()) {
+  //           if (file?.originFileObj) {
+  //             const pngFile = await convertToPng(file.originFileObj);
+  //             formData.append(
+  //               `comment_${index}_file${fileIndex}`,
+  //               pngFile,
+  //               `comment_${index}_file${fileIndex}.jpg`
+  //             );
+  //           }
+  //         }
+  //       }
+
+  //       const response = await api.photo_section.upload_file(formData);
+
+  //       const messages: any = {
+  //         200: "Updated Successfully",
+  //         201: "Added Successfully",
+  //       };
+
+  //       if (messages[response?.status]) {
+  //         toast.success(messages[response?.status], {
+  //           position: "top-center",
+  //           autoClose: 300,
+  //         });
+  //       }
+  //       setResponseData(response?.data?.pdfReponseData);
+  //       if (response) {
+  //         router.replace(`/admin/user?${getUserdata?.user_id}`);
+  //       }
+
+  //       return response?.data?.pdfReponseData;
+  //     }
+  //   } catch (error: any) {
+  //     if (error?.status === 400) {
+  //       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+  //       localStorage.removeItem("hasReloaded");
+  //       toast.error("Session Expired Login Again");
+  //       router.replace("/auth/signin");
+  //     } else {
+  //       toast.error("Something went wrong Please try again", {
+  //         position: "top-center",
+  //         autoClose: 300,
+  //       });
+  //     }
+  //   } finally {
+  //     if (pagetype) {
+  //       setLoading(false);
+  //     }
+  //   }
+  // };
 
   // const submit = async (values: any) => {
   //   setLoading(true);
