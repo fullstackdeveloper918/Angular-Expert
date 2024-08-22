@@ -700,6 +700,9 @@ const Page8 = () => {
       await sharePdf(item);
     }
   };
+  const hnandleBack = () => {
+    router.back()
+}
   return (
     <MainLayout>
       <Fragment>
@@ -874,17 +877,15 @@ const Page8 = () => {
                           </Button>
                         </div>
                       ) : (
-                        <div className=" col-12 d-flex gap-5 justify-content-center">
-                          <Button
-                            size={"large"}
-                            type="primary"
-                            htmlType="submit"
-                            className="login-form-button"
-                            loading={loading}
-                          >
+                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                        <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
+                            Back
+                        </Button>
+
+                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
                             Save
-                          </Button>
-                        </div>
+                        </Button>
+                    </div>
                       )}
                     </div>
                   </Form>
