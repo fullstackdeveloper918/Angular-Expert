@@ -633,8 +633,8 @@ const AdminDashboard: Page = (props: any) => {
                       <Link className='text-decoration-none' href={data.link}>
                         <Card className='dashboard-widget-card text-center h-80 border-0' style={{ background: data.cardBackground }} >
 
-                          <div className='dashboard-widget-card-content'>
-                            <Typography.Title level={3} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
+                          <div className='dashboard-widget-card-content px-2'>
+                            <Typography.Title level={4} className='m-0 mb-1 fw-bold' style={{ color: data.textColor }}>{data.title}</Typography.Title>
                             <Typography.Paragraph className="m-0" style={{ color: data.textColor }}>{data.count}</Typography.Paragraph>
                           </div>
                         </Card>

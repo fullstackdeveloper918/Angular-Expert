@@ -43,7 +43,8 @@
   background-color: #F0F0F0 !important
 }
 .trigger, .ant-pagination .ant-pagination-item-active{
-  background: #040707 !important
+  background: #040707 !important;
+  border-color: #000;
 }
 :where(.css-dev-only-do-not-override-f7vrd6).ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
   color: #040707 !important;
@@ -111,6 +112,7 @@ i.fa-trash-can{
   font-size: 20px;
   border: 0 !important;
   padding: 0 4px;
+  box-shadow: none;
 }
 .blackViewBtn {
   color: #fff !important;
@@ -156,8 +158,14 @@ a.forgotPassword {
   margin: 10px 0 !important;
 }
 .auth-pages .form-wrapper {
-  border-radius: 0 40px 40px 0;
+  border-radius: 40px;
   box-shadow: none !important;
+}
+.loginAuth.auth-pages .form-wrapper {
+  border-radius: 0 40px 40px 0;
+}
+.forgot-auth.auth-pages .form-wrapper {
+  border-radius: 40px;
 }
 :where(.css-dev-only-do-not-override-f7vrd6).ant-input-affix-wrapper-lg {
   padding: 7px 10px;
@@ -261,21 +269,60 @@ a.forgotPassword {
 .blackViewBtn:hover{
   border-color: #000000 !important;
 }
+:where(.css-dev-only-do-not-override-98ntnt).ant-table-wrapper .ant-table-pagination.ant-pagination {
+  padding: 13px 20px;
+  gap: 7px;
+}
+:where(.css-dev-only-do-not-override-98ntnt).ant-pagination .ant-pagination-item {
+ 
+  min-width: 22px;
+  height: 22px;
+  margin-inline-end: 5px;
+  line-height: 20px;
+  font-size: 12px;
+  user-select: none;
+}
 
+:where(.css-dev-only-do-not-override-98ntnt).ant-pagination .ant-pagination-prev,
+:where(.css-dev-only-do-not-override-98ntnt).ant-pagination .ant-pagination-next{
+  min-width: 26px;
+  height: 24px;
+  line-height: 20px;
+  text-align: center;
+  vertical-align: middle;
+  list-style: none;
+  border-radius: 6px;
+  transition: all 0.2s;
+  background: rgb(235 235 235 / 24%);
+}
+:where(.css-dev-only-do-not-override-98ntnt).ant-popover .ant-popover-content {
+  right: 25px;
+}
+:where(.css-dev-only-do-not-override-98ntnt).ant-popconfirm .ant-popconfirm-message .ant-popconfirm-description {
+  margin-top: 0;
+}
+.ant-popconfirm-buttons{
+  margin-top: 15px;
+}
+.ant-popover-inner{
+  padding: 12px 14px 14px 12px;
+}
+:where(.css-dev-only-do-not-override-98ntnt).ant-popconfirm .ant-popconfirm-buttons button:first-child:hover{
+  color: #000;
+  border-color: #000;
+}
+.antShadow .ant-card .ant-card-body{
+  padding: 0 !important;
+}
+.cardButtons .ant-btn-primary {
+  flex: 1;
+}
 @media screen and (max-width:1290px) {
   .auth-pages .image-wrapper{
     max-height: 520px;
     padding: 0 30px;
   }
-//   .ant-table-content ,
-//   .ant-table-container,
-//   .ant-table,
-//   .ant-table-wrapper {
-//     width: 100% !important;
-//     overflow: hidden !important;
-//     overflow-x: auto !important;
-//     scrollbar-width: thin !important;
-// }
+
 
 
 
@@ -298,6 +345,14 @@ a.forgotPassword {
   .flexWrapper .ant-form-item{
     width: 100%;
   }
+  .auth-pages .form-wrapper {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    border-radius:40px !important ;
+}
+.common-card {
+  padding: 14px;
+}
 }
 @media screen and (max-width:575px) {
   :where(.css-dev-only-do-not-override-f7vrd6).ant-btn-primary {

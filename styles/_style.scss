@@ -47,6 +47,9 @@
     object-position: center;
 }
 
+.antShadow .ant-spin-container:first-child {
+    box-shadow: none;
+}
 
 // ==================================== Dashboard CSS ====================================
 .dashboard-widget-card {

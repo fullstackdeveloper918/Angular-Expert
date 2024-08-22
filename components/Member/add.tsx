@@ -206,7 +206,7 @@ router.back()
         <section className="club_member">
 
           <Row justify="center" gutter={[20, 20]} className='heightCenter'>
-            <Col sm={22} md={20} lg={16} xl={14} xxl={12}>
+            <Col xs={24} sm={22} md={20} lg={16} xl={14} xxl={12}>
               <Card className='common-card'>
                 
                 <div className='d-flex justify-content-between'>
@@ -340,7 +340,7 @@ router.back()
                     </Form.Item> */}
                     </div>
                     {/* Button  */}
-                    <div className="d-flex gap-3 justify-content-center">
+                    <div className="d-flex gap-3 justify-content-end">
                       {/* <Button size={'large'} type="primary" onClick={onPrevious} className="" >
                         Save
                       </Button> */}

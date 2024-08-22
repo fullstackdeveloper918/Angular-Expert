@@ -337,10 +337,10 @@ const data={
   return (
     <MainLayout>
       <Fragment>
-        <section>
+        <section className="antShadow">
           <Spin spinning={loading}>
             <Row gutter={[20, 20]}>
-              <Col sm={22} md={12} lg={11} xl={10} xxl={9} className='mx-auto'>
+              <Col xs={24} sm={24} md={12} lg={11} xl={10} xxl={9} className='mx-auto'>
                 <Card className='common-card'>
                   <div className='mb-4'>
                     <Breadcrumb separator=">">

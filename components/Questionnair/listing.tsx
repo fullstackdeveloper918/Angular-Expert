@@ -396,7 +396,7 @@ const QuestionnairList = () => {
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col  span={8}>
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                 <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                     <div className="card-body pb-2 d-flex flex-column">
                                                         <div className="justify-content-between align-items-center d-flex">
@@ -447,7 +447,7 @@ const QuestionnairList = () => {
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col  span={8}>
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                 <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                     <div className="card-body pb-2 d-flex flex-column">
                                                         <div className="justify-content-between align-items-center d-flex">
@@ -500,7 +500,7 @@ const QuestionnairList = () => {
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col  span={8}>
+                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
                                                 <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                     <div className="card-body pb-2 d-flex flex-column">
                                                         <div className="justify-content-between align-items-center d-flex">
@@ -556,7 +556,7 @@ const QuestionnairList = () => {
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col  span={8}>
+                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
                                                 <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                     <div className="card-body pb-2 d-flex flex-column">
                                                         <div className="justify-content-between align-items-center d-flex">
@@ -612,7 +612,7 @@ const QuestionnairList = () => {
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col  span={8}>
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -668,7 +668,7 @@ const QuestionnairList = () => {
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col  span={8}>
+                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
                                                 <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                     <div className="card-body pb-2 d-flex flex-column">
                                                         <div className="justify-content-between align-items-center d-flex">
@@ -700,7 +700,7 @@ const QuestionnairList = () => {
                                             </Col>
                                                 }
                                                 {getUserdata?.template_access?.includes("additional_question")&&
-                                                <Col  span={8}>
+                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -750,7 +750,7 @@ const QuestionnairList = () => {
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col  span={8}>
+                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -785,9 +785,9 @@ const QuestionnairList = () => {
                                             {/* ))} */}
                                         </Row>
                                         {getUserdata?.is_additional_user==false &&
-                                        <Row gutter={[20, 20]}>
+                                        <Row gutter={[20, 20]} className="flex-wrap">
                                             {/* {data.map((item, index) => ( */}
-                                                <Col  span={8}>
+                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8} >
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -812,7 +812,7 @@ const QuestionnairList = () => {
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col  span={8}>
+                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -839,7 +839,7 @@ const QuestionnairList = () => {
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col  span={8}>
+                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -869,7 +869,7 @@ const QuestionnairList = () => {
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col  span={8}>
+                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -899,7 +899,7 @@ const QuestionnairList = () => {
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col  span={8}>
+                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -929,7 +929,7 @@ const QuestionnairList = () => {
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col  span={8}>
+                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -959,7 +959,7 @@ const QuestionnairList = () => {
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col  span={8}>
+                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -983,7 +983,7 @@ const QuestionnairList = () => {
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col  span={8}>
+                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">

@@ -215,6 +215,7 @@ const MainLayout = ({ children }: any) => {
                 description="Are you sure to Logout ?"
                 okText="Logout"
                 cancelText="No"
+                style={{margin:'0'}}
                 okButtonProps={{ type: "primary", danger: true }}
               >
                 <Button
