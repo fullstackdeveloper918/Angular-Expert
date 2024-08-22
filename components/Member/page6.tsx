@@ -44,9 +44,10 @@ const Page6 = () => {
           })
           setTimeout(() => {
             if (!pagetype) {
-              router.push(`/admin/member/add/additional_questionnaire?${value}&edit`);
+              router.push(`/admin/member/add/page7?${value}&edit`);
             } else {
-              router.back();
+            //   router.back();
+            router.push("/admin/questionnaire?page6")
             }
           }, 1000);
           }else{
@@ -58,7 +59,7 @@ const Page6 = () => {
                 router.replace("/auth/signin")
               }
               if (!pagetype) {
-                router.push(`/admin/member/add/additional_questionnaire?${value}&edit`)
+                router.push(`/admin/member/add/page7?${value}&edit`)
             }else{
                 router?.back()
             }

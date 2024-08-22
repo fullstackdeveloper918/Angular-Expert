@@ -22,15 +22,19 @@ import { toast, ToastContainer } from "react-toastify";
 import { parseCookies } from "nookies";
 import {destroyCookie } from "nookies";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { clearUserData } from "@/lib/features/userSlice";
 import QuestionanirModal from "../common/QuestionnairModal";
 import PhotoSectionPdf from "../common/Photosectionpdf";
+
+
 const { Search } = Input;
 const { Title } = Typography;
 const QuestionnairList = () => {
     const getUserdata = useSelector((state: any) => state?.user?.userData)
-   
+    const searchParams = useSearchParams();
+    const entries = Array.from(searchParams.entries());
+    const value = entries.length > 0 ? entries[0][0] : '';
     
     const cookies = parseCookies();
     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
@@ -335,25 +339,210 @@ const QuestionnairList = () => {
     const xyz =getUserdata?.is_additional_user==true?getUserdata?.parent_user_id:getUserdata?.user_id
 
     const userData= getUserdata?.is_additional_user==true
-   
+   const handleClick=()=>{
+router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
+    }
+    console.log(value,"value");
+    
+    useEffect(() => {
+        if (value=="page2") {
+          toast(<CustomToastpage2 />, {
+            position: 'top-center',
+            autoClose: 10000, // Display for 5 seconds
+          });
+        }else if(value=="page3"){
+            toast(<CustomToastpage3 />, {
+                position: 'top-center',
+                autoClose: 10000, // Display for 5 seconds
+              });
+        }else if(value=="page4"){
+            toast(<CustomToastpage4 />, {
+                position: 'top-center',
+                autoClose: 10000, // Display for 5 seconds
+              });
+        }else if(value=="page5"){
+            toast(<CustomToastpage5 />, {
+                position: 'top-center',
+                autoClose: 10000, // Display for 5 seconds
+              });
+        }else if(value=="page6"){
+            toast(<CustomToastpage6 />, {
+                position: 'top-center',
+                autoClose: 10000, // Display for 5 seconds
+              });
+        }else if(value=="page7"){
+            toast(<CustomToastpage7 />, {
+                position: 'top-center',
+                autoClose: 10000, // Display for 5 seconds
+              });
+        }else if(value=="additionalPage"){
+            toast(<CustomToastAdditonalPage />, {
+                position: 'top-center',
+                autoClose: 10000, // Display for 5 seconds
+              });
+        }else if(value=="page8"){
+            toast(<CustomToastPgae8 />, {
+                position: 'top-center',
+                autoClose: 10000, // Display for 5 seconds
+              });
+        }
+      }, [value]);
+    
+      const CustomToastpage2 = () => (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+            <p style={{ margin: 0 }}>Business Update Successfully</p>
+          </div>
+          <a
+            href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}            rel="noopener noreferrer"
+            style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+          >
+            Click here for more info
+          </a>
+        </div>
+      );
+      
+      const CustomToastpage3 = () => (
+        // <div>
+        //   <p>Goals Update Successfully</p>
+        //   <a href="/admin/member/add/page3?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
+        // </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+          <p style={{ margin: 0 }}>Goals Update Successfully</p>
+        </div>
+        <a
+        href={`/admin/member/add/page3?${getUserdata?.user_id}&edit`}  
+          rel="noopener noreferrer"
+          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        >
+          Click here for more info
+        </a>
+      </div>
+      );
+      const CustomToastpage4 = () => (
+        // <div>
+        //   <p>Update Crfatsmen Toolbox</p>
+        //   <a href="/admin/member/add/page4?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
+        // </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+          <p style={{ margin: 0 }}>Update Crfatsmen Toolbox</p>
+        </div>
+        <a
+        href={`/admin/member/add/page4?${getUserdata?.user_id}&edit`}  
+          rel="noopener noreferrer"
+          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        >
+          Click here for more info
+        </a>
+      </div>
+      );
+      const CustomToastpage5 = () => (
+        // <div>
+        //   <p>Update Crfatsmen Checkup</p>
+        //   <a href="/admin/member/add/page5?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
+        // </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+          <p style={{ margin: 0 }}>Update Crfatsmen Checkup</p>
+        </div>
+        <a
+        href={`/admin/member/add/page5?${getUserdata?.user_id}&edit`}  
+          rel="noopener noreferrer"
+          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        >
+          Click here for more info
+        </a>
+      </div>
+      );
+      const CustomToastpage6 = () => (
+        // <div>
+        //   <p>Update Spring Meeting Review</p>
+        //   <a href="/admin/member/add/page6?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
+        // </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+          <p style={{ margin: 0 }}>Update Spring Meeting Review</p>
+        </div>
+        <a
+        href={`/admin/member/add/page6?${getUserdata?.user_id}&edit`}  
+          rel="noopener noreferrer"
+          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        >
+          Click here for more info
+        </a>
+      </div>
+      );
+      const CustomToastpage7 = () => (
+        // <div>
+        //   <p>Update Fall Meeting Preparation</p>
+        //   <a href="/admin/member/add/page7?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
+        // </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+          <p style={{ margin: 0 }}>Update Fall Meeting Preparation</p>
+        </div>
+        <a
+        href={`/admin/member/add/page7?${getUserdata?.user_id}&edit`}  
+          rel="noopener noreferrer"
+          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        >
+          Click here for more info
+        </a>
+      </div>
+      );
+      const CustomToastAdditonalPage = () => (
+        // <div>
+        //   <p>Update Additional Questions</p>
+        //   <a href="/admin/member/add/additional_questionnaire?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
+        // </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+          <p style={{ margin: 0 }}>Update Additional Questions</p>
+        </div>
+        <a
+        href={`/admin/member/add/additional_questionnaire?${getUserdata?.user_id}&edit`}  
+          rel="noopener noreferrer"
+          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        >
+          Click here for more info
+        </a>
+      </div>
+      );
+      const CustomToastPgae8 = () => (
+        // <div>
+        //   <p>Update Photo Section</p>
+        //   <a href="/admin/member/add/page8?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
+        // </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+          <p style={{ margin: 0 }}>Update Photo Section</p>
+        </div>
+        <a
+        href={`/admin/member/add/page8?${getUserdata?.user_id}&edit`}  
+          rel="noopener noreferrer"
+          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        >
+          Click here for more info
+        </a>
+      </div>
+      );
     console.log(state1,"state1");
     
     return (
         <MainLayout>
             <Fragment>
                 <section>
-                <ToastContainer
-                        className="toast-container-center"
-                        position="top-right"
-                        autoClose={1000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                    />
+                {/* <ToastContainer /> */}
                     {getUserdata?.is_admin == false ?
                         <Row gutter={[20, 20]}>
                             <Col span={24}>

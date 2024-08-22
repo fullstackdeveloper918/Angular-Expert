@@ -102,7 +102,8 @@ const Page1 = () => {
                     if (!pagetype) {
                       router.push(`/admin/member/add/page3?${value}&edit`);
                     } else {
-                      router.back();
+                    //   router.back();
+                    router.push("/admin/questionnaire?page2")
                     }
                   }, 1000);
                 toast.success(res?.message)
@@ -392,7 +393,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                                         <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
                                                             Previous
                                                         </Button> : ""} */}
-                                                    <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                                                    <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
                                                         {!pagetype ? "Next" : "Save"}
                                                     </Button>
                                                 </div>

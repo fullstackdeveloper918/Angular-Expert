@@ -45,9 +45,10 @@ const Page7 = () => {
                 setLoading(true)
                 let res = await api.User.edit(items)
                 if (!pagetype) {
-                    router.push(`/admin/member/add/page8?${value}&edit`)
+                    router.push(`/admin/member/add/additional_questionnaire?${value}&edit`)
                 } else {
-                    router?.back()
+                    // router?.back()
+                    router.push("/admin/questionnaire?page7")
                 }
             } else {
 
@@ -58,7 +59,7 @@ const Page7 = () => {
                     router.replace("/auth/signin")
                 }
                 if (!pagetype) {
-                    router.push(`/admin/member/add/page8?${res?.userId}`)
+                    router.push(`/admin/member/add/additional_questionnaire?${res?.userId}`)
                 } else {
                     router?.back()
                 }

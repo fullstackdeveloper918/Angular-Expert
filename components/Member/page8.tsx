@@ -259,9 +259,15 @@ const Page8 = () => {
           });
         }
         setResponseData(response?.data?.pdfReponseData);
-        if (response) {
+        // if (response) {
+        //   router.replace(`/admin/user?${getUserdata?.user_id}`);
+        // }
+        if (!pagetype) {
           router.replace(`/admin/user?${getUserdata?.user_id}`);
-        }
+      } else {
+          // router?.back()
+          router.push("/admin/questionnaire?page8")
+      }
 
         return response?.data?.pdfReponseData;
       } else {
@@ -871,9 +877,10 @@ const Page8 = () => {
                             type="primary"
                             htmlType="submit"
                             className="login-form-button "
-                            loading={loading}
+                            // loading={loading}
                           >
-                            {!pagetype ? "Next" : "Save"}
+                            Submit
+                            {/* {!pagetype ? "Next" : "Save"} */}
                           </Button>
                         </div>
                       ) : (
@@ -882,8 +889,11 @@ const Page8 = () => {
                             Back
                         </Button>
 
-                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
+                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
                             Save
+                        </Button>
+                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
+                            Submit
                         </Button>
                     </div>
                       )}

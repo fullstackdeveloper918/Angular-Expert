@@ -142,7 +142,7 @@ const Page3 = () => {
                         if (!pagetype) {
                           router.push(`/admin/member/add/page4?${value}&edit`);
                         } else {
-                          router.back();
+                            router.push("/admin/questionnaire?page3")
                         }
                       }, 1000);
                 // }

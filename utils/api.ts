@@ -48,8 +48,8 @@ const requests = {
 };
 
 const Auth = {
-  login: (info: any) =>
-    requests.post('single-user', info),
+  login: () =>
+    requests.get('single-user'),
   signUp: (items: any) => requests.post(`register`, items),
   loginAsUser: (info: any) =>
     requests.post('admin/users/login_as_user', info),

@@ -13,7 +13,7 @@ import {
   browserLocalPersistence,
   getAuth,
 } from "firebase/auth";
-import {  destroyCookie } from 'nookies';
+import { destroyCookie } from 'nookies';
 // import { auth } from "@/utils/firebase";
 import { parseCookies, setCookie } from "nookies";
 import axios from "axios";
@@ -56,35 +56,35 @@ const Sigin = () => {
   const removeCookie = (cookieName: string) => {
     destroyCookie(null, cookieName); // This removes the cookie
   };
-  useEffect(() => {
-    const cookies = parseCookies();
-    const storedToken = cookies.COOKIES_USER_ACCESS_TOKEN;
-    if (storedToken) {
-      setToken(storedToken);
-      router.push("/admin/dashboard");
-    } else {
-      const unsubscribe = onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          try {
-            const idToken = await user.getIdToken();
-            setToken(idToken);
-            setState(user);
-            createSessionCookie(idToken);
-          } catch (error: any) {
-            if (error.response && error.response.status === 401) {
-              router.push("/auth/signin");
-            } else {
-              router.push("/auth/signin");
-            }
-          }
-        } else {
-          router.push("/auth/signin");
-        }
-      });
+  // useEffect(() => {
+  //   const cookies = parseCookies();
+  //   const storedToken = cookies.COOKIES_USER_ACCESS_TOKEN;
+  //   if (storedToken) {
+  //     setToken(storedToken);
+  //     router.push("/admin/dashboard");
+  //   } else {
+  //     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+  //       if (user) {
+  //         try {
+  //           const idToken = await user.getIdToken();
+  //           setToken(idToken);
+  //           setState(user);
+  //           createSessionCookie(idToken);
+  //         } catch (error: any) {
+  //           if (error.response && error.response.status === 401) {
+  //             router.push("/auth/signin");
+  //           } else {
+  //             router.push("/auth/signin");
+  //           }
+  //         }
+  //       } else {
+  //         router.push("/auth/signin");
+  //       }
+  //     });
 
-      return () => unsubscribe();
-    }
-  }, [router]);
+  //     return () => unsubscribe();
+  //   }
+  // }, [router]);
 
   const setCookie = (name: string, value: string, days: number) => {
     const expires = new Date();
@@ -149,9 +149,9 @@ const Sigin = () => {
       const idTokenResult = await userCredential.user.getIdTokenResult(true);
       const refreshToken = idTokenResult.token;
       const idToken = await userCredential.user.getIdToken();
-      console.log(idTokenResult,"idTokenResult");
-      console.log(idToken,"idToken");
-      console.log(refreshToken,"refreshToken");
+      console.log(idTokenResult, "idTokenResult");
+      console.log(idToken, "idToken");
+      console.log(refreshToken, "refreshToken");
       setToken(refreshToken);
       const expirationTime = idTokenResult.expirationTime;
       const timeRemaining = new Date(expirationTime).getTime() - Date.now();
@@ -177,49 +177,65 @@ const Sigin = () => {
       setCookie("user_data", JSON.stringify(responseData), 30);
     } catch (error: any) {
       // if (error) {
-        toast.error("Invalid Credentials");
+      toast.error("Invalid Credentials");
       // }
       setLoading(false);
     }
   };
-  const refreshTokenAndSchedule = async (auth: any, setToken: Function, setCookie: Function) => {
+
+  const refreshTokenAndSchedule = async (auth: any) => {
     try {
       const user = auth.currentUser;
       if (user) {
         // Refresh the token
         const newIdToken = await user.getIdToken(true);
-  
+        console.log(newIdToken,"newIdToken");
+        
+        // localStorage.setItem('idToken', newIdToken);
         // Calculate new expiration time (1 hour from now)
-        const newExpirationTime = Date.now() + 60 * 60 * 1000; // 1 hour
-  
-        // Update cookies with the new token and expiration time
+        const newExpirationTime:any = Date.now() + 1 * 60 * 1000; // 1 hour
+
+        // // Update cookies with the new token and expiration time
         setToken(newIdToken);
-        setCookie("COOKIES_USER_ACCESS_TOKEN", newIdToken, { expires: new Date(newExpirationTime) });
-        setCookie("expirationTime", newExpirationTime, { expires: new Date(newExpirationTime) });
-  
-        console.log("Token refreshed:", newIdToken);
-  
-        // Schedule the next token refresh (every 1 minute)
-        scheduleTokenRefresh(60 * 1000, auth, setToken, setCookie); // 1 minute
+        setCookie("COOKIES_USER_ACCESS_TOKEN", newIdToken, { expires: new Date(newExpirationTime) }as any);
+        setCookie("expirationTime", newExpirationTime, { expires: new Date(newExpirationTime) } as any);
+
+        // console.log("Token refreshed:", newIdToken);
+        const res = await axios.get("https://frontend.goaideme.com/single-user", {
+          headers: {
+            Token: newIdToken, // Use the token from cookies
+            "Content-Type": "application/json",
+          },
+        });
+    
+        const responseData = res?.data?.data;
+        console.log(responseData, 'responsedata')
+    
+        toast.success("Login successfully");
+        dispatch(getuserData(responseData));
+        router.push("/admin/dashboard");
+
+        // Schedule the next token refresh (20 seconds before expiration)
+        const refreshInterval = Math.max(0, newExpirationTime - Date.now() - 20 * 1000); // 20 seconds before expiration
+        setTimeout(() => refreshTokenAndSchedule(auth), refreshInterval);
       }
     } catch (error) {
       console.error("Error refreshing token:", error);
     }
   };
-  
+
   // Function to schedule the token refresh
-  const scheduleTokenRefresh = (refreshInterval: number, auth: any, setToken: Function, setCookie: Function) => {
-    // Use setTimeout to refresh the token every minute
-    setTimeout(() => refreshTokenAndSchedule(auth, setToken, setCookie), refreshInterval);
+  const scheduleTokenRefresh = (auth: any) => {
+    refreshTokenAndSchedule(auth,);
   };
-  
+ 
   const onFinish = async (values: any) => {
+    const auth = getAuth();
+
+
     try {
       setLoading(true);
-  
-      // Initialize Firebase Auth
-      const auth = getAuth();
-  
+
       // Sign in with email and password
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -228,62 +244,83 @@ const Sigin = () => {
           : values?.email.trim().toLowerCase(),
         values?.password
       );
-  
-      setState(userCredential);
-  
+
       // Get the ID token and set custom expiration time
       const idToken = await userCredential.user.getIdToken(true);
-      const customExpirationTime:any = Date.now() + 60 * 60 * 1000; // 1 hour
-  
+      console.log(idToken,"idToken");
+      // localStorage.setItem('idToken', idToken);
+      // const customExpirationTime: any = Date.now() + 2 * 60 * 1000; // 1 hour
+
       // Store expiration time and token in cookies
-      setCookie("expirationTime", customExpirationTime, 1); // 1 hour
-      setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 1); // 1 hour
-  
+      // setCookie("expirationTime", customExpirationTime, { expires: new Date(customExpirationTime) } as any);
+      // setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, { expires: new Date(customExpirationTime) } as any);
+
       console.log("Session will expire in 1 hour");
-  
-      // Schedule token refresh every 1 minute
-      scheduleTokenRefresh(60 * 1000, auth, setToken, setCookie); // 1 minute
-  
-      // Call API with the token
-      const res = await axios.get("https://frontend.goaideme.com/single-user", {
-        headers: {
-          Token: idToken,
-          "Content-Type": "application/json",
-        },
-      });
-  
-      const responseData: any = res?.data?.data;
-  
-      toast.success("Login successfully");
-      dispatch(getuserData(responseData));
-      router.push("/admin/dashboard");
-  
-    } catch (error: any) {
+
+      // Schedule token refresh
+      scheduleTokenRefresh(auth);
+
+      // Fetch latest token from cookies
+      //     const cookies = parseCookies();
+      //     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
+      // console.log(accessToken,"accessToken");
+
+      // Call API with the latest token
+      // const res = await axios.get("https://frontend.goaideme.com/single-user", {
+      //   headers: {
+      //     Token: idToken, // Use the token from cookies
+      //     "Content-Type": "application/json",
+      //   },
+      // });
+
+      // const responseData = res?.data?.data;
+
+      // toast.success("Login successfully");
+      // dispatch(getuserData(responseData));
+      // router.push("/admin/dashboard");
+    } catch (error) {
       toast.error("Invalid Credentials");
       setLoading(false);
     }
   };
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+const getToken=localStorage.getItem("idToken")
+
+  // const signin = async () => {
+  //   const res = await axios.get("https://frontend.goaideme.com/single-user", {
+  //     headers: {
+  //       Token: getToken, // Use the token from cookies
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+
+  //   const responseData = res?.data?.data;
+
+  //   toast.success("Login successfully");
+  //   dispatch(getuserData(responseData));
+  //   router.push("/admin/dashboard");
+  // }
+
+
+
+
+
   return (
     <section className="auth-pages d-flex align-items-center h-100 loginAuth">
-        <ToastContainer
-         position="top-right"
-         autoClose={1000}
-         hideProgressBar={false}
-         newestOnTop={false}
-         closeOnClick
-         rtl={false}
-         pauseOnFocusLoss
-         draggable
-         pauseOnHover
-       />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="container">
         <Row justify="center">
           <Col

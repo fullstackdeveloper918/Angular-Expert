@@ -62,9 +62,9 @@ const AdditionalQuestion = () => {
                  // }
                  setTimeout(() => {
                     if (!pagetype) {
-                        router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
+                        router.push(`/admin/member/add/page8?${res?.userId}&edit`)
                     } else {
-                      router.back();
+                        router.push("/admin/questionnaire?additionalPage")
                     }
                   }, 1000);
             } else {
@@ -76,7 +76,7 @@ const AdditionalQuestion = () => {
                 router.replace("/auth/signin")
             }
             if (!pagetype) {
-                router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
+                router.push(`/admin/member/add/page8?${res?.userId}&edit`)
             }else{
                 router?.back()
             }

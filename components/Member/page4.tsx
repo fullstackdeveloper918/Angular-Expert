@@ -60,7 +60,7 @@ const Page4 = () => {
                     if (!pagetype) {
                       router.push(`/admin/member/add/page5?${value}&edit`);
                     } else {
-                      router.back();
+                        router.push("/admin/questionnaire?page4")
                     }
                   }, 1000);
             } else {

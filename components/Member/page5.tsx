@@ -58,7 +58,7 @@ const Page5 = () => {
                     if (!pagetype) {
                       router.push(`/admin/member/add/page6?${value}&edit`);
                     } else {
-                      router.back();
+                        router.push("/admin/questionnaire?page5")
                     }
                   }, 1000);
             } else {
