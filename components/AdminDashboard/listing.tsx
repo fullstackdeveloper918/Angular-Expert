@@ -569,7 +569,7 @@ const AdminDashboard: Page = (props: any) => {
     } else {
       userlist();
     }
-  }, []);
+  }, [state1?.status === '400']);
   const initialise = async () => {
     try {
       if (getUserdata?.is_admin == false) {
