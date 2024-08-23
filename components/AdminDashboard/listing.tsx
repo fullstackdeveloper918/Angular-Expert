@@ -561,14 +561,14 @@ const AdminDashboard: Page = (props: any) => {
     }
   }
   useEffect(() => {
-    // const hasReloaded = localStorage.getItem('hasReloaded');
-    // if (!hasReloaded) {
-    //   // if (!hasReloaded && state1?.status === '400') {
-    //   localStorage.setItem('hasReloaded', 'true');
-    //   window.location.reload();
-    // } else {
+    const hasReloaded = localStorage.getItem('hasReloaded');
+    if (!hasReloaded) {
+      // if (!hasReloaded && state1?.status === '400') {
+      localStorage.setItem('hasReloaded', 'true');
+      window.location.reload();
+    } else {
       userlist();
-    // }
+    }
   }, []);
   const initialise = async () => {
     try {
