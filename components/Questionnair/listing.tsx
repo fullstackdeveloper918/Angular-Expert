@@ -592,7 +592,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
                                                             {state1?.financial_position?
                                                             <Tooltip title="Download Pdf">
-                                                                <Button onClick={downLoadPdf}><DownloadOutlined /></Button>
+                                                                <Button className="borderBtn" onClick={downLoadPdf}><DownloadOutlined /></Button>
                                                             </Tooltip>:""}
                                                         </div>
                                                         <Link
@@ -601,7 +601,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         >
                                                             <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                 <div className="mt-2">
-                                                                    <Button  >
+                                                                    <Button  className="borderBtn">
                                                                         Update
                                                                     </Button>
                                                                 </div>
@@ -643,9 +643,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             <h5 className="fw-bold text-start mb-4">GOALS</h5>
                                                             {state1?.goal_last_meeting ?
                                                             <Tooltip title="Download Pdf">
-                                                                <Button onClick={downLoadPdf2}><DownloadOutlined /></Button>
+                                                                <Button className="borderBtn" onClick={downLoadPdf2}><DownloadOutlined /></Button>
                                                             </Tooltip>:<Tooltip title="No Data Available">
-                                                                <Button onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
+                                                                <Button className="borderBtn" onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
                                                             </Tooltip>}
                                                         </div>
                                                         <Link
@@ -654,7 +654,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         >
                                                             <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                 <div className="mt-2">
-                                                                    <Button  >
+                                                                    <Button className="borderBtn" >
                                                                         Update
                                                                     </Button>
                                                                 </div>
@@ -696,9 +696,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
                                                             {state1?.technology ?
                                                             <Tooltip title="Download Pdf">
-                                                                <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
+                                                                <Button className="borderBtn" onClick={downLoadPdf3}><DownloadOutlined /></Button>
                                                             </Tooltip>:<Tooltip title="No Data Available">
-                                                                <Button onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
+                                                                <Button className="borderBtn" onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
                                                             </Tooltip>}
                                                             {/* <Tooltip title="Download Pdf">
                                                                 <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
@@ -710,7 +710,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         >
                                                             <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                 <div className="mt-2">
-                                                                    <Button  >
+                                                                    <Button  className="borderBtn">
                                                                         Update
                                                                     </Button>
                                                                 </div>
@@ -752,9 +752,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
                                                             {state1?.commitment ?
                                                             <Tooltip title="Download Pdf">
-                                                                <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
+                                                                <Button className="borderBtn" onClick={downLoadPdf4}><DownloadOutlined /></Button>
                                                             </Tooltip>:<Tooltip title="No Data Available">
-                                                                <Button onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
+                                                                <Button className="borderBtn" onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
                                                             </Tooltip>}
                                                             {/* <Tooltip title="Download Pdf">
                                                                 <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
@@ -766,7 +766,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         >
                                                             <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                 <div className="mt-2">
-                                                                    <Button  >
+                                                                    <Button  className="borderBtn">
                                                                         Update
                                                                     </Button>
                                                                 </div>
@@ -808,9 +808,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                                 <h5 className="fw-bold text-start mb-4">SPRING 2024 MEETING REVIEW</h5>
                                                                 {state1?.fall_meeting ?
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf5}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
                                                                 </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
@@ -822,7 +822,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -864,9 +864,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
                                                             {state1?.estimating ?
                                                             <Tooltip title="Download Pdf">
-                                                                <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                <Button className="borderBtn" onClick={downLoadPdf6}><DownloadOutlined /></Button>
                                                             </Tooltip>:<Tooltip title="No Data Available">
-                                                                <Button onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
+                                                                <Button className="borderBtn" onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
                                                             </Tooltip>}
                                                             {/* <Tooltip title="Download Pdf">
                                                                 <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
@@ -878,7 +878,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         >
                                                             <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                 <div className="mt-2">
-                                                                    <Button  >
+                                                                    <Button  className="borderBtn">
                                                                         Update
                                                                     </Button>
                                                                 </div>
@@ -895,7 +895,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">ADDITIONAL QUESTIONS</h5>
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                    <Button  onClick={downLoadPdf6} className="borderBtn"><DownloadOutlined /></Button>
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
@@ -904,7 +904,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button className="borderBtn" >
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -950,9 +950,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                                 </Tooltip> */}
                                                                 {state1?.photo_section ?
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn"  onClick={downLoadPdf7}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
                                                                 </Tooltip>}
                                                             </div>
                                                             <Link
@@ -961,7 +961,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button className="borderBtn" >
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -983,7 +983,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                                 <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
                                                                 {state1?.financial_position?
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf}><DownloadOutlined /></Button>
                                                                 </Tooltip>:""}
                                                             </div>
                                                             <Link
@@ -992,7 +992,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1008,9 +1008,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                                 <h5 className="fw-bold text-start mb-4">GOALS</h5>
                                                                 {state1?.goal_last_meeting ?
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf2}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf2}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
                                                                 </Tooltip>}
                                                             </div>
                                                             <Link
@@ -1019,7 +1019,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1035,9 +1035,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                                 <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
                                                                 {state1?.technology ?
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf3}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
                                                                 </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
@@ -1049,7 +1049,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button className="borderBtn" >
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1065,9 +1065,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                                 <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
                                                                 {state1?.commitment ?
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf4}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
                                                                 </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
@@ -1079,7 +1079,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1095,9 +1095,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                                 <h5 className="fw-bold text-start mb-4">SPRING 2024 MEETING REVIEW</h5>
                                                                 {state1?.fall_meeting ?
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf5}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
                                                                 </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
@@ -1109,7 +1109,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1125,9 +1125,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                                 <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
                                                                 {state1?.estimating ?
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf6}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
                                                                 </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
@@ -1139,7 +1139,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button className="borderBtn" >
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1154,7 +1154,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">ADDITIONAL QUESTIONS</h5>
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf6}><DownloadOutlined /></Button>
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
@@ -1163,7 +1163,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1183,9 +1183,9 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                                 </Tooltip> */}
                                                                 {state1?.photo_section ?
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf7}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
                                                                 </Tooltip>}
                                                             </div>
                                                             <Link
@@ -1194,7 +1194,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>

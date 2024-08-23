@@ -42,10 +42,7 @@
 :where(.css-dev-only-do-not-override-f7vrd6).ant-select-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
   background-color: #F0F0F0 !important
 }
-.trigger, .ant-pagination .ant-pagination-item-active{
-  background: #040707 !important;
-  border-color: #000;
-}
+
 :where(.css-dev-only-do-not-override-f7vrd6).ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
   color: #040707 !important;
   border-color:#040707 !important;
@@ -104,7 +101,7 @@ i.fa-trash-can{
   box-shadow: 0 0 10px rgb(144 143 143 / 20%);
 }
 :where(.css-dev-only-do-not-override-f7vrd6).ant-table-wrapper .ant-table-pagination-right {
-  padding: 10px;
+  padding: 10px !important;
 }
 .ViewMore {
   background: transparent !important;
@@ -129,7 +126,7 @@ i.fa-trash-can{
   outline: none !important;
 }
 .paginationCenter .ant-pagination{
-  justify-content: center;
+  justify-content: center !important;
 }
 a.forgotPassword {
   color: #000;
@@ -258,7 +255,7 @@ a.forgotPassword {
   padding: 8px 11px !important;
 }
 :where(.css-dev-only-do-not-override-98ntnt).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector {
-  border-color: #000000;
+  border-color: #000000 !important;
 }
 .tabs-wrapper .ant-table-container{
   width: 100%;
@@ -270,30 +267,34 @@ a.forgotPassword {
   border-color: #000000 !important;
 }
 :where(.css-dev-only-do-not-override-98ntnt).ant-table-wrapper .ant-table-pagination.ant-pagination {
-  padding: 13px 20px;
-  gap: 7px;
+  padding: 13px 20px !important;
+  gap: 7px !important;
 }
 :where(.css-dev-only-do-not-override-98ntnt).ant-pagination .ant-pagination-item {
  
-  min-width: 22px;
-  height: 22px;
-  margin-inline-end: 5px;
-  line-height: 20px;
-  font-size: 12px;
-  user-select: none;
+  min-width: 22px !important;
+  height: 22px !important;
+  margin-inline-end: 5px !important;
+  line-height: 20px !important;
+  font-size: 12px !important; 
+  user-select: none !important;
 }
 
 :where(.css-dev-only-do-not-override-98ntnt).ant-pagination .ant-pagination-prev,
 :where(.css-dev-only-do-not-override-98ntnt).ant-pagination .ant-pagination-next{
-  min-width: 26px;
-  height: 24px;
-  line-height: 20px;
-  text-align: center;
-  vertical-align: middle;
-  list-style: none;
-  border-radius: 6px;
-  transition: all 0.2s;
-  background: rgb(235 235 235 / 24%);
+  min-width: 26px !important;
+  height: 24px !important;
+  line-height: 20px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  list-style: none !important;
+  border-radius: 6px !important;
+  transition: all 0.2s !important;
+  background: rgb(235 235 235 / 24%) !important;
+}
+.trigger, .ant-pagination .ant-pagination-item-active{
+  background: #040707 !important;
+  border-color: #000 !important;
 }
 :where(.css-dev-only-do-not-override-98ntnt).ant-popover .ant-popover-content {
   right: 25px;
@@ -317,15 +318,39 @@ a.forgotPassword {
 .cardButtons .ant-btn-primary {
   flex: 1;
 }
+:where(.css-98ntnt).ant-table-wrapper .ant-table-pagination.ant-pagination {
+  padding: 16px 0 !important;
+  margin: 0 !important;
+}
+:where(.css-98ntnt).ant-popconfirm.ant-popover {
+  font-size: 14px;
+  right: 25px !important;
+  left: unset !important;
+}
+:where(.css-98ntnt).ant-menu-light .ant-menu-item-selected, :where(.css-98ntnt).ant-menu-light>.ant-menu .ant-menu-item-selected {
+  background-color: #d3d3d3 !important;
+}
+
+.borderBtn{
+  background: #ffffff;
+  border-color: #d9d9d9;
+  color: rgba(0, 0, 0, 0.88);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02);
+  transition: all .3s ease-in;
+}
+.borderBtn:hover{
+  border-color: #000 !important;
+  color: rgba(0, 0, 0, 0.88) !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+
 @media screen and (max-width:1290px) {
   .auth-pages .image-wrapper{
     max-height: 520px;
     padding: 0 30px;
   }
-
-
-
-
 }
 @media screen and (max-width:991x) {
   .ant-card .ant-card-body {
