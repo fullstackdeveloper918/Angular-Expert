@@ -2,50 +2,22 @@
 import {
     Breadcrumb,
     Form,
-    Select,
-    Input,
-    Upload,
-    Modal,
-    message,
     Typography,
-    SelectProps,
     Button,
     Card,
     Col,
     Row,
 } from "antd";
-import dynamic from "next/dynamic";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
-import { PlusOutlined, StepBackwardOutlined } from "@ant-design/icons";
-import Link from "next/link";
-import validation from "@/utils/validation";
 import MainLayout from "../../components/Layout/layout";
 import 'react-toastify/dist/ReactToastify.css';
-import EmployeeRoles from "@/utils/EmployeeRoles.json";
 import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
 import { toast, ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { destroyCookie, setCookie } from "nookies";
-import henceforthApi from "@/utils/api";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/utils/firebase";
 import nookies from 'nookies';
-// const { Row, Col, Card, Button } = {
-//   Button: dynamic(() => import("antd").then((module) => module.Button), {
-//     ssr: false,
-//   }),
-//   Row: dynamic(() => import("antd").then((module) => module.Row), {
-//     ssr: false,
-//   }),
-//   Col: dynamic(() => import("antd").then((module) => module.Col), {
-//     ssr: false,
-//   }),
-//   Card: dynamic(() => import("antd").then((module) => module.Card), {
-//     ssr: false,
-//   }),
-// };
 const Page1 = () => {
     const router = useRouter()
     const [form] = Form.useForm();
@@ -58,12 +30,6 @@ const Page1 = () => {
     const value = entries.length > 0 ? entries[0][0] : '';
     const type = entries.length > 1 ? entries[1][0] : '';
     const pagetype = entries.length > 2 ? entries[2][0] : '';
-    const setCookie = (name: any, value: any, days: any) => {
-        nookies.set(null, name, value, {
-            maxAge: days * 24 * 60 * 60,
-            path: '/',
-        });
-    };
     const onFinish = async (values: any) => {
         let items = {
             bussiness_update: {
@@ -98,14 +64,14 @@ const Page1 = () => {
                 // } else {
                 //     router?.back()
                 // }
-                setTimeout(() => {
+                // setTimeout(() => {
                     if (!pagetype) {
                       router.push(`/admin/member/add/page3?${value}&edit`);
                     } else {
                     //   router.back();
                     router.push("/admin/questionnaire?page2")
                     }
-                  }, 1000);
+                //   }, 1000);
                 toast.success(res?.message)
                 // toast.success(message, {
                 //     onClose: () => {
@@ -121,7 +87,7 @@ const Page1 = () => {
 
                 setLoading(true)
                 let res = await api.Auth.signUp(items)
-                if (res?.status == 400) {
+                if (res?.status == 500) {
                     toast.error("Session Expired Login Again")
                     localStorage.removeItem('hasReloaded');
                     router.replace("/auth/signin")
@@ -238,7 +204,7 @@ const Page1 = () => {
                 setLoading(true)
                 let res = await api.Auth.signUp(items)
                 toast.success("Added Successfully")
-                if (res?.status == 400) {
+                if (res?.status == 500) {
                     toast.error("Session Expired Login Again")
                     router.replace("/auth/signin")
                 }
@@ -309,72 +275,36 @@ const Page1 = () => {
                                         {/* First Name  */}
                                         <Form.Item name="financial_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your current financial position:">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                            // onKeyPress={(e: any) => {
-                                            //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                            //         e.preventDefault();
-                                            //     } else {
-                                            //         e.target.value = String(e.target.value).trim()
-                                            //     }
-                                            // }}
+                    
                                             />
                                         </Form.Item>
                                         {/* Last Name  */}
                                         <Form.Item name="sales_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your current sales positions, hot prospects, recently contracted work:">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                            // onKeyPress={(e: any) => {
-                                            //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                            //         e.preventDefault();
-                                            //     } else {
-                                            //         e.target.value = String(e.target.value).trim()
-                                            //     }
-                                            // }}
+                                            
                                             />
                                         </Form.Item>
                                         <Form.Item name="accomplishments" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your accomplishments in the last 6 months:">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                            // onKeyPress={(e: any) => {
-                                            //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                            //         e.preventDefault();
-                                            //     } else {
-                                            //         e.target.value = String(e.target.value).trim()
-                                            //     }
-                                            // }}
+                                           
                                             />
                                         </Form.Item>
                                         <Form.Item name="hr_position" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe your HR position &/or needs:">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                            // onKeyPress={(e: any) => {
-                                            //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                            //         e.preventDefault();
-                                            //     } else {
-                                            //         e.target.value = String(e.target.value).trim()
-                                            //     }
-                                            // }}
+                                            
                                             />
                                         </Form.Item>
                                         <Form.Item name="current_challenges" rules={[{ required: true, whitespace: true, message: 'Please Fill Field' }]} label="Describe any current challenges your business is facing (i.e. problem client, personnel
 issue(s), trade availability, rising costs, supply chain, etc.):">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                            // onKeyPress={(e: any) => {
-                                            //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                            //         e.preventDefault();
-                                            //     } else {
-                                            //         e.target.value = String(e.target.value).trim()
-                                            //     }
-                                            // }}
+                                          
                                             />
                                         </Form.Item>
 
 
                                         <Form.Item name="craftsmen_support" rules={[{ required: true, message: 'Please Fill Field' }]} label="How can the Craftsmen aid or support you with these challenges?">
                                             <TextArea size={'large'} placeholder="Enter..."
-                                            // onKeyPress={(e: any) => {
-                                            //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                                            //         e.preventDefault();
-                                            //     } else {
-                                            //         e.target.value = String(e.target.value).trim()
-                                            //     }
-                                            // }}
+                                          
                                             />
                                         </Form.Item>
 
@@ -399,7 +329,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                                 </div>
                                                 :
                                                 <div className=" col-8 d-flex gap-5 justify-content-center">
-                                                    <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
+                                                    <Button size={'large'} type="primary" className=" ">
                                                         Back
                                                     </Button>
 

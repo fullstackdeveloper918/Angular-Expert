@@ -89,7 +89,7 @@ const QuestionnairList = () => {
         try {
             let res = await api.Meeting.listing();
             setAreas(res);
-            if (res?.status == 400) {
+            if (res?.status == 500) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 // }

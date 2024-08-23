@@ -85,7 +85,7 @@ const Add = () => {
         //   router.push('/admin/member')
         // }
         router.push(`/admin/member/additional_user?${res?.user_id}`)
-        if (res?.status == 400) {
+        if (res?.status == 500) {
           toast.error("Session Expired Login Again")
           router.replace("/auth/signin")
         }
@@ -139,7 +139,7 @@ const Add = () => {
         } as any
         let res = await api.User.edit(items)
         // router.push(`/admin/member/add/page2?${value}&edit`)
-        if (res?.status == 400) {
+        if (res?.status == 500) {
           destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
           localStorage.removeItem('hasReloaded');
           toast.error("Session Expired Login Again")
@@ -152,7 +152,7 @@ const Add = () => {
         router.push(`/admin/member/additional_user`)
         toast.success("Added Successfully")
 router.back()
-        if (res?.status == 400) {
+        if (res?.status == 500) {
           toast.error("Session Expired Login Again")
           router.replace("/auth/signin")
         }

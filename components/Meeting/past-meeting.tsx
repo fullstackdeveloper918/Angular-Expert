@@ -197,7 +197,7 @@ const PastMeetingList = () => {
             const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
             let res = await api.Meeting.past_meeting(query);
             setAreas(res?.result);
-            if (res?.status == 400) {
+            if (res?.status == 500) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
                 // }

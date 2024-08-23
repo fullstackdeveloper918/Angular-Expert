@@ -65,7 +65,7 @@ const Page5 = () => {
 
                 setLoading(true)
                 let res = await api.Auth.signUp(items)
-                if (res?.status == 400) {
+                if (res?.status == 500) {
                     toast.error("Session Expired Login Again")
                     router.replace("/auth/signin")
                 }
@@ -112,7 +112,7 @@ const Page5 = () => {
                 setLoading(true)
                 let res = await api.Auth.signUp(items)
                 toast.success("Save Successfully")
-                if (res?.status == 400) {
+                if (res?.status == 500) {
                     toast.error("Session Expired Login Again")
                     router.replace("/auth/signin")
                 }

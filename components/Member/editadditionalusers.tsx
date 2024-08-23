@@ -45,7 +45,7 @@ const Edititionaladd = () => {
                 let res = await api.User.edit_additional_user(item)
                 toast.success(res?.message)
                 router?.back()
-                if (res?.status == 400) {
+                if (res?.status == 500) {
                     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                     localStorage.removeItem('hasReloaded');
                     toast.error("Session Expired Login Again")

@@ -50,6 +50,9 @@ const Sigin = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
+
+  // const auth = getAuth();
   // const handleSuperAdminClick = () => {
   //   setShowPassword((prevShowPassword) => !prevShowPassword); // Toggle showPassword state
   // };
@@ -86,6 +89,35 @@ const Sigin = () => {
   //   }
   // }, [router]);
 
+
+  // const refreshed = async () => {
+  //   try{
+  //     const res = await axios.get("https://frontend.goaideme.com/single-user", {
+  //       headers: {
+  //         Token: token, 
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  
+      
+  //     const responseData = res?.data?.data;
+  //     console.log(responseData, 'man')
+  //     console.log('useeffect runs')
+  //     router.push("/admin/dashboard");
+  //   } catch(err) {
+  //     console.log(err, 'check err')
+  //   }
+   
+
+  // }
+
+
+  // useEffect(() => {
+  //  refreshed()
+    
+
+  // },[token])
+
   const setCookie = (name: string, value: string, days: number) => {
     const expires = new Date();
     expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
@@ -100,7 +132,7 @@ const Sigin = () => {
     }
   };
 
-  // const refreshToken = async () => {
+ 
   //   onAuthStateChanged(auth, (user) => {
   //     if (user) {
   //       user
@@ -131,102 +163,170 @@ const Sigin = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-  const onFinish1 = async (values: any) => {
-    try {
-      setLoading(true);
+  // const onFinish1 = async (values: any) => {
+  //   try {
+  //     setLoading(true);
 
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        values?.password === "RamDodge2020"
-          ? "nahbcraftsmen@gmail.com"
-          : values?.email.trim().toLowerCase(),
-        values?.password
-      );
-      // const user =await userCredential?.user
-      // console.log(user, "userrrr");
+  //     const userCredential = await signInWithEmailAndPassword(
+  //       auth,
+  //       values?.password === "RamDodge2020"
+  //         ? "nahbcraftsmen@gmail.com"
+  //         : values?.email.trim().toLowerCase(),
+  //       values?.password
+  //     );
+  //     // const user =await userCredential?.user
+  //     // console.log(user, "userrrr");
 
-      setState(userCredential);
-      const idTokenResult = await userCredential.user.getIdTokenResult(true);
-      const refreshToken = idTokenResult.token;
-      const idToken = await userCredential.user.getIdToken();
-      console.log(idTokenResult, "idTokenResult");
-      console.log(idToken, "idToken");
-      console.log(refreshToken, "refreshToken");
-      setToken(refreshToken);
-      const expirationTime = idTokenResult.expirationTime;
-      const timeRemaining = new Date(expirationTime).getTime() - Date.now();
-      console.log(timeRemaining - 60000, "check bbb");
-      const expireDate = new Date();
-      expireDate.setMinutes(expireDate.getMinutes() + 30);
-      return
-      const res = await axios.get("https://frontend.goaideme.com/single-user", {
-        headers: {
-          Token: `${idToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-      const responseData: any = res?.data?.data;
-      toast.success("Login successfully");
-      dispatch(getuserData(responseData));
-      router?.push("/admin/dashboard");
+  //     setState(userCredential);
+  //     const idTokenResult = await userCredential.user.getIdTokenResult(true);
+  //     const refreshToken = idTokenResult.token;
+  //     const idToken = await userCredential.user.getIdToken();
+  //     console.log(idTokenResult, "idTokenResult");
+  //     console.log(idToken, "idToken");
+  //     console.log(refreshToken, "refreshToken");
+  //     setToken(refreshToken);
+  //     const expirationTime = idTokenResult.expirationTime;
+  //     const timeRemaining = new Date(expirationTime).getTime() - Date.now();
+  //     console.log(timeRemaining - 60000, "check bbb");
+  //     const expireDate = new Date();
+  //     expireDate.setMinutes(expireDate.getMinutes() + 30);
+  //     return
+  //     const res = await axios.get("https://frontend.goaideme.com/single-user", {
+  //       headers: {
+  //         Token: `${idToken}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     const responseData: any = res?.data?.data;
+  //     toast.success("Login successfully");
+  //     dispatch(getuserData(responseData));
+  //     router?.push("/admin/dashboard");
 
-      createSessionCookie(idToken);
-      const longExpireDate = new Date();
-      longExpireDate.setDate(longExpireDate.getDate() + 30);
-      setCookie("COOKIES_USER_ACCESS_TOKEN", refreshToken, 30);
-      setCookie("user_data", JSON.stringify(responseData), 30);
-    } catch (error: any) {
-      // if (error) {
-      toast.error("Invalid Credentials");
-      // }
-      setLoading(false);
-    }
-  };
+  //     createSessionCookie(idToken);
+  //     const longExpireDate = new Date();
+  //     longExpireDate.setDate(longExpireDate.getDate() + 30);
+  //     setCookie("COOKIES_USER_ACCESS_TOKEN", refreshToken, 30);
+  //     setCookie("user_data", JSON.stringify(responseData), 30);
+  //   } catch (error: any) {
+  //     // if (error) {
+  //     toast.error("Invalid Credentials");
+  //     // }
+  //     setLoading(false);
+  //   }
+  // };
 
-  const refreshTokenAndSchedule = async (auth: any) => {
+  // const refreshTokenAndSchedule = async (auth: any) => {
+  //   try {
+  //     console.log(auth, 'auth check')
+  //     const user = auth.currentUser;
+      
+  //     if (user) {
+  //       // Refresh the token
+  //       const newIdToken = await user.getIdToken(true);
+        
+  //       // localStorage.setItem('idToken', newIdToken);
+  //       // Calculate new expiration time (1 hour from now)
+  //       const newExpirationTime:any = Date.now() + 1 * 60 * 1000; // 1 hour
+
+  //       // // Update cookies with the new token and expiration time
+  //       setToken(newIdToken);
+  //       setCookie("COOKIES_USER_ACCESS_TOKEN", newIdToken, { expires: new Date(newExpirationTime) }as any);
+  //       setCookie("expirationTime", newExpirationTime, { expires: new Date(newExpirationTime) } as any);
+
+  //       // console.log("Token refreshed:", newIdToken);
+
+
+        
+  //       // const responseData = res?.data?.data;
+  //       // console.log(responseData, 'man')
+    
+  //       toast.success("Login successfully");
+  //       // dispatch(getuserData(responseData));
+  //       // router.push("/admin/dashboard");
+
+  //       // Schedule the next token refresh (20 seconds before expiration)
+  //       const refreshInterval = Math.max(0, newExpirationTime - Date.now() - 20 * 1000); // 20 seconds before expiration
+  //       setInterval(() => refreshTokenAndSchedule(auth), refreshInterval);
+        
+  //     }
+  //   } catch (error) {
+  //     console.error("Error refreshing token:", error);
+  //   }
+  // };
+
+  const refreshTokenAndSchedule = async (auth:any) => {
     try {
       const user = auth.currentUser;
+      console.log(user?.accessToken, 'accesstoken')
+      console.log(user, 'useer after 40')
       if (user) {
-        // Refresh the token
         const newIdToken = await user.getIdToken(true);
-        console.log(newIdToken,"newIdToken");
-        
-        // localStorage.setItem('idToken', newIdToken);
-        // Calculate new expiration time (1 hour from now)
-        const newExpirationTime:any = Date.now() + 1 * 60 * 1000; // 1 hour
+        console.log(newIdToken, 'newIdT1oken')
+        const newExpirationTime = Date.now() + 1 * 60 * 1000; // 1 hour from now
 
-        // // Update cookies with the new token and expiration time
+
+
+        // Update state and cookies
         setToken(newIdToken);
-        setCookie("COOKIES_USER_ACCESS_TOKEN", newIdToken, { expires: new Date(newExpirationTime) }as any);
-        setCookie("expirationTime", newExpirationTime, { expires: new Date(newExpirationTime) } as any);
+        createSessionCookie(newIdToken);
+        setCookie("expirationTime", newExpirationTime.toString(), 30);
 
-        // console.log("Token refreshed:", newIdToken);
-        const res = await axios.get("https://frontend.goaideme.com/single-user", {
-          headers: {
-            Token: newIdToken, // Use the token from cookies
-            "Content-Type": "application/json",
-          },
-        });
-    
-        const responseData = res?.data?.data;
-        console.log(responseData, 'responsedata')
-    
-        toast.success("Login successfully");
-        dispatch(getuserData(responseData));
-        router.push("/admin/dashboard");
-
-        // Schedule the next token refresh (20 seconds before expiration)
-        const refreshInterval = Math.max(0, newExpirationTime - Date.now() - 20 * 1000); // 20 seconds before expiration
-        setTimeout(() => refreshTokenAndSchedule(auth), refreshInterval);
+        // The next refresh is scheduled for 40 seconds
       }
-    } catch (error) {
-      console.error("Error refreshing token:", error);
+    } catch (error:any) {
+      console.error("Error refreshing token:", error.message);
     }
   };
+
+
+  useEffect(() => {
+    // Initial refresh and scheduling
+    refreshTokenAndSchedule(auth);
+
+    // Set interval to refresh the token every 40 seconds
+    const intervalId = setInterval(() => {
+      
+      refreshTokenAndSchedule(auth);
+    }, 60 * 1000); // 20 seconds
+
+    // Cleanup interval on component unmount
+    return () => {
+      clearInterval(intervalId);
+      
+    };
+  }, []);
+
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        console.log(token, 'token new')
+        if (token) {
+          
+          const res = await axios.get("https://frontend.goaideme.com/single-user", {
+            headers: {
+              Token: token,
+              "Content-Type": "application/json",
+            },
+          });
+          const responseData = res?.data?.data;
+          console.log(responseData, 'responsedata')
+          dispatch(getuserData(responseData));
+          router?.push("/admin/dashboard");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  },[token,auth])
+
+
 
   // Function to schedule the token refresh
   const scheduleTokenRefresh = (auth: any) => {
-    refreshTokenAndSchedule(auth,);
+    refreshTokenAndSchedule(auth);
   };
  
   const onFinish = async (values: any) => {
@@ -247,37 +347,12 @@ const Sigin = () => {
 
       // Get the ID token and set custom expiration time
       const idToken = await userCredential.user.getIdToken(true);
-      console.log(idToken,"idToken");
-      // localStorage.setItem('idToken', idToken);
-      // const customExpirationTime: any = Date.now() + 2 * 60 * 1000; // 1 hour
+    
 
-      // Store expiration time and token in cookies
-      // setCookie("expirationTime", customExpirationTime, { expires: new Date(customExpirationTime) } as any);
-      // setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, { expires: new Date(customExpirationTime) } as any);
-
-      console.log("Session will expire in 1 hour");
 
       // Schedule token refresh
       scheduleTokenRefresh(auth);
 
-      // Fetch latest token from cookies
-      //     const cookies = parseCookies();
-      //     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
-      // console.log(accessToken,"accessToken");
-
-      // Call API with the latest token
-      // const res = await axios.get("https://frontend.goaideme.com/single-user", {
-      //   headers: {
-      //     Token: idToken, // Use the token from cookies
-      //     "Content-Type": "application/json",
-      //   },
-      // });
-
-      // const responseData = res?.data?.data;
-
-      // toast.success("Login successfully");
-      // dispatch(getuserData(responseData));
-      // router.push("/admin/dashboard");
     } catch (error) {
       toast.error("Invalid Credentials");
       setLoading(false);
@@ -287,22 +362,8 @@ const Sigin = () => {
 
 
 
-const getToken=localStorage.getItem("idToken")
 
-  // const signin = async () => {
-  //   const res = await axios.get("https://frontend.goaideme.com/single-user", {
-  //     headers: {
-  //       Token: getToken, // Use the token from cookies
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
 
-  //   const responseData = res?.data?.data;
-
-  //   toast.success("Login successfully");
-  //   dispatch(getuserData(responseData));
-  //   router.push("/admin/dashboard");
-  // }
 
 
 

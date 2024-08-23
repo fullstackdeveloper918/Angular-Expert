@@ -58,7 +58,7 @@ const Admin: Page = () => {
           
             let res = await api.Admin.listing()
             setState(res)
-            if (res?.status == 400) {
+            if (res?.status == 500) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 // }

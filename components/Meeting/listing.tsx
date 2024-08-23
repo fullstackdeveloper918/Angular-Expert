@@ -227,7 +227,7 @@ const MeetingList = () => {
          
             
             setLoading(false);
-            if (res?.status == 400) {
+            if (res?.status == 500) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
                 // }
@@ -239,7 +239,7 @@ const MeetingList = () => {
             console.error(error.status);
             
             setLoading(false);
-            if (error?.status==400) {
+            if (error?.status==500) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 // }
