@@ -226,14 +226,14 @@ const AdditionalQuestion = () => {
 
                                         {/* Button  */}
                                         {!pagetype ?
-                                                <div className="col-2">
+                                                <div className="">
 
                                                     <Button size={'large'} type="primary" className=" " htmlType="submit">
                                                         Save
                                                     </Button>
                                                 </div> : ""}
                                                 {!pagetype?
-                                            <div className=" col-8 d-flex gap-5 justify-content-center">
+                                            <div className=" col-12 d-flex gap-5 justify-content-between">
                                                 {!pagetype ?
                                                     <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
                                                         Previous
@@ -243,7 +243,7 @@ const AdditionalQuestion = () => {
                                                 </Button>
                                             </div>
                                             :
-                                            <div className=" col-8 d-flex gap-5 justify-content-center">
+                                            <div className=" col-12 d-flex gap-5 justify-content-between">
                                                     <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
                                                         Back
                                                     </Button>

@@ -309,16 +309,16 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                         </Form.Item>
 
                                         {/* Button  */}
-                                        <div className="d-flex mt-3">
+                                        <div className="d-flex mt-3 justify-content-between">
                                             {!pagetype ?
-                                                <div className="col-2">
+                                                <div className="">
 
                                                     <Button size={'large'} type="primary" className=" " htmlType="submit">
                                                         Save
                                                     </Button>
                                                 </div> : ""}
                                             {!pagetype ?
-                                                <div className=" col-8 d-flex  justify-content-center">
+                                                <div className="  d-flex  justify-content-between">
                                                     {/* {!pagetype ?
                                                         <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
                                                             Previous
@@ -328,7 +328,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):">
                                                     </Button>
                                                 </div>
                                                 :
-                                                <div className=" col-8 d-flex gap-5 justify-content-center">
+                                                <div className="  d-flex gap-5 justify-content-between ">
                                                     <Button size={'large'} type="primary" className=" ">
                                                         Back
                                                     </Button>

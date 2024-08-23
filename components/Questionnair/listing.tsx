@@ -2,7 +2,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Input, Breadcrumb, Typography, Table, Card, Col, Row, Tooltip, Button, Collapse, theme, Popconfirm } from "antd";
 import MainLayout from "../../components/Layout/layout";
-import Link from "next/link";
+// import Link from "next/link";
 import api from "@/utils/api";
 import { CheckOutlined, DownloadOutlined, PlusOutlined } from "@ant-design/icons";
 import { pdf } from "@react-pdf/renderer";
@@ -26,6 +26,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { clearUserData } from "@/lib/features/userSlice";
 import QuestionanirModal from "../common/QuestionnairModal";
 import PhotoSectionPdf from "../common/Photosectionpdf";
+import Link from "next/link";
 
 
 const { Search } = Input;
@@ -730,26 +731,27 @@ const QuestionnairList = () => {
                                                 //     </Card>
                                                 // </Col>
                                                 <Col xs={24} sm={12} md={12} lg={12} xl={8}>
-                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
-                                                        <div className="card-body pb-2 d-flex flex-column">
-                                                            <div className="justify-content-between align-items-center d-flex">
-                                                                <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
-                                                                {state1?.financial_position ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : ""}
-                                                            </div>
-                                                            <Link
-                                                                href={`${baseURL}/page2?${xyz}&edit&questionnair`}
-                                                                className='text-decoration-none text-white flex-grow-1'
-                                                            >
-                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
-                                                                    <div className="mt-2">
-                                                                        <Button  >
-                                                                            Update
-                                                                        </Button>
-                                                                    </div>
+                                                <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                    <div className="card-body pb-2 d-flex flex-column">
+                                                        <div className="justify-content-between align-items-center d-flex">
+                                                            <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
+                                                            {state1?.financial_position?
+                                                            <Tooltip title="Download Pdf">
+                                                                <Button className="borderBtn" onClick={downLoadPdf}><DownloadOutlined /></Button>
+                                                            </Tooltip>:""}
+                                                        </div>
+                                                        <Link
+                                                            href={`${baseURL}/page2?${xyz}&edit&questionnair`}
+                                                            className='text-decoration-none text-white flex-grow-1'
+                                                        >
+                                                            <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                <div className="mt-2">
+                                                                    <Button  className="borderBtn">
+                                                                        Update
+                                                                    </Button>
                                                                 </div>
+                                                            </div>
+                                                            
                                                             </Link>
                                                         </div>
                                                     </Card>
@@ -781,28 +783,29 @@ const QuestionnairList = () => {
                                                 //     </Card>
                                                 // </Col>
                                                 <Col xs={24} sm={12} md={12} lg={12} xl={8}>
-                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
-                                                        <div className="card-body pb-2 d-flex flex-column">
-                                                            <div className="justify-content-between align-items-center d-flex">
-                                                                <h5 className="fw-bold text-start mb-4">GOALS</h5>
-                                                                {state1?.goal_last_meeting ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf2}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
-                                                            </div>
-                                                            <Link
-                                                                href={`${baseURL}/page3?${xyz}&edit&questionnair`}
-                                                                className='text-decoration-none text-white flex-grow-1'
-                                                            >
-                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
-                                                                    <div className="mt-2">
-                                                                        <Button  >
-                                                                            Update
-                                                                        </Button>
-                                                                    </div>
+                                                <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                    <div className="card-body pb-2 d-flex flex-column">
+                                                        <div className="justify-content-between align-items-center d-flex">
+                                                            <h5 className="fw-bold text-start mb-4">GOALS</h5>
+                                                            {state1?.goal_last_meeting ?
+                                                            <Tooltip title="Download Pdf">
+                                                                <Button className="borderBtn" onClick={downLoadPdf2}><DownloadOutlined /></Button>
+                                                            </Tooltip>:<Tooltip title="No Data Available">
+                                                                <Button className="borderBtn" onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
+                                                            </Tooltip>}
+                                                        </div>
+                                                        <Link
+                                                            href={`${baseURL}/page3?${xyz}&edit&questionnair`}
+                                                            className='text-decoration-none text-white flex-grow-1'
+                                                        >
+                                                            <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                <div className="mt-2">
+                                                                    <Button className="borderBtn" >
+                                                                        Update
+                                                                    </Button>
                                                                 </div>
+                                                            </div>
+                                                           
                                                             </Link>
                                                         </div>
                                                     </Card>
@@ -833,32 +836,33 @@ const QuestionnairList = () => {
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
-                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
-                                                        <div className="card-body pb-2 d-flex flex-column">
-                                                            <div className="justify-content-between align-items-center d-flex">
-                                                                <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
-                                                                {state1?.technology ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
-                                                                {/* <Tooltip title="Download Pdf">
+                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                    <div className="card-body pb-2 d-flex flex-column">
+                                                        <div className="justify-content-between align-items-center d-flex">
+                                                            <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
+                                                            {state1?.technology ?
+                                                            <Tooltip title="Download Pdf">
+                                                                <Button className="borderBtn" onClick={downLoadPdf3}><DownloadOutlined /></Button>
+                                                            </Tooltip>:<Tooltip title="No Data Available">
+                                                                <Button className="borderBtn" onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
+                                                            </Tooltip>}
+                                                            {/* <Tooltip title="Download Pdf">
                                                                 <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
                                                             </Tooltip> */}
-                                                            </div>
-                                                            <Link
-                                                                href={`${baseURL}/page4?${xyz}&edit&questionnair`}
-                                                                className='text-decoration-none text-white flex-grow-1'
-                                                            >
-                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
-                                                                    <div className="mt-2">
-                                                                        <Button  >
-                                                                            Update
-                                                                        </Button>
-                                                                    </div>
+                                                        </div>
+                                                        <Link
+                                                            href={`${baseURL}/page4?${xyz}&edit&questionnair`}
+                                                            className='text-decoration-none text-white flex-grow-1'
+                                                        >
+                                                            <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                <div className="mt-2">
+                                                                    <Button  className="borderBtn">
+                                                                        Update
+                                                                    </Button>
                                                                 </div>
+                                                            </div>
+                                                           
                                                             </Link>
                                                         </div>
                                                     </Card>
@@ -889,32 +893,33 @@ const QuestionnairList = () => {
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
-                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
-                                                        <div className="card-body pb-2 d-flex flex-column">
-                                                            <div className="justify-content-between align-items-center d-flex">
-                                                                <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
-                                                                {state1?.commitment ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
-                                                                {/* <Tooltip title="Download Pdf">
+                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                    <div className="card-body pb-2 d-flex flex-column">
+                                                        <div className="justify-content-between align-items-center d-flex">
+                                                            <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
+                                                            {state1?.commitment ?
+                                                            <Tooltip title="Download Pdf">
+                                                                <Button className="borderBtn" onClick={downLoadPdf4}><DownloadOutlined /></Button>
+                                                            </Tooltip>:<Tooltip title="No Data Available">
+                                                                <Button className="borderBtn" onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
+                                                            </Tooltip>}
+                                                            {/* <Tooltip title="Download Pdf">
                                                                 <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
                                                             </Tooltip> */}
-                                                            </div>
-                                                            <Link
-                                                                href={`${baseURL}/page5?${xyz}&edit&questionnair`}
-                                                                className='text-decoration-none text-white flex-grow-1'
-                                                            >
-                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
-                                                                    <div className="mt-2">
-                                                                        <Button  >
-                                                                            Update
-                                                                        </Button>
-                                                                    </div>
+                                                        </div>
+                                                        <Link
+                                                            href={`${baseURL}/page5?${xyz}&edit&questionnair`}
+                                                            className='text-decoration-none text-white flex-grow-1'
+                                                        >
+                                                            <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                <div className="mt-2">
+                                                                    <Button  className="borderBtn">
+                                                                        Update
+                                                                    </Button>
                                                                 </div>
+                                                            </div>
+                                                           
                                                             </Link>
                                                         </div>
                                                     </Card>
@@ -951,11 +956,11 @@ const QuestionnairList = () => {
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">SPRING 2024 MEETING REVIEW</h5>
                                                                 {state1?.fall_meeting ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf5}><DownloadOutlined /></Button>
+                                                                </Tooltip>:<Tooltip title="No Data Available">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
+                                                                </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
@@ -966,7 +971,7 @@ const QuestionnairList = () => {
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1001,32 +1006,33 @@ const QuestionnairList = () => {
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
-                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
-                                                        <div className="card-body pb-2 d-flex flex-column">
-                                                            <div className="justify-content-between align-items-center d-flex">
-                                                                <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
-                                                                {state1?.estimating ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
-                                                                {/* <Tooltip title="Download Pdf">
+                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                    <div className="card-body pb-2 d-flex flex-column">
+                                                        <div className="justify-content-between align-items-center d-flex">
+                                                            <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
+                                                            {state1?.estimating ?
+                                                            <Tooltip title="Download Pdf">
+                                                                <Button className="borderBtn" onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                            </Tooltip>:<Tooltip title="No Data Available">
+                                                                <Button className="borderBtn" onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
+                                                            </Tooltip>}
+                                                            {/* <Tooltip title="Download Pdf">
                                                                 <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
                                                             </Tooltip> */}
-                                                            </div>
-                                                            <Link
-                                                                href={`${baseURL}/page7?${xyz}&edit&questionnair`}
-                                                                className='text-decoration-none text-white flex-grow-1'
-                                                            >
-                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
-                                                                    <div className="mt-2">
-                                                                        <Button  >
-                                                                            Update
-                                                                        </Button>
-                                                                    </div>
+                                                        </div>
+                                                        <Link
+                                                            href={`${baseURL}/page7?${xyz}&edit&questionnair`}
+                                                            className='text-decoration-none text-white flex-grow-1'
+                                                        >
+                                                            <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                <div className="mt-2">
+                                                                    <Button  className="borderBtn">
+                                                                        Update
+                                                                    </Button>
                                                                 </div>
+                                                            </div>
+                                                            
                                                             </Link>
                                                         </div>
                                                     </Card>
@@ -1039,7 +1045,7 @@ const QuestionnairList = () => {
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">ADDITIONAL QUESTIONS</h5>
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                    <Button  onClick={downLoadPdf6} className="borderBtn"><DownloadOutlined /></Button>
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
@@ -1048,7 +1054,7 @@ const QuestionnairList = () => {
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button className="borderBtn" >
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1093,11 +1099,11 @@ const QuestionnairList = () => {
                                                                     <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
                                                                 {state1?.photo_section ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button className="borderBtn"  onClick={downLoadPdf7}><DownloadOutlined /></Button>
+                                                                </Tooltip>:<Tooltip title="No Data Available">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
+                                                                </Tooltip>}
                                                             </div>
                                                             <Link
                                                                 href={`${baseURL}/page8?${xyz}&edit&questionnair`}
@@ -1105,7 +1111,7 @@ const QuestionnairList = () => {
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button className="borderBtn" >
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1125,10 +1131,10 @@ const QuestionnairList = () => {
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
-                                                                {state1?.financial_position ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : ""}
+                                                                {state1?.financial_position?
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf}><DownloadOutlined /></Button>
+                                                                </Tooltip>:""}
                                                             </div>
                                                             <Link
                                                                 href={`${baseURL}/page2?${xyz}&edit&questionnair`}
@@ -1136,7 +1142,7 @@ const QuestionnairList = () => {
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1151,11 +1157,11 @@ const QuestionnairList = () => {
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">GOALS</h5>
                                                                 {state1?.goal_last_meeting ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf2}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf2}><DownloadOutlined /></Button>
+                                                                </Tooltip>:<Tooltip title="No Data Available">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
+                                                                </Tooltip>}
                                                             </div>
                                                             <Link
                                                                 href={`${baseURL}/page3?${xyz}&edit&questionnair`}
@@ -1163,7 +1169,7 @@ const QuestionnairList = () => {
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1178,11 +1184,11 @@ const QuestionnairList = () => {
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
                                                                 {state1?.technology ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf3}><DownloadOutlined /></Button>
+                                                                </Tooltip>:<Tooltip title="No Data Available">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
+                                                                </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
@@ -1193,7 +1199,7 @@ const QuestionnairList = () => {
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button className="borderBtn" >
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1208,11 +1214,11 @@ const QuestionnairList = () => {
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
                                                                 {state1?.commitment ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf4}><DownloadOutlined /></Button>
+                                                                </Tooltip>:<Tooltip title="No Data Available">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
+                                                                </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
@@ -1223,7 +1229,7 @@ const QuestionnairList = () => {
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1238,11 +1244,11 @@ const QuestionnairList = () => {
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">SPRING 2024 MEETING REVIEW</h5>
                                                                 {state1?.fall_meeting ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf5}><DownloadOutlined /></Button>
+                                                                </Tooltip>:<Tooltip title="No Data Available">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
+                                                                </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
@@ -1253,7 +1259,7 @@ const QuestionnairList = () => {
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1268,11 +1274,11 @@ const QuestionnairList = () => {
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
                                                                 {state1?.estimating ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                </Tooltip>:<Tooltip title="No Data Available">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
+                                                                </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
@@ -1283,7 +1289,7 @@ const QuestionnairList = () => {
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button className="borderBtn" >
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1298,7 +1304,7 @@ const QuestionnairList = () => {
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">ADDITIONAL QUESTIONS</h5>
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf6}><DownloadOutlined /></Button>
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
@@ -1307,7 +1313,7 @@ const QuestionnairList = () => {
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>
@@ -1326,11 +1332,11 @@ const QuestionnairList = () => {
                                                                     <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
                                                                 {state1?.photo_section ?
-                                                                    <Tooltip title="Download Pdf">
-                                                                        <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
-                                                                    </Tooltip> : <Tooltip title="No Data Available">
-                                                                        <Button onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
-                                                                    </Tooltip>}
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf7}><DownloadOutlined /></Button>
+                                                                </Tooltip>:<Tooltip title="No Data Available">
+                                                                    <Button className="borderBtn" onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
+                                                                </Tooltip>}
                                                             </div>
                                                             <Link
                                                                 href={`${baseURL}/page8?${xyz}&edit&questionnair`}
@@ -1338,7 +1344,7 @@ const QuestionnairList = () => {
                                                             >
                                                                 <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
                                                                     <div className="mt-2">
-                                                                        <Button  >
+                                                                        <Button  className="borderBtn">
                                                                             Update
                                                                         </Button>
                                                                     </div>

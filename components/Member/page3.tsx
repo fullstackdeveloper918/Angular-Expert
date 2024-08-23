@@ -450,16 +450,16 @@ const Page3 = () => {
                                             </Button>
                                         </div>
                                         {/* Button  */}
-                                        <div className="d-flex mt-3">
+                                        <div className="d-flex mt-3 justify-content-betwwen">
                                             {!pagetype ?
-                                                <div className="col-2">
+                                                <div >
 
                                                     <Button size={'large'} type="primary" className=" " htmlType="submit">
                                                         Save
                                                     </Button>
                                                 </div> : ""}
                                                 {!pagetype?
-                                            <div className=" col-8 d-flex gap-5 justify-content-center">
+                                            <div className=" d-flex gap-5 justify-content-between">
                                                 {!pagetype ?
                                                     <Button size={'large'} type="primary" className=" " onClick={onPrevious}>
                                                         Previous
@@ -469,7 +469,7 @@ const Page3 = () => {
                                                 </Button>
                                             </div>
                                             :
-                                            <div className=" col-8 d-flex gap-5 justify-content-center">
+                                            <div className="  d-flex gap-5 justify-content-between ">
                                                      <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
                                                             Back
                                                         </Button>
