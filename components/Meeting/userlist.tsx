@@ -52,6 +52,7 @@ const UserList = () => {
         is_activate: "",
         is_archive: ""
     })
+    const [loadingState, setLoadingState] = useState<{ [key: string]: boolean }>({});
     const [state1, setState1] = useState<any>([])
     const [state2, setState2] = useState<any>([])
     const cookies = parseCookies();
@@ -163,9 +164,20 @@ const UserList = () => {
 
     };
    
+    // const handleDownloadAndFetchData = async (id: any) => {
+    //     let res = await getDataById(id);
+    //     await downLoadPdf(res);
+    // };
     const handleDownloadAndFetchData = async (id: any) => {
-        let res = await getDataById(id);
-        await downLoadPdf(res);
+        setLoadingState((prevState) => ({ ...prevState, [id]: true })); // Set loading state for the specific item
+        try {
+            let res = await getDataById(id);
+            await downLoadPdf(res);
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+        } finally {
+            setLoadingState((prevState) => ({ ...prevState, [id]: false })); // Reset loading state for the specific item
+        }
     };
     const handleFetchAndFetchData = async (id: any) => {
          
@@ -175,6 +187,7 @@ const UserList = () => {
     // const completed2 = state2?.filter((res:any) => res?.is_completed === true);
     const user_completed = state2?.slice(0, 5).map((res: any, index: number) => {
         const companyName = companyNameMap[res?.company_name||getUserdata?.master_user_detail?.company_name] || "N/A";
+        const isLoading = loadingState[res?.uid];
         return {
             key: index + 1,
             name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
@@ -184,7 +197,7 @@ const UserList = () => {
             action: <ul className='m-0 list-unstyled d-flex gap-2'>
                 <li>
                     <Tooltip title="Download Pdf">
-                        <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.uid)}><DownloadOutlined /></Button>
+                        <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.uid)}> {isLoading ? <Spin /> : <DownloadOutlined />}</Button>
                     </Tooltip>
                 </li>
                 <li>
@@ -238,6 +251,7 @@ const UserList = () => {
     ];
     const dataSource = filteredData?.map((res: any, index: number) => {
         const companyName = companyNameMap[res?.company_name || res?.master_user_detail?.company_name] || "N/A";
+        const isLoading = loadingState[res?.id];
         return {
             key: index + 1,
             name: res?.firstname ? `${validation?.capitalizeFirstLetter(res?.firstname)} ${validation?.capitalizeFirstLetter(res?.lastname)}` : "N/A",
@@ -249,7 +263,7 @@ const UserList = () => {
             action: <ul className='m-0 list-unstyled d-flex gap-2'>
                 <li>
                     <Tooltip title="Download Pdf">
-                        <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.id)}><DownloadOutlined /></Button>
+                        <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.id)}> {isLoading ? <Spin /> : <DownloadOutlined />}</Button>
                     </Tooltip>
                 </li>
                 <li>
@@ -326,7 +340,7 @@ const UserList = () => {
             let query = searchTerm ? `searchTerm=${searchTerm}` : '';
             let res = await api.User.listing(query);
             setState1(res?.data || []);
-            if (res?.data?.status == 400||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
+            if (res?.data?.status == 500||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")

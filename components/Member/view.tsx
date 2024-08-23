@@ -76,6 +76,7 @@ const MeetingView = () => {
     is_activate: "",
     is_archive: ""
   })
+  const [loadingState, setLoadingState] = useState<any>(false);
   const searchParam = useParams();
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
@@ -173,8 +174,17 @@ const MeetingView = () => {
 
 // Function to handle PDF download
 const downLoadPdf = async () => {
-    const { blob, timestamp } = await generatePdf();
-    saveAs(blob, `Detail_${timestamp}.pdf`);
+  try {
+    setLoadingState(true)
+      const { blob, timestamp } = await generatePdf();
+      saveAs(blob, `Detail_${timestamp}.pdf`); 
+  } catch (error) {
+      console.error('Error generating or saving the PDF:', error); 
+      alert('Failed to generate or save the PDF. Please try again.'); 
+  }
+  finally{
+    setLoadingState(false)
+  }
 };
 
 // Function to handle PDF sharing
@@ -240,7 +250,7 @@ const companyName = companyNameMap[state?.company_name || state?.master_user_det
                   </div>
                   <div className=" ">
                     <Tooltip title="Download Pdf">
-                      <Button className='ViewMore ' onClick={downLoadPdf}><DownloadOutlined /></Button>
+                      <Button className='ViewMore ' onClick={downLoadPdf}>{loadingState ? <Spin /> : <DownloadOutlined />}</Button>
                     </Tooltip>
                     
                     <Tooltip title="Share Pdf link">

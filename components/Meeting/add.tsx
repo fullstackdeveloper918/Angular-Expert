@@ -205,7 +205,14 @@ const MeetingAdd = () => {
             let res = await api.Meeting.create(items as any);
             toast.success(res?.message)
             router.back()
+            if (res?.status == 500) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
+                // }
+                // dispatch(clearUserData({}));
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
             // onAdd();
         } catch (error: any) {
             if (error.status == 400) {

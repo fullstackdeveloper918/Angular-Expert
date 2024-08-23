@@ -256,6 +256,8 @@ const Sigin = () => {
 
   const refreshTokenAndSchedule = async (auth:any) => {
     try {
+      console.log(auth,"jklkljklk");
+      
       const check= auth.currentUser
       const user = auth.currentUser.getIdToken(true).then((idToken:any) => 
          {
@@ -346,7 +348,7 @@ const Sigin = () => {
   };
  
   const onFinish = async (values: any) => {
-    const auth = getAuth();
+    const auth:any = getAuth();
 
 
     try {
@@ -363,7 +365,7 @@ const Sigin = () => {
 
       // Get the ID token and set custom expiration time
       const idToken = await userCredential.user.getIdToken(true);
-    
+      setCookie("Auth", JSON.stringify(auth.currentUser), 30);
 
 
       // Schedule token refresh

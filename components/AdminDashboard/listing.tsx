@@ -37,6 +37,7 @@ const AdminDashboard: Page = (props: any) => {
   const [areas, setAreas] = useState<any>([]);
   const [complete, setComplete] = useState<any>("")
   const [check, setCheck] = useState<any>("")
+  const [loadingState, setLoadingState] = useState<{ [key: string]: boolean }>({});
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
   const Countdown = areas?.result?.length
     ? areas?.result
@@ -243,14 +244,25 @@ const AdminDashboard: Page = (props: any) => {
     saveAs(blob, `${capFirst(companyName)}.pdf`);
   };
 
-  const handleDownloadAndFetchData = async (id: any) => {
-    const res = await getDataById(id);
+  // const handleDownloadAndFetchData = async (id: any) => {
+  //   const res = await getDataById(id);
 
-    if (res) {
-      await downLoadPdf(res);
-    } else {
+  //   if (res) {
+  //     await downLoadPdf(res);
+  //   } else {
+  //   }
+  // };
+  const handleDownloadAndFetchData = async (id: any) => {
+    setLoadingState((prevState) => ({ ...prevState, [id]: true })); // Set loading state for the specific item
+    try {
+        let res = await getDataById(id);
+        await downLoadPdf(res);
+    } catch (error) {
+        console.error("Error generating PDF:", error);
+    } finally {
+        setLoadingState((prevState) => ({ ...prevState, [id]: false })); // Reset loading state for the specific item
     }
-  };
+};
   const completed = state1?.filter((res: any) => res?.is_completed === true);
   const filteredData = state1?.reduce((acc: any[], res: any) => {
     
@@ -294,6 +306,7 @@ const AdminDashboard: Page = (props: any) => {
   })
   .map((res: any, index: number) => {
     const companyName = companyNameMap[res?.company_name || ""] || "N/A";
+    const isLoading = loadingState[res?.id];
     return {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(res?.firstname)} ${validation.capitalizeFirstLetter(res?.lastname)}` : "N/A",
@@ -322,7 +335,7 @@ const AdminDashboard: Page = (props: any) => {
                 className='ViewMore'
                 onClick={() => handleDownloadAndFetchData(res?.id)}
               >
-                <DownloadOutlined />
+             {isLoading ? <Spin /> : <DownloadOutlined />}
               </Button>
             </Tooltip>
           </li>
@@ -333,6 +346,7 @@ const AdminDashboard: Page = (props: any) => {
 
   const dataSource2 = non_completed?.map((res: any, index: number) => {
     const companyName = companyNameMap[res?.company_name || ""] || "N/A";
+    const isLoading = loadingState[res?.id];
     return {
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(validation.capitalizeFirstLetter(res?.firstname))} ${res?.lastname}` : "N/A",
@@ -343,7 +357,7 @@ const AdminDashboard: Page = (props: any) => {
           <Tooltip title="Download Pdf">
             <Button className='ViewMore '
               onClick={() => handleDownloadAndFetchData(res?.id)}
-            ><DownloadOutlined /></Button>
+            >{isLoading ? <Spin /> : <DownloadOutlined />}</Button>
           </Tooltip>
         </li>
 
@@ -562,16 +576,16 @@ const AdminDashboard: Page = (props: any) => {
     }
   }
   useEffect(() => {
-    const hasReloaded = localStorage.getItem('hasReloaded');
-    if (!hasReloaded) {
-      // if (!hasReloaded && state1?.status === '400') {
-      localStorage.setItem('hasReloaded', 'true');
-      window.location.reload();
-    } else {
+    // const hasReloaded = localStorage.getItem('hasReloaded');
+    // if (!hasReloaded) {
+    //   // if (!hasReloaded && state1?.status === '400') {
+    //   localStorage.setItem('hasReloaded', 'true');
+    //   window.location.reload();
+    // } else {
       userlist();
-    }
-  // }, []);
-  }, [state1?.status === '400']);
+    // }
+  }, []);
+  // }, [state1?.status === '400']);
   const initialise = async () => {
     try {
       if (getUserdata?.is_admin == false) {

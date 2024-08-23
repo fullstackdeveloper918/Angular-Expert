@@ -4,7 +4,7 @@ import { Input, Breadcrumb, Typography, Table, Card, Col, Row, Tooltip, Button, 
 import MainLayout from "../../components/Layout/layout";
 import Link from "next/link";
 import api from "@/utils/api";
-import { DownloadOutlined, PlusOutlined } from "@ant-design/icons";
+import { CheckOutlined, DownloadOutlined, PlusOutlined } from "@ant-design/icons";
 import { pdf } from "@react-pdf/renderer";
 import saveAs from "file-saver";
 import { useSelector } from "react-redux";
@@ -20,7 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { toast, ToastContainer } from "react-toastify";
 import { parseCookies } from "nookies";
-import {destroyCookie } from "nookies";
+import { destroyCookie } from "nookies";
 import { useDispatch } from "react-redux";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { clearUserData } from "@/lib/features/userSlice";
@@ -35,12 +35,12 @@ const QuestionnairList = () => {
     const searchParams = useSearchParams();
     const entries = Array.from(searchParams.entries());
     const value = entries.length > 0 ? entries[0][0] : '';
-    
+
     const cookies = parseCookies();
     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
-    const pendingTime=cookies.expirationTime
-    console.log(pendingTime,"pendingTime");
-    
+    const pendingTime = cookies.expirationTime
+    console.log(pendingTime, "pendingTime");
+
     const [questionType, setQuestionType] = useState<any>(null);
     const { token } = theme.useToken();
     const [state, setState] = useState<any>([])
@@ -56,7 +56,7 @@ const QuestionnairList = () => {
             const name = res?.question ? `${res?.question}` : "";
             const meeting_type = res?.index || "";
             const city = res?.location || "";
-            return name.toLowerCase().includes(searchTerm.toLowerCase()) || meeting_type.toLowerCase().includes(searchTerm.toLowerCase())|| city.toLowerCase().includes(searchTerm.toLowerCase());
+            return name.toLowerCase().includes(searchTerm.toLowerCase()) || meeting_type.toLowerCase().includes(searchTerm.toLowerCase()) || city.toLowerCase().includes(searchTerm.toLowerCase());
         });
         setFilteredData(filtered);
     }, [searchTerm, state]);
@@ -98,7 +98,7 @@ const QuestionnairList = () => {
                 router.replace("/auth/signin")
             }
         } catch (error) {
-            if (error==400) {
+            if (error == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 dispatch(clearUserData({}));
                 // }
@@ -114,32 +114,32 @@ const QuestionnairList = () => {
     }, []);
     const getDataById = async () => {
         const item = {
-          user_id: getUserdata?.user_id
+            user_id: getUserdata?.user_id
         }
         try {
-          const res = await api.User.getById(item as any);
-          setState1(res?.data || null);
+            const res = await api.User.getById(item as any);
+            setState1(res?.data || null);
         } catch (error: any) {
-            if (error==400) {
+            if (error == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-      
+
                 // }
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
             }
         }
-      };
-      useEffect(()=>{
+    };
+    useEffect(() => {
         getDataById()
-      },[])
-      
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchTerm(value);
-};
-    const initialise = async (query:any) => {
+    }, [])
+
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+    };
+    const initialise = async (query: any) => {
         try {
-            const query:any = searchTerm ? `searchTerm=${searchTerm}` : '';
+            const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
             const params: any = questionType ? { searchFilter: questionType } : {};
             let res = await api.Questionnaire.listing(query);
 
@@ -150,8 +150,8 @@ const QuestionnairList = () => {
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
             }
-        } catch (error:any) {
-            if (error?.status==400) {
+        } catch (error: any) {
+            if (error?.status == 400) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")
@@ -162,17 +162,17 @@ const QuestionnairList = () => {
     };
 
     useEffect(() => {
-        const query:any = searchTerm ? `searchTerm=${searchTerm}` : '';
+        const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
         initialise(query);
     }, [searchTerm]);
-   
+
     const generatePdf = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
         const blob = await pdf(<BussinessPdf state={state1} />).toBlob();
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };
-    
+
     // Function to handle PDF download
     const downLoadPdf = async () => {
         const { blob, timestamp } = await generatePdf();
@@ -184,7 +184,7 @@ const QuestionnairList = () => {
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };
-    
+
     // Function to handle PDF download
     const downLoadPdf2 = async () => {
         const { blob, timestamp } = await generatePdf2();
@@ -196,7 +196,7 @@ const QuestionnairList = () => {
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };
-    
+
     // Function to handle PDF download
     const downLoadPdf3 = async () => {
         const { blob, timestamp } = await generatePdf3();
@@ -208,7 +208,7 @@ const QuestionnairList = () => {
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };
-    
+
     // Function to handle PDF download
     const downLoadPdf4 = async () => {
         const { blob, timestamp } = await generatePdf4();
@@ -220,7 +220,7 @@ const QuestionnairList = () => {
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };
-    
+
     // Function to handle PDF download
     const downLoadPdf5 = async () => {
         const { blob, timestamp } = await generatePdf5();
@@ -232,7 +232,7 @@ const QuestionnairList = () => {
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };
-    
+
     // Function to handle PDF download
     const downLoadPdf6 = async () => {
         const { blob, timestamp } = await generatePdf6();
@@ -244,29 +244,29 @@ const QuestionnairList = () => {
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };
-    
+
     // Function to handle PDF download
     const downLoadPdf7 = async () => {
         const { blob, timestamp } = await generatePdf7();
         saveAs(blob, `Order_${timestamp}.pdf`);
     };
-    
+
     // Function to handle PDF sharing
     const sharePdf = async () => {
-    
+
         const { pdfUrl, timestamp } = await generatePdf();
         const response = await fetch(pdfUrl);
         const blob = await response.blob();
-    
+
         // Convert the blob to a file
         const file = new File([blob], `Order_${timestamp}.pdf`, { type: 'application/pdf' });
         const formData = new FormData();
         formData.append('file', file);
-    
-    
+
+
         const res = await fetch('https://frontend.goaideme.com/save-pdf', {
-        // const res = await fetch('https://app-uilsndszlq-uc.a.run.app/save-pdf', {
-    
+            // const res = await fetch('https://app-uilsndszlq-uc.a.run.app/save-pdf', {
+
             method: 'POST',
             body: formData,
             headers: {
@@ -274,23 +274,23 @@ const QuestionnairList = () => {
                 // 'Content-Type': 'application/json',
             }
         },);
-    
-        const apiRes:any = await res.json()
-          navigator.clipboard.writeText(apiRes?.fileUrl)
-                    .then(() => {
-                        toast.success('Link copied to clipboard');
-                    })
-                    .catch(() => {
-                        toast.error('Failed to copy link to clipboard');
-                    });
-    
+
+        const apiRes: any = await res.json()
+        navigator.clipboard.writeText(apiRes?.fileUrl)
+            .then(() => {
+                toast.success('Link copied to clipboard');
+            })
+            .catch(() => {
+                toast.error('Failed to copy link to clipboard');
+            });
+
         //   })
         //   toast.success('Link Share Successfully', {
         //     position: 'top-center',
         //     autoClose: 300,
-    
+
         //   });
-    
+
         // Optionally, open the PDF in a new tab
         // window.open(pdfUrl, '_blank');
     };
@@ -309,10 +309,10 @@ const QuestionnairList = () => {
         borderRadius: token.borderRadiusLG,
         border: '1px solid #e6e6e6',
     };
-  
+
     const data = [
         { title: 'Card 1', description: 'BUSINESS UPDATE', state: 0 },
-        { title: 'Card 2', description: 'GOALS', state: 1},
+        { title: 'Card 2', description: 'GOALS', state: 1 },
         { title: 'Card 3', description: 'CRAFTSMEN TOOLBOX', state: 2 },
         { title: 'Card 4', description: 'CRAFTSMEN CHECK-UP', state: 3 },
         { title: 'Card 5', description: 'SPRING 2024 MEETING REVIEW', state: 4 },
@@ -323,7 +323,7 @@ const QuestionnairList = () => {
     const baseURL = '/admin/member/add';
     const getLinkForState = (state: any) => {
         switch (state) {
-            
+
             case 0: return `${baseURL}/page2?${getUserdata?.user_id}&edit&questionnair`;
             case 1: return `${baseURL}/page3?${getUserdata?.user_id}&edit&questionnair`;
             case 2: return `${baseURL}/page4?${getUserdata?.user_id}&edit&questionnair`;
@@ -336,213 +336,342 @@ const QuestionnairList = () => {
             default: return `${baseURL}/page-default?${getUserdata}&edit`;
         }
     };
-    const xyz =getUserdata?.is_additional_user==true?getUserdata?.parent_user_id:getUserdata?.user_id
+    const xyz = getUserdata?.is_additional_user == true ? getUserdata?.parent_user_id : getUserdata?.user_id
 
-    const userData= getUserdata?.is_additional_user==true
-   const handleClick=()=>{
-router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
+    const userData = getUserdata?.is_additional_user == true
+    const handleClick = () => {
+        router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
     }
-    console.log(value,"value");
-    
+    console.log(value, "value");
+    const [showToast, setShowToast] = useState<any>(true);
+
+    // Update localStorage whenever showToast changes
+    // useEffect(() => {
+    //     localStorage.setItem('showToast', JSON.stringify(showToast));
+    // }, [showToast]);
+
+    const handleCancel = () => {
+        setShowToast(false);
+    };
     useEffect(() => {
-        if (value=="page2") {
-          toast(<CustomToastpage2 />, {
-            position: 'top-center',
-            autoClose: 10000, // Display for 5 seconds
-          });
-        }else if(value=="page3"){
-            toast(<CustomToastpage3 />, {
-                position: 'top-center',
-                autoClose: 10000, // Display for 5 seconds
-              });
-        }else if(value=="page4"){
-            toast(<CustomToastpage4 />, {
-                position: 'top-center',
-                autoClose: 10000, // Display for 5 seconds
-              });
-        }else if(value=="page5"){
-            toast(<CustomToastpage5 />, {
-                position: 'top-center',
-                autoClose: 10000, // Display for 5 seconds
-              });
-        }else if(value=="page6"){
-            toast(<CustomToastpage6 />, {
-                position: 'top-center',
-                autoClose: 10000, // Display for 5 seconds
-              });
-        }else if(value=="page7"){
-            toast(<CustomToastpage7 />, {
-                position: 'top-center',
-                autoClose: 10000, // Display for 5 seconds
-              });
-        }else if(value=="additionalPage"){
-            toast(<CustomToastAdditonalPage />, {
-                position: 'top-center',
-                autoClose: 10000, // Display for 5 seconds
-              });
-        }else if(value=="page8"){
-            toast(<CustomToastPgae8 />, {
-                position: 'top-center',
-                autoClose: 10000, // Display for 5 seconds
-              });
+        if (value == "page2") {
+            <CustomToastpage2 />
+            //   toast(<CustomToastpage2 />, {
+            //     position: 'top-center',
+            //     autoClose: false, 
+            //   });
+        } else if (value == "page3") {
+            <CustomToastpage3 />;
+        } else if (value == "page4") {
+            <CustomToastpage4 />;
+        } else if (value == "page5") {
+            <CustomToastpage5 />;
+        } else if (value == "page6") {
+            <CustomToastpage6 />;
+        } else if (value == "page7") {
+            <CustomToastpage7 />;
+        } else if (value == "additionalPage") {
+            <CustomToastAdditonalPage />;
+        } else if (value == "page8") {
+            <CustomToastPgae8 />;
         }
-      }, [value]);
-    
-      const CustomToastpage2 = () => (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
-            <p style={{ margin: 0 }}>Business Update Successfully</p>
-          </div>
-          <a
-            href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}            rel="noopener noreferrer"
-            style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
-          >
-            Click here for more info
-          </a>
+    }, [value]);
+
+    const CustomToastpage2 = () => (
+        <div className="Custom_tost">
+            <div>
+                <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}><CheckOutlined /></span>
+                <p style={{ margin: 0 }}>You have successfully updated the form</p>
+            </div>
+            <div className="Btns"><a
+                href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`} rel="noopener noreferrer"
+                style={{ marginTop: '8px', textDecoration: 'none' }}
+            >
+                Click here for more info
+            </a>
+                <a
+                   onClick={handleCancel}
+                >
+                    Cancel
+                </a>
+            </div>
         </div>
-      );
-      
-      const CustomToastpage3 = () => (
+    );
+
+    const CustomToastpage3 = () => (
         // <div>
         //   <p>Goals Update Successfully</p>
         //   <a href="/admin/member/add/page3?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
         // </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
-          <p style={{ margin: 0 }}>Goals Update Successfully</p>
+        // <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        // <div className="Custom_tost">
+        //     <div style={{ display: 'flex', alignItems: 'center' }}>
+        //         <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+        //         <p style={{ margin: 0 }}>Goals Update Successfully</p>
+        //     </div>
+        //     <a
+        //         href={`/admin/member/add/page3?${getUserdata?.user_id}&edit`}
+        //         rel="noopener noreferrer"
+        //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        //     >
+        //         Click here for more info
+        //     </a>
+        // </div>
+        <div className="Custom_tost">
+            <div>
+                <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}><CheckOutlined /></span>
+                <p style={{ margin: 0 }}>You have successfully updated the form</p>
+            </div>
+            <div className="Btns"> <a
+                href={`/admin/member/add/page3?${getUserdata?.user_id}&edit`}
+                rel="noopener noreferrer"
+                style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+            >
+                Click here for more info
+            </a>
+                <a
+                   onClick={handleCancel}
+                >
+                    Cancel
+                </a>
+            </div>
         </div>
-        <a
-        href={`/admin/member/add/page3?${getUserdata?.user_id}&edit`}  
-          rel="noopener noreferrer"
-          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
-        >
-          Click here for more info
-        </a>
-      </div>
-      );
-      const CustomToastpage4 = () => (
+    );
+    const CustomToastpage4 = () => (
         // <div>
         //   <p>Update Crfatsmen Toolbox</p>
         //   <a href="/admin/member/add/page4?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
         // </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
-          <p style={{ margin: 0 }}>Update Crfatsmen Toolbox</p>
-        </div>
-        <a
-        href={`/admin/member/add/page4?${getUserdata?.user_id}&edit`}  
-          rel="noopener noreferrer"
-          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
-        >
-          Click here for more info
-        </a>
-      </div>
-      );
-      const CustomToastpage5 = () => (
+        // <div className="Custom_tost">
+        //     <div style={{ display: 'flex', alignItems: 'center' }}>
+        //         <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+        //         <p style={{ margin: 0 }}>Update Crfatsmen Toolbox</p>
+        //     </div>
+        //     <a
+        //         href={`/admin/member/add/page4?${getUserdata?.user_id}&edit`}
+        //         rel="noopener noreferrer"
+        //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        //     >
+        //         Click here for more info
+        //     </a>
+        // </div>
+         <div className="Custom_tost">
+         <div>
+             <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}><CheckOutlined /></span>
+             <p style={{ margin: 0 }}>You have successfully updated the form</p>
+         </div>
+         <div className="Btns"> <a
+              href={`/admin/member/add/page4?${getUserdata?.user_id}&edit`}
+             rel="noopener noreferrer"
+             style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+         >
+             Click here for more info
+         </a>
+             <a
+                onClick={handleCancel}
+             >
+                 Cancel
+             </a>
+         </div>
+     </div>
+    );
+    const CustomToastpage5 = () => (
         // <div>
         //   <p>Update Crfatsmen Checkup</p>
         //   <a href="/admin/member/add/page5?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
         // </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
-          <p style={{ margin: 0 }}>Update Crfatsmen Checkup</p>
+        // <div className="Custom_tost">
+        //     <div style={{ display: 'flex', alignItems: 'center' }}>
+        //         <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+        //         <p style={{ margin: 0 }}>Update Crfatsmen Checkup</p>
+        //     </div>
+        //     <a
+        //         href={`/admin/member/add/page5?${getUserdata?.user_id}&edit`}
+        //         rel="noopener noreferrer"
+        //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        //     >
+        //         Click here for more info
+        //     </a>
+        // </div>
+        <div className="Custom_tost">
+        <div>
+            <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}><CheckOutlined /></span>
+            <p style={{ margin: 0 }}>You have successfully updated the form</p>
         </div>
-        <a
-        href={`/admin/member/add/page5?${getUserdata?.user_id}&edit`}  
-          rel="noopener noreferrer"
-          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        <div className="Btns"> <a
+            href={`/admin/member/add/page5?${getUserdata?.user_id}&edit`}
+            rel="noopener noreferrer"
+            style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         >
-          Click here for more info
+            Click here for more info
         </a>
-      </div>
-      );
-      const CustomToastpage6 = () => (
+            <a
+               onClick={handleCancel}
+            >
+                Cancel
+            </a>
+        </div>
+    </div>
+    );
+    const CustomToastpage6 = () => (
         // <div>
         //   <p>Update Spring Meeting Review</p>
         //   <a href="/admin/member/add/page6?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
         // </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
-          <p style={{ margin: 0 }}>Update Spring Meeting Review</p>
+        // <div className="Custom_tost">
+        //     <div style={{ display: 'flex', alignItems: 'center' }}>
+        //         <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+        //         <p style={{ margin: 0 }}>Update Spring Meeting Review</p>
+        //     </div>
+        //     <a
+        //         href={`/admin/member/add/page6?${getUserdata?.user_id}&edit`}
+        //         rel="noopener noreferrer"
+        //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        //     >
+        //         Click here for more info
+        //     </a>
+        // </div>
+        <div className="Custom_tost">
+        <div>
+            <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}><CheckOutlined /></span>
+            <p style={{ margin: 0 }}>You have successfully updated the form</p>
         </div>
-        <a
-        href={`/admin/member/add/page6?${getUserdata?.user_id}&edit`}  
-          rel="noopener noreferrer"
-          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        <div className="Btns"> <a
+           href={`/admin/member/add/page6?${getUserdata?.user_id}&edit`}
+            rel="noopener noreferrer"
+            style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         >
-          Click here for more info
+            Click here for more info
         </a>
-      </div>
-      );
-      const CustomToastpage7 = () => (
+            <a
+               onClick={handleCancel}
+            >
+                Cancel
+            </a>
+        </div>
+    </div>
+    );
+    const CustomToastpage7 = () => (
         // <div>
         //   <p>Update Fall Meeting Preparation</p>
         //   <a href="/admin/member/add/page7?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
         // </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
-          <p style={{ margin: 0 }}>Update Fall Meeting Preparation</p>
+        // <div className="Custom_tost">
+        //     <div style={{ display: 'flex', alignItems: 'center' }}>
+        //         <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+        //         <p style={{ margin: 0 }}>Update Fall Meeting Preparation</p>
+        //     </div>
+        //     <a
+        //         href={`/admin/member/add/page7?${getUserdata?.user_id}&edit`}
+        //         rel="noopener noreferrer"
+        //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        //     >
+        //         Click here for more info
+        //     </a>
+        // </div>
+        <div className="Custom_tost">
+        <div>
+            <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}><CheckOutlined /></span>
+            <p style={{ margin: 0 }}>You have successfully updated the form</p>
         </div>
-        <a
-        href={`/admin/member/add/page7?${getUserdata?.user_id}&edit`}  
-          rel="noopener noreferrer"
-          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        <div className="Btns"> <a
+            href={`/admin/member/add/page7?${getUserdata?.user_id}&edit`}
+            rel="noopener noreferrer"
+            style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         >
-          Click here for more info
+            Click here for more info
         </a>
-      </div>
-      );
-      const CustomToastAdditonalPage = () => (
+            <a
+               onClick={handleCancel}
+            >
+                Cancel
+            </a>
+        </div>
+    </div>
+    );
+    const CustomToastAdditonalPage = () => (
         // <div>
         //   <p>Update Additional Questions</p>
         //   <a href="/admin/member/add/additional_questionnaire?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
         // </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
-          <p style={{ margin: 0 }}>Update Additional Questions</p>
+        // <div className="Custom_tost">
+        //     <div style={{ display: 'flex', alignItems: 'center' }}>
+        //         <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+        //         <p style={{ margin: 0 }}>Update Additional Questions</p>
+        //     </div>
+        //     <a
+        //         href={`/admin/member/add/additional_questionnaire?${getUserdata?.user_id}&edit`}
+        //         rel="noopener noreferrer"
+        //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        //     >
+        //         Click here for more info
+        //     </a>
+        // </div>
+        <div className="Custom_tost">
+        <div>
+            <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}><CheckOutlined /></span>
+            <p style={{ margin: 0 }}>You have successfully updated the form</p>
         </div>
-        <a
-        href={`/admin/member/add/additional_questionnaire?${getUserdata?.user_id}&edit`}  
-          rel="noopener noreferrer"
-          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        <div className="Btns"> <a
+            href={`/admin/member/add/additional_questionnaire?${getUserdata?.user_id}&edit`}
+            rel="noopener noreferrer"
+            style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         >
-          Click here for more info
+            Click here for more info
         </a>
-      </div>
-      );
-      const CustomToastPgae8 = () => (
+            <a
+               onClick={handleCancel}
+            >
+                Cancel
+            </a>
+        </div>
+    </div>
+    );
+    const CustomToastPgae8 = () => (
         // <div>
         //   <p>Update Photo Section</p>
         //   <a href="/admin/member/add/page8?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit"  rel="noopener noreferrer">Click here for more info</a>
         // </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
-          <p style={{ margin: 0 }}>Update Photo Section</p>
+        // <div className="Custom_tost">
+        //     <div style={{ display: 'flex', alignItems: 'center' }}>
+        //         <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}>✔</span>
+        //         <p style={{ margin: 0 }}>Update Photo Section</p>
+        //     </div>
+        //     <a
+        //         href={`/admin/member/add/page8?${getUserdata?.user_id}&edit`}
+        //         rel="noopener noreferrer"
+        //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        //     >
+        //         Click here for more info
+        //     </a>
+        // </div>
+        <div className="Custom_tost">
+        <div>
+            <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}><CheckOutlined /></span>
+            <p style={{ margin: 0 }}>You have successfully updated the form</p>
         </div>
-        <a
-        href={`/admin/member/add/page8?${getUserdata?.user_id}&edit`}  
-          rel="noopener noreferrer"
-          style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
+        <div className="Btns"> <a
+           href={`/admin/member/add/page8?${getUserdata?.user_id}&edit`}
+            rel="noopener noreferrer"
+            style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         >
-          Click here for more info
+            Click here for more info
         </a>
-      </div>
-      );
-    console.log(state1,"state1");
-    
+            <a
+               onClick={handleCancel}
+            >
+                Cancel
+            </a>
+        </div>
+    </div>
+    );
+    console.log(state1, "state1");
+
     return (
         <MainLayout>
             <Fragment>
                 <section>
-                {/* <ToastContainer /> */}
+                    {/* <ToastContainer /> */}
                     {getUserdata?.is_admin == false ?
                         <Row gutter={[20, 20]}>
                             <Col span={24}>
@@ -557,10 +686,25 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                         <div className='d-flex justify-content-between align-items-center mb-5'>
                                             <Title level={3} className='m-0 fw-bold'>Questionnaire</Title>
                                         </div>
-
+                                        { value == "page2" ?
+                                        (showToast) && <CustomToastpage2 />:""}
+                                        { value == "page3" ?
+                                        (showToast) && <CustomToastpage3 />:""}
+                                        { value == "page4" ?
+                                        (showToast) && <CustomToastpage4 />:""}
+                                        { value == "page5" ?
+                                        (showToast) && <CustomToastpage5 />:""}
+                                        { value == "page6" ?
+                                        (showToast) && <CustomToastpage6 />:""}
+                                        { value == "page7" ?
+                                        (showToast) && <CustomToastpage7 />:""}
+                                        { value == "additionalPage" ?
+                                        (showToast) && <CustomToastAdditonalPage />:""}
+                                        { value == "page8" ?
+                                        (showToast) && <CustomToastPgae8/>:""}
                                         <Row gutter={[20, 20]}>
                                             {/* {data.map((item, index) => ( */}
-                                            {getUserdata?.template_access?.includes("bussiness_update")&&
+                                            {getUserdata?.template_access?.includes("bussiness_update") &&
                                                 // <Col  span={8}>
                                                 //     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                 //         <div className="card-body pb-2 d-flex flex-column">
@@ -586,32 +730,32 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                 //     </Card>
                                                 // </Col>
                                                 <Col xs={24} sm={12} md={12} lg={12} xl={8}>
-                                                <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
-                                                    <div className="card-body pb-2 d-flex flex-column">
-                                                        <div className="justify-content-between align-items-center d-flex">
-                                                            <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
-                                                            {state1?.financial_position?
-                                                            <Tooltip title="Download Pdf">
-                                                                <Button onClick={downLoadPdf}><DownloadOutlined /></Button>
-                                                            </Tooltip>:""}
-                                                        </div>
-                                                        <Link
-                                                            href={`${baseURL}/page2?${xyz}&edit&questionnair`}
-                                                            className='text-decoration-none text-white flex-grow-1'
-                                                        >
-                                                            <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
-                                                                <div className="mt-2">
-                                                                    <Button  >
-                                                                        Update
-                                                                    </Button>
-                                                                </div>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
+                                                                {state1?.financial_position ?
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : ""}
                                                             </div>
-                                                        </Link>
-                                                    </div>
-                                                </Card>
-                                            </Col>
-                                                }
-                                                {getUserdata?.template_access?.includes("goals")&&
+                                                            <Link
+                                                                href={`${baseURL}/page2?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                            }
+                                            {getUserdata?.template_access?.includes("goals") &&
                                                 // <Col  span={8}>
                                                 //     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                 //         <div className="card-body pb-2 d-flex flex-column">
@@ -637,34 +781,34 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                 //     </Card>
                                                 // </Col>
                                                 <Col xs={24} sm={12} md={12} lg={12} xl={8}>
-                                                <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
-                                                    <div className="card-body pb-2 d-flex flex-column">
-                                                        <div className="justify-content-between align-items-center d-flex">
-                                                            <h5 className="fw-bold text-start mb-4">GOALS</h5>
-                                                            {state1?.goal_last_meeting ?
-                                                            <Tooltip title="Download Pdf">
-                                                                <Button onClick={downLoadPdf2}><DownloadOutlined /></Button>
-                                                            </Tooltip>:<Tooltip title="No Data Available">
-                                                                <Button onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
-                                                            </Tooltip>}
-                                                        </div>
-                                                        <Link
-                                                            href={`${baseURL}/page3?${xyz}&edit&questionnair`}
-                                                            className='text-decoration-none text-white flex-grow-1'
-                                                        >
-                                                            <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
-                                                                <div className="mt-2">
-                                                                    <Button  >
-                                                                        Update
-                                                                    </Button>
-                                                                </div>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">GOALS</h5>
+                                                                {state1?.goal_last_meeting ?
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf2}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
                                                             </div>
-                                                        </Link>
-                                                    </div>
-                                                </Card>
-                                            </Col>
-                                                }
-                                                {getUserdata?.template_access?.includes("craftsmen_toolbox")&&
+                                                            <Link
+                                                                href={`${baseURL}/page3?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                            }
+                                            {getUserdata?.template_access?.includes("craftsmen_toolbox") &&
                                                 // <Col  span={8}>
                                                 //     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                 //         <div className="card-body pb-2 d-flex flex-column">
@@ -689,38 +833,38 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
-                                                <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
-                                                    <div className="card-body pb-2 d-flex flex-column">
-                                                        <div className="justify-content-between align-items-center d-flex">
-                                                            <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
-                                                            {state1?.technology ?
-                                                            <Tooltip title="Download Pdf">
-                                                                <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
-                                                            </Tooltip>:<Tooltip title="No Data Available">
-                                                                <Button onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
-                                                            </Tooltip>}
-                                                            {/* <Tooltip title="Download Pdf">
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
+                                                                {state1?.technology ?
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
+                                                                {/* <Tooltip title="Download Pdf">
                                                                 <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
                                                             </Tooltip> */}
-                                                        </div>
-                                                        <Link
-                                                            href={`${baseURL}/page4?${xyz}&edit&questionnair`}
-                                                            className='text-decoration-none text-white flex-grow-1'
-                                                        >
-                                                            <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
-                                                                <div className="mt-2">
-                                                                    <Button  >
-                                                                        Update
-                                                                    </Button>
-                                                                </div>
                                                             </div>
-                                                        </Link>
-                                                    </div>
-                                                </Card>
-                                            </Col>
-                                                }
-                                                {getUserdata?.template_access?.includes("craftsmen_checkup")&&
+                                                            <Link
+                                                                href={`${baseURL}/page4?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                            }
+                                            {getUserdata?.template_access?.includes("craftsmen_checkup") &&
                                                 // <Col  span={8}>
                                                 //     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                 //         <div className="card-body pb-2 d-flex flex-column">
@@ -745,38 +889,38 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
-                                                <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
-                                                    <div className="card-body pb-2 d-flex flex-column">
-                                                        <div className="justify-content-between align-items-center d-flex">
-                                                            <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
-                                                            {state1?.commitment ?
-                                                            <Tooltip title="Download Pdf">
-                                                                <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
-                                                            </Tooltip>:<Tooltip title="No Data Available">
-                                                                <Button onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
-                                                            </Tooltip>}
-                                                            {/* <Tooltip title="Download Pdf">
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
+                                                                {state1?.commitment ?
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
+                                                                {/* <Tooltip title="Download Pdf">
                                                                 <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
                                                             </Tooltip> */}
-                                                        </div>
-                                                        <Link
-                                                            href={`${baseURL}/page5?${xyz}&edit&questionnair`}
-                                                            className='text-decoration-none text-white flex-grow-1'
-                                                        >
-                                                            <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
-                                                                <div className="mt-2">
-                                                                    <Button  >
-                                                                        Update
-                                                                    </Button>
-                                                                </div>
                                                             </div>
-                                                        </Link>
-                                                    </div>
-                                                </Card>
-                                            </Col>
-                                                }
-                                                {getUserdata?.template_access?.includes("fall_meeting_review")&&
+                                                            <Link
+                                                                href={`${baseURL}/page5?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                            }
+                                            {getUserdata?.template_access?.includes("fall_meeting_review") &&
                                                 // <Col  span={8}>
                                                 //     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                 //         <div className="card-body pb-2 d-flex flex-column">
@@ -807,11 +951,11 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">SPRING 2024 MEETING REVIEW</h5>
                                                                 {state1?.fall_meeting ?
-                                                                <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
-                                                                </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
-                                                                </Tooltip>}
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
@@ -831,8 +975,8 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                }
-                                                {getUserdata?.template_access?.includes("spring_meeting")&&
+                                            }
+                                            {getUserdata?.template_access?.includes("spring_meeting") &&
                                                 // <Col  span={8}>
                                                 //     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                 //         <div className="card-body pb-2 d-flex flex-column">
@@ -857,39 +1001,39 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
-                                                <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
-                                                    <div className="card-body pb-2 d-flex flex-column">
-                                                        <div className="justify-content-between align-items-center d-flex">
-                                                            <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
-                                                            {state1?.estimating ?
-                                                            <Tooltip title="Download Pdf">
-                                                                <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
-                                                            </Tooltip>:<Tooltip title="No Data Available">
-                                                                <Button onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
-                                                            </Tooltip>}
-                                                            {/* <Tooltip title="Download Pdf">
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                    <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
+                                                        <div className="card-body pb-2 d-flex flex-column">
+                                                            <div className="justify-content-between align-items-center d-flex">
+                                                                <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
+                                                                {state1?.estimating ?
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
+                                                                {/* <Tooltip title="Download Pdf">
                                                                 <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
                                                             </Tooltip> */}
-                                                        </div>
-                                                        <Link
-                                                            href={`${baseURL}/page7?${xyz}&edit&questionnair`}
-                                                            className='text-decoration-none text-white flex-grow-1'
-                                                        >
-                                                            <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
-                                                                <div className="mt-2">
-                                                                    <Button  >
-                                                                        Update
-                                                                    </Button>
-                                                                </div>
                                                             </div>
-                                                        </Link>
-                                                    </div>
-                                                </Card>
-                                            </Col>
-                                                }
-                                                {getUserdata?.template_access?.includes("additional_question")&&
-                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                            <Link
+                                                                href={`${baseURL}/page7?${xyz}&edit&questionnair`}
+                                                                className='text-decoration-none text-white flex-grow-1'
+                                                            >
+                                                                <div className="d-flex align-items-center flex-nowrap gap-2 mt-4">
+                                                                    <div className="mt-2">
+                                                                        <Button  >
+                                                                            Update
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </Card>
+                                                </Col>
+                                            }
+                                            {getUserdata?.template_access?.includes("additional_question") &&
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -913,8 +1057,8 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                }
-                                                {getUserdata?.template_access?.includes("photo_section")&&
+                                            }
+                                            {getUserdata?.template_access?.includes("photo_section") &&
                                                 // <Col  span={8}>
                                                 //     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                 //         <div className="card-body pb-2 d-flex flex-column">
@@ -939,21 +1083,21 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                 //         </div>
                                                 //     </Card>
                                                 // </Col>
-                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">PHOTO SECTION</h5>
-                                                                
+
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
                                                                 {state1?.photo_section ?
-                                                                <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
-                                                                </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
-                                                                </Tooltip>}
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
                                                             </div>
                                                             <Link
                                                                 href={`${baseURL}/page8?${xyz}&edit&questionnair`}
@@ -970,21 +1114,21 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                }
+                                            }
                                             {/* ))} */}
                                         </Row>
-                                        {getUserdata?.is_additional_user==false &&
-                                        <Row gutter={[20, 20]} className="flex-wrap">
-                                            {/* {data.map((item, index) => ( */}
-                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8} >
+                                        {getUserdata?.is_additional_user == false &&
+                                            <Row gutter={[20, 20]} className="flex-wrap">
+                                                {/* {data.map((item, index) => ( */}
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8} >
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
-                                                                {state1?.financial_position?
-                                                                <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf}><DownloadOutlined /></Button>
-                                                                </Tooltip>:""}
+                                                                {state1?.financial_position ?
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : ""}
                                                             </div>
                                                             <Link
                                                                 href={`${baseURL}/page2?${xyz}&edit&questionnair`}
@@ -1001,17 +1145,17 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">GOALS</h5>
                                                                 {state1?.goal_last_meeting ?
-                                                                <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf2}><DownloadOutlined /></Button>
-                                                                </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
-                                                                </Tooltip>}
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf2}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
                                                             </div>
                                                             <Link
                                                                 href={`${baseURL}/page3?${xyz}&edit&questionnair`}
@@ -1028,17 +1172,17 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
                                                                 {state1?.technology ?
-                                                                <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
-                                                                </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
-                                                                </Tooltip>}
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf3} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf3}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
@@ -1058,17 +1202,17 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
                                                                 {state1?.commitment ?
-                                                                <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
-                                                                </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
-                                                                </Tooltip>}
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
@@ -1088,17 +1232,17 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">SPRING 2024 MEETING REVIEW</h5>
                                                                 {state1?.fall_meeting ?
-                                                                <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
-                                                                </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
-                                                                </Tooltip>}
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf5} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf5}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
@@ -1118,17 +1262,17 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
                                                                 {state1?.estimating ?
-                                                                <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
-                                                                </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
-                                                                </Tooltip>}
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf6} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf6}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
@@ -1148,7 +1292,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col   xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
@@ -1172,21 +1316,21 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                                <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
+                                                <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">PHOTO SECTION</h5>
-                                                                
+
                                                                 {/* <Tooltip title="Download Pdf">
                                                                     <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
                                                                 </Tooltip> */}
                                                                 {state1?.photo_section ?
-                                                                <Tooltip title="Download Pdf">
-                                                                    <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
-                                                                </Tooltip>:<Tooltip title="No Data Available">
-                                                                    <Button onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
-                                                                </Tooltip>}
+                                                                    <Tooltip title="Download Pdf">
+                                                                        <Button onClick={downLoadPdf7}><DownloadOutlined /></Button>
+                                                                    </Tooltip> : <Tooltip title="No Data Available">
+                                                                        <Button onClick={downLoadPdf7} disabled><DownloadOutlined /></Button>
+                                                                    </Tooltip>}
                                                             </div>
                                                             <Link
                                                                 href={`${baseURL}/page8?${xyz}&edit&questionnair`}
@@ -1203,8 +1347,8 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                            {/* ))} */}
-                                        </Row>}
+                                                {/* ))} */}
+                                            </Row>}
 
                                         <style jsx>{`
                            .common-card {
@@ -1295,7 +1439,7 @@ router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
                                     <div className='accordion-wrapper'>
                                         <Table dataSource={dataSource} columns={columns} pagination={{
                                             position: ['bottomCenter'],
-                                          }} />
+                                        }} />
                                     </div>
                                 </Card>
                             </Col>

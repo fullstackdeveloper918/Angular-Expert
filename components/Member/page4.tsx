@@ -68,6 +68,10 @@ const Page4 = () => {
                 setLoading(true)
                 let res = await api.Auth.signUp(items)
                 if (res?.status == 500) {
+                    destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+    
+                    // }
+                    // dispatch(clearUserData({}));
                     toast.error("Session Expired Login Again")
                     router.replace("/auth/signin")
                 }

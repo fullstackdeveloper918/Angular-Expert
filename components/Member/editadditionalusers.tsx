@@ -74,7 +74,11 @@ const Edititionaladd = () => {
             
             setState(res || null);
             form.setFieldsValue(res?.data)
-            if (res?.data?.status == 400) {
+            if (res?.data?.status == 500) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+
+                // }
+                // dispatch(clearUserData({}));
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
             }

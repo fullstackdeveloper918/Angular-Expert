@@ -113,7 +113,7 @@ const MeetingEdit = () => {
 
       setState(data);
       form.setFieldsValue(data);
-      if (data?.status == 400) {
+      if (data?.status == 500) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         localStorage.removeItem('hasReloaded');
 
@@ -157,7 +157,16 @@ const MeetingEdit = () => {
     try {
       setLoading(true)
       let res = await api.Meeting.edit(items as any);
+      toast.success(res?.message)
       router.push("/admin/meetings")
+      if (res?.status == 500) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+
+        // }
+        // dispatch(clearUserData({}));
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
     } catch (error: any) {
     } finally {
       setLoading(false)

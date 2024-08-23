@@ -62,6 +62,7 @@ const ArchiveMemberList = () => {
     const [searchTerm, setSearchTerm] = useState<any>('');
     const [filteredData, setFilteredData] = useState(state1?.data);
     const [data, setData] = useState<any>([]);
+    const [loadingState, setLoadingState] = useState<{ [key: string]: boolean }>({});
     // const [lastVisibleId, setLastVisibleId] = useState(null);
     useEffect(() => {
         // Filter data when searchTerm or state1 changes
@@ -164,8 +165,15 @@ const ArchiveMemberList = () => {
     };
 
     const handleDownloadAndFetchData = async (id: any) => {
-        let res = await getDataById(id);
-        await downLoadPdf(res);
+        setLoadingState((prevState) => ({ ...prevState, [id]: true })); // Set loading state for the specific item
+        try {
+            let res = await getDataById(id);
+            await downLoadPdf(res);
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+        } finally {
+            setLoadingState((prevState) => ({ ...prevState, [id]: false })); // Reset loading state for the specific item
+        }
     };
     const handleFetchAndFetchData = async (id: any) => {
          
@@ -175,6 +183,7 @@ const ArchiveMemberList = () => {
     // const completed2 = state2?.filter((res:any) => res?.is_completed === true);
     const user_completed = state2?.slice(0, 5).map((res: any, index: number) => {
         const companyName = companyNameMap[res?.company_name || ""] || "N/A";
+        const isLoading = loadingState[res?.uid];
         return {
             key: index + 1,
             name: res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A",
@@ -184,7 +193,7 @@ const ArchiveMemberList = () => {
             action: <ul className='m-0 list-unstyled d-flex gap-2'>
                 <li>
                     <Tooltip title="Download Pdf">
-                        <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.uid)}><DownloadOutlined /></Button>
+                        <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.uid)}>{isLoading ? <Spin /> : <DownloadOutlined />}</Button>
                     </Tooltip>
                 </li>
                 <li>
@@ -234,6 +243,7 @@ const ArchiveMemberList = () => {
     ];
     const dataSource = filteredData?.map((res: any, index: number) => {
         const companyName = companyNameMap[res?.company_name || ""] || "N/A";
+        const isLoading = loadingState[res?.id];
         return {
             key: index + 1,
             name: res?.firstname ? `${validation?.capitalizeFirstLetter(res?.firstname)} ${validation?.capitalizeFirstLetter(res?.lastname)}` : "N/A",
@@ -245,7 +255,7 @@ const ArchiveMemberList = () => {
             action: <ul className='m-0 list-unstyled d-flex gap-2'>
                 <li>
                     <Tooltip title="Download Pdf">
-                        <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.id)}><DownloadOutlined /></Button>
+                        <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.id)}>{isLoading ? <Spin /> : <DownloadOutlined />}</Button>
                     </Tooltip>
                 </li>
                 <li>

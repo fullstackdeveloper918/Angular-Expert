@@ -212,6 +212,14 @@ const data={
     try {
       const res = await api.Meeting.getById(item as any);
       const data = res?.data || {};
+      if (res?.data?.status == 500) {
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+
+        // }
+        dispatch(clearUserData({}));
+        toast.error("Session Expired Login Again")
+        router.replace("/auth/signin")
+    }
       if (data.start_meeting_date) {
         data.start_meeting_date = dayjs(data.start_meeting_date);
       }

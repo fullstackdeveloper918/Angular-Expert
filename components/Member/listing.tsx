@@ -85,6 +85,14 @@ const MemberList = () => {
         try {
             const res = await api.User.getById(item as any);
             setState(res?.data || null);
+            if (res?.data?.status == 500) {
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+
+                // }
+                // dispatch(clearUserData({}));
+                toast.error("Session Expired Login Again")
+                router.replace("/auth/signin")
+            }
             return res.data
         } catch (error: any) {
             alert(error.message);

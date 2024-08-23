@@ -579,7 +579,7 @@ const Page8 = () => {
       const res = await api.User.getById(item as any);
 
       setState(res?.data || null);
-      if (res?.data?.status == 400) {
+      if (res?.data?.status == 500) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
         localStorage.removeItem("hasReloaded");
         toast.error("Session Expired Login Again");

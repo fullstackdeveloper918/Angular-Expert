@@ -100,7 +100,7 @@ const Page1 = () => {
         } catch (error: any) {
 
             setLoading(false)
-            if (error?.status == 400) {
+            if (error?.status == 500) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")
@@ -122,7 +122,7 @@ const Page1 = () => {
         try {
             const res = await api.User.getById(item as any);
             setState(res?.data || null);
-            if (res?.data?.status == 400) {
+            if (res?.data?.status == 500) {
                 localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
@@ -150,7 +150,7 @@ const Page1 = () => {
             //         //   };
             //     // }
             // }
-            if (error?.status == 400) {
+            if (error?.status == 500) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")
