@@ -29,6 +29,7 @@ type Page<P = {}> = NextPage<P> & {
 const AdminDashboard: Page = (props: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData)
   
+  console.log(getUserdata,"getUserdata");
   
   const [loading, setLoading] = useState<any>(true)
   const [state1, setState1] = useState<any>([])
@@ -569,6 +570,7 @@ const AdminDashboard: Page = (props: any) => {
     } else {
       userlist();
     }
+  // }, []);
   }, [state1?.status === '400']);
   const initialise = async () => {
     try {

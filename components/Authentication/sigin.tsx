@@ -256,13 +256,29 @@ const Sigin = () => {
 
   const refreshTokenAndSchedule = async (auth:any) => {
     try {
-      const user = auth.currentUser;
-      console.log(user?.accessToken, 'accesstoken')
-      console.log(user, 'useer after 40')
-      if (user) {
-        const newIdToken = await user.getIdToken(true);
+      const check= auth.currentUser
+      const user = auth.currentUser.getIdToken(true).then((idToken:any) => 
+         {
+        const res =  axios.get("https://frontend.goaideme.com/single-user", {
+          headers: {
+            Token: idToken,
+            "Content-Type": "application/json",
+          },
+        }).then((res) => {
+          const responseData = res?.data?.data;
+          dispatch(getuserData(responseData));
+          router?.push("/admin/dashboard");
+        })
+        .catch(err => console.log(err))
+        
+      }
+      ).catch((err:any) => console.log(err))
+      // console.log(user?.accessToken, 'accesstoken')
+      // console.log(user, 'useer after 40')
+      if (check) {
+        const newIdToken = await check.getIdToken(true);
         console.log(newIdToken, 'newIdT1oken')
-        const newExpirationTime = Date.now() + 1 * 60 * 1000; // 1 hour from now
+        const newExpirationTime = Date.now() + 59 * 60 * 1000; // 1 hour from now
 
 
 
@@ -287,7 +303,7 @@ const Sigin = () => {
     const intervalId = setInterval(() => {
       
       refreshTokenAndSchedule(auth);
-    }, 60 * 1000); // 20 seconds
+    }, 50 * 60 * 1000); // 20 seconds
 
     // Cleanup interval on component unmount
     return () => {
