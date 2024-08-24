@@ -379,7 +379,7 @@ const QuestionnairList = () => {
             <CustomToastPgae8 />;
         }
     }, [value]);
-   
+    
     const CustomToastpage2 = () => (
         <div className="Custom_tost">
             <div>
@@ -390,7 +390,7 @@ const QuestionnairList = () => {
                 href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`} rel="noopener noreferrer"
                 style={{ marginTop: '8px', textDecoration: 'none' }}
             >
-               You can check your update here link
+               To check your update, Click here
             </a>
                 <a
                    onClick={handleCancel}
@@ -417,7 +417,7 @@ const QuestionnairList = () => {
         //         rel="noopener noreferrer"
         //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         //     >
-        //        You can check your update here link
+        //        To check your update, Click here
         //     </a>
         // </div>
         <div className="Custom_tost">
@@ -430,7 +430,7 @@ const QuestionnairList = () => {
                 rel="noopener noreferrer"
                 style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
             >
-               You can check your update here link
+               To check your update, Click here
             </a>
                 <a
                    onClick={handleCancel}
@@ -455,7 +455,7 @@ const QuestionnairList = () => {
         //         rel="noopener noreferrer"
         //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         //     >
-        //        You can check your update here link
+        //        To check your update, Click here
         //     </a>
         // </div>
          <div className="Custom_tost">
@@ -468,7 +468,7 @@ const QuestionnairList = () => {
              rel="noopener noreferrer"
              style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
          >
-            You can check your update here link
+            To check your update, Click here
          </a>
              <a
                 onClick={handleCancel}
@@ -493,7 +493,7 @@ const QuestionnairList = () => {
         //         rel="noopener noreferrer"
         //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         //     >
-        //        You can check your update here link
+        //        To check your update, Click here
         //     </a>
         // </div>
         <div className="Custom_tost">
@@ -506,7 +506,7 @@ const QuestionnairList = () => {
             rel="noopener noreferrer"
             style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         >
-           You can check your update here link
+           To check your update, Click here
         </a>
             <a
                onClick={handleCancel}
@@ -531,7 +531,7 @@ const QuestionnairList = () => {
         //         rel="noopener noreferrer"
         //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         //     >
-        //        You can check your update here link
+        //        To check your update, Click here
         //     </a>
         // </div>
         <div className="Custom_tost">
@@ -544,7 +544,7 @@ const QuestionnairList = () => {
             rel="noopener noreferrer"
             style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         >
-           You can check your update here link
+           To check your update, Click here
         </a>
             <a
                onClick={handleCancel}
@@ -569,7 +569,7 @@ const QuestionnairList = () => {
         //         rel="noopener noreferrer"
         //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         //     >
-        //        You can check your update here link
+        //        To check your update, Click here
         //     </a>
         // </div>
         <div className="Custom_tost">
@@ -582,7 +582,7 @@ const QuestionnairList = () => {
             rel="noopener noreferrer"
             style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         >
-           You can check your update here link
+           To check your update, Click here
         </a>
             <a
                onClick={handleCancel}
@@ -607,7 +607,7 @@ const QuestionnairList = () => {
         //         rel="noopener noreferrer"
         //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         //     >
-        //        You can check your update here link
+        //        To check your update, Click here
         //     </a>
         // </div>
         <div className="Custom_tost">
@@ -620,7 +620,7 @@ const QuestionnairList = () => {
             rel="noopener noreferrer"
             style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         >
-           You can check your update here link
+           To check your update, Click here
         </a>
             <a
                onClick={handleCancel}
@@ -645,7 +645,7 @@ const QuestionnairList = () => {
         //         rel="noopener noreferrer"
         //         style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         //     >
-        //        You can check your update here link
+        //        To check your update, Click here
         //     </a>
         // </div>
         <div className="Custom_tost">
@@ -658,7 +658,7 @@ const QuestionnairList = () => {
             rel="noopener noreferrer"
             style={{ marginTop: '8px', color: '#007bff', textDecoration: 'none' }}
         >
-           You can check your update here link
+           To check your update, Click here
         </a>
             <a
                onClick={handleCancel}
