@@ -150,7 +150,8 @@ const createCustomToken = async (auth:any, checkUid:any) => {
         const redirectPath = localStorage.getItem('redirectAfterLogin') || '/admin/dashboard';
         console.log(redirectPath,"redirectPath");
         
-        router.push('/admin/dashboard');
+        // router.push('/admin/dashboard');
+        router.push(redirectPath);
         // Clear the stored URL path from local storage
         localStorage.removeItem('redirectAfterLogin');
         
@@ -168,25 +169,31 @@ const pathname=redirectPath?redirectPath:"/admin/dashboard"
 
 
 
-  // const hasReloaded:any = localStorage.getItem('hasReloaded');
-  // useEffect(() => {
-  //   // Retrieve `hasReloaded` from localStorage
-  //   const hasReloaded = JSON.parse(localStorage.getItem('hasReloaded') || 'false');
-  //   console.log(hasReloaded, "hasReloaded");
+  // const hasReloaded:any = localStorage.getItem('hasReloaded')/;
+  useEffect(() => {
+    // Retrieve `hasReloaded` from localStorage
+    const hasReloaded = localStorage.getItem('hasReloaded');
+    console.log(hasReloaded, "hasReloaded");
 
-  //   if (hasReloaded) {
-  //     // Set `hasReloaded` to 'false' to prevent subsequent reloads
-  //     localStorage.setItem('hasReloaded', JSON.stringify(false));
-  //     // Reload the page
+    if (!hasReloaded) {
+      //   // if (!hasReloaded && state1?.status === '400') {
+        localStorage.setItem('hasReloaded', 'true');
+        window.location.reload();
+      } 
+  }, []); //
+
+
+  // useEffect(() => {
+  //   const hasReloaded = localStorage.getItem('hasReloaded');
+  //   if (!hasReloaded) {
+  //   //   // if (!hasReloaded && state1?.status === '400') {
+  //     localStorage.setItem('hasReloaded', 'true');
   //     window.location.reload();
   //   } else {
-  //     // Set `hasReloaded` to 'true' initially
-  //     localStorage.setItem('hasReloaded', JSON.stringify(true));
+  //     userlist();
   //   }
-  // }, []); //
-
-
-
+  // // }, []);
+  // }, [state1?.status==500]);
 
 
 
