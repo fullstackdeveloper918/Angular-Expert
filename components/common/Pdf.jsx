@@ -413,7 +413,7 @@ const MemberUpdatePDF = (props) => {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.main_heading}> ADDITIONAL QUESTIONS</Text>
+            <Text style={styles.main_heading} wrap={false}> ADDITIONAL QUESTIONS</Text>
             {props?.state?.questions?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_wrapper}>
