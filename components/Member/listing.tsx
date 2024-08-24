@@ -85,14 +85,14 @@ const MemberList = () => {
         try {
             const res = await api.User.getById(item as any);
             setState(res?.data || null);
-            if (res?.data?.status == 500) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            // if (res?.data?.status == 500) {
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
-                // }
-                // dispatch(clearUserData({}));
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
-            }
+            //     // }
+            //     // dispatch(clearUserData({}));
+            //     toast.error("Session Expired Login Again")
+            //     router.replace("/auth/signin")
+            // }
             return res.data
         } catch (error: any) {
             alert(error.message);
@@ -338,25 +338,25 @@ const MemberList = () => {
             let query = searchTerm ? `searchTerm=${searchTerm}` : '';
             let res = await api.User.listing(query);
             setState1(res?.data || []);
-            if (res?.data?.status == 400||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                localStorage.removeItem('hasReloaded');
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
-            }
+            // if (res?.data?.status == 400||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            //     localStorage.removeItem('hasReloaded');
+            //     toast.error("Session Expired Login Again")
+            //     router.replace("/auth/signin")
+            // }
             let apiRes = await api.User.user_listing()
             setState2(apiRes?.data)
             setLoading1(false)
             
         } catch (error:any) {
             setLoading1(false)
-            if (error?.status==400) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                localStorage.removeItem('hasReloaded');
+            // if (error?.status==400) {
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            //     localStorage.removeItem('hasReloaded');
 
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
-            }
+            //     toast.error("Session Expired Login Again")
+            //     router.replace("/auth/signin")
+            // }
         }
     };
 

@@ -38,7 +38,7 @@ const Logout = (props: any) => {
     try {
       setLoading(true);
       await signOut(auth);
-
+      localStorage.removeItem('redirectAfterLogin');
       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
       dispatch(clearUserData({}));
       toast.success("Logout Successful", {

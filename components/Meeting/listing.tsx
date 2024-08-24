@@ -20,7 +20,7 @@ import Link from "next/link";
 import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import MainLayout from "../../components/Layout/layout";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import FilterSelect from "@/components/common/FilterSelect";
 
 import dayjs from "dayjs";
@@ -54,6 +54,18 @@ const { Search } = Input;
 const MeetingList = () => {
     const router = useRouter()
     const dispatch = useDispatch();
+    const id  = useParams();
+    const searchParams =  window.location.pathname
+    const baseUrl = 'https://example.com';
+    const path = '/some/path';
+    const queryParams = new URLSearchParams({ foo: 'bar', baz: 'qux' });
+    console.log(searchParams,"searchParams");
+    
+    const url = new URL(path, baseUrl);
+    url.search = queryParams.toString();
+    
+    console.log(url.toString(),"jkjkjkjk"); 
+
     const [areas, setAreas] = useState<any>([]);
     const [filteredData, setFilteredData] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState('')
@@ -227,32 +239,46 @@ const MeetingList = () => {
          
             
             setLoading(false);
-            if (res?.status == 500) {
+            if (res?.status === 400) {
+                // Save the current URL path in local storage
+                localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        
+                // Clear cookies and dispatch actions
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-
-                // }
                 dispatch(clearUserData({}));
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
+                toast.error("Session Expired. Login Again");
+        
+                // Redirect to sign-in page
+                router.replace("/auth/signin");
             }
         } catch (error:any) {
             console.error(error.status);
             
             setLoading(false);
-            if (error?.status==500) {
+            if (error?.status==400) {
+                localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        
+                // Clear cookies and dispatch actions
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                localStorage.removeItem('hasReloaded');
-                // }
                 dispatch(clearUserData({}));
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
+                toast.error("Session Expired. Login Again");
+        
+                // Redirect to sign-in page
+                router.replace("/auth/signin");
             }
         }
     };
     useEffect(() => {
+        const hasReloaded = localStorage.getItem('hasReloaded');
+        if (!hasReloaded) {
+        //   // if (!hasReloaded && state1?.status === '400') {
+          localStorage.setItem('hasReloaded', 'true');
+          window.location.reload();
+        } else {
         const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
         initialise(query);
-    }, [searchTerm]);
+        }
+    }, [searchTerm,areas?.status === '500']);
 
 
 

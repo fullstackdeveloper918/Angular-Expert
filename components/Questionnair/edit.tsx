@@ -111,11 +111,13 @@ const EditQuestionnair: Page = () => {
       // setAddModalOpen(false);
 
     } catch (error:any) {
-       if (error?.status==400) {
+       if (error?.status==500) {
+       
+        localStorage.setItem('redirectAfterLogin', window.location.pathname);
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        localStorage.removeItem('hasReloaded');
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
+        // dispatch(clearUserData({}));
+        toast.error("Session Expired. Login Again");
+        router.replace("/auth/signin");
     }
     }
   };

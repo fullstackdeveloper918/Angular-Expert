@@ -102,7 +102,7 @@ const MainLayout = ({ children }: any) => {
     try {
       setLoading(true)
       await signOut(auth)
-       
+      localStorage.removeItem('redirectAfterLogin');
          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
          localStorage.removeItem('hasReloaded');
        dispatch(clearUserData({}));

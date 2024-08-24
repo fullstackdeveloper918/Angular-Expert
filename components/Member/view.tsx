@@ -89,12 +89,11 @@ const MeetingView = () => {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
     } catch (error: any) {
-      if (error==400) {
+      if (error==500) {
+        localStorage.setItem('redirectAfterLogin', window.location.pathname);
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-
-        // }
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
+        toast.error("Session Expired. Login Again");
+        router.replace("/auth/signin");
     }
     }
   };
@@ -150,12 +149,11 @@ const MeetingView = () => {
       getDataById()
       toast.success(res?.data?.message)
     } catch (error:any) {
-      if (error.status==400) {
+      if (error.status==500) {
+        localStorage.setItem('redirectAfterLogin', window.location.pathname);
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-
-        // }
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
+        toast.error("Session Expired. Login Again");
+        router.replace("/auth/signin");
     }
     } finally {
       setLoading(false)

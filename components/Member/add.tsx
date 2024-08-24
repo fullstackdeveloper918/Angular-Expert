@@ -86,8 +86,13 @@ const Add = () => {
         // }
         router.push(`/admin/member/additional_user?${res?.user_id}`)
         if (res?.status == 500) {
-          toast.error("Session Expired Login Again")
-          router.replace("/auth/signin")
+          // toast.error("Session Expired Login Again")
+          // router.replace("/auth/signin")
+          localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          // dispatch(clearUserData({}));
+          toast.error("Session Expired. Login Again");
+          router.replace("/auth/signin");
         }
       }
 
@@ -183,7 +188,7 @@ router.back()
         try {
           const res = await api.User.getById(item as any);
           setState(res?.data || null);
-          if (res?.data?.status == 400) {
+          if (res?.data?.status == 500) {
             toast.error("Session Expired Login Again")
             router.replace("/auth/signin")
           }

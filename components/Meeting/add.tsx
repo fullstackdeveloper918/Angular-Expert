@@ -206,20 +206,34 @@ const MeetingAdd = () => {
             toast.success(res?.message)
             router.back()
             if (res?.status == 500) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
-                // }
+                // // }
+                // // dispatch(clearUserData({}));
+                // toast.error("Session Expired Login Again")
+                // router.replace("/auth/signin")
+                localStorage.setItem('redirectAfterLogin', window.location.pathname);
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 // dispatch(clearUserData({}));
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
+                toast.error("Session Expired. Login Again");
+                router.replace("/auth/signin");
             }
             // onAdd();
         } catch (error: any) {
-            if (error.status == 400) {
+            if (error.status == 500) {
+                // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                // localStorage.removeItem('hasReloaded');
+                // toast.error("Session Expired Login Again")
+                // router.replace("/auth/signin")
+                localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        
+                // Clear cookies and dispatch actions
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                localStorage.removeItem('hasReloaded');
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
+                // dispatch(clearUserData({}));
+                toast.error("Session Expired. Login Again");
+        
+                // Redirect to sign-in page
+                router.replace("/auth/signin");
             }
         }
     }

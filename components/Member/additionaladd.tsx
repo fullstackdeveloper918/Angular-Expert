@@ -105,12 +105,17 @@ const Additionaladd = () => {
                 let res = await api.User.edit_additional_user(item)
                 toast.success(res?.data?.message)
                 if (res?.data?.status == 500) {
-                    destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                    // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
     
-                    // }
+                    // // }
+                    // // dispatch(clearUserData({}));
+                    // toast.error("Session Expired Login Again")
+                    // router.replace("/auth/signin")
+                    localStorage.setItem('redirectAfterLogin', window.location.pathname);
+                    destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                     // dispatch(clearUserData({}));
-                    toast.error("Session Expired Login Again")
-                    router.replace("/auth/signin")
+                    toast.error("Session Expired. Login Again");
+                    router.replace("/auth/signin");
                 }
                 if(res) {
                     router.back()
@@ -119,12 +124,11 @@ const Additionaladd = () => {
                 let res = await api.User.add_additional_user(item)
                 toast.success(res?.data?.message)
                 if (res?.data?.status == 500) {
+                    localStorage.setItem('redirectAfterLogin', window.location.pathname);
                     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-    
-                    // }
                     // dispatch(clearUserData({}));
-                    toast.error("Session Expired Login Again")
-                    router.replace("/auth/signin")
+                    toast.error("Session Expired. Login Again");
+                    router.replace("/auth/signin");
                 }
                 if(res) {
                     router.back()

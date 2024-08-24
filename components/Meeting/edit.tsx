@@ -114,20 +114,30 @@ const MeetingEdit = () => {
       setState(data);
       form.setFieldsValue(data);
       if (data?.status == 500) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        localStorage.removeItem('hasReloaded');
+        // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        // localStorage.removeItem('hasReloaded');
 
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
+        // toast.error("Session Expired Login Again")
+        // router.replace("/auth/signin")
+        localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        // dispatch(clearUserData({}));
+        toast.error("Session Expired. Login Again");
+        router.replace("/auth/signin");
     }
     } catch (error: any) {
       // if (error) {
       if (error.status == 400) {
+        // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        // localStorage.removeItem('hasReloaded');
+        // // }
+        // toast.error("Session Expired Login Again")
+        // router.replace("/auth/signin")
+        localStorage.setItem('redirectAfterLogin', window.location.pathname);
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        localStorage.removeItem('hasReloaded');
-        // }
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
+        // dispatch(clearUserData({}));
+        toast.error("Session Expired. Login Again");
+        router.replace("/auth/signin");
       }
     }
     // }
@@ -160,12 +170,17 @@ const MeetingEdit = () => {
       toast.success(res?.message)
       router.push("/admin/meetings")
       if (res?.status == 500) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
-        // }
-        // dispatch(clearUserData({}));
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
+        // // }
+        // // dispatch(clearUserData({}));
+        // toast.error("Session Expired Login Again")
+        // router.replace("/auth/signin")
+        localStorage.setItem('redirectAfterLogin', window.location.pathname);
+                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                // dispatch(clearUserData({}));
+                toast.error("Session Expired. Login Again");
+                router.replace("/auth/signin");
     }
     } catch (error: any) {
     } finally {

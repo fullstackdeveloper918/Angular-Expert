@@ -51,73 +51,6 @@ const Sigin = () => {
   const [showPassword, setShowPassword] = useState(true);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
-
-  // const auth = getAuth();
-  // const handleSuperAdminClick = () => {
-  //   setShowPassword((prevShowPassword) => !prevShowPassword); // Toggle showPassword state
-  // };
-  const removeCookie = (cookieName: string) => {
-    destroyCookie(null, cookieName); // This removes the cookie
-  };
-  // useEffect(() => {
-  //   const cookies = parseCookies();
-  //   const storedToken = cookies.COOKIES_USER_ACCESS_TOKEN;
-  //   if (storedToken) {
-  //     setToken(storedToken);
-  //     router.push("/admin/dashboard");
-  //   } else {
-  //     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-  //       if (user) {
-  //         try {
-  //           const idToken = await user.getIdToken();
-  //           setToken(idToken);
-  //           setState(user);
-  //           createSessionCookie(idToken);
-  //         } catch (error: any) {
-  //           if (error.response && error.response.status === 401) {
-  //             router.push("/auth/signin");
-  //           } else {
-  //             router.push("/auth/signin");
-  //           }
-  //         }
-  //       } else {
-  //         router.push("/auth/signin");
-  //       }
-  //     });
-
-  //     return () => unsubscribe();
-  //   }
-  // }, [router]);
-
-
-  // const refreshed = async () => {
-  //   try{
-  //     const res = await axios.get("https://frontend.goaideme.com/single-user", {
-  //       headers: {
-  //         Token: token, 
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  
-      
-  //     const responseData = res?.data?.data;
-  //     console.log(responseData, 'man')
-  //     console.log('useeffect runs')
-  //     router.push("/admin/dashboard");
-  //   } catch(err) {
-  //     console.log(err, 'check err')
-  //   }
-   
-
-  // }
-
-
-  // useEffect(() => {
-  //  refreshed()
-    
-
-  // },[token])
-
   const setCookie = (name: string, value: string, days: number) => {
     const expires = new Date();
     expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
@@ -132,220 +65,51 @@ const Sigin = () => {
     }
   };
 
- 
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       user
-  //         .getIdToken(true)
-  //         .then((idToken) => {
-  //           setToken(idToken);
-  //           createSessionCookie(idToken);
-  //         })
-  //         .catch((error) => {
-  //           console.error("Failed to refresh token", error);
-  //         });
-  //     }
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   const intervalTime = 55 * 60 * 1000; // 55 minutes
-  //   const interval = setInterval(() => {
-  //     refreshToken();
-
-  //     const nextRefreshTime = new Date(Date.now() + intervalTime);
-  //   }, intervalTime);
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
   const handleSuperAdminClick = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-  // const onFinish1 = async (values: any) => {
-  //   try {
-  //     setLoading(true);
 
-  //     const userCredential = await signInWithEmailAndPassword(
-  //       auth,
-  //       values?.password === "RamDodge2020"
-  //         ? "nahbcraftsmen@gmail.com"
-  //         : values?.email.trim().toLowerCase(),
-  //       values?.password
-  //     );
-  //     // const user =await userCredential?.user
-  //     // console.log(user, "userrrr");
-
-  //     setState(userCredential);
-  //     const idTokenResult = await userCredential.user.getIdTokenResult(true);
-  //     const refreshToken = idTokenResult.token;
-  //     const idToken = await userCredential.user.getIdToken();
-  //     console.log(idTokenResult, "idTokenResult");
-  //     console.log(idToken, "idToken");
-  //     console.log(refreshToken, "refreshToken");
-  //     setToken(refreshToken);
-  //     const expirationTime = idTokenResult.expirationTime;
-  //     const timeRemaining = new Date(expirationTime).getTime() - Date.now();
-  //     console.log(timeRemaining - 60000, "check bbb");
-  //     const expireDate = new Date();
-  //     expireDate.setMinutes(expireDate.getMinutes() + 30);
-  //     return
-  //     const res = await axios.get("https://frontend.goaideme.com/single-user", {
-  //       headers: {
-  //         Token: `${idToken}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     const responseData: any = res?.data?.data;
-  //     toast.success("Login successfully");
-  //     dispatch(getuserData(responseData));
-  //     router?.push("/admin/dashboard");
-
-  //     createSessionCookie(idToken);
-  //     const longExpireDate = new Date();
-  //     longExpireDate.setDate(longExpireDate.getDate() + 30);
-  //     setCookie("COOKIES_USER_ACCESS_TOKEN", refreshToken, 30);
-  //     setCookie("user_data", JSON.stringify(responseData), 30);
-  //   } catch (error: any) {
-  //     // if (error) {
-  //     toast.error("Invalid Credentials");
-  //     // }
-  //     setLoading(false);
-  //   }
-  // };
-
-  // const refreshTokenAndSchedule = async (auth: any) => {
-  //   try {
-  //     console.log(auth, 'auth check')
-  //     const user = auth.currentUser;
-      
-  //     if (user) {
-  //       // Refresh the token
-  //       const newIdToken = await user.getIdToken(true);
-        
-  //       // localStorage.setItem('idToken', newIdToken);
-  //       // Calculate new expiration time (1 hour from now)
-  //       const newExpirationTime:any = Date.now() + 1 * 60 * 1000; // 1 hour
-
-  //       // // Update cookies with the new token and expiration time
-  //       setToken(newIdToken);
-  //       setCookie("COOKIES_USER_ACCESS_TOKEN", newIdToken, { expires: new Date(newExpirationTime) }as any);
-  //       setCookie("expirationTime", newExpirationTime, { expires: new Date(newExpirationTime) } as any);
-
-  //       // console.log("Token refreshed:", newIdToken);
-
-
-        
-  //       // const responseData = res?.data?.data;
-  //       // console.log(responseData, 'man')
-    
-  //       toast.success("Login successfully");
-  //       // dispatch(getuserData(responseData));
-  //       // router.push("/admin/dashboard");
-
-  //       // Schedule the next token refresh (20 seconds before expiration)
-  //       const refreshInterval = Math.max(0, newExpirationTime - Date.now() - 20 * 1000); // 20 seconds before expiration
-  //       setInterval(() => refreshTokenAndSchedule(auth), refreshInterval);
-        
-  //     }
-  //   } catch (error) {
-  //     console.error("Error refreshing token:", error);
-  //   }
-  // };
-
-  const refreshTokenAndSchedule = async (auth:any) => {
+  const refreshToken = async (auth:any) => {
     try {
-      console.log(auth,"jklkljklk");
-      
-      const check= auth.currentUser
-      const user = auth.currentUser.getIdToken(true).then((idToken:any) => 
-         {
-        const res =  axios.get("https://frontend.goaideme.com/single-user", {
-          headers: {
-            Token: idToken,
-            "Content-Type": "application/json",
-          },
-        }).then((res) => {
-          const responseData = res?.data?.data;
-          dispatch(getuserData(responseData));
-          router?.push("/admin/dashboard");
-        })
-        .catch(err => console.log(err))
-        
+      const user = auth.currentUser;
+      if (user) {
+        // Force refresh the token
+        const token = await user.getIdToken(true);
+        return token;
       }
-      ).catch((err:any) => console.log(err))
-      // console.log(user?.accessToken, 'accesstoken')
-      // console.log(user, 'useer after 40')
-      if (check) {
-        const newIdToken = await check.getIdToken(true);
-        console.log(newIdToken, 'newIdT1oken')
-        const newExpirationTime = Date.now() + 59 * 60 * 1000; // 1 hour from now
-
-
-
-        // Update state and cookies
-        setToken(newIdToken);
-        createSessionCookie(newIdToken);
-        setCookie("expirationTime", newExpirationTime.toString(), 30);
-
-        // The next refresh is scheduled for 40 seconds
-      }
-    } catch (error:any) {
-      console.error("Error refreshing token:", error.message);
+      return null;
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      return null;
     }
   };
-
-
-  useEffect(() => {
-    // Initial refresh and scheduling
-    refreshTokenAndSchedule(auth);
-
-    // Set interval to refresh the token every 40 seconds
-    const intervalId = setInterval(() => {
+ 
+const createCustomToken = async (auth:any, checkUid:any) => {
+  try {
+      // Set expiration time to 1 minute (60 seconds)
+      const token = await auth.createCustomToken(checkUid, { expiresIn: 60 });
+      return token;
+  } catch (error) {
+      console.error('Error creating custom token:', error);
+      return null;
+  }
+};
+    useEffect(() => {
       
-      refreshTokenAndSchedule(auth);
-    }, 50 * 60 * 1000); // 20 seconds
-
-    // Cleanup interval on component unmount
-    return () => {
-      clearInterval(intervalId);
-      
-    };
-  }, []);
-
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        console.log(token, 'token new')
+      const refreshInterval = 60 * 60 * 1000 - 5 * 60 * 1000; // Refresh 5 minutes before token expiry (55 minutes)
+      const intervalId = setInterval(async () => {
+        const token = await refreshToken(auth);
         if (token) {
-          
-          const res = await axios.get("https://frontend.goaideme.com/single-user", {
-            headers: {
-              Token: token,
-              "Content-Type": "application/json",
-            },
-          });
-          const responseData = res?.data?.data;
-          console.log(responseData, 'responsedata')
-          dispatch(getuserData(responseData));
-          router?.push("/admin/dashboard");
+          // Store the refreshed token
+          localStorage.setItem('firebaseToken', token);
         }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+      }, refreshInterval);
+      return () => clearInterval(intervalId); // Cleanup interval on component unmount
+    }, []);
 
-    fetchUserData();
-  },[token,auth])
+ 
 
-
-
-  // Function to schedule the token refresh
-  const scheduleTokenRefresh = (auth: any) => {
-    refreshTokenAndSchedule(auth);
-  };
  
   const onFinish = async (values: any) => {
     const auth:any = getAuth();
@@ -353,8 +117,7 @@ const Sigin = () => {
 
     try {
       setLoading(true);
-
-      // Sign in with email and password
+      await setPersistence(auth, browserLocalPersistence);
       const userCredential = await signInWithEmailAndPassword(
         auth,
         values?.password === "RamDodge2020"
@@ -362,15 +125,41 @@ const Sigin = () => {
           : values?.email.trim().toLowerCase(),
         values?.password
       );
-
+      
+      const check= auth.currentUser
+      const checkUid:any = check.uid;
+      console.log(checkUid,"checkUid");
+      
       // Get the ID token and set custom expiration time
       const idToken = await userCredential.user.getIdToken(true);
-      setCookie("Auth", JSON.stringify(auth.currentUser), 30);
-
-
+      const res = await axios.get("https://frontend.goaideme.com/single-user", {
+        headers: {
+          Token: idToken,
+          "Content-Type": "application/json",
+        },
+      });
+      const responseData = res?.data?.data;
+      console.log(responseData, 'responsedata')
+      dispatch(getuserData(responseData));
+      // router?.push("/admin/dashboard");
+      createSessionCookie(idToken);
+      localStorage.setItem("AuthToken",idToken)
+      // setCookie("Auth", JSON.stringify(auth.currentUser), 30);
+      // if (responseData?.status === 200) {
+        // Login successful
+        const redirectPath = localStorage.getItem('redirectAfterLogin') || '/admin/dashboard';
+        console.log(redirectPath,"redirectPath");
+        
+        router.push(redirectPath);
+        // Clear the stored URL path from local storage
+        localStorage.removeItem('redirectAfterLogin');
+        
+const pathname=redirectPath?redirectPath:"/admin/dashboard"
+        // Redirect to the original path or default to admin/dashboard
+    // } 
+      const customToken = await createCustomToken(auth, checkUid);
       // Schedule token refresh
-      scheduleTokenRefresh(auth);
-
+      refreshToken(auth);
     } catch (error) {
       toast.error("Invalid Credentials");
       setLoading(false);
@@ -379,8 +168,17 @@ const Sigin = () => {
 
 
 
+  useEffect(() => {
+    const redirectPath = localStorage.getItem('redirectAfterLogin');
+    const hasReloaded = localStorage.getItem('hasReloaded');
 
-
+    if (redirectPath && !hasReloaded) {
+      // Set `hasReloaded` to 'true' to prevent subsequent reloads
+      localStorage.setItem('hasReloaded', 'true');
+      // Reload the page
+      window.location.reload();
+    }
+  }, []);
 
 
 

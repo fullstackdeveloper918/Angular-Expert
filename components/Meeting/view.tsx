@@ -240,13 +240,18 @@ const data={
       setAddress(data)
       //   form.setFieldsValue(data);
     } catch (error: any) {
-      if (error?.status == 400) {
+      if (error?.status == 500) {
+        // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        // dispatch(clearUserData({}));
+        // localStorage.removeItem('hasReloaded');
+        // // }
+        // toast.error("Session Expired Login Again")
+        // router.replace("/auth/signin")
+        localStorage.setItem('redirectAfterLogin', window.location.pathname);
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         dispatch(clearUserData({}));
-        localStorage.removeItem('hasReloaded');
-        // }
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
+        toast.error("Session Expired. Login Again");
+        router.replace("/auth/signin");
       }
     }
   };

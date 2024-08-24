@@ -91,20 +91,20 @@ const QuestionnairList = () => {
             let res = await api.Meeting.listing();
             setAreas(res);
             if (res?.status == 500) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                localStorage.removeItem('hasReloaded');
-                // }
-                dispatch(clearUserData({}));
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
+                // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                // localStorage.removeItem('hasReloaded');
+                // // }
+                // dispatch(clearUserData({}));
+                // toast.error("Session Expired Login Again")
+                // router.replace("/auth/signin")
             }
-        } catch (error) {
-            if (error == 400) {
+        } catch (error:any) {
+            if (error.status == 500) {
+                localStorage.setItem('redirectAfterLogin', window.location.pathname);
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                dispatch(clearUserData({}));
-                // }
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
+                // dispatch(clearUserData({}));
+                toast.error("Session Expired. Login Again");
+                router.replace("/auth/signin");
             }
         }
     };
