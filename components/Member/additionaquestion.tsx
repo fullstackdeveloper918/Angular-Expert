@@ -91,6 +91,7 @@ const AdditionalQuestion = () => {
       }
       if (error?.status == 500) {
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        localStorage.removeItem("hasReloaded")
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
@@ -112,6 +113,7 @@ const AdditionalQuestion = () => {
           "Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token."
       ) {
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        localStorage.removeItem("hasReloaded")
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
@@ -133,6 +135,7 @@ const AdditionalQuestion = () => {
       setState(res?.data || null);
       if (res?.data?.status == 500) {
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        localStorage.removeItem("hasReloaded")
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
@@ -169,6 +172,7 @@ const AdditionalQuestion = () => {
         // toast.error("Session Expired Login Again");
         // router.replace("/auth/signin");
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        localStorage.removeItem("hasReloaded")
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");

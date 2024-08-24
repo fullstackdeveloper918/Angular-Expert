@@ -224,13 +224,14 @@ const PastMeetingUserList = () => {
                 // toast.error("Session Expired Login Again")
                 // router.replace("/auth/signin")
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
+                localStorage.removeItem("hasReloaded")
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 // dispatch(clearUserData({}));
                 toast.error("Session Expired. Login Again");
                 router.replace("/auth/signin");
             }
         } catch (error:any) {
-            if (error?.status==400) {
+            if (error?.status==500) {
                 // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 // dispatch(clearUserData({}));
                 // localStorage.removeItem('hasReloaded');
@@ -238,6 +239,7 @@ const PastMeetingUserList = () => {
                 // toast.error("Session Expired Login Again")
                 // router.replace("/auth/signin")
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
+                localStorage.removeItem("hasReloaded")
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 // dispatch(clearUserData({}));
                 toast.error("Session Expired. Login Again");

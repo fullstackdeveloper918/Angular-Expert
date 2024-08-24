@@ -135,7 +135,7 @@ const router =useRouter()
       const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
       let res = await api.Meeting.archive(query);
       setAreas(res?.data);
-      if (res?.data?.status == 500||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
+      if (res?.data?.status == 400||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         localStorage.removeItem('hasReloaded');
         toast.error("Session Expired Login Again")
@@ -155,17 +155,10 @@ const router =useRouter()
   };
   
   useEffect(() => {
-    const hasReloaded = localStorage.getItem('hasReloaded');
-    if (!hasReloaded) {
-    //   // if (!hasReloaded && state1?.status === '400') {
-      localStorage.setItem('hasReloaded', 'true');
-      window.location.reload();
-    } else {
     const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
     initialise(query);
-  }
 
-  }, [searchTerm,areas?.status === '500']);
+  }, [searchTerm]);
   // if (hasError) {
   //   return <Logout />;
   // }

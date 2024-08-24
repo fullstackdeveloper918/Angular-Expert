@@ -248,6 +248,7 @@ const data={
         // toast.error("Session Expired Login Again")
         // router.replace("/auth/signin")
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        localStorage.removeItem("hasReloaded")
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         dispatch(clearUserData({}));
         toast.error("Session Expired. Login Again");

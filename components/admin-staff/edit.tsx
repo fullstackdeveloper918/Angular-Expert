@@ -65,7 +65,7 @@ const EditStaff: Page = () => {
       router.back()
 
     } catch (error: any) {
-      if (error.status == 400) {
+      if (error.status == 500) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         localStorage.removeItem('hasReloaded');
         // }
@@ -88,7 +88,7 @@ const EditStaff: Page = () => {
       form.setFieldsValue(apiRes)
       form.setFieldValue("phone_no", apiRes.mobile)
     } catch (error:any) {
-      if (error?.status==400) {
+      if (error?.status==500) {
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         localStorage.removeItem('hasReloaded');
         toast.error("Session Expired Login Again")

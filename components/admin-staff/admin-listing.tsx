@@ -67,7 +67,7 @@ const Admin: Page = () => {
                 router.replace("/auth/signin")
             }
         } catch (error:any) {
-            if (error?.status==400) {
+            if (error?.status==500) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 // }

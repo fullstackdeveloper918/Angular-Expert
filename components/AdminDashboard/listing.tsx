@@ -61,7 +61,7 @@ const AdminDashboard: Page = (props: any) => {
   const start_date = 1725993000000;
   const spring_start_date = 1745951400000;
   const fiveDaysInMilliseconds = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
-
+const [error,setError]=useState<any>("")
   const new_date = start_date - fiveDaysInMilliseconds;
 
   const formatWithOrdinal = (date: any) => {
@@ -567,14 +567,18 @@ const AdminDashboard: Page = (props: any) => {
     try {
       let res = await api.User.listing()
       let response = await api.User.completelist()
-      
+      console.log(res?.data, 'res check')
       setState1(res?.data)
       setState2(response)
       setLoading(false)
-    } catch (error) {
+    } catch (error:any) {
+      console.log(error?.response, 'error check')
+      setError(error?.response?.status)
       setLoading(false)
     }
   }
+  console.log(state1,"state1");
+  
   useEffect(() => {
     const hasReloaded = localStorage.getItem('hasReloaded');
     if (!hasReloaded) {
@@ -585,7 +589,7 @@ const AdminDashboard: Page = (props: any) => {
       userlist();
     }
   // }, []);
-  }, [state1?.status === '500']);
+  }, [state1?.status==500]);
   const initialise = async () => {
     try {
       if (getUserdata?.is_admin == false) {

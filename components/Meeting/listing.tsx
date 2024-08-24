@@ -239,7 +239,7 @@ const MeetingList = () => {
          
             
             setLoading(false);
-            if (res?.status === 400) {
+            if (res?.status === 500) {
                 // Save the current URL path in local storage
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
         
@@ -255,7 +255,7 @@ const MeetingList = () => {
             console.error(error.status);
             
             setLoading(false);
-            if (error?.status==400) {
+            if (error?.status==500) {
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
         
                 // Clear cookies and dispatch actions
@@ -269,16 +269,10 @@ const MeetingList = () => {
         }
     };
     useEffect(() => {
-        const hasReloaded = localStorage.getItem('hasReloaded');
-        if (!hasReloaded) {
-        //   // if (!hasReloaded && state1?.status === '400') {
-          localStorage.setItem('hasReloaded', 'true');
-          window.location.reload();
-        } else {
+        
         const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
         initialise(query);
-        }
-    }, [searchTerm,areas?.status === '500']);
+    }, [searchTerm]);
 
 
 

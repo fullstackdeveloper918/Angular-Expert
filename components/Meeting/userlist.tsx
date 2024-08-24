@@ -347,6 +347,7 @@ const UserList = () => {
                 // router.replace("/auth/signin")
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                localStorage.removeItem("hasReloaded")
                 // dispatch(clearUserData({}));
                 toast.error("Session Expired. Login Again");
                 router.replace("/auth/signin");
@@ -365,6 +366,7 @@ const UserList = () => {
                 // router.replace("/auth/signin")
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                localStorage.removeItem("hasReloaded")
                 // dispatch(clearUserData({}));
                 toast.error("Session Expired. Login Again");
                 router.replace("/auth/signin");

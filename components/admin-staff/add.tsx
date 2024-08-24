@@ -91,7 +91,7 @@ const AddStaff: Page = () => {
 
 
             setLoading(false)
-            if (error?.status==400) {
+            if (error?.status==500) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 // }

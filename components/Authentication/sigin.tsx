@@ -150,7 +150,7 @@ const createCustomToken = async (auth:any, checkUid:any) => {
         const redirectPath = localStorage.getItem('redirectAfterLogin') || '/admin/dashboard';
         console.log(redirectPath,"redirectPath");
         
-        router.push(redirectPath);
+        router.push('/admin/dashboard');
         // Clear the stored URL path from local storage
         localStorage.removeItem('redirectAfterLogin');
         
@@ -168,17 +168,22 @@ const pathname=redirectPath?redirectPath:"/admin/dashboard"
 
 
 
-  useEffect(() => {
-    const redirectPath = localStorage.getItem('redirectAfterLogin');
-    const hasReloaded = localStorage.getItem('hasReloaded');
+  // const hasReloaded:any = localStorage.getItem('hasReloaded');
+  // useEffect(() => {
+  //   // Retrieve `hasReloaded` from localStorage
+  //   const hasReloaded = JSON.parse(localStorage.getItem('hasReloaded') || 'false');
+  //   console.log(hasReloaded, "hasReloaded");
 
-    if (redirectPath && !hasReloaded) {
-      // Set `hasReloaded` to 'true' to prevent subsequent reloads
-      localStorage.setItem('hasReloaded', 'true');
-      // Reload the page
-      window.location.reload();
-    }
-  }, []);
+  //   if (hasReloaded) {
+  //     // Set `hasReloaded` to 'false' to prevent subsequent reloads
+  //     localStorage.setItem('hasReloaded', JSON.stringify(false));
+  //     // Reload the page
+  //     window.location.reload();
+  //   } else {
+  //     // Set `hasReloaded` to 'true' initially
+  //     localStorage.setItem('hasReloaded', JSON.stringify(true));
+  //   }
+  // }, []); //
 
 
 

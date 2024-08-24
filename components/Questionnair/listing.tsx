@@ -101,6 +101,7 @@ const QuestionnairList = () => {
         } catch (error:any) {
             if (error.status == 500) {
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
+                localStorage.removeItem("hasReloaded")
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 // dispatch(clearUserData({}));
                 toast.error("Session Expired. Login Again");
@@ -145,14 +146,15 @@ const QuestionnairList = () => {
             let res = await api.Questionnaire.listing(query);
 
             setState(res.data);
-            if (res?.data?.status == 400) {
+            if (res?.data?.status == 500) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+                
                 localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")
                 router.replace("/auth/signin")
             }
         } catch (error: any) {
-            if (error?.status == 400) {
+            if (error?.status == 500) {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem('hasReloaded');
                 toast.error("Session Expired Login Again")

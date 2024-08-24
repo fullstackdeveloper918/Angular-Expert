@@ -124,6 +124,7 @@ const Page1 = () => {
         dispatch(clearSpecificFormData(fieldsToClear));
         if (res?.status == 500) {
           localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          localStorage.removeItem("hasReloaded")
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
@@ -135,6 +136,7 @@ const Page1 = () => {
       if (error?.status == 500) {
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.removeItem("hasReloaded")
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
       }
@@ -155,7 +157,7 @@ const Page1 = () => {
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
-      if (res?.data?.status == 400) {
+      if (res?.data?.status == 500) {
         localStorage.removeItem("hasReloaded");
         toast.error("Session Expired Login Again");
         router.replace("/auth/signin");
@@ -231,6 +233,7 @@ const Page1 = () => {
         toast.success("Added Successfully");
         if (res?.status == 400) {
           localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          localStorage.removeItem("hasReloaded")
           destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
           toast.error("Session Expired. Login Again");
           router.replace("/auth/signin");
@@ -240,6 +243,7 @@ const Page1 = () => {
     } catch (error: any) {
       if (error?.status == 400) {
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        localStorage.removeItem("hasReloaded")
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");

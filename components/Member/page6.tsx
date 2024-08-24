@@ -66,6 +66,7 @@ const Page6 = () => {
 
         if (res?.status == 500) {
             localStorage.setItem('redirectAfterLogin', window.location.pathname);
+            localStorage.removeItem("hasReloaded")
             destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
             toast.error("Session Expired. Login Again");
             router.replace("/auth/signin");
@@ -139,6 +140,7 @@ const Page6 = () => {
       setState(res?.data || null);
       if (res?.data?.status == 500) {
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        localStorage.removeItem("hasReloaded")
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
@@ -157,6 +159,7 @@ const Page6 = () => {
     } catch (error: any) {
       if (error == 500) {
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        localStorage.removeItem("hasReloaded")
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
