@@ -1,10 +1,10 @@
 "use client";
 import { Form, Upload, Typography, Divider, Button, Popconfirm } from "antd";
-import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { PlusOutlined, MinusCircleOutlined, CheckOutlined } from "@ant-design/icons";
 // import ReactImageCompressor from "react-image-compressor";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { Fragment, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import api from "@/utils/api";
 import type { UploadFile } from "antd";
@@ -67,6 +67,7 @@ const Page8 = () => {
   );
   const [responseData, setResponseData] = useState<any>("");
   const [screenLoader, setScreenLoader] = useState(false);
+  const [checkToast, setCheckToast] = useState(true)
   const [previewImage, setPreviewImage] = useState<any>("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -83,11 +84,16 @@ const Page8 = () => {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
-
+  const [showToast, setShowToast] = useState<any>(true);
   const handleChange = async (info: any, id: any) => {
     const newFileLists = { ...fileLists, [id]: info.fileList };
     setFileLists(newFileLists);
   };
+  const handleCancel = () => {
+    setShowToast(false);
+  };
+
+ 
 
   const addInputPair = () => {
     const newId = Date.now();
@@ -264,10 +270,10 @@ const Page8 = () => {
         // }
         if (!pagetype) {
           router.replace(`/admin/user?${getUserdata?.user_id}`);
-      } else {
+        } else {
           // router?.back()
           router.push("/admin/questionnaire?page8")
-      }
+        }
 
         return response?.data?.pdfReponseData;
       } else {
@@ -708,10 +714,24 @@ const Page8 = () => {
   };
   const hnandleBack = () => {
     router.back()
-}
+  }
   return (
     <MainLayout>
       <Fragment>
+
+        {checkToast && <div className="Custom_tost">
+          <div>
+            <span style={{ color: 'green', fontSize: '16px', marginRight: '8px' }}><CheckOutlined /></span>
+            <p style={{ margin: 0 }}>Please save the project once you uploaded files and comments, otherwise data would be lost</p>
+          </div>
+          <div className="Btns">
+            <a
+              onClick={() => setCheckToast(false)}
+            >
+              Cancel
+            </a>
+          </div>
+        </div>}
         <section className="club_member">
           <DynamicRow
             justify="center"
@@ -792,7 +812,7 @@ const Page8 = () => {
                                   }
                                 >
                                   {(fileLists[pair.id] || []).length >=
-                                  10 ? null : (
+                                    10 ? null : (
                                     <PlusOutlined />
                                   )}
                                 </Upload>
@@ -877,7 +897,7 @@ const Page8 = () => {
                             type="primary"
                             htmlType="submit"
                             className="login-form-button "
-                            // loading={loading}
+                          // loading={loading}
                           >
                             Submit
                             {/* {!pagetype ? "Next" : "Save"} */}
@@ -885,17 +905,17 @@ const Page8 = () => {
                         </div>
                       ) : (
                         <div className=" col-8 d-flex gap-5 justify-content-center">
-                        <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
+                          <Button size={'large'} type="primary" className=" " onClick={hnandleBack}>
                             Back
-                        </Button>
+                          </Button>
 
-                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
+                          <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
                             Save
-                        </Button>
-                        <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
+                          </Button>
+                          <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
                             Submit
-                        </Button>
-                    </div>
+                          </Button>
+                        </div>
                       )}
                     </div>
                   </Form>
