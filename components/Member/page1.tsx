@@ -33,7 +33,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import nookies from "nookies";
 import useAutoSaveForm from "../common/useAutoSaveForm";
-import { clearFormData, clearSpecificFormData } from "@/lib/features/formSlice";
+import {  clearSpecificFormData } from "@/lib/features/formSlice";
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -197,61 +197,65 @@ const Page1 = () => {
       getDataById();
     }
   }, [type]);
-  const onFinish1 = async (values: any) => {
-    let items = {
-      bussiness_update: {
-        userId: value,
-        financial_position: values?.financial_position,
-        sales_position: values?.sales_position,
-        accomplishments: values?.accomplishments,
-        hr_position: values?.hr_position,
-        current_challenges: values?.current_challenges,
-        craftsmen_support: values?.craftsmen_support,
-      },
-    } as any;
 
-    try {
-      if (type == "edit") {
-        let items = {
-          bussiness_update: {
-            userId: value,
-            financial_position: values?.financial_position,
-            sales_position: values?.sales_position,
-            accomplishments: values?.accomplishments,
-            hr_position: values?.hr_position,
-            current_challenges: values?.current_challenges,
-            craftsmen_support: values?.craftsmen_support,
-          },
-        } as any;
-        setLoading(true);
-        let res = await api.User.edit(items);
-        toast.success(res?.message);
-        // router.push(`/admin/member/add/page3?${value}&edit`)
-      } else {
-        setLoading(true);
-        let res = await api.Auth.signUp(items);
-        toast.success("Added Successfully");
-        if (res?.status == 400) {
-          localStorage.setItem('redirectAfterLogin', window.location.pathname);
-          localStorage.removeItem("hasReloaded")
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
-        // router.push(`/admin/member/add/page3?${res?.user_id}`)
-      }
-    } catch (error: any) {
-      if (error?.status == 400) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+
+  // const onFinish1 = async (values: any) => {
+  //   let items = {
+  //     bussiness_update: {
+  //       userId: value,
+  //       financial_position: values?.financial_position,
+  //       sales_position: values?.sales_position,
+  //       accomplishments: values?.accomplishments,
+  //       hr_position: values?.hr_position,
+  //       current_challenges: values?.current_challenges,
+  //       craftsmen_support: values?.craftsmen_support,
+  //     },
+  //   } as any;
+
+  //   try {
+  //     if (type == "edit") {
+  //       let items = {
+  //         bussiness_update: {
+  //           userId: value,
+  //           financial_position: values?.financial_position,
+  //           sales_position: values?.sales_position,
+  //           accomplishments: values?.accomplishments,
+  //           hr_position: values?.hr_position,
+  //           current_challenges: values?.current_challenges,
+  //           craftsmen_support: values?.craftsmen_support,
+  //         },
+  //       } as any;
+  //       setLoading(true);
+  //       let res = await api.User.edit(items);
+  //       toast.success(res?.message);
+  //       // router.push(`/admin/member/add/page3?${value}&edit`)
+  //     } else {
+  //       setLoading(true);
+  //       let res = await api.Auth.signUp(items);
+  //       toast.success("Added Successfully");
+  //       if (res?.status == 400) {
+  //         localStorage.setItem('redirectAfterLogin', window.location.pathname);
+  //         localStorage.removeItem("hasReloaded")
+  //         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+  //         toast.error("Session Expired. Login Again");
+  //         router.replace("/auth/signin");
+  //       }
+  //       // router.push(`/admin/member/add/page3?${res?.user_id}`)
+  //     }
+  //   } catch (error: any) {
+  //     if (error?.status == 400) {
+  //       localStorage.setItem('redirectAfterLogin', window.location.pathname);
+  //       localStorage.removeItem("hasReloaded")
+  //       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+  //       toast.error("Session Expired. Login Again");
+  //       router.replace("/auth/signin");
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
   const onPrevious = () => {
     router.replace(`/admin/member/add?${value}&edit`);
   };
