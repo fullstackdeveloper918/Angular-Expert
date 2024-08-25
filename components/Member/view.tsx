@@ -224,8 +224,6 @@ const companyName = companyNameMap[state?.company_name || state?.master_user_det
 
 
   return (
-    <MainLayout>
-    <Fragment>
       <section className="antShadow">
       
         <Spin spinning={loading}>
@@ -322,8 +320,6 @@ const companyName = companyNameMap[state?.company_name || state?.master_user_det
           </Row>
         </Spin>
       </section>
-    </Fragment>
-  </MainLayout>
   );
 };
 export default MeetingView;

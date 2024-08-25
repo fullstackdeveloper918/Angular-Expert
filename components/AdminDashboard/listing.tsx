@@ -580,16 +580,16 @@ const [error,setError]=useState<any>("")
   console.log(state1,"state1");
   
   useEffect(() => {
-    const hasReloaded = localStorage.getItem('hasReloaded');
-    if (!hasReloaded) {
-    //   // if (!hasReloaded && state1?.status === '400') {
-      localStorage.setItem('hasReloaded', 'true');
-      window.location.reload();
-    } else {
+    // const hasReloaded = localStorage.getItem('hasReloaded');
+    // if (!hasReloaded) {
+    // //   // if (!hasReloaded && state1?.status === '400') {
+    //   localStorage.setItem('hasReloaded', 'true');
+    //   window.location.reload();
+    // } else {
       userlist();
-    }
-  // }, []);
-  }, [state1?.status==500]);
+    // }
+  }, []);
+  // }, [state1?.status==500]);
   const initialise = async () => {
     try {
       if (getUserdata?.is_admin == false) {
@@ -622,10 +622,6 @@ const [error,setError]=useState<any>("")
   }, [])
 
   return (
-    <MainLayout>
-
-      <Fragment>
-        {/* <h1 className="">check main layout</h1> */}
         <section>
           <Row gutter={[20, 20]} className="mb-4 ">
 
@@ -742,9 +738,7 @@ const [error,setError]=useState<any>("")
               : ""}
           </Row>
         </section>
-      </Fragment>
-    </MainLayout>
-  );
+        );
 };
 
 export default AdminDashboard;

@@ -386,7 +386,7 @@ const UserList = () => {
         }
     };
     return (
-        <MainLayout>
+        <>
 
             <Fragment>
                 {/* <Head>
@@ -472,10 +472,10 @@ const UserList = () => {
 
                 </section>
             </Fragment>
-        </MainLayout>
+        </>
     );
 };
 
-// Page.getLayout = (Page: ReactNode) => <MainLayout>{Page}</MainLayout>;
+// Page.getLayout = (Page: ReactNode) => <>{Page}</>;
 
 export default UserList;

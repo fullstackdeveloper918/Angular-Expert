@@ -284,7 +284,7 @@ const MeetingList = () => {
 
 
     return (
-        <MainLayout>
+        <>
 
             <Fragment>
                 <section>
@@ -342,7 +342,7 @@ const MeetingList = () => {
 
                 </section>
             </Fragment>
-        </MainLayout>
+        </>
     );
 };
 

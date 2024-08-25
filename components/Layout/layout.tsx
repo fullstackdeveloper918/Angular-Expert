@@ -13,10 +13,13 @@ import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { signOut } from "firebase/auth";
+import {  signOut } from "firebase/auth";
 import { auth } from "../../utils/firebase";
 // import { auth } from "@/utils/firebase";
-
+import {
+  onAuthStateChanged,
+} from "firebase/auth";
+import api from "@/utils/api";
 const { Button, Dropdown, Tooltip } = {
   Dropdown: dynamic(() => import("antd").then((module) => module.Dropdown), {
     ssr: false,
@@ -37,23 +40,28 @@ const MainLayout = ({ children }: any) => {
   const router = useRouter();
   const dispatch = useDispatch();
   useEffect(() => {
-    window.addEventListener("scroll", () => {
+    const scroll=() => {
       const header: any = document.querySelector(".ant-layout-header");
       if (window.scrollY >= 64) {
         header?.classList.add("sticky-top", "z-3", "transition-smooth");
       } else {
         header?.classList.remove("sticky-top", "z-3", "transition-smooth");
       }
-    });
-
-    window.addEventListener("resize", () => {
+    }
+    const resize=() => {
       if (window.innerWidth <= 991) {
         setCollapsed(true);
       } else {
         setCollapsed(false);
       }
-    });
-  });
+    }
+    window.addEventListener("scroll", scroll);  
+    window.addEventListener("resize", resize);
+    return()=>{
+      window.removeEventListener("scroll", scroll);
+      window.removeEventListener("resize", resize);  
+    }
+  },[]);
 
   const items: MenuProps["items"] = [
     {
@@ -91,7 +99,15 @@ const MainLayout = ({ children }: any) => {
   ];
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
-
+  useEffect(() => {
+    console.log("initial")
+    const intervalId = setInterval(async () => {
+      console.log("initial called")
+      refreshTokenAndSchedule(auth);
+    }, 60 * 1000); 
+    return () => clearInterval(intervalId); 
+  }, [getUserdata]);
+  
   useEffect(() => {
     const cookies = parseCookies();
     const token = cookies["COOKIES_USER_ACCESS_TOKEN"];
@@ -105,8 +121,8 @@ const MainLayout = ({ children }: any) => {
       localStorage.removeItem('redirectAfterLogin');
          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
          localStorage.removeItem('hasReloaded');
-       dispatch(clearUserData({}));
-       toast.success("Logout Successful", {
+         dispatch(clearUserData({}));
+         toast.success("Logout Successful", {
          position: "top-center",
          autoClose: 300,
          onClose: () => {
@@ -118,8 +134,45 @@ const MainLayout = ({ children }: any) => {
       setLoading(false)
     }
   };
- 
+  const setCookie = (name: string, value: string, days?: number) => {
+    const expires = new Date();
+    if(days){
+      expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+    }
+    document.cookie = `${name}=${value};${days?`expires=${expires.toUTCString()};`:''}path=/`;
+  };
 
+  const createSessionCookie = (idToken: string) => {
+    try {
+      setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days
+    } catch (error) {
+      console.error("Failed to create session cookie", error);
+    }
+  };
+  const refreshTokenAndSchedule = async (auth: any) => {
+    try {
+      const check = auth.currentUser;
+      if (check) {
+        const uid = check.uid;
+  
+        const expirationTime = parseInt(localStorage.getItem("loginExpiryTime") || "0");
+        const currentTime = Date.now();
+  
+        if (expirationTime < currentTime) {
+          const newIdToken = await check.getIdToken(true);
+          const newExpirationTime = Date.now() + 1 * 60 * 1000;
+          localStorage.setItem("loginExpiryTime", newExpirationTime.toString());
+          createSessionCookie(newIdToken);
+          setCookie("expirationTime", newExpirationTime.toString());
+          api.setToken(newIdToken)
+          // setTimeout(() => refreshTokenAndSchedule(auth), 1 * 60 * 1000); 
+        }
+      }
+    } catch (error: any) {
+      console.error("Error refreshing token:", error.message);
+    }
+  };
+  
   return (
     <>
       <ToastContainer

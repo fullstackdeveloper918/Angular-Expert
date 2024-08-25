@@ -104,7 +104,7 @@ const AddStaff: Page = () => {
     };
 
     return (
-        <MainLayout>
+        <>
             <Fragment>
                 <ToastContainer
                     position="top-center"
@@ -208,7 +208,7 @@ const AddStaff: Page = () => {
 
                 </section>
             </Fragment >
-        </MainLayout>
+        </>
     )
 }
 

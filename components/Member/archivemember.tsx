@@ -391,7 +391,7 @@ const ArchiveMemberList = () => {
         }
     };
     return (
-        <MainLayout>
+        <>
 
             <Fragment>
                 <section>
@@ -455,10 +455,10 @@ const ArchiveMemberList = () => {
 
                 </section>
             </Fragment>
-        </MainLayout>
+        </>
     );
 };
 
-// Page.getLayout = (Page: ReactNode) => <MainLayout>{Page}</MainLayout>;
+// Page.getLayout = (Page: ReactNode) => <>{Page}</>;
 
 export default ArchiveMemberList;

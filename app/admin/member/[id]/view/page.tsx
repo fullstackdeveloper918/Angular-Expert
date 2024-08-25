@@ -4,9 +4,9 @@ import MeetingView from "../../../../../components/Member/view";
 
 const page = () => {
   return (
-    <div>
+    <>
       <MeetingView />
-    </div>
+    </>
   );
 };
 

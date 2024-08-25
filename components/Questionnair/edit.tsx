@@ -122,7 +122,7 @@ const EditQuestionnair: Page = () => {
     }
   };
   return (
-    <MainLayout>
+    <>
       <Fragment>
        
         <section>
@@ -175,7 +175,7 @@ const EditQuestionnair: Page = () => {
 
         </section>
       </Fragment>
-    </MainLayout>
+    </>
   )
 }
 

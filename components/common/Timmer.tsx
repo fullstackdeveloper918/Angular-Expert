@@ -16,7 +16,6 @@ const Timmer: React.FC<CountdownProps> = ({ endDate }) => {
             const now = dayjs();
             const end = dayjs(endDate);
             const diff = end.diff(now);
-
             if (diff <= 0) {
                 setTimeRemaining('00:00:00, 0 days');
                 return;

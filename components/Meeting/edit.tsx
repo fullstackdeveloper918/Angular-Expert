@@ -384,7 +384,7 @@ const MeetingEdit = () => {
 
   
   return (
-    <MainLayout>
+    <>
       <Fragment>
 
         <section>
@@ -591,7 +591,7 @@ const MeetingEdit = () => {
 
         </section>
       </Fragment >
-    </MainLayout>
+    </>
   );
 };
 

@@ -23,6 +23,7 @@ import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from "../../utils/firebase";
 import { getuserData } from "../../lib/features/userSlice";
+import api from "@/utils/api";
 // import firebase from "firebase/app";
 // import "firebase/auth";
 const { Row, Col, Button, Divider } = {
@@ -49,7 +50,7 @@ const Sigin = () => {
   const [state, setState] = useState<any>("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+  // const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   const setCookie = (name: string, value: string, days: number) => {
     const expires = new Date();
@@ -69,47 +70,69 @@ const Sigin = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-
-  const refreshToken = async (auth:any) => {
-    try {
-      const user = auth.currentUser;
-      if (user) {
-        // Force refresh the token
-        const token = await user.getIdToken(true);
-        return token;
-      }
-      return null;
-    } catch (error) {
-      console.error('Error refreshing token:', error);
-      return null;
-    }
-  };
- 
-const createCustomToken = async (auth:any, checkUid:any) => {
+const refreshTokenAndSchedule = async (auth: any) => {
   try {
-      // Set expiration time to 1 minute (60 seconds)
-      const token = await auth.createCustomToken(checkUid, { expiresIn: 60 });
-      return token;
-  } catch (error) {
-      console.error('Error creating custom token:', error);
-      return null;
+    const check = auth.currentUser;
+    if (check) {
+      const uid = check.uid;
+
+      const currentTime = Date.now();
+      const expirationTime = parseInt(localStorage.getItem("loginExpiryTime") || "0");
+
+      if (expirationTime > currentTime) {
+        const newIdToken = await check.getIdToken(true);
+        console.log(newIdToken, 'newIdToken');
+        console.log(uid, 'uid');
+
+        const newExpirationTime = Date.now() + 1 * 60 * 1000;
+        localStorage.setItem("loginExpiryTime", newExpirationTime.toString());
+        setToken(newIdToken);
+        createSessionCookie(newIdToken);
+        setCookie("expirationTime", newExpirationTime.toString(), 30);
+
+        // setTimeout(() => refreshTokenAndSchedule(auth), 1 * 60 * 1000); 
+      }
+    }
+  } catch (error: any) {
+    console.error("Error refreshing token:", error.message);
   }
 };
-    useEffect(() => {
+
+useEffect(() => {
+  const xyz = onAuthStateChanged(auth, (user) => {
+    if (user) {
       
-      const refreshInterval = 60 * 60 * 1000 - 5 * 60 * 1000; // Refresh 5 minutes before token expiry (55 minutes)
-      const intervalId = setInterval(async () => {
-        const token = await refreshToken(auth);
-        if (token) {
-          // Store the refreshed token
-          localStorage.setItem('firebaseToken', token);
-        }
-      }, refreshInterval);
-      return () => clearInterval(intervalId); // Cleanup interval on component unmount
-    }, []);
+      refreshTokenAndSchedule(auth);
+    }
+  });
+  return () => xyz();
+}, [auth]);
 
+// useEffect(() => {
+//   refreshTokenAndSchedule(auth);
+
+//   const intervalId = setInterval(() => {
+    
+//     refreshTokenAndSchedule(auth);
+//   }, 30 * 1000); 
+
+//   return () => {
+//     clearInterval(intervalId);
+    
+//   };
+// }, []);
+
+useEffect(() => {
+  const intervalId = setInterval(async () => {
+    refreshTokenAndSchedule(auth);
+  }, 60 * 1000); 
+  return () => clearInterval(intervalId); 
+}, [auth]);
+
+const scheduleTokenRefresh = (auth: any) => {
+  refreshTokenAndSchedule(auth);
  
-
+};
  
   const onFinish = async (values: any) => {
     const auth:any = getAuth();
@@ -129,8 +152,6 @@ const createCustomToken = async (auth:any, checkUid:any) => {
       const check= auth.currentUser
       const checkUid:any = check.uid;
       console.log(checkUid,"checkUid");
-      
-      // Get the ID token and set custom expiration time
       const idToken = await userCredential.user.getIdToken(true);
       const res = await axios.get("https://frontend.goaideme.com/single-user", {
         headers: {
@@ -140,27 +161,25 @@ const createCustomToken = async (auth:any, checkUid:any) => {
       });
       const responseData = res?.data?.data;
       console.log(responseData, 'responsedata')
+
       dispatch(getuserData(responseData));
       // router?.push("/admin/dashboard");
       createSessionCookie(idToken);
+      api.setToken(idToken)
+      const loginTime = new Date().getTime(); 
+      const expiryTime = loginTime + 1 * 60 * 1000; 
+      localStorage.setItem("loginExpiryTime", expiryTime.toString());
       localStorage.setItem("AuthToken",idToken)
-      // setCookie("Auth", JSON.stringify(auth.currentUser), 30);
-      // if (responseData?.status === 200) {
-        // Login successful
+      setCookie("Auth", JSON.stringify(auth.currentUser), 30);
         const redirectPath = localStorage.getItem('redirectAfterLogin') || '/admin/dashboard';
         console.log(redirectPath,"redirectPath");
         
         router.push('/admin/dashboard');
         // router.push(redirectPath);
-        // Clear the stored URL path from local storage
         localStorage.removeItem('redirectAfterLogin');
         
 const pathname=redirectPath?redirectPath:"/admin/dashboard"
-        // Redirect to the original path or default to admin/dashboard
-    // } 
-      const customToken = await createCustomToken(auth, checkUid);
-      // Schedule token refresh
-      refreshToken(auth);
+      scheduleTokenRefresh(auth);
     } catch (error) {
       toast.error("Invalid Credentials");
       setLoading(false);

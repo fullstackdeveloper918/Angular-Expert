@@ -349,7 +349,7 @@ const data={
   };
   const airportCode = state?.airport ? findAirportCode(state.airport) : "N/A";
   return (
-    <MainLayout>
+    <>
       <Fragment>
         <section className="antShadow">
           <Spin spinning={loading}>
@@ -442,7 +442,7 @@ const data={
           </Spin>
         </section>
       </Fragment>
-    </MainLayout>
+    </>
   );
 };
 export default MeetingViewPage;

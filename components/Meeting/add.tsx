@@ -590,7 +590,7 @@ const MeetingAdd = () => {
         </Menu>
     );
     return (
-        <MainLayout>
+        <>
             <Fragment>
 
                 <section>
@@ -844,7 +844,7 @@ const MeetingAdd = () => {
 
                 </section>
             </Fragment >
-        </MainLayout>
+        </>
     );
 };
 

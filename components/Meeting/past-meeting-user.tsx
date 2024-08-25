@@ -262,7 +262,7 @@ const PastMeetingUserList = () => {
 
 
     return (
-        <MainLayout>
+        <>
 
             <Fragment>
                 <section>
@@ -303,7 +303,7 @@ const PastMeetingUserList = () => {
 
                 </section>
             </Fragment>
-        </MainLayout>
+        </>
     );
 };
 

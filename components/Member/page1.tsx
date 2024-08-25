@@ -271,7 +271,7 @@ const Page1 = () => {
   };
 
   return (
-    <MainLayout>
+    <>
       <Fragment>
         <section>
           <ToastContainer
@@ -523,7 +523,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):"
           </Row>
         </section>
       </Fragment>
-    </MainLayout>
+    </>
   );
 };
 

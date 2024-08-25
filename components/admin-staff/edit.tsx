@@ -108,7 +108,7 @@ const EditStaff: Page = () => {
   }, [])
 
   return (
-    <MainLayout>
+    <>
       <Fragment>
 
         <section>
@@ -198,7 +198,7 @@ const EditStaff: Page = () => {
           {/* </Spin> */}
         </section>
       </Fragment>
-    </MainLayout>
+    </>
   )
 }
 

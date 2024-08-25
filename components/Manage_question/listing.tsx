@@ -126,7 +126,7 @@ const Manage_Question = () => {
 
 
   return (
-    <MainLayout>
+    <>
       <Fragment>
         <section>
           <Row gutter={[20, 20]}>
@@ -176,7 +176,7 @@ const Manage_Question = () => {
           </Row>
         </section>
       </Fragment>
-    </MainLayout>
+    </>
   );
 };
 

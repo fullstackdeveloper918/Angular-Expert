@@ -670,7 +670,7 @@ const QuestionnairList = () => {
     console.log(state1, "state1");
 
     return (
-        <MainLayout>
+        <>
             <Fragment>
                 <section>
                     {/* <ToastContainer /> */}
@@ -1462,7 +1462,7 @@ const QuestionnairList = () => {
 
                 </section>
             </Fragment >
-        </MainLayout>
+        </>
     );
 };
 

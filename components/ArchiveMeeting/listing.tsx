@@ -163,7 +163,7 @@ const router =useRouter()
   //   return <Logout />;
   // }
   return (
-    <MainLayout>
+    <>
 
       <Fragment>
         <section>
@@ -202,7 +202,7 @@ const router =useRouter()
 
         </section>
       </Fragment>
-    </MainLayout>
+    </>
   );
 };
 

@@ -186,7 +186,7 @@ const Page6 = () => {
   };
 
   return (
-    <MainLayout>
+    <>
       <Fragment>
         <section className="club_member">
           <Row justify="center" gutter={[20, 20]} className="heightCenter">
@@ -340,7 +340,7 @@ const Page6 = () => {
           </Row>
         </section>
       </Fragment>
-    </MainLayout>
+    </>
   );
 };
 

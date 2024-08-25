@@ -401,7 +401,7 @@ const Page3 = () => {
   };
 
   return (
-    <MainLayout>
+    <>
       <Fragment>
         <section className="club_member">
           <Row justify="center" gutter={[20, 20]}>
@@ -651,7 +651,7 @@ const Page3 = () => {
           </Row>
         </section>
       </Fragment>
-    </MainLayout>
+    </>
   );
 };
 

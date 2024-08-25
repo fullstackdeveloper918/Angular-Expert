@@ -716,7 +716,7 @@ const Page8 = () => {
     router.back()
   }
   return (
-    <MainLayout>
+    <>
       <Fragment>
 
         {checkToast && <div className="Custom_tost">
@@ -925,7 +925,7 @@ const Page8 = () => {
           </DynamicRow>
         </section>
       </Fragment>
-    </MainLayout>
+    </>
   );
 };
 

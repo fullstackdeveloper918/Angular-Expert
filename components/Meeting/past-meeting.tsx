@@ -244,7 +244,7 @@ const PastMeetingList = () => {
 
 
     return (
-        <MainLayout>
+        <>
 
             <Fragment>
                 <section>
@@ -285,7 +285,7 @@ const PastMeetingList = () => {
 
                 </section>
             </Fragment>
-        </MainLayout>
+        </>
     );
 };
 

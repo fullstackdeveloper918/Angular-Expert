@@ -372,7 +372,7 @@ const MemberList = () => {
     //     }
     // };
     return (
-        <MainLayout>
+        <>
 
             <Fragment>
                 {/* <Head>
@@ -455,10 +455,10 @@ const MemberList = () => {
 
                 </section>
             </Fragment>
-        </MainLayout>
+        </>
     );
 };
 
-// Page.getLayout = (Page: ReactNode) => <MainLayout>{Page}</MainLayout>;
+// Page.getLayout = (Page: ReactNode) => <>{Page}</>;
 
 export default MemberList;

@@ -104,20 +104,26 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
   const hasUser = getUserdata?.is_admin == false;
 
   const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
-    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
-    if (rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
+    const latestOpenKey = keys.find((key) => !openKeys.includes(key));
+    if (!latestOpenKey || !rootSubmenuKeys.includes(latestOpenKey)) {
       setOpenKeys(keys);
-    } 
-    else {
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    } else {
+      setOpenKeys([latestOpenKey]);
     }
   };
 const router= useRouter()
-const[active,setActive]=useState<any>(null)
-  useEffect(()=>{
-let x=window.location.pathname.split('/')[2]
-setActive(x)  
-},[])
+function getLastPathnamePart(): string {
+  const pathname: string = window.location.pathname;
+  const parts: string[] = pathname.split("/").filter(Boolean); // Filter out empty strings
+  return parts.pop() || ""; // Return the last part or an empty string if the array is empty
+}
+
+// Call the function whenever you need to get the last part
+const lastPart: any = getLastPathnamePart();
+console.log(lastPart); 
+// const paths = ['dashboard', 'Members', 'Products', 'Care Team', 'Questions', "setting", 'Content Page', 'More', 'contact-us', 'DB Backup', 'contact-us', 'notification']
+// const [root, sub] = window.location.pathname?.split('/');
+// console.log(sub,"active");
 
   const mainMenu = [
     hasDashboardPermission && {
@@ -530,7 +536,7 @@ setActive(x)
           onOpenChange={onOpenChange}
           defaultSelectedKeys={["dashboard"]}
           
-          selectedKeys={active}
+          selectedKeys={[lastPart]}
           mode="inline"
           items={items}
         />

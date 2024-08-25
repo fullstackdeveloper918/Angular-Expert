@@ -98,7 +98,7 @@ const Edititionaladd = () => {
         router.push("/admin/member/add/page2")
     }
     return (
-        <MainLayout>
+        <>
             <Fragment>
 
                 <section className="club_member">
@@ -204,7 +204,7 @@ const Edititionaladd = () => {
 
                 </section>
             </Fragment >
-        </MainLayout>
+        </>
     );
 };
 

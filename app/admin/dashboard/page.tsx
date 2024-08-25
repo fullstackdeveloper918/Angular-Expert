@@ -6,9 +6,9 @@ import AdminDashboard from "../../../components/AdminDashboard/listing";
 
 const page = async() => {
   return (
-    <div>
+    <>
       <AdminDashboard />
-    </div>
+    </>
   );
 };
 

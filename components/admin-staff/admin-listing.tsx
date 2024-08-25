@@ -167,7 +167,7 @@ const Admin: Page = () => {
    
 
     return (
-        <MainLayout>
+        <>
             <Fragment>
 
                 <section>
@@ -208,7 +208,7 @@ const Admin: Page = () => {
                     
                 </section>
             </Fragment>
-        </MainLayout>
+        </>
     )
 }
 

@@ -154,7 +154,7 @@ const Additionaladd = () => {
         router.push("/admin/member/add/page2")
     }
     return (
-        <MainLayout>
+        <>
             <Fragment>
 
                 <section className="club_member">
@@ -267,7 +267,7 @@ const Additionaladd = () => {
 
                 </section>
             </Fragment >
-        </MainLayout>
+        </>
     );
 };
 
