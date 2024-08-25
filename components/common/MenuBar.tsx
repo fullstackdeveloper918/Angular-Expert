@@ -112,15 +112,20 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
     }
   };
 const router= useRouter()
-function getLastPathnamePart(): string {
-  const pathname: string = window.location.pathname;
-  const parts: string[] = pathname.split("/").filter(Boolean); // Filter out empty strings
-  return parts.pop() || ""; // Return the last part or an empty string if the array is empty
-}
+// function getLastPathnamePart(): string {
+//   const pathname: string = window.location.pathname;
+//   const parts: string[] = pathname.split("/").filter(Boolean); // Filter out empty strings
+//   return parts.pop() || ""; // Return the last part or an empty string if the array is empty
+// }
 
-// Call the function whenever you need to get the last part
-const lastPart: any = getLastPathnamePart();
-console.log(lastPart); 
+// // Call the function whenever you need to get the last part
+// const lastPart: any = getLastPathnamePart();
+
+const[active,setActive]=useState<any>(null)
+  useEffect(()=>{
+let x=window.location.pathname.split('/')[2]
+setActive(x)  
+},[])
 // const paths = ['dashboard', 'Members', 'Products', 'Care Team', 'Questions', "setting", 'Content Page', 'More', 'contact-us', 'DB Backup', 'contact-us', 'notification']
 // const [root, sub] = window.location.pathname?.split('/');
 // console.log(sub,"active");
@@ -536,7 +541,7 @@ console.log(lastPart);
           onOpenChange={onOpenChange}
           defaultSelectedKeys={["dashboard"]}
           
-          selectedKeys={[lastPart]}
+          selectedKeys={[active]}
           mode="inline"
           items={items}
         />
