@@ -77,10 +77,16 @@ function getItem(
     type,
   } as MenuItem;
 }
-
+interface ScreenSize {
+  width: number;
+  height: number;
+}
 const MenuBar = ({ collapsed, setCollapsed }: any) => {
 
-  
+  const [screenSize, setScreenSize] = useState<ScreenSize>({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
   const [openKeys, setOpenKeys] = useState(["sub1"]);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
 
@@ -146,12 +152,29 @@ console.log(pathname,"pathname");
 // const paths = ['dashboard', 'Members', 'Products', 'Care Team', 'Questions', "setting", 'Content Page', 'More', 'contact-us', 'DB Backup', 'contact-us', 'notification']
 // const [root, sub] = window.location.pathname?.split('/');
 // console.log(sub,"active");
+useEffect(() => {
+  const handleResize = () => {
+    setScreenSize({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+  };
 
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
+
+// Handler for the link click
+const handleLinkClick = () => {
+  if (screenSize.width < 400) {
+    setCollapsed(true);
+  }
+};
   const mainMenu = [
     hasDashboardPermission && {
       key: henceofrthEnums.Roles.DASHBOARD,
       view: getItem(
-        <Link href="/admin/dashboard" className="text-decoration-none" onClick={()=>setCollapsed(true)}>
+        <Link href="/admin/dashboard" className="text-decoration-none" onClick={handleLinkClick }>
           Dashboard
         </Link>,
         "dashboard",
@@ -162,7 +185,7 @@ console.log(pathname,"pathname");
     hasClubMemberPermission && {
       key: henceofrthEnums.Roles.USERS,
       view: getItem(
-        <Link href="/admin/member" className="text-decoration-none"  onClick={()=>setCollapsed(true)}>
+        <Link href="/admin/member" className="text-decoration-none"  onClick={handleLinkClick }>
           {getUserdata?.is_admin == false ? "User" : "Club Members"}
         </Link>,
         "member",
@@ -172,7 +195,7 @@ console.log(pathname,"pathname");
     hasClubMemberPermission && {
       key: henceofrthEnums.Roles.USERS,
       view: getItem(
-        <Link href="/admin/member/archive" className="text-decoration-none"  onClick={()=>setCollapsed(true)}>
+        <Link href="/admin/member/archive" className="text-decoration-none"  onClick={handleLinkClick}>
           {getUserdata?.is_admin == false ? "User" : "Archive Members"}
         </Link>,
         "archive",
@@ -187,7 +210,7 @@ console.log(pathname,"pathname");
         <UsergroupAddOutlined style={iconSize} />,
         [
           getItem(
-            <Link href="/admin/meetings" className="text-decoration-none"  onClick={()=>setCollapsed(true)}>
+            <Link href="/admin/meetings" className="text-decoration-none"  onClick={handleLinkClick}>
               Meetings
             </Link>,
             "meetings",
@@ -208,7 +231,7 @@ console.log(pathname,"pathname");
               <Link
                 href="/admin/manage_questions"
                 className="text-decoration-none"
-                onClick={()=>setCollapsed(true)}
+                onClick={handleLinkClick}
               >
                 Manage Questions for Meeting
               </Link>,
@@ -219,7 +242,7 @@ console.log(pathname,"pathname");
             <Link
               href="/admin/archive_meeting"
               className="text-decoration-none"
-              onClick={()=>setCollapsed(true)}
+              onClick={handleLinkClick}
             >
               Archive Meetings
             </Link>,
@@ -233,7 +256,7 @@ console.log(pathname,"pathname");
     hasQUESTIONNAIREPermission && {
       key: henceofrthEnums.Roles.ORDER,
       view: getItem(
-        <Link href="/admin/questionnaire" className="text-decoration-none"  onClick={()=>setCollapsed(true)}>
+        <Link href="/admin/questionnaire" className="text-decoration-none"  onClick={handleLinkClick}>
           Questionnaire
         </Link>,
         "questionnaire",
@@ -252,7 +275,7 @@ console.log(pathname,"pathname");
           getItem(
             <Link
               href={`/admin/member/${getUserdata?.user_id}/view`}
-              onClick={()=>setCollapsed(true)}
+              onClick={handleLinkClick}
               // href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
               className="text-decoration-none"
             >
@@ -264,7 +287,7 @@ console.log(pathname,"pathname");
           getItem(
             <Link
               href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
-              onClick={()=>setCollapsed(true)}
+              onClick={handleLinkClick}
               // href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
               className="text-decoration-none"
             >
@@ -276,7 +299,7 @@ console.log(pathname,"pathname");
           getItem(
             <Link
               href={`/admin/user?${getUserdata?.user_id}`}
-              onClick={()=>setCollapsed(true)}
+              onClick={handleLinkClick}
               // href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
               className="text-decoration-none"
             >
@@ -289,7 +312,7 @@ console.log(pathname,"pathname");
           getItem(
             <Link
               href={`/admin/additional_users`}
-              onClick={()=>setCollapsed(true)}
+              onClick={handleLinkClick}
               // href={`/admin/member/add/page2?${getUserdata?.user_id}&edit`}
               className="text-decoration-none"
             >
@@ -299,7 +322,7 @@ console.log(pathname,"pathname");
             <AppstoreAddOutlined style={iconSize} />
           ),
           getItem(
-            <Link href="/admin/meetings" className="text-decoration-none"  onClick={()=>setCollapsed(true)}>
+            <Link href="/admin/meetings" className="text-decoration-none"  onClick={handleLinkClick}>
               Meetings
             </Link>,
             "meetings",
@@ -310,7 +333,7 @@ console.log(pathname,"pathname");
             <Link
               href="/admin/meetings/past_meeting"
               className="text-decoration-none"
-              onClick={()=>setCollapsed(true)}
+              onClick={handleLinkClick}
             >
               Past Meetings
             </Link>,
@@ -318,7 +341,7 @@ console.log(pathname,"pathname");
             <TeamOutlined  style={iconSize} />
           ),
           getItem(
-            <Link href="/admin/questionnaire" className="text-decoration-none"  onClick={()=>setCollapsed(true)}>
+            <Link href="/admin/questionnaire" className="text-decoration-none"  onClick={handleLinkClick}>
               Questionnaire
             </Link>,
             "questionnaire",
