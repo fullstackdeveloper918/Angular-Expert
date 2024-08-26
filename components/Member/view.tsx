@@ -288,15 +288,15 @@ const companyName = companyNameMap[state?.company_name || state?.master_user_det
                     }
                     {!getUserdata?.is_admin==false?
                     <Popconfirm
-                      title={`${state?.is_activate ? 'Activate' : 'Deactivate'} the club member`}
+                      title={`${state?.is_activate ? 'Deactivate' : 'Activate'} the club member`}
                       // onConfirm={activeDeactive(id)}
                       onConfirm={(e: any) => activeDeactive(id)}
-                      description={`Are you sure to ${state?.is_activate ? 'Activate' : 'Deactivate'} this club member?`}
-                      okText={state?.is_activate ? 'Activate' : 'Deactivate'}
+                      description={`Are you sure to ${state?.is_activate ? 'Deactivate' : 'Activate'} this club member?`}
+                      okText={state?.is_activate ? 'Deactivate' : 'Activate'}
                       cancelText="No"
                       okButtonProps={{ type: 'primary', danger: true }}
                     >
-                      <Button size='large' type="primary" htmlType='button' className='flex-grow-1 activateBtn' ghost>   {state?.is_activate ? 'Deactivate' : 'Activate'}</Button>
+                      <Button size='large' type="primary" htmlType='button' className='flex-grow-1 activateBtn' ghost>   {state?.is_activate ? 'Activate' : 'Deactivate'}</Button>
                     </Popconfirm>: <Button size='large' type="primary" htmlType='button' className='flex-grow-1  activateBtn' loading={loading} onClick={onFinish}>Reset Password</Button>}
                    
                     {getUserdata?.is_admin==true?
