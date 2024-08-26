@@ -136,6 +136,7 @@ const scheduleTokenRefresh = (auth: any) => {
  
   const onFinish = async (values: any) => {
     const auth:any = getAuth();
+// console.log("link running");
 
 
     try {
@@ -290,7 +291,9 @@ const pathname=redirectPath?redirectPath:"/admin/dashboard"
                         href={"/auth/forgot-password"}
                         className="forgotPassword"
                       >
+                        <span className="">
                         Forgot your password?
+                        </span>
                       </Link>
                     </div>
                   )}
