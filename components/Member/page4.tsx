@@ -17,6 +17,8 @@ const Page4 = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<any>(false);
+  const [loading1, setLoading1] = useState<any>(false);
+  const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const [state, setState] = useState<any>("");
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
@@ -28,81 +30,167 @@ const Page4 = () => {
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 1000);
-
-  const submit = async (values: any) => {
-    let items = {
-      craftsmen_toolbox: {
-        userId: value,
-        technology: values?.technology,
-        products: values?.products,
-        project: values?.project,
-      },
-    };
-    try {
-      const fieldsToClear = ["products", "project", "technology"];
-      if (type == "edit") {
-        let items = {
-          craftsmen_toolbox: {
-            userId: value,
-            technology: values?.technology,
-            products: values?.products,
-            project: values?.project,
-          },
-        } as any;
-        setLoading(true);
-
-        let res = await api.User.edit(items);
-        toast.success("Update Craftsmen Toolbox");
-
-        dispatch(clearSpecificFormData(fieldsToClear));
-
-        // toast.success(res?.message)
-        // if (!pagetype) {
-        //     router.push(`/admin/member/add/page5?${value}&edit`)
-        // }else{
-        //     router?.back()
-        // }
-        setTimeout(() => {
-          if (!pagetype) {
-            router.push(`/admin/member/add/page5?${value}&edit`);
-          } else {
-              router.push("/admin/questionnaire?page4")
+  const submit = async(values: any) => {
+    if (actionType === 'submit') {
+      let items = {
+        craftsmen_toolbox: {
+          userId: value,
+          technology: values?.technology,
+          products: values?.products,
+          project: values?.project,
+        },
+      };
+      try {
+        const fieldsToClear = ["products", "project", "technology"];
+        if (type == "edit") {
+          let items = {
+            craftsmen_toolbox: {
+              userId: value,
+              technology: values?.technology,
+              products: values?.products,
+              project: values?.project,
+            },
+          } as any;
+          setLoading(true);
+  
+          let res = await api.User.edit(items);
+          toast.success("Update Craftsmen Toolbox");
+  
+          dispatch(clearSpecificFormData(fieldsToClear));
+  
+          // toast.success(res?.message)
+          // if (!pagetype) {
+          //     router.push(`/admin/member/add/page5?${value}&edit`)
+          // }else{
+          //     router?.back()
+          // }
+          setTimeout(() => {
+            if (!pagetype) {
+              router.push(`/admin/member/add/page5?${value}&edit`);
+            } else {
+                router.push("/admin/questionnaire?page4")
+            }
+          }, 1000);
+        } else {
+          setLoading(true);
+          let res = await api.Auth.signUp(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+  
+          if (res?.status == 500) {
+              localStorage.setItem('redirectAfterLogin', window.location.pathname);
+              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+              toast.error("Session Expired. Login Again");
+              router.replace("/auth/signin");
           }
-        }, 1000);
-      } else {
-        setLoading(true);
-        let res = await api.Auth.signUp(items);
-        dispatch(clearSpecificFormData(fieldsToClear));
-
-        if (res?.status == 500) {
-            localStorage.setItem('redirectAfterLogin', window.location.pathname);
-            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-            toast.error("Session Expired. Login Again");
-            router.replace("/auth/signin");
+          if (!pagetype) {
+            router.push(`/admin/member/add/page5?${res?.userId}`);
+          } else {
+            router?.back();
+          }
+        }
+      } catch (error: any) {
+        setLoading(false);
+        if (error?.status == 500) {
+          localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          toast.error("Session Expired. Login Again");
+          router.replace("/auth/signin");
         }
         if (!pagetype) {
-          router.push(`/admin/member/add/page5?${res?.userId}`);
-        } else {
-          router?.back();
+          setLoading(false);
+        }
+      } finally {
+        if (pagetype) {
+          setLoading(false);
         }
       }
-    } catch (error: any) {
-      setLoading(false);
-      if (error?.status == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
-      if (!pagetype) {
-        setLoading(false);
-      }
-    } finally {
-      if (pagetype) {
-        setLoading(false);
+    } else if (actionType === 'save') {
+      let items = {
+        craftsmen_toolbox: {
+          userId: value,
+          technology: values?.technology,
+          products: values?.products,
+          project: values?.project,
+        },
+      };
+      try {
+        const fieldsToClear = ["products", "project", "technology"];
+        if (type == "edit") {
+          let items = {
+            craftsmen_toolbox: {
+              userId: value,
+              technology: values?.technology,
+              products: values?.products,
+              project: values?.project,
+            },
+          } as any;
+          setLoading1(true);
+  
+          let res = await api.User.edit(items);
+          toast.success("Update Craftsmen Toolbox");
+  
+          dispatch(clearSpecificFormData(fieldsToClear));
+  
+          // toast.success(res?.message)
+          // if (!pagetype) {
+          //     router.push(`/admin/member/add/page5?${value}&edit`)
+          // }else{
+          //     router?.back()
+          // }
+          // setTimeout(() => {
+          //   if (!pagetype) {
+          //     router.push(`/admin/member/add/page5?${value}&edit`);
+          //   } else {
+          //       router.push("/admin/questionnaire?page4")
+          //   }
+          // }, 1000);
+        } else {
+          setLoading1(true);
+          let res = await api.Auth.signUp(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+  
+          if (res?.status == 500) {
+              localStorage.setItem('redirectAfterLogin', window.location.pathname);
+              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+              toast.error("Session Expired. Login Again");
+              router.replace("/auth/signin");
+          }
+          // if (!pagetype) {
+          //   router.push(`/admin/member/add/page5?${res?.userId}`);
+          // } else {
+          //   router?.back();
+          // }
+        }
+      } catch (error: any) {
+        setLoading1(false);
+        if (error?.status == 500) {
+          localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          toast.error("Session Expired. Login Again");
+          router.replace("/auth/signin");
+        }
+        if (!pagetype) {
+          setLoading1(false);
+        }
+      } finally {
+        if (pagetype) {
+          setLoading1(false);
+        }
       }
     }
+    setLoading1(false);
   };
+  const handleSubmitClick = () => {
+    setActionType('submit');
+    form.submit(); // Trigger form submission
+  };
+
+  const handleSaveClick = () => {
+    setActionType('save');
+    form.submit(); // Trigger form submission
+  };
+
+
 
   const getDataById = async () => {
     const item = {
@@ -256,7 +344,8 @@ const Page4 = () => {
                             size={"large"}
                             type="primary"
                             className=" "
-                            htmlType="submit"
+                            loading={loading1}
+                            onClick={handleSaveClick}
                           >
                             Save
                           </Button>
@@ -281,11 +370,13 @@ const Page4 = () => {
                           <Button
                             size={"large"}
                             type="primary"
-                            htmlType="submit"
+                            // htmlType="submit"
                             className="login-form-button "
                             loading={loading}
+                            onClick={handleSubmitClick}
                           >
-                            {!pagetype ? "Next" : "Save"}
+                            Next
+                            {/* {!pagetype ? "Next" : "Save"} */}
                           </Button>
                         </div>
                       ) : (
@@ -302,9 +393,10 @@ const Page4 = () => {
                           <Button
                             size={"large"}
                             type="primary"
-                            htmlType="submit"
+                            // htmlType="submit"
                             className="login-form-button "
-                            loading={loading}
+                            loading={loading1}
+                            onClick={handleSaveClick}
                           >
                             Save
                           </Button>

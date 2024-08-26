@@ -71,6 +71,7 @@ const Page8 = () => {
   const [previewImage, setPreviewImage] = useState<any>("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const [state, setState] = useState<any>("");
   const [errorShown, setErrorShown] = useState(false);
   const images = JSON.stringify(fileLists);
@@ -93,7 +94,7 @@ const Page8 = () => {
     setShowToast(false);
   };
 
- 
+
 
   const addInputPair = () => {
     const newId = Date.now();
@@ -216,366 +217,265 @@ const Page8 = () => {
       reader.readAsDataURL(file);
     });
   };
-
   const submit = async (values: any) => {
-    setLoading(true);
+    if (actionType === 'submit') {
+      setLoading(true);
 
-    const photoComment = inputPairs.map((pair) => ({
-      comment: values[pair.commentName],
-      files: values[pair.goalName],
-    }));
+      const photoComment = inputPairs.map((pair) => ({
+        comment: values[pair.commentName],
+        files: values[pair.goalName],
+      }));
 
-    try {
-      const formData: any = new FormData();
+      try {
+        const formData: any = new FormData();
 
-      if (state?.photo_section?.fileUrls?.length) {
-        formData.append("id", state?.photo_section?.commentId);
-        formData.append("user_id", value);
+        if (state?.photo_section?.fileUrls?.length) {
+          formData.append("id", state?.photo_section?.commentId);
+          formData.append("user_id", value);
+          formData.append('is_save', 'false');
+          for (const item of inputPairs) {
+            formData.append(`${item?.commentLabel}`, values[item?.commentName]);
 
-        for (const item of inputPairs) {
-          formData.append(`${item?.commentLabel}`, values[item?.commentName]);
-
-          for (const file of values[item.goalName]?.fileList || []) {
-            if (file?.originFileObj) {
-              // Use JPEG compression to target around 1 MB
-              const compressedJpegFile = await convertToPng(
-                file.originFileObj,
-                1
-              );
-              formData.append(
-                `${item?.commentLabel}_file`,
-                compressedJpegFile,
-                `${item?.commentLabel}_file.png`
-              );
+            for (const file of values[item.goalName]?.fileList || []) {
+              if (file?.originFileObj) {
+                // Use JPEG compression to target around 1 MB
+                const compressedJpegFile = await convertToPng(
+                  file.originFileObj,
+                  1
+                );
+                formData.append(
+                  `${item?.commentLabel}_file`,
+                  compressedJpegFile,
+                  `${item?.commentLabel}_file.png`
+                );
+               
+              }
             }
           }
-        }
 
-        const response = await api.photo_section.update_file(formData);
+          const response = await api.photo_section.update_file(formData);
 
-        const messages: any = {
-          200: "Updated Successfully",
-          201: "Added Successfully",
-        };
+          const messages: any = {
+            200: "Updated Successfully",
+            201: "Added Successfully",
+          };
 
-        if (messages[response?.status]) {
-          toast.success(messages[response?.status], {
-            position: "top-center",
-            autoClose: 300,
-          });
-        }
-        setResponseData(response?.data?.pdfReponseData);
-        // if (response) {
-        //   router.replace(`/admin/user?${getUserdata?.user_id}`);
-        // }
-        if (!pagetype) {
-          router.replace(`/admin/user?${getUserdata?.user_id}`);
+          if (messages[response?.status]) {
+            toast.success(messages[response?.status], {
+              position: "top-center",
+              autoClose: 300,
+            });
+          }
+          setResponseData(response?.data?.pdfReponseData);
+          // if (response) {
+          //   router.replace(`/admin/user?${getUserdata?.user_id}`);
+          // }
+          if (!pagetype) {
+            router.replace(`/admin/user?${getUserdata?.user_id}`);
+          } else {
+            // router?.back()
+            router.push("/admin/questionnaire?page8")
+          }
+
+          return response?.data?.pdfReponseData;
         } else {
-          // router?.back()
-          router.push("/admin/questionnaire?page8")
-        }
+          formData.append("id", value);
+          formData.append('is_save', 'false');
+          for (const [index, item] of photoComment.entries()) {
+            formData.append(`comment_${index}`, item?.comment);
 
-        return response?.data?.pdfReponseData;
-      } else {
-        formData.append("id", value);
-
-        for (const [index, item] of photoComment.entries()) {
-          formData.append(`comment_${index}`, item?.comment);
-
-          for (const [fileIndex, file] of (
-            item?.files?.fileList || []
-          ).entries()) {
-            if (file?.originFileObj) {
-              // Use JPEG compression to target around 1 MB
-              const compressedJpegFile = await convertToPng(
-                file.originFileObj,
-                1
-              );
-              formData.append(
-                `comment_${index}_file${fileIndex}`,
-                compressedJpegFile,
-                `comment_${index}_file${fileIndex}.png`
-              );
+            for (const [fileIndex, file] of (
+              item?.files?.fileList || []
+            ).entries()) {
+              if (file?.originFileObj) {
+                // Use JPEG compression to target around 1 MB
+                const compressedJpegFile = await convertToPng(
+                  file.originFileObj,
+                  1
+                );
+                formData.append(
+                  `comment_${index}_file${fileIndex}`,
+                  compressedJpegFile,
+                  `comment_${index}_file${fileIndex}.png`
+                );
+                formData.append('is_save', 'false');
+              }
             }
           }
+
+          const response = await api.photo_section.upload_file(formData);
+
+          const messages: any = {
+            200: "Updated Successfully",
+            201: "Added Successfully",
+          };
+
+          if (messages[response?.status]) {
+            toast.success(messages[response?.status], {
+              position: "top-center",
+              autoClose: 300,
+            });
+          }
+          setResponseData(response?.data?.pdfReponseData);
+          if (response) {
+            router.replace(`/admin/user?${getUserdata?.user_id}`);
+          }
+
+          return response?.data?.pdfReponseData;
         }
-
-        const response = await api.photo_section.upload_file(formData);
-
-        const messages: any = {
-          200: "Updated Successfully",
-          201: "Added Successfully",
-        };
-
-        if (messages[response?.status]) {
-          toast.success(messages[response?.status], {
+      } catch (error: any) {
+        if (error?.status === 500) {
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+          localStorage.removeItem("hasReloaded");
+          toast.error("Session Expired Login Again");
+          router.replace("/auth/signin");
+        } else {
+          toast.error("Something went wrong Please try again", {
             position: "top-center",
             autoClose: 300,
           });
         }
-        setResponseData(response?.data?.pdfReponseData);
-        if (response) {
-          router.replace(`/admin/user?${getUserdata?.user_id}`);
+      } finally {
+        if (pagetype) {
+          setLoading(false);
         }
+      }
+    } else if (actionType === 'save') {
+      setLoading(true);
 
-        return response?.data?.pdfReponseData;
-      }
-    } catch (error: any) {
-      if (error?.status === 500) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        localStorage.removeItem("hasReloaded");
-        toast.error("Session Expired Login Again");
-        router.replace("/auth/signin");
-      } else {
-        toast.error("Something went wrong Please try again", {
-          position: "top-center",
-          autoClose: 300,
-        });
-      }
-    } finally {
-      if (pagetype) {
-        setLoading(false);
+      const photoComment = inputPairs.map((pair) => ({
+        comment: values[pair.commentName],
+        files: values[pair.goalName],
+      }));
+
+      try {
+        const formData: any = new FormData();
+
+        if (state?.photo_section?.fileUrls?.length) {
+          formData.append("id", state?.photo_section?.commentId);
+          formData.append("user_id", value);
+          formData.append('is_save', 'true');
+          for (const item of inputPairs) {
+            formData.append(`${item?.commentLabel}`, values[item?.commentName]);
+
+            for (const file of values[item.goalName]?.fileList || []) {
+              if (file?.originFileObj) {
+                // Use JPEG compression to target around 1 MB
+                const compressedJpegFile = await convertToPng(
+                  file.originFileObj,
+                  1
+                );
+                formData.append(
+                  `${item?.commentLabel}_file`,
+                  compressedJpegFile,
+                  `${item?.commentLabel}_file.png`
+                );
+               
+              }
+            }
+          }
+
+          const response = await api.photo_section.update_file(formData);
+
+          const messages: any = {
+            200: "Updated Successfully",
+            201: "Added Successfully",
+          };
+
+          if (messages[response?.status]) {
+            toast.success(messages[response?.status], {
+              position: "top-center",
+              autoClose: 300,
+            });
+          }
+          setResponseData(response?.data?.pdfReponseData);
+          // if (response) {
+          //   router.replace(`/admin/user?${getUserdata?.user_id}`);
+          // }
+          if (!pagetype) {
+            router.replace(`/admin/user?${getUserdata?.user_id}`);
+          } else {
+            // router?.back()
+            router.push("/admin/questionnaire?page8")
+          }
+
+          return response?.data?.pdfReponseData;
+        } else {
+          formData.append("id", value);
+          formData.append('is_save', 'true');
+          for (const [index, item] of photoComment.entries()) {
+            formData.append(`comment_${index}`, item?.comment);
+
+            for (const [fileIndex, file] of (
+              item?.files?.fileList || []
+            ).entries()) {
+              if (file?.originFileObj) {
+                // Use JPEG compression to target around 1 MB
+                const compressedJpegFile = await convertToPng(
+                  file.originFileObj,
+                  1
+                );
+                formData.append(
+                  `comment_${index}_file${fileIndex}`,
+                  compressedJpegFile,
+                  `comment_${index}_file${fileIndex}.png`
+                );
+               
+              }
+            }
+          }
+
+          const response = await api.photo_section.upload_file(formData);
+
+          const messages: any = {
+            200: "Updated Successfully",
+            201: "Added Successfully",
+          };
+
+          if (messages[response?.status]) {
+            toast.success(messages[response?.status], {
+              position: "top-center",
+              autoClose: 300,
+            });
+          }
+          setResponseData(response?.data?.pdfReponseData);
+          if (response) {
+            router.replace(`/admin/user?${getUserdata?.user_id}`);
+          }
+
+          return response?.data?.pdfReponseData;
+        }
+      } catch (error: any) {
+        if (error?.status === 500) {
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+          localStorage.removeItem("hasReloaded");
+          toast.error("Session Expired Login Again");
+          router.replace("/auth/signin");
+        } else {
+          toast.error("Something went wrong Please try again", {
+            position: "top-center",
+            autoClose: 300,
+          });
+        }
+      } finally {
+        if (pagetype) {
+          setLoading(false);
+        }
       }
     }
+    setLoading(false);
   };
 
-  // const submit = async (values: any) => {
-  //   setLoading(true);
+  const handleSubmitClick = () => {
+    setActionType('submit');
+    form.submit(); // Trigger form submission
+  };
 
-  //   // Function to convert image files to PNG format
-  //   const convertToPng = async (file: File): Promise<Blob> => {
-  //     return new Promise((resolve, reject) => {
-  //       const reader = new FileReader();
-  //       reader.onload = (e: any) => {
-  //         const img = new Image();
-  //         img.onload = () => {
-  //           const canvas = document.createElement("canvas");
-  //           const ctx = canvas.getContext("2d");
-  //           if (!ctx) {
-  //             reject(new Error("Failed to get canvas context"));
-  //             return;
-  //           }
+  const handleSaveClick = () => {
+    setActionType('save');
+    form.submit(); // Trigger form submission
+  };
 
-  //           canvas.width = img.width;
-  //           canvas.height = img.height;
-  //           ctx.drawImage(img, 0, 0);
-  //           canvas.toBlob((blob) => {
-  //             if (blob) {
-  //               resolve(blob);
-  //             } else {
-  //               reject(new Error("Failed to convert image to PNG"));
-  //             }
-  //           }, "image/png");
-  //         };
-  //         img.src = e.target.result;
-  //       };
-  //       reader.onerror = (error) => reject(error);
-  //       reader.readAsDataURL(file);
-  //     });
-  //   };
-
-  //   const photoComment = inputPairs.map((pair) => ({
-  //     comment: values[pair.commentName],
-  //     files: values[pair.goalName],
-  //   }));
-
-  //   try {
-  //     const formData: any = new FormData();
-
-  //     if (state?.photo_section?.fileUrls?.length) {
-  //       formData.append("id", state?.photo_section?.commentId);
-  //       formData.append("user_id", value);
-
-  //       // Using `for...of` to handle async operations in a loop
-  //       for (const item of inputPairs) {
-  //         formData.append(`${item?.commentLabel}`, values[item?.commentName]);
-
-  //         // Converting images to PNG format
-  //         for (const file of values[item.goalName]?.fileList || []) {
-  //           if (file?.originFileObj) {
-  //             const pngFile = await convertToPng(file.originFileObj);
-  //             formData.append(
-  //               `${item?.commentLabel}_file`,
-  //               pngFile,
-  //               `${item?.commentLabel}_file.jpg`
-  //             );
-  //           }
-  //         }
-  //       }
-
-  //       const response = await api.photo_section.update_file(formData);
-
-  //       const messages: any = {
-  //         200: "Updated Successfully",
-  //         201: "Added Successfully",
-  //       };
-
-  //       if (messages[response?.status]) {
-  //         toast.success(messages[response?.status], {
-  //           position: "top-center",
-  //           autoClose: 300,
-  //         });
-  //       }
-  //       setResponseData(response?.data?.pdfReponseData);
-  //       if (response) {
-  //         router.replace(`/admin/user?${getUserdata?.user_id}`);
-  //       }
-
-  //       return response?.data?.pdfReponseData;
-  //     } else {
-  //       formData.append("id", value);
-
-  //       // Using `for...of` to handle async operations in a loop
-  //       for (const [index, item] of photoComment.entries()) {
-  //         formData.append(`comment_${index}`, item?.comment);
-
-  //         // Converting images to PNG format
-  //         for (const [fileIndex, file] of (
-  //           item?.files?.fileList || []
-  //         ).entries()) {
-  //           if (file?.originFileObj) {
-  //             const pngFile = await convertToPng(file.originFileObj);
-  //             formData.append(
-  //               `comment_${index}_file${fileIndex}`,
-  //               pngFile,
-  //               `comment_${index}_file${fileIndex}.jpg`
-  //             );
-  //           }
-  //         }
-  //       }
-
-  //       const response = await api.photo_section.upload_file(formData);
-
-  //       const messages: any = {
-  //         200: "Updated Successfully",
-  //         201: "Added Successfully",
-  //       };
-
-  //       if (messages[response?.status]) {
-  //         toast.success(messages[response?.status], {
-  //           position: "top-center",
-  //           autoClose: 300,
-  //         });
-  //       }
-  //       setResponseData(response?.data?.pdfReponseData);
-  //       if (response) {
-  //         router.replace(`/admin/user?${getUserdata?.user_id}`);
-  //       }
-
-  //       return response?.data?.pdfReponseData;
-  //     }
-  //   } catch (error: any) {
-  //     if (error?.status === 400) {
-  //       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-  //       localStorage.removeItem("hasReloaded");
-  //       toast.error("Session Expired Login Again");
-  //       router.replace("/auth/signin");
-  //     } else {
-  //       toast.error("Something went wrong Please try again", {
-  //         position: "top-center",
-  //         autoClose: 300,
-  //       });
-  //     }
-  //   } finally {
-  //     if (pagetype) {
-  //       setLoading(false);
-  //     }
-  //   }
-  // };
-
-  // const submit = async (values: any) => {
-  //   setLoading(true);
-
-  //   const photoComment = inputPairs.map((pair) => ({
-  //     comment: values[pair.commentName],
-  //     files: values[pair.goalName],
-  //   }));
-  //   try {
-  //     setLoading(true);
-  //     const formData: any = new FormData();
-
-  //     try {
-  //       let response;
-  //       if (state?.photo_section?.fileUrls?.length) {
-  //         formData.append("id", state?.photo_section?.commentId);
-  //         formData.append("user_id", value);
-
-  //         inputPairs.forEach((item: any, index) => {
-  //           formData.append(`${item?.commentLabel}`, values[item?.commentName]);
-  //           values[item.goalName]?.fileList?.forEach(
-  //             (file: any, index: number) => {
-  //               if (file?.originFileObj) {
-  //                 formData.append(
-  //                   `${item?.commentLabel}_file${index}`,
-  //                   file.originFileObj
-  //                 );
-  //               }
-  //             }
-  //           );
-  //         });
-
-  //         formData.forEach((value: any, key: any) => {});
-
-  //         response = await api.photo_section.update_file(formData);
-  //       } else {
-  //         formData.append("id", value);
-  //         photoComment.forEach((item: any, index) => {
-  //           formData.append(`comment_${index}`, item?.comment);
-  //           item?.files?.fileList.forEach((file: any, fileIndex: number) => {
-  //             if (file?.originFileObj) {
-  //               formData.append(
-  //                 `comment_${index}_file${fileIndex}`,
-  //                 file.originFileObj
-  //               );
-  //             }
-  //           });
-  //         });
-
-  //         response = await api.photo_section.upload_file(formData);
-  //       }
-  //       const messages: any = {
-  //         200: "Updated Successfully",
-  //         201: "Added Successfully",
-  //       };
-
-  //       if (messages[response?.status]) {
-  //         toast.success(messages[response?.status], {
-  //           position: "top-center",
-  //           autoClose: 300,
-  //         });
-  //       }
-  //       setResponseData(response?.data?.pdfReponseData);
-  //       if (response) {
-  //         router.replace(`/admin/user?${getUserdata?.user_id}`);
-  //       }
-
-  //       // console.log(pagetype, "pagetype");
-  //       // if (!pagetype) {
-  //       //   router.push(`/admin/user?${getUserdata?.user_id}`);
-  //       // }
-
-  //       return response?.data?.pdfReponseData;
-  //     } catch (error) {
-  //       if (error) {
-  //         toast.error("Something went wrong Please try again", {
-  //           position: "top-center",
-  //           autoClose: 300,
-  //         });
-  //       }
-  //     }
-  //   } catch (error: any) {
-  //     if (error?.status == 400) {
-  //       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-  //       localStorage.removeItem("hasReloaded");
-  //       toast.error("Session Expired Login Again");
-  //       router.replace("/auth/signin");
-  //     }
-  //   } finally {
-  //     if (pagetype) {
-  //       setLoading(false);
-  //     }
-  //   }
-  // };
 
   const getDataById = async () => {
     const item = {
@@ -870,7 +770,7 @@ const Page8 = () => {
                             size={"large"}
                             type="primary"
                             className=" "
-                            htmlType="submit"
+                            onClick={handleSaveClick}
                           >
                             Save
                           </Button>
@@ -895,9 +795,9 @@ const Page8 = () => {
                           <Button
                             size={"large"}
                             type="primary"
-                            htmlType="submit"
+                            
                             className="login-form-button "
-                          // loading={loading}
+                            onClick={handleSubmitClick}
                           >
                             Submit
                             {/* {!pagetype ? "Next" : "Save"} */}
@@ -909,10 +809,12 @@ const Page8 = () => {
                             Back
                           </Button>
 
-                          <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
+                          <Button size={'large'} type="primary" onClick={handleSaveClick}
+                            className="login-form-button " >
                             Save
                           </Button>
-                          <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " >
+                          <Button size={'large'} type="primary" onClick={handleSubmitClick}
+                            className="login-form-button " >
                             Submit
                           </Button>
                         </div>

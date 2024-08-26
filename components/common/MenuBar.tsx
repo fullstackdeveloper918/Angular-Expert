@@ -120,12 +120,29 @@ const router= useRouter()
 
 // // Call the function whenever you need to get the last part
 // const lastPart: any = getLastPathnamePart();
+console.log(window.location.pathname,"pathname");
 
 const[active,setActive]=useState<any>(null)
-  useEffect(()=>{
-let x=window.location.pathname.split('/')[2]
-setActive(x)  
-},[])
+//   useEffect(()=>{
+// let x=window.location.pathname.split('/')
+// setActive(x)  
+// },[])
+
+useEffect(() => {
+  const checkPathname = () => {
+    const pathname = window.location.pathname;
+    const parts: string[] = pathname.split("/").filter(Boolean)
+    const checkPath=parts.pop()
+    setActive(checkPath); 
+    localStorage.setItem("Pathname", pathname);
+  };
+  const intervalId = setInterval(checkPathname, 1000);
+  return () => clearInterval(intervalId);
+}, []);
+console.log(active,"active");
+let pathname=localStorage.getItem("Pathname")
+console.log(pathname,"pathname");
+
 // const paths = ['dashboard', 'Members', 'Products', 'Care Team', 'Questions', "setting", 'Content Page', 'More', 'contact-us', 'DB Backup', 'contact-us', 'notification']
 // const [root, sub] = window.location.pathname?.split('/');
 // console.log(sub,"active");
@@ -238,7 +255,7 @@ setActive(x)
             >
               My Profile
             </Link>,
-            `my_details`,
+            `view`,
             <AppstoreAddOutlined style={iconSize} />
           ),
           getItem(
@@ -249,7 +266,7 @@ setActive(x)
             >
               My Updates
             </Link>,
-            `my_documents`,
+            `page2`,
             <AppstoreAddOutlined style={iconSize} />
           ),
           getItem(
@@ -260,7 +277,7 @@ setActive(x)
             >
               My Document
             </Link>,
-            `my_documents`,
+            `user`,
             <AppstoreAddOutlined style={iconSize} />
           ),
          
@@ -272,7 +289,7 @@ setActive(x)
             >
               Additional Users
             </Link>,
-            `additonal_users`,
+            `additional_users`,
             <AppstoreAddOutlined style={iconSize} />
           ),
           getItem(
@@ -541,7 +558,7 @@ setActive(x)
           onOpenChange={onOpenChange}
           defaultSelectedKeys={["dashboard"]}
           
-          selectedKeys={[active]}
+          selectedKeys={active}
           mode="inline"
           items={items}
         />

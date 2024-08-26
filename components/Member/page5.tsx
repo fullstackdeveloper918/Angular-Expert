@@ -18,6 +18,8 @@ const Page5 = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
+  const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : "";
@@ -27,121 +29,145 @@ const Page5 = () => {
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 1000);
-
-  const submit = async (values: any) => {
-    let items = {
-      craftsmen_checkup: {
-        userId: value,
-        commitment: values?.commitment,
-        contribute: values?.contribute,
-        wellbeing: values?.wellbeing,
-        contact_info: values?.contact_info,
-      },
-    };
-    try {
-      const fieldsToClear = [
-        "commitment",
-        "contribute",
-        "wellbeing",
-        "contact_info",
-      ];
-
-      if (type == "edit") {
-        let items = {
-          craftsmen_checkup: {
-            userId: value,
-            commitment: values?.commitment,
-            contribute: values?.contribute,
-            wellbeing: values?.wellbeing,
-            contact_info: values?.contact_info,
-          },
-        } as any;
-        setLoading(true);
-        let res = await api.User.edit(items);
-        dispatch(clearSpecificFormData(fieldsToClear));
-
-        toast.success(res?.message);
-        // if (!pagetype) {
-        //     router.push(`/admin/member/add/page6?${value}&edit`)
-        // }else{
-        //     router?.back()
-        // }
-        setTimeout(() => {
-          if (!pagetype) {
-            router.push(`/admin/member/add/page6?${value}&edit`);
-          } else {
-              router.push("/admin/questionnaire?page5")
+  const submit = async(values: any) => {
+    if (actionType === 'submit') {
+      let items = {
+        craftsmen_checkup: {
+          userId: value,
+          commitment: values?.commitment,
+          contribute: values?.contribute,
+          wellbeing: values?.wellbeing,
+          contact_info: values?.contact_info,
+        },
+      };
+      try {
+        const fieldsToClear = [
+          "commitment",
+          "contribute",
+          "wellbeing",
+          "contact_info",
+        ];
+  
+        if (type == "edit") {
+          let items = {
+            craftsmen_checkup: {
+              userId: value,
+              commitment: values?.commitment,
+              contribute: values?.contribute,
+              wellbeing: values?.wellbeing,
+              contact_info: values?.contact_info,
+            },
+          } as any;
+          setLoading(true);
+          let res = await api.User.edit(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+  
+          toast.success(res?.message);
+          // if (!pagetype) {
+          //     router.push(`/admin/member/add/page6?${value}&edit`)
+          // }else{
+          //     router?.back()
+          // }
+          setTimeout(() => {
+            if (!pagetype) {
+              router.push(`/admin/member/add/page6?${value}&edit`);
+            } else {
+                router.push("/admin/questionnaire?page5")
+            }
+          }, 1000);
+        } else {
+          setLoading(true);
+          let res = await api.Auth.signUp(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+  
+          if (res?.status == 500) {
+              localStorage.setItem('redirectAfterLogin', window.location.pathname);
+              localStorage.removeItem("hasReloaded")
+              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+              toast.error("Session Expired. Login Again");
+              router.replace("/auth/signin");;
           }
-        }, 1000);
-      } else {
-        setLoading(true);
-        let res = await api.Auth.signUp(items);
-        dispatch(clearSpecificFormData(fieldsToClear));
-
-        if (res?.status == 500) {
-            localStorage.setItem('redirectAfterLogin', window.location.pathname);
-            localStorage.removeItem("hasReloaded")
-            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-            toast.error("Session Expired. Login Again");
-            router.replace("/auth/signin");;
+          router.push(`/admin/member/add/page6?${res?.userId}`);
         }
-        router.push(`/admin/member/add/page6?${res?.userId}`);
+      } catch (error) {
+        if (!pagetype) {
+          setLoading(false);
+        }
+      } finally {
+        if (pagetype) {
+          setLoading(false);
+        }
       }
-    } catch (error) {
-      if (!pagetype) {
-        setLoading(false);
-      }
-    } finally {
-      if (pagetype) {
-        setLoading(false);
+    } else if (actionType === 'save') {
+      let items = {
+        craftsmen_checkup: {
+          userId: value,
+          commitment: values?.commitment,
+          contribute: values?.contribute,
+          wellbeing: values?.wellbeing,
+          contact_info: values?.contact_info,
+        },
+      };
+      try {
+        const fieldsToClear = [
+          "commitment",
+          "contribute",
+          "wellbeing",
+          "contact_info",
+        ];
+  
+        if (type == "edit") {
+          let items = {
+            craftsmen_checkup: {
+              userId: value,
+              commitment: values?.commitment,
+              contribute: values?.contribute,
+              wellbeing: values?.wellbeing,
+              contact_info: values?.contact_info,
+            },
+          } as any;
+          setLoading1(true);
+          let res = await api.User.edit(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+  
+          toast.success(res?.message);
+        } else {
+          setLoading1(true);
+          let res = await api.Auth.signUp(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+  
+          if (res?.status == 500) {
+              localStorage.setItem('redirectAfterLogin', window.location.pathname);
+              localStorage.removeItem("hasReloaded")
+              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+              toast.error("Session Expired. Login Again");
+              router.replace("/auth/signin");;
+          }
+          router.push(`/admin/member/add/page6?${res?.userId}`);
+        }
+      } catch (error) {
+        if (!pagetype) {
+          setLoading1(false);
+        }
+      } finally {
+        if (pagetype) {
+          setLoading1(false);
+        }
       }
     }
+    setLoading1(false);
+  };
+ 
+  const handleSubmitClick = () => {
+    setActionType('submit');
+    form.submit(); // Trigger form submission
   };
 
-  //   let items = {
-  //     craftsmen_checkup: {
-  //       userId: value,
-  //       commitment: values?.commitment,
-  //       contribute: values?.contribute,
-  //       wellbeing: values?.wellbeing,
-  //       contact_info: values?.contact_info,
-  //     },
-  //   };
-  //   try {
-  //     if (type == "edit") {
-  //       let items = {
-  //         craftsmen_checkup: {
-  //           userId: value,
-  //           commitment: values?.commitment,
-  //           contribute: values?.contribute,
-  //           wellbeing: values?.wellbeing,
-  //           contact_info: values?.contact_info,
-  //         },
-  //       } as any;
-  //       setLoading(true);
-  //       let res = await api.User.edit(items);
-  //       toast.success("Save Successfully");
-  //     } else {
-  //       setLoading(true);
-  //       let res = await api.Auth.signUp(items);
-  //       toast.success("Save Successfully");
-  //       if (res?.status == 400) {
-  //         toast.error("Session Expired Login Again");
-  //         router.replace("/auth/signin");
-  //       }
-  //     }
-  //   } catch (error: any) {
-  //     setLoading(false);
-  //     if (error?.status == 400) {
-  //       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-  //       localStorage.removeItem("hasReloaded");
-
-  //       toast.error("Session Expired Login Again");
-  //       router.replace("/auth/signin");
-  //     }
-  //   } finally {
-  //   }
-  // };
+  const handleSaveClick = () => {
+    setActionType('save');
+    form.submit(); // Trigger form submission
+  };
+  
 
   const [state, setState] = useState<any>("");
   const getDataById = async () => {
@@ -294,7 +320,8 @@ const Page5 = () => {
                             size={"large"}
                             type="primary"
                             className=" "
-                            htmlType="submit"
+                            loading={loading1}
+                            onClick={handleSaveClick}
                           >
                             Save
                           </Button>
@@ -319,11 +346,12 @@ const Page5 = () => {
                           <Button
                             size={"large"}
                             type="primary"
-                            htmlType="submit"
+                            // htmlType="submit"
                             className="login-form-button "
                             loading={loading}
+                            onClick={handleSubmitClick}
                           >
-                            {!pagetype ? "Next" : "Save"}
+                            Next
                           </Button>
                         </div>
                       ) : (
@@ -340,9 +368,9 @@ const Page5 = () => {
                           <Button
                             size={"large"}
                             type="primary"
-                            htmlType="submit"
                             className="login-form-button "
-                            loading={loading}
+                            loading={loading1}
+                            onClick={handleSaveClick}
                           >
                             Save
                           </Button>

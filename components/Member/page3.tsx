@@ -36,6 +36,7 @@ import { useSelector } from "react-redux";
 interface Goal {
   goal?: string;
   comment?: string;
+  goal_next?: string;
 }
 const { Option } = Select;
 const Page3 = () => {
@@ -43,13 +44,14 @@ const Page3 = () => {
   const [form] = Form.useForm();
 
   const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
   const [state, setState] = useState<any>("");
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 1000);
-
+  const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const value = entries.length > 0 ? entries[0][0] : "";
   const type = entries.length > 1 ? entries[1][0] : "";
   const questionnair = entries.length > 2 ? entries[2][1] : "";
@@ -118,6 +120,7 @@ const Page3 = () => {
 
   const addInputPair = () => {
     const nextIndex = inputPairs.length + 1;
+
     setInputPairs([
       ...inputPairs,
       {
@@ -142,61 +145,128 @@ const Page3 = () => {
       )
     );
   };
-  const submit = async (values: any) => {
-    const goalsData = inputPairs.map((pair) => ({
-      goal: values[pair.goalName],
-      comment: values[pair.commentName],
-      status: pair.status,
-    }));
-    const goalsData1 = inputFields.map((field) => ({
-      goal: values[field.name],
-      status: field.status1,
-    }));
-    let items = {
-      goals: {
-        userId: value,
-        goal_last_meeting: goalsData,
-        goal_next_meeting: goalsData1,
-      },
-    };
-    try {
-      setLoading(true);
-      if (type == "edit") {
-        let items = {
-          goals: {
-            userId: value,
-            goal_last_meeting: goalsData,
-            goal_next_meeting: goalsData1,
-          },
-        } as any;
+  const submit = async(values: any) => {
+    if (actionType === 'submit') {
+      const goalsData = inputPairs.map((pair) => ({
+        goal: values[pair.goalName],
+        comment: values[pair.commentName],
+        status: pair.status,
+      }));
+      const goalsData1 = inputFields.map((field) => ({
+        goal: values[field.name],
+        status: field.status1,
+      }));
+      let items = {
+        goals: {
+          userId: value,
+          goal_last_meeting: goalsData,
+          goal_next_meeting: goalsData1,
+        },
+      };
+      try {
         setLoading(true);
-        let res = await api.User.edit(items);
-
-        setTimeout(() => {
-          if (!pagetype) {
-            router.push(`/admin/member/add/page4?${value}&edit`);
-          } else {
-              router.push("/admin/questionnaire?page3")
-          }
-        }, 1000);
-        // }
-      } else {
-        let res = await api.Auth.signUp(items);
-        if (!pagetype) {
-          router.push(`/admin/member/add/page4?${res?.userId}`);
+        if (type == "edit") {
+          let items = {
+            goals: {
+              userId: value,
+              goal_last_meeting: goalsData,
+              goal_next_meeting: goalsData1,
+            },
+          } as any;
+          setLoading(true);
+          let res = await api.User.edit(items);
+  
+          setTimeout(() => {
+            if (!pagetype) {
+              router.push(`/admin/member/add/page4?${value}&edit`);
+            } else {
+              router.push("/admin/questionnaire?page3");
+            }
+          }, 1000);
+          // }
         } else {
-          router?.back();
+          let res = await api.Auth.signUp(items);
+          if (!pagetype) {
+            router.push(`/admin/member/add/page4?${res?.userId}`);
+          } else {
+            router?.back();
+          }
+        }
+      } catch (error) {
+        if (!pagetype) {
+          setLoading(false);
+        }
+      } finally {
+        if (pagetype) {
+          setLoading(false);
         }
       }
-    } catch (error) {
-      if (!pagetype) {
-        setLoading(false);
-      }
-    } finally {
-      if (pagetype) {
-        setLoading(false);
+    } else if (actionType === 'save') {
+      const goalsData = inputPairs.map((pair) => ({
+        goal: values[pair.goalName],
+        comment: values[pair.commentName],
+        status: pair.status,
+      }));
+      const goalsData1 = inputFields.map((field) => ({
+        goal: values[field.name],
+        status: field.status1,
+      }));
+      let items = {
+        goals: {
+          userId: value,
+          goal_last_meeting: goalsData,
+          goal_next_meeting: goalsData1,
+        },
+      };
+      try {
+        setLoading1(true);
+        if (type == "edit") {
+          let items = {
+            goals: {
+              userId: value,
+              goal_last_meeting: goalsData,
+              goal_next_meeting: goalsData1,
+            },
+          } as any;
+          setLoading1(true);
+          let res = await api.User.edit(items);
+  
+          // setTimeout(() => {
+          //   if (!pagetype) {
+          //     router.push(`/admin/member/add/page4?${value}&edit`);
+          //   } else {
+          //     router.push("/admin/questionnaire?page3");
+          //   }
+          // }, 1000);
+          // }
+        } else {
+          let res = await api.Auth.signUp(items);
+          // if (!pagetype) {
+          //   router.push(`/admin/member/add/page4?${res?.userId}`);
+          // } else {
+          //   router?.back();
+          // }
+        }
+      } catch (error) {
+        if (!pagetype) {
+          setLoading1(false);
+        }
+      } finally {
+        if (pagetype) {
+          setLoading1(false);
+        }
       }
     }
+    setLoading1(false);
+  };
+  const handleSubmitClick = () => {
+    setActionType('submit');
+    form.submit(); // Trigger form submission
+  };
+
+  const handleSaveClick = () => {
+    setActionType('save');
+    form.submit(); // Trigger form submission
   };
 
   const getDataById = async () => {
@@ -207,9 +277,9 @@ const Page3 = () => {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
       if (res?.data?.status == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.setItem("redirectAfterLogin", window.location.pathname);
+        localStorage.removeItem("hasReloaded");
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
       }
@@ -227,80 +297,15 @@ const Page3 = () => {
       }));
       setInputPairs(formattedGoals);
 
-      // Function to transform `formValues` into an array similar to `fetchedGoals`
-      // const transformFormValuesToArray = (formValues: any): Goal[] => {
-      //   const goalsArray: Goal[] = [];
-
-      //   Object.keys(formValues).forEach((key) => {
-      //     const match = key.match(/^(goal|comments)(\d+)$/);
-      //     if (match) {
-      //       const [, type, index] = match;
-      //       const idx = parseInt(index, 10) - 1;
-
-      //       if (!goalsArray[idx]) {
-      //         goalsArray[idx] = {};
-      //       }
-
-      //       if (type === "goal") {
-      //         goalsArray[idx].goal = formValues[key];
-      //       } else if (type === "comments") {
-      //         goalsArray[idx].comment = formValues[key];
-      //       }
-      //     }
-      //   });
-      //   return goalsArray;
-      // };
-
-      // // Determine the data source to use
-      // const dataToUse =
-      //   Object.keys(formValues).length > 0
-      //     ? transformFormValuesToArray(formValues)
-      //     : fetchedGoals;
-
-      // // Set the form values
-      // form.setFieldsValue({
-      //   ...dataToUse.reduce((acc: any, goal: Goal, index: number) => {
-      //     if (goal.goal) {
-      //       acc[`goal${index + 1}`] = goal.goal;
-      //     }
-      //     if (goal.comment) {
-      //       acc[`comments${index + 1}`] = goal.comment;
-      //     }
-      //     return acc;
-      //   }, {}),
-      // });
-
-      // const fetchedGoalsNext = res?.data.goal_next_meeting || [];
-      // const formattedGoalsNext = fetchedGoalsNext.map(
-      //   (goal: any, index: any) => ({
-      //     name: `goal_next${index + 1}`,
-      //     label: `Goal ${index + 1}:`,
-      //     status1: goal.status,
-      //     initialGoal1: goal.goal,
-      //   })
-      // );
-
-      // setInputFields(formattedGoalsNext);
-
-      // form.setFieldsValue({
-      //   ...fetchedGoalsNext.reduce((acc: any, goal: any, index: any) => {
-      //     acc[`goal_next${index + 1}`] = goal.goal;
-
-      //     return acc;
-      //   }, {}),
-      // });
-
       const transformDataToArray = (
         formValues: any,
         prefix: string
       ): Goal[] => {
         const goalsArray: Goal[] = [];
 
-        console.log(formValues, "formvalues");
-
         Object.keys(formValues).forEach((key) => {
           const match = key.match(
-            new RegExp(`^${prefix}(goal|comments)(\\d+)$`)
+            new RegExp(`^${prefix}(goal|comments|goal_next)(\\d+)$`)
           );
           if (match) {
             const [, type, index] = match;
@@ -314,11 +319,12 @@ const Page3 = () => {
               goalsArray[idx].goal = formValues[key];
             } else if (type === "comments") {
               goalsArray[idx].comment = formValues[key];
+            } else if (type == "goal_next") {
+              goalsArray[idx].goal_next = formValues[key];
             }
           }
         });
 
-        console.log(`Transformed Data for ${prefix}:`, goalsArray);
         return goalsArray;
       };
 
@@ -331,28 +337,27 @@ const Page3 = () => {
             if (goal.comment) {
               acc[`${prefix}comments${index + 1}`] = goal.comment;
             }
+            if (goal.goal_next) {
+              acc[`${prefix}goal_next${index + 1}`] = goal.goal_next;
+            }
             return acc;
           },
           {}
         );
 
-        console.log(`Prepared Form Values for ${prefix}:`, formValues);
         return formValues;
       };
 
-      // Determine the data source to use for current meeting
       const dataToUse =
         Object.keys(formValues).length > 0
-          ? transformDataToArray(formValues, "") // Empty prefix for current meeting
+          ? transformDataToArray(formValues, "")
           : fetchedGoals;
 
       form.setFieldsValue({
-        ...prepareFormValues(dataToUse, ""), // Empty prefix for current meeting
+        ...prepareFormValues(dataToUse, ""),
       });
 
-      // Process next meeting data
       const fetchedGoalsNext = res?.data.goal_next_meeting || [];
-      console.log("Fetched Goals Next:", fetchedGoalsNext);
 
       const formattedGoalsNext = fetchedGoalsNext.map(
         (goal: any, index: number) => ({
@@ -363,19 +368,17 @@ const Page3 = () => {
         })
       );
 
-      console.log("Formatted Goals Next:", formattedGoalsNext);
-
       setInputFields(formattedGoalsNext);
 
       form.setFieldsValue({
-        ...prepareFormValues(fetchedGoalsNext, "goal_next"), // Prefix for next meeting
+        ...prepareFormValues(fetchedGoalsNext, "goal_next"),
       });
     } catch (error: any) {
       if (error.status == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.setItem("redirectAfterLogin", window.location.pathname);
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
         toast.error("Session Expired. Login Again");
-        localStorage.removeItem("hasReloaded")
+        localStorage.removeItem("hasReloaded");
         router.replace("/auth/signin");
       }
     }
@@ -589,7 +592,8 @@ const Page3 = () => {
                             size={"large"}
                             type="primary"
                             className=" "
-                            htmlType="submit"
+                            onClick={handleSaveClick}
+                            loading={loading1}
                           >
                             Save
                           </Button>
@@ -614,7 +618,7 @@ const Page3 = () => {
                           <Button
                             size={"large"}
                             type="primary"
-                            htmlType="submit"
+                            onClick={handleSubmitClick}
                             className="login-form-button "
                             loading={loading}
                           >
@@ -635,9 +639,9 @@ const Page3 = () => {
                           <Button
                             size={"large"}
                             type="primary"
-                            htmlType="submit"
+                            onClick={handleSaveClick}
                             className="login-form-button "
-                            loading={loading}
+                            loading={loading1}
                           >
                             Save
                           </Button>

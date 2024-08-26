@@ -54,6 +54,7 @@ const Page1 = () => {
   const [form] = Form.useForm();
 
   const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
   const [state, setState] = useState<any>("");
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
@@ -61,7 +62,7 @@ const Page1 = () => {
   const value = entries.length > 0 ? entries[0][0] : "";
   const type = entries.length > 1 ? entries[1][0] : "";
   const pagetype = entries.length > 2 ? entries[2][0] : "";
-
+  const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 1000);
@@ -72,83 +73,161 @@ const Page1 = () => {
       path: "/",
     });
   };
-
-  const onFinish = async (values: any) => {
-    let items = {
-      bussiness_update: {
-        userId: value,
-        financial_position: values?.financial_position,
-        sales_position: values?.sales_position,
-        accomplishments: values?.accomplishments,
-        hr_position: values?.hr_position,
-        current_challenges: values?.current_challenges,
-        craftsmen_support: values?.craftsmen_support,
-      },
-    } as any;
-
-    try {
-      const fieldsToClear = [
-        "financial_position",
-        "sales_position",
-        "accomplishments",
-        "hr_position",
-        "current_challenges",
-        "craftsmen_support",
-      ];
-      if (type == "edit") {
-        let items = {
-          bussiness_update: {
-            userId: value,
-            financial_position: values?.financial_position,
-            sales_position: values?.sales_position,
-            accomplishments: values?.accomplishments,
-            hr_position: values?.hr_position,
-            current_challenges: values?.current_challenges,
-            craftsmen_support: values?.craftsmen_support,
-          },
-        } as any;
-        setLoading(true);
-        let res = await api.User.edit(items);
-        if (!pagetype) {
-          router.push(`/admin/member/add/page3?${value}&edit`);
+  const onFinish = async(values: any) => {
+    if (actionType === 'submit') {
+      let items = {
+        bussiness_update: {
+          userId: value,
+          financial_position: values?.financial_position,
+          sales_position: values?.sales_position,
+          accomplishments: values?.accomplishments,
+          hr_position: values?.hr_position,
+          current_challenges: values?.current_challenges,
+          craftsmen_support: values?.craftsmen_support,
+        },
+      } as any;
+  
+      try {
+        const fieldsToClear = [
+          "financial_position",
+          "sales_position",
+          "accomplishments",
+          "hr_position",
+          "current_challenges",
+          "craftsmen_support",
+        ];
+        if (type == "edit") {
+          let items = {
+            bussiness_update: {
+              userId: value,
+              financial_position: values?.financial_position,
+              sales_position: values?.sales_position,
+              accomplishments: values?.accomplishments,
+              hr_position: values?.hr_position,
+              current_challenges: values?.current_challenges,
+              craftsmen_support: values?.craftsmen_support,
+            },
+          } as any;
+          setLoading(true);
+          let res = await api.User.edit(items);
+          if (!pagetype) {
+            router.push(`/admin/member/add/page3?${value}&edit`);
+          } else {
+            //   router.back();
+            router.push("/admin/questionnaire?page2")
+          }
+          toast.success(res?.message);
+  
+          dispatch(clearSpecificFormData(fieldsToClear));
         } else {
-          //   router.back();
-          router.push("/admin/questionnaire?page2")
+          setLoading(true);
+          let res = await api.Auth.signUp(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+          if (res?.status == 500) {
+            localStorage.setItem('redirectAfterLogin', window.location.pathname);
+            localStorage.removeItem("hasReloaded")
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          toast.error("Session Expired. Login Again");
+          router.replace("/auth/signin");
+          }
+          router.push(`/admin/member/add/page3?${res?.user_id}`)
         }
-        toast.success(res?.message);
-
-        dispatch(clearSpecificFormData(fieldsToClear));
-      } else {
-        setLoading(true);
-        let res = await api.Auth.signUp(items);
-        dispatch(clearSpecificFormData(fieldsToClear));
-        if (res?.status == 500) {
+      } catch (error: any) {
+        setLoading(false);
+        if (error?.status == 500) {
           localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
           localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
+          toast.error("Session Expired. Login Again");
+          router.replace("/auth/signin");
         }
-        router.push(`/admin/member/add/page3?${res?.user_id}`)
+        if (!pagetype) {
+          setLoading(false);
+        }
+      } finally {
+        if (pagetype) {
+          setLoading(false);
+        }
       }
-    } catch (error: any) {
-      setLoading(false);
-      if (error?.status == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        localStorage.removeItem("hasReloaded")
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
-      if (!pagetype) {
-        setLoading(false);
-      }
-    } finally {
-      if (pagetype) {
-        setLoading(false);
+    } else if (actionType === 'save') {
+      let items = {
+        bussiness_update: {
+          userId: value,
+          financial_position: values?.financial_position,
+          sales_position: values?.sales_position,
+          accomplishments: values?.accomplishments,
+          hr_position: values?.hr_position,
+          current_challenges: values?.current_challenges,
+          craftsmen_support: values?.craftsmen_support,
+        },
+      } as any;
+  
+      try {
+        const fieldsToClear = [
+          "financial_position",
+          "sales_position",
+          "accomplishments",
+          "hr_position",
+          "current_challenges",
+          "craftsmen_support",
+        ];
+        if (type == "edit") {
+          let items = {
+            bussiness_update: {
+              userId: value,
+              financial_position: values?.financial_position,
+              sales_position: values?.sales_position,
+              accomplishments: values?.accomplishments,
+              hr_position: values?.hr_position,
+              current_challenges: values?.current_challenges,
+              craftsmen_support: values?.craftsmen_support,
+            },
+          } as any;
+          setLoading1(true);
+          let res = await api.User.edit(items);
+          // if (!pagetype) {
+          //   router.push(`/admin/member/add/page3?${value}&edit`);
+          // } else {
+          //   //   router.back();
+          //   router.push("/admin/questionnaire?page2")
+          // }
+          toast.success(res?.message);
+  
+          dispatch(clearSpecificFormData(fieldsToClear));
+        } else {
+          setLoading1(true);
+          let res = await api.Auth.signUp(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+          if (res?.status == 500) {
+            localStorage.setItem('redirectAfterLogin', window.location.pathname);
+            localStorage.removeItem("hasReloaded")
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          toast.error("Session Expired. Login Again");
+          router.replace("/auth/signin");
+          }
+          // router.push(`/admin/member/add/page3?${res?.user_id}`)
+        }
+      } catch (error: any) {
+        setLoading1(false);
+        if (error?.status == 500) {
+          localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          localStorage.removeItem("hasReloaded")
+          toast.error("Session Expired. Login Again");
+          router.replace("/auth/signin");
+        }
+        if (!pagetype) {
+          setLoading1(false);
+        }
+      } finally {
+        if (pagetype) {
+          setLoading1(false);
+        }
       }
     }
+    setLoading1(false);
   };
+ 
 
   const getDataById = async () => {
     const item = {
@@ -199,63 +278,7 @@ const Page1 = () => {
   }, [type]);
 
 
-  // const onFinish1 = async (values: any) => {
-  //   let items = {
-  //     bussiness_update: {
-  //       userId: value,
-  //       financial_position: values?.financial_position,
-  //       sales_position: values?.sales_position,
-  //       accomplishments: values?.accomplishments,
-  //       hr_position: values?.hr_position,
-  //       current_challenges: values?.current_challenges,
-  //       craftsmen_support: values?.craftsmen_support,
-  //     },
-  //   } as any;
-
-  //   try {
-  //     if (type == "edit") {
-  //       let items = {
-  //         bussiness_update: {
-  //           userId: value,
-  //           financial_position: values?.financial_position,
-  //           sales_position: values?.sales_position,
-  //           accomplishments: values?.accomplishments,
-  //           hr_position: values?.hr_position,
-  //           current_challenges: values?.current_challenges,
-  //           craftsmen_support: values?.craftsmen_support,
-  //         },
-  //       } as any;
-  //       setLoading(true);
-  //       let res = await api.User.edit(items);
-  //       toast.success(res?.message);
-  //       // router.push(`/admin/member/add/page3?${value}&edit`)
-  //     } else {
-  //       setLoading(true);
-  //       let res = await api.Auth.signUp(items);
-  //       toast.success("Added Successfully");
-  //       if (res?.status == 400) {
-  //         localStorage.setItem('redirectAfterLogin', window.location.pathname);
-  //         localStorage.removeItem("hasReloaded")
-  //         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-  //         toast.error("Session Expired. Login Again");
-  //         router.replace("/auth/signin");
-  //       }
-  //       // router.push(`/admin/member/add/page3?${res?.user_id}`)
-  //     }
-  //   } catch (error: any) {
-  //     if (error?.status == 400) {
-  //       localStorage.setItem('redirectAfterLogin', window.location.pathname);
-  //       localStorage.removeItem("hasReloaded")
-  //       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-  //       toast.error("Session Expired. Login Again");
-  //       router.replace("/auth/signin");
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-
+  
   const onPrevious = () => {
     router.replace(`/admin/member/add?${value}&edit`);
   };
@@ -269,7 +292,15 @@ const Page1 = () => {
       ...changedValues,
     }));
   };
+  const handleSubmitClick = () => {
+    setActionType('submit');
+    form.submit(); // Trigger form submission
+  };
 
+  const handleSaveClick = () => {
+    setActionType('save');
+    form.submit(); // Trigger form submission
+  };
   return (
     <>
       <Fragment>
@@ -462,7 +493,8 @@ issue(s), trade availability, rising costs, supply chain, etc.):"
                             size={"large"}
                             type="primary"
                             className=" "
-                            htmlType="submit"
+                            loading={loading1}
+                            onClick={handleSaveClick}
                           >
                             Save
                           </Button>
@@ -480,11 +512,12 @@ issue(s), trade availability, rising costs, supply chain, etc.):"
                             <Button
                               size={"large"}
                               type="primary"
-                              htmlType="submit"
+                              // htmlType="submit"
                               className="login-form-button "
                               loading={loading}
+                              onClick={handleSubmitClick}
                             >
-                              {!pagetype ? "Next" : "Save"}
+                            Next
                             </Button>
                           </div>
                         ) : (
@@ -501,9 +534,10 @@ issue(s), trade availability, rising costs, supply chain, etc.):"
                             <Button
                               size={"large"}
                               type="primary"
-                              htmlType="submit"
+                              // htmlType="submit"
                               className="login-form-button "
-                              loading={loading}
+                              onClick={handleSaveClick}
+                              loading={loading1}
                             >
                               Save
                             </Button>

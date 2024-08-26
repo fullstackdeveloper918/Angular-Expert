@@ -14,6 +14,8 @@ const AdditionalQuestion = () => {
   const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<any>(false);
+  const [loading1, setLoading1] = useState<any>(false);
+  const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const [state, setState] = useState<any>("");
   const [question, setQuestion] = useState<any>([]);
 
@@ -30,77 +32,148 @@ const AdditionalQuestion = () => {
   useAutoSaveForm(formValues, 1000);
 
   console.log(formValues, "formValues");
-  const submit = async (values: any) => {
-    let items = {
-      additional_question: {
-        userId: value,
-        questions: question.map((q: any) => ({
-          question_id: q.id,
-          question: q.question,
-          answer: values[`question_${q.id}`] || "",
-        })),
-      },
-    };
-    try {
-      if (type == "edit") {
-        let items = {
-          additional_question: {
-            userId: value,
-            questions: question.map((q: any) => ({
-              question_id: q.id,
-              question: q.question,
-              answer: values[`question_${q.id}`] || "",
-            })),
-          },
-        } as any;
-        setLoading(true);
-
-        let res = await api.User.edit(items);
-        toast.success(res?.message);
-        // if (!pagetype) {
-        //     router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
-        // }else{
-        //     router?.back()
-        // }
-        // }
-        setTimeout(() => {
-          if (!pagetype) {
-              router.push(`/admin/member/add/page8?${res?.userId}&edit`)
-          } else {
-              router.push("/admin/questionnaire?additionalPage")
+  const submit = async(values: any) => {
+    if (actionType === 'submit') {
+      let items = {
+        additional_question: {
+          userId: value,
+          questions: question.map((q: any) => ({
+            question_id: q.id,
+            question: q.question,
+            answer: values[`question_${q.id}`] || "",
+          })),
+        },
+      };
+      try {
+        if (type == "edit") {
+          let items = {
+            additional_question: {
+              userId: value,
+              questions: question.map((q: any) => ({
+                question_id: q.id,
+                question: q.question,
+                answer: values[`question_${q.id}`] || "",
+              })),
+            },
+          } as any;
+          setLoading(true);
+  
+          let res = await api.User.edit(items);
+          toast.success(res?.message);
+          // if (!pagetype) {
+          //     router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
+          // }else{
+          //     router?.back()
+          // }
+          // }
+          setTimeout(() => {
+            if (!pagetype) {
+                router.push(`/admin/member/add/page8?${res?.userId}&edit`)
+            } else {
+                router.push("/admin/questionnaire?additionalPage")
+            }
+          }, 1000);
+        } else {
+          setLoading(true);
+          let res = await api.Auth.signUp(items);
+          if (res?.status == 500) {
+            toast.error("Session Expired Login Again");
+            router.replace("/auth/signin");
           }
-        }, 1000);
-      } else {
-        setLoading(true);
-        let res = await api.Auth.signUp(items);
-        if (res?.status == 500) {
-          toast.error("Session Expired Login Again");
+          if (!pagetype) {
+            router.push(
+              `/admin/member/add/page8?${res?.userId}&edit&questionnair`
+            );
+          } else {
+            router?.back();
+          }
+        }
+      } catch (error: any) {
+        if (!pagetype) {
+          setLoading(false);
+        }
+        if (error?.status == 500) {
+          localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          localStorage.removeItem("hasReloaded")
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          toast.error("Session Expired. Login Again");
           router.replace("/auth/signin");
         }
-        if (!pagetype) {
-          router.push(
-            `/admin/member/add/page8?${res?.userId}&edit&questionnair`
-          );
-        } else {
-          router?.back();
+      } finally {
+        if (pagetype) {
+          setLoading(false);
         }
       }
-    } catch (error: any) {
-      if (!pagetype) {
-        setLoading(false);
-      }
-      if (error?.status == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
-    } finally {
-      if (pagetype) {
-        setLoading(false);
+    } else if (actionType === 'save') {
+      let items = {
+        additional_question: {
+          userId: value,
+          questions: question.map((q: any) => ({
+            question_id: q.id,
+            question: q.question,
+            answer: values[`question_${q.id}`] || "",
+          })),
+        },
+      };
+      try {
+        if (type == "edit") {
+          let items = {
+            additional_question: {
+              userId: value,
+              questions: question.map((q: any) => ({
+                question_id: q.id,
+                question: q.question,
+                answer: values[`question_${q.id}`] || "",
+              })),
+            },
+          } as any;
+          setLoading1(true);
+  
+          let res = await api.User.edit(items);
+          toast.success(res?.message);
+          // if (!pagetype) {
+          //     router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
+          // }else{
+          //     router?.back()
+          // }
+          // }
+        
+        } else {
+          setLoading1(true);
+          let res = await api.Auth.signUp(items);
+          if (res?.status == 500) {
+            toast.error("Session Expired Login Again");
+            router.replace("/auth/signin");
+          }
+         
+        }
+      } catch (error: any) {
+        if (!pagetype) {
+          setLoading1(false);
+        }
+        if (error?.status == 500) {
+          localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          localStorage.removeItem("hasReloaded")
+          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          toast.error("Session Expired. Login Again");
+          router.replace("/auth/signin");
+        }
+      } finally {
+        if (pagetype) {
+          setLoading1(false);
+        }
       }
     }
+    setLoading1(false);
+  };
+  const handleSubmitClick = () => {
+    setActionType('submit');
+    form.submit(); // Trigger form submission
+  };
+
+  const handleSaveClick = () => {
+    setActionType('save');
+    form.submit(); // Trigger form submission
   };
   const getQuestion = async () => {
     try {
@@ -270,7 +343,8 @@ const AdditionalQuestion = () => {
                           size={"large"}
                           type="primary"
                           className=" "
-                          htmlType="submit"
+                          onClick={handleSaveClick}
+                          loading={loading1}
                         >
                           Save
                         </Button>
@@ -295,9 +369,9 @@ const AdditionalQuestion = () => {
                         <Button
                           size={"large"}
                           type="primary"
-                          htmlType="submit"
+                         onClick={handleSubmitClick}
                           className="login-form-button "
-                          // loading={loading}
+                          loading={loading}
                         >
                           {!pagetype ? "Next" : "Save"}
                         </Button>
@@ -316,9 +390,9 @@ const AdditionalQuestion = () => {
                         <Button
                           size={"large"}
                           type="primary"
-                          htmlType="submit"
+                          onClick={handleSaveClick}
                           className="login-form-button "
-                          loading={loading}
+                          loading={loading1}
                         >
                           Save
                         </Button>

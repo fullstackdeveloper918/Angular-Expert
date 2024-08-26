@@ -113,6 +113,16 @@ const MainLayout = ({ children }: any) => {
     const token = cookies["COOKIES_USER_ACCESS_TOKEN"];
     setAccessToken(token);
   }, []);
+  useEffect(() => {
+    const checkPathname = () => {
+      const pathname = window.location.pathname;
+      console.log(pathname); 
+      localStorage.setItem("Pathname", pathname);
+    };
+    const intervalId = setInterval(checkPathname, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+  console.log(window.location.pathname,"pathnamepathname");
   const [loading, setLoading] = useState(false)
   const handleLogout = async () => {
     try {

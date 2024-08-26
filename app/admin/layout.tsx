@@ -3,7 +3,7 @@ import MainLayout from "../../components/Layout/layout";
 import { parseCookies } from "nookies";
 
 const AdminLayout = ({children}:{children:ReactNode}) => {
- 
+  
   return (
     <Fragment>
       <MainLayout>

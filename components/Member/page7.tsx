@@ -18,6 +18,8 @@ const Page7 = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
+  const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : "";
@@ -27,107 +29,133 @@ const Page7 = () => {
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 1000);
-
-  const submit = async (values: any) => {
-    let items = {
-      spring_meeting: {
-        userId: value,
-        estimating: values?.estimating,
-        accountability: values?.accountability,
-        productivity: values?.productivity,
-      },
-    };
-    try {
-      const fieldsToClear = ["estimating", "accountability", "productivity"];
-
-      if (type == "edit") {
-        let items = {
-          spring_meeting: {
-            userId: value,
-            estimating: values?.estimating,
-            accountability: values?.accountability,
-            productivity: values?.productivity,
-          },
-        } as any;
-        setLoading(true);
-        let res = await api.User.edit(items);
-        dispatch(clearSpecificFormData(fieldsToClear));
-        if (!pagetype) {
-          router.push(`/admin/member/add/additional_questionnaire?${value}&edit`)
-      } else {
-          // router?.back()
-          router.push("/admin/questionnaire?page7")
-      }
-      } else {
-        setLoading(true);
-        let res = await api.Auth.signUp(items);
-        dispatch(clearSpecificFormData(fieldsToClear));
-
-        if (res?.status == 500) {
-            localStorage.setItem('redirectAfterLogin', window.location.pathname);
-            localStorage.removeItem("hasReloaded")
-            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-            toast.error("Session Expired. Login Again");
-            router.replace("/auth/signin");
-        }
-        if (!pagetype) {
-          router.push(`/admin/member/add/page8?${res?.userId}`);
+  const submit = async(values: any) => {
+    if (actionType === 'submit') {
+      let items = {
+        spring_meeting: {
+          userId: value,
+          estimating: values?.estimating,
+          accountability: values?.accountability,
+          productivity: values?.productivity,
+        },
+      };
+      try {
+        const fieldsToClear = ["estimating", "accountability", "productivity"];
+  
+        if (type == "edit") {
+          let items = {
+            spring_meeting: {
+              userId: value,
+              estimating: values?.estimating,
+              accountability: values?.accountability,
+              productivity: values?.productivity,
+            },
+          } as any;
+          setLoading(true);
+          let res = await api.User.edit(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+          if (!pagetype) {
+            router.push(`/admin/member/add/additional_questionnaire?${value}&edit`)
         } else {
-          router?.back();
+            // router?.back()
+            router.push("/admin/questionnaire?page7")
+        }
+        } else {
+          setLoading(true);
+          let res = await api.Auth.signUp(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+  
+          if (res?.status == 500) {
+              localStorage.setItem('redirectAfterLogin', window.location.pathname);
+              localStorage.removeItem("hasReloaded")
+              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+              toast.error("Session Expired. Login Again");
+              router.replace("/auth/signin");
+          }
+          if (!pagetype) {
+            router.push(`/admin/member/add/page8?${res?.userId}`);
+          } else {
+            router?.back();
+          }
+        }
+      } catch (error) {
+        if (!pagetype) {
+          setLoading(false);
+        }
+      } finally {
+        if (pagetype) {
+          setLoading(false);
         }
       }
-    } catch (error) {
-      if (!pagetype) {
-        setLoading(false);
-      }
-    } finally {
-      if (pagetype) {
-        setLoading(false);
+    } else if (actionType === 'save') {
+      let items = {
+        spring_meeting: {
+          userId: value,
+          estimating: values?.estimating,
+          accountability: values?.accountability,
+          productivity: values?.productivity,
+        },
+      };
+      try {
+        const fieldsToClear = ["estimating", "accountability", "productivity"];
+  
+        if (type == "edit") {
+          let items = {
+            spring_meeting: {
+              userId: value,
+              estimating: values?.estimating,
+              accountability: values?.accountability,
+              productivity: values?.productivity,
+            },
+          } as any;
+          setLoading1(true);
+          let res = await api.User.edit(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+        //   if (!pagetype) {
+        //     router.push(`/admin/member/add/additional_questionnaire?${value}&edit`)
+        // } else {
+        //     // router?.back()
+        //     router.push("/admin/questionnaire?page7")
+        // }
+        } else {
+          setLoading1(true);
+          let res = await api.Auth.signUp(items);
+          dispatch(clearSpecificFormData(fieldsToClear));
+  
+          if (res?.status == 500) {
+              localStorage.setItem('redirectAfterLogin', window.location.pathname);
+              localStorage.removeItem("hasReloaded")
+              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+              toast.error("Session Expired. Login Again");
+              router.replace("/auth/signin");
+          }
+          // if (!pagetype) {
+          //   router.push(`/admin/member/add/page8?${res?.userId}`);
+          // } else {
+          //   router?.back();
+          // }
+        }
+      } catch (error) {
+        if (!pagetype) {
+          setLoading1(false);
+        }
+      } finally {
+        if (pagetype) {
+          setLoading1(false);
+        }
       }
     }
+    setLoading1(false);
   };
-  // const onFinish1 = async (values: any) => {
-  //   let items = {
-  //     spring_meeting: {
-  //       userId: value,
-  //       estimating: values?.estimating,
-  //       accountability: values?.accountability,
-  //       productivity: values?.productivity,
-  //     },
-  //   };
-  //   try {
-  //     if (type == "edit") {
-  //       let items = {
-  //         spring_meeting: {
-  //           userId: value,
-  //           estimating: values?.estimating,
-  //           accountability: values?.accountability,
-  //           productivity: values?.productivity,
-  //         },
-  //       } as any;
-  //       setLoading(true);
-  //       let res = await api.User.edit(items);
-  //       toast.success("Save successfully");
-  //     } else {
-  //       setLoading(true);
-  //       let res = await api.Auth.signUp(items);
-  //       toast.success("Save Successfully");
-  //       if (res?.status == 400) {
-  //         toast.error("Session Expired Login Again");
-  //         router.replace("/auth/signin");
-  //       }
-  //     }
-  //   } catch (error: any) {
-  //     setLoading(false);
-  //     if (error?.status == 400) {
-  //       destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-  //       localStorage.removeItem("hasReloaded");
-  //       toast.error("Session Expired Login Again");
-  //       router.replace("/auth/signin");
-  //     }
-  //   } finally {
-  //   }
-  // };
+  const handleSubmitClick = () => {
+    setActionType('submit');
+    form.submit(); // Trigger form submission
+  };
+
+  const handleSaveClick = () => {
+    setActionType('save');
+    form.submit(); // Trigger form submission
+  };
 
   const [state, setState] = useState<any>("");
   const getDataById = async () => {
@@ -308,7 +336,8 @@ const Page7 = () => {
                             size={"large"}
                             type="primary"
                             className=" "
-                            htmlType="submit"
+                            onClick={handleSaveClick}
+                            loading={loading1}
                           >
                             Save
                           </Button>
@@ -333,7 +362,7 @@ const Page7 = () => {
                           <Button
                             size={"large"}
                             type="primary"
-                            htmlType="submit"
+                            onClick={handleSubmitClick}
                             className="login-form-button "
                             loading={loading}
                           >
@@ -354,9 +383,9 @@ const Page7 = () => {
                           <Button
                             size={"large"}
                             type="primary"
-                            htmlType="submit"
+                            onClick={handleSaveClick}
                             className="login-form-button "
-                            loading={loading}
+                            loading={loading1}
                           >
                             Save
                           </Button>
