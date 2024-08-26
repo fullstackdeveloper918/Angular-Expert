@@ -26,7 +26,7 @@ const Page6 = () => {
 
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
-  useAutoSaveForm(formValues, 1000);
+  useAutoSaveForm(formValues, 300);
   const submit = async(values: any) => {
     if (actionType === 'submit') {
       let items = {

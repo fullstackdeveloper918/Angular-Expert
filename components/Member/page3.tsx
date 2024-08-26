@@ -50,7 +50,7 @@ const Page3 = () => {
   const entries = Array.from(searchParams.entries());
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
-  useAutoSaveForm(formValues, 1000);
+  useAutoSaveForm(formValues, 300);
   const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const value = entries.length > 0 ? entries[0][0] : "";
   const type = entries.length > 1 ? entries[1][0] : "";
@@ -91,7 +91,7 @@ const Page3 = () => {
       )
     );
   };
-  const [inputPairs, setInputPairs] = useState([
+  const [inputPairs,                             setInputPairs] = useState([
     {
       id: 1,
       goalName: "goal1",
@@ -295,7 +295,7 @@ const Page3 = () => {
         initialGoal: goal.goal,
         initialComment: goal.comment,
       }));
-      setInputPairs(formattedGoals);
+   
 
       const transformDataToArray = (
         formValues: any,
@@ -356,7 +356,10 @@ const Page3 = () => {
       form.setFieldsValue({
         ...prepareFormValues(dataToUse, ""),
       });
-
+      console.log(formValues,"formValues");
+      console.log(formattedGoals,"formattedGoals");
+      
+      setInputPairs(formattedGoals);
       const fetchedGoalsNext = res?.data.goal_next_meeting || [];
 
       const formattedGoalsNext = fetchedGoalsNext.map(

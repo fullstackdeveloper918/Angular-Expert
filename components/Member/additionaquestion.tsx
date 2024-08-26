@@ -29,7 +29,7 @@ const AdditionalQuestion = () => {
   const savedFormData = useSelector((state: any) => state.form);
 
   const [formValues, setFormValues] = useState(savedFormData);
-  useAutoSaveForm(formValues, 1000);
+  useAutoSaveForm(formValues, 300);
 
   console.log(formValues, "formValues");
   const submit = async(values: any) => {

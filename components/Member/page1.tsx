@@ -65,7 +65,7 @@ const Page1 = () => {
   const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
-  useAutoSaveForm(formValues, 1000);
+  useAutoSaveForm(formValues, 300);
 
   const setCookie = (name: any, value: any, days: any) => {
     nookies.set(null, name, value, {
