@@ -1,5 +1,5 @@
 "use client";
-import { Form, Upload, Typography, Divider, Button, Popconfirm } from "antd";
+import { Form, Upload, Typography, Divider, Button, Popconfirm, Spin } from "antd";
 import { PlusOutlined, MinusCircleOutlined, CheckOutlined } from "@ant-design/icons";
 // import ReactImageCompressor from "react-image-compressor";
 import dynamic from "next/dynamic";
@@ -71,6 +71,7 @@ const Page8 = () => {
   const [previewImage, setPreviewImage] = useState<any>("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadButton, setLoadButton] = useState('')
   const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const [state, setState] = useState<any>("");
   const [errorShown, setErrorShown] = useState(false);
@@ -218,9 +219,10 @@ const Page8 = () => {
     });
   };
   const submit = async (values: any) => {
+   
     if (actionType === 'submit') {
+      setLoadButton('Submit')
       setLoading(true);
-
       const photoComment = inputPairs.map((pair) => ({
         comment: values[pair.commentName],
         files: values[pair.goalName],
@@ -304,6 +306,7 @@ const Page8 = () => {
           }
 
           const response = await api.photo_section.upload_file(formData);
+          setLoading(false)
 
           const messages: any = {
             200: "Updated Successfully",
@@ -323,6 +326,7 @@ const Page8 = () => {
 
           return response?.data?.pdfReponseData;
         }
+       
       } catch (error: any) {
         if (error?.status === 500) {
           destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
@@ -341,7 +345,8 @@ const Page8 = () => {
         }
       }
     } else if (actionType === 'save') {
-      setLoading(true);
+      setLoadButton('Save')
+
 
       const photoComment = inputPairs.map((pair) => ({
         comment: values[pair.commentName],
@@ -376,6 +381,7 @@ const Page8 = () => {
           }
 
           const response = await api.photo_section.update_file(formData);
+          setLoading(false)
 
           const messages: any = {
             200: "Updated Successfully",
@@ -468,12 +474,12 @@ const Page8 = () => {
 
   const handleSubmitClick = () => {
     setActionType('submit');
-    form.submit(); // Trigger form submission
+    form.submit(); 
   };
 
   const handleSaveClick = () => {
     setActionType('save');
-    form.submit(); // Trigger form submission
+    form.submit(); 
   };
 
 
@@ -772,7 +778,7 @@ const Page8 = () => {
                             className=" "
                             onClick={handleSaveClick}
                           >
-                            Save
+                           {loadButton === 'Save' ? <Spin /> : 'Save'}
                           </Button>
                         </div>
                       ) : (
@@ -799,7 +805,7 @@ const Page8 = () => {
                             className="login-form-button "
                             onClick={handleSubmitClick}
                           >
-                            Submit
+                           {loadButton === 'Submit' ? <Spin /> : 'Submit'}
                             {/* {!pagetype ? "Next" : "Save"} */}
                           </Button>
                         </div>
@@ -811,11 +817,11 @@ const Page8 = () => {
 
                           <Button size={'large'} type="primary" onClick={handleSaveClick}
                             className="login-form-button " >
-                            Save
+                            {loadButton === 'Save' ? <Spin /> : 'Save'}
                           </Button>
                           <Button size={'large'} type="primary" onClick={handleSubmitClick}
                             className="login-form-button " >
-                            Submit
+                          {loadButton === 'Submit' ? <Spin /> : 'Submit'}
                           </Button>
                         </div>
                       )}

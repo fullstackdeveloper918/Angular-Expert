@@ -51,9 +51,6 @@ const Page3 = () => {
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 300);
-
-  console.log(formValues, 'formVallues')
-
   const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const value = entries.length > 0 ? entries[0][0] : "";
   const type = entries.length > 1 ? entries[1][0] : "";
@@ -94,7 +91,7 @@ const Page3 = () => {
       )
     );
   };
-  const [inputPairs, setInputPairs] = useState([
+  const [inputPairs,                             setInputPairs] = useState([
     {
       id: 1,
       goalName: "goal1",
@@ -142,18 +139,12 @@ const Page3 = () => {
   };
 
   const handleStatusChange = (id: any, value: any) => {
-    console.log(id, value, 'id value')
     setInputPairs(
       inputPairs.map((pair) =>
         pair.id === id ? { ...pair, status: value } : pair
       )
     );
   };
-
-
-  console.log(inputPairs, 'inputPairs')
-
-
   const submit = async(values: any) => {
     if (actionType === 'submit') {
       const goalsData = inputPairs.map((pair) => ({
@@ -268,9 +259,6 @@ const Page3 = () => {
     }
     setLoading1(false);
   };
-
-
-
   const handleSubmitClick = () => {
     setActionType('submit');
     form.submit(); // Trigger form submission
@@ -317,13 +305,11 @@ const Page3 = () => {
 
         Object.keys(formValues).forEach((key) => {
           const match = key.match(
-            new RegExp(`^${prefix}(goal|comments|goal_next|status)(\\d+)$`)
+            new RegExp(`^${prefix}(goal|comments|goal_next)(\\d+)$`)
           );
           if (match) {
             const [, type, index] = match;
             const idx = parseInt(index, 10) - 1;
-
-            console.log(idx, 'check idx')
 
             if (!goalsArray[idx]) {
               goalsArray[idx] = {};
@@ -335,8 +321,6 @@ const Page3 = () => {
               goalsArray[idx].comment = formValues[key];
             } else if (type == "goal_next") {
               goalsArray[idx].goal_next = formValues[key];
-            } else if (type === "status") {
-              inputPairs[idx].status = formValues[key];
             }
           }
         });
@@ -372,7 +356,8 @@ const Page3 = () => {
       form.setFieldsValue({
         ...prepareFormValues(dataToUse, ""),
       });
-     
+      console.log(formValues,"formValues");
+      console.log(formattedGoals,"formattedGoals");
       
       setInputPairs(formattedGoals);
       const fetchedGoalsNext = res?.data.goal_next_meeting || [];
@@ -407,19 +392,14 @@ const Page3 = () => {
       getDataById();
     }
   }, [type, form]);
-
-
   const onPrevious = () => {
     router.replace(`/admin/member/add/page2?${value}&edit`);
   };
-
-
   const hnandleBack = () => {
     router.back();
   };
 
   const onValuesChange = (changedValues: any) => {
-    
     setFormValues((prevValues: any) => ({
       ...prevValues,
       ...changedValues,
@@ -492,7 +472,7 @@ const Page3 = () => {
                             />
                           </Form.Item>
 
-                          <Select 
+                          <Select
                             className="responiveSelect"
                             defaultValue={pair.status}
                             style={{
@@ -502,10 +482,11 @@ const Page3 = () => {
                               fontSize: "24px",
                               cursor: "pointer",
                               width: 120,
+                              zIndex: 9
                             }}
-                            // onChange={(value) =>
-                            //   handleStatusChange(pair.id, value)
-                            // }
+                            onChange={(value) =>
+                              handleStatusChange(pair.id, value)
+                            }
                           >
                             <Option value="completed">Completed</Option>
                             <Option value="progressing">Progressing</Option>
@@ -559,9 +540,9 @@ const Page3 = () => {
                                   width: 120,
                                   zIndex: 9
                                 }}
-                                // onChange={(value) =>
-                                //   handleStatusChange1(index, value)
-                                // }
+                                onChange={(value) =>
+                                  handleStatusChange1(index, value)
+                                }
                               >
                                 <Option value="high">High</Option>
                                 <Option value="medium">Medium</Option>
@@ -600,7 +581,7 @@ const Page3 = () => {
                         </>
                       ))}
                       <Button
-                        type="dashed" className="mt-4"
+                        type="dashed"
                         onClick={addInputField}
                         block
                         icon={<PlusOutlined />}
@@ -609,9 +590,9 @@ const Page3 = () => {
                       </Button>
                     </div>
                     {/* Button  */}
-                    <div className="d-flex justify-content-between mt-3">
+                    <div className="d-flex mt-3">
                       {!pagetype ? (
-                        <div className="">
+                        <div className="col-2">
                           <Button
                             size={"large"}
                             type="primary"
@@ -626,7 +607,7 @@ const Page3 = () => {
                         ""
                       )}
                       {!pagetype ? (
-                        <div className="d-flex gap-5 justify-content-center col-8 ">
+                        <div className=" col-8 d-flex gap-5 justify-content-center">
                           {!pagetype ? (
                             <Button
                               size={"large"}
@@ -650,7 +631,7 @@ const Page3 = () => {
                           </Button>
                         </div>
                       ) : (
-                        <div className="d-flex gap-5 justify-content-center col-8">
+                        <div className=" col-8 d-flex gap-5 justify-content-center">
                           <Button
                             size={"large"}
                             type="primary"
