@@ -31,7 +31,7 @@ const AdditionalQuestion = () => {
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 300);
 
-  console.log(formValues, "formValues");
+ 
   const submit = async(values: any) => {
     if (actionType === 'submit') {
       let items = {
@@ -194,7 +194,7 @@ const AdditionalQuestion = () => {
     } catch (error) {}
   };
 
-  console.log(formValues, "formValues");
+ 
 
   useEffect(() => {
     getQuestion();
@@ -234,7 +234,7 @@ const AdditionalQuestion = () => {
               return acc;
             }, {});
 
-      console.log(resValues);
+     
 
       form.setFieldsValue(resValues);
     } catch (error: any) {
@@ -265,7 +265,7 @@ const AdditionalQuestion = () => {
   };
 
   const onValuesChange = (changedValues: any) => {
-    console.log(changedValues, "changedvalues");
+  
     setFormValues((prevValues: any) => ({
       ...prevValues,
       ...changedValues,

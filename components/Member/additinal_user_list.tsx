@@ -207,7 +207,7 @@ const AdditionalList = () => {
                 router.replace("/auth/signin");
             }
 
-            console.log('app crashed')
+           
             
         } catch (error:any) {
             setLoading1(false)

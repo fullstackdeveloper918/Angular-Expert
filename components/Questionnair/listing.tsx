@@ -40,7 +40,7 @@ const QuestionnairList = () => {
     const cookies = parseCookies();
     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
     const pendingTime = cookies.expirationTime
-    console.log(pendingTime, "pendingTime");
+  
 
     const [questionType, setQuestionType] = useState<any>(null);
     const { token } = theme.useToken();
@@ -345,7 +345,7 @@ const QuestionnairList = () => {
     const handleClick = () => {
         router.push(`admin/member/add/page2?mqPJZGktGjd7NoNAGCsj92fnYYj1&edit`)
     }
-    console.log(value, "value");
+   
     const [showToast, setShowToast] = useState<any>(true);
 
     // Update localStorage whenever showToast changes
@@ -667,7 +667,7 @@ const QuestionnairList = () => {
         </div>
     </div>
     );
-    console.log(state1, "state1");
+  
 
     return (
         <>

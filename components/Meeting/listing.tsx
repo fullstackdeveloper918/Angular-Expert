@@ -22,7 +22,6 @@ import dynamic from "next/dynamic";
 import MainLayout from "../../components/Layout/layout";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import FilterSelect from "@/components/common/FilterSelect";
-
 import dayjs from "dayjs";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
@@ -54,45 +53,43 @@ const { Search } = Input;
 const MeetingList = () => {
     const router = useRouter()
     const dispatch = useDispatch();
-    const id  = useParams();
-    const searchParams =  window.location.pathname
+    const id = useParams();
+    const searchParams = window.location.pathname
     const baseUrl = 'https://example.com';
     const path = '/some/path';
     const queryParams = new URLSearchParams({ foo: 'bar', baz: 'qux' });
-    console.log(searchParams,"searchParams");
     
+
     const url = new URL(path, baseUrl);
     url.search = queryParams.toString();
-    
-    console.log(url.toString(),"jkjkjkjk"); 
 
     const [areas, setAreas] = useState<any>([]);
     const [filteredData, setFilteredData] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState('')
     const [loading, setLoading] = useState(true);
     const getUserdata = useSelector((state: any) => state?.user?.userData)
-    const formatWithOrdinal = (date:any) => {
+    const formatWithOrdinal = (date: any) => {
         const day = dayjs(date).date();
-        
-        const getOrdinalSuffix = (day:any) => {
-          const j = day % 10,
+
+        const getOrdinalSuffix = (day: any) => {
+            const j = day % 10,
                 k = day % 100;
-          if (j === 1 && k !== 11) {
-            return day + "st";
-          }
-          if (j === 2 && k !== 12) {
-            return day + "nd";
-          }
-          if (j === 3 && k !== 13) {
-            return day + "rd";
-          }
-          return day + "th";
+            if (j === 1 && k !== 11) {
+                return day + "st";
+            }
+            if (j === 2 && k !== 12) {
+                return day + "nd";
+            }
+            if (j === 3 && k !== 13) {
+                return day + "rd";
+            }
+            return day + "th";
         };
-      
+
         const monthYear = dayjs(date).format('MMMM YYYY');
         const formattedDate = `${dayjs(date).format('MMMM')} ${getOrdinalSuffix(day)}, ${dayjs(date).format('YYYY')}`;
         return formattedDate;
-      };
+    };
     useEffect(() => {
         // Filter data when searchTerm or state1 changes
         const filtered = areas?.filter((res: any) => {
@@ -103,13 +100,10 @@ const MeetingList = () => {
         });
         setFilteredData(filtered);
     }, [searchTerm, areas]);
-    const handleDelete = async (_id: string) => {
-        try {
 
-        } catch (error) {
-        }
 
-    }
+
+   
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
@@ -139,30 +133,32 @@ const MeetingList = () => {
                     <Tooltip title={res?.location}>
                         {res?.location ? `${res?.location.slice(0, 20)}...` : "N/A"}
                     </Tooltip>,
-                start_date: formatWithOrdinal(res?.start_meeting_date)|| "N/A",
+                start_date: formatWithOrdinal(res?.start_meeting_date) || "N/A",
                 start_time: dayjs(res?.start_time).format('hh:mm A') || "N/A",
-                end_date: formatWithOrdinal(res?.end_meeting_date)|| "N/A",
+                end_date: formatWithOrdinal(res?.end_meeting_date) || "N/A",
                 end_time: dayjs(res?.end_time).format('hh:mm A') || "N/A",
                 action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
                     {getUserdata?.is_admin == false ? "" :
-                    <>
-                    <li>
-                        <Link href={`/admin/meetings/${res?.id}/edit`} >
-                            <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                        </Link>
-                    </li>
-                        <li>
-                            <Popconfirm
-                                title="Delete"
-                                description="Are you sure you want to delete ?"
-                                onConfirm={(event: any) => { archive(res?.id) }}
-                            // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
-                            >
-                                <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
-                            </Popconfirm>
-                        </li>
-                    </>
-                        }
+                        <>
+                            <li>
+                                <Link href={`/admin/meetings/${res?.id}/edit`} >
+                                    <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
+                                </Link>
+                            </li>
+                           
+                            <li>
+                                <Popconfirm
+                                    title="Delete"
+                                    description="Are you sure you want to delete ?"
+                                    onConfirm={(event: any) => { archive(res?.id) }}
+                                // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                                >
+                                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                                </Popconfirm>
+                            </li>
+
+                        </>
+                    }
                     <li>
                         <Link href={`/admin/meetings/${res?.id}/view`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
                     </li>
@@ -236,46 +232,43 @@ const MeetingList = () => {
             const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
             let res = await api.Meeting.listing(query);
             setAreas(res);
-         
-            
+
+
             setLoading(false);
             if (res?.status === 500) {
                 // Save the current URL path in local storage
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        
+
                 // Clear cookies and dispatch actions
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 dispatch(clearUserData({}));
                 toast.error("Session Expired. Login Again");
-        
+
                 // Redirect to sign-in page
                 router.replace("/auth/signin");
             }
-        } catch (error:any) {
+        } catch (error: any) {
             console.error(error.status);
-            
+
             setLoading(false);
-            if (error?.status==500) {
+            if (error?.status == 500) {
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        
+
                 // Clear cookies and dispatch actions
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 dispatch(clearUserData({}));
                 toast.error("Session Expired. Login Again");
-        
+
                 // Redirect to sign-in page
                 router.replace("/auth/signin");
             }
         }
     };
     useEffect(() => {
-        
+
         const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
         initialise(query);
     }, [searchTerm]);
-
-
-
 
 
     const add = () => {
@@ -321,9 +314,9 @@ const MeetingList = () => {
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
                                     {loading ? (
-                                       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '20vh' }}>
-                                       <Spin size="large"/>
-                                   </div>
+                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '20vh' }}>
+                                            <Spin size="large" />
+                                        </div>
                                     ) : (
                                         <Table dataSource={dataSource} columns={baseColumns} pagination={{
                                             position: ['bottomCenter'],

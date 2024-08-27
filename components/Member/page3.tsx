@@ -51,6 +51,12 @@ const Page3 = () => {
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 300);
+
+  console.log(formValues, 'formVallues')
+
+   
+
+
   const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const value = entries.length > 0 ? entries[0][0] : "";
   const type = entries.length > 1 ? entries[1][0] : "";
@@ -91,7 +97,7 @@ const Page3 = () => {
       )
     );
   };
-  const [inputPairs,                             setInputPairs] = useState([
+  const [inputPairs, setInputPairs] = useState([
     {
       id: 1,
       goalName: "goal1",
@@ -139,6 +145,7 @@ const Page3 = () => {
   };
 
   const handleStatusChange = (id: any, value: any) => {
+    console.log(id, value, 'id value')
     setInputPairs(
       inputPairs.map((pair) =>
         pair.id === id ? { ...pair, status: value } : pair
@@ -356,8 +363,7 @@ const Page3 = () => {
       form.setFieldsValue({
         ...prepareFormValues(dataToUse, ""),
       });
-      console.log(formValues,"formValues");
-      console.log(formattedGoals,"formattedGoals");
+     
       
       setInputPairs(formattedGoals);
       const fetchedGoalsNext = res?.data.goal_next_meeting || [];
@@ -400,6 +406,7 @@ const Page3 = () => {
   };
 
   const onValuesChange = (changedValues: any) => {
+    console.log(changedValues, 'changed')
     setFormValues((prevValues: any) => ({
       ...prevValues,
       ...changedValues,
@@ -537,6 +544,7 @@ const Page3 = () => {
                                   fontSize: "24px",
                                   cursor: "pointer",
                                   width: 120,
+                                  zIndex: 9
                                 }}
                                 onChange={(value) =>
                                   handleStatusChange1(index, value)
@@ -579,7 +587,7 @@ const Page3 = () => {
                         </>
                       ))}
                       <Button
-                        type="dashed"
+                        type="dashed" className="mt-4"
                         onClick={addInputField}
                         block
                         icon={<PlusOutlined />}
@@ -588,9 +596,9 @@ const Page3 = () => {
                       </Button>
                     </div>
                     {/* Button  */}
-                    <div className="d-flex mt-3">
+                    <div className="d-flex justify-content-between mt-3">
                       {!pagetype ? (
-                        <div className="col-2">
+                        <div className="">
                           <Button
                             size={"large"}
                             type="primary"
@@ -605,7 +613,7 @@ const Page3 = () => {
                         ""
                       )}
                       {!pagetype ? (
-                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                        <div className=" d-flex gap-5 justify-content-between col-12">
                           {!pagetype ? (
                             <Button
                               size={"large"}
@@ -629,7 +637,7 @@ const Page3 = () => {
                           </Button>
                         </div>
                       ) : (
-                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                        <div className="  d-flex gap-5 justify-content-between col-12">
                           <Button
                             size={"large"}
                             type="primary"

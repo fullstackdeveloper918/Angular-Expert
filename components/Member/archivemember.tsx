@@ -119,16 +119,12 @@ const ArchiveMemberList = () => {
         const file = new File([blob], `${capFirst(item?.company_name)}.pdf`, { type: 'application/pdf' });
         const formData = new FormData();
         formData.append('file', file);
-
-
         const res = await fetch('https://frontend.goaideme.com/save-pdf', {
-        // const res = await fetch('https://app-uilsndszlq-uc.a.run.app/save-pdf', {
-
             method: 'POST',
             body: formData,
             headers: {
                 Token: `${accessToken}`,
-                // 'Content-Type': 'application/json',
+             
             }
         },);
 
@@ -335,11 +331,6 @@ const ArchiveMemberList = () => {
         }] : [])
     ];
 
-
-
-
-
-
     const addUser = () => {
         router.push("/admin/member/add")
     }
@@ -361,15 +352,11 @@ const ArchiveMemberList = () => {
             
         } catch (error:any) {
             setLoading1(false)
-            // if (error?.status==400) {
-            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-            //     localStorage.removeItem('hasReloaded');
-
-            //     toast.error("Session Expired Login Again")
-            //     router.replace("/auth/signin")
-            // }
+            
         }
     };
+
+
     const archive = async (id: any) => {
         const item = {
             userId: id,
@@ -384,6 +371,8 @@ const ArchiveMemberList = () => {
 
         }
     }
+
+    
     const unarchive = async (id: any) => {
         const item = {
             user_id: id,
@@ -398,6 +387,8 @@ const ArchiveMemberList = () => {
 
         }
     }
+
+
     useEffect(() => {
         const query = searchTerm ? `searchTerm=${searchTerm}` : '';
         getData();
