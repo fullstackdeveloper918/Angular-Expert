@@ -154,6 +154,8 @@ const User = {
     requests.post('save-pdf', info),
   archive_user_delete: (info: any) =>
     requests.post(`delete-archive-user`, info),
+  unarchive_user: (info: any) =>
+    requests.post(`unarchive-user`, info),
 };
 const Meeting={
   // add-meeting

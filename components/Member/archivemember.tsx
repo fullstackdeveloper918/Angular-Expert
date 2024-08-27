@@ -27,7 +27,7 @@ import Pdf from "../common/Pdf";
 import saveAs from "file-saver";
 import { useSelector } from "react-redux";
 import validation, { capFirst } from "../../utils/validation";
-
+import Unarchive from "../../assests/images/3669187_unarchive_ic_icon (2).png"
 const { Search } = Input;
 type Page<P = {}> = NextPage<P> & {
     getLayout?: (page: ReactNode) => ReactNode;
@@ -265,6 +265,16 @@ const ArchiveMemberList = () => {
                 </li>
                 <li>
                             <Popconfirm
+                                title="Unarchive"
+                                description="Are you sure you want to Unarchive ?"
+                                onConfirm={(event: any) => { unarchive(res?.id) }}
+                            // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                            >
+                                <Button type="text" danger htmlType='button' className='px-0' ><img src={Unarchive.src} alt="" /></Button>
+                            </Popconfirm>
+                        </li>
+                <li>
+                            <Popconfirm
                                 title="Delete"
                                 description="Are you sure you want to delete ?"
                                 onConfirm={(event: any) => { archive(res?.id) }}
@@ -371,6 +381,20 @@ const ArchiveMemberList = () => {
         }
         try {
             let res = await api.User.archive_user_delete(item as any)
+            // initialise(id)
+            toast.success(res?.message)
+            getData()
+            //   setAreas
+        } catch (error) {
+
+        }
+    }
+    const unarchive = async (id: any) => {
+        const item = {
+            user_id: id,
+        }
+        try {
+            let res = await api.User.unarchive_user(item as any)
             // initialise(id)
             toast.success(res?.message)
             getData()
