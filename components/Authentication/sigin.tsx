@@ -314,7 +314,7 @@ const pathname=redirectPath?redirectPath:"/admin/dashboard"
                     {showPassword ? (
                       <span className="mt-2">Login as Super Admin</span>
                     ) : (
-                      <span className="mt-2">Login as Admin</span>
+                      <span className="mt-2">Login as User</span>
                     )}
                   </Button>
                 </div>
