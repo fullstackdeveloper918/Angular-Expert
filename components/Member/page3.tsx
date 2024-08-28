@@ -231,7 +231,7 @@ const Page3 = () => {
           } as any;
           setLoading1(true);
           let res = await api.User.edit(items);
-
+toast.success(res?.message)
           // setTimeout(() => {
           //   if (!pagetype) {
           //     router.push(`/admin/member/add/page4?${value}&edit`);
@@ -356,7 +356,7 @@ const Page3 = () => {
 console.log(dataToUse, 'datatouse')
 
       form.setFieldsValue({
-        ...prepareFormValues(dataToUse, ""),
+        ...prepareFormValues(fetchedGoals, ""),
       });
 
       setInputPairs(formattedGoals);
@@ -489,7 +489,7 @@ console.log(inputPairs,"inputPairsaa");
                               fontSize: "24px",
                               cursor: "pointer",
                               width: 120,
-                              zIndex: 9
+                              // zIndex: 9
                             }}
                             onChange={(value) =>
                               handleStatusChange(pair.id, value)
@@ -531,11 +531,11 @@ console.log(inputPairs,"inputPairsaa");
                       {inputFields.map((field: any, index: number) => (
                         <>
                           <div style={{ position: "relative" }}>
-                            {/* <Form.Item
-                              // key={field.name}
-                              name={field.status1}
-                              // initialValue={field.initialGoal1}
-                            > */}
+                              <Form.Item
+                                // key={field.name}
+                                name={field.id}
+                                // initialValue={field.initialGoal1}
+                              >
                              <Select
                             className="responiveSelect"
                             defaultValue={field.status1}
@@ -546,7 +546,7 @@ console.log(inputPairs,"inputPairsaa");
                               fontSize: "24px",
                               cursor: "pointer",
                               width: 120,
-                              zIndex: 9
+                              // zIndex: 9
                             }}
                             onChange={(value) =>
                               handleStatusChange1(field.id, value)
@@ -576,7 +576,7 @@ console.log(inputPairs,"inputPairsaa");
                                 <Option value="medium">Medium</Option>
                                 <Option value="low">Low</Option>
                               </Select> */}
-                            {/* </Form.Item> */}
+                            </Form.Item>
                             <Form.Item
                               // key={field.name}
                               name={field.name}
