@@ -291,91 +291,40 @@ toast.success(res?.message)
         goalName: `goal${index + 1}`,
         goalLabel: `GOAL #${index + 1}`,
         commentName: `comments${index + 1}`,
-        commentLabel: "Comments:",
+        commentLabel: 'Comments:',
         status: goal.status,
         initialGoal: goal.goal,
-        initialComment: goal.comment,
-      }));
-
-      const transformDataToArray = (
-        formValues: any,
-        prefix: string
-      ): Goal[] => {
-        const goalsArray: Goal[] = [];
-
-        Object.keys(formValues).forEach((key) => {
-          const match = key.match(
-            new RegExp(`^${prefix}(goal|comments|goal_next)(\\d+)$`)
-          );
-          if (match) {
-            const [, type, index] = match;
-            const idx = parseInt(index, 10) - 1;
-
-            if (!goalsArray[idx]) {
-              goalsArray[idx] = {};
-            }
-
-            if (type === "goal") {
-              goalsArray[idx].goal = formValues[key];
-            } else if (type === "comments") {
-              goalsArray[idx].comment = formValues[key];
-            } else if (type == "goal_next") {
-              goalsArray[idx].goal_next = formValues[key];
-            }
-          }
-        });
-
-        return goalsArray;
-      };
-
-      const prepareFormValues = (data: Goal[], prefix: string): any => {
-        const formValues = data.reduce(
-          (acc: any, goal: Goal, index: number) => {
-            if (goal.goal) {
-              acc[`${prefix}goal${index + 1}`] = goal.goal;
-            }
-            if (goal.comment) {
-              acc[`${prefix}comments${index + 1}`] = goal.comment;
-            }
-            if (goal.goal_next) {
-              acc[`${prefix}goal_next${index + 1}`] = goal.goal_next;
-            }
+        initialComment: goal.comment
+    }));
+    setInputPairs(formattedGoals);
+    form.setFieldsValue({
+        ...fetchedGoals.reduce((acc: any, goal: any, index: any) => {
+            acc[`goal${index + 1}`] = goal.goal;
+            acc[`comments${index + 1}`] = goal.comment;
             return acc;
-          },
-          {}
-        );
+        }, {})
+    });
+    const fetchedGoalsNext = res?.data.goal_next_meeting || [];
+    const formattedGoalsNext = fetchedGoalsNext.map((goal: any, index: any) => ({
 
-        return formValues;
-      };
 
-      const dataToUse =
-        Object.keys(formValues).length > 0
-          ? transformDataToArray(formValues, "")
-          : fetchedGoals;
+        name: `goal_next${index + 1}`,
+        label: `Goal ${index + 1}:`,
+        status1: goal.status,
+        initialGoal1: goal.goal
+    }));
+   
 
-console.log(dataToUse, 'datatouse')
+    setInputFields(formattedGoalsNext);
 
-      form.setFieldsValue({
-        ...prepareFormValues(fetchedGoals, ""),
-      });
+    form.setFieldsValue({
 
-      setInputPairs(formattedGoals);
-      const fetchedGoalsNext = res?.data.goal_next_meeting || [];
-
-      const formattedGoalsNext = fetchedGoalsNext.map(
-        (goal: any, index: number) => ({
-          name: `goal_next${index + 1}`,
-          label: `Goal ${index + 1}:`,
-          status1: goal.status,
-          initialGoal1: goal.goal,
-        })
-      );
-
-      setInputFields(formattedGoalsNext);
-
-      form.setFieldsValue({
-        ...prepareFormValues(fetchedGoalsNext, "goal_next"),
-      });
+        ...fetchedGoalsNext.reduce((acc: any, goal: any, index: any) => {
+            acc[`goal_next${index + 1}`] = goal.goal;
+          
+            return acc;
+        }, {})
+    });
     } catch (error: any) {
       if (error.status == 500) {
         localStorage.setItem("redirectAfterLogin", window.location.pathname);
