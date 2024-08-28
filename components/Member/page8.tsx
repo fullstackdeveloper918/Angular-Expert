@@ -219,100 +219,90 @@ const Page8 = () => {
     });
   };
   const submit = async (values: any) => {
-   
+    let responseData = null; // Default value to handle the return
+  
+    console.log('Submit function started with values:', values); // Debugging line
+  
     if (actionType === 'submit') {
-      setLoadButton('Submit')
+      setLoadButton('Submit');
       setLoading(true);
+  
       const photoComment = inputPairs.map((pair) => ({
         comment: values[pair.commentName],
         files: values[pair.goalName],
       }));
-
+  
       try {
         const formData: any = new FormData();
-
+  
         if (state?.photo_section?.fileUrls?.length) {
           formData.append("id", state?.photo_section?.commentId);
           formData.append("user_id", value);
           formData.append('is_save', 'false');
           for (const item of inputPairs) {
             formData.append(`${item?.commentLabel}`, values[item?.commentName]);
-
+  
             for (const file of values[item.goalName]?.fileList || []) {
               if (file?.originFileObj) {
-                // Use JPEG compression to target around 1 MB
-                const compressedJpegFile = await convertToPng(
-                  file.originFileObj,
-                  1
-                );
+                const compressedJpegFile = await convertToPng(file.originFileObj, 1);
                 formData.append(
                   `${item?.commentLabel}_file`,
                   compressedJpegFile,
                   `${item?.commentLabel}_file.png`
                 );
-               
               }
             }
           }
-
+  
           const response = await api.photo_section.update_file(formData);
-
           const messages: any = {
             200: "Updated Successfully",
             201: "Added Successfully",
           };
-
+  
           if (messages[response?.status]) {
             toast.success(messages[response?.status], {
               position: "top-center",
               autoClose: 300,
             });
           }
+          console.log(response,"pdfReponseData");
+          
           setResponseData(response?.data?.pdfReponseData);
-          // if (response) {
-          //   router.replace(`/admin/user?${getUserdata?.user_id}`);
-          // }
+          await sharePdf(response?.pdfReponseData);
           if (!pagetype) {
             router.replace(`/admin/user?${getUserdata?.user_id}`);
           } else {
-            // router?.back()
-            router.push("/admin/questionnaire?page8")
+            router.push("/admin/questionnaire?page8");
           }
-
-          return response?.data?.pdfReponseData;
+  
+          responseData = response?.pdfReponseData;
         } else {
           formData.append("id", value);
           formData.append('is_save', 'false');
           for (const [index, item] of photoComment.entries()) {
             formData.append(`comment_${index}`, item?.comment);
-
-            for (const [fileIndex, file] of (
-              item?.files?.fileList || []
-            ).entries()) {
+  
+            for (const [fileIndex, file] of (item?.files?.fileList || []).entries()) {
               if (file?.originFileObj) {
-                // Use JPEG compression to target around 1 MB
-                const compressedJpegFile = await convertToPng(
-                  file.originFileObj,
-                  1
-                );
+                const compressedJpegFile = await convertToPng(file.originFileObj, 1);
                 formData.append(
                   `comment_${index}_file${fileIndex}`,
                   compressedJpegFile,
                   `comment_${index}_file${fileIndex}.png`
                 );
-                formData.append('is_save', 'false');
               }
             }
           }
-
+  
           const response = await api.photo_section.upload_file(formData);
-          setLoading(false)
-
+          setLoading(false);
+  
           const messages: any = {
             200: "Updated Successfully",
             201: "Added Successfully",
           };
-
+  
           if (messages[response?.status]) {
             toast.success(messages[response?.status], {
               position: "top-center",
@@ -320,14 +310,16 @@ const Page8 = () => {
             });
           }
           setResponseData(response?.data?.pdfReponseData);
+  
           if (response) {
             router.replace(`/admin/user?${getUserdata?.user_id}`);
           }
-
-          return response?.data?.pdfReponseData;
+  
+          responseData = response?.pdfReponseData;
         }
-       
+  
       } catch (error: any) {
+        setLoadButton('');
         if (error?.status === 500) {
           destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
           localStorage.removeItem("hasReloaded");
@@ -345,49 +337,43 @@ const Page8 = () => {
         }
       }
     } else if (actionType === 'save') {
-      setLoadButton('Save')
-
-
+      setLoadButton('Save');
+  
       const photoComment = inputPairs.map((pair) => ({
         comment: values[pair.commentName],
         files: values[pair.goalName],
       }));
-
+  
       try {
         const formData: any = new FormData();
-
+  
         if (state?.photo_section?.fileUrls?.length) {
           formData.append("id", state?.photo_section?.commentId);
           formData.append("user_id", value);
           formData.append('is_save', 'true');
           for (const item of inputPairs) {
             formData.append(`${item?.commentLabel}`, values[item?.commentName]);
-
+  
             for (const file of values[item.goalName]?.fileList || []) {
               if (file?.originFileObj) {
-                // Use JPEG compression to target around 1 MB
-                const compressedJpegFile = await convertToPng(
-                  file.originFileObj,
-                  1
-                );
+                const compressedJpegFile = await convertToPng(file.originFileObj, 1);
                 formData.append(
                   `${item?.commentLabel}_file`,
                   compressedJpegFile,
                   `${item?.commentLabel}_file.png`
                 );
-               
               }
             }
           }
-
+  
           const response = await api.photo_section.update_file(formData);
-          setLoading(false)
-
+          setLoading(false);
+  
           const messages: any = {
             200: "Updated Successfully",
             201: "Added Successfully",
           };
-
+  
           if (messages[response?.status]) {
             toast.success(messages[response?.status], {
               position: "top-center",
@@ -395,49 +381,39 @@ const Page8 = () => {
             });
           }
           setResponseData(response?.data?.pdfReponseData);
-          // if (response) {
-          //   router.replace(`/admin/user?${getUserdata?.user_id}`);
-          // }
+  
           if (!pagetype) {
             router.replace(`/admin/user?${getUserdata?.user_id}`);
           } else {
-            // router?.back()
-            router.push("/admin/questionnaire?page8")
+            router.push("/admin/questionnaire?page8");
           }
-
-          return response?.data?.pdfReponseData;
+  
+          responseData = response?.data?.pdfReponseData;
         } else {
           formData.append("id", value);
           formData.append('is_save', 'true');
           for (const [index, item] of photoComment.entries()) {
             formData.append(`comment_${index}`, item?.comment);
-
-            for (const [fileIndex, file] of (
-              item?.files?.fileList || []
-            ).entries()) {
+  
+            for (const [fileIndex, file] of (item?.files?.fileList || []).entries()) {
               if (file?.originFileObj) {
-                // Use JPEG compression to target around 1 MB
-                const compressedJpegFile = await convertToPng(
-                  file.originFileObj,
-                  1
-                );
+                const compressedJpegFile = await convertToPng(file.originFileObj, 1);
                 formData.append(
                   `comment_${index}_file${fileIndex}`,
                   compressedJpegFile,
                   `comment_${index}_file${fileIndex}.png`
                 );
-               
               }
             }
           }
-
+  
           const response = await api.photo_section.upload_file(formData);
-
+  
           const messages: any = {
             200: "Updated Successfully",
             201: "Added Successfully",
           };
-
+  
           if (messages[response?.status]) {
             toast.success(messages[response?.status], {
               position: "top-center",
@@ -445,13 +421,16 @@ const Page8 = () => {
             });
           }
           setResponseData(response?.data?.pdfReponseData);
+  
           if (response) {
             router.replace(`/admin/user?${getUserdata?.user_id}`);
           }
-
-          return response?.data?.pdfReponseData;
+  
+          responseData = response?.data?.pdfReponseData;
         }
+  
       } catch (error: any) {
+        setLoadButton('');
         if (error?.status === 500) {
           destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
           localStorage.removeItem("hasReloaded");
@@ -469,8 +448,11 @@ const Page8 = () => {
         }
       }
     }
-    setLoading(false);
+  
+    console.log('Submit function completed with responseData:', responseData); // Debugging line
+    return responseData; // Ensure return value
   };
+  
 
   const handleSubmitClick = () => {
     setActionType('submit');
@@ -613,9 +595,14 @@ const Page8 = () => {
   };
 
   const handleFetchAndFetchData = async (values: any) => {
-    let item = await submit(values);
-    if (item) {
+  
+    if (actionType === 'submit') {
+      let item = await submit(values);
+      console.log('Item received from submit:', item);
       await sharePdf(item);
+    } else if (actionType === 'save') {
+      let item = await submit(values);
+      console.log('Item received from submit:', item);
     }
   };
   const hnandleBack = () => {
