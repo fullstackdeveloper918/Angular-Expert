@@ -380,7 +380,6 @@ const Page3 = () => {
       );
 
       setInputFields(formattedGoalsNext);
-console.log(formattedGoalsNext,"formattedGoalsNext");
 
       form.setFieldsValue({
         ...fetchedGoalsNext.reduce((acc: any, goal: any, index: any) => {
