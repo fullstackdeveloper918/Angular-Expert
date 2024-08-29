@@ -48,14 +48,18 @@ const Page3 = () => {
   const [state, setState] = useState<any>("");
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
-  const savedFormData = useSelector((state: any) => state.form);
-  const [formValues, setFormValues] = useState(savedFormData);
+  // const savedFormData = useSelector((state: any) => state.form);
+  // console.log(savedFormData,"savedFormData");
+
+  const [formValues, setFormValues] = useState<any>("");
   useAutoSaveForm(formValues, 300);
-  const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
+  const [actionType, setActionType] = useState<"submit" | "save" | null>(null);
   const value = entries.length > 0 ? entries[0][0] : "";
   const type = entries.length > 1 ? entries[1][0] : "";
   const questionnair = entries.length > 2 ? entries[2][1] : "";
   const pagetype = entries.length > 2 ? entries[2][0] : "";
+  console.log(formValues, "formValuesformValuesformValues");
+
   //   const id: any = searchParam.id;
 
   // const [inputFields, setInputFields] = useState([
@@ -64,14 +68,20 @@ const Page3 = () => {
   const [inputFields, setInputFields] = useState([
     { id: 1, name: "goal_next1", label: "Goal 1:", status1: "Select..." },
   ]);
-   const addInputField = () => {
+  const addInputField = () => {
     const newId = Date.now(); // Unique ID for new field
     setInputFields([
-        ...inputFields,
-        { id: newId, name: `goal_next${inputFields.length + 1}`, label: `Goal ${inputFields.length + 1}:`, status1: 'Select...' }
+      ...inputFields,
+      {
+        id: newId,
+        name: `goal_next${inputFields.length + 1}`,
+        label: `Goal ${inputFields.length + 1}:`,
+        status1: "Select...",
+      },
     ]);
-};
+  };
   const removeInputField = (id: any) => {
+    localStorage.removeItem("NextGoals");
     const newInputFields = inputFields.filter((field) => field.id !== id);
     setInputFields(
       newInputFields.map((field, i) => ({
@@ -81,16 +91,20 @@ const Page3 = () => {
     );
   };
 
-  const handleStatusChange1 = (id:any, value:any) => {
+  const handleStatusChange1 = (id: any, value: any) => {
     // Debugging
-    console.log('Selected Value:', value);
-    console.log('Current Input Fields:', inputFields);
-    
-    setInputFields(prevFields => 
-      prevFields.map(field => 
+    console.log("Selected Value:", value);
+    console.log("Current Input Fields:", inputFields);
+    setInputFields(
+      inputFields.map((field) =>
         field.id === id ? { ...field, status1: value } : field
       )
     );
+    // setInputFields((prevFields) =>
+    //   prevFields.map((field) =>
+    //     field.id === id ? { ...field, status1: value } : field
+    //   )
+    // );
   };
   const [inputPairs, setInputPairs] = useState([
     {
@@ -136,18 +150,23 @@ const Page3 = () => {
   };
 
   const removeInputPair = (id: any) => {
+    localStorage.removeItem("LastGoals");
     setInputPairs(inputPairs.filter((pair) => pair.id !== id));
   };
 
   const handleStatusChange = (id: any, value: any) => {
+    console.log(value,"qwqwqw");
+    
     setInputPairs(
       inputPairs.map((pair) =>
         pair.id === id ? { ...pair, status: value } : pair
       )
     );
   };
-  const submit = async(values: any) => {
-    if (actionType === 'submit') {
+  const submit = async (values: any) => {
+    
+    // return
+    if (actionType === "submit") {
       const goalsData = inputPairs.map((pair) => ({
         goal: values[pair.goalName],
         comment: values[pair.commentName],
@@ -157,6 +176,9 @@ const Page3 = () => {
         goal: values[field.name],
         status: field.status1,
       }));
+      console.log(goalsData, "rqrrq");
+      console.log(goalsData1, "wqeqw");
+
       let items = {
         goals: {
           userId: value,
@@ -164,6 +186,7 @@ const Page3 = () => {
           goal_next_meeting: goalsData1,
         },
       };
+      // return
       try {
         setLoading(true);
         if (type == "edit") {
@@ -176,7 +199,8 @@ const Page3 = () => {
           } as any;
           setLoading(true);
           let res = await api.User.edit(items);
-
+          localStorage.removeItem("LastGoals");
+          localStorage.removeItem("NextGoals");
           setTimeout(() => {
             if (!pagetype) {
               router.push(`/admin/member/add/page4?${value}&edit`);
@@ -202,7 +226,9 @@ const Page3 = () => {
           setLoading(false);
         }
       }
-    } else if (actionType === 'save') {
+    } else if (actionType === "save") {
+    console.log(values,"121212");
+// return
       const goalsData = inputPairs.map((pair) => ({
         goal: values[pair.goalName],
         comment: values[pair.commentName],
@@ -212,6 +238,8 @@ const Page3 = () => {
         goal: values[field.name],
         status: field.status1,
       }));
+      console.log(goalsData,"121212");
+      // return
       let items = {
         goals: {
           userId: value,
@@ -219,6 +247,9 @@ const Page3 = () => {
           goal_next_meeting: goalsData1,
         },
       };
+      console.log(goalsData, "rqrrq");
+      console.log(goalsData1, "wqeqw");
+      // return
       try {
         setLoading1(true);
         if (type == "edit") {
@@ -231,7 +262,9 @@ const Page3 = () => {
           } as any;
           setLoading1(true);
           let res = await api.User.edit(items);
-toast.success(res?.message)
+          toast.success(res?.message);
+          localStorage.removeItem("LastGoals");
+          localStorage.removeItem("NextGoals");
           // setTimeout(() => {
           //   if (!pagetype) {
           //     router.push(`/admin/member/add/page4?${value}&edit`);
@@ -261,15 +294,17 @@ toast.success(res?.message)
     setLoading1(false);
   };
   const handleSubmitClick = () => {
-    setActionType('submit');
+    setActionType("submit");
     form.submit(); // Trigger form submission
   };
 
   const handleSaveClick = () => {
-    setActionType('save');
+    setActionType("save");
     form.submit(); // Trigger form submission
   };
-
+  const localLastGoal = localStorage.getItem("LastGoals");
+  console.log(localLastGoal,"localLastGoal");
+  
   const getDataById = async () => {
     const item = {
       user_id: value,
@@ -284,47 +319,77 @@ toast.success(res?.message)
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
       }
-
-      const fetchedGoals = res?.data.goal_last_meeting || [];
-      const formattedGoals = fetchedGoals.map((goal: any, index: any) => ({
-        id: index + 1,
-        goalName: `goal${index + 1}`,
-        goalLabel: `GOAL #${index + 1}`,
-        commentName: `comments${index + 1}`,
-        commentLabel: 'Comments:',
-        status: goal.status,
-        initialGoal: goal.goal,
-        initialComment: goal.comment
-    }));
-    setInputPairs(formattedGoals);
-    form.setFieldsValue({
-        ...fetchedGoals.reduce((acc: any, goal: any, index: any) => {
-            acc[`goal${index + 1}`] = goal.goal;
-            acc[`comments${index + 1}`] = goal.comment;
-            return acc;
-        }, {})
-    });
-    const fetchedGoalsNext = res?.data.goal_next_meeting || [];
-    const formattedGoalsNext = fetchedGoalsNext.map((goal: any, index: any) => ({
-
-
-        name: `goal_next${index + 1}`,
-        label: `Goal ${index + 1}:`,
-        status1: goal.status,
-        initialGoal1: goal.goal
-    }));
+      const savedGoalsData = localStorage.getItem("LastGoals");
+      let parsedGoals = savedGoalsData ? JSON.parse(savedGoalsData) : [];
+      if (parsedGoals.length === 0) {
+        parsedGoals = res?.data.goal_last_meeting || [];
+      }
+      console.log(parsedGoals,"parsedGoals");
+      
+      const fetchedGoals = parsedGoals
+        ? parsedGoals
+        : res?.data.goal_last_meeting || [];
+      console.log(res?.data.goal_last_meeting, "ttttt");
+      const formattedGoals = res?.data.goal_last_meeting.map((goal: any, index: any) => {
+        console.log(goal,"yyyyy");
+        
+        // Extract goal data, using localStorage data if available, otherwise fallback to API data
+        return {
+          id: index + 1,
+          goalName: `goal${index + 1}`,
+          goalLabel: `GOAL #${index + 1}`,
+          commentName: `comments${index + 1}`,
+          commentLabel: "Comments:",
+          status: goal.status, // Default status if not available
+          initialGoal: goal.goal || "", // Default empty string if not available
+          initialComment: goal.comment || "", // Default empty string if not available
+        };
+      });
+   console.log(formattedGoals,"formattedGoals");
    
-
-    setInputFields(formattedGoalsNext);
-
-    form.setFieldsValue({
-
-        ...fetchedGoalsNext.reduce((acc: any, goal: any, index: any) => {
-            acc[`goal_next${index + 1}`] = goal.goal;
+      setInputPairs(formattedGoals);
+      form.setFieldsValue({
+        ...fetchedGoals.reduce((acc: any, goal: any, index: any) => {
+          console.log( acc[`status${index + 1}`] = goal.status,"0000");
           
-            return acc;
-        }, {})
-    });
+          acc[`goal${index + 1}`] = goal.goal;
+          acc[`comments${index + 1}`] = goal.comment;
+          acc[`status${index + 1}`] = goal.status;
+          return acc;
+        }, {}),
+      });
+
+      const savedGoalsData1 = localStorage.getItem("NextGoals");
+      let parsedGoals1 = savedGoalsData1 ? JSON.parse(savedGoalsData1) : [];
+      if (parsedGoals1.length === 0) {
+        parsedGoals1 = res?.data.goal_next_meeting || [];
+      }
+      console.log(savedGoalsData1,"savedGoalsData1");
+      
+      const fetchedGoals1 = parsedGoals1
+        ? parsedGoals
+        : res?.data.goal_next_meeting || [];
+      const fetchedGoalsNext = res?.data.goal_next_meeting || [];
+      const formattedGoalsNext = fetchedGoals1.map(
+        (goal: any, index: any) => ({
+          name: `goal_next${index + 1}`,
+          label: `Goal ${index + 1}:`,
+          status1: goal.status1,
+          initialGoal1: goal.goal,
+        })
+      );
+
+      setInputFields(formattedGoalsNext);
+console.log(formattedGoalsNext,"formattedGoalsNext");
+
+      form.setFieldsValue({
+        ...fetchedGoalsNext.reduce((acc: any, goal: any, index: any) => {
+          acc[`goal_next${index + 1}`] = goal.goal;
+          acc[`status${index + 1}`] = goal.status1;
+
+          return acc;
+        }, {}),
+      });
     } catch (error: any) {
       if (error.status == 500) {
         localStorage.setItem("redirectAfterLogin", window.location.pathname);
@@ -348,15 +413,37 @@ toast.success(res?.message)
     router.back();
   };
 
-  const onValuesChange = (changedValues: any) => {
-    setFormValues((prevValues: any) => ({
-      ...prevValues,
-      ...changedValues,
+  // const onValuesChange = (changedValues: any, allValues: any) => {
+  //   const goalsData = inputPairs.map((pair: any) => ({
+  //     goal: allValues[pair.goalName],
+  //     comment: allValues[pair.commentName],
+  //     status: allValues[pair.status],
+  //   }));
+  //   localStorage.setItem("LastGoals", JSON.stringify(goalsData));
+  //   console.log(goalsData, "goalsData");
+  // };
+  console.log(inputPairs,"123445");
+  const onValuesChange = (changedValues: any, allValues: any) => {
+    console.log(inputPairs,"inputPairsinputPairs");
+    console.log(allValues,"allValuesallValues");
+    console.log(changedValues,"changedValueschangedValues");
+    
+    const goalsData = inputPairs.map((pair) => ({
+      goal: allValues[pair.goalName], 
+      comment: allValues[pair.commentName], 
+      status: allValues[pair.status] || pair.status, 
     }));
+    const goalsData1 = inputFields.map((field) => ({
+      goal_next: allValues[field.name],
+      status: allValues[field.status1] || field.status1,
+    }));
+    localStorage.setItem("LastGoals", JSON.stringify(goalsData));
+    localStorage.setItem("NextGoals", JSON.stringify(goalsData1));
+    console.log(goalsData, "goalsData");
+    console.log(goalsData1, "goalsData1");
   };
-
-console.log(formValues,"inputFieldsaa");
-console.log(inputPairs,"inputPairsaa");
+  console.log(inputFields, "inputFieldsaa");
+  console.log(inputPairs, "inputPairsaa");
 
   return (
     <>
@@ -424,31 +511,34 @@ console.log(inputPairs,"inputPairsaa");
                             />
                           </Form.Item>
                           <Form.Item
-                              // key={field.name}
-                              name={pair.status}
-                              // initialValue={field.initialGoal1}
-                            >
-                          <Select
-                            className="responiveSelect"
-                            defaultValue={pair.status}
-                            style={{
-                              position: "absolute",
-                              top: "-14px",
-                              right: "0px",
-                              fontSize: "24px",
-                              cursor: "pointer",
-                              width: 120,
-                              // zIndex: 9
-                            }}
-                            onChange={(value) =>
-                              handleStatusChange(pair.id, value)
-                            }
+                            // key={field.name}
+                            // name={localLastGoal?pair.status:[index, 'status']}
+                            name={pair.status}
+                            // initialValue={pair.status}
+                            // name={[index, 'status']}
+                            
                           >
-                            <Option value="completed">Completed</Option>
-                            <Option value="progressing">Progressing</Option>
-                            <Option value="struggling">Struggling</Option>
-                            <Option value="not_started">Not Started</Option>
-                          </Select>
+                            <Select
+                              className="responiveSelect"
+                              
+                              defaultValue={pair.status}
+                              onChange={(value) => handleStatusChange(pair.id, value)}
+                              style={{
+                                position: "absolute",
+                                top: "-14px",
+                                right: "0px",
+                                fontSize: "24px",
+                                cursor: "pointer",
+                                width: 120,
+                                // zIndex: 9
+                              }}
+                              
+                            >
+                              <Option value="completed">Completed</Option>
+                              <Option value="progressing">Progressing</Option>
+                              <Option value="struggling">Struggling</Option>
+                              <Option value="not_started">Not Started</Option>
+                            </Select>
                           </Form.Item>
                           {inputPairs.length > 1 && (
                             <div className="remove_row">
@@ -478,33 +568,35 @@ console.log(inputPairs,"inputPairsaa");
                     </div>
                     <div className="">
                       {inputFields.map((field: any, index: number) => (
+                        
                         <>
+                        {console.log(field,"fiels")
+                        }
                           <div style={{ position: "relative" }}>
-                              <Form.Item
-                                // key={field.name}
-                                name={field.id}
-                                // initialValue={field.initialGoal1}
+                            <Form.Item
+                            //  key={field.id}
+                             name={field.status1}
+                            //  initialValue={field.status1}
+                            >
+                              <Select
+                                className="responiveSelect"
+                                // defaultValue={field.status1}
+                                style={{
+                                  position: "absolute",
+                                  top: "-14px",
+                                  right: "35px",
+                                  fontSize: "24px",
+                                  cursor: "pointer",
+                                  width: 120,
+                                  // zIndex: 9
+                                }}
+                                defaultValue={field.status1}
+                                onChange={(value) => handleStatusChange1(field.id, value)}
                               >
-                             <Select
-                            className="responiveSelect"
-                            defaultValue={field.status1}
-                            style={{
-                              position: "absolute",
-                              top: "-14px",
-                              right: "35px",
-                              fontSize: "24px",
-                              cursor: "pointer",
-                              width: 120,
-                              // zIndex: 9
-                            }}
-                            onChange={(value) =>
-                              handleStatusChange1(field.id, value)
-                            }
-                          >
-                            <Option value="high">High</Option>
-                            <Option value="medium">Medium</Option>
-                            <Option value="low">Low</Option>
-                          </Select>
+                                <Option value="high">High</Option>
+                                <Option value="medium">Medium</Option>
+                                <Option value="low">Low</Option>
+                              </Select>
                               {/* <Select
                                 className="responiveSelect"
                                 defaultValue={field.status1}
@@ -729,9 +821,9 @@ export default Page3;
 //     // Debugging
 //     console.log('Selected Value:', value);
 //     console.log('Current Input Fields:', inputFields);
-    
-//     setInputFields(prevFields => 
-//       prevFields.map(field => 
+
+//     setInputFields(prevFields =>
+//       prevFields.map(field =>
 //         field.id === id ? { ...field, status1: value } : field
 //       )
 //     );
@@ -811,7 +903,7 @@ export default Page3;
 //       },
 //     };
 //     console.log(goalsData1,"goalsData1");
-    
+
 //     // return
 //     try {
 //       setLoading(true);
