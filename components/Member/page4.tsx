@@ -137,13 +137,11 @@ const Page4 = () => {
           // }else{
           //     router?.back()
           // }
-          // setTimeout(() => {
-          //   if (!pagetype) {
-          //     router.push(`/admin/member/add/page5?${value}&edit`);
-          //   } else {
-          //       router.push("/admin/questionnaire?page4")
-          //   }
-          // }, 1000);
+          setTimeout(() => {
+            if (pagetype) {
+              router.push("/admin/questionnaire?page4")
+            } 
+          }, 1000);
         } else {
           setLoading1(true);
           let res = await api.Auth.signUp(items);

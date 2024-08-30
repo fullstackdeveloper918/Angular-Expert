@@ -185,13 +185,12 @@ const Page1 = () => {
           } as any;
           setLoading1(true);
           let res = await api.User.edit(items);
-          // if (!pagetype) {
-          //   router.push(`/admin/member/add/page3?${value}&edit`);
-          // } else {
-          //   //   router.back();
-          //   router.push("/admin/questionnaire?page2")
-          // }
           toast.success(res?.message);
+          setTimeout(() => {
+            if (pagetype) {
+              router.push("/admin/questionnaire?page2")
+            } 
+          }, 1000);
   
           dispatch(clearSpecificFormData(fieldsToClear));
         } else {

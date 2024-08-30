@@ -115,7 +115,11 @@ const Page6 = () => {
           toast.success("Update spring meeting review", {
             autoClose: 10000, // 10 seconds
           });
-         
+          setTimeout(() => {
+            if (pagetype) {
+              router.push("/admin/questionnaire?page6")
+            } 
+          }, 1000);
         } else {
           setLoading1(true);
           let res = await api.Auth.signUp(items);

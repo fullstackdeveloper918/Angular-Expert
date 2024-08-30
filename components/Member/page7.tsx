@@ -111,12 +111,12 @@ const Page7 = () => {
           setLoading1(true);
           let res = await api.User.edit(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-        //   if (!pagetype) {
-        //     router.push(`/admin/member/add/additional_questionnaire?${value}&edit`)
-        // } else {
-        //     // router?.back()
-        //     router.push("/admin/questionnaire?page7")
-        // }
+          toast.success(res?.message);
+          setTimeout(() => {
+            if (pagetype) {
+              router.push("/admin/questionnaire?page7")
+            } 
+          }, 1000);
         } else {
           setLoading1(true);
           let res = await api.Auth.signUp(items);

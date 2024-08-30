@@ -131,6 +131,11 @@ const Page5 = () => {
           dispatch(clearSpecificFormData(fieldsToClear));
   
           toast.success(res?.message);
+          setTimeout(() => {
+            if (pagetype) {
+              router.push("/admin/questionnaire?page5")
+            } 
+          }, 1000);
         } else {
           setLoading1(true);
           let res = await api.Auth.signUp(items);

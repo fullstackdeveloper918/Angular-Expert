@@ -131,6 +131,11 @@ const Page3 = () => {
           toast.success(res?.message);
           localStorage.removeItem("LastGoals");
           localStorage.removeItem("NextGoals");
+          setTimeout(() => {
+            if (pagetype) {
+              router.push("/admin/questionnaire?page3")
+            } 
+          }, 1000);
         } else {
           let res = await api.Auth.signUp(items);
         }
