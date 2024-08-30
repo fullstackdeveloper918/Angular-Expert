@@ -117,22 +117,8 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
       setOpenKeys([latestOpenKey]);
     }
   };
-const router= useRouter()
-// function getLastPathnamePart(): string {
-//   const pathname: string = window.location.pathname;
-//   const parts: string[] = pathname.split("/").filter(Boolean); // Filter out empty strings
-//   return parts.pop() || ""; // Return the last part or an empty string if the array is empty
-// }
-
-// // Call the function whenever you need to get the last part
-// const lastPart: any = getLastPathnamePart();
-console.log(window.location.pathname,"pathname");
 
 const[active,setActive]=useState<any>(null)
-//   useEffect(()=>{
-// let x=window.location.pathname.split('/')
-// setActive(x)  
-// },[])
 
 useEffect(() => {
   const checkPathname = () => {
@@ -145,13 +131,10 @@ useEffect(() => {
   const intervalId = setInterval(checkPathname, 1000);
   return () => clearInterval(intervalId);
 }, []);
-console.log(active,"active");
 let pathname=localStorage.getItem("Pathname")
-console.log(pathname,"pathname");
 
 // const paths = ['dashboard', 'Members', 'Products', 'Care Team', 'Questions', "setting", 'Content Page', 'More', 'contact-us', 'DB Backup', 'contact-us', 'notification']
 // const [root, sub] = window.location.pathname?.split('/');
-// console.log(sub,"active");
 useEffect(() => {
   const handleResize = () => {
     setScreenSize({

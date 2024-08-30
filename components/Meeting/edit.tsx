@@ -4,9 +4,7 @@ import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
-// import api from "@/utils/api";
 import utc from "dayjs/plugin/utc";
 import moment from "moment-timezone";
 import { toast } from "react-toastify";
@@ -114,11 +112,7 @@ const MeetingEdit = () => {
       setState(data);
       form.setFieldsValue(data);
       if (data?.status == 500) {
-        // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        // localStorage.removeItem('hasReloaded');
 
-        // toast.error("Session Expired Login Again")
-        // router.replace("/auth/signin")
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
         localStorage.removeItem("hasReloaded")
@@ -129,11 +123,6 @@ const MeetingEdit = () => {
     } catch (error: any) {
       // if (error) {
       if (error.status == 400) {
-        // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        // localStorage.removeItem('hasReloaded');
-        // // }
-        // toast.error("Session Expired Login Again")
-        // router.replace("/auth/signin")
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
         localStorage.removeItem("hasReloaded")
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
@@ -408,19 +397,6 @@ const MeetingEdit = () => {
                   <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onFinish}>
 
                     <div className='row mt-4 selectPaddingBox'>
-
-                      {/* First Name  */}
-                      {/* <Form.Item name="meeting_name" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Meeting Agenda' }]} label="Meeting Agenda">
-                        <Input size={'large'} placeholder="Meeting Agenda"
-                          onKeyPress={(e: any) => {
-                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                              e.preventDefault();
-                            } else {
-                              e.target.value = String(e.target.value).trim()
-                            }
-                          }}
-                        />
-                      </Form.Item> */}
                       <Form.Item name="meeting_type" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Type' }]} label="Meeting Type">
                         <Select
                           size={'large'}
@@ -440,10 +416,6 @@ const MeetingEdit = () => {
                         rules={[{ required: true, message: 'Please Select Timezone' }]}
                         label="Timezone"
                       >
-                        {/* <div className="Div_contact">
-                                                   
-                                                    <CalendlyWidget />
-                                                </div> */}
                         <Select
                           showSearch
                           placeholder="Select a timezone"
@@ -481,15 +453,9 @@ const MeetingEdit = () => {
                           style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
                       </Form.Item>
                       <Form.Item name="end_meeting_date" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting End Date' }]} label="Meeting End Date">
-                        {/* <TimePicker onChange={onChange1} disabledTime={disabledTime} style={{ width: '100%' }} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} /> */}
                         <DatePicker
                           style={{ width: '100%' }}
-                          // defaultValue={defaultValue}
-                          // showTime
-
                           disabledDate={disabledDate}
-                          // disabledTime={disabledTime}
-                          // locale={buddhistLocale}
                           onChange={onChange}
                         />
                       </Form.Item>
@@ -499,9 +465,6 @@ const MeetingEdit = () => {
                           // disabledTime={disabledTime}
                           style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
                       </Form.Item>
-                      {/* <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Year' }]} label="Meeting Year">
-                        <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
-                      </Form.Item> */}
                       <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
                         <input
                           value={form.getFieldValue("location")}
@@ -510,7 +473,6 @@ const MeetingEdit = () => {
                           ref={locationSearchRef}
                           placeholder="Enter your address"
                         />
-                        {/* <Input size={'large'} placeholder="Location"   /> */}
                       </Form.Item>
                       <Form.Item className='col-lg-6 col-sm-12' name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
                         <input
@@ -528,17 +490,6 @@ const MeetingEdit = () => {
                           placeholder="Enter your address"
                         />
                       </Form.Item>
-                      {/* <Form.Item name="weather" className='col-lg-6 col-sm-12' rules={[{ required: true, whitespace: true, message: 'Please Enter Weather' }]} label="Weather">
-                        <Input size={'large'} placeholder="Weather"
-                          onKeyPress={(e: any) => {
-                            if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                              e.preventDefault();
-                            } else {
-                              e.target.value = String(e.target.value).trim()
-                            }
-                          }}
-                        />
-                      </Form.Item> */}
                       <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
                         <Input size={'large'} placeholder="Host Company"
 
@@ -565,9 +516,7 @@ const MeetingEdit = () => {
                       ]} label="Cell">
                         <Input
                           size={'large'} placeholder="Cell"
-                          // type="number"
                           onKeyPress={(event) => {
-                            // Allow digits, space, parentheses, hyphen, plus, comma, and special keys
                             if (!/[0-9\s\(\)\-\+\,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
                               event.preventDefault();
                             }

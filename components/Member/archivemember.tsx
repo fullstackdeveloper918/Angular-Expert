@@ -166,7 +166,6 @@ const ArchiveMemberList = () => {
             let res = await getDataById(id);
             await downLoadPdf(res);
         } catch (error) {
-            console.error("Error generating PDF:", error);
         } finally {
             setLoadingState((prevState) => ({ ...prevState, [id]: false })); // Reset loading state for the specific item
         }

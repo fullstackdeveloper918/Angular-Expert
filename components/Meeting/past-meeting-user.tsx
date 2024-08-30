@@ -217,12 +217,6 @@ const PastMeetingUserList = () => {
             let res = await api.Meeting.meeting_user(item);
             setState(res?.newResult);
             if (res?.status == 500) {
-                // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-
-                // // }
-                // dispatch(clearUserData({}));
-                // toast.error("Session Expired Login Again")
-                // router.replace("/auth/signin")
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
                 localStorage.removeItem("hasReloaded")
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
@@ -232,12 +226,7 @@ const PastMeetingUserList = () => {
             }
         } catch (error:any) {
             if (error?.status==500) {
-                // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                // dispatch(clearUserData({}));
-                // localStorage.removeItem('hasReloaded');
-                // // }
-                // toast.error("Session Expired Login Again")
-                // router.replace("/auth/signin")
+               
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
                 localStorage.removeItem("hasReloaded")
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });

@@ -6,14 +6,11 @@ import Link from 'next/link';
 import { PlusOutlined } from '@ant-design/icons'
 import dynamic from 'next/dynamic';
 import EmployeeRoles from '../../utils/EmployeeRoles.json'
-import MainLayout from '../Layout/layout';
-// import api from '@/utils/api';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { destroyCookie } from 'nookies';
 import api from '../../utils/api';
 import { clearUserData } from '../../lib/features/userSlice';
-// import { clearUserData } from '@/lib/features/userSlice';
 
 const { Row, Col, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then(module => module.Button), { ssr: false }),
@@ -23,7 +20,6 @@ const { Row, Col, Card, Button, Pagination, Tooltip } = {
     Pagination: dynamic(() => import("antd").then(module => module.Pagination), { ssr: false }),
     Tooltip: dynamic(() => import("antd").then(module => module.Tooltip), { ssr: false }),
 }
-let timer: any
 const { Search } = Input;
 
 type Page<P = {}> = NextPage<P> & {

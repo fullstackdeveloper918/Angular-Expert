@@ -50,8 +50,6 @@ const Page3 = () => {
   const [state, setState] = useState<any>("");
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
-  // const savedFormData = useSelector((state: any) => state.form);
-  // console.log(savedFormData,"savedFormData");
 
   const [formValues, setFormValues] = useState<any>("");
   useAutoSaveForm(formValues, 300);
@@ -60,7 +58,6 @@ const Page3 = () => {
   const type = entries.length > 1 ? entries[1][0] : "";
   const questionnair = entries.length > 2 ? entries[2][1] : "";
   const pagetype = entries.length > 2 ? entries[2][0] : "";
-  console.log(formValues, "formValuesformValuesformValues");
   const submit = async (values: any) => {
     // return
     if (actionType === "submit") {
@@ -112,7 +109,6 @@ const Page3 = () => {
         }
       }
     } else if (actionType === "save") {
-      console.log(values, "121212");
       let items = {
         goals: {
           userId: value,
@@ -135,21 +131,8 @@ const Page3 = () => {
           toast.success(res?.message);
           localStorage.removeItem("LastGoals");
           localStorage.removeItem("NextGoals");
-          // setTimeout(() => {
-          //   if (!pagetype) {
-          //     router.push(`/admin/member/add/page4?${value}&edit`);
-          //   } else {
-          //     router.push("/admin/questionnaire?page3");
-          //   }
-          // }, 1000);
-          // }
         } else {
           let res = await api.Auth.signUp(items);
-          // if (!pagetype) {
-          //   router.push(`/admin/member/add/page4?${res?.userId}`);
-          // } else {
-          //   router?.back();
-          // }
         }
       } catch (error) {
         if (!pagetype) {
@@ -173,7 +156,6 @@ const Page3 = () => {
     form.submit();
   };
   const localLastGoal = localStorage.getItem("LastGoals");
-  console.log(localLastGoal, "localLastGoal");
 
   const getDataById = async () => {
     const item = {
@@ -182,7 +164,6 @@ const Page3 = () => {
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
-      console.log(res?.data?.goal_last_meeting, "qwqwwq");
 
       if (res?.data?.status == 500) {
         localStorage.setItem("redirectAfterLogin", window.location.pathname);
@@ -192,14 +173,12 @@ const Page3 = () => {
         router.replace("/auth/signin");
       }
       const savedGoalsData = localStorage.getItem("LastGoals");
-      console.log(savedGoalsData, "check");
 
       let parsedGoals = savedGoalsData ? JSON.parse(savedGoalsData) : [];
 
       if (parsedGoals.length === 0) {
         parsedGoals = res?.data.goal_last_meeting || [];
       }
-      console.log(parsedGoals, "parsedGoals");
 
       const fetchedGoals = parsedGoals
         ? parsedGoals
@@ -210,13 +189,10 @@ const Page3 = () => {
       if (parsedGoals1.length === 0) {
         parsedGoals1 = res?.data.goal_next_meeting || [];
       }
-      console.log(savedGoalsData1, "savedGoalsData1");
 
       const fetchedGoals1 = parsedGoals1
         ? parsedGoals1
         : res?.data?.goal_next_meeting || [];
-      console.log(res?.data.goal_last_meeting, "ttttt");
-      console.log(fetchedGoals1, "fetchedGoals1");
       form.setFieldsValue({ next_goals: fetchedGoals1 });
     } catch (error: any) {
       if (error.status == 500) {
@@ -234,16 +210,27 @@ const Page3 = () => {
       getDataById();
     }
   }, [type, form]);
+  const[backLoading,setBackLoading]=useState<any>(false)
   const onPrevious = () => {
-    router.replace(`/admin/member/add/page2?${value}&edit`);
+    
+    try {
+      setBackLoading(true)
+      router.replace(`/admin/member/add/page2?${value}&edit`);
+      
+    } catch (error) {
+      setBackLoading(false)
+    }
   };
   const hnandleBack = () => {
-    router.back();
+    try {
+      setBackLoading(true)
+      router.back();
+    } catch (error) {
+      setBackLoading(false)
+    }
   };
 
   const onValuesChange = (changedValues: any, allValues: any) => {
-    console.log(allValues, "allValuesallValues");
-    console.log(changedValues, "changedValueschangedValues");
     localStorage.setItem("LastGoals", JSON.stringify(allValues?.last_goals));
     localStorage.setItem("NextGoals", JSON.stringify(allValues?.next_goals));
   };
@@ -477,6 +464,7 @@ const Page3 = () => {
                               type="primary"
                               className=" "
                               onClick={onPrevious}
+                              loading={backLoading}
                             >
                               Previous
                             </Button>
@@ -499,6 +487,7 @@ const Page3 = () => {
                             size={"large"}
                             type="primary"
                             className=" "
+                            loading={backLoading}
                             onClick={hnandleBack}
                           >
                             Back

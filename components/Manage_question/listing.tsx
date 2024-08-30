@@ -13,18 +13,13 @@ import {
   Button,
 } from "antd";
 import Link from "next/link";
-import MainLayout from "../../components/Layout/layout";
-// import CustomModal from "@/components/common/Modal";
-// import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
 import api from "../../utils/api";
 import CustomModal from "../common/Modal";
-const { Panel } = Collapse;
 const { Search } = Input;
 const Manage_Question = () => {
-  const [deleteLoading, setDeleteLoading] = React.useState("")
   const [state, setState] = React.useState<any>([])
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState(state);
@@ -81,7 +76,6 @@ const Manage_Question = () => {
     return {
       key: index + 1,
       question: res?.question || "N/A",
-      // question_type:res?.question_type,
       action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
         <li>
           <CustomModal type={"Edit"} {...res} initialise={initialise} />
@@ -91,7 +85,6 @@ const Manage_Question = () => {
                                 title="Delete"
                                 description="Are you sure you want to delete ?"
                                 onConfirm={(event: any) => { archive(res?.id) }}
-                            // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
                             >
                                 <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
                             </Popconfirm>
@@ -111,11 +104,6 @@ const Manage_Question = () => {
       dataIndex: 'question',
       key: 'question',
     },
-    // {
-    //     title: 'Questions Type',
-    //     dataIndex: 'question_type',
-    //     key: 'question_type',
-    // },
 
     {
       title: 'Action',
@@ -155,8 +143,6 @@ const Manage_Question = () => {
                   <Search
                     size="large"
                     placeholder="Search..."
-                    // onSearch={onSearch}
-                    // onChange={(e) => onSearch(e.target.value)}
                     enterButton
                   />
                   <CustomModal type={"Add"} initialise={initialise} />

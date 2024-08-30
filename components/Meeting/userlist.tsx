@@ -36,11 +36,8 @@ type Page<P = {}> = NextPage<P> & {
 const UserList = () => {
     const router = useRouter()
     const [loading1, setLoading1] = useState(true);
-    //   const { userInfo, downloadCSV, Toast, uploadCSV } = React.useContext(GlobalContext)
     const getUserdata = useSelector((state: any) => state?.user?.userData)
     const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
-    const [show, setShow] = useState(true);
-    const [lastVisibleId, setLastVisibleId] = useState<any>(null);
     const [state, setState] = React.useState<any>({
         id: "",
         name: "",
@@ -58,12 +55,8 @@ const UserList = () => {
     const cookies = parseCookies();
     const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
     const [loading, setLoading] = React.useState(false)
-    const [exportModal, setExportModal] = React.useState(false);
-    const [areas, setAreas] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState<any>('');
     const [filteredData, setFilteredData] = useState(state1);
-    const [data, setData] = useState<any>([]);
-    // const [lastVisibleId, setLastVisibleId] = useState(null);
     const companyNameMap:any = {
         "augusta": "Augusta Homes, Inc.",
         "buffington": "Buffington Homes, L.P.",
@@ -164,17 +157,12 @@ const UserList = () => {
 
     };
    
-    // const handleDownloadAndFetchData = async (id: any) => {
-    //     let res = await getDataById(id);
-    //     await downLoadPdf(res);
-    // };
     const handleDownloadAndFetchData = async (id: any) => {
         setLoadingState((prevState) => ({ ...prevState, [id]: true })); // Set loading state for the specific item
         try {
             let res = await getDataById(id);
             await downLoadPdf(res);
         } catch (error) {
-            console.error("Error generating PDF:", error);
         } finally {
             setLoadingState((prevState) => ({ ...prevState, [id]: false })); // Reset loading state for the specific item
         }
@@ -233,16 +221,6 @@ const UserList = () => {
             dataIndex: 'company',
             key: 'company',
         },
-        // {
-        //     title: 'Email',
-        //     dataIndex: 'email',
-        //     key: 'email',
-        // },
-        // {
-        //     title: 'Status',
-        //     dataIndex: 'status',
-        //     key: 'status',
-        // },
         {
             title: 'Action',
             dataIndex: 'action',
@@ -341,10 +319,6 @@ const UserList = () => {
             let res = await api.User.listing(query);
             setState1(res?.data || []);
             if (res?.data?.status == 500||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
-                // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                // localStorage.removeItem('hasReloaded');
-                // toast.error("Session Expired Login Again")
-                // router.replace("/auth/signin")
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem("hasReloaded")
@@ -359,11 +333,6 @@ const UserList = () => {
         } catch (error:any) {
             setLoading1(false)
             if (error?.status==500) {
-                // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                // localStorage.removeItem('hasReloaded');
-
-                // toast.error("Session Expired Login Again")
-                // router.replace("/auth/signin")
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 localStorage.removeItem("hasReloaded")
@@ -428,20 +397,6 @@ const UserList = () => {
                                 <div className='my-4 '>
                                     <Search size='large' className='' placeholder="Search by Name & Email" enterButton value={searchTerm}
                                         onChange={handleSearch} />
-                                    {/* <Button type="primary" size='large' htmlType="button"  icon={<DownloadOutlined />} onClick={() => setExportModal(true)}>Export</Button> */}
-                                    {/* <Space wrap> */}
-                                    {/* <Select
-                                defaultValue="lucy"
-                                style={{ width: 220 }}
-                                // onChange={handleChange}
-                                size='large'
-                                options={[
-                                    { value: 'jack', label: 'Jack' },
-                                    { value: 'lucy', label: 'Lucy' },
-                                    { value: 'Yiminghe', label: 'yiminghe' },
-                                    { value: 'disabled', label: 'Disabled', disabled: true },
-                                ]}
-                            /> */}
                                 </div>
                                 {/* Tabs  */}
                                 <div className='tabs-wrapper'>
@@ -453,9 +408,6 @@ const UserList = () => {
                                         <>
                                     {getUserdata?.is_admin == false ?
                                         <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} 
-                                        // pagination={{
-                                        //     position: ['bottomCenter'],
-                                        // }}
                                         pagination={false}
                                          /> :
                                         <Table className="tableBox" dataSource={dataSource} columns={columns}  pagination={{
@@ -476,6 +428,5 @@ const UserList = () => {
     );
 };
 
-// Page.getLayout = (Page: ReactNode) => <>{Page}</>;
 
 export default UserList;

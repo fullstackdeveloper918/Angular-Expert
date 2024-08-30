@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Form, Input } from "antd";
 import dynamic from "next/dynamic";
 import 'react-toastify/dist/ReactToastify.css';
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import api from "@/utils/api";
 const { Row, Col, Button, Divider } = {
@@ -36,16 +35,7 @@ const Forgotpaswrd = () => {
         };
         try {
             let res = await api.Auth.forgotPassword(items)
-            console.log(res,"reeeeee");
-            
             toast.success(res?.message)
-            // if(res.status == 200) {
-            //     toast.success('OTP sent to your email', {
-            //         position: 'top-center',
-            //         autoClose: 1500
-            //     })
-            //     setLoading(false)
-            // }
 
         } catch (error) {
             setLoading(false)
@@ -93,7 +83,6 @@ const Forgotpaswrd = () => {
                                     { type: 'email', message: 'The input is not valid E-mail!' }
                                 ]}
                             >
-                                {/* <label className="labelSignup">Email</label> */}
                                 <Input size={'large'} prefix={<i className="fa-regular fa-envelope"></i>} placeholder="Email" />
                             </Form.Item>
 

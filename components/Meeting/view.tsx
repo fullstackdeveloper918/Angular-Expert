@@ -2,23 +2,17 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
-import { Breadcrumb, Spin, Tooltip, Typography } from "antd";
-import React, { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Breadcrumb, Spin,  Typography } from "antd";
+import React, { Fragment,  useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import MainLayout from "../../components/Layout/layout";
-// import api from "@/utils/api";
 import axios from "axios";
 import { pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
-// import Pdf from "@/app/common/Pdf";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Pdf from "../common/Pdf";
-import { DownloadOutlined, ShareAltOutlined } from "@ant-design/icons";
 import { destroyCookie, parseCookies } from "nookies";
 import { useSelector } from "react-redux";
-// import validation from "@/utils/validation";
 import dayjs from "dayjs";
-// import { clearUserData } from "@/lib/features/userSlice";
 import airportData from "../../jsonFiles/airports.json"
 import { clearUserData } from "../../lib/features/userSlice";
 import api from "../../utils/api";
@@ -48,13 +42,10 @@ interface WeatherData {
   dt: number; // timestamp
   main: {
     temp: number;
-    // other main properties
   };
   weather: {
     description: string;
-    // other weather properties
   }[];
-  // other fields from the response
 }
 interface StaffDetailInterface {
   is_blocked: boolean;
@@ -85,7 +76,6 @@ const MeetingViewPage = () => {
   })
 
   const router = useRouter()
-  const [isActive, setIsActive] = useState(false);
   const searchParam = useParams();
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
@@ -93,7 +83,6 @@ const MeetingViewPage = () => {
 const data={
   hotel:"Asheville, NC 28801"
 }
-  const hotelAddress=state?.hotel
   const [address, setAddress] = useState(data?.hotel || "");
   const [latitude, setLatitude] = useState<any>(null);
   const [longitude, setLongitude] = useState<any>(null);
@@ -197,7 +186,6 @@ const data={
 
         setNext7DaysWeather(formattedWeather);
       } catch (error) {
-        console.error('Error fetching weather data:', error);
         setNext7DaysWeather([]);
       }
     };
@@ -232,21 +220,12 @@ const data={
       if (data.end_time) {
         data.end_time = dayjs(data.end_time);
       }
-      // if (data.year) {
-      //   data.year = dayjs(data.year);
-      // }
 
       setState(data);
       setAddress(data)
       //   form.setFieldsValue(data);
     } catch (error: any) {
       if (error?.status == 500) {
-        // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        // dispatch(clearUserData({}));
-        // localStorage.removeItem('hasReloaded');
-        // // }
-        // toast.error("Session Expired Login Again")
-        // router.replace("/auth/signin")
         localStorage.setItem('redirectAfterLogin', window.location.pathname);
         localStorage.removeItem("hasReloaded")
         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });

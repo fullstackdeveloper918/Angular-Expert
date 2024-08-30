@@ -1,23 +1,16 @@
 "use client";
 import type { NextPage } from "next";
-import React, { Fragment, ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
-import { DownloadOutlined, EyeOutlined, FieldTimeOutlined, FormOutlined, LoginOutlined } from "@ant-design/icons";
+import { DownloadOutlined, EyeOutlined, FieldTimeOutlined, FormOutlined } from "@ant-design/icons";
 import "../../styles/globals.scss";
-import { Button, Card, Col, Popconfirm, Row, Spin, Table, Tooltip, Typography } from "antd";
-// import api from "@/utils/api";
+import { Button, Card, Col, Row, Spin, Table, Tooltip, Typography } from "antd";
 import { useSelector } from "react-redux";
-// import Icons from "@/components/common/Icons";
-import MainLayout from "../../components/Layout/layout";
 import dayjs from "dayjs";
 import Timmer from "../common/Timmer";
-// import validation, { capFirst, replaceUnderScore } from "@/utils/validation";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
 import saveAs from "file-saver";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
-import { destroyCookie } from "nookies";
 import Timmerday from "../common/Timmerday";
 import api from "../../utils/api";
 import Icons from "../common/Icons";
@@ -28,9 +21,6 @@ type Page<P = {}> = NextPage<P> & {
 
 const AdminDashboard: Page = (props: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData)
-  
-  console.log(getUserdata,"getUserdata");
-  
   const [loading, setLoading] = useState<any>(true)
   const [state1, setState1] = useState<any>([])
   const [state2, setState2] = useState<any>([])
@@ -39,15 +29,6 @@ const AdminDashboard: Page = (props: any) => {
   const [check, setCheck] = useState<any>("")
   const [loadingState, setLoadingState] = useState<{ [key: string]: boolean }>({});
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
-  const Countdown = areas?.result?.length
-    ? areas?.result
-      .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime()) // Sort by start_meeting_date
-      .map((res: any, index: number) => (
-        <div key={index}>
-          <Timmer endDate={res?.start_meeting_date} />
-        </div>
-      ))
-    : [];
 
   const updateDue = async () => {
     let res = await api.Meeting.update()
@@ -82,7 +63,6 @@ const [error,setError]=useState<any>("")
       return day + "th";
     };
 
-    const monthYear = dayjs(date).format('MMMM YYYY');
     const formattedDate = `${dayjs(date).format('MMMM')} ${getOrdinalSuffix(day)}, ${dayjs(date).format('YYYY')}`;
     return formattedDate;
   };
@@ -244,26 +224,16 @@ const [error,setError]=useState<any>("")
     saveAs(blob, `${capFirst(companyName)}.pdf`);
   };
 
-  // const handleDownloadAndFetchData = async (id: any) => {
-  //   const res = await getDataById(id);
-
-  //   if (res) {
-  //     await downLoadPdf(res);
-  //   } else {
-  //   }
-  // };
   const handleDownloadAndFetchData = async (id: any) => {
     setLoadingState((prevState) => ({ ...prevState, [id]: true })); // Set loading state for the specific item
     try {
         let res = await getDataById(id);
         await downLoadPdf(res);
     } catch (error) {
-        console.error("Error generating PDF:", error);
     } finally {
         setLoadingState((prevState) => ({ ...prevState, [id]: false })); // Reset loading state for the specific item
     }
 };
-  const completed = state1?.filter((res: any) => res?.is_completed === true);
   const filteredData = state1?.reduce((acc: any[], res: any) => {
     
     
@@ -299,7 +269,6 @@ const [error,setError]=useState<any>("")
   );
   const dataSource1 = state2
   ?.sort((a: any, b: any) => {
-    // Assuming created_at is an object similar to the timestamp you mentioned earlier
     const dateA = new Date(a.updatedAt._seconds * 1000 + a.updatedAt._nanoseconds / 1000000);
     const dateB = new Date(b.updatedAt._seconds * 1000 + b.updatedAt._nanoseconds / 1000000);
     return   dateB.getTime() -dateA.getTime();
@@ -370,7 +339,6 @@ const [error,setError]=useState<any>("")
     columnData.push(dataSource2.slice(i, i + 7));
   }
 
-  // Generate columns for the table
   const columns: any = [];
   for (let i = 0; i < columnData.length; i++) {
     columns.push({
@@ -381,17 +349,13 @@ const [error,setError]=useState<any>("")
         const item = columnData[i][rowIndex];
         return item ? (
           <>
-            {/* <div>{item.key}</div>
-            <div>{item.name}</div> */}
             <div>{item.company}</div>
-            {/* <div>{item.action}</div> */}
           </>
         ) : null;
       },
     });
   }
 
-  // Create data source for the table with rows based on the maximum number of items in any column
   const maxRows = Math.max(...columnData.map((col: any) => col.length));
   const tableData = Array.from({ length: maxRows }).map((_, rowIndex) => {
     const row: any = {};
@@ -465,17 +429,6 @@ const [error,setError]=useState<any>("")
   ];
 
 
-
-  // const columns = [
-  //   {
-  //     title: 'Key',
-  //     dataIndex: 'key',
-  //     key: 'key',
-  //     render: (_: any, record: any, index: any) => (
-  //       <CustomCell items={groupedData[index]} />
-  //     ),
-  //   },
-  // ];
   const columns1 = [
     {
       title: 'Order No.',
@@ -567,29 +520,18 @@ const [error,setError]=useState<any>("")
     try {
       let res = await api.User.listing()
       let response = await api.User.completelist()
-      console.log(res?.data, 'res check')
       setState1(res?.data)
       setState2(response)
       setLoading(false)
     } catch (error:any) {
-      console.log(error?.response, 'error check')
       setError(error?.response?.status)
       setLoading(false)
     }
   }
-  console.log(state1,"state1");
   
   useEffect(() => {
-    // const hasReloaded = localStorage.getItem('hasReloaded');
-    // if (!hasReloaded) {
-    // //   // if (!hasReloaded && state1?.status === '400') {
-    //   localStorage.setItem('hasReloaded', 'true');
-    //   window.location.reload();
-    // } else {
       userlist();
-    // }
   }, []);
-  // }, [state1?.status==500]);
   const initialise = async () => {
     try {
       if (getUserdata?.is_admin == false) {
@@ -600,15 +542,6 @@ const [error,setError]=useState<any>("")
         setCheck(apiRes1)
       }
     } catch (error) {
-      //   if (error==400) {
-      //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-
-      //     // }
-      //     toast.error("Session Expired Login Again")
-      //     router.replace("/auth/signin")
-      // }
-
-
     }
   };
   useEffect(() => {
