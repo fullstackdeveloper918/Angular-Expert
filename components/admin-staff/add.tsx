@@ -1,11 +1,10 @@
 "use client"
-import type { GetServerSideProps, NextPage } from 'next'
+import type { NextPage } from 'next'
 import React, { Fragment, ReactNode, useState } from 'react'
-import { Breadcrumb, Form, Select, Input, Upload, Modal, message, Typography, SelectProps } from 'antd';
+import { Breadcrumb, Form, Select, Input, Typography, SelectProps } from 'antd';
 import Link from 'next/link';
-import { PlusOutlined } from '@ant-design/icons';
-import type { RcFile, UploadProps } from 'antd/es/upload';
-import type { UploadChangeParam, UploadFile } from 'antd/es/upload/interface';
+import type { RcFile } from 'antd/es/upload';
+import type { UploadFile } from 'antd/es/upload/interface';
 import EmployeeRoles from '../../utils/EmployeeRoles.json'
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -43,10 +42,6 @@ const getBase64 = (file: RcFile): Promise<string> =>
 const AddStaff: Page = () => {
     const router = useRouter()
     const [form] = Form.useForm();
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [loading, setLoading] = useState<any>(false)
     const dispatch = useDispatch()
     const options: SelectProps['options'] = [];

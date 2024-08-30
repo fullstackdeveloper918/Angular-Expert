@@ -7,20 +7,13 @@ import {
     Breadcrumb,
     Tabs,
     Typography,
-    Upload,
-    Badge,
-    Tag,
-    Select,
-    Popconfirm,
 } from "antd";
 import { clearUserData } from "../../lib/features/userSlice";
-import { parseCookies, destroyCookie } from "nookies";
+import {  destroyCookie } from "nookies";
 import Link from "next/link";
-import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
+import { EyeOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
-import MainLayout from "../../components/Layout/layout";
 import { useRouter } from "next/navigation";
-import FilterSelect from "@/components/common/FilterSelect";
 
 import dayjs from "dayjs";
 import api from "@/utils/api";
@@ -77,7 +70,6 @@ const PastMeetingList = () => {
           return day + "th";
         };
       
-        const monthYear = dayjs(date).format('MMMM YYYY');
         const formattedDate = `${dayjs(date).format('MMMM')} ${getOrdinalSuffix(day)}, ${dayjs(date).format('YYYY')}`;
         return formattedDate;
       };
@@ -126,12 +118,6 @@ const PastMeetingList = () => {
             end_date: formatWithOrdinal(res?.end_meeting_date)||"N/A",
             end_time: dayjs(res?.end_time).format('hh:mm A')||"N/A",
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-                {/* <li>
-                    <Link href={`/admin/meetings/${res?.id}/edit`} >
-                        <Button type="text" className='px-0 border-0 bg-transparent shadow-none'><i className="fa-solid fa-pen-to-square"></i></Button>
-                    </Link>
-                </li> */}
-                
                 <li>
               <Link href={`/admin/meetings/${res?.id}/meeting-user?${dayjs(res?.start_meeting_date).format('YYYY')}`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
           </li>
@@ -164,26 +150,6 @@ const PastMeetingList = () => {
             dataIndex: 'host_city',
             key: 'host_city',
         },
-        // {
-        //     title: 'Meeting Date',
-        //     dataIndex: 'start_date',
-        //     key: 'start_date',
-        // },
-        // {
-        //     title: 'Meeting Time',
-        //     dataIndex: 'start_time',
-        //     key: 'start_time',
-        // },
-        // {
-        //     title: 'Meeting End Date',
-        //     dataIndex: 'end_date',
-        //     key: 'end_date',
-        // },
-        // {
-        //     title: 'Meeting End Time',
-        //     dataIndex: 'end_time',
-        //     key: 'end_time',
-        // },
         {
             title: 'Information',
             dataIndex: 'action',
@@ -198,12 +164,6 @@ const PastMeetingList = () => {
             let res = await api.Meeting.past_meeting(query);
             setAreas(res?.result);
             if (res?.status == 500) {
-                // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-
-                // // }
-                // dispatch(clearUserData({}));
-                // toast.error("Session Expired Login Again")
-                // router.replace("/auth/signin")
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
                 localStorage.removeItem("hasReloaded")
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
@@ -213,12 +173,6 @@ const PastMeetingList = () => {
             }
         } catch (error:any) {
             if (error?.status==500) {
-                // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                // dispatch(clearUserData({}));
-                // localStorage.removeItem('hasReloaded');
-                // // }
-                // toast.error("Session Expired Login Again")
-                // router.replace("/auth/signin")
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
                 localStorage.removeItem("hasReloaded")
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
@@ -272,12 +226,6 @@ const PastMeetingList = () => {
                                             position: ['bottomCenter'],
                                           }} />
                                 </div>
-                                {/* Pagination  */}
-                                {/* <Row justify={'center'} className="mt-5 d-flex paginationCenter">
-                                    <Col span={24}>
-                                        <Pagination total={15} hideOnSinglePage={true} disabled={loading} />
-                                    </Col>
-                                </Row> */}
                             </Card>
                         </Col>
                     </Row>

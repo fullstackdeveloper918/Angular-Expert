@@ -21,8 +21,6 @@ const Logout = (props: any) => {
 
     const handleLogoutEvent = (event: StorageEvent) => {
       if (event.key === "logout") {
-        console.log(event.key, "event key");
-        // auth.signOut();
         router.push("/auth/signin");
       }
     };

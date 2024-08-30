@@ -23,7 +23,6 @@ import Link from "next/link";
 import MainLayout from "../../components/Layout/layout";
 import utc from "dayjs/plugin/utc";
 import dayjs from "dayjs";
-// import api from "@/utils/api";
 import TimezoneSelect from "react-timezone-select";
 import { InlineWidget } from 'react-calendly';
 import CalendlyWidget from "../common/calender"
@@ -77,7 +76,6 @@ const MeetingAdd = () => {
     const [lat, setLat] = useState<any>(null);
     const [long, setLong] = useState<any>(null);
     const [data, setData] = useState<any>(null);
-    const [weatherData1, setWeatherData1] = useState<any>([]);
     const [meetingendDate, setMeetingendDate] = useState<any>(null);
     const [meetingestartDate, setMeetingstartDate] = useState<any>(null);
     
@@ -96,17 +94,8 @@ const MeetingAdd = () => {
     };
     const onChangeDate = (date: any) => {
         const selectedTimezone1 = 'Australia/Sydney'; // Example timezone
-       
-
-        // Parse the selected date without time
         const localDate = moment(date).format("YYYY-MM-DD");
-       
-
-        // Create a moment object using the selected timezone
         const dateInSelectedTimezone = moment.tz(localDate, selectedTimezone1);
-       
-
-        // Format the date according to the selected timezone
         const formattedDate = dateInSelectedTimezone.format("YYYY-MM-DD");
        
 
@@ -126,30 +115,9 @@ const MeetingAdd = () => {
             setSelectedDate(selectedDate.clone().tz(value));
         }
     };
-    // const [selectedTimezone, setSelectedTimezone] = useState<any>(null);
-
-    // Handle timezone selection
-    const handleTimezoneChange = (timezone: any) => {
-        setSelectedTimezone(timezone);
-    };
-
-    const onChangeYear = (date: any) => {
-    };
 
 
     const [meetingType, setMeetingType] = useState<any>('');
-    const onChange: DatePickerProps['onChange'] = (_, dateStr) => {
-    };
-    const disabledHours = () => {
-        // Enable only 0 (12 AM) and 15 (3 PM)
-        const hours = Array.from({ length: 24 }, (_, i) => i);
-        return hours.filter(hour => hour !== 0 && hour !== 15);
-    };
-
-    const disabledMinutes = (selectedHour: number) => {
-        // Allow only 0 minutes for the enabled hours (12 AM and 3 PM)
-        return selectedHour === 0 || selectedHour === 15 ? [] : Array.from({ length: 60 }, (_, i) => i);
-    };
     const onChange1: TimePickerProps['onChange'] = (time, timeString) => {
     };
 
@@ -206,12 +174,6 @@ const MeetingAdd = () => {
             toast.success(res?.message)
             router.back()
             if (res?.status == 500) {
-                // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-
-                // // }
-                // // dispatch(clearUserData({}));
-                // toast.error("Session Expired Login Again")
-                // router.replace("/auth/signin")
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
                 localStorage.removeItem("hasReloaded")
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
@@ -222,10 +184,6 @@ const MeetingAdd = () => {
             // onAdd();
         } catch (error: any) {
             if (error.status == 500) {
-                // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                // localStorage.removeItem('hasReloaded');
-                // toast.error("Session Expired Login Again")
-                // router.replace("/auth/signin")
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
                 localStorage.removeItem("hasReloaded")
                 // Clear cookies and dispatch actions
@@ -260,24 +218,7 @@ const MeetingAdd = () => {
         return true;
     };
 
-    const disabledTime = (current: any) => {
-        const now = dayjs();
-        if (current && current.isSame(now, 'day')) {
-            const hours = Array.from({ length: now.hour() }, (_, i) => i);
-            const minutes = Array.from({ length: now.minute() }, (_, i) => i);
-            const seconds = Array.from({ length: now.second() }, (_, i) => i);
-            return {
-                disabledHours: () => hours,
-                disabledMinutes: () => minutes,
-                disabledSeconds: () => seconds,
-            };
-        }
-        return {};
-    };
-    const disabledYear = (current: any) => {
-        // Can not select years before this year
-        return current && current.year() < dayjs().year();
-    };
+  
 
     const [shortCounrtyName, setShortCountryName] = useState("")
 
@@ -450,12 +391,6 @@ const MeetingAdd = () => {
     const lat1 = 40.7128; // Example latitude
     const lon = -74.0060; // Example longitude
 
-    // Example start and end dates
-    // const meetingStartDate = meetingestartDate;
-    // const meetingEndDate = meetingendDate;
-
-    // const startDate = useMemo(() => new Date(meetingStartDate), [meetingStartDate]);
-    // const endDate = useMemo(() => new Date(meetingEndDate), [meetingEndDate]);
     const currentDate = useMemo(() => new Date(), []);
     const endDate = useMemo(() => {
         const date = new Date();
@@ -515,7 +450,6 @@ const MeetingAdd = () => {
 
                 setNext7DaysWeather(formattedWeather);
             } catch (error) {
-                console.error('Error fetching weather data:', error);
                 setNext7DaysWeather([]);
             }
         };
@@ -536,59 +470,15 @@ const MeetingAdd = () => {
                     setNearestAirport(results[0]);
                   
                 } else {
-                    console.error('No airports found.');
                 }
             } else {
-                console.error('Error finding airports:', status);
             }
         }
     );
     };
 
   
-    // useEffect(() => {
-    //     initPlaceAirport()
-    // }, [shortCounrtyName])
-    const weatherData = [
-        { day: 'Mon', temperature: 34, condition: 'sunny' },
-        { day: 'Tue', temperature: 33, condition: 'rain' },
-        // { day: 'Wed', temperature: 31, condition: 'storm' },
-        // { day: 'Thu', temperature: 33, condition: 'cloud' },
-        // { day: 'Fri', temperature: 34, condition: 'storm' },
-        // { day: 'Sat', temperature: 32, condition: 'storm' },
-        // { day: 'Sun', temperature: 31, condition: 'storm' },
-        // { day: 'Mon', temperature: 31, condition: 'storm' }
-    ];
-
-    const getWeatherIcon = (condition: string) => {
-        switch (condition) {
-            case 'sunny':
-                return '🌤';
-            case 'rain':
-                return '🌧';
-            case 'storm':
-                return '⛈';
-            case 'cloud':
-                return '☁️';
-            default:
-                return '🌤';
-        }
-    };
-    const menu = (
-        <Menu>
-            {next7DaysWeather.map(({ day, icon, temp }) => (
-                <Menu.Item key={day} disabled>
-                    <div style={{ display: 'flex', flexDirection: 'column', color: "#000000", alignItems: 'flex-start' }}>
-                        <span style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '5px' }}>{day}</span>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <span style={{ fontSize: '24px', marginRight: '10px' }}>{icon}</span>
-                            <span style={{ fontSize: '16px' }}>{temp}°C</span>
-                        </div>
-                    </div>
-                </Menu.Item>
-            ))}
-        </Menu>
-    );
+  
     return (
         <>
             <Fragment>
@@ -678,13 +568,8 @@ const MeetingAdd = () => {
                                             <Form.Item name="end_time" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting End Time' }]} label="Meeting End Time">
                                                 <TimePicker onChange={onChange1}
                                                     use12Hours
-                                                    // disabledTime={disabledTime} 
                                                     style={{ width: '100%' }} defaultOpenValue={dayjs('00:00', 'HH:mm')} />
                                             </Form.Item>
-                                            {/* <Form.Item name="year" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Year' }]} label="Meeting Year">
-                                                <DatePicker onChange={onChange} disabledDate={disabledYear} style={{ width: '100%' }} picker="year" />
-                                            </Form.Item> */}
-
                                             <Form.Item name="location" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Location' }]} label="Location">
                                                 {/* <Input size={'large'} placeholder="Location"   /> */}
                                                 <input
@@ -695,13 +580,7 @@ const MeetingAdd = () => {
                                                     placeholder="Enter your address"
                                                 />
                                             </Form.Item>
-                                            {/* <Form.Item
-                            name="location"
-                            label="Location"
-                            rules={[{ required: true, message: 'Please enter a location' }]}
-                        >
-                         <GoogleMap locationSearchRef={locationSearchRef.current}/>
-                        </Form.Item> RamDodge2020 */}
+                                          
                                             <Form.Item className='col-lg-6 col-sm-12' name="hotel" rules={[{ required: true, whitespace: true, message: 'Please Enter Hotel' }]} label="Hotel">
                                                 <input
                                                     className="custom-input"
@@ -712,35 +591,8 @@ const MeetingAdd = () => {
 
                                             </Form.Item>
                                             <Form.Item name="airport" className='col-lg-6 col-sm-12' label="Nearest Airport">
-                                                {/* <Input size={'large'} placeholder="Nearest Airport"
-                                                    onKeyPress={onKeyPress}
-                                                /> */}
                                                 <p className="custom-input" style={{ width: '100%' }}>{nearestAirport?.name}</p>
-                                                {/* <Input
-                                                    className="custom-input"
-                                                    style={{ width: '100%' }}
-                                                    ref={airportRef}
-                                                    // value={nearestAirport?.name}
-                                                    placeholder="Enter your address"
-                                                /> */}
                                             </Form.Item>
-
-                                            {/* <Form.Item
-                                                name="weather"
-                                                label="Weather"
-                                                style={{ width: '100%' }}
-                                                className="weather-container"
-                                            >
-                                                <div className="custom-input" >
-                                                    {weatherData1.map((dayData: any, index: any) => (
-                                                        <span key={index} style={{ margin: '0 10px' }}>
-                                                         
-                                                            }
-                                                            {dayData}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </Form.Item> */}
                                             <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
                                                 <Input size={'large'} placeholder="Host Company"
 
@@ -752,10 +604,6 @@ const MeetingAdd = () => {
                                             <Form.Item
                                                 name="host"
                                                 className="col-lg-6 col-sm-12"
-                                                // validateTrigger={['onChange', 'onBlur']}
-                                                // rules={[
-                                                //     { required: true, message: 'Please Select Host' },
-                                                // ]}
                                                 label="Host"
                                             >
                                                 <Input size={'large'} placeholder="Host"
@@ -769,9 +617,7 @@ const MeetingAdd = () => {
                                             ]} label="Cell">
                                                 <Input
                                                     size={'large'} placeholder="Cell"
-                                                    // type="number"
                                                     onKeyPress={(event) => {
-                                                        // Allow digits, space, parentheses, hyphen, plus, comma, and special keys
                                                         if (!/[0-9\s\(\)\-\+\,]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
                                                             event.preventDefault();
                                                         }
@@ -780,12 +626,6 @@ const MeetingAdd = () => {
 
                                             </Form.Item>
                                             <Form.Item name="weather" className='col-lg-6 col-sm-12' label="Weather">
-                                                {/* <Input
-                                                    className="custom-input"
-                                                    style={{ width: '100%' }}
-                                                    // ref={airportRef}
-                                                    placeholder="Weather"
-                                                />  */}
                                                 <p className="custom-input" style={{ width: '100%' }}>
                                                     {/* <Dropdown overlay={menu} trigger={['click']}> */}
                                                     {next7DaysWeather.map(({ day, icon, temp }, index: number) => (
@@ -801,21 +641,6 @@ const MeetingAdd = () => {
                                                     ))}
                                                     {/* </Dropdown> */}
                                                 </p>
-                                                {/* <Input
-                                                    type="text"
-                                                    // value={location}
-                                                    // onChange={(e) => setLocation(e.target.value)}
-                                                    placeholder="Enter Weather"
-                                                /> */}
-                                                {/* <button onClick={handleSearch}>Search</button>
-                                                {error && <p>{error}</p>}
-                                                {weather && (
-                                                    <div>
-                                                        <h2>{weather.name}</h2>
-                                                        <p>Temperature: {weather.main.temp}°C</p>
-                                                        <p>Weather: {weather.weather[0].description}</p>
-                                                    </div>
-                                                )} */}
                                             </Form.Item>
                                             {meetingType == 'spring' && (
                                                 <Form.Item

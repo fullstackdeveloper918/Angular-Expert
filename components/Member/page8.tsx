@@ -221,7 +221,6 @@ const Page8 = () => {
   const submit = async (values: any) => {
     let responseData = null; // Default value to handle the return
   
-    console.log('Submit function started with values:', values); // Debugging line
   
     if (actionType === 'submit') {
       setLoadButton('Submit');
@@ -266,7 +265,6 @@ const Page8 = () => {
               autoClose: 300,
             });
           }
-          console.log(response,"pdfReponseData");
           
           setResponseData(response?.data?.pdfReponseData);
           await sharePdf(response?.pdfReponseData);
@@ -449,7 +447,6 @@ const Page8 = () => {
       }
     }
   
-    console.log('Submit function completed with responseData:', responseData); // Debugging line
     return responseData; // Ensure return value
   };
   
@@ -598,11 +595,9 @@ const Page8 = () => {
   
     if (actionType === 'submit') {
       let item = await submit(values);
-      console.log('Item received from submit:', item);
       await sharePdf(item);
     } else if (actionType === 'save') {
       let item = await submit(values);
-      console.log('Item received from submit:', item);
     }
   };
   const hnandleBack = () => {

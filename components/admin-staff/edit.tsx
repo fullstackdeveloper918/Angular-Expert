@@ -3,13 +3,10 @@ import type { NextPage } from 'next'
 import React, { Fragment, ReactNode, useEffect, useState } from 'react'
 import { Breadcrumb, Form, Select, Input, Typography, SelectProps } from 'antd';
 import Link from 'next/link';
-import type { UploadFile } from 'antd/es/upload/interface';
 import EmployeeRoles from '../../utils/EmployeeRoles.json'
 import { useParams, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import MainLayout from '../Layout/layout';
-// import api from '@/utils/api';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { destroyCookie } from 'nookies';
 import api from '../../utils/api';
 
@@ -73,7 +70,6 @@ const EditStaff: Page = () => {
         router.replace("/auth/signin")
       }
     } finally {
-      //   setLoading(false)
     }
   };
 

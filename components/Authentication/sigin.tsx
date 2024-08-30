@@ -13,19 +13,13 @@ import {
   browserLocalPersistence,
   getAuth,
 } from "firebase/auth";
-import { destroyCookie } from 'nookies';
-// import { auth } from "@/utils/firebase";
-import { parseCookies, setCookie } from "nookies";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-// import { getuserData } from "@/lib/features/userSlice";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from "../../utils/firebase";
 import { getuserData } from "../../lib/features/userSlice";
 import api from "@/utils/api";
-// import firebase from "firebase/app";
-// import "firebase/auth";
 const { Row, Col, Button, Divider } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
     ssr: false,
@@ -44,13 +38,9 @@ const { Row, Col, Button, Divider } = {
 const Sigin = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [rememberMe, setRememberMe] = React.useState(false);
   const [token, setToken] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [state, setState] = useState<any>("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
-  // const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   const setCookie = (name: string, value: string, days: number) => {
     const expires = new Date();
@@ -62,7 +52,6 @@ const Sigin = () => {
     try {
       setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days
     } catch (error) {
-      console.error("Failed to create session cookie", error);
     }
   };
 
@@ -81,20 +70,15 @@ const refreshTokenAndSchedule = async (auth: any) => {
 
       if (expirationTime > currentTime) {
         const newIdToken = await check.getIdToken(true);
-        console.log(newIdToken, 'newIdToken');
-        console.log(uid, 'uid');
 
         const newExpirationTime = Date.now() + 1 * 60 * 1000;
         localStorage.setItem("loginExpiryTime", newExpirationTime.toString());
         setToken(newIdToken);
         createSessionCookie(newIdToken);
         setCookie("expirationTime", newExpirationTime.toString(), 30);
-
-        // setTimeout(() => refreshTokenAndSchedule(auth), 1 * 60 * 1000); 
       }
     }
   } catch (error: any) {
-    console.error("Error refreshing token:", error.message);
   }
 };
 
@@ -108,19 +92,6 @@ useEffect(() => {
   return () => xyz();
 }, [auth]);
 
-// useEffect(() => {
-//   refreshTokenAndSchedule(auth);
-
-//   const intervalId = setInterval(() => {
-    
-//     refreshTokenAndSchedule(auth);
-//   }, 30 * 1000); 
-
-//   return () => {
-//     clearInterval(intervalId);
-    
-//   };
-// }, []);
 
 useEffect(() => {
   const intervalId = setInterval(async () => {
@@ -136,7 +107,6 @@ const scheduleTokenRefresh = (auth: any) => {
  
   const onFinish = async (values: any) => {
     const auth:any = getAuth();
-// console.log("link running");
 
 
     try {
@@ -151,8 +121,7 @@ const scheduleTokenRefresh = (auth: any) => {
       );
       
       const check= auth.currentUser
-      const checkUid:any = check.uid;
-      console.log(checkUid,"checkUid");
+      // const checkUid:any = check.uid;
       const idToken = await userCredential.user.getIdToken(true);
       const res = await axios.get("https://frontend.goaideme.com/single-user", {
         headers: {
@@ -161,7 +130,6 @@ const scheduleTokenRefresh = (auth: any) => {
         },
       });
       const responseData = res?.data?.data;
-      console.log(responseData, 'responsedata')
 
       dispatch(getuserData(responseData));
       // router?.push("/admin/dashboard");
@@ -173,7 +141,6 @@ const scheduleTokenRefresh = (auth: any) => {
       localStorage.setItem("AuthToken",idToken)
       setCookie("Auth", JSON.stringify(auth.currentUser), 30);
         const redirectPath = localStorage.getItem('redirectAfterLogin') || '/admin/dashboard';
-        console.log(redirectPath,"redirectPath");
         
         router.push('/admin/dashboard');
         // router.push(redirectPath);
@@ -187,33 +154,6 @@ const pathname=redirectPath?redirectPath:"/admin/dashboard"
     }
   };
 
-
-
-  // const hasReloaded:any = localStorage.getItem('hasReloaded')/;
-  // useEffect(() => {
-  //   // Retrieve `hasReloaded` from localStorage
-  //   const hasReloaded = localStorage.getItem('hasReloaded');
-  //   console.log(hasReloaded, "hasReloaded");
-
-  //   if (!hasReloaded) {
-  //     //   // if (!hasReloaded && state1?.status === '400') {
-  //       localStorage.setItem('hasReloaded', 'true');
-  //       window.location.reload();
-  //     } 
-  // }, []); //
-
-
-  // useEffect(() => {
-  //   const hasReloaded = localStorage.getItem('hasReloaded');
-  //   if (!hasReloaded) {
-  //   //   // if (!hasReloaded && state1?.status === '400') {
-  //     localStorage.setItem('hasReloaded', 'true');
-  //     window.location.reload();
-  //   } else {
-  //     userlist();
-  //   }
-  // // }, []);
-  // }, [state1?.status==500]);
 
 
 

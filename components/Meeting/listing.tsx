@@ -248,7 +248,6 @@ const MeetingList = () => {
                 router.replace("/auth/signin");
             }
         } catch (error: any) {
-            console.error(error.status);
 
             setLoading(false);
             if (error?.status == 500) {
@@ -293,11 +292,6 @@ const MeetingList = () => {
                                 {/* title  */}
                                 <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3'>
                                     <Typography.Title level={3} className='m-0 fw-bold'>Meetings</Typography.Title>
-                                    {/* {getUserdata?.is_admin==false?"":
-                                    <div className='d-flex gap-2'>
-                                        <Button type="primary" style={{ width: 190 }} htmlType="button" size='large' icon={<PlusOutlined />} onClick={add}>Add Meeting</Button>
-                                    </div>
-                                    } */}
                                 </div>
                                 {/* Search  */}
                                 <div className='my-4 d-flex gap-3'>
@@ -322,12 +316,6 @@ const MeetingList = () => {
                                             position: ['bottomCenter'],
                                         }} />)}
                                 </div>
-                                {/* Pagination  */}
-                                {/* <Row justify={'center'} className="mt-5 d-flex paginationCenter">
-                                    <Col span={24}>
-                                        <Pagination total={15} hideOnSinglePage={true} disabled={loading} />
-                                    </Col>
-                                </Row> */}
                             </Card>
                         </Col>
                     </Row>

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import React, { Fragment, useEffect, useState } from "react";
 import {
@@ -33,7 +32,6 @@ const ArchiveMeeting = () => {
   const [areas, setAreas] = useState<any>([]);
 
   const [filteredData, setFilteredData] = useState<any>([]);
-  const [hasError, setHasError] = useState(false);
   const formatWithOrdinal = (date: any) => {
     const day = dayjs(date).date();
 
@@ -52,7 +50,6 @@ const ArchiveMeeting = () => {
       return day + "th";
     };
 
-    const monthYear = dayjs(date).format("MMMM YYYY");
     const formattedDate = `${dayjs(date).format("MMMM")} ${getOrdinalSuffix(
       day
     )}, ${dayjs(date).format("YYYY")}`;
@@ -60,7 +57,6 @@ const ArchiveMeeting = () => {
   };
 
   useEffect(() => {
-    // Filter data when searchTerm or state1 changes
     const filtered = areas?.filter((res: any) => {
       const name = res?.host ? `${res?.host}` : "";
       const meeting_type = res?.meeting_type || "";
@@ -98,10 +94,8 @@ const ArchiveMeeting = () => {
                 title="Unarchive"
                 description="Are you sure you want to Unarchive ?"
                 onConfirm={(event: any) => {
-                  // unarchive(res?.id);
                   unarchive(res?.id);
                 }}
-                // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
               >
                 <Button type="text" danger htmlType="button" className="px-0">
                   <img src={Unarchive.src} alt="" />
@@ -225,7 +219,6 @@ const ArchiveMeeting = () => {
       }
       getData()
     } catch (error: unknown) {
-      console.error(error, "check error");
       setLoading(false);
     }
   };
@@ -296,7 +289,6 @@ const ArchiveMeeting = () => {
                     </>
                   )}
                 </div>
-                {/* Pagination  */}
               </Card>
             </Col>
           </Row>

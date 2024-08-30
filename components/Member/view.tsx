@@ -177,7 +177,6 @@ const downLoadPdf = async () => {
       const { blob, timestamp } = await generatePdf();
       saveAs(blob, `Detail_${timestamp}.pdf`); 
   } catch (error) {
-      console.error('Error generating or saving the PDF:', error); 
       alert('Failed to generate or save the PDF. Please try again.'); 
   }
   finally{

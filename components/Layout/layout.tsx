@@ -100,9 +100,7 @@ const MainLayout = ({ children }: any) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   useEffect(() => {
-    console.log("initial")
     const intervalId = setInterval(async () => {
-      console.log("initial called")
       refreshTokenAndSchedule(auth);
     }, 60 * 1000); 
     return () => clearInterval(intervalId); 
@@ -156,7 +154,6 @@ const MainLayout = ({ children }: any) => {
     try {
       setCookie("COOKIES_USER_ACCESS_TOKEN", idToken, 30); // 30 days
     } catch (error) {
-      console.error("Failed to create session cookie", error);
     }
   };
   const refreshTokenAndSchedule = async (auth: any) => {
@@ -179,7 +176,6 @@ const MainLayout = ({ children }: any) => {
         }
       }
     } catch (error: any) {
-      console.error("Error refreshing token:", error.message);
     }
   };
   
