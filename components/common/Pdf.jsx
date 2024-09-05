@@ -267,7 +267,7 @@ const MemberUpdatePDF = (props) => {
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Goal #{index + 1}: </Text>
                     <Text style={styles.textarea} wrap={false}>
-                         {res?.goal}  
+                         {res?.name}  
                     </Text>
                   </View>
                   <View style={styles.Flex_div}>
@@ -293,7 +293,7 @@ const MemberUpdatePDF = (props) => {
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Goal #{index + 1}: </Text>
                     <Text style={styles.textarea} wrap={false}>
-                         {res?.goal}  
+                         {res?.name}  
                     </Text>
                   </View>
                   <View style={styles.Flex_div}>
