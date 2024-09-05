@@ -173,27 +173,28 @@ const MeetingAdd = () => {
             let res = await api.Meeting.create(items as any);
             toast.success(res?.message)
             router.back()
-            if (res?.status == 500) {
-                localStorage.setItem('redirectAfterLogin', window.location.pathname);
-                localStorage.removeItem("hasReloaded")
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                // dispatch(clearUserData({}));
-                toast.error("Session Expired. Login Again");
-                router.replace("/auth/signin");
-            }
+            // if (res?.status == 500) {
+            //     localStorage.setItem('redirectAfterLogin', window.location.pathname);
+            //     localStorage.removeItem("hasReloaded")
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            //     // dispatch(clearUserData({}));
+            //     toast.error("Session Expired. Login Again");
+            //     router.replace("/auth/signin");
+            // }
             // onAdd();
         } catch (error: any) {
-            if (error.status == 500) {
-                localStorage.setItem('redirectAfterLogin', window.location.pathname);
-                localStorage.removeItem("hasReloaded")
-                // Clear cookies and dispatch actions
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                // dispatch(clearUserData({}));
-                toast.error("Session Expired. Login Again");
+            toast.error(error?.message)
+            // if (error.status == 500) {
+            //     localStorage.setItem('redirectAfterLogin', window.location.pathname);
+            //     localStorage.removeItem("hasReloaded")
+            //     // Clear cookies and dispatch actions
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            //     // dispatch(clearUserData({}));
+            //     toast.error("Session Expired. Login Again");
         
-                // Redirect to sign-in page
-                router.replace("/auth/signin");
-            }
+            //     // Redirect to sign-in page
+            //     router.replace("/auth/signin");
+            // }
         }
     }
 

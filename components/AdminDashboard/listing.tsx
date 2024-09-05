@@ -29,6 +29,13 @@ const AdminDashboard: Page = (props: any) => {
   const [check, setCheck] = useState<any>("")
   const [loadingState, setLoadingState] = useState<{ [key: string]: boolean }>({});
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const xyz = areas?.result?.length > 0 
+  ? areas.result
+      .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime())[0]?.start_meeting_date 
+  : undefined;
+
+console.log(xyz, "axfz");
+
 
   const updateDue = async () => {
     let res = await api.Meeting.update()
@@ -43,7 +50,7 @@ const AdminDashboard: Page = (props: any) => {
   const spring_start_date = 1745951400000;
   const fiveDaysInMilliseconds = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
 const [error,setError]=useState<any>("")
-  const new_date = start_date - fiveDaysInMilliseconds;
+  const new_date = xyz - fiveDaysInMilliseconds;
 
   const formatWithOrdinal = (date: any) => {
     const day = dayjs(date).date();
@@ -83,7 +90,7 @@ const [error,setError]=useState<any>("")
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: "Asheville Member Meeting Kick off",
       textColor: "#000000",
-      count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
+      count: <span style={{ fontSize: '20px' }}> <Timmer endDate={xyz} /></span>,
       link: "/admin/dashboard"
 
     },
@@ -148,7 +155,7 @@ const [error,setError]=useState<any>("")
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: "Asheville Member Meeting Kick off",
       textColor: "#000000",
-      count: <span style={{ fontSize: '20px' }}> <Timmer endDate={start_date} /></span>,
+      count: <span style={{ fontSize: '20px' }}> <Timmer endDate={xyz} /></span>,
       link: "/admin/dashboard"
 
     },
@@ -534,13 +541,13 @@ const [error,setError]=useState<any>("")
   }, []);
   const initialise = async () => {
     try {
-      if (getUserdata?.is_admin == false) {
+      // if (getUserdata?.is_admin == false) {
         let res = await api.Meeting.upcoming_meeting();
         setAreas(res);
-      } else if (getUserdata?.is_admin == true) {
+      // } else if (getUserdata?.is_admin == true) {
         let apiRes1 = await api.User.check_fall_spring()
         setCheck(apiRes1)
-      }
+      // }
     } catch (error) {
     }
   };
