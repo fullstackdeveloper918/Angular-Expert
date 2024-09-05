@@ -112,7 +112,6 @@ const Page8 = () => {
       return;
     }
   
-    // Check if the file is too large
     if (info.file.status === 'done' && info.file.originFileObj?.size >= 10 * 1024 * 1024) {
       toast.error("Please upload image less than 10 MB size.", {
         position: "top-center",
