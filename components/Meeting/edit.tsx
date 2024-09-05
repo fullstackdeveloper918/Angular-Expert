@@ -150,7 +150,6 @@ const MeetingEdit = () => {
       host_company: values?.host_company,
       host: values?.host,
       cell: values?.cell,
-      // weather: values?.weather,
       comments: values?.comments,
       notes: values?.notes,
       phone: [values?.phone],
