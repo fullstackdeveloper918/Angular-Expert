@@ -213,7 +213,6 @@ const meetingTime = '2024-09-11T13:00:00'; // 1 PM in Asheville
       host_company: values?.host_company,
       host: values?.host,
       cell: values?.cell,
-      // weather: values?.weather,
       comments: values?.comments,
       notes: values?.notes,
       phone: [values?.phone],
