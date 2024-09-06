@@ -101,17 +101,18 @@ const Page8 = () => {
   const [showToast, setShowToast] = useState<any>(true);
 
   const handleFileChange = async (info: any, id: any, pair: any) => {
-    // Check the status of the file
+    // Check if the file is being removed
     if (info.file.status === 'removed') {
       // Handle file removal
       await handleDelete(info.file, pair);
   
-      // Update file list state
+      // Update file list state after removing the file
       const newFileLists = { ...fileLists, [id]: info.fileList };
       setFileLists(newFileLists);
       return;
     }
   
+    // Check if the file is larger than 10MB
     if (info.file.status === 'done' && info.file.originFileObj?.size >= 10 * 1024 * 1024) {
       toast.error("Please upload image less than 10 MB size.", {
         position: "top-center",
@@ -120,12 +121,71 @@ const Page8 = () => {
       return;
     }
   
-    // Handle file addition
+    // Check if the file extension is not .png
+    const fileType = info.file.type;
+    if (fileType !== 'image/png' && info.file.status === 'done') {
+      try {
+        // Convert image to PNG format
+        const pngFile = await convertToPNG(info.file.originFileObj);
+  
+        // Update file list with the new PNG file
+        const newFileList = [...info.fileList];
+        const index = newFileList.findIndex((file: any) => file.uid === info.file.uid);
+        if (index !== -1) {
+          newFileList[index] = {
+            ...info.fileList[index],
+            originFileObj: pngFile,
+            url: URL.createObjectURL(pngFile)
+          };
+        }
+  
+        const newFileLists = { ...fileLists, [id]: newFileList };
+        setFileLists(newFileLists);
+      } catch (error) {
+        toast.error("Error converting file to PNG.", {
+          position: "top-center",
+          autoClose: 1500,
+        });
+      }
+      return;
+    }
+  
+    // Handle valid file upload
     if (info.file.status === 'done' || info.file.status === 'uploading') {
       const newFileLists = { ...fileLists, [id]: info.fileList };
       setFileLists(newFileLists);
     }
   };
+  
+  // Function to convert image file to PNG format
+  const convertToPNG = (file: File): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0);
+  
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + '.png', { type: 'image/png' }));
+            } else {
+              reject(new Error('Blob conversion failed'));
+            }
+          }, 'image/png');
+        };
+        img.onerror = reject;
+        img.src = event.target?.result as string;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+  
   
 
   // const handleChange = async (info: any, id: any) => {
@@ -782,23 +842,23 @@ const Page8 = () => {
                                 name={pair.goalName}
                                 label={pair.goalLabel}
                               >
-                                <Upload
-                                  listType="picture-card"
-                                  fileList={fileLists[pair.id] || []}
-                                  onPreview={handlePreview}
-                                  onChange={(info) =>
-                                    handleFileChange(
-                                      info,
-                                      pair.id.toString(),
-                                      pair
-                                    )
-                                  }
-                                >
-                                  {(fileLists[pair.id] || []).length >=
-                                  10 ? null : (
-                                    <PlusOutlined />
-                                  )}
-                                </Upload>
+                              <Upload
+  listType="picture-card"
+  fileList={fileLists[pair.id] || []}
+  onPreview={handlePreview}
+  onChange={(info) =>
+    handleFileChange(
+      info,
+      pair.id.toString(),
+      pair
+    )
+  }
+>
+  {(fileLists[pair.id] || []).length >= 10 ? null : (
+    <PlusOutlined />
+  )}
+</Upload>
+
 
                                 {/* <Upload
                                   listType="picture-card"
