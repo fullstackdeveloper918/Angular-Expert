@@ -4,11 +4,14 @@ import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { format, toZonedTime,  } from 'date-fns-tz';
+import {differenceInSeconds} from 'date-fns'
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import moment from "moment-timezone";
 import { toast } from "react-toastify";
 import { destroyCookie } from "nookies";
+import timezone from 'dayjs/plugin/timezone';
 import api from "../../utils/api";
 const { Row, Col, Card, Button } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
@@ -27,6 +30,7 @@ const { Row, Col, Card, Button } = {
 const timezones = moment.tz.names();
 const { Option } = Select;
 dayjs.extend(utc);
+dayjs.extend(timezone);
 const formatTimezone = (timezone: any) => {
   const offset = moment.tz(timezone).utcOffset();
   const sign = offset >= 0 ? '+' : '-';
@@ -75,9 +79,16 @@ const MeetingEdit = () => {
   const handleChange = (value: any) => {
     setMeetingType(value);
   };
+
+
   const onChange1: TimePickerProps['onChange'] = (time, timeString) => {
+    console.log(time, 'time picker')
   };
+
+
+
   const onChange = (date: any, dateString: any) => {
+    
     setState((prevState: any) => ({
       ...prevState,
       start_time: date
@@ -134,15 +145,67 @@ const MeetingEdit = () => {
     // }
   };
   const onFinish = async (values: any) => {
+    const userSelectedDate = values?.start_meeting_date;
+
+
+// my code 
+
+const meetingTime = '2024-09-11T13:00:00'; // 1 PM in Asheville
+    const meetingTimeZone = 'America/New_York'; // Time zone of the meeting
+    // Get user's local time zone
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(userTimeZone, 'userTimeZone')
+    // Convert meeting time to user's local time zone
+    const meetingDateInUserZone = toZonedTime(meetingTime, meetingTimeZone);
+    console.log(meetingDateInUserZone, 'meetingDateInUserZone')
+    const meetingDateInUserZoneLocal = toZonedTime(meetingDateInUserZone, userTimeZone);
+  
+      const now = new Date();
+      const timeDifference = differenceInSeconds(meetingDateInUserZoneLocal, now);
+
+
+      console.log('timeDifference', timeDifference)
+
+// end hers
+
+
+
+    console.log(values?.start_time, 'start time')
+    console.log(userSelectedDate,"rrr");
+    
+    const utcDate = dayjs(userSelectedDate).utc();
+    console.log(utcDate, 'utcDate')
+
+    const utcMilliseconds = utcDate.valueOf();
+    const dateInNewYork = dayjs(utcMilliseconds).tz('America/New_York');
+    console.log(dateInNewYork, 'dateinnewyork')
+    const dateInLocal = dayjs(utcMilliseconds).local();
+
+    const userSelectedTime = values?.start_time;
+    console.log(userSelectedTime,"uuu");
+    
+    const utcTime = dayjs(userSelectedTime).format('HH:mm');
+    console.log(utcTime, 'utcTime');
+    // const utcMilliseconds1 = utcTime.valueOf();
+    // const dateInNewYork1 = dayjs(utcMilliseconds1).tz('America/New_York');
+    // const timeInLocal1 = dayjs(utcMilliseconds1).local();
+    // console.log(utcTime,"timeInLocal1");
+    
+    
+    
     let items = {
       meeting_name: "meeting_name",
       meeting_id: id,
       meeting_type: values?.meeting_type,
       meeting_time_zone: selectedTimezone,
       start_time: dayjs(values?.start_time).utc().valueOf(),
-      start_meeting_date: dayjs(values?.start_meeting_date).utc().valueOf(),
+      start_meeting_date: dayjs(values?.start_meeting_date).valueOf(),
       end_time: dayjs(values?.end_time).utc().valueOf(),
       end_meeting_date: dayjs(values?.end_meeting_date).utc().valueOf(),
+      // start_time: timeInLocal1,
+      // start_meeting_date: dateInLocal,
+      // end_time: dayjs(values?.end_time).valueOf(),
+      // end_meeting_date: dayjs(values?.end_meeting_date).valueOf(),
       year: "",
       location: values?.location,
       hotel: values?.hotel,
@@ -155,6 +218,8 @@ const MeetingEdit = () => {
       notes: values?.notes,
       phone: [values?.phone],
     }
+    console.log(dayjs(values?.start_meeting_date).valueOf(),"gggg");
+    // return
     try {
       setLoading(true)
       let res = await api.Meeting.edit(items as any);

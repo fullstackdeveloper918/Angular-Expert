@@ -139,16 +139,26 @@ const MeetingAdd = () => {
             meeting_time_zone: selectedTimezone,
             // "purpose": "Present new project proposal to client.",
             meeting_type: values?.meeting_type,
-            start_time: dayjs(values?.start_time).utc().valueOf(),
+            start_time: dayjs(values?.start_time).valueOf(),
             // start_time: dayjs(values?.start_time).valueOf(),
-            start_meeting_date: dayjs(values?.start_date).utc().valueOf(),
+            start_meeting_date: dayjs(values?.start_date).valueOf(),
             // start_meeting_date: dayjs(values?.start_date).valueOf(),
             // end_time: dayjs(values?.end_time).valueOf(),
-            end_time: dayjs(values?.end_time).utc().valueOf(),
+            end_time: dayjs(values?.end_time).valueOf(),
             // end_meeting_date: dayjs(values?.end_date).valueOf(),
-            end_meeting_date: dayjs(values?.end_date).utc().valueOf(),
+            end_meeting_date: dayjs(values?.end_date).valueOf(),
             // year: dayjs(values?.end_date).valueOf(),
-            year: dayjs(values?.end_date).utc().valueOf(),
+            year: dayjs(values?.end_date).valueOf(),
+            // start_time: dayjs(values?.start_time).utc().valueOf(),
+            // // start_time: dayjs(values?.start_time).valueOf(),
+            // start_meeting_date: dayjs(values?.start_date).utc().valueOf(),
+            // // start_meeting_date: dayjs(values?.start_date).valueOf(),
+            // // end_time: dayjs(values?.end_time).valueOf(),
+            // end_time: dayjs(values?.end_time).utc().valueOf(),
+            // // end_meeting_date: dayjs(values?.end_date).valueOf(),
+            // end_meeting_date: dayjs(values?.end_date).utc().valueOf(),
+            // // year: dayjs(values?.end_date).valueOf(),
+            // year: dayjs(values?.end_date).utc().valueOf(),
             location: selectedLocation,
             hotel: hotel,
             airport: nearestAirport?.name,
@@ -161,6 +171,8 @@ const MeetingAdd = () => {
             notes: values?.notes,
             phone: [values?.mobile_no],
         }
+        console.log(dayjs(values?.start_date).valueOf(),"gggg");
+        
         // return
         const timestamp = 1720782277333;
 

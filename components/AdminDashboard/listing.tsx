@@ -33,7 +33,7 @@ const AdminDashboard: Page = (props: any) => {
   ? areas.result
       .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime())[0]?.start_meeting_date 
   : undefined;
-
+  const abc:any = xyz ? dayjs.tz(xyz, 'America/New_York').valueOf() : undefined;
 console.log(xyz, "axfz");
 
 
@@ -90,7 +90,7 @@ const [error,setError]=useState<any>("")
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: "Asheville Member Meeting Kick off",
       textColor: "#000000",
-      count: <span style={{ fontSize: '20px' }}> <Timmer endDate={xyz} /></span>,
+      count: <span style={{ fontSize: '20px' }}> <Timmer endDate={abc} /></span>,
       link: "/admin/dashboard"
 
     },
