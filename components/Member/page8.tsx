@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import { destroyCookie, parseCookies } from "nookies";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
+import Compressor from 'compressorjs';
 
 const { Title } = Typography;
 
@@ -99,65 +100,22 @@ const Page8 = () => {
     setPreviewOpen(true);
   };
   const [showToast, setShowToast] = useState<any>(true);
-
-  const handleFileChange = async (info: any, id: any, pair: any) => {
-    // Check if the file is being removed
-    if (info.file.status === 'removed') {
-      // Handle file removal
-      await handleDelete(info.file, pair);
-  
-      // Update file list state after removing the file
-      const newFileLists = { ...fileLists, [id]: info.fileList };
-      setFileLists(newFileLists);
-      return;
-    }
-  
-    // Check if the file is larger than 10MB
-    if (info.file.status === 'done' && info.file.originFileObj?.size >= 10 * 1024 * 1024) {
-      toast.error("Please upload image less than 10 MB size.", {
-        position: "top-center",
-        autoClose: 1500,
-      });
-      return;
-    }
-  
-    // Check if the file extension is not .png
-    const fileType = info.file.type;
-    if (fileType !== 'image/png' && info.file.status === 'done') {
-      try {
-        // Convert image to PNG format
-        const pngFile = await convertToPNG(info.file.originFileObj);
-  
-        // Update file list with the new PNG file
-        const newFileList = [...info.fileList];
-        const index = newFileList.findIndex((file: any) => file.uid === info.file.uid);
-        if (index !== -1) {
-          newFileList[index] = {
-            ...info.fileList[index],
-            originFileObj: pngFile,
-            url: URL.createObjectURL(pngFile)
-          };
-        }
-  
-        const newFileLists = { ...fileLists, [id]: newFileList };
-        setFileLists(newFileLists);
-      } catch (error) {
-        toast.error("Error converting file to PNG.", {
-          position: "top-center",
-          autoClose: 1500,
+  const convertAndCompressToPNG = (file: any): Promise<any> => {
+    return new Promise((resolve, reject) => {
+      // Convert image to PNG format
+      convertToPNG(file).then((pngFile) => {
+        new Compressor(pngFile, {
+          quality: 0.6, // Adjust quality as needed
+          success(result) {
+            resolve(result);
+          },
+          error(err) {
+            reject(err);
+          }
         });
-      }
-      return;
-    }
-  
-    // Handle valid file upload
-    if (info.file.status === 'done' || info.file.status === 'uploading') {
-      const newFileLists = { ...fileLists, [id]: info.fileList };
-      setFileLists(newFileLists);
-    }
+      }).catch(reject);
+    });
   };
-  
-  // Function to convert image file to PNG format
   const convertToPNG = (file: File): Promise<File> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -185,6 +143,81 @@ const Page8 = () => {
       reader.readAsDataURL(file);
     });
   };
+  const handleFileChange = async (info: any, id: any, pair: any) => {
+    if (info.file.status === 'removed') {
+      await handleDelete(info.file, pair);
+      const newFileLists = { ...fileLists, [id]: info.fileList };
+      setFileLists(newFileLists);
+      return;
+    } else if (info.file.status === 'done' && info.file.originFileObj?.size >= 10 * 1024 * 1024) {
+      toast.error("Please upload an image smaller than 10 MB.", {
+        position: "top-center",
+        autoClose: 1500,
+      });
+      return;
+    } else {
+      if (info.file.status === 'done') {
+        try {
+          // Convert and compress all images to PNG
+          const compressedPngFile = await convertAndCompressToPNG(info.file.originFileObj);
+  
+          const newFileList = [...info.fileList];
+          const index = newFileList.findIndex((file: any) => file.uid === info.file.uid);
+          if (index !== -1) {
+            newFileList[index] = {
+              ...info.fileList[index],
+              originFileObj: compressedPngFile,
+              url: URL.createObjectURL(compressedPngFile),
+            };
+          }
+  
+          const newFileLists = { ...fileLists, [id]: newFileList };
+          setFileLists(newFileLists);
+        } catch (error) {
+          toast.error("Error converting and compressing the file to PNG.", {
+            position: "top-center",
+            autoClose: 1500,
+          });
+        }
+        return;
+      }
+  
+      if (info.file.status === 'done' || info.file.status === 'uploading') {
+        const newFileLists = { ...fileLists, [id]: info.fileList };
+        setFileLists(newFileLists);
+      }
+    }
+  };
+  
+  
+  // Function to convert image file to PNG format
+  // const convertToPNG = (file: File): Promise<File> => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onload = (event) => {
+  //       const img = new Image();
+  //       img.onload = () => {
+  //         const canvas = document.createElement('canvas');
+  //         canvas.width = img.width;
+  //         canvas.height = img.height;
+  //         const ctx = canvas.getContext('2d');
+  //         ctx?.drawImage(img, 0, 0);
+  
+  //         canvas.toBlob((blob) => {
+  //           if (blob) {
+  //             resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + '.png', { type: 'image/png' }));
+  //           } else {
+  //             reject(new Error('Blob conversion failed'));
+  //           }
+  //         }, 'image/png');
+  //       };
+  //       img.onerror = reject;
+  //       img.src = event.target?.result as string;
+  //     };
+  //     reader.onerror = reject;
+  //     reader.readAsDataURL(file);
+  //   });
+  // };
   
   
 
