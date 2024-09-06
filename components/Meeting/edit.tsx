@@ -503,7 +503,6 @@ const meetingTime = '2024-09-11T13:00:00'; // 1 PM in Asheville
                       <Form.Item name="start_meeting_date" className='col-lg-6 col-sm-12' rules={[{ required: true, message: 'Please Enter Meeting Start date' }]} label="Meeting Start date">
                         <DatePicker
                           style={{ width: '100%' }}
-                          // defaultValue={defaultValue}
                           // showTime
                           disabledDate={disabledDate}
                           // disabledTime={disabledTime}
