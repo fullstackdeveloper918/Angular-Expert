@@ -158,7 +158,6 @@ const Page8 = () => {
     } else {
       if (info.file.status === 'done') {
         try {
-          // Convert and compress all images to PNG
           const compressedPngFile = await convertAndCompressToPNG(info.file.originFileObj);
   
           const newFileList = [...info.fileList];
