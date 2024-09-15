@@ -33,6 +33,18 @@ const AdminDashboard: Page = (props: any) => {
   ? areas.result
       .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime())[0]?.start_meeting_date 
   : undefined;
+  const springDate = areas?.result?.length > 0 
+  ? areas.result
+      .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime())[1]?.start_meeting_date 
+  : undefined;
+  console.log(areas,"kkkk");
+  
+  const xyz1 = areas?.result?.length > 0 
+  ? areas.result
+      .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime())[0]?.location 
+  : undefined;
+  console.log(xyz1,"xyz1");
+  
   const abc:any = xyz ? dayjs.tz(xyz, 'America/New_York').valueOf() : undefined;
 console.log(xyz, "axfz");
 
@@ -78,7 +90,7 @@ const [error,setError]=useState<any>("")
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Member Update Due",
+      title: `${xyz1} Member Update Due`,
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
@@ -88,7 +100,7 @@ const [error,setError]=useState<any>("")
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Member Meeting Kick off",
+      title: `${xyz1} Member Meeting Kick off`,
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={abc} /></span>,
       link: "/admin/dashboard"
@@ -114,7 +126,7 @@ const [error,setError]=useState<any>("")
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#000000",
-      title: <span >St. George Spring Member 2025(<Timmerday endDate={spring_start_date} />)</span>,
+      title: <span >St. George Spring Member 2025(<Timmerday endDate={springDate} />)</span>,
       // title: "St. George Spring 2025",
       count: <span style={{ fontSize: '20px' }}>
 
@@ -143,7 +155,7 @@ const [error,setError]=useState<any>("")
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Member Update Due",
+      title: `${xyz1} Member Update Due`,
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
@@ -153,7 +165,7 @@ const [error,setError]=useState<any>("")
       cardBackground: "#D3D3D3", // Light gray background
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
-      title: "Asheville Member Meeting Kick off",
+      title: `${xyz1} Member Meeting Kick off`,
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={xyz} /></span>,
       link: "/admin/dashboard"

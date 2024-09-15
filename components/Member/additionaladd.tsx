@@ -150,8 +150,8 @@ const Additionaladd = () => {
     };
 
     // form.setFieldsValue(res);
-    const submit = () => {
-        router.push("/admin/member/add/page2")
+    const onBack = () => {
+        router.push("/admin/member")
     }
     return (
         <>
@@ -221,7 +221,9 @@ const Additionaladd = () => {
                                                 >
                                                     <Input.Password size='large' type="password" placeholder="Password" />
                                                 </Form.Item>
-                                                <Form.Item name={`roles_${field.id}`} label="Permissions" rules={[{ required: true, message: 'Please Select Permissions' }]}>
+                                                <Form.Item name={`roles_${field.id}`} label="Permissions"
+                                                //  rules={[{ required: true, message: 'Please Select Permissions' }]}
+                                                 >
                                                     <Select
                                                         mode="tags"
                                                         size={'large'}
@@ -252,9 +254,9 @@ const Additionaladd = () => {
                                         {/* <Divider /> */}
                                         {/* Button  */}
                                         <div className="d-flex gap-3 justify-content-end">
-                                            {/* <Button size={'large'} type="primary" onClick={onPrevious} className="" >
-                        Save
-                      </Button> */}
+                                            <Button size={'large'} type="primary" onClick={onBack}  className="" >
+                        Cancel
+                      </Button>
                                             <Button size={'large'} type="primary" htmlType="submit" className="login-form-button " loading={loading}>
                                                 Save
                                             </Button>
