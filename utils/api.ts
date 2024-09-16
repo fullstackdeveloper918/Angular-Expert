@@ -181,6 +181,8 @@ const Meeting={
     requests.post(`delete-meeting`, info),
   unarchive_meeting: (info: any) =>
     requests.post(`unarchive-meeting`, info),
+  unarchive_meeting_delete: (info: any) =>
+    requests.post(`delete-archive-meeting`, info),
 
 }
 const Questionnair={

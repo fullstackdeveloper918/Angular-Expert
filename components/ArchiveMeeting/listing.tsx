@@ -55,7 +55,21 @@ const ArchiveMeeting = () => {
     )}, ${dayjs(date).format("YYYY")}`;
     return formattedDate;
   };
+  const archive = async (id: any) => {
+    const item = {
+        meeting_id: id,
+    }
+    try {
+        let res = await api.Meeting.unarchive_meeting_delete(item as any)
+        console.log(res,"sfsadf");
+        
+        initialise(id)
+        toast.success(res?.message)
+        //   setAreas
+    } catch (error) {
 
+    }
+}
   useEffect(() => {
     const filtered = areas?.filter((res: any) => {
       const name = res?.host ? `${res?.host}` : "";
@@ -102,6 +116,16 @@ const ArchiveMeeting = () => {
                 </Button>
               </Popconfirm>
             </li>
+            <li>
+                                <Popconfirm
+                                    title="Delete"
+                                    description="Are you sure you want to delete ?"
+                                    onConfirm={(event: any) => { archive(res?.id) }}
+                                // okButtonProps={{ loading: deleteLoading == res._id, danger: true }}
+                                >
+                                    <Button type="text" danger htmlType='button' className='px-0' ><i className="fa-solid fa-trash-can"></i></Button>
+                                </Popconfirm>
+                            </li>
           </>
         </ul>
       ),

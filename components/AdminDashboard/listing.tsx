@@ -43,6 +43,10 @@ const AdminDashboard: Page = (props: any) => {
   ? areas.result
       .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime())[0]?.location 
   : undefined;
+  const xyz2 = areas?.result?.length > 0 
+  ? areas.result
+      .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime())[1]?.location 
+  : undefined;
   console.log(xyz1,"xyz1");
   
   const abc:any = xyz ? dayjs.tz(xyz, 'America/New_York').valueOf() : undefined;
@@ -87,72 +91,39 @@ const [error,setError]=useState<any>("")
   };
   const DashboardData = [
     {
-      cardBackground: "#D3D3D3", // Light gray background
+      cardBackground: "#D3D3D3",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: `${xyz1} Member Update Due`,
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={new_date} /></span>,
       link: "/admin/dashboard"
-
     },
     {
-      cardBackground: "#D3D3D3", // Light gray background
+      cardBackground: "#D3D3D3",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: `${xyz1} Member Meeting Kick off`,
       textColor: "#000000",
       count: <span style={{ fontSize: '20px' }}> <Timmer endDate={abc} /></span>,
       link: "/admin/dashboard"
-
     },
-    // {
-    //   cardBackground: "#D3D3D3", // Light gray background
-    //   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
-    //   iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-    //   icon: <Icons.Users />,
-    //   title: `Fall 2024 (80 days)`,
-    //   textColor: "#000000",
-    //   count: <span style={{ fontSize: '20px' }}><Timmerday /></span>
-    //   // count: <span style={{ fontSize: '20px' }}>{check?.data?.fall || "0"}</span>
-    //   // "Fall 2024 (80 days)"
-    //   ,
-    //   link: "/admin/dashboard"
-
-    // },
     {
-      cardBackground: "#D3D3D3", // Light gray background
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Black shadow
+      cardBackground: "#D3D3D3", 
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", 
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       textColor: "#000000",
-      title: <span >St. George Spring Member 2025(<Timmerday endDate={springDate} />)</span>,
-      // title: "St. George Spring 2025",
-      count: <span style={{ fontSize: '20px' }}>
-
-      </span>
-      // count: <span style={{ fontSize: '20px' }}>{check?.data?.spring || "0"}</span>
-      // "Spring 2025 (408 days)"
-      ,
+      title: <span >{xyz2} Fall Member 2025(<Timmerday endDate={springDate} />)</span>,
+      count: <span style={{ fontSize: '20px' }}></span>,
       link: "/admin/dashboard"
     },
-    // {
-    //   cardBackground: "#FFF5CC",
-    //   iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-    //   icon: <Icons.Users />,
-    //   textColor: "#B76E00",
-    //   title: `${total_count?.data || "0"}`,
-    //   count: "Total Club Members",
-    //   link: hasClubMemberPermission ? `/admin/member` : "/admin/dashboard"
-
-    // },
 
   ]
 
   const DashboardData2 = [
-    // getUserdata?.is_admin==false?
     {
-      cardBackground: "#D3D3D3", // Light gray background
+      cardBackground: "#D3D3D3",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: `${xyz1} Member Update Due`,
@@ -162,7 +133,7 @@ const [error,setError]=useState<any>("")
 
     },
     {
-      cardBackground: "#D3D3D3", // Light gray background
+      cardBackground: "#D3D3D3",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FieldTimeOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: `${xyz1} Member Meeting Kick off`,
@@ -172,28 +143,22 @@ const [error,setError]=useState<any>("")
 
     },
     {
-      cardBackground: "#D3D3D3", // Light gray background
+      cardBackground: "#D3D3D3",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <Icons.Users />,
       title: "Member Update Completed",
       textColor: "#000000",
-      count: <span style={{ fontSize: '20px' }}>{complete?.totalCompleted || "0"}</span>
-      //  "No. of Users fillled the Form for coming meeting"
-      ,
+      count: <span style={{ fontSize: '20px' }}>{complete?.totalCompleted || "0"}</span>,
       link: "/admin/dashboard"
 
     },
     {
-      // cardBackground: "#FFF5CC",
-      // iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
-      cardBackground: "#D3D3D3", // Light gray background
+      cardBackground: "#D3D3D3",
       iconBackground: "linear-gradient(135deg, rgba(255, 171, 0, 0) 0%, rgba(255, 171, 0, 0.24) 97.35%)",
       icon: <FormOutlined style={{ fontSize: '30px', color: '#08c' }} />,
       title: "Member Update yet to be completed",
       textColor: "#000000",
-      count: <span style={{ fontSize: '20px' }}>{complete?.totalUncompleted || "0"}</span>
-      // "No. of Users remains to fill the Form for coming meeting"
-      ,
+      count: <span style={{ fontSize: '20px' }}>{complete?.totalUncompleted || "0"}</span>,
       link: "/admin/dashboard"
     },
   ]
@@ -201,11 +166,10 @@ const [error,setError]=useState<any>("")
     const item = { user_id: id };
     try {
       const res = await api.User.getById(item as any);
-      // setState3(res?.data || null);
-      return res?.data || null; // Ensure to return the data
+      return res?.data || null; 
     } catch (error: any) {
       alert(error.message);
-      return null; // Return null in case of error
+      return null; 
     }
   };
 
@@ -244,13 +208,13 @@ const [error,setError]=useState<any>("")
   };
 
   const handleDownloadAndFetchData = async (id: any) => {
-    setLoadingState((prevState) => ({ ...prevState, [id]: true })); // Set loading state for the specific item
+    setLoadingState((prevState) => ({ ...prevState, [id]: true }));
     try {
         let res = await getDataById(id);
         await downLoadPdf(res);
     } catch (error) {
     } finally {
-        setLoadingState((prevState) => ({ ...prevState, [id]: false })); // Reset loading state for the specific item
+        setLoadingState((prevState) => ({ ...prevState, [id]: false }));
     }
 };
   const filteredData = state1?.reduce((acc: any[], res: any) => {
@@ -339,7 +303,6 @@ const [error,setError]=useState<any>("")
       key: index + 1,
       name: res?.firstname ? `${validation.capitalizeFirstLetter(validation.capitalizeFirstLetter(res?.firstname))} ${res?.lastname}` : "N/A",
       company: companyName || "N/A",
-      // email: res?.email,
       action: <ul className='m-0 list-unstyled d-flex gap-2'>
         <li>
           <Tooltip title="Download Pdf">
@@ -454,11 +417,6 @@ const [error,setError]=useState<any>("")
       dataIndex: 'key',
       key: 'key',
     },
-    // {
-    //   title: 'Name',
-    //   dataIndex: 'name',
-    //   key: 'name',
-    // },
     {
       title: 'Company Name',
       dataIndex: 'company',
@@ -553,13 +511,10 @@ const [error,setError]=useState<any>("")
   }, []);
   const initialise = async () => {
     try {
-      // if (getUserdata?.is_admin == false) {
         let res = await api.Meeting.upcoming_meeting();
         setAreas(res);
-      // } else if (getUserdata?.is_admin == true) {
         let apiRes1 = await api.User.check_fall_spring()
         setCheck(apiRes1)
-      // }
     } catch (error) {
     }
   };

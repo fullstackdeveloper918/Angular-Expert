@@ -243,24 +243,12 @@ const MeetingList = () => {
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 dispatch(clearUserData({}));
                 toast.error("Session Expired. Login Again");
-
-                // Redirect to sign-in page
                 router.replace("/auth/signin");
             }
         } catch (error: any) {
 
             setLoading(false);
-            if (error?.status == 500) {
-                localStorage.setItem('redirectAfterLogin', window.location.pathname);
-
-                // Clear cookies and dispatch actions
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                dispatch(clearUserData({}));
-                toast.error("Session Expired. Login Again");
-
-                // Redirect to sign-in page
-                router.replace("/auth/signin");
-            }
+            toast.error(error.message)
         }
     };
     useEffect(() => {
