@@ -60,7 +60,7 @@ console.log(xyz, "axfz");
   }, [])
   const start_date = 1725993000000;
   const spring_start_date = 1745951400000;
-  const fiveDaysInMilliseconds = 5 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
+  const fiveDaysInMilliseconds = 5 * 24 * 60 * 60 * 1000; 
 const [error,setError]=useState<any>("")
   const new_date = xyz - fiveDaysInMilliseconds;
 
@@ -267,7 +267,7 @@ const [error,setError]=useState<any>("")
   const non_completed = filteredData?.filter((res: any) => res?.is_completed === false);
   
   
-  const dataSource = state1?.slice(0, 5).map((res: any, index: number) => {
+  const dataSource = state1?.map((res: any, index: number) => {
     const companyName = companyNameMap[res?.company_name || ""] || "N/A";
     return {
       key: index + 1,
@@ -652,11 +652,11 @@ const [error,setError]=useState<any>("")
                 <Card className='common-card'>
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
                     <Typography.Title level={4} className='m-0 fw-bold'>Club Members</Typography.Title>
-                    {hasClubMemberPermission ?
+                    {/* {hasClubMemberPermission ?
                       state1?.length &&
                       <Link href={'/admin/member'}>
                         <Button className='text-center blackViewBtn'> View All</Button>
-                      </Link> : ""}
+                      </Link> : ""} */}
                   </div>
                   <div className='tabs-wrapper'>
                     {loading ? (
@@ -664,7 +664,9 @@ const [error,setError]=useState<any>("")
                         <Spin size="large" />
                       </div>
                     ) : (
-                      <Table dataSource={dataSource} columns={columns2} pagination={false} />
+                      <Table dataSource={dataSource} columns={columns2} pagination={{
+                        position: ['bottomCenter'],
+                    }} />
                     )}
                   </div>
 
