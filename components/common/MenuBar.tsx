@@ -107,6 +107,10 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
     (getUserdata?.permission?.length &&
       getUserdata.permission.includes("QUESTIONNAIRE")) ||
     getUserdata?.email === "nahbcraftsmen@gmail.com";
+  const hasQEXPORTPermission =
+    (getUserdata?.permission?.length &&
+      getUserdata.permission.includes("EXPORT")) ||
+    getUserdata?.email === "nahbcraftsmen@gmail.com";
   const hasUser = getUserdata?.is_admin == false;
 
   const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
@@ -248,6 +252,18 @@ const handleLinkClick = () => {
         </span>
       ),
     },
+    hasQEXPORTPermission && {
+      key: henceofrthEnums.Roles.ORDER,
+      view: getItem(
+        <Link href="/admin/export" className="text-decoration-none"  onClick={handleLinkClick}>
+          Export
+        </Link>,
+        "export",
+        <span>
+          <BookOutlined style={iconSize} />
+        </span>
+      ),
+    },
     hasUser && {
       key: henceofrthEnums.Roles.MY_PRIFILE_SETTINS,
       view: getItem(
@@ -328,6 +344,15 @@ const handleLinkClick = () => {
               Questionnaire
             </Link>,
             "questionnaire",
+            <span>
+              <BookOutlined style={iconSize} />
+            </span>
+          ),
+          getItem(
+            <Link href="/admin/export" className="text-decoration-none"  onClick={handleLinkClick}>
+              Export
+            </Link>,
+            "export",
             <span>
               <BookOutlined style={iconSize} />
             </span>

@@ -87,6 +87,12 @@ const Admin={
     requests.post(`admin/detail`,info),
 }
 
+const Export={
+  // listing: (q?: string) =>
+  //   requests.get(`admin/list${q ? `?${q}` : ""}`),
+  listing: () =>
+    requests.get(`https://frontend.goaideme.com/get-original-report`),
+}
 const photo_section={
   remove_photo: (info: any) =>
     requests.post('remove-photo-section', info),
@@ -362,6 +368,7 @@ const henceforthApi = {
   Dashboard,
   ImageUpload,
   FILES,
+  Export,
   Meeting,
   photo_section,
   Admin,

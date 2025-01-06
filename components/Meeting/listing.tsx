@@ -236,10 +236,7 @@ const MeetingList = () => {
 
             setLoading(false);
             if (res?.status === 500) {
-                // Save the current URL path in local storage
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
-
-                // Clear cookies and dispatch actions
                 destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 dispatch(clearUserData({}));
                 toast.error("Session Expired. Login Again");
