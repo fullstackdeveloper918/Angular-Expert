@@ -256,7 +256,7 @@ const handleLinkClick = () => {
       key: henceofrthEnums.Roles.ORDER,
       view: getItem(
         <Link href="/admin/export" className="text-decoration-none"  onClick={handleLinkClick}>
-          Export
+          Reports
         </Link>,
         "export",
         <span>

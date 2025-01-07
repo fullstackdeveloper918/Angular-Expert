@@ -98,47 +98,54 @@ const Export = () => {
             container.appendChild(companyDiv);
           });
       }
-      {
-        selectedValue === "round" &&
-          data.data.roundTableTopic.forEach((item: any) => {
-            const companyDiv = document.createElement("div");
-            companyDiv.style.marginBottom = "20px";
-            companyDiv.style.borderBottom = "1px solid #ccc";
-            companyDiv.style.paddingBottom = "10px";
-
-            const companyName = document.createElement("h2");
-            companyName.innerText = `Company Name: ${capFirst(
-              item.company_name || "N/A"
-            )}`;
-            companyDiv.appendChild(companyName);
-
-            const firstName = document.createElement("h3");
-            firstName.innerText = `Name: ${capFirst(
-              item.firstname || "N/A"
-            )}  ${capFirst(item.lastname || "N/A")}`;
-            companyDiv.appendChild(firstName);
-
-            const productivity = document.createElement("p");
-            productivity.innerHTML = `<strong>Productivity:</strong> ${capFirst(
-              item.productivity || "N/A"
-            )}`;
-            companyDiv.appendChild(productivity);
-
-            const accountability = document.createElement("p");
-            accountability.innerHTML = `<strong>Accountability:</strong> ${capFirst(
-              item.accountability || "N/A"
-            )}`;
-            companyDiv.appendChild(accountability);
-
-            const estimating = document.createElement("p");
-            estimating.innerHTML = `<strong>Estimating:</strong> ${capFirst(
-              item.estimating || "N/A"
-            )}`;
-            companyDiv.appendChild(estimating);
-
-            container.appendChild(companyDiv);
-          });
+      if (selectedValue === "round") {
+        const tittle = document.createElement("h2");
+        tittle.innerText = "Round Table Topic";
+        tittle.style.textAlign = "center"; 
+      
+        data.data.roundTableTopic.forEach((item: any) => {
+          const companyDiv = document.createElement("div");
+          companyDiv.style.marginBottom = "20px";
+          companyDiv.style.borderBottom = "1px solid #ccc";
+          companyDiv.style.paddingBottom = "10px";
+      
+          companyDiv.appendChild(tittle);
+      
+          const companyName = document.createElement("h2");
+          companyName.innerText = `Company Name: ${capFirst(
+            item.company_name || "N/A"
+          )}`;
+          companyDiv.appendChild(companyName);
+      
+          const firstName = document.createElement("h3");
+          firstName.innerText = `Name: ${capFirst(
+            item.firstname || "N/A"
+          )}  ${capFirst(item.lastname || "N/A")}`;
+          companyDiv.appendChild(firstName);
+      
+          const productivity = document.createElement("p");
+          productivity.innerHTML = `<strong>Productivity:</strong> ${capFirst(
+            item.productivity || "N/A"
+          )}`;
+          companyDiv.appendChild(productivity);
+      
+          const accountability = document.createElement("p");
+          accountability.innerHTML = `<strong>Accountability:</strong> ${capFirst(
+            item.accountability || "N/A"
+          )}`;
+          companyDiv.appendChild(accountability);
+      
+          const estimating = document.createElement("p");
+          estimating.innerHTML = `<strong>Estimating:</strong> ${capFirst(
+            item.estimating || "N/A"
+          )}`;
+          companyDiv.appendChild(estimating);
+      
+          // Append the created div to the container
+          container.appendChild(companyDiv);
+        });
       }
+      
 
       document.body.appendChild(container);
 
@@ -216,7 +223,7 @@ const Export = () => {
             onChange={handleSelectChange}
           >
             <Option value="product">Product Data</Option>
-            <Option value="round">Round-Table-Topic</Option>
+            <Option value="round">Round Table Topic</Option>
             <Option value="technology">Technology Data</Option>
           </Select>
           <Button type="primary" className="mb-3" onClick={handleDownloadPdf} loading={loading}>
