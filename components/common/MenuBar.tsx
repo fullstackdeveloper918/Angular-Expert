@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assests/images/image.png";
 import { Typography, type MenuProps } from "antd";
-import { CloseOutlined, TeamOutlined } from "@ant-design/icons";
+import { CloseOutlined, ExportOutlined, TeamOutlined } from "@ant-design/icons";
 import User from "../../assests/images/placeholder.png";
 import favicon from "../../assests/images/favicon.png";
 import {
@@ -260,7 +260,7 @@ const handleLinkClick = () => {
         </Link>,
         "export",
         <span>
-          <BookOutlined style={iconSize} />
+          <ExportOutlined style={iconSize} />
         </span>
       ),
     },
