@@ -45,7 +45,7 @@ const { Row, Col, Card, Button, Pagination, Tooltip } = {
 };
 const { Search } = Input;
 const { Option } = Select;
-const Export = () => {
+const Technology = () => {
   const [loading, setLoading] = useState(false);
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
@@ -55,7 +55,7 @@ const Export = () => {
       ?.replace(/_/g, " ")
       ?.replace(/\b\w/g, (char: any) => char.toUpperCase());
   };
-  const [selectedValue, setSelectedValue] = useState<any>("round");
+  const [selectedValue, setSelectedValue] = useState<any>("technology");
   console.log(selectedValue, "selectedValue");
 
   const handleSelectChange = (value: any) => {
@@ -255,7 +255,7 @@ const Export = () => {
   useEffect(() => {
     const fetchData = async () => {
       const type = "yourType";
-      const url = `https://frontend.goaideme.com/round-table-report`;
+      const url = `https://frontend.goaideme.com/technology-product-project-report`;
       // const url = `https://frontend.goaideme.com/round-table-report?type=${type}`;
 
       try {
@@ -304,19 +304,19 @@ const Export = () => {
           )} ${dayjs(res?.meeting?.start_meeting_date).format("YYYY")}` ||
           "N/A",
         host_name: capFirst(res?.username) || "N/A",
-        productivity: (
-          <Tooltip title={res?.productivity}>
-            {truncateText(capFirst(res?.productivity) || "N/A", 5)}
+        products: (
+          <Tooltip title={res?.products}>
+            {truncateText(capFirst(res?.products) || "N/A", 5)}
           </Tooltip>
         ),
-        accountability: (
-          <Tooltip title={res?.accountability}>
-            {truncateText(capFirst(res?.accountability) || "N/A", 5)}
+        project: (
+          <Tooltip title={res?.project}>
+            {truncateText(capFirst(res?.project) || "N/A", 5)}
           </Tooltip>
         ),
-        estimating: (
-          <Tooltip title={res?.estimating}>
-            {truncateText(capFirst(res?.estimating) || "N/A", 5)}
+        technology: (
+          <Tooltip title={res?.technology}>
+            {truncateText(capFirst(res?.technology) || "N/A", 5)}
           </Tooltip>
         ),
         host_city: (
@@ -343,19 +343,19 @@ const Export = () => {
       key: "host_name",
     },
     {
-      title: "Productivity",
-      dataIndex: "productivity",
-      key: "productivity",
+      title: "Project",
+      dataIndex: "project",
+      key: "project",
     },
     {
-      title: "Accountability",
-      dataIndex: "accountability",
-      key: "start_accountabilitydate",
+      title: "Products",
+      dataIndex: "products",
+      key: "products",
     },
     {
-      title: "Estimating",
-      dataIndex: "estimating",
-      key: "estimating",
+      title: "Technology",
+      dataIndex: "technology",
+      key: "technology",
     },
     // {
     //     title: 'Meeting End Date',
@@ -392,14 +392,14 @@ const Export = () => {
                       </Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item className="text-decoration-none">
-                      Round Table
+                    Technology
                     </Breadcrumb.Item>
                   </Breadcrumb>
                 </div>
                 {/* title  */}
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
                   <Typography.Title level={3} className="m-0 fw-bold">
-                    Round Table
+                  Technology
                   </Typography.Title>
                   <Button
                     type="primary"
@@ -528,4 +528,4 @@ const Export = () => {
 //   width: "100%",
 // };
 
-export default Export;
+export default Technology;

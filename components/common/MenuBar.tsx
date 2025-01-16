@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assests/images/image.png";
 import { Typography, type MenuProps } from "antd";
-import { CloseOutlined, ExportOutlined, TeamOutlined } from "@ant-design/icons";
+import { CloseOutlined, ExportOutlined, RadarChartOutlined, TeamOutlined } from "@ant-design/icons";
 import User from "../../assests/images/placeholder.png";
 import favicon from "../../assests/images/favicon.png";
 import {
@@ -253,17 +253,45 @@ const handleLinkClick = () => {
       ),
     },
     hasQEXPORTPermission && {
-      key: henceofrthEnums.Roles.ORDER,
+      key: henceofrthEnums.Roles.PAGES,
       view: getItem(
-        <Link href="/admin/export" className="text-decoration-none"  onClick={handleLinkClick}>
-          Reports
-        </Link>,
-        "export",
-        <span>
-          <ExportOutlined style={iconSize} />
-        </span>
+        "Reports",
+        "sub2",
+        <ExportOutlined style={iconSize} />,
+        [
+          getItem(
+            <Link href="/admin/export" className="text-decoration-none"  onClick={handleLinkClick}>
+              Round Table
+            </Link>,
+            "export",
+            <DatabaseOutlined style={iconSize} />
+          ),
+          getItem(
+            <Link
+              href="/admin/technology"
+              className="text-decoration-none"
+            >
+              Technology
+            </Link>,
+            "technology",
+            <RadarChartOutlined  style={iconSize} />
+          ),
+         
+        ]
       ),
     },
+    // hasQEXPORTPermission && {
+    //   key: henceofrthEnums.Roles.ORDER,
+    //   view: getItem(
+    //     <Link href="/admin/export" className="text-decoration-none"  onClick={handleLinkClick}>
+    //       Reports
+    //     </Link>,
+    //     "export",
+    //     <span>
+    //       <ExportOutlined style={iconSize} />
+    //     </span>
+    //   ),
+    // },
     hasUser && {
       key: henceofrthEnums.Roles.MY_PRIFILE_SETTINS,
       view: getItem(
@@ -344,15 +372,6 @@ const handleLinkClick = () => {
               Questionnaire
             </Link>,
             "questionnaire",
-            <span>
-              <BookOutlined style={iconSize} />
-            </span>
-          ),
-          getItem(
-            <Link href="/admin/export" className="text-decoration-none"  onClick={handleLinkClick}>
-              Export
-            </Link>,
-            "export",
             <span>
               <BookOutlined style={iconSize} />
             </span>
