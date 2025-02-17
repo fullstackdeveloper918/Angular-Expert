@@ -45,7 +45,7 @@ const { Row, Col, Card, Button, Pagination, Tooltip } = {
 };
 const { Search } = Input;
 const { Option } = Select;
-const Technology = () => {
+const Product = () => {
   const [loading, setLoading] = useState(false);
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
@@ -55,7 +55,7 @@ const Technology = () => {
       ?.replace(/_/g, " ")
       ?.replace(/\b\w/g, (char: any) => char.toUpperCase());
   };
-  const [selectedValue, setSelectedValue] = useState<any>("technology");
+  const [selectedValue, setSelectedValue] = useState<any>("product");
   console.log(selectedValue, "selectedValue");
 
   const handleSelectChange = (value: any) => {
@@ -304,21 +304,21 @@ const Technology = () => {
           )} ${dayjs(res?.meeting?.start_meeting_date).format("YYYY")}` ||
           "N/A",
         host_name: capFirst(res?.username) || "N/A",
-        // products: (
-        //   <Tooltip title={res?.products}>
-        //     {truncateText(capFirst(res?.products) || "N/A", 5)}
-        //   </Tooltip>
-        // ),
+        products: (
+          <Tooltip title={res?.products}>
+            {truncateText(capFirst(res?.products) || "N/A", 15)}
+          </Tooltip>
+        ),
         // project: (
         //   <Tooltip title={res?.project}>
         //     {truncateText(capFirst(res?.project) || "N/A", 5)}
         //   </Tooltip>
         // ),
-        technology: (
-          <Tooltip title={res?.technology}>
-            {truncateText(capFirst(res?.technology) || "N/A", 15)}
-          </Tooltip>
-        ),
+        // technology: (
+        //   <Tooltip title={res?.technology}>
+        //     {truncateText(capFirst(res?.technology) || "N/A", 5)}
+        //   </Tooltip>
+        // ),
         host_city: (
           <Tooltip title={res?.location}>
             {res?.location ? `${res?.location.slice(0, 20)}...` : "N/A"}
@@ -347,16 +347,16 @@ const Technology = () => {
     //   dataIndex: "project",
     //   key: "project",
     // },
-    // {
-    //   title: "Products",
-    //   dataIndex: "products",
-    //   key: "products",
-    // },
     {
-      title: "Technology",
-      dataIndex: "technology",
-      key: "technology",
+      title: "Products",
+      dataIndex: "products",
+      key: "products",
     },
+    // {
+    //   title: "Technology",
+    //   dataIndex: "technology",
+    //   key: "technology",
+    // },
     // {
     //     title: 'Meeting End Date',
     //     dataIndex: 'end_date',
@@ -392,14 +392,14 @@ const Technology = () => {
                       </Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item className="text-decoration-none">
-                    Technology
+                    Products
                     </Breadcrumb.Item>
                   </Breadcrumb>
                 </div>
                 {/* title  */}
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
                   <Typography.Title level={3} className="m-0 fw-bold">
-                  Technology
+                  Products
                   </Typography.Title>
                   <Button
                     type="primary"
@@ -528,4 +528,4 @@ const Technology = () => {
 //   width: "100%",
 // };
 
-export default Technology;
+export default Product;

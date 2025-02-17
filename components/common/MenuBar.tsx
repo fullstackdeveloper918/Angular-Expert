@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assests/images/image.png";
 import { Typography, type MenuProps } from "antd";
-import { CloseOutlined, ExportOutlined, RadarChartOutlined, TeamOutlined } from "@ant-design/icons";
+import { CloseOutlined, ExportOutlined, ProductOutlined, RadarChartOutlined, TeamOutlined } from "@ant-design/icons";
 import User from "../../assests/images/placeholder.png";
 import favicon from "../../assests/images/favicon.png";
 import {
@@ -275,6 +275,16 @@ const handleLinkClick = () => {
             </Link>,
             "technology",
             <RadarChartOutlined  style={iconSize} />
+          ),
+          getItem(
+            <Link
+              href="/admin/product"
+              className="text-decoration-none"
+            >
+              Product
+            </Link>,
+            "product",
+            <ProductOutlined  style={iconSize} />
           ),
          
         ]
