@@ -26,7 +26,7 @@ const { Row, Col, Button, Divider } = {
 const Updatepswrd = () => {
 
   const router =useRouter()
-  const cookies = parseCookies();
+  // const cookies = parseCookies();
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : "";
