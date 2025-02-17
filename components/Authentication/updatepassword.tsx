@@ -41,7 +41,7 @@ const Updatepswrd = () => {
       toast.success(res?.message, {
         autoClose: 5000
       });
-      router.back()
+      router.push(`/auth/signin`)
     } catch (error) {}
   };
   return (
