@@ -69,10 +69,10 @@ const Auth = {
     requests.patch('profile', info),
 };
 const dashboard={
-  upcoming: () =>
-    requests.get(`upcoming-meeting`),
-  next: () =>
-    requests.get(`next-meetings`),
+  upcoming: (q?: string) =>
+    requests.get(`upcoming-meeting?meeting_id=${q ? `?${q}` : ""}`),
+  next: (q?: string) =>
+    requests.get(`next-meetings?meeting_id=${q ? `?${q}` : ""}`),
 }
 const Admin={
   // admin/listadmin/add
@@ -114,24 +114,24 @@ const User = {
     requests.post('add-adtional-user', info),
   edit_additional_user: (info: any) =>
     requests.post('update-additional-users', info),
-  listing: (q?: string) =>
-    requests.get(`list${q ? `?${q}` : ""}`),
+  listing: (q?: string,id?:any) =>
+    requests.get(`list?meeting_id=${id ? `?${id}` : ""}${q ? `?${q}` : ""}`),
   // additional_user_listing: (q?: string) =>
   //   requests.get(`addtional-user-list${q ? `?${q}` : ""}`),
   additional_user_listing: (info: any) =>
     requests.post(`addtional-user-list`,info),
   arcivelisting: (q?: string) =>
     requests.get(`archive-user-listing${q ? `?${q}` : ""}`),
-  completelist: () =>
-    requests.get(`descending-completed-form`),
+  completelist: (q?:string) =>
+    requests.get(`descending-completed-form?meeting_id=${q ? `?${q}` : ""}`),
   listing1: () =>
     requests.get(`list`),
   user_listing: (q?: string) =>
-    requests.get(`single-user-form-status`),
-  check_fall_spring: () =>
-    requests.get(`spring-fall-meeting-count`),
-  user_completed_noncompleted: () =>
-    requests.get(`complete-uncomplete-form`),
+    requests.get(`single-user-form-status?meeting_id=${q ? `?${q}` : ""}`),
+  check_fall_spring: (q?:string) =>
+    requests.get(`spring-fall-meeting-count?meeting_id=${q ? `?${q}` : ""}`),
+  user_completed_noncompleted: (q?:string) =>
+    requests.get(`complete-uncomplete-form?meeting_id=${q ? `?${q}` : ""}`),
   user_total_count: (q?: string) =>
     requests.get(`total-member-count`),
   user_remains_userfor_meeting: (q?: string) =>
@@ -169,16 +169,16 @@ const Meeting={
   // add-meeting
   create: (info: any) =>
     requests.post('add-meeting', info),
-  update:()=>
-    requests.get("five-day-beforemeeting-countdown"),
+  update:(q?: string)=>
+    requests.get(`five-day-beforemeeting-countdown?meeting_id=${q ? `?${q}` : ""}`),
   past_meeting:(q?: string)=>
     requests.get(`past-meetings${q ? `?${q}` : ""}`),
   meeting_user:(info: any)=>
     requests.post(`past-meetings-user`,info),
   listing: (q?: string) =>
     requests.get(`meeting-list${q ? `?${q}` : ""}`),
-  upcoming_meeting: () =>
-    requests.get(`upcoming-meeting`),
+  upcoming_meeting: (q?: string) =>
+    requests.get(`upcoming-meeting?meeting_id=${q ? `?${q}` : ""}`),
   archive: (q?: string) =>
     requests.get(`meeting-archive${q ? `?${q}` : ""}`),
   getById: (info: any) =>
@@ -214,8 +214,8 @@ const Manage_Question={
     requests.post(`question-delete`, info),
 }
 const Questionnaire={
-  listing: (q?: string) =>
-    requests.get(`question-list${q ? `?${q}` : ""}`),
+  listing: (q?: string,id?:any) =>
+    requests.get(`question-list?meeting_id=${id ? `?${id}` : ""}${q ? `?${q}` : ""}`),
 }
 // const Dashboard = {
 //   listing: (q?: string) =>

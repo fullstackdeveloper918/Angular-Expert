@@ -116,7 +116,8 @@ const QuestionnairList = () => {
     }, []);
     const getDataById = async () => {
         const item = {
-            user_id: getUserdata?.user_id
+            user_id: getUserdata?.user_id,
+            meeting_id:getUserdata.meetings.NextMeeting.id
         }
         try {
             const res = await api.User.getById(item as any);
@@ -143,7 +144,7 @@ const QuestionnairList = () => {
         try {
             const query: any = searchTerm ? `searchTerm=${searchTerm}` : '';
             const params: any = questionType ? { searchFilter: questionType } : {};
-            let res = await api.Questionnaire.listing(query);
+            let res = await api.Questionnaire.listing(query,getUserdata.meetings.NextMeeting.id);
 
             setState(res.data);
             if (res?.data?.status == 500) {

@@ -21,6 +21,8 @@ type Page<P = {}> = NextPage<P> & {
 
 const AdminDashboard: Page = (props: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData)
+  console.log(getUserdata,"getUserdata");
+  
   const [loading, setLoading] = useState<any>(true)
   const [state1, setState1] = useState<any>([])
   const [state2, setState2] = useState<any>([])
@@ -50,11 +52,16 @@ const AdminDashboard: Page = (props: any) => {
   console.log(xyz1,"xyz1");
   
   const abc:any = xyz ? dayjs.tz(xyz, 'America/New_York').valueOf() : undefined;
-console.log(xyz, "axfz");
+// console.log(getUserdata.meetings.NextMeeting.id, "axfz");
 
 
   const updateDue = async () => {
-    let res = await api.Meeting.update()
+console.log(getUserdata,"getUserdatagetUserdata");
+
+    let item={
+      meeting_id:getUserdata.meetings.NextMeeting.id
+    }
+    let res = await api.Meeting.update(getUserdata.meetings.NextMeeting.id)
 
   }
   useEffect(() => {
@@ -163,7 +170,7 @@ const [error,setError]=useState<any>("")
     },
   ]
   const getDataById = async (id: any) => {
-    const item = { user_id: id };
+    const item = { user_id: id,meeting_id:getUserdata.meetings.NextMeeting.id };
     try {
       const res = await api.User.getById(item as any);
       return res?.data || null; 
@@ -485,7 +492,7 @@ const [error,setError]=useState<any>("")
   const getData = async () => {
     setLoading(true)
     try {
-      let apiRes1 = await api.User.user_completed_noncompleted()
+      let apiRes1 = await api.User.user_completed_noncompleted(getUserdata.meetings.NextMeeting.id)
       setComplete(apiRes1.data)
       setLoading(false)
     } catch (error) {
@@ -495,8 +502,8 @@ const [error,setError]=useState<any>("")
   const userlist = async () => {
     setLoading(true)
     try {
-      let res = await api.User.listing()
-      let response = await api.User.completelist()
+      let res = await api.User.listing(getUserdata.meetings.NextMeeting.id)
+      let response = await api.User.completelist(getUserdata.meetings.NextMeeting.id)
       setState1(res?.data)
       setState2(response)
       setLoading(false)
@@ -511,9 +518,9 @@ const [error,setError]=useState<any>("")
   }, []);
   const initialise = async () => {
     try {
-        let res = await api.Meeting.upcoming_meeting();
+        let res = await api.Meeting.upcoming_meeting(getUserdata.meetings.NextMeeting.id);
         setAreas(res);
-        let apiRes1 = await api.User.check_fall_spring()
+        let apiRes1 = await api.User.check_fall_spring(getUserdata.meetings.NextMeeting.id)
         setCheck(apiRes1)
     } catch (error) {
     }

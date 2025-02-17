@@ -3,7 +3,7 @@ import logo from "../../assests/images/image.png";
 import React from "react";
 import { Form, Input } from "antd";
 import dynamic from "next/dynamic";
-import {  useSearchParams } from "next/navigation";
+import {  useRouter, useSearchParams } from "next/navigation";
 import { parseCookies } from "nookies";
 import api from "@/utils/api";
 import { toast, ToastContainer } from "react-toastify";
@@ -24,6 +24,7 @@ const { Row, Col, Button, Divider } = {
 };
 
 const Updatepswrd = () => {
+  const router =useRouter()
   const cookies = parseCookies();
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
@@ -36,7 +37,10 @@ const Updatepswrd = () => {
     };
     try {
       let res = await api.Auth.updatePassword(items);
-      toast.success(res?.message);
+      toast.success(res?.message, {
+        autoClose: 5000
+      });
+      router.push(`/auth/signin`)
     } catch (error) {}
   };
   return (
