@@ -89,6 +89,7 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
   });
   const [openKeys, setOpenKeys] = useState(["sub1"]);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
+console.log(getUserdata,"getUserdata");
 
   const hasDashboardPermission =
     (getUserdata?.permission?.length &&

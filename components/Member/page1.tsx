@@ -49,6 +49,8 @@ import {  clearSpecificFormData } from "@/lib/features/formSlice";
 //   }),
 // };
 const Page1 = () => {
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
+  console.log(getUserdata,"getUserdata");
   const router = useRouter();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
@@ -76,17 +78,20 @@ const Page1 = () => {
   const onFinish = async(values: any) => {
     if (actionType === 'submit') {
       let items = {
-        bussiness_update: {
-          userId: value,
+        business_update: {
+          // userId: value,
           financial_position: values?.financial_position,
           sales_position: values?.sales_position,
           accomplishments: values?.accomplishments,
           hr_position: values?.hr_position,
           current_challenges: values?.current_challenges,
           craftsmen_support: values?.craftsmen_support,
+          is_completed:""
         },
+        meeting_id:getUserdata.meetings.NextMeeting.id,
+        user_id:getUserdata.user_id
       } as any;
-  
+   
       try {
         const fieldsToClear = [
           "financial_position",
@@ -99,14 +104,17 @@ const Page1 = () => {
         if (type == "edit") {
           let items = {
             bussiness_update: {
-              userId: value,
+              // userId: value,
               financial_position: values?.financial_position,
               sales_position: values?.sales_position,
               accomplishments: values?.accomplishments,
               hr_position: values?.hr_position,
               current_challenges: values?.current_challenges,
               craftsmen_support: values?.craftsmen_support,
+               is_completed:values?.craftsmen_support,
             },
+            meeting_id:getUserdata.meetings.NextMeeting.id,
+            user_id:getUserdata.user_id
           } as any;
           setLoading(true);
           let res = await api.User.edit(items);
@@ -152,7 +160,8 @@ const Page1 = () => {
     } else if (actionType === 'save') {
       let items = {
         bussiness_update: {
-          userId: value,
+          // userId: value,
+           is_completed:"",
           financial_position: values?.financial_position,
           sales_position: values?.sales_position,
           accomplishments: values?.accomplishments,
@@ -160,6 +169,8 @@ const Page1 = () => {
           current_challenges: values?.current_challenges,
           craftsmen_support: values?.craftsmen_support,
         },
+        meeting_id:getUserdata.meetings.NextMeeting.id,
+        user_id:getUserdata.user_id
       } as any;
   
       try {
@@ -174,14 +185,17 @@ const Page1 = () => {
         if (type == "edit") {
           let items = {
             bussiness_update: {
-              userId: value,
+              // userId: value,
               financial_position: values?.financial_position,
               sales_position: values?.sales_position,
               accomplishments: values?.accomplishments,
               hr_position: values?.hr_position,
               current_challenges: values?.current_challenges,
               craftsmen_support: values?.craftsmen_support,
+               is_completed:values?.craftsmen_support,
             },
+            meeting_id:getUserdata.meetings.NextMeeting.id,
+            user_id:getUserdata.user_id
           } as any;
           setLoading1(true);
           let res = await api.User.edit(items);
@@ -231,6 +245,7 @@ const Page1 = () => {
   const getDataById = async () => {
     const item = {
       user_id: value,
+      meeting_id:getUserdata.meetings.NextMeeting.id
     };
     try {
       const res = await api.User.getById(item as any);

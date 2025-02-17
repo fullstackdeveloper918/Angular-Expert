@@ -134,7 +134,7 @@ const MeetingView = () => {
     };
     try {
       setLoading(true)
-      let res:any = await axios.post("https://frontend.goaideme.com/reset-password", 
+      let res:any = await axios.post("https://nahb.goaideme.com/reset-password", 
       // let res = await axios.post("https://app-uilsndszlq-uc.a.run.app/reset-password", 
         items, // items is the body of the request
         {
@@ -197,7 +197,7 @@ const sharePdf = async () => {
     formData.append('file', file);
 
 
-    const res = await fetch('https://frontend.goaideme.com/save-pdf', {
+    const res = await fetch('https://nahb.goaideme.com/save-pdf', {
     // const res = await fetch('https://app-uilsndszlq-uc.a.run.app/save-pdf', {
 
         method: 'POST',

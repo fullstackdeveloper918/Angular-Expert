@@ -123,7 +123,7 @@ const scheduleTokenRefresh = (auth: any) => {
       const check= auth.currentUser
       // const checkUid:any = check.uid;
       const idToken = await userCredential.user.getIdToken(true);
-      const res = await axios.get("https://frontend.goaideme.com/single-user", {
+      const res = await axios.get("https://nahb.goaideme.com/single-user", {
         headers: {
           Token: idToken,
           "Content-Type": "application/json",

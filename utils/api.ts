@@ -3,9 +3,10 @@ const SuperagentPromise = require('superagent-promise');
 const superagent = SuperagentPromise(_superagent, global.Promise);
 import { parseCookies } from 'nookies';
 import { info } from "console";
+// import { useSelector } from "react-redux";
 
 // const API_ROOT = 'https://app-uilsndszlq-uc.a.run.app/';
-const API_ROOT = 'https://frontend.goaideme.com/';
+const API_ROOT = 'https://nahb.goaideme.com/';
 
 const BUCKET_ROOT = `https://shared2.fra1.digitaloceanspaces.com/shared2/`;
 
@@ -19,7 +20,8 @@ const API_FILE_ROOT_DB_BACKUP = `${BUCKET_ROOT}backup/`;
 const cookies = parseCookies();
 const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
 
-
+// const getUserdata = useSelector((state: any) => state?.user?.userData);
+// console.log(getUserdata,"getUserdata");
 const encode = encodeURIComponent;
 const responseBody = (res: any) => res.body;
 
@@ -91,7 +93,7 @@ const Export={
   // listing: (q?: string) =>
   //   requests.get(`admin/list${q ? `?${q}` : ""}`),
   listing: () =>
-    requests.get(`https://frontend.goaideme.com/get-original-report`),
+    requests.get(`https://nahb.goaideme.com/get-original-report`),
 }
 const photo_section={
   remove_photo: (info: any) =>
