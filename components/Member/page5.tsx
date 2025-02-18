@@ -14,12 +14,14 @@ import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearFormData, clearSpecificFormData } from "@/lib/features/formSlice";
 
 const Page5 = () => {
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
-  const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
+  const [state, setState] = useState<any>("");
+  const [actionType, setActionType] = useState<"submit" | "save" | null>(null);
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : "";
@@ -29,11 +31,12 @@ const Page5 = () => {
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 300);
-  const submit = async(values: any) => {
-    if (actionType === 'submit') {
+  const submit = async (values: any) => {
+    if (actionType === "submit") {
       let items = {
         craftsmen_checkup: {
-          userId: value,
+          user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
           commitment: values?.commitment,
           contribute: values?.contribute,
           wellbeing: values?.wellbeing,
@@ -47,11 +50,12 @@ const Page5 = () => {
           "wellbeing",
           "contact_info",
         ];
-  
-        if (type == "edit") {
+
+        if (type == "edit"||state?.craftsMenUpdates?.length) {
           let items = {
             craftsmen_checkup: {
-              userId: value,
+              user_id: value,
+              meeting_id: getUserdata.meetings.NextMeeting.id,
               commitment: values?.commitment,
               contribute: values?.contribute,
               wellbeing: values?.wellbeing,
@@ -61,7 +65,7 @@ const Page5 = () => {
           setLoading(true);
           let res = await api.User.edit(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-  
+
           toast.success(res?.message);
           // if (!pagetype) {
           //     router.push(`/admin/member/add/page6?${value}&edit`)
@@ -72,20 +76,23 @@ const Page5 = () => {
             if (!pagetype) {
               router.push(`/admin/member/add/page6?${value}&edit`);
             } else {
-                router.push("/admin/questionnaire?page5")
+              router.push("/admin/questionnaire?page5");
             }
           }, 1000);
         } else {
           setLoading(true);
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-  
+
           if (res?.status == 500) {
-              localStorage.setItem('redirectAfterLogin', window.location.pathname);
-              localStorage.removeItem("hasReloaded")
-              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-              toast.error("Session Expired. Login Again");
-              router.replace("/auth/signin");;
+            localStorage.setItem(
+              "redirectAfterLogin",
+              window.location.pathname
+            );
+            localStorage.removeItem("hasReloaded");
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+            toast.error("Session Expired. Login Again");
+            router.replace("/auth/signin");
           }
           router.push(`/admin/member/add/page6?${res?.userId}`);
         }
@@ -98,10 +105,11 @@ const Page5 = () => {
           setLoading(false);
         }
       }
-    } else if (actionType === 'save') {
+    } else if (actionType === "save") {
       let items = {
         craftsmen_checkup: {
-          userId: value,
+          user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
           commitment: values?.commitment,
           contribute: values?.contribute,
           wellbeing: values?.wellbeing,
@@ -115,11 +123,12 @@ const Page5 = () => {
           "wellbeing",
           "contact_info",
         ];
-  
-        if (type == "edit") {
+
+        if (state?.craftsMenUpdates?.length||type == "edit") {
           let items = {
             craftsmen_checkup: {
-              userId: value,
+              user_id: value,
+              meeting_id: getUserdata.meetings.NextMeeting.id,
               commitment: values?.commitment,
               contribute: values?.contribute,
               wellbeing: values?.wellbeing,
@@ -129,24 +138,27 @@ const Page5 = () => {
           setLoading1(true);
           let res = await api.User.edit(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-  
+
           toast.success(res?.message);
           setTimeout(() => {
             if (pagetype) {
-              router.push("/admin/questionnaire?page5")
-            } 
+              router.push("/admin/questionnaire?page5");
+            }
           }, 1000);
         } else {
           setLoading1(true);
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-  
+
           if (res?.status == 500) {
-              localStorage.setItem('redirectAfterLogin', window.location.pathname);
-              localStorage.removeItem("hasReloaded")
-              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-              toast.error("Session Expired. Login Again");
-              router.replace("/auth/signin");;
+            localStorage.setItem(
+              "redirectAfterLogin",
+              window.location.pathname
+            );
+            localStorage.removeItem("hasReloaded");
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+            toast.error("Session Expired. Login Again");
+            router.replace("/auth/signin");
           }
           router.push(`/admin/member/add/page6?${res?.userId}`);
         }
@@ -162,34 +174,33 @@ const Page5 = () => {
     }
     setLoading1(false);
   };
- 
+
   const handleSubmitClick = () => {
-    setActionType('submit');
+    setActionType("submit");
     form.submit(); // Trigger form submission
   };
 
   const handleSaveClick = () => {
-    setActionType('save');
+    setActionType("save");
     form.submit(); // Trigger form submission
   };
-  
 
-  const [state, setState] = useState<any>("");
   const getDataById = async () => {
     const item = {
       user_id: value,
+      meeting_id: getUserdata.meetings.NextMeeting.id,
     };
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
       if (res?.data?.status == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.setItem("redirectAfterLogin", window.location.pathname);
+        localStorage.removeItem("hasReloaded");
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
       }
-      const dataFromApi = res?.data || {};
+      const dataFromApi = res?.data?.craftsMenUpdates[0] || {};
 
       const finalData = {
         commitment: formValues?.commitment || dataFromApi?.commitment,
@@ -201,9 +212,9 @@ const Page5 = () => {
       form.setFieldsValue(finalData);
     } catch (error: any) {
       if (error?.status == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.setItem("redirectAfterLogin", window.location.pathname);
+        localStorage.removeItem("hasReloaded");
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
       }

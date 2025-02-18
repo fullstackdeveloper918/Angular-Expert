@@ -14,9 +14,11 @@ import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearSpecificFormData } from "@/lib/features/formSlice";
 
 const Page7 = () => {
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const [state, setState] = useState<any>("");
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
@@ -33,7 +35,8 @@ const Page7 = () => {
     if (actionType === 'submit') {
       let items = {
         spring_meeting: {
-          userId: value,
+          user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
           estimating: values?.estimating,
           accountability: values?.accountability,
           productivity: values?.productivity,
@@ -42,10 +45,12 @@ const Page7 = () => {
       try {
         const fieldsToClear = ["estimating", "accountability", "productivity"];
   
-        if (type == "edit") {
+        // if (type == "edit") {
+        if (state?.roundTableTopics?.length||type == "edit") {
           let items = {
             spring_meeting: {
-              userId: value,
+              user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
               estimating: values?.estimating,
               accountability: values?.accountability,
               productivity: values?.productivity,
@@ -90,7 +95,8 @@ const Page7 = () => {
     } else if (actionType === 'save') {
       let items = {
         spring_meeting: {
-          userId: value,
+          user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
           estimating: values?.estimating,
           accountability: values?.accountability,
           productivity: values?.productivity,
@@ -99,10 +105,11 @@ const Page7 = () => {
       try {
         const fieldsToClear = ["estimating", "accountability", "productivity"];
   
-        if (type == "edit") {
+        if (state?.roundTableTopics?.length||type == "edit") {
           let items = {
             spring_meeting: {
-              userId: value,
+              user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
               estimating: values?.estimating,
               accountability: values?.accountability,
               productivity: values?.productivity,
@@ -157,10 +164,10 @@ const Page7 = () => {
     form.submit(); // Trigger form submission
   };
 
-  const [state, setState] = useState<any>("");
   const getDataById = async () => {
     const item = {
       user_id: value,
+      meeting_id: getUserdata.meetings.NextMeeting.id,
     };
     try {
       const res = await api.User.getById(item as any);
@@ -173,7 +180,7 @@ const Page7 = () => {
         router.replace("/auth/signin");
       }
 
-      const dataFromApi = res?.data || {};
+      const dataFromApi = res?.data?.roundTableTopics[0] || {};
 
       const finalData = {
         estimating: formValues?.estimating || dataFromApi?.estimating,

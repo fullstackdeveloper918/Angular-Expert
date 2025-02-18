@@ -12,12 +12,14 @@ import { useDispatch, useSelector } from "react-redux";
 import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearFormData, clearSpecificFormData } from "@/lib/features/formSlice";
 const Page6 = () => {
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const [state, setState] = useState<any>("");
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
-  const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
+  const [actionType, setActionType] = useState<"submit" | "save" | null>(null);
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : "";
@@ -27,21 +29,24 @@ const Page6 = () => {
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 300);
-  const submit = async(values: any) => {
-    if (actionType === 'submit') {
+  const submit = async (values: any) => {
+    if (actionType === "submit") {
       let items = {
         fall_meeting_review: {
-          userId: value,
+          user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
           fall_meeting: values?.fall_meeting,
           personal_finances: values?.personal_finances,
         },
       };
       try {
         const fieldsToClear = ["fall_meeting", "personal_finances"];
-        if (type == "edit") {
+        if (state?.meetingReviews?.length||type == "edit") {
+          // if (type == "edit") {
           let items = {
             fall_meeting_review: {
-              userId: value,
+              user_id: value,
+              meeting_id: getUserdata.meetings.NextMeeting.id,
               fall_meeting: values?.fall_meeting,
               personal_finances: values?.personal_finances,
             },
@@ -49,7 +54,7 @@ const Page6 = () => {
           setLoading(true);
           let res = await api.User.edit(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-  
+
           toast.success("Update spring meeting review", {
             autoClose: 10000, // 10 seconds
           });
@@ -57,21 +62,24 @@ const Page6 = () => {
             if (!pagetype) {
               router.push(`/admin/member/add/page7?${value}&edit`);
             } else {
-            //   router.back();
-            router.push("/admin/questionnaire?page6")
+              //   router.back();
+              router.push("/admin/questionnaire?page6");
             }
           }, 1000);
         } else {
           setLoading(true);
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-  
+
           if (res?.status == 500) {
-              localStorage.setItem('redirectAfterLogin', window.location.pathname);
-              localStorage.removeItem("hasReloaded")
-              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-              toast.error("Session Expired. Login Again");
-              router.replace("/auth/signin");
+            localStorage.setItem(
+              "redirectAfterLogin",
+              window.location.pathname
+            );
+            localStorage.removeItem("hasReloaded");
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+            toast.error("Session Expired. Login Again");
+            router.replace("/auth/signin");
           }
           if (!pagetype) {
             router.push(
@@ -90,20 +98,22 @@ const Page6 = () => {
           setLoading(false);
         }
       }
-    } else if (actionType === 'save') {
+    } else if (actionType === "save") {
       let items = {
         fall_meeting_review: {
-          userId: value,
+          user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
           fall_meeting: values?.fall_meeting,
           personal_finances: values?.personal_finances,
         },
       };
       try {
         const fieldsToClear = ["fall_meeting", "personal_finances"];
-        if (type == "edit") {
+        if (state?.meetingReviews?.length||type == "edit") {
           let items = {
             fall_meeting_review: {
-              userId: value,
+              user_id: value,
+              meeting_id: getUserdata.meetings.NextMeeting.id,
               fall_meeting: values?.fall_meeting,
               personal_finances: values?.personal_finances,
             },
@@ -111,28 +121,30 @@ const Page6 = () => {
           setLoading1(true);
           let res = await api.User.edit(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-  
+
           toast.success("Update spring meeting review", {
             autoClose: 10000, // 10 seconds
           });
           setTimeout(() => {
             if (pagetype) {
-              router.push("/admin/questionnaire?page6")
-            } 
+              router.push("/admin/questionnaire?page6");
+            }
           }, 1000);
         } else {
           setLoading1(true);
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-  
+
           if (res?.status == 500) {
-              localStorage.setItem('redirectAfterLogin', window.location.pathname);
-              localStorage.removeItem("hasReloaded")
-              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-              toast.error("Session Expired. Login Again");
-              router.replace("/auth/signin");
+            localStorage.setItem(
+              "redirectAfterLogin",
+              window.location.pathname
+            );
+            localStorage.removeItem("hasReloaded");
+            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+            toast.error("Session Expired. Login Again");
+            router.replace("/auth/signin");
           }
-        
         }
       } catch (error) {
         if (!pagetype) {
@@ -147,31 +159,31 @@ const Page6 = () => {
     setLoading1(false);
   };
   const handleSubmitClick = () => {
-    setActionType('submit');
+    setActionType("submit");
     form.submit(); // Trigger form submission
   };
 
   const handleSaveClick = () => {
-    setActionType('save');
+    setActionType("save");
     form.submit(); // Trigger form submission
   };
-  const [state, setState] = useState<any>("");
   const getDataById = async () => {
     const item = {
       user_id: value,
+      meeting_id: getUserdata.meetings.NextMeeting.id,
     };
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
       if (res?.data?.status == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.setItem("redirectAfterLogin", window.location.pathname);
+        localStorage.removeItem("hasReloaded");
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
       }
 
-      const dataFromApi = res?.data || {};
+      const dataFromApi = res?.data?.meetingReviews[0] || {};
 
       const finalData = {
         fall_meeting:
@@ -183,9 +195,9 @@ const Page6 = () => {
       form.setFieldsValue(finalData);
     } catch (error: any) {
       if (error == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        localStorage.setItem("redirectAfterLogin", window.location.pathname);
+        localStorage.removeItem("hasReloaded");
+        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
       }
@@ -329,11 +341,11 @@ const Page6 = () => {
                           <Button
                             size={"large"}
                             type="primary"
-                           onClick={handleSubmitClick}
+                            onClick={handleSubmitClick}
                             className="login-form-button "
                             loading={loading}
                           >
-                           Next
+                            Next
                           </Button>
                         </div>
                       ) : (

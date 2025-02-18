@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
 
 const MemberUpdatePDF = (props) => {
   const photoSection = props?.state?.photo_section || [];
+console.log(props?.state,"props");
 
   const options = { httpHeaders: { crossOrigin: "anonymous" } };
   // <Image key={imageIndex} style={{ width: 100, height: 100 }} options={options} src={{ uri: ${file.url}, method: "GET", headers: { Pragma: 'no-cache', "Cache-Control": "no-cache" }, body: "" }} />
@@ -225,43 +226,43 @@ const MemberUpdatePDF = (props) => {
             <Text style={styles.main_heading}>Business Update</Text>
             <Text style={styles.text}>Current financial position:</Text>
             <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
-              {props?.state?.financial_position}
+              {props?.state?.businessUpdate[0]?.financial_position}
             </Text>
             <Text style={styles.text} wrap={false}>
               Current sales positions, hot prospects, recently contracted work:
             </Text>
             <Text style={styles.textarea} wrap={false}>
-              {props?.state?.sales_position}
+              {props?.state?.businessUpdate[0]?.sales_position}
             </Text>
             <Text style={styles.text}>
               Accomplishments in the last 6 months:
             </Text>
             <Text style={styles.textarea} wrap={false}>
-              {props?.state?.accomplishments}
+              {props?.state?.businessUpdate[0]?.accomplishments}
             </Text>
             <Text style={styles.text}> HR position &/or needs: </Text>
             <Text style={styles.textarea} wrap={false}>
-              {props?.state?.hr_position}
+              {props?.state?.businessUpdate[0]?.hr_position}
             </Text>
             <Text style={styles.text}>
               Current challenges (e.g., problem client, personnel issue(s),
               trade availability, rising costs, supply chain):
             </Text>
             <Text style={styles.textarea} wrap={false}>
-              {props?.state?.current_challenges}
+              {props?.state?.businessUpdate[0]?.current_challenges}
             </Text>
             <Text style={styles.text}>
               How can the Craftsmen aid or support you with these challenges?
             </Text>
             <Text style={styles.textarea} wrap={false}>
-              {props?.state?.craftsmen_support}
+              {props?.state?.businessUpdate[0]?.craftsmen_support}
             </Text>
           </View>
 
           <View style={styles.section}>
             <Text style={styles.main_heading}>Goals</Text>
             <Text style={styles.subheading}>Goals from Last Meeting</Text>
-            {props?.state?.goal_last_meeting?.map((res, index) => (
+            {props?.state?.lastNextMeetings[0]?.goal_last_meeting?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
@@ -287,7 +288,7 @@ const MemberUpdatePDF = (props) => {
 
           <View style={styles.section}>
             <Text style={styles.subheading}>Goals for Next Meeting</Text>
-            {props?.state?.goal_next_meeting?.map((res, index) => (
+            {props?.state?.lastNextMeetings[0]?.goal_next_meeting?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
@@ -315,7 +316,7 @@ const MemberUpdatePDF = (props) => {
                 of the app or website:
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.technology}
+                {props?.state?.technologyData[0]?.technology}
               </Text>
 
               <Text style={styles.text}>
@@ -323,7 +324,7 @@ const MemberUpdatePDF = (props) => {
                 share the name and website:
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.products}
+                {props?.state?.technologyData[0]?.products}
               </Text>
 
               <Text style={styles.text}>
@@ -331,7 +332,7 @@ const MemberUpdatePDF = (props) => {
                 apart from your competition:
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                   {props?.state?.project}   
+                   {props?.state?.technologyData[0]?.project}   
               </Text>
             </View>
           </View>
@@ -343,28 +344,28 @@ const MemberUpdatePDF = (props) => {
                 What is your level of commitment to our club?
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.commitment}
+                {props?.state?.craftsMenUpdates[0]?.commitment}
               </Text>
 
               <Text style={styles.text}>
                 List Something(s) you can do to contribute to our club.
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.contribute}
+                {props?.state?.craftsMenUpdates[0]?.contribute}
               </Text>
 
               <Text style={styles.text}>
                 How is your present health, wellbeing, family life?
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.wellbeing}
+                {props?.state?.craftsMenUpdates[0]?.wellbeing}
               </Text>
 
               <Text style={styles.text}>
                 Have any items on your contact info changed?
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.contact_info}
+                {props?.state?.craftsMenUpdates[0]?.contact_info}
               </Text>
             </View>
           </View>
@@ -376,7 +377,7 @@ const MemberUpdatePDF = (props) => {
                 What was your most valuable take away from our fall meeting?
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.fall_meeting}
+                {props?.state?.meetingReviews[0]?.fall_meeting}
               </Text>
 
               <Text style={styles.text}>
@@ -385,7 +386,7 @@ const MemberUpdatePDF = (props) => {
                 finances?
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.personal_finances}
+                {props?.state?.meetingReviews[0]?.personal_finances}
               </Text>
             </View>
           </View>
@@ -400,27 +401,27 @@ const MemberUpdatePDF = (props) => {
             </Text>
             <View style={styles.goal}>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.estimating}
+                {props?.state?.roundTableTopics[0]?.estimating}
               </Text>
 
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.accountability}
+                {props?.state?.roundTableTopics[0]?.accountability}
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.productivity}
+                {props?.state?.roundTableTopics[0]?.productivity}
               </Text>
             </View>
           </View>
 
           <View style={styles.section}>
             <Text style={styles.main_heading} wrap={false}> ADDITIONAL QUESTIONS</Text>
-            {props?.state?.questions?.map((res, index) => (
+            {props?.state?.answer?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_wrapper}>
                   <View style={styles.Flex_div}>
-                    <Text style={styles.text}> {res?.question} </Text>
+                    <Text style={styles.text}> {res?.questions[0]?.question} </Text>
                     <Text style={styles.textarea} wrap={false}>
-                         {res?.answer}  
+                         {res?.questions[0]?.answer}  
                     </Text>
                   </View>
                 </View>
@@ -441,7 +442,9 @@ const MemberUpdatePDF = (props) => {
                           <View style={styles.images_div}>
                             {Array.isArray(item?.images) &&
                               item.images.map((imageUrl, imgIndex) => (
+                                
                                 <React.Fragment key={imgIndex}>
+                                  {console.log(imageUrl,"imageUrl")}
                                   <Image
                                     style={styles.innderImg}
                                     options={options}

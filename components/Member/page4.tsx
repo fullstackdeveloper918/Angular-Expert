@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearFormData, clearSpecificFormData } from "@/lib/features/formSlice";
 const Page4 = () => {
+   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -34,7 +35,8 @@ const Page4 = () => {
     if (actionType === 'submit') {
       let items = {
         craftsmen_toolbox: {
-          userId: value,
+          user_id: value,
+          meeting_id:getUserdata.meetings.NextMeeting.id,
           technology: values?.technology,
           products: values?.products,
           project: values?.project,
@@ -42,10 +44,12 @@ const Page4 = () => {
       };
       try {
         const fieldsToClear = ["products", "project", "technology"];
-        if (type == "edit") {
+        // if (type == "edit") {
+        if (state?.technologyData?.length||type == "edit") {
           let items = {
             craftsmen_toolbox: {
-              userId: value,
+              user_id: value,
+              meeting_id:getUserdata.meetings.NextMeeting.id,
               technology: values?.technology,
               products: values?.products,
               project: values?.project,
@@ -107,7 +111,8 @@ const Page4 = () => {
     } else if (actionType === 'save') {
       let items = {
         craftsmen_toolbox: {
-          userId: value,
+          user_id: value,
+          meeting_id:getUserdata.meetings.NextMeeting.id,
           technology: values?.technology,
           products: values?.products,
           project: values?.project,
@@ -115,10 +120,12 @@ const Page4 = () => {
       };
       try {
         const fieldsToClear = ["products", "project", "technology"];
-        if (type == "edit") {
+        // if (type == "edit") {
+        if (state?.technologyData.length||type == "edit") {
           let items = {
             craftsmen_toolbox: {
-              userId: value,
+              user_id: value,
+              meeting_id:getUserdata.meetings.NextMeeting.id,
               technology: values?.technology,
               products: values?.products,
               project: values?.project,
@@ -193,6 +200,7 @@ const Page4 = () => {
   const getDataById = async () => {
     const item = {
       user_id: value,
+      meeting_id:getUserdata.meetings.NextMeeting.id,
     };
     try {
       const res = await api.User.getById(item as any);
@@ -204,7 +212,7 @@ const Page4 = () => {
         toast.error("Session Expired. Login Again");
         router.replace("/auth/signin");
       }
-      const dataFromApi = res?.data || {};
+      const dataFromApi = res?.data?.technologyData[0] || {};
 
       const finalData = {
         products: formValues?.products || dataFromApi?.products || "",

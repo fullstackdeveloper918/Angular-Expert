@@ -86,10 +86,10 @@ const Page1 = () => {
           hr_position: values?.hr_position,
           current_challenges: values?.current_challenges,
           craftsmen_support: values?.craftsmen_support,
-          is_completed:""
+          // is_completed:""
+          meeting_id:getUserdata.meetings.NextMeeting.id,
+          user_id:getUserdata.user_id
         },
-        meeting_id:getUserdata.meetings.NextMeeting.id,
-        user_id:getUserdata.user_id
       } as any;
    
       try {
@@ -101,9 +101,10 @@ const Page1 = () => {
           "current_challenges",
           "craftsmen_support",
         ];
-        if (type == "edit") {
+        // if (type == "edit") {
+        if (state?.businessUpdate?.length||type == "edit") {
           let items = {
-            bussiness_update: {
+            business_update: {
               // userId: value,
               financial_position: values?.financial_position,
               sales_position: values?.sales_position,
@@ -111,10 +112,10 @@ const Page1 = () => {
               hr_position: values?.hr_position,
               current_challenges: values?.current_challenges,
               craftsmen_support: values?.craftsmen_support,
-               is_completed:values?.craftsmen_support,
+              //  is_completed:values?.craftsmen_support,
+              meeting_id:getUserdata.meetings.NextMeeting.id,
+              user_id:getUserdata.user_id
             },
-            meeting_id:getUserdata.meetings.NextMeeting.id,
-            user_id:getUserdata.user_id
           } as any;
           setLoading(true);
           let res = await api.User.edit(items);
@@ -131,24 +132,24 @@ const Page1 = () => {
           setLoading(true);
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-          if (res?.status == 500) {
-            localStorage.setItem('redirectAfterLogin', window.location.pathname);
-            localStorage.removeItem("hasReloaded")
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-          }
+          // if (res?.status == 500) {
+          //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          //   localStorage.removeItem("hasReloaded")
+          // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          // toast.error("Session Expired. Login Again");
+          // router.replace("/auth/signin");
+          // }
           router.push(`/admin/member/add/page3?${res?.user_id}`)
         }
       } catch (error: any) {
         setLoading(false);
-        if (error?.status == 500) {
-          localStorage.setItem('redirectAfterLogin', window.location.pathname);
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          localStorage.removeItem("hasReloaded")
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
+        // if (error?.status == 500) {
+        //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        //   localStorage.removeItem("hasReloaded")
+        //   toast.error("Session Expired. Login Again");
+        //   router.replace("/auth/signin");
+        // }
         if (!pagetype) {
           setLoading(false);
         }
@@ -161,16 +162,16 @@ const Page1 = () => {
       let items = {
         bussiness_update: {
           // userId: value,
-           is_completed:"",
+          //  is_completed:"",
           financial_position: values?.financial_position,
           sales_position: values?.sales_position,
           accomplishments: values?.accomplishments,
           hr_position: values?.hr_position,
           current_challenges: values?.current_challenges,
           craftsmen_support: values?.craftsmen_support,
+          meeting_id:getUserdata.meetings.NextMeeting.id,
+          user_id:getUserdata.user_id
         },
-        meeting_id:getUserdata.meetings.NextMeeting.id,
-        user_id:getUserdata.user_id
       } as any;
   
       try {
@@ -182,9 +183,10 @@ const Page1 = () => {
           "current_challenges",
           "craftsmen_support",
         ];
-        if (type == "edit") {
+        if (state?.businessUpdate?.length||type == "edit") {
+        // if (type == "edit") {
           let items = {
-            bussiness_update: {
+            business_update: {
               // userId: value,
               financial_position: values?.financial_position,
               sales_position: values?.sales_position,
@@ -192,10 +194,10 @@ const Page1 = () => {
               hr_position: values?.hr_position,
               current_challenges: values?.current_challenges,
               craftsmen_support: values?.craftsmen_support,
-               is_completed:values?.craftsmen_support,
+              //  is_completed:values?.craftsmen_support,
+              meeting_id:getUserdata.meetings.NextMeeting.id,
+              user_id:getUserdata.user_id
             },
-            meeting_id:getUserdata.meetings.NextMeeting.id,
-            user_id:getUserdata.user_id
           } as any;
           setLoading1(true);
           let res = await api.User.edit(items);
@@ -211,24 +213,24 @@ const Page1 = () => {
           setLoading1(true);
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-          if (res?.status == 500) {
-            localStorage.setItem('redirectAfterLogin', window.location.pathname);
-            localStorage.removeItem("hasReloaded")
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-          }
+          // if (res?.status == 500) {
+          //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          //   localStorage.removeItem("hasReloaded")
+          // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          // toast.error("Session Expired. Login Again");
+          // router.replace("/auth/signin");
+          // }
           // router.push(`/admin/member/add/page3?${res?.user_id}`)
         }
       } catch (error: any) {
         setLoading1(false);
-        if (error?.status == 500) {
-          localStorage.setItem('redirectAfterLogin', window.location.pathname);
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          localStorage.removeItem("hasReloaded")
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
+        // if (error?.status == 500) {
+        //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        //   localStorage.removeItem("hasReloaded")
+        //   toast.error("Session Expired. Login Again");
+        //   router.replace("/auth/signin");
+        // }
         if (!pagetype) {
           setLoading1(false);
         }
@@ -250,46 +252,51 @@ const Page1 = () => {
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
-      if (res?.data?.status == 500) {
-        localStorage.removeItem("hasReloaded");
-        toast.error("Session Expired Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (res?.data?.status == 500) {
+      //   localStorage.removeItem("hasReloaded");
+      //   toast.error("Session Expired Login Again");
+      //   router.replace("/auth/signin");
+      // }
 
       const dataFromApi = res?.data || {};
 
       const finalData = {
         financial_position:
           formValues?.financial_position ||
-          dataFromApi?.financial_position ||
+          dataFromApi?.businessUpdate[0]?.financial_position ||
           "",
         sales_position:
-          formValues?.sales_position || dataFromApi?.sales_position,
+          formValues?.sales_position || dataFromApi?.businessUpdate[0]?.sales_position,
         accomplishments:
-          formValues?.accomplishments || dataFromApi?.accomplishments,
-        hr_position: formValues?.hr_position || dataFromApi?.hr_position,
+          formValues?.accomplishments || dataFromApi?.businessUpdate[0]?.accomplishments,
+        hr_position: formValues?.hr_position || dataFromApi?.businessUpdate[0]?.hr_position,
         current_challenges:
-          formValues?.current_challenges || dataFromApi?.current_challenges,
+          formValues?.current_challenges || dataFromApi?.businessUpdate[0]?.current_challenges,
         craftsmen_support:
-          formValues?.craftsmen_support || dataFromApi?.craftsmen_support,
+          formValues?.craftsmen_support || dataFromApi?.businessUpdate[0]?.craftsmen_support,
       };
 
       form.setFieldsValue(finalData);
     } catch (error: any) {
-      if (error?.status == 500) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        localStorage.removeItem("hasReloaded");
-        toast.error("Session Expired Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (error?.status == 500) {
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   localStorage.removeItem("hasReloaded");
+      //   toast.error("Session Expired Login Again");
+      //   router.replace("/auth/signin");
+      // // }
     }
   };
 
   useEffect(() => {
-    if (type == "edit") {
+    if (state?.businessUpdate?.length||type == "edit") {
       getDataById();
     }
-  }, [type]);
+  }, [state?.businessUpdate?.length||type == "edit"]);
+  // useEffect(() => {
+  //   if (type == "edit") {
+  //     getDataById();
+  //   }
+  // }, [type]);
 
 
   

@@ -42,6 +42,7 @@ interface Goal {
 }
 const { Option } = Select;
 const Page3 = () => {
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
 
@@ -63,7 +64,8 @@ const Page3 = () => {
     if (actionType === "submit") {
       let items = {
         goals: {
-          userId: value,
+          user_id: value,
+              meeting_id:getUserdata.meetings.NextMeeting.id,
           goal_last_meeting: values?.last_goals,
           goal_next_meeting: values?.next_goals,
         },
@@ -71,10 +73,12 @@ const Page3 = () => {
       // return
       try {
         setLoading(true);
-        if (type == "edit") {
+        if (state?.lastNextMeetings?.length||type == "edit") {
+        // if (type == "edit") {
           let items = {
             goals: {
-              userId: value,
+              user_id: value,
+              meeting_id:getUserdata.meetings.NextMeeting.id,
               goal_last_meeting: values?.last_goals,
               goal_next_meeting: values?.next_goals,
             },
@@ -111,17 +115,20 @@ const Page3 = () => {
     } else if (actionType === "save") {
       let items = {
         goals: {
-          userId: value,
+          user_id: value,
+              meeting_id:getUserdata.meetings.NextMeeting.id,
           goal_last_meeting: values?.last_goals,
           goal_next_meeting: values?.next_goals,
         },
       };
       try {
         setLoading1(true);
-        if (type == "edit") {
+        // if (type == "edit") {
+        if (state?.lastNextMeetings.length||type == "edit") {
           let items = {
             goals: {
-              userId: value,
+              user_id: value,
+              meeting_id:getUserdata.meetings.NextMeeting.id,
               goal_last_meeting: values?.last_goals,
               goal_next_meeting: values?.next_goals,
             },
@@ -165,56 +172,62 @@ const Page3 = () => {
   const getDataById = async () => {
     const item = {
       user_id: value,
+      meeting_id:getUserdata.meetings.NextMeeting.id
     };
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
 
-      if (res?.data?.status == 500) {
-        localStorage.setItem("redirectAfterLogin", window.location.pathname);
-        localStorage.removeItem("hasReloaded");
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (res?.data?.status == 500) {
+      //   localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      //   localStorage.removeItem("hasReloaded");
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   toast.error("Session Expired. Login Again");
+      //   router.replace("/auth/signin");
+      // }
       const savedGoalsData = localStorage.getItem("LastGoals");
 
       let parsedGoals = savedGoalsData ? JSON.parse(savedGoalsData) : [];
 
       if (parsedGoals.length === 0) {
-        parsedGoals = res?.data.goal_last_meeting || [];
+        parsedGoals = res?.data?.lastNextMeetings[0]?.goal_last_meeting || [];
       }
 
       const fetchedGoals = parsedGoals
         ? parsedGoals
-        : res?.data.goal_last_meeting || [];
+        : res?.data.lastNextMeetings[0].goal_last_meeting || [];
         form.setFieldsValue({ last_goals: fetchedGoals });
       const savedGoalsData1 = localStorage.getItem("NextGoals");
       let parsedGoals1 = savedGoalsData1 ? JSON.parse(savedGoalsData1) : [];
       if (parsedGoals1.length === 0) {
-        parsedGoals1 = res?.data.goal_next_meeting || [];
+        parsedGoals1 = res?.data.lastNextMeetings[0].goal_next_meeting || [];
       }
 
       const fetchedGoals1 = parsedGoals1
         ? parsedGoals1
-        : res?.data?.goal_next_meeting || [];
+        : res?.data?.lastNextMeetings[0]?.goal_next_meeting || [];
       form.setFieldsValue({ next_goals: fetchedGoals1 });
     } catch (error: any) {
-      if (error.status == 500) {
-        localStorage.setItem("redirectAfterLogin", window.location.pathname);
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        toast.error("Session Expired. Login Again");
-        localStorage.removeItem("hasReloaded");
-        router.replace("/auth/signin");
-      }
+      // if (error.status == 500) {
+      //   localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   toast.error("Session Expired. Login Again");
+      //   localStorage.removeItem("hasReloaded");
+      //   router.replace("/auth/signin");
+      // }
     }
   };
 
   useEffect(() => {
-    if (type == "edit") {
+    if (type=="edit") {
       getDataById();
     }
   }, [type, form]);
+  // useEffect(() => {
+  //   if (type == "edit") {
+  //     getDataById();
+  //   }
+  // }, [type, form]);
   const[backLoading,setBackLoading]=useState<any>(false)
   const onPrevious = () => {
     

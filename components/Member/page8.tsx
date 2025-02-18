@@ -375,6 +375,7 @@ const Page8 = () => {
         if (state?.photo_section?.fileUrls?.length) {
           formData.append("id", state?.photo_section?.commentId);
           formData.append("user_id", value);
+          formData.append("meeting_id",  getUserdata.meetings.NextMeeting.id,);
           formData.append("is_save", "false");
           for (const item of inputPairs) {
             formData.append(`${item?.commentLabel}`, values[item?.commentName]);
@@ -395,6 +396,7 @@ const Page8 = () => {
           }
 
           const response = await api.photo_section.update_file(formData);
+console.log(response,"sjdkahdgasd");
 
           const messages: any = {
             200: "Updated Successfully",
@@ -408,8 +410,9 @@ const Page8 = () => {
             });
           }
           setLoadButton("");
+console.log(response?.pdfReponseData,"qwertyuiop");
 
-          setResponseData(response?.data?.pdfReponseData);
+          setResponseData(response?.pdfReponseData);
           await sharePdf(response?.pdfReponseData);
           if (!pagetype) {
             router.replace(`/admin/user?${getUserdata?.user_id}`);
@@ -421,6 +424,8 @@ const Page8 = () => {
         } else {
           formData.append("id", value);
           formData.append("is_save", "false");
+          formData.append("user_id", value);
+          formData.append("meeting_id",  getUserdata.meetings.NextMeeting.id,);
           for (const [index, item] of photoComment.entries()) {
             formData.append(`comment_${index}`, item?.comment);
 
@@ -466,17 +471,17 @@ const Page8 = () => {
         }
       } catch (error: any) {
         setLoadButton("");
-        if (error?.status === 500) {
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-          localStorage.removeItem("hasReloaded");
-          toast.error("Session Expired Login Again");
-          router.replace("/auth/signin");
-        } else {
-          toast.error("Something went wrong Please try again", {
-            position: "top-center",
-            autoClose: 300,
-          });
-        }
+        // if (error?.status === 500) {
+        //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+        //   localStorage.removeItem("hasReloaded");
+        //   toast.error("Session Expired Login Again");
+        //   router.replace("/auth/signin");
+        // } else {
+        //   toast.error("Something went wrong Please try again", {
+        //     position: "top-center",
+        //     autoClose: 300,
+        //   });
+        // }
       } finally {
         if (pagetype) {
           setLoading(false);
@@ -496,6 +501,7 @@ const Page8 = () => {
         if (state?.photo_section?.fileUrls?.length) {
           formData.append("id", state?.photo_section?.commentId);
           formData.append("user_id", value);
+          formData.append("meeting_id",  getUserdata.meetings.NextMeeting.id,);
           formData.append("is_save", "true");
           for (const item of inputPairs) {
             formData.append(`${item?.commentLabel}`, values[item?.commentName]);
@@ -517,6 +523,7 @@ const Page8 = () => {
 
           const response = await api.photo_section.update_file(formData);
           setLoading(false);
+console.log(response,"oerutouer");
 
           const messages: any = {
             200: "Updated Successfully",
@@ -542,6 +549,8 @@ const Page8 = () => {
         } else {
           formData.append("id", value);
           formData.append("is_save", "true");
+          formData.append("user_id", value);
+          formData.append("meeting_id",  getUserdata.meetings.NextMeeting.id,);
           for (const [index, item] of photoComment.entries()) {
             formData.append(`comment_${index}`, item?.comment);
 
@@ -586,17 +595,11 @@ const Page8 = () => {
         }
       } catch (error: any) {
         setLoadButton("");
-        if (error?.status === 500) {
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-          localStorage.removeItem("hasReloaded");
-          toast.error("Session Expired Login Again");
-          router.replace("/auth/signin");
-        } else {
           toast.error("Something went wrong Please try again", {
             position: "top-center",
             autoClose: 300,
           });
-        }
+        
       } finally {
         if (pagetype) {
           setLoading(false);
@@ -620,17 +623,18 @@ const Page8 = () => {
   const getDataById = async () => {
     const item = {
       user_id: value,
+      meeting_id: getUserdata.meetings.NextMeeting.id,
     };
     try {
       const res = await api.User.getById(item as any);
 
       setState(res?.data || null);
-      if (res?.data?.status == 500) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        localStorage.removeItem("hasReloaded");
-        toast.error("Session Expired Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (res?.data?.status == 500) {
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   localStorage.removeItem("hasReloaded");
+      //   toast.error("Session Expired Login Again");
+      //   router.replace("/auth/signin");
+      // }
       const fetchedGoals = res?.data?.photo_section?.fileUrls || [];
       const commentKey = fetchedGoals[0]?.commentId || "";
 
@@ -674,12 +678,12 @@ const Page8 = () => {
 
       setFileLists(fileListsData);
     } catch (error: any) {
-      if (error?.status == 400) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        localStorage.removeItem("hasReloaded");
-        toast.error("Session Expired Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (error?.status == 400) {
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   localStorage.removeItem("hasReloaded");
+      //   toast.error("Session Expired Login Again");
+      //   router.replace("/auth/signin");
+      // }
     }
   };
 
@@ -748,6 +752,8 @@ const Page8 = () => {
   // };
 
   const generatePdf = async (data?: any) => {
+    console.log(data,"sdafasdfasd");
+    
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
     const blob = await pdf(<Pdf state={data} />).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
@@ -755,6 +761,8 @@ const Page8 = () => {
   };
 
   const sharePdf = async (responseData: any) => {
+    console.log(responseData,"responseData");
+    
     const { pdfUrl, timestamp } = await generatePdf(responseData);
     const response = await fetch(pdfUrl);
     const blob = await response.blob();
