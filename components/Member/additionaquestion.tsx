@@ -71,7 +71,7 @@ const AdditionalQuestion = () => {
           // }
           setTimeout(() => {
             if (!pagetype) {
-              router.push(`/admin/member/add/page8?${res?.userId}&edit`);
+              router.push(`/admin/member/add/page8?${value}&edit`);
             } else {
               router.push("/admin/questionnaire?additionalPage");
             }
@@ -85,7 +85,7 @@ const AdditionalQuestion = () => {
           // }
           if (!pagetype) {
             router.push(
-              `/admin/member/add/page8?${res?.userId}&edit&questionnair`
+              `/admin/member/add/page8?${value}&edit&questionnair`
             );
           } else {
             router?.back();

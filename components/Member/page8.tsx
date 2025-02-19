@@ -759,10 +759,32 @@ console.log(response,"oerutouer");
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
+  const companyNameMap:any
+   = {
+    augusta: "Augusta Homes, Inc.",
+    buffington: "Buffington Homes, L.P.",
+    cabin: "Cabin John Builders",
+    cataldo: "Cataldo Custom Builders",
+    david_campbell: "The DCB",
+    dc_building: "DC Building Inc.",
+    Ddenman_construction: "Denman Construction, Inc.",
+    ellis: "Ellis Custom Homes",
+    tm_grady_builders: "T.M. Grady Builders",
+    hardwick: "Hardwick G. C.",
+    homeSource: "HomeSource Construction",
+    ed_nikles: "Ed Nikles Custom Builder, Inc.",
+    olsen: "Olsen Custom Homes",
+    raykon: "Raykon Construction",
+    matt_sitra: "Matt Sitra Custom Homes",
+    schneider: "Schneider Construction, LLC",
+    shaeffer: "Shaeffer Hyde Construction",
+    split: "Split Rock Custom Homes",
+    tiara: "Tiara Sun Development",
+  };
 
   const sharePdf = async (responseData: any) => {
     console.log(responseData,"responseData");
-    
+    const companyName = companyNameMap[responseData?.company_name || ""] || "N/A";
     const { pdfUrl, timestamp } = await generatePdf(responseData);
     const response = await fetch(pdfUrl);
     const blob = await response.blob();
@@ -771,6 +793,9 @@ console.log(response,"oerutouer");
     const formData = new FormData();
     formData.append("file", file);
     formData.append("user_id", getUserdata?.user_id);
+    formData.append("meeting_id", getUserdata.meetings.NextMeeting.id);
+    formData.append("company_name", companyName);
+    // formData.append("company_name", responseData?.company_name);
     const res = await fetch(
       "https://nahb.goaideme.com/send-completeform-mail-to-superadmin",
       {

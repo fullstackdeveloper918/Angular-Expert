@@ -192,7 +192,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Fall 2024</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2025</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}
@@ -202,7 +202,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
           <View style={styles.section}>
             <Text style={styles.main_heading}>Goals</Text>
             <Text style={styles.subheading}>Goals from Last Meeting</Text>
-            {props?.state?.goal_last_meeting?.map((res, index) => (
+            {props?.state?.lastNextMeetings[0]?.goal_last_meeting?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_wrapper}>
                   <View style={styles.Flex_div}>
@@ -222,7 +222,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 
           <View style={styles.section}>
             <Text style={styles.subheading}>Goals for Next Meeting</Text>
-            {props?.state?.goal_next_meeting?.map((res, index) => (
+            {props?.state?.lastNextMeetings[0]?.goal_next_meeting?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_wrapper}>
                   <View style={styles.Flex_div}>

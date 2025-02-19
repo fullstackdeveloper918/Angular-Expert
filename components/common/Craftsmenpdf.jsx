@@ -192,7 +192,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Fall 2024</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2025</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}
@@ -206,7 +206,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                 What is your level of commitment to our club?{" "}
               </Text>
               <Text style={styles.textarea}>
-                {props?.state?.commitment}
+              {props?.state?.craftsMenUpdates[0]?.commitment}
               </Text>
 
               <Text style={styles.text}>
@@ -214,7 +214,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                 List Something(s) you can do to contribute to our club.{" "}
               </Text>
               <Text style={styles.textarea}>
-                {props?.state?.contribute}
+              {props?.state?.craftsMenUpdates[0]?.contribute}
               </Text>
 
               <Text style={styles.text}>
@@ -222,7 +222,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                 How is your present health, wellbeing, family life?{" "}
               </Text>
               <Text style={styles.textarea}>
-                {props?.state?.wellbeing}
+              {props?.state?.craftsMenUpdates[0]?.wellbeing}
               </Text>
 
               <Text style={styles.text}>
@@ -230,7 +230,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                 Have any items on your contact info changed?
               </Text>
               <Text style={styles.textarea}>
-                {props?.state?.contact_info}
+              {props?.state?.craftsMenUpdates[0]?.contact_info}
               </Text>
             </View>
           </View>

@@ -192,7 +192,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Fall 2024</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2025</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}
@@ -203,25 +203,25 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
             <Text style={styles.main_heading}>Business Update</Text>
             <Text style={styles.text}>Current financial position:</Text>
             <Text style={[styles.textarea, styles.heightGiven]}>
-              {props?.state?.financial_position}
+            {props?.state?.businessUpdate[0]?.financial_position}
             </Text>
             <Text style={styles.text}>
               {" "}
               Current sales positions, hot prospects, recently contracted work:{" "}
             </Text>
             <Text style={styles.textarea}>
-              {props?.state?.sales_position}
+            {props?.state?.businessUpdate[0]?.sales_position}
             </Text>
             <Text style={styles.text}>
               {" "}
               Accomplishments in the last 6 months:{" "}
             </Text>
             <Text style={styles.textarea}>
-              {props?.state?.accomplishments}
+            {props?.state?.businessUpdate[0]?.accomplishments}
             </Text>
             <Text style={styles.text}> HR position &/or needs: </Text>
             <Text style={styles.textarea}>
-              {props?.state?.hr_position}
+            {props?.state?.businessUpdate[0]?.hr_position}
             </Text>
             <Text style={styles.text}>
               {" "}
@@ -229,14 +229,14 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
               trade availability, rising costs, supply chain):{" "}
             </Text>
             <Text style={styles.textarea}>
-              {props?.state?.current_challenges}
+            {props?.state?.businessUpdate[0]?.current_challenges}
             </Text>
             <Text style={styles.text}>
               {" "}
               How can the Craftsmen aid or support you with these challenges?{" "}
             </Text>
             <Text style={styles.textarea}>
-              {props?.state?.craftsmen_support}
+            {props?.state?.businessUpdate[0]?.craftsmen_support}
             </Text>
           </View>
         </Page>

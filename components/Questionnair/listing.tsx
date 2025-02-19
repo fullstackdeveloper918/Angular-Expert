@@ -15,6 +15,7 @@ import Toolboxpdf from "../common/Toolboxpdf"
 import Craftsmenpdf from "../common/Craftsmenpdf"
 import MeetingReviewpdf from "../common/Meetingreviewpdf"
 import Meetingpreparationpdf from "../common/Meetingpreparationpdf"
+import Additionalquestion from "../common/Additionalquestion"
 import Photopdf from "../common/Photosectionpdf"
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -27,12 +28,15 @@ import { clearUserData } from "@/lib/features/userSlice";
 import QuestionanirModal from "../common/QuestionnairModal";
 import PhotoSectionPdf from "../common/Photosectionpdf";
 import Link from "next/link";
+import dayjs from "dayjs";
 
 
 const { Search } = Input;
 const { Title } = Typography;
 const QuestionnairList = () => {
     const getUserdata = useSelector((state: any) => state?.user?.userData)
+    console.log(getUserdata,"getUserdata");
+    
     const searchParams = useSearchParams();
     const entries = Array.from(searchParams.entries());
     const value = entries.length > 0 ? entries[0][0] : '';
@@ -50,6 +54,8 @@ const QuestionnairList = () => {
     const [filteredData, setFilteredData] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState('')
     const router = useRouter()
+    console.log(state1,"state1");
+    
     const dispatch = useDispatch();
     useEffect(() => {
         // Filter data when searchTerm or state1 changes
@@ -121,6 +127,8 @@ const QuestionnairList = () => {
         }
         try {
             const res = await api.User.getById(item as any);
+            console.log(res,"uiouiouiouio");
+            
             setState1(res?.data || null);
         } catch (error: any) {
             if (error?.status == 500) {
@@ -252,6 +260,18 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdf7 = async () => {
         const { blob, timestamp } = await generatePdf7();
+        saveAs(blob, `Order_${timestamp}.pdf`);
+    };
+    const generatePdf8 = async () => {
+        const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+        const blob = await pdf(<Additionalquestion state={state1} />).toBlob();
+        const pdfUrl = URL.createObjectURL(blob);
+        return { blob, pdfUrl, timestamp };
+    };
+
+    // Function to handle PDF download
+    const downLoadPdf8 = async () => {
+        const { blob, timestamp } = await generatePdf8();
         saveAs(blob, `Order_${timestamp}.pdf`);
     };
 
@@ -668,7 +688,28 @@ const QuestionnairList = () => {
         </div>
     </div>
     );
-  
+
+
+const getSeasonByReviewMonth = (month: number): string =>
+    month >= 1 && month <= 6 ? 'Spring' : month >= 7 && month <= 12 ? 'Fall' : 'Invalid Month';
+
+
+const meeting_review_month:any= dayjs(getUserdata?.meetings?.lastMeeting?.start_meeting_date).format("MM")
+const season_review_month = getSeasonByReviewMonth(meeting_review_month);
+console.log(season_review_month,"season");
+
+const meeting_review_year= dayjs(getUserdata?.meetings?.lastMeeting?.start_meeting_date).format("YYYY")
+console.log(meeting_review_year,"meeting_review_year");
+
+
+const meeting_prepration_month:any= dayjs(getUserdata?.meetings?.NextMeeting?.start_meeting_date).format("MM")
+const season_prepration_month = getSeasonByReviewMonth(meeting_prepration_month);
+console.log(season_prepration_month,"season_prepration_month");
+
+
+
+const meeting_prepration_year= dayjs(getUserdata?.meetings?.NextMeeting?.start_meeting_date).format("YYYY")
+console.log(meeting_prepration_year,"meeting_prepration_year");
 
     return (
         <>
@@ -737,7 +778,7 @@ const QuestionnairList = () => {
                                                     <div className="card-body pb-2 d-flex flex-column">
                                                         <div className="justify-content-between align-items-center d-flex">
                                                             <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
-                                                            {state1?.financial_position?
+                                                            {state1?.businessUpdate?.length?
                                                             <Tooltip title="Download Pdf">
                                                                 <Button className="borderBtn" onClick={downLoadPdf}><DownloadOutlined /></Button>
                                                             </Tooltip>:""}
@@ -789,10 +830,12 @@ const QuestionnairList = () => {
                                                     <div className="card-body pb-2 d-flex flex-column">
                                                         <div className="justify-content-between align-items-center d-flex">
                                                             <h5 className="fw-bold text-start mb-4">GOALS</h5>
-                                                            {state1?.goal_last_meeting ?
+                                                            {state1?.lastNextMeetings?.length ?
                                                             <Tooltip title="Download Pdf">
                                                                 <Button className="borderBtn" onClick={downLoadPdf2}><DownloadOutlined /></Button>
-                                                            </Tooltip>:<Tooltip title="No Data Available">
+                                                            </Tooltip>
+                                                            :
+                                                            <Tooltip title="No Data Available">
                                                                 <Button className="borderBtn" onClick={downLoadPdf2} disabled><DownloadOutlined /></Button>
                                                             </Tooltip>}
                                                         </div>
@@ -843,7 +886,7 @@ const QuestionnairList = () => {
                                                     <div className="card-body pb-2 d-flex flex-column">
                                                         <div className="justify-content-between align-items-center d-flex">
                                                             <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
-                                                            {state1?.technology ?
+                                                            {state1?.technologyData?.length ?
                                                             <Tooltip title="Download Pdf">
                                                                 <Button className="borderBtn" onClick={downLoadPdf3}><DownloadOutlined /></Button>
                                                             </Tooltip>:<Tooltip title="No Data Available">
@@ -900,7 +943,7 @@ const QuestionnairList = () => {
                                                     <div className="card-body pb-2 d-flex flex-column">
                                                         <div className="justify-content-between align-items-center d-flex">
                                                             <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
-                                                            {state1?.commitment ?
+                                                            {state1?.craftsMenUpdates?.length ?
                                                             <Tooltip title="Download Pdf">
                                                                 <Button className="borderBtn" onClick={downLoadPdf4}><DownloadOutlined /></Button>
                                                             </Tooltip>:<Tooltip title="No Data Available">
@@ -956,8 +999,8 @@ const QuestionnairList = () => {
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
-                                                                <h5 className="fw-bold text-start mb-4">SPRING 2024 MEETING REVIEW</h5>
-                                                                {state1?.fall_meeting ?
+                                                                <h5 className="fw-bold text-start mb-4">{season_review_month} {meeting_review_year} MEETING REVIEW</h5>
+                                                                {state1?.meetingReviews?.length ?
                                                                 <Tooltip title="Download Pdf">
                                                                     <Button className="borderBtn" onClick={downLoadPdf5}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
@@ -1012,8 +1055,8 @@ const QuestionnairList = () => {
                                                 <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                     <div className="card-body pb-2 d-flex flex-column">
                                                         <div className="justify-content-between align-items-center d-flex">
-                                                            <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
-                                                            {state1?.estimating ?
+                                                            <h5 className="fw-bold text-start mb-4">{season_prepration_month} {meeting_prepration_year} MEETING PREPARATION</h5>
+                                                            {state1?.roundTableTopics?.length?
                                                             <Tooltip title="Download Pdf">
                                                                 <Button className="borderBtn" onClick={downLoadPdf6}><DownloadOutlined /></Button>
                                                             </Tooltip>:<Tooltip title="No Data Available">
@@ -1047,7 +1090,7 @@ const QuestionnairList = () => {
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">ADDITIONAL QUESTIONS</h5>
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button  onClick={downLoadPdf6} className="borderBtn"><DownloadOutlined /></Button>
+                                                                    <Button  onClick={downLoadPdf8} className="borderBtn"><DownloadOutlined /></Button>
                                                                 </Tooltip>
                                                             </div>
                                                             <Link
@@ -1133,7 +1176,7 @@ const QuestionnairList = () => {
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">BUSINESS UPDATE</h5>
-                                                                {state1?.financial_position?
+                                                                {state1?.businessUpdate?.length ?
                                                                 <Tooltip title="Download Pdf">
                                                                     <Button className="borderBtn" onClick={downLoadPdf}><DownloadOutlined /></Button>
                                                                 </Tooltip>:""}
@@ -1158,7 +1201,7 @@ const QuestionnairList = () => {
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">GOALS</h5>
-                                                                {state1?.goal_last_meeting ?
+                                                                {state1?.lastNextMeetings?.length ?
                                                                 <Tooltip title="Download Pdf">
                                                                     <Button className="borderBtn" onClick={downLoadPdf2}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
@@ -1185,7 +1228,7 @@ const QuestionnairList = () => {
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">CRAFTSMEN TOOLBOX</h5>
-                                                                {state1?.technology ?
+                                                                {state1?.technologyData?.length ?
                                                                 <Tooltip title="Download Pdf">
                                                                     <Button className="borderBtn" onClick={downLoadPdf3}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
@@ -1215,7 +1258,7 @@ const QuestionnairList = () => {
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">CRAFTSMEN CHECK-UP</h5>
-                                                                {state1?.commitment ?
+                                                                {state1?.craftsMenUpdates?.length ?
                                                                 <Tooltip title="Download Pdf">
                                                                     <Button className="borderBtn" onClick={downLoadPdf4}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
@@ -1244,8 +1287,8 @@ const QuestionnairList = () => {
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
-                                                                <h5 className="fw-bold text-start mb-4">SPRING 2024 MEETING REVIEW</h5>
-                                                                {state1?.fall_meeting ?
+                                                                <h5 className="fw-bold text-start mb-4">{season_review_month} {meeting_review_year} MEETING REVIEW</h5>
+                                                                {state1?.meetingReviews?.length ?
                                                                 <Tooltip title="Download Pdf">
                                                                     <Button className="borderBtn" onClick={downLoadPdf5}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
@@ -1274,8 +1317,8 @@ const QuestionnairList = () => {
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
-                                                                <h5 className="fw-bold text-start mb-4">FALL 2024 MEETING PREPARATION</h5>
-                                                                {state1?.estimating ?
+                                                                <h5 className="fw-bold text-start mb-4">{season_prepration_month} {meeting_prepration_year} MEETING PREPARATION</h5>
+                                                                {state1?.roundTableTopics?.length ?
                                                                 <Tooltip title="Download Pdf">
                                                                     <Button className="borderBtn" onClick={downLoadPdf6}><DownloadOutlined /></Button>
                                                                 </Tooltip>:<Tooltip title="No Data Available">
@@ -1306,7 +1349,7 @@ const QuestionnairList = () => {
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">ADDITIONAL QUESTIONS</h5>
                                                                 <Tooltip title="Download Pdf">
-                                                                    <Button className="borderBtn" onClick={downLoadPdf6}><DownloadOutlined /></Button>
+                                                                    <Button className="borderBtn" onClick={downLoadPdf8}><DownloadOutlined /></Button>
                                                                 </Tooltip>
                                                             </div>
                                                             <Link

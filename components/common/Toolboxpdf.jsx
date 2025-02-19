@@ -192,7 +192,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Fall 2024</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2025</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}
@@ -208,7 +208,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                 of the app or website:{" "}
               </Text>
               <Text style={styles.textarea}>
-                {props?.state?.technology}
+              {props?.state?.technologyData[0]?.technology}
               </Text>
 
               <Text style={styles.text}>
@@ -217,7 +217,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                 share the name and website:{" "}
               </Text>
               <Text style={styles.textarea}>
-                {props?.state?.products}
+              {props?.state?.technologyData[0]?.products}
               </Text>
 
               <Text style={styles.text}>
@@ -225,7 +225,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                 Describe something that you do with each project that sets you
                 apart from your competition:{" "}
               </Text>
-              <Text style={styles.textarea}>   {props?.state?.project}   </Text>
+              <Text style={styles.textarea}>   {props?.state?.technologyData[0]?.project}   </Text>
             </View>
           </View>
         </Page>

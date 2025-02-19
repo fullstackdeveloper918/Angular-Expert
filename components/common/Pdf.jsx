@@ -1,4 +1,6 @@
 import React from "react";
+// import { useSelector } from "react-redux";
+// import dayjs from "dayjs";
 import {
   Page,
   Text,
@@ -157,6 +159,8 @@ const styles = StyleSheet.create({
 });
 
 const MemberUpdatePDF = (props) => {
+  // const getUserdata = useSelector((state) => state?.user?.userData)
+  // console.log(getUserdata,"getUserdata");
   const photoSection = props?.state?.photo_section || [];
 console.log(props?.state,"props");
 
@@ -190,6 +194,31 @@ console.log(props?.state,"props");
     props?.state?.photo_section?.fileUrls?.length &&
     Object.values(props?.state?.photo_section?.fileUrls[0]);
 
+
+
+
+    
+    // const getSeasonByReviewMonth = (month) =>
+    //     month >= 1 && month <= 6 ? 'Spring' : month >= 7 && month <= 12 ? 'Fall' : 'Invalid Month';
+    
+    
+    // const meeting_review_month= dayjs(props?.state?.meetings?.lastMeeting?.start_meeting_date).format("MM")
+    // const season_review_month = getSeasonByReviewMonth(meeting_review_month);
+    // console.log(season_review_month,"season");
+    
+    // const meeting_review_year= dayjs(props?.state?.meetings?.lastMeeting?.start_meeting_date).format("YYYY")
+    // console.log(meeting_review_year,"meeting_review_year");
+    
+    
+    // const meeting_prepration_month= dayjs(props?.state?.meetings?.NextMeeting?.start_meeting_date).format("MM")
+    // const season_prepration_month = getSeasonByReviewMonth(meeting_prepration_month);
+    // console.log(season_prepration_month,"season_prepration_month");
+    
+    
+    
+    // const meeting_prepration_year= dayjs(props?.state?.meetings?.NextMeeting?.start_meeting_date).format("YYYY")
+    // console.log(meeting_prepration_year,"meeting_prepration_year");
+    
   return (
     <>
       <Document>
@@ -371,7 +400,8 @@ console.log(props?.state,"props");
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.main_heading}>FALL 2023 MEETING REVIEW</Text>
+            {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
+            <Text style={styles.main_heading}>Fall 2024 MEETING REVIEW</Text>
             <View style={styles.goal}>
               <Text style={styles.text}>
                 What was your most valuable take away from our fall meeting?
@@ -393,7 +423,8 @@ console.log(props?.state,"props");
 
           <View style={styles.section}>
             <Text style={styles.main_heading}>
-              SPRING 2024 MEETING PREPARATION
+              {/* {meeting_prepration_month} {meeting_prepration_year} MEETING PREPARATION */}
+              Spring 2025 MEETING PREPARATION
             </Text>
             <Text style={styles.subheading}>
               LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER WITH SPRING

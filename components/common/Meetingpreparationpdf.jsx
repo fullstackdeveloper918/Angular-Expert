@@ -192,7 +192,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Fall 2024</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2025</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}
@@ -202,7 +202,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
        
           <View style={styles.section}>
             <Text style={styles.main_heading}>
-              SPRING 2024 MEETING PREPARATION
+              SPRING 2025 MEETING PREPARATION
             </Text>
             <Text style={styles.subheading}>
               LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER WITH SPRING
@@ -210,14 +210,14 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
             </Text>
             <View style={styles.goal}>
               <Text style={styles.textarea}>
-                {props?.state?.estimating}
+              {props?.state?.roundTableTopics[0]?.estimating}
               </Text>
 
               <Text style={styles.textarea}>
-                {props?.state?.accountability}
+              {props?.state?.roundTableTopics[0]?.accountability}
               </Text>
               <Text style={styles.textarea}>
-                {props?.state?.productivity}
+              {props?.state?.roundTableTopics[0]?.productivity}
               </Text>
             </View>
           </View>

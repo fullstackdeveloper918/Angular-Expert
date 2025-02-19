@@ -80,7 +80,8 @@ const MemberList = () => {
     const getDataById = async (id: any) => {
         //  
         const item = {
-            user_id: id
+            user_id: id,
+            meeting_id:getUserdata.meetings.NextMeeting.id
         }
         try {
             const res = await api.User.getById(item as any);
@@ -100,7 +101,7 @@ const MemberList = () => {
     };
     const generatePdf = async (data?: any) => {
         //  
-
+        console.log(data,"asjldjas");
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
         const blob = await pdf(<Pdf state={data} />).toBlob();
         const pdfUrl = URL.createObjectURL(blob);
@@ -117,7 +118,7 @@ const MemberList = () => {
     // Function to handle PDF sharing
     const sharePdf = async (item: any) => {
         //  
-
+        const companyName = companyNameMap[item?.company_name || ""] || "N/A";
         const { pdfUrl, timestamp } = await generatePdf(item);
         const response = await fetch(pdfUrl);
         const blob = await response.blob();
@@ -126,6 +127,9 @@ const MemberList = () => {
         const file = new File([blob], `${capFirst(item?.company_name)}.pdf`, { type: 'application/pdf' });
         const formData = new FormData();
         formData.append('file', file);
+        formData.append("user_id", getUserdata?.user_id);
+        formData.append("meeting_id", getUserdata.meetings.NextMeeting.id);
+        formData.append("company_name", companyName);
 
 
         const res = await fetch('https://nahb.goaideme.com/save-pdf', {
@@ -335,7 +339,7 @@ const MemberList = () => {
         setLoading1(true)
         try {
             let query = searchTerm ? `searchTerm=${searchTerm}` : '';
-            let res = await api.User.listing(query);
+            let res = await api.User.listing(query,getUserdata.meetings.NextMeeting.id);
             setState1(res?.data || []);
             // if (res?.data?.status == 400||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
             //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
