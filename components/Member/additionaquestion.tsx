@@ -47,7 +47,7 @@ const AdditionalQuestion = () => {
       };
       try {
         // if (type == "edit") {
-        if (state?.answer?.length||type == "edit") {
+        if (state?.answer?.length) {
           let items = {
             additional_question: {
               user_id: value,
@@ -120,7 +120,7 @@ const AdditionalQuestion = () => {
         },
       };
       try {
-        if (state?.answer?.length||type == "edit") {
+        if (state?.answer?.length) {
           // if (type == "edit") {
           let items = {
             additional_question: {

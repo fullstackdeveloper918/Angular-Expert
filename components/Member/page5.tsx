@@ -51,7 +51,7 @@ const Page5 = () => {
           "contact_info",
         ];
 
-        if (type == "edit"||state?.craftsMenUpdates?.length) {
+        if (state?.craftsMenUpdates?.length) {
           let items = {
             craftsmen_checkup: {
               user_id: value,
@@ -94,7 +94,7 @@ const Page5 = () => {
             toast.error("Session Expired. Login Again");
             router.replace("/auth/signin");
           }
-          router.push(`/admin/member/add/page6?${res?.userId}`);
+          router.push(`/admin/member/add/page6?${value}`);
         }
       } catch (error) {
         if (!pagetype) {
@@ -124,7 +124,7 @@ const Page5 = () => {
           "contact_info",
         ];
 
-        if (state?.craftsMenUpdates?.length||type == "edit") {
+        if (state?.craftsMenUpdates?.length) {
           let items = {
             craftsmen_checkup: {
               user_id: value,
@@ -160,7 +160,7 @@ const Page5 = () => {
             toast.error("Session Expired. Login Again");
             router.replace("/auth/signin");
           }
-          router.push(`/admin/member/add/page6?${res?.userId}`);
+          router.push(`/admin/member/add/page6?${value}`);
         }
       } catch (error) {
         if (!pagetype) {

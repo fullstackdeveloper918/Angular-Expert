@@ -62,6 +62,8 @@ const Page1 = () => {
   const entries = Array.from(searchParams.entries());
 
   const value = entries.length > 0 ? entries[0][0] : "";
+  console.log(value,"value");
+  
   const type = entries.length > 1 ? entries[1][0] : "";
   const pagetype = entries.length > 2 ? entries[2][0] : "";
   const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
@@ -139,7 +141,7 @@ const Page1 = () => {
           // toast.error("Session Expired. Login Again");
           // router.replace("/auth/signin");
           // }
-          router.push(`/admin/member/add/page3?${res?.user_id}`)
+          router.push(`/admin/member/add/page3?${value}`)
         }
       } catch (error: any) {
         setLoading(false);

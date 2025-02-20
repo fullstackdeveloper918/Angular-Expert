@@ -41,7 +41,7 @@ const Page6 = () => {
       };
       try {
         const fieldsToClear = ["fall_meeting", "personal_finances"];
-        if (state?.meetingReviews?.length||type == "edit") {
+        if (state?.meetingReviews?.length) {
           // if (type == "edit") {
           let items = {
             fall_meeting_review: {
@@ -109,7 +109,7 @@ const Page6 = () => {
       };
       try {
         const fieldsToClear = ["fall_meeting", "personal_finances"];
-        if (state?.meetingReviews?.length||type == "edit") {
+        if (state?.meetingReviews?.length) {
           let items = {
             fall_meeting_review: {
               user_id: value,

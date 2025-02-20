@@ -202,32 +202,32 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
           <View style={styles.section}>
             <Text style={styles.main_heading}>Goals</Text>
             <Text style={styles.subheading}>Goals from Last Meeting</Text>
-            {props?.state?.lastNextMeetings[0]?.goal_last_meeting?.map((res, index) => (
+            {props?.state?.lastNextMeetings[0]?.goal_next_meeting?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_wrapper}>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Goal #{index + 1}: </Text>
-                    <Text style={styles.textarea}>   {res?.goal}  </Text>
+                    <Text style={styles.textarea}>   {res?.name}  </Text>
                   </View>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Status of Goal: </Text>
                     <Text style={styles.textarea}>   {res?.status}  </Text>
                   </View>
                 </View>
-                <Text style={styles.text}> Comments: </Text>
-                <Text style={styles.textarea}>  {res?.comment}   </Text>
+                {/* <Text style={styles.text}> Comments: </Text>
+                <Text style={styles.textarea}>  {res?.comment}   </Text> */}
               </View>
             ))}
           </View>
 
           <View style={styles.section}>
             <Text style={styles.subheading}>Goals for Next Meeting</Text>
-            {props?.state?.lastNextMeetings[0]?.goal_next_meeting?.map((res, index) => (
+            {props?.state?.futureMeetings[0]?.goal_next_meeting?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_wrapper}>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Goal #{index + 1}: </Text>
-                    <Text style={styles.textarea}>   {res?.goal}  </Text>
+                    <Text style={styles.textarea}>   {res?.name}  </Text>
                   </View>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Priority: </Text>

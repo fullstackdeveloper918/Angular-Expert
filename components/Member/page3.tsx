@@ -65,7 +65,7 @@ const Page3 = () => {
       let items = {
         goals: {
           user_id: value,
-              meeting_id:getUserdata.meetings.NextMeeting.id,
+              meeting_id:getUserdata?.meetings?.NextMeeting?.id,
           goal_last_meeting: values?.last_goals,
           goal_next_meeting: values?.next_goals,
         },
@@ -73,7 +73,7 @@ const Page3 = () => {
       // return
       try {
         setLoading(true);
-        if (state?.lastNextMeetings?.length||type == "edit") {
+        if (state?.futureMeetings?.length) {
         // if (type == "edit") {
           let items = {
             goals: {
@@ -98,7 +98,7 @@ const Page3 = () => {
         } else {
           let res = await api.Auth.signUp(items);
           if (!pagetype) {
-            router.push(`/admin/member/add/page4?${res?.userId}`);
+            router.push(`/admin/member/add/page4?${value}`);
           } else {
             router?.back();
           }
@@ -124,7 +124,7 @@ const Page3 = () => {
       try {
         setLoading1(true);
         // if (type == "edit") {
-        if (state?.lastNextMeetings.length||type == "edit") {
+        if (state?.futureMeetings.length) {
           let items = {
             goals: {
               user_id: value,
@@ -190,22 +190,22 @@ const Page3 = () => {
       let parsedGoals = savedGoalsData ? JSON.parse(savedGoalsData) : [];
 
       if (parsedGoals.length === 0) {
-        parsedGoals = res?.data?.lastNextMeetings[0]?.goal_last_meeting || [];
+        parsedGoals = res?.data?.lastNextMeetings[0]?.goal_next_meeting || [];
       }
 
       const fetchedGoals = parsedGoals
         ? parsedGoals
-        : res?.data.lastNextMeetings[0].goal_last_meeting || [];
+        : res?.data.lastNextMeetings[0].goal_next_meeting || [];
         form.setFieldsValue({ last_goals: fetchedGoals });
       const savedGoalsData1 = localStorage.getItem("NextGoals");
       let parsedGoals1 = savedGoalsData1 ? JSON.parse(savedGoalsData1) : [];
       if (parsedGoals1.length === 0) {
-        parsedGoals1 = res?.data.lastNextMeetings[0].goal_next_meeting || [];
+        parsedGoals1 = res?.data.futureMeetings[0].goal_next_meeting || [];
       }
 
       const fetchedGoals1 = parsedGoals1
         ? parsedGoals1
-        : res?.data?.lastNextMeetings[0]?.goal_next_meeting || [];
+        : res?.data?.futureMeetings[0]?.goal_next_meeting || [];
       form.setFieldsValue({ next_goals: fetchedGoals1 });
     } catch (error: any) {
       // if (error.status == 500) {
@@ -299,17 +299,18 @@ const Page3 = () => {
                     className="add-staff-form"
                     scrollToFirstError
                     layout="vertical"
+                    
                     onValuesChange={onValuesChange}
                     onFinish={submit}
                     initialValues={{ last_goals: [{ name: '', comment: '' }, { name: '', comment: '' }, { name: '', comment: '' }] }}
                   >
-                    <Form.List name="last_goals">
+                    <Form.List name="last_goals" >
                       {(fields, { add, remove }) => (
                         <>
                           {fields.map(({ key, name, ...restField }) => (
                             <>
-                             <Form.Item {...restField} name={[name, "status"]}>
-                                <Select
+                             <Form.Item  {...restField} name={[name, "status"]}>
+                                <Select disabled
                                 defaultValue={"...Select"}
                                   className="responiveSelect"
                                   style={{
@@ -337,24 +338,26 @@ const Page3 = () => {
                                 label={`Goal #${key+1}`}
                               >
                                 <TextArea
+                                disabled
                                   size={"large"}
                                   placeholder="Enter..."
                                   className="text-black"
                                 />
                               </Form.Item>
-                              <Form.Item
+                              {/* <Form.Item
                                 {...restField}
                                 name={[name, "comment"]}
                                 label={`Comment #${key+1}`}
                               >
                                 <TextArea
+                                disabled
                                   size={"large"}
                                   placeholder="Enter..."
                                   className="text-black"
                                 />
-                              </Form.Item>
+                              </Form.Item> */}
                              
-                              <div className="remove_row">
+                              <div className="remove_row" >
                                 <MinusCircleOutlined
                                   style={{
                                     top: "-11px",
@@ -367,8 +370,9 @@ const Page3 = () => {
                               </div>
                             </>
                           ))}
-                          <Form.Item className="mt-2">
+                          {/* <Form.Item className="mt-2">
                             <Button
+                            
                               type="dashed"
                               onClick={() => add()}
                               block
@@ -376,7 +380,7 @@ const Page3 = () => {
                             >
                               Add field
                             </Button>
-                          </Form.Item>
+                          </Form.Item> */}
                         </>
                       )}
                     </Form.List>

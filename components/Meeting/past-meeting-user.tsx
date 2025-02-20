@@ -92,6 +92,8 @@ const PastMeetingUserList = () => {
     };
     const getDataById = async (id: any) => {
         //  
+        console.log(id,"ljlljljlj");
+        
         const item = {
             user_id: id,
             meeting_id:id12
@@ -116,6 +118,7 @@ const PastMeetingUserList = () => {
     };
     const generatePdf = async (data?: any) => {
         //  
+console.log(data,";kd;ka;s");
 
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
         const blob = await pdf(<Pdf state={data} />).toBlob();
@@ -125,6 +128,7 @@ const PastMeetingUserList = () => {
 
     // Function to handle PDF download
     const downLoadPdf = async (res: any) => {
+console.log(res,"rtetert");
 
         const { blob, timestamp } = await generatePdf(res);
         saveAs(blob, `${capFirst(res?.company_name)}.pdf`);
@@ -191,9 +195,13 @@ const PastMeetingUserList = () => {
         "tiara": "Tiara Sun Development"
     };
     const handleDownloadAndFetchData = async (id: any) => {
+        console.log(id,"lsjdljsdlj");
+        
         setLoadingState((prevState) => ({ ...prevState, [id]: true })); // Set loading state for the specific item
         try {
             let res = await getDataById(id);
+            console.log(res,"yutut");
+            
             await downLoadPdf(res);
         } catch (error) {
         } finally {

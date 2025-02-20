@@ -291,7 +291,7 @@ console.log(props?.state,"props");
           <View style={styles.section}>
             <Text style={styles.main_heading}>Goals</Text>
             <Text style={styles.subheading}>Goals from Last Meeting</Text>
-            {props?.state?.lastNextMeetings[0]?.goal_last_meeting?.map((res, index) => (
+            {props?.state?.lastNextMeetings[0]?.goal_next_meeting?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
@@ -317,7 +317,7 @@ console.log(props?.state,"props");
 
           <View style={styles.section}>
             <Text style={styles.subheading}>Goals for Next Meeting</Text>
-            {props?.state?.lastNextMeetings[0]?.goal_next_meeting?.map((res, index) => (
+            {props?.state?.futureMeetings[0]?.goal_next_meeting?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>

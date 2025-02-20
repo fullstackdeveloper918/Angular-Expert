@@ -45,7 +45,7 @@ const Page4 = () => {
       try {
         const fieldsToClear = ["products", "project", "technology"];
         // if (type == "edit") {
-        if (state?.technologyData?.length||type == "edit") {
+        if (state?.technologyData?.length) {
           let items = {
             craftsmen_toolbox: {
               user_id: value,
@@ -87,7 +87,7 @@ const Page4 = () => {
               router.replace("/auth/signin");
           }
           if (!pagetype) {
-            router.push(`/admin/member/add/page5?${res?.userId}`);
+            router.push(`/admin/member/add/page5?${value}`);
           } else {
             router?.back();
           }
@@ -121,7 +121,7 @@ const Page4 = () => {
       try {
         const fieldsToClear = ["products", "project", "technology"];
         // if (type == "edit") {
-        if (state?.technologyData.length||type == "edit") {
+        if (state?.technologyData.length) {
           let items = {
             craftsmen_toolbox: {
               user_id: value,

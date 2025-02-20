@@ -46,7 +46,7 @@ const Page7 = () => {
         const fieldsToClear = ["estimating", "accountability", "productivity"];
   
         // if (type == "edit") {
-        if (state?.roundTableTopics?.length||type == "edit") {
+        if (state?.roundTableTopics?.length) {
           let items = {
             spring_meeting: {
               user_id: value,
@@ -105,7 +105,7 @@ const Page7 = () => {
       try {
         const fieldsToClear = ["estimating", "accountability", "productivity"];
   
-        if (state?.roundTableTopics?.length||type == "edit") {
+        if (state?.roundTableTopics?.length) {
           let items = {
             spring_meeting: {
               user_id: value,

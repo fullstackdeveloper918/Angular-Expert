@@ -1089,9 +1089,14 @@ console.log(meeting_prepration_year,"meeting_prepration_year");
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">ADDITIONAL QUESTIONS</h5>
+                                                                {state1?.answer?.length ?
                                                                 <Tooltip title="Download Pdf">
                                                                     <Button  onClick={downLoadPdf8} className="borderBtn"><DownloadOutlined /></Button>
                                                                 </Tooltip>
+                                                                :
+                                                                <Tooltip title="Download Pdf">
+                                                                <Button  onClick={downLoadPdf8} disabled className="borderBtn"><DownloadOutlined /></Button>
+                                                            </Tooltip>}
                                                             </div>
                                                             <Link
                                                                 href={`${baseURL}/additional_questionnaire?${xyz}&edit&questionnair`}
@@ -1348,9 +1353,13 @@ console.log(meeting_prepration_year,"meeting_prepration_year");
                                                         <div className="card-body pb-2 d-flex flex-column">
                                                             <div className="justify-content-between align-items-center d-flex">
                                                                 <h5 className="fw-bold text-start mb-4">ADDITIONAL QUESTIONS</h5>
+                                                                {state1?.answer?.length ?
                                                                 <Tooltip title="Download Pdf">
                                                                     <Button className="borderBtn" onClick={downLoadPdf8}><DownloadOutlined /></Button>
-                                                                </Tooltip>
+                                                                </Tooltip>:
+                                                                <Tooltip title="Download Pdf">
+                                                                    <Button className="borderBtn" disabled onClick={downLoadPdf8}><DownloadOutlined /></Button>
+                                                                </Tooltip>}
                                                             </div>
                                                             <Link
                                                                 href={`${baseURL}/additional_questionnaire?${xyz}&edit&questionnair`}

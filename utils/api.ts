@@ -141,7 +141,7 @@ const User = {
   getById: (info: any) =>
     requests.post(`single-user-detail`,info),
   getById1: (info: any) =>
-    requests.post(`get-additional-users`,info),
+    requests.post(`addtional-user-list`,info),
   getAdditionalId: (info: any) =>
     requests.post(`single-additional-users`,info),
   getQuestion: () =>

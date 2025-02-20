@@ -51,6 +51,7 @@ const Add = () => {
         company_name: values?.company_name,
         position: values?.position,
         home_city: values?.home_city,
+        meeting_id:getUserdata.meetings.NextMeeting.id,
       }
     } as any
 
@@ -63,12 +64,13 @@ const Add = () => {
             firstname: String(values.firstname).trim(),
             lastname: String(values.lastname).trim(),
             email: String(values.email).trim(),
-            password: String(values.password).trim(),
+            // password: "Abhay@1234",
             mobile: values.phone_number,
             roles: "",
             company_name: values?.company_name,
             position: values?.position,
             home_city: values?.home_city,
+            meeting_id:getUserdata.meetings.NextMeeting.id,
           }
         } as any
         let res = await api.User.edit(items)
@@ -140,6 +142,7 @@ const Add = () => {
             company_name: values?.company_name,
             position: values?.position,
             home_city: values?.home_city,
+            meeting_id:getUserdata.meetings.NextMeeting.id,
           }
         } as any
         let res = await api.User.edit(items)
@@ -183,7 +186,8 @@ router.back()
     if (type == "edit") {
       const getDataById = async () => {
         const item = {
-          user_id: value
+          user_id: value,
+          meeting_id:getUserdata.meetings.NextMeeting.id,
         }
         try {
           const res = await api.User.getById(item as any);

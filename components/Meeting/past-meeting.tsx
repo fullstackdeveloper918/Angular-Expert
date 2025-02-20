@@ -7,11 +7,12 @@ import {
     Breadcrumb,
     Tabs,
     Typography,
+    Spin,
 } from "antd";
 import { clearUserData } from "../../lib/features/userSlice";
-import {  destroyCookie } from "nookies";
+import {  destroyCookie, parseCookies } from "nookies";
 import Link from "next/link";
-import { EyeOutlined } from "@ant-design/icons";
+import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 
@@ -20,6 +21,9 @@ import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import validation, { capFirst } from "@/utils/validation";
+import { pdf } from "@react-pdf/renderer";
+import Pdf from "../common/Pdf";
+import saveAs from "file-saver";
 const { Row, Col, Avatar, Card, Button, Pagination, Tooltip } = {
     Button: dynamic(() => import("antd").then((module) => module.Button), {
         ssr: false,
@@ -48,6 +52,8 @@ const { Search } = Input;
 const PastMeetingList = () => {
     const router = useRouter()
     const dispatch = useDispatch();
+    const cookies = parseCookies();
+        const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
     const [areas, setAreas] = useState<any>([]);
     const [searchTerm, setSearchTerm] = useState('')
     const [filteredData, setFilteredData] = useState<any>([]);
@@ -88,6 +94,119 @@ const PastMeetingList = () => {
         const value = event.target.value;
         setSearchTerm(value);
     };
+    const [state,setState]=useState<any>("")
+    const getDataById = async (id: any) => {
+        //  
+        const item = {
+            user_id: getUserdata.user_id,
+            meeting_id:id
+        }
+        try {
+            const res = await api.User.getById(item as any);
+            setState(res?.data || null);
+            // if (res?.data?.status == 500) {
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+
+            //     // }
+            //     // dispatch(clearUserData({}));
+            //     toast.error("Session Expired Login Again")
+            //     router.replace("/auth/signin")
+            // }
+            return res.data
+        } catch (error: any) {
+            alert(error.message);
+        }
+    };
+    const companyNameMap:any = {
+        "augusta": "Augusta Homes, Inc.",
+        "buffington": "Buffington Homes, L.P.",
+        "cabin": "Cabin John Builders",
+        "cataldo": "Cataldo Custom Builders",
+        "david_campbell": "The DCB",
+        "dc_building": "DC Building Inc.",
+        "Ddenman_construction": "Denman Construction, Inc.",
+        "ellis": "Ellis Custom Homes",
+        "tm_grady_builders": "T.M. Grady Builders",
+        "hardwick": "Hardwick G. C.",
+        "homeSource": "HomeSource Construction",
+        "ed_nikles": "Ed Nikles Custom Builder, Inc.",
+        "olsen": "Olsen Custom Homes",
+        "raykon": "Raykon Construction",
+        "matt_sitra": "Matt Sitra Custom Homes",
+        "schneider": "Schneider Construction, LLC",
+        "shaeffer": "Shaeffer Hyde Construction",
+        "split": "Split Rock Custom Homes",
+        "tiara": "Tiara Sun Development"
+    };
+    const generatePdf = async (data?: any) => {
+        //  
+        console.log(data,"asjldjas");
+        const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+        const blob = await pdf(<Pdf state={data} />).toBlob();
+        const pdfUrl = URL.createObjectURL(blob);
+        return { blob, pdfUrl, timestamp };
+    };
+
+    // Function to handle PDF download
+    const downLoadPdf = async (res: any) => {
+
+        const { blob, timestamp } = await generatePdf(res);
+        saveAs(blob, `${capFirst(res?.company_name)}.pdf`);
+    };
+
+    // Function to handle PDF sharing
+    const sharePdf = async (item: any) => {
+        //  
+        const companyName = companyNameMap[item?.company_name || ""] || "N/A";
+        const { pdfUrl, timestamp } = await generatePdf(item);
+        const response = await fetch(pdfUrl);
+        const blob = await response.blob();
+
+        // Convert the blob to a file
+        const file = new File([blob], `${capFirst(item?.company_name)}.pdf`, { type: 'application/pdf' });
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append("user_id", getUserdata?.user_id);
+        formData.append("meeting_id", getUserdata.meetings.NextMeeting.id);
+        formData.append("company_name", companyName);
+
+
+        const res = await fetch('https://nahb.goaideme.com/save-pdf', {
+        // const res = await fetch('https://app-uilsndszlq-uc.a.run.app/save-pdf', {
+
+            method: 'POST',
+            body: formData,
+            headers: {
+                Token: `${accessToken}`,
+                // 'Content-Type': 'application/json',
+            }
+        },);
+
+        const apiRes: any = await res.json()
+        navigator.clipboard.writeText(apiRes?.fileUrl)
+            .then(() => {
+                toast.success('Link copied to clipboard');
+            })
+            .catch(() => {
+                toast.error('Failed to copy link to clipboard');
+            });
+
+    };
+
+
+  const [loadingState, setLoadingState] = useState<{ [key: string]: boolean }>({});
+    const handleDownloadAndFetchData = async (id: any) => {
+        setLoadingState((prevState) => ({ ...prevState, [id]: true })); // Set loading state for the specific item
+        try {
+            let res = await getDataById(id);
+            await downLoadPdf(res);
+        } catch (error) {
+        } finally {
+            setLoadingState((prevState) => ({ ...prevState, [id]: false })); // Reset loading state for the specific item
+        }
+    };
+
+
 
     const archive = async (id: any) => {
         const item = {
@@ -104,10 +223,12 @@ const PastMeetingList = () => {
     const dataSource = filteredData?.length && filteredData
     .sort((a:any, b:any) => a.start_meeting_date - b.start_meeting_date)
     .map((res: any, index: number) => {
+        const companyName = companyNameMap[res?.host_company || ""] || "N/A";
+        const isLoading = loadingState[res?.id];
         return {
             key: index + 1,
             meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format('YYYY')}`||"N/A",
-            host_company:capFirst(res?.host_company||"N/A"),
+            host_company:res?.host_company||"N/A",
             host_name:capFirst(res?.host)||"N/A",
             host_city:
             <Tooltip title={res?.location}>
@@ -118,12 +239,19 @@ const PastMeetingList = () => {
             end_date: formatWithOrdinal(res?.end_meeting_date)||"N/A",
             end_time: dayjs(res?.end_time).format('hh:mm A')||"N/A",
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+                {getUserdata?.is_admin?
                 <li>
               <Link href={`/admin/meetings/${res?.id}/meeting-user?${dayjs(res?.start_meeting_date).format('YYYY')}`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
-          </li>
+          </li>:
+          <li>
+                    <Tooltip title="Download Pdf">
+                        <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.id)}>   {isLoading ? <Spin /> : <DownloadOutlined />}</Button>
+                    </Tooltip>
+                </li>}
             </ul>
         }
     })
+    const isUserAvailable = true;
     const baseColumns = [
         {
             title: 'Order No.',
@@ -150,11 +278,20 @@ const PastMeetingList = () => {
             dataIndex: 'host_city',
             key: 'host_city',
         },
+        getUserdata?.is_admin
+        ?
         {
             title: 'Information',
             dataIndex: 'action',
             key: 'action',
-        }
+          }:
+        {
+            title: 'Download',
+            dataIndex: 'action',
+            key: 'action',
+          }
+       
+        
     ];
     
 
