@@ -535,6 +535,19 @@ const [error,setError]=useState<any>("")
 
   }, [])
 
+   
+//   const getSeasonByReviewMonth = (month:any) =>
+//     month >= 1 && month <= 6 ? 'Spring' : month >= 7 && month <= 12 ? 'Fall' : 'Invalid Month';
+
+
+// const meeting_review_month= dayjs(props?.state?.meetings?.lastMeeting?.start_meeting_date).format("MM")
+// const season_review_month = getSeasonByReviewMonth(meeting_review_month);
+// console.log(season_review_month,"season");
+
+// const meeting_review_year= dayjs(props?.state?.meetings?.lastMeeting?.start_meeting_date).format("YYYY")
+// console.log(meeting_review_year,"meeting_review_year");
+
+  
   return (
         <section>
           <Row gutter={[20, 20]} className="mb-4 ">
@@ -580,7 +593,7 @@ const [error,setError]=useState<any>("")
               <Col sm={24} md={24} lg={24} xxl={12}>
                 <Card className='common-card'>
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                    <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates for Fall 2024</Typography.Title>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates for Spring 2025</Typography.Title>
 
                   </div>
                   <div className='tabs-wrapper'>
@@ -596,7 +609,7 @@ const [error,setError]=useState<any>("")
                 <Card className='common-card'>
 
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                    <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates for Fall 2024</Typography.Title>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates for Spring 2025</Typography.Title>
                   </div>
                   <div className='tabs-wrapper'>
                     <Table
