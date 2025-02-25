@@ -371,7 +371,7 @@ console.log(res,"rtetert");
         setLoading1(true)
         try {
             let query = searchTerm ? `searchTerm=${searchTerm}` : '';
-            let res = await api.User.listing(query,id12);
+            let res = await api.User.past_meeting_list(query,id12);
             console.log(res,"iyiyii");
             
             setState1(res?.data || []);

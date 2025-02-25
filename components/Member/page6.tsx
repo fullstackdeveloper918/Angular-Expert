@@ -5,7 +5,7 @@ import React, { Fragment, useCallback, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { destroyCookie } from "nookies";
 import { StepBackwardOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -226,6 +226,18 @@ const Page6 = () => {
     <>
       <Fragment>
         <section className="club_member">
+          <ToastContainer
+                                className="toast-container-center"
+                                position="top-right"
+                                autoClose={false} // Disable auto-close
+                                hideProgressBar={false}
+                                newestOnTop={false}
+                                closeOnClick
+                                rtl={false}
+                                pauseOnFocusLoss
+                                draggable
+                                pauseOnHover
+                              />
           <Row justify="center" gutter={[20, 20]} className="heightCenter">
             <Col xs={24} sm={22} md={20} lg={16} xl={14} xxl={12}>
               <Card className="common-card">
@@ -253,7 +265,7 @@ const Page6 = () => {
                                     </div> : ""} */}
                 <div className="mb-2 d-flex justify-content-between">
                   <Typography.Title level={3} className="m-0 fw-bold">
-                    SPRING 2024 MEETING REVIEW
+                    FALL 2024 MEETING REVIEW
                   </Typography.Title>
                   {/* <Button size={'large'} type="primary" className="text-white" disabled>5/8</Button> */}
                   {!pagetype && (

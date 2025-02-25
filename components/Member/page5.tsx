@@ -6,7 +6,7 @@ import React, { Fragment, useCallback, useEffect, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { destroyCookie } from "nookies";
 import { StepBackwardOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -243,6 +243,18 @@ const Page5 = () => {
     <>
       <Fragment>
         <section className="club_member">
+          <ToastContainer
+                                className="toast-container-center"
+                                position="top-right"
+                                autoClose={false} // Disable auto-close
+                                hideProgressBar={false}
+                                newestOnTop={false}
+                                closeOnClick
+                                rtl={false}
+                                pauseOnFocusLoss
+                                draggable
+                                pauseOnHover
+                              />
           <Row justify="center" gutter={[20, 20]} className="heightCenter">
             <Col xs={24} sm={22} md={20} lg={16} xl={14} xxl={12}>
               <Card className="common-card">

@@ -104,7 +104,7 @@ const Page1 = () => {
           "craftsmen_support",
         ];
         // if (type == "edit") {
-        if (state?.businessUpdate?.length||type == "edit") {
+        if (state?.businessUpdate?.length) {
           let items = {
             business_update: {
               // userId: value,
@@ -185,7 +185,7 @@ const Page1 = () => {
           "current_challenges",
           "craftsmen_support",
         ];
-        if (state?.businessUpdate?.length||type == "edit") {
+        if (state?.businessUpdate?.length) {
         // if (type == "edit") {
           let items = {
             business_update: {

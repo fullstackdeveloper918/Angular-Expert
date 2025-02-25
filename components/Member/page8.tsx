@@ -21,7 +21,7 @@ import MainLayout from "../../components/Layout/layout";
 import api from "@/utils/api";
 import type { UploadFile } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { destroyCookie, parseCookies } from "nookies";
@@ -822,6 +822,18 @@ console.log(response,"oerutouer");
   return (
     <>
       <Fragment>
+        <ToastContainer
+                              className="toast-container-center"
+                              position="top-right"
+                              autoClose={false} // Disable auto-close
+                              hideProgressBar={false}
+                              newestOnTop={false}
+                              closeOnClick
+                              rtl={false}
+                              pauseOnFocusLoss
+                              draggable
+                              pauseOnHover
+                            />
         {checkToast && (
           <div className="Custom_tost">
             <div>

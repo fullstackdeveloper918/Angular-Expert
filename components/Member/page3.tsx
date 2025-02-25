@@ -29,7 +29,7 @@ import {
 import EmployeeRoles from "@/utils/EmployeeRoles.json";
 import api from "@/utils/api";
 import TextArea from "antd/es/input/TextArea";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { destroyCookie } from "nookies";
 import useAutoSaveForm from "../common/useAutoSaveForm";
 import { useSelector } from "react-redux";
@@ -219,10 +219,10 @@ const Page3 = () => {
   };
 
   useEffect(() => {
-    if (type=="edit") {
+    // if (type=="edit") {
       getDataById();
-    }
-  }, [type, form]);
+    // }
+  }, [ form]);
   // useEffect(() => {
   //   if (type == "edit") {
   //     getDataById();
@@ -265,6 +265,18 @@ const Page3 = () => {
     <>
       <Fragment>
         <section className="club_member">
+           <ToastContainer
+                      className="toast-container-center"
+                      position="top-right"
+                      autoClose={false} // Disable auto-close
+                      hideProgressBar={false}
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                    />
           <Row justify="center" gutter={[20, 20]}>
             <Col sm={22} md={24} lg={16} xl={16} xxl={12}>
               <Card className="common-card">

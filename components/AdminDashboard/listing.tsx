@@ -233,9 +233,13 @@ const [error,setError]=useState<any>("")
     
     return acc;
   }, []);
+  console.log(state2,"state2");
   
-
-  const non_completed = filteredData?.filter((res: any) => res?.is_completed === false);
+  // const filteredArray = state2.filter((item:any) => item.is_form_completed == true);
+  const non_completed = state2?.filter((res: any) => res?.is_form_completed == false);
+  console.log(non_completed,"non_completed");
+  
+  // const non_completed = filteredData?.filter((res: any) => res?.is_completed === false);
   
   
   const dataSource = state1?.map((res: any, index: number) => {
@@ -257,7 +261,9 @@ const [error,setError]=useState<any>("")
     }
   }
   );
-  const dataSource1 = state2
+  const filteredArray = state2.filter((item:any) => item.is_form_completed == true);
+
+  const dataSource1 = filteredArray
   ?.sort((a: any, b: any) => {
     const dateA = new Date(a.updatedAt._seconds * 1000 + a.updatedAt._nanoseconds / 1000000);
     const dateB = new Date(b.updatedAt._seconds * 1000 + b.updatedAt._nanoseconds / 1000000);
@@ -302,6 +308,8 @@ const [error,setError]=useState<any>("")
       ),
     };
   });
+
+  // const filteredArray = state2.filter((item:any) => item.is_form_completed == true);
 
   const dataSource2 = non_completed?.map((res: any, index: number) => {
     const companyName = companyNameMap[res?.company_name || ""] || "N/A";
@@ -499,6 +507,8 @@ const [error,setError]=useState<any>("")
       setLoading(false)
     }
   }
+  console.log(state2,"ljlsjdfl");
+  
   const userlist = async () => {
     setLoading(true)
     try {

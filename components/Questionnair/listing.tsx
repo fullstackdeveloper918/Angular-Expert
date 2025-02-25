@@ -339,8 +339,8 @@ const QuestionnairList = () => {
         { title: 'Card 2', description: 'GOALS', state: 1 },
         { title: 'Card 3', description: 'CRAFTSMEN TOOLBOX', state: 2 },
         { title: 'Card 4', description: 'CRAFTSMEN CHECK-UP', state: 3 },
-        { title: 'Card 5', description: 'SPRING 2024 MEETING REVIEW', state: 4 },
-        { title: 'Card 6', description: 'FALL 2024 MEETING PREPARATION', state: 5 },
+        { title: 'Card 5', description: 'FALL 2024 MEETING REVIEW', state: 4 },
+        { title: 'Card 6', description: 'SPRING 2024 MEETING PREPARATION', state: 5 },
         { title: 'Card 7', description: 'PHOTO SECTION', state: 6 },
         // Add more card data as needed
     ];

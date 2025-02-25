@@ -70,14 +70,14 @@ const Auth = {
 };
 const dashboard={
   upcoming: (q?: string) =>
-    requests.get(`upcoming-meeting?meeting_id=${q ? `?${q}` : ""}`),
+    requests.get(`upcoming-meeting?meeting_id=${q ? `${q}` : ""}`),
   next: (q?: string) =>
-    requests.get(`next-meetings?meeting_id=${q ? `?${q}` : ""}`),
+    requests.get(`next-meetings?meeting_id=${q ? `${q}` : ""}`),
 }
 const Admin={
   // admin/listadmin/add
   listing: (q?: string) =>
-    requests.get(`admin/list${q ? `?${q}` : ""}`),
+    requests.get(`admin/list${q ? `${q}` : ""}`),
   
   create: (info: any) =>
     requests.post('admin/add', info),
@@ -115,23 +115,25 @@ const User = {
   edit_additional_user: (info: any) =>
     requests.post('update-additional-users', info),
   listing: (q?: string,id?:any) =>
-    requests.get(`list?meeting_id=${id ? `?${id}` : ""}${q ? `?${q}` : ""}`),
+    requests.get(`list?meeting_id=${id ? `${id}` : ""}${q ? `${q}` : ""}`),
+  past_meeting_list: (q?: string,id?:any) =>
+    requests.get(`past-meetings-user?meeting_id=${id ? `${id}` : ""}${q ? `${q}` : ""}`),
   // additional_user_listing: (q?: string) =>
   //   requests.get(`addtional-user-list${q ? `?${q}` : ""}`),
   additional_user_listing: (info: any) =>
     requests.post(`addtional-user-list`,info),
   arcivelisting: (q?: string) =>
-    requests.get(`archive-user-listing${q ? `?${q}` : ""}`),
+    requests.get(`archive-user-listing${q ? `${q}` : ""}`),
   completelist: (q?:string) =>
-    requests.get(`descending-completed-form?meeting_id=${q ? `?${q}` : ""}`),
+    requests.get(`descending-completed-form?meeting_id=${q ? `${q}` : ""}`),
   listing1: () =>
     requests.get(`list`),
   user_listing: (q?: string) =>
-    requests.get(`single-user-form-status?meeting_id=${q ? `?${q}` : ""}`),
+    requests.get(`single-user-form-status?meeting_id=${q ? `${q}` : ""}`),
   check_fall_spring: (q?:string) =>
-    requests.get(`spring-fall-meeting-count?meeting_id=${q ? `?${q}` : ""}`),
+    requests.get(`spring-fall-meeting-count?meeting_id=${q ? `${q}` : ""}`),
   user_completed_noncompleted: (q?:string) =>
-    requests.get(`complete-uncomplete-form?meeting_id=${q ? `?${q}` : ""}`),
+    requests.get(`complete-uncomplete-form?meeting_id=${q ? `${q}` : ""}`),
   user_total_count: (q?: string) =>
     requests.get(`total-member-count`),
   user_remains_userfor_meeting: (q?: string) =>
@@ -147,7 +149,7 @@ const User = {
   getQuestion: () =>
     requests.get(`new-questions`),
   getPurchase: (_id: string, q?: string) =>
-    requests.get(`user/${_id}/purchase${q ? `?${q}` : ""}`),
+    requests.get(`user/${_id}/purchase${q ? `${q}` : ""}`),
   detailPurchase: (_id: string) =>
     requests.get(`user/purchase/${_id}`),
   block: (id: string, info: any) =>
@@ -170,17 +172,17 @@ const Meeting={
   create: (info: any) =>
     requests.post('add-meeting', info),
   update:(q?: string)=>
-    requests.get(`five-day-beforemeeting-countdown?meeting_id=${q ? `?${q}` : ""}`),
+    requests.get(`five-day-beforemeeting-countdown?meeting_id=${q ? `${q}` : ""}`),
   past_meeting:(q?: string)=>
-    requests.get(`past-meetings${q ? `?${q}` : ""}`),
+    requests.get(`past-meetings${q ? `${q}` : ""}`),
   meeting_user:(info: any)=>
     requests.post(`past-meetings-user`,info),
   listing: (q?: string) =>
-    requests.get(`meeting-list${q ? `?${q}` : ""}`),
+    requests.get(`meeting-list${q ? `${q}` : ""}`),
   upcoming_meeting: (q?: string) =>
-    requests.get(`upcoming-meeting?meeting_id=${q ? `?${q}` : ""}`),
+    requests.get(`upcoming-meeting?meeting_id=${q ? `${q}` : ""}`),
   archive: (q?: string) =>
-    requests.get(`meeting-archive${q ? `?${q}` : ""}`),
+    requests.get(`meeting-archive${q ? `${q}` : ""}`),
   getById: (info: any) =>
     requests.post(`meeting-detail`,info),
   edit: ( info: any) =>
@@ -215,7 +217,7 @@ const Manage_Question={
 }
 const Questionnaire={
   listing: (q?: string,id?:any) =>
-    requests.get(`question-list?meeting_id=${id ? `?${id}` : ""}${q ? `?${q}` : ""}`),
+    requests.get(`question-list?meeting_id=${id ? `${id}` : ""}${q ? `${q}` : ""}`),
 }
 // const Dashboard = {
 //   listing: (q?: string) =>
