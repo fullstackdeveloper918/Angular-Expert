@@ -18,8 +18,10 @@ import { useRouter } from "next/navigation";
 import { destroyCookie } from "nookies";
 import api from "../../utils/api";
 import CustomModal from "../common/Modal";
+import { useSelector } from "react-redux";
 const { Search } = Input;
 const Manage_Question = () => {
+  const getUserdata = useSelector((state: any) => state?.user?.userData)
   const [state, setState] = React.useState<any>([])
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState(state);
@@ -61,6 +63,7 @@ const Manage_Question = () => {
   const archive = async (id: any) => {
     const item = {
         question_id: id,
+        meeting_id:getUserdata.meetings.NextMeeting.id,
     }
     try {
         let res = await api.Manage_Question.delete(item as any)

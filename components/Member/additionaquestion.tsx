@@ -11,6 +11,9 @@ import { StepBackwardOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import useAutoSaveForm from "../common/useAutoSaveForm";
 const AdditionalQuestion = () => {
+
+ 
+
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
@@ -19,7 +22,16 @@ const AdditionalQuestion = () => {
   const [actionType, setActionType] = useState<"submit" | "save" | null>(null);
   const [state, setState] = useState<any>("");
   const [question, setQuestion] = useState<any>([]);
-
+  console.log(question,"question");
+  
+  const filtered_questions = question?.filter((item: any) => item.page_type === "answers") // Step 1: Filter by page_type
+  .sort((a: any, b: any) => parseInt(a.quesiton_position) - parseInt(b.quesiton_position)) // Step 2: Sort by question_position
+  .map((item: any, index: number) => {
+    item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
+    return item;
+  });
+  console.log(filtered_questions,"filtered_questions");
+  
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : "";
@@ -201,6 +213,9 @@ const AdditionalQuestion = () => {
   useEffect(() => {
     getQuestion();
   }, []);
+
+
+  
   const getDataById = async () => {
     const item = {
       user_id: value,
@@ -209,6 +224,8 @@ const AdditionalQuestion = () => {
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
+      console.log(res?.data,"qwert");
+      
       // if (res?.data?.status == 500) {
       //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
       //   localStorage.removeItem("hasReloaded")
@@ -319,7 +336,7 @@ const AdditionalQuestion = () => {
                   >
                     {/* First Name  */}
 
-                    {question.map((question: any) => (
+                    {filtered_questions.map((question: any) => (
                       <Form.Item
                         key={question.id}
                         name={`question_${question.id}`}

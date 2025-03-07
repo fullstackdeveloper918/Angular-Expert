@@ -41,7 +41,7 @@ interface Goal {
   goal_next?: string;
 }
 const { Option } = Select;
-const Page3 = () => {
+const Page3 = ({questions}:any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();

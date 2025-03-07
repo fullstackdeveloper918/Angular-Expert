@@ -11,7 +11,15 @@ import { StepBackwardOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearFormData, clearSpecificFormData } from "@/lib/features/formSlice";
-const Page6 = () => {
+const Page6 = ({questions}:any) => {
+  console.log(questions,"ytaaayt");
+  const filtered_questions = questions?.data?.filter((item: any) => item.page_type === "meeting_review") // Step 1: Filter by page_type
+  .sort((a: any, b: any) => parseInt(a.quesiton_position) - parseInt(b.quesiton_position)) // Step 2: Sort by question_position
+  .map((item: any, index: number) => {
+    item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
+    return item;
+  });
+  console.log(filtered_questions,"filtered_questions");
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
@@ -35,8 +43,14 @@ const Page6 = () => {
         fall_meeting_review: {
           user_id: value,
           meeting_id: getUserdata.meetings.NextMeeting.id,
-          fall_meeting: values?.fall_meeting,
-          personal_finances: values?.personal_finances,
+          fallmeeting_review_update_questions: filtered_questions.map((q: any) => ({
+            question_id: q.id,
+            question: q.question,
+            answer: values[`question_${q.id}`] || "",
+            question_position:q.quesiton_position
+          })),
+          // fall_meeting: values?.fall_meeting,
+          // personal_finances: values?.personal_finances,
         },
       };
       try {
@@ -47,8 +61,14 @@ const Page6 = () => {
             fall_meeting_review: {
               user_id: value,
               meeting_id: getUserdata.meetings.NextMeeting.id,
-              fall_meeting: values?.fall_meeting,
-              personal_finances: values?.personal_finances,
+              fallmeeting_review_update_questions: filtered_questions.map((q: any) => ({
+                question_id: q.id,
+                question: q.question,
+                answer: values[`question_${q.id}`] || "",
+                question_position:q.quesiton_position
+              })),
+              // fall_meeting: values?.fall_meeting,
+              // personal_finances: values?.personal_finances,
             },
           } as any;
           setLoading(true);
@@ -71,16 +91,16 @@ const Page6 = () => {
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
 
-          if (res?.status == 500) {
-            localStorage.setItem(
-              "redirectAfterLogin",
-              window.location.pathname
-            );
-            localStorage.removeItem("hasReloaded");
-            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-            toast.error("Session Expired. Login Again");
-            router.replace("/auth/signin");
-          }
+          // if (res?.status == 500) {
+          //   localStorage.setItem(
+          //     "redirectAfterLogin",
+          //     window.location.pathname
+          //   );
+          //   localStorage.removeItem("hasReloaded");
+          //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+          //   toast.error("Session Expired. Login Again");
+          //   router.replace("/auth/signin");
+          // }
           if (!pagetype) {
             router.push(
               `/admin/member/add/additional_questionnaire?${value}&edit`
@@ -103,8 +123,14 @@ const Page6 = () => {
         fall_meeting_review: {
           user_id: value,
           meeting_id: getUserdata.meetings.NextMeeting.id,
-          fall_meeting: values?.fall_meeting,
-          personal_finances: values?.personal_finances,
+          fallmeeting_review_update_questions: filtered_questions.map((q: any) => ({
+            question_id: q.id,
+            question: q.question,
+            answer: values[`question_${q.id}`] || "",
+            question_position:q.quesiton_position
+          })),
+          // fall_meeting: values?.fall_meeting,
+          // personal_finances: values?.personal_finances,
         },
       };
       try {
@@ -114,8 +140,14 @@ const Page6 = () => {
             fall_meeting_review: {
               user_id: value,
               meeting_id: getUserdata.meetings.NextMeeting.id,
-              fall_meeting: values?.fall_meeting,
-              personal_finances: values?.personal_finances,
+              fallmeeting_review_update_questions: filtered_questions.map((q: any) => ({
+                question_id: q.id,
+                question: q.question,
+                answer: values[`question_${q.id}`] || "",
+                question_position:q.quesiton_position
+              })),
+              // fall_meeting: values?.fall_meeting,
+              // personal_finances: values?.personal_finances,
             },
           } as any;
           setLoading1(true);
@@ -135,16 +167,16 @@ const Page6 = () => {
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
 
-          if (res?.status == 500) {
-            localStorage.setItem(
-              "redirectAfterLogin",
-              window.location.pathname
-            );
-            localStorage.removeItem("hasReloaded");
-            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-            toast.error("Session Expired. Login Again");
-            router.replace("/auth/signin");
-          }
+          // if (res?.status == 500) {
+          //   localStorage.setItem(
+          //     "redirectAfterLogin",
+          //     window.location.pathname
+          //   );
+          //   localStorage.removeItem("hasReloaded");
+          //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+          //   toast.error("Session Expired. Login Again");
+          //   router.replace("/auth/signin");
+          // }
         }
       } catch (error) {
         if (!pagetype) {
@@ -175,16 +207,27 @@ const Page6 = () => {
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
-      if (res?.data?.status == 500) {
-        localStorage.setItem("redirectAfterLogin", window.location.pathname);
-        localStorage.removeItem("hasReloaded");
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (res?.data?.status == 500) {
+      //   localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      //   localStorage.removeItem("hasReloaded");
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   toast.error("Session Expired. Login Again");
+      //   router.replace("/auth/signin");
+      // }
 
       const dataFromApi = res?.data?.meetingReviews[0] || {};
-
+console.log(dataFromApi,"dataFromApi");
+const resValues = 
+Object.keys(formValues).length > 0
+  ? Object.keys(formValues).reduce((acc: any, key) => {
+      acc[key] = formValues[key];
+      return acc;
+    }, {})
+  :dataFromApi?.fallmeeting_review_update_questions?.reduce((acc: any, question: any) => {
+    console.log(acc,"accaccacc");
+      acc[`question_${question.question_id}`] = question.answer;
+      return acc;
+    }, {});
       const finalData = {
         fall_meeting:
           formValues?.fall_meeting || dataFromApi?.fall_meeting || "",
@@ -192,15 +235,15 @@ const Page6 = () => {
           formValues?.personal_finances || dataFromApi?.personal_finances,
       };
 
-      form.setFieldsValue(finalData);
+      form.setFieldsValue(resValues);
     } catch (error: any) {
-      if (error == 500) {
-        localStorage.setItem("redirectAfterLogin", window.location.pathname);
-        localStorage.removeItem("hasReloaded");
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (error == 500) {
+      //   localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      //   localStorage.removeItem("hasReloaded");
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   toast.error("Session Expired. Login Again");
+      //   router.replace("/auth/signin");
+      // }
     }
   };
   React.useEffect(() => {
@@ -291,8 +334,25 @@ const Page6 = () => {
                     onFinish={submit}
                     onValuesChange={onValuesChange}
                   >
+                  
+{filtered_questions.map((question: any) => (
+                      <Form.Item
+                        key={question.id}
+                        name={`question_${question.id}`}
+                        rules={[
+                          {
+                            required: true,
+                            whitespace: true,
+                            message: "Please Fill Field",
+                          },
+                        ]}
+                        label={question.question}
+                      >
+                        <TextArea size="large" placeholder="Enter..." />
+                      </Form.Item>
+                    ))}
                     {/* First Name  */}
-                    <Form.Item
+                    {/* <Form.Item
                       name="fall_meeting"
                       rules={[
                         {
@@ -317,7 +377,7 @@ const Page6 = () => {
                       label="Have you implemented any recommendations from Bart Smith’s financial analysis &/or Fred Reikowsky’s project management skills?"
                     >
                       <TextArea size={"large"} placeholder="Enter..." />
-                    </Form.Item>
+                    </Form.Item> */}
 
                     {/* Button  */}
                     <div className="d-flex mt-3">

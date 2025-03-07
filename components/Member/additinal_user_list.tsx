@@ -105,6 +105,7 @@ const AdditionalList = () => {
     const archive = async (id: any) => {
         const item = {
             user_id: id,
+            meeting_id:getUserdata.meetings.NextMeeting.id,
         }
         try {
             let res = await api.User.delete1(item as any)

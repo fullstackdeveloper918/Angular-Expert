@@ -13,7 +13,15 @@ import { useDispatch, useSelector } from "react-redux";
 import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearFormData, clearSpecificFormData } from "@/lib/features/formSlice";
 
-const Page5 = () => {
+const Page5 = ({questions}:any) => {
+  console.log(questions,"ytaaayt");
+  const filtered_questions = questions?.data?.filter((item: any) => item.page_type === "craftsmen_checkup") // Step 1: Filter by page_type
+  .sort((a: any, b: any) => parseInt(a.quesiton_position) - parseInt(b.quesiton_position)) // Step 2: Sort by question_position
+  .map((item: any, index: number) => {
+    item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
+    return item;
+  });
+  console.log(filtered_questions,"filtered_questions");
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
@@ -37,10 +45,16 @@ const Page5 = () => {
         craftsmen_checkup: {
           user_id: value,
           meeting_id: getUserdata.meetings.NextMeeting.id,
-          commitment: values?.commitment,
-          contribute: values?.contribute,
-          wellbeing: values?.wellbeing,
-          contact_info: values?.contact_info,
+          craftsmen_checkup_update_questions: filtered_questions.map((q: any) => ({
+            question_id: q.id,
+            question: q.question,
+            answer: values[`question_${q.id}`] || "",
+            question_position:q.quesiton_position
+          })),
+          // commitment: values?.commitment,
+          // contribute: values?.contribute,
+          // wellbeing: values?.wellbeing,
+          // contact_info: values?.contact_info,
         },
       };
       try {
@@ -56,10 +70,16 @@ const Page5 = () => {
             craftsmen_checkup: {
               user_id: value,
               meeting_id: getUserdata.meetings.NextMeeting.id,
-              commitment: values?.commitment,
-              contribute: values?.contribute,
-              wellbeing: values?.wellbeing,
-              contact_info: values?.contact_info,
+              craftsmen_checkup_update_questions: filtered_questions.map((q: any) => ({
+                question_id: q.id,
+                question: q.question,
+                answer: values[`question_${q.id}`] || "",
+                question_position:q.quesiton_position
+              })),
+              // commitment: values?.commitment,
+              // contribute: values?.contribute,
+              // wellbeing: values?.wellbeing,
+              // contact_info: values?.contact_info,
             },
           } as any;
           setLoading(true);
@@ -110,10 +130,16 @@ const Page5 = () => {
         craftsmen_checkup: {
           user_id: value,
           meeting_id: getUserdata.meetings.NextMeeting.id,
-          commitment: values?.commitment,
-          contribute: values?.contribute,
-          wellbeing: values?.wellbeing,
-          contact_info: values?.contact_info,
+          craftsmen_checkup_update_questions: filtered_questions.map((q: any) => ({
+            question_id: q.id,
+            question: q.question,
+            answer: values[`question_${q.id}`] || "",
+            question_position:q.quesiton_position
+          })),
+          // commitment: values?.commitment,
+          // contribute: values?.contribute,
+          // wellbeing: values?.wellbeing,
+          // contact_info: values?.contact_info,
         },
       };
       try {
@@ -129,10 +155,16 @@ const Page5 = () => {
             craftsmen_checkup: {
               user_id: value,
               meeting_id: getUserdata.meetings.NextMeeting.id,
-              commitment: values?.commitment,
-              contribute: values?.contribute,
-              wellbeing: values?.wellbeing,
-              contact_info: values?.contact_info,
+              craftsmen_checkup_update_questions: filtered_questions.map((q: any) => ({
+                question_id: q.id,
+                question: q.question,
+                answer: values[`question_${q.id}`] || "",
+                question_position:q.quesiton_position
+              })),
+              // commitment: values?.commitment,
+              // contribute: values?.contribute,
+              // wellbeing: values?.wellbeing,
+              // contact_info: values?.contact_info,
             },
           } as any;
           setLoading1(true);
@@ -201,15 +233,25 @@ const Page5 = () => {
         router.replace("/auth/signin");
       }
       const dataFromApi = res?.data?.craftsMenUpdates[0] || {};
+      const resValues = 
+      Object.keys(formValues).length > 0
+        ? Object.keys(formValues).reduce((acc: any, key) => {
+            acc[key] = formValues[key];
+            return acc;
+          }, {})
+        :dataFromApi?.craftsmen_checkup_update_questions?.reduce((acc: any, question: any) => {
+          console.log(acc,"accaccacc");
+            acc[`question_${question.question_id}`] = question.answer;
+            return acc;
+          }, {});
+      // const finalData = {
+      //   commitment: formValues?.commitment || dataFromApi?.commitment,
+      //   contribute: formValues?.contribute || dataFromApi?.contribute,
+      //   wellbeing: formValues?.wellbeing || dataFromApi?.wellbeing,
+      //   contact_info: formValues?.contact_info || dataFromApi?.contact_info,
+      // };
 
-      const finalData = {
-        commitment: formValues?.commitment || dataFromApi?.commitment,
-        contribute: formValues?.contribute || dataFromApi?.contribute,
-        wellbeing: formValues?.wellbeing || dataFromApi?.wellbeing,
-        contact_info: formValues?.contact_info || dataFromApi?.contact_info,
-      };
-
-      form.setFieldsValue(finalData);
+      form.setFieldsValue(resValues);
     } catch (error: any) {
       if (error?.status == 500) {
         localStorage.setItem("redirectAfterLogin", window.location.pathname);
@@ -286,8 +328,26 @@ const Page5 = () => {
                     onFinish={submit}
                     onValuesChange={onValuesChange}
                   >
+
+
+{filtered_questions.map((question: any) => (
+                      <Form.Item
+                        key={question.id}
+                        name={`question_${question.id}`}
+                        rules={[
+                          {
+                            required: true,
+                            whitespace: true,
+                            message: "Please Fill Field",
+                          },
+                        ]}
+                        label={question.question}
+                      >
+                        <TextArea size="large" placeholder="Enter..." />
+                      </Form.Item>
+                    ))}
                     {/* First Name  */}
-                    <Form.Item
+                    {/* <Form.Item
                       name="commitment"
                       rules={[
                         {
@@ -338,7 +398,7 @@ const Page5 = () => {
                       label="Have any items on your contact info changed?"
                     >
                       <TextArea size={"large"} placeholder="Enter..." />
-                    </Form.Item>
+                    </Form.Item> */}
 
                     {/* Button  */}
                     <div className="d-flex mt-3">

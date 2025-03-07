@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearSpecificFormData } from "@/lib/features/formSlice";
 
-const Page7 = () => {
+const Page7 = ({questions}:any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
@@ -263,7 +263,7 @@ const Page7 = () => {
                                     </div> : ""} */}
                 <div className="mb-2 d-flex justify-content-between">
                   <Typography.Title level={3} className="m-0 fw-bold">
-                    SPRING 2024 MEETING PREPARATION
+                    SPRING 2025 MEETING PREPARATION
                   </Typography.Title>
                   {/* <Button size={'large'} type="primary" className="text-white" disabled>6/8</Button> */}
                   {!pagetype && (
