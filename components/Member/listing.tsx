@@ -32,7 +32,7 @@ type Page<P = {}> = NextPage<P> & {
     getLayout?: (page: ReactNode) => ReactNode;
 };
 
-const MemberList = () => {
+const MemberList = ({response}:any) => {
     const router = useRouter()
     const [loading1, setLoading1] = useState(true);
     const [loading2, setLoading2] = useState(false);
@@ -103,7 +103,7 @@ const MemberList = () => {
         //  
         console.log(data,"asjldjas");
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
-        const blob = await pdf(<Pdf state={data} />).toBlob();
+        const blob = await pdf(<Pdf state={data}/>).toBlob();
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };

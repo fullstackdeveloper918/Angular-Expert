@@ -192,7 +192,8 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2025</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>{props?.state?.craftsMenUpdates[0]?.craftsmen_checkup_update_questions.length?"Spring 2025":
+                "Fall 2024"}</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}
@@ -200,39 +201,53 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
           </View>
           <View style={styles.section}>
             <Text style={styles.main_heading}>CRAFTSMEN CHECK-UP</Text>
-            <View style={styles.goal}>
-              <Text style={styles.text}>
-                {" "}
-                What is your level of commitment to our club?{" "}
-              </Text>
-              <Text style={styles.textarea}>
-              {props?.state?.craftsMenUpdates[0]?.commitment}
-              </Text>
-
-              <Text style={styles.text}>
-                {" "}
-                List Something(s) you can do to contribute to our club.{" "}
-              </Text>
-              <Text style={styles.textarea}>
-              {props?.state?.craftsMenUpdates[0]?.contribute}
-              </Text>
-
-              <Text style={styles.text}>
-                {" "}
-                How is your present health, wellbeing, family life?{" "}
-              </Text>
-              <Text style={styles.textarea}>
-              {props?.state?.craftsMenUpdates[0]?.wellbeing}
-              </Text>
-
-              <Text style={styles.text}>
-                {" "}
-                Have any items on your contact info changed?
-              </Text>
-              <Text style={styles.textarea}>
-              {props?.state?.craftsMenUpdates[0]?.contact_info}
-              </Text>
-            </View>
+              <View style={styles.goal}>
+            
+            
+                        {props?.state?.craftsMenUpdates?.length?
+                        props?.state?.craftsMenUpdates[0]?.craftsmen_checkup_update_questions.map((res,index)=>
+                        (
+                          <>
+                          <Text style={styles.text} key={index}>{res?.question}</Text>
+                        <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+                          {res.answer}
+                        </Text>
+                          </>
+                        )
+                        )
+                        :
+            
+            <>
+                          <Text style={styles.text}>
+                            What is your level of commitment to our club?
+                          </Text>
+                          <Text style={styles.textarea} wrap={false}>
+                            {props?.state?.craftsMenUpdates[0]?.commitment}
+                          </Text>
+            
+                          <Text style={styles.text}>
+                            List Something(s) you can do to contribute to our club.
+                          </Text>
+                          <Text style={styles.textarea} wrap={false}>
+                            {props?.state?.craftsMenUpdates[0]?.contribute}
+                          </Text>
+            
+                          <Text style={styles.text}>
+                            How is your present health, wellbeing, family life?
+                          </Text>
+                          <Text style={styles.textarea} wrap={false}>
+                            {props?.state?.craftsMenUpdates[0]?.wellbeing}
+                          </Text>
+            
+                          <Text style={styles.text}>
+                            Have any items on your contact info changed?
+                          </Text>
+                          <Text style={styles.textarea} wrap={false}>
+                            {props?.state?.craftsMenUpdates[0]?.contact_info}
+                          </Text>
+            
+                          </>}
+                        </View>
           </View>
 
           

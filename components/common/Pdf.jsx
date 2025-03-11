@@ -245,7 +245,8 @@ console.log(props?.state,"props");
                   textTransform: "capitalize",
                 }}
               >
-                Fall 2024
+                {props?.state?.businessUpdate.length?"Spring 2025":
+                "Fall 2024"}
               </Text>
             </Text>
             <Text style={styles.subheader}>{companyName}</Text>
@@ -253,6 +254,19 @@ console.log(props?.state,"props");
 
           <View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
+            {props?.state?.businessUpdate.length?
+            props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
+            (
+              <>
+              <Text style={styles.text} key={index}>{res?.question}</Text>
+            <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+              {res.answer}
+            </Text>
+              </>
+            )
+            )
+            :
+            <>
             <Text style={styles.text}>Current financial position:</Text>
             <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
               {props?.state?.businessUpdate[0]?.financial_position}
@@ -286,6 +300,9 @@ console.log(props?.state,"props");
             <Text style={styles.textarea} wrap={false}>
               {props?.state?.businessUpdate[0]?.craftsmen_support}
             </Text>
+            </>
+
+}
           </View>
 
           <View style={styles.section}>
@@ -340,6 +357,21 @@ console.log(props?.state,"props");
           <View style={styles.section}>
             <Text style={styles.main_heading}>CRAFTSMEN TOOLBOX</Text>
             <View style={styles.goal}>
+
+            {props?.state?.technologyData?.length?
+            props?.state?.technologyData[0]?.craftsmen_toolbox_update_questions.map((res,index)=>
+            (
+              <>
+              <Text style={styles.text} key={index}>{res?.question}</Text>
+            <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+              {res.answer}
+            </Text>
+              </>
+            )
+            )
+            :
+
+<>
               <Text style={styles.text}>
                 Describe any new technology you started using and share the name
                 of the app or website:
@@ -363,12 +395,32 @@ console.log(props?.state,"props");
               <Text style={styles.textarea} wrap={false}>
                    {props?.state?.technologyData[0]?.project}   
               </Text>
+</>}
             </View>
+
           </View>
 
           <View style={styles.section}>
             <Text style={styles.main_heading}>CRAFTSMEN CHECK-UP</Text>
             <View style={styles.goal}>
+
+
+            {props?.state?.craftsMenUpdates?.length?
+            props?.state?.craftsMenUpdates[0]?.craftsmen_checkup_update_questions.map((res,index)=>
+            (
+              <>
+              <Text style={styles.text} key={index}>{res?.question}</Text>
+            <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+              {res.answer}
+            </Text>
+              </>
+            )
+            )
+            :
+
+<>
+
+
               <Text style={styles.text}>
                 What is your level of commitment to our club?
               </Text>
@@ -396,6 +448,8 @@ console.log(props?.state,"props");
               <Text style={styles.textarea} wrap={false}>
                 {props?.state?.craftsMenUpdates[0]?.contact_info}
               </Text>
+
+              </>}
             </View>
           </View>
 
@@ -403,6 +457,22 @@ console.log(props?.state,"props");
             {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
             <Text style={styles.main_heading}>Fall 2024 MEETING REVIEW</Text>
             <View style={styles.goal}>
+
+            {props?.state?.meetingReviews.length?
+            props?.state?.technologyData[0]?.fallmeeting_review_update_questions?.map((res,index)=>
+            (
+              <>
+              <Text style={styles.text} key={index}>{res?.question}</Text>
+            <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+              {res.answer}
+            </Text>
+              </>
+            )
+            )
+            :
+
+<>
+              
               <Text style={styles.text}>
                 What was your most valuable take away from our fall meeting?
               </Text>
@@ -418,6 +488,7 @@ console.log(props?.state,"props");
               <Text style={styles.textarea} wrap={false}>
                 {props?.state?.meetingReviews[0]?.personal_finances}
               </Text>
+              </>}
             </View>
           </View>
 

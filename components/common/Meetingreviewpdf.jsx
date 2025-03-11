@@ -192,7 +192,8 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2025</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>{props?.state?.technologyData[0]?.fallmeeting_review_update_questions?.length?"Spring 2025":
+                "Fall 2024"}</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}
@@ -200,25 +201,40 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
           </View>
           <View style={styles.section}>
             <Text style={styles.main_heading}>FALL 2024 MEETING REVIEW</Text>
-            <View style={styles.goal}>
-              <Text style={styles.text}>
-                {" "}
-                What was your most valuable take away from our fall meeting?{" "}
-              </Text>
-              <Text style={styles.textarea}>
-              {props?.state?.meetingReviews[0]?.fall_meeting}
-              </Text>
-
-              <Text style={styles.text}>
-                {" "}
-                Have you implemented any of Jim Weber’s estate/financial
-                planning reccomendations into your business and/or personal
-                finances?{" "}
-              </Text>
-              <Text style={styles.textarea}>
-              {props?.state?.meetingReviews[0]?.personal_finances}
-              </Text>
-            </View>
+           <View style={styles.goal}>
+           
+                       {props?.state?.meetingReviews.length?
+                       props?.state?.technologyData[0]?.fallmeeting_review_update_questions?.map((res,index)=>
+                       (
+                         <>
+                         <Text style={styles.text} key={index}>{res?.question}</Text>
+                       <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+                         {res.answer}
+                       </Text>
+                         </>
+                       )
+                       )
+                       :
+           
+           <>
+                         
+                         <Text style={styles.text}>
+                           What was your most valuable take away from our fall meeting?
+                         </Text>
+                         <Text style={styles.textarea} wrap={false}>
+                           {props?.state?.meetingReviews[0]?.fall_meeting}
+                         </Text>
+           
+                         <Text style={styles.text}>
+                           Have you implemented any of Jim Weber’s estate/financial
+                           planning reccomendations into your business and/or personal
+                           finances?
+                         </Text>
+                         <Text style={styles.textarea} wrap={false}>
+                           {props?.state?.meetingReviews[0]?.personal_finances}
+                         </Text>
+                         </>}
+                       </View>
           </View>
 
      

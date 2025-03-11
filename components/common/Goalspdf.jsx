@@ -192,7 +192,8 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2025</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>  {props?.state?.futureMeetings[0]?.goal_next_meeting?.length?"Spring 2025":
+                "Fall 2024"}</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}

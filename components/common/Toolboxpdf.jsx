@@ -192,7 +192,8 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2025</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>{props?.state?.technologyData[0]?.craftsmen_toolbox_update_questions?.length?"Spring 2025":
+                "Fall 2024"}</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}
@@ -201,32 +202,47 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 
           <View style={styles.section}>
             <Text style={styles.main_heading}>CRAFTSMEN TOOLBOX</Text>
-            <View style={styles.goal}>
-              <Text style={styles.text}>
-                {" "}
-                Describe any new technology you started using and share the name
-                of the app or website:{" "}
-              </Text>
-              <Text style={styles.textarea}>
-              {props?.state?.technologyData[0]?.technology}
-              </Text>
-
-              <Text style={styles.text}>
-                {" "}
-                Describe any new products you have used in the last 6 months &
-                share the name and website:{" "}
-              </Text>
-              <Text style={styles.textarea}>
-              {props?.state?.technologyData[0]?.products}
-              </Text>
-
-              <Text style={styles.text}>
-                {" "}
-                Describe something that you do with each project that sets you
-                apart from your competition:{" "}
-              </Text>
-              <Text style={styles.textarea}>   {props?.state?.technologyData[0]?.project}   </Text>
-            </View>
+                      <View style={styles.goal}>
+          
+                      {props?.state?.technologyData?.length?
+                      props?.state?.technologyData[0]?.craftsmen_toolbox_update_questions.map((res,index)=>
+                      (
+                        <>
+                        <Text style={styles.text} key={index}>{res?.question}</Text>
+                      <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+                        {res.answer}
+                      </Text>
+                        </>
+                      )
+                      )
+                      :
+          
+          <>
+                        <Text style={styles.text}>
+                          Describe any new technology you started using and share the name
+                          of the app or website:
+                        </Text>
+                        <Text style={styles.textarea} wrap={false}>
+                          {props?.state?.technologyData[0]?.technology}
+                        </Text>
+          
+                        <Text style={styles.text}>
+                          Describe any new products you have used in the last 6 months &
+                          share the name and website:
+                        </Text>
+                        <Text style={styles.textarea} wrap={false}>
+                          {props?.state?.technologyData[0]?.products}
+                        </Text>
+          
+                        <Text style={styles.text}>
+                          Describe something that you do with each project that sets you
+                          apart from your competition:
+                        </Text>
+                        <Text style={styles.textarea} wrap={false}>
+                             {props?.state?.technologyData[0]?.project}   
+                        </Text>
+          </>}
+                      </View>
           </View>
         </Page>
       </Document>

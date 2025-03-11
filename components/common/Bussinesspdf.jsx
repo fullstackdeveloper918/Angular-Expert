@@ -192,7 +192,8 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2025</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}> {props?.state?.businessUpdate.length?"Spring 2025":
+                "Fall 2024"}</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}
@@ -201,43 +202,56 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 
           <View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
-            <Text style={styles.text}>Current financial position:</Text>
-            <Text style={[styles.textarea, styles.heightGiven]}>
-            {props?.state?.businessUpdate[0]?.financial_position}
-            </Text>
-            <Text style={styles.text}>
-              {" "}
-              Current sales positions, hot prospects, recently contracted work:{" "}
-            </Text>
-            <Text style={styles.textarea}>
-            {props?.state?.businessUpdate[0]?.sales_position}
-            </Text>
-            <Text style={styles.text}>
-              {" "}
-              Accomplishments in the last 6 months:{" "}
-            </Text>
-            <Text style={styles.textarea}>
-            {props?.state?.businessUpdate[0]?.accomplishments}
-            </Text>
-            <Text style={styles.text}> HR position &/or needs: </Text>
-            <Text style={styles.textarea}>
-            {props?.state?.businessUpdate[0]?.hr_position}
-            </Text>
-            <Text style={styles.text}>
-              {" "}
-              Current challenges (e.g., problem client, personnel issue(s),
-              trade availability, rising costs, supply chain):{" "}
-            </Text>
-            <Text style={styles.textarea}>
-            {props?.state?.businessUpdate[0]?.current_challenges}
-            </Text>
-            <Text style={styles.text}>
-              {" "}
-              How can the Craftsmen aid or support you with these challenges?{" "}
-            </Text>
-            <Text style={styles.textarea}>
-            {props?.state?.businessUpdate[0]?.craftsmen_support}
-            </Text>
+            {/* <Text style={styles.main_heading}>Business Update</Text> */}
+                       {props?.state?.businessUpdate.length?
+                       props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
+                       (
+                         <>
+                         <Text style={styles.text} key={index}>{res?.question}</Text>
+                       <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+                         {res.answer}
+                       </Text>
+                         </>
+                       )
+                       )
+                       :
+                       <>
+                       <Text style={styles.text}>Current financial position:</Text>
+                       <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+                         {props?.state?.businessUpdate[0]?.financial_position}
+                       </Text>
+                       <Text style={styles.text} wrap={false}>
+                         Current sales positions, hot prospects, recently contracted work:
+                       </Text>
+                       <Text style={styles.textarea} wrap={false}>
+                         {props?.state?.businessUpdate[0]?.sales_position}
+                       </Text>
+                       <Text style={styles.text}>
+                         Accomplishments in the last 6 months:
+                       </Text>
+                       <Text style={styles.textarea} wrap={false}>
+                         {props?.state?.businessUpdate[0]?.accomplishments}
+                       </Text>
+                       <Text style={styles.text}> HR position &/or needs: </Text>
+                       <Text style={styles.textarea} wrap={false}>
+                         {props?.state?.businessUpdate[0]?.hr_position}
+                       </Text>
+                       <Text style={styles.text}>
+                         Current challenges (e.g., problem client, personnel issue(s),
+                         trade availability, rising costs, supply chain):
+                       </Text>
+                       <Text style={styles.textarea} wrap={false}>
+                         {props?.state?.businessUpdate[0]?.current_challenges}
+                       </Text>
+                       <Text style={styles.text}>
+                         How can the Craftsmen aid or support you with these challenges?
+                       </Text>
+                       <Text style={styles.textarea} wrap={false}>
+                         {props?.state?.businessUpdate[0]?.craftsmen_support}
+                       </Text>
+                       </>
+           
+           }
           </View>
         </Page>
       </Document>
