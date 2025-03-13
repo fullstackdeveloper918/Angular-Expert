@@ -8,6 +8,7 @@ import {
   Image,
   Document,
   StyleSheet,
+  usePage
 } from "@react-pdf/renderer";
 const styles = StyleSheet.create({
   page: {
@@ -139,7 +140,20 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   heightGiven: {
-    minHeight: 400,
+    minHeight: 550,
+  },
+  heightGiventab: {
+    minHeight: 450,
+  },
+  heightGiventbottom: {
+    minHeight: 390,
+  },
+  heightGivenwrap: {
+    minHeight: 350,
+    marginBottom:'20px',
+  },
+  heightGivenwrapper: {
+    minHeight: 330,
   },
   images_div: {
     display: "flex",
@@ -156,11 +170,32 @@ const styles = StyleSheet.create({
     objectFit: "cover",
     // flex:'1 0 47%'
   },
+  footer: {
+    position: "absolute",
+    bottom: 20,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+  },
+  pageNumber: {
+    fontSize: 12,
+    color: "#ff6347", // Change color here (e.g., tomato red)
+  },
 });
 
 const MemberUpdatePDF = (props) => {
+  // const [totalPages, setTotalPages] = useState(null);
   // const getUserdata = useSelector((state) => state?.user?.userData)
   // console.log(getUserdata,"getUserdata");
+// const { pageNumber } = usePage();
+// console.log(pageNumber,"pageNumber");
+// console.log(totalPages,"totalPages");
+
+  // const onRender = () => {
+  //   // This will be triggered after all the pages are rendered
+  //   setTotalPages(document?.pageCount);  // Get total page count
+  // };
+
   const photoSection = props?.state?.photo_section || [];
 console.log(props?.state,"props");
 
@@ -221,8 +256,8 @@ console.log(props?.state,"props");
     
   return (
     <>
-      <Document>
-        <Page size="A4" style={styles.page}>
+      <Document> 
+        <Page size="A4" style={styles.page} wrap >
           <View style={{ textAlign: "center", display: "block" }}>
             <Image
               src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"
@@ -259,7 +294,7 @@ console.log(props?.state,"props");
             (
               <>
               <Text style={styles.text} key={index}>{res?.question}</Text>
-            <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+            <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
               {res.answer}
             </Text>
               </>
@@ -268,7 +303,7 @@ console.log(props?.state,"props");
             :
             <>
             <Text style={styles.text}>Current financial position:</Text>
-            <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+            <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
               {props?.state?.businessUpdate[0]?.financial_position}
             </Text>
             <Text style={styles.text} wrap={false}>
@@ -318,10 +353,10 @@ console.log(props?.state,"props");
                     </Text>
                   </View>
                   <View style={styles.Flex_div}>
-                    <Text style={styles.text}> Status of Goal: </Text>
-                    <Text style={styles.textarea} wrap={false}>
+                    <Text style={styles.text}> Status of Goal: {res?.status}</Text>
+                    {/* <Text style={styles.textarea} wrap={false}>
                          {res?.status}  
-                    </Text>
+                    </Text> */}
                   </View>
                 </View>
                 <Text style={styles.text}> Comments: </Text>
@@ -344,9 +379,10 @@ console.log(props?.state,"props");
                     </Text>
                   </View>
                   <View style={styles.Flex_div}>
-                    <Text style={styles.text}> Priority: </Text>
+                    <Text style={styles.text}> Priority: {res?.status}</Text>
                     <Text style={styles.textarea} wrap={false}>
-                        {res?.status}   
+                      {/*   {res?.status}    */}
+                      
                     </Text>
                   </View>
                 </View>
@@ -363,7 +399,10 @@ console.log(props?.state,"props");
             (
               <>
               <Text style={styles.text} key={index}>{res?.question}</Text>
-            <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+            <Text 
+            // style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}
+            style={[styles.textarea, index === 0 ? styles.heightGiventab : styles.heightGivenwrapper]} wrap={false}
+            >
               {res.answer}
             </Text>
               </>
@@ -410,7 +449,10 @@ console.log(props?.state,"props");
             (
               <>
               <Text style={styles.text} key={index}>{res?.question}</Text>
-            <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+            <Text 
+            // style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}
+            style={[styles.textarea, index === 0 ? styles.heightGiventbottom : styles.heightGivenwrapper]} wrap={false}
+            >
               {res.answer}
             </Text>
               </>
@@ -459,11 +501,11 @@ console.log(props?.state,"props");
             <View style={styles.goal}>
 
             {props?.state?.meetingReviews.length?
-            props?.state?.technologyData[0]?.fallmeeting_review_update_questions?.map((res,index)=>
+            props?.state?.meetingReviews[0]?.fallmeeting_review_update_questions?.map((res,index)=>
             (
               <>
               <Text style={styles.text} key={index}>{res?.question}</Text>
-            <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+            <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
               {res.answer}
             </Text>
               </>
@@ -542,6 +584,15 @@ console.log(props?.state,"props");
                       <View style={styles.goal} key={index}>
                         <View style={styles.goal_two}>
                           <View style={styles.images_div}>
+                          <Text
+                            style={[
+                              styles.subheading,
+                              styles.marginequal,
+                              styles.block,
+                            ]}
+                          >
+                            Comment: {item?.comment}
+                          </Text>
                             {Array.isArray(item?.images) &&
                               item.images.map((imageUrl, imgIndex) => (
                                 
@@ -562,21 +613,14 @@ console.log(props?.state,"props");
                               ))}
                           </View>
 
-                          <Text
-                            style={[
-                              styles.subheading,
-                              styles.marginequal,
-                              styles.block,
-                            ]}
-                          >
-                            Comment: {item?.comment}
-                          </Text>
+                         
                         </View>
                       </View>
                     ))}
               </View>
             </View>
           </View>
+
         </Page>
       </Document>
     </>
