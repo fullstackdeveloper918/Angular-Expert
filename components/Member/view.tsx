@@ -39,6 +39,7 @@ const { Row, Col, Card, Button, Space, Popconfirm } = {
 };
 
 const MeetingView = () => {
+  
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const getUserdata=useSelector((state:any)=>state?.user?.userData)
@@ -83,7 +84,8 @@ const MeetingView = () => {
   const id: any = searchParam.id;
   const getDataById = async () => {
     const item = {
-      user_id: id
+      user_id: id,
+      meeting_id:getUserdata.meetings.NextMeeting.id
     }
     try {
       const res = await api.User.getById(item as any);

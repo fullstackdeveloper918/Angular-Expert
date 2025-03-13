@@ -95,7 +95,8 @@ const UserList = () => {
     const getDataById = async (id: any) => {
         //  
         const item = {
-            user_id: id
+            user_id: id,
+            meeting_id:getUserdata.meetings.NextMeeting.id
         }
         try {
             const res = await api.User.getById(item as any);
@@ -316,7 +317,7 @@ const UserList = () => {
         setLoading1(true)
         try {
             let query = searchTerm ? `searchTerm=${searchTerm}` : '';
-            let res = await api.User.listing(query);
+            let res = await api.User.listing(query,getUserdata.meetings.NextMeeting.id);
             setState1(res?.data || []);
             if (res?.data?.status == 500||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
@@ -326,7 +327,7 @@ const UserList = () => {
                 toast.error("Session Expired. Login Again");
                 router.replace("/auth/signin");
             }
-            let apiRes = await api.User.user_listing()
+            let apiRes = await api.User.user_listing(getUserdata.meetings.NextMeeting.id)
             setState2(apiRes?.data)
             setLoading1(false)
             

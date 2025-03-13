@@ -6,17 +6,19 @@ import React, { Fragment, useCallback, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { destroyCookie } from "nookies";
 import { StepBackwardOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearSpecificFormData } from "@/lib/features/formSlice";
 
-const Page7 = () => {
+const Page7 = ({questions}:any) => {
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const [state, setState] = useState<any>("");
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
@@ -33,7 +35,8 @@ const Page7 = () => {
     if (actionType === 'submit') {
       let items = {
         spring_meeting: {
-          userId: value,
+          user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
           estimating: values?.estimating,
           accountability: values?.accountability,
           productivity: values?.productivity,
@@ -42,10 +45,12 @@ const Page7 = () => {
       try {
         const fieldsToClear = ["estimating", "accountability", "productivity"];
   
-        if (type == "edit") {
+        // if (type == "edit") {
+        if (state?.roundTableTopics?.length) {
           let items = {
             spring_meeting: {
-              userId: value,
+              user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
               estimating: values?.estimating,
               accountability: values?.accountability,
               productivity: values?.productivity,
@@ -90,7 +95,8 @@ const Page7 = () => {
     } else if (actionType === 'save') {
       let items = {
         spring_meeting: {
-          userId: value,
+          user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
           estimating: values?.estimating,
           accountability: values?.accountability,
           productivity: values?.productivity,
@@ -99,10 +105,11 @@ const Page7 = () => {
       try {
         const fieldsToClear = ["estimating", "accountability", "productivity"];
   
-        if (type == "edit") {
+        if (state?.roundTableTopics?.length) {
           let items = {
             spring_meeting: {
-              userId: value,
+              user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
               estimating: values?.estimating,
               accountability: values?.accountability,
               productivity: values?.productivity,
@@ -157,10 +164,10 @@ const Page7 = () => {
     form.submit(); // Trigger form submission
   };
 
-  const [state, setState] = useState<any>("");
   const getDataById = async () => {
     const item = {
       user_id: value,
+      meeting_id: getUserdata.meetings.NextMeeting.id,
     };
     try {
       const res = await api.User.getById(item as any);
@@ -173,7 +180,7 @@ const Page7 = () => {
         router.replace("/auth/signin");
       }
 
-      const dataFromApi = res?.data || {};
+      const dataFromApi = res?.data?.roundTableTopics[0] || {};
 
       const finalData = {
         estimating: formValues?.estimating || dataFromApi?.estimating,
@@ -216,6 +223,18 @@ const Page7 = () => {
     <>
       <Fragment>
         <section className="club_member">
+          <ToastContainer
+                                className="toast-container-center"
+                                position="top-right"
+                                autoClose={false} // Disable auto-close
+                                hideProgressBar={false}
+                                newestOnTop={false}
+                                closeOnClick
+                                rtl={false}
+                                pauseOnFocusLoss
+                                draggable
+                                pauseOnHover
+                              />
           <Row justify="center" gutter={[20, 20]} className="heightCenter">
             <Col xs={24} sm={22} md={20} lg={16} xl={14} xxl={12}>
               <Card className="common-card">
@@ -244,7 +263,7 @@ const Page7 = () => {
                                     </div> : ""} */}
                 <div className="mb-2 d-flex justify-content-between">
                   <Typography.Title level={3} className="m-0 fw-bold">
-                    FALL 2024 MEETING PREPARATION
+                    SPRING 2025 MEETING PREPARATION
                   </Typography.Title>
                   {/* <Button size={'large'} type="primary" className="text-white" disabled>6/8</Button> */}
                   {!pagetype && (

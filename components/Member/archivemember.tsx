@@ -38,6 +38,8 @@ const ArchiveMemberList = () => {
     const [loading1, setLoading1] = useState(true);
     //   const { userInfo, downloadCSV, Toast, uploadCSV } = React.useContext(GlobalContext)
     const getUserdata = useSelector((state: any) => state?.user?.userData)
+    console.log(getUserdata,"getUserdata");
+    
     const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
     const [show, setShow] = useState(true);
     const [lastVisibleId, setLastVisibleId] = useState<any>(null);
@@ -81,7 +83,8 @@ const ArchiveMemberList = () => {
     const getDataById = async (id: any) => {
         //  
         const item = {
-            user_id: id
+            user_id: id,
+            meeting_id:getUserdata.meetings.NextMeeting.id
         }
         try {
             const res = await api.User.getById(item as any);
@@ -93,6 +96,8 @@ const ArchiveMemberList = () => {
     };
     const generatePdf = async (data?: any) => {
         //  
+        console.log(data,"asjldjas");
+        
 
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
         const blob = await pdf(<Pdf state={data} />).toBlob();

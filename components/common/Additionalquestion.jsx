@@ -149,37 +149,39 @@ const styles = StyleSheet.create({
   },
 });
 
-const MeetingReviewPdf = (props) => {
-  const photoSection = props?.state?.photo_section || [];
+const Additionalquestion = (props) => {
 
-  const options = { httpHeaders: { 'crossOrigin': 'anonymous' }, };
-  // <Image key={imageIndex} style={{ width: 100, height: 100 }} options={options} src={{ uri: ${file.url}, method: "GET", headers: { Pragma: 'no-cache', "Cache-Control": "no-cache" }, body: "" }} />
-  const companyNameMap = {
-    "augusta": "Augusta Homes, Inc.",
-    "buffington": "Buffington Homes, L.P.",
-    "cabin": "Cabin John Builders",
-    "cataldo": "Cataldo Custom Builders",
-    "david_campbell": "The DCB",
-    "dc_building": "DC Building Inc.",
-    "Ddenman_construction": "Denman Construction, Inc.",
-    "ellis": "Ellis Custom Homes",
-    "tm_grady_builders": "T.M. Grady Builders",
-    "hardwick": "Hardwick G. C.",
-    "homeSource": "HomeSource Construction",
-    "ed_nikles": "Ed Nikles Custom Builder, Inc.",
-    "olsen": "Olsen Custom Homes",
-    "raykon": "Raykon Construction",
-    "matt_sitra": "Matt Sitra Custom Homes",
-    "schneider": "Schneider Construction, LLC",
-    "shaeffer": "Shaeffer Hyde Construction",
-    "split": "Split Rock Custom Homes",
-    "tiara": "Tiara Sun Development"
-};
 
-const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
+    const photoSection = props?.state?.photo_section || [];
 
-  const newArr = props?.state?.photo_section?.fileUrls?.length && Object.values(props?.state?.photo_section?.fileUrls[0])
-
+    const options = { httpHeaders: { 'crossOrigin': 'anonymous' }, };
+    // <Image key={imageIndex} style={{ width: 100, height: 100 }} options={options} src={{ uri: ${file.url}, method: "GET", headers: { Pragma: 'no-cache', "Cache-Control": "no-cache" }, body: "" }} />
+    const companyNameMap = {
+      "augusta": "Augusta Homes, Inc.",
+      "buffington": "Buffington Homes, L.P.",
+      "cabin": "Cabin John Builders",
+      "cataldo": "Cataldo Custom Builders",
+      "david_campbell": "The DCB",
+      "dc_building": "DC Building Inc.",
+      "Ddenman_construction": "Denman Construction, Inc.",
+      "ellis": "Ellis Custom Homes",
+      "tm_grady_builders": "T.M. Grady Builders",
+      "hardwick": "Hardwick G. C.",
+      "homeSource": "HomeSource Construction",
+      "ed_nikles": "Ed Nikles Custom Builder, Inc.",
+      "olsen": "Olsen Custom Homes",
+      "raykon": "Raykon Construction",
+      "matt_sitra": "Matt Sitra Custom Homes",
+      "schneider": "Schneider Construction, LLC",
+      "shaeffer": "Shaeffer Hyde Construction",
+      "split": "Split Rock Custom Homes",
+      "tiara": "Tiara Sun Development"
+  };
+  
+  const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
+  
+    const newArr = props?.state?.photo_section?.fileUrls?.length && Object.values(props?.state?.photo_section?.fileUrls[0])
+  
   return (
     <>
       <Document>
@@ -192,57 +194,34 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>{props?.state?.technologyData[0]?.fallmeeting_review_update_questions?.length?"Spring 2025":
-                "Fall 2024"}</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Fall 2025</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}
             </Text>
           </View>
-          <View style={styles.section}>
-            <Text style={styles.main_heading}>FALL 2024 MEETING REVIEW</Text>
-           <View style={styles.goal}>
-           
-                       {props?.state?.meetingReviews.length?
-                       props?.state?.technologyData[0]?.fallmeeting_review_update_questions?.map((res,index)=>
-                       (
-                         <>
-                         <Text style={styles.text} key={index}>{res?.question}</Text>
-                       <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
-                         {res.answer}
-                       </Text>
-                         </>
-                       )
-                       )
-                       :
-           
-           <>
-                         
-                         <Text style={styles.text}>
-                           What was your most valuable take away from our fall meeting?
-                         </Text>
-                         <Text style={styles.textarea} wrap={false}>
-                           {props?.state?.meetingReviews[0]?.fall_meeting}
-                         </Text>
-           
-                         <Text style={styles.text}>
-                           Have you implemented any of Jim Weber’s estate/financial
-                           planning reccomendations into your business and/or personal
-                           finances?
-                         </Text>
-                         <Text style={styles.textarea} wrap={false}>
-                           {props?.state?.meetingReviews[0]?.personal_finances}
-                         </Text>
-                         </>}
-                       </View>
-          </View>
 
-     
+       
+          <View style={styles.section}>
+                     <Text style={styles.main_heading} wrap={false}> ADDITIONAL QUESTIONS</Text>
+                     {props?.state?.answer?.map((res, index) => (
+                       <View style={styles.goal} key={index}>
+                         <View style={styles.div_wrapper}>
+                           <View style={styles.Flex_div}>
+                             <Text style={styles.text}> {res?.questions[0]?.question} </Text>
+                             <Text style={styles.textarea} wrap={false}>
+                                  {res?.questions[0]?.answer}  
+                             </Text>
+                           </View>
+                         </View>
+                       </View>
+                     ))}
+                   </View>
 
         </Page>
       </Document>
     </>
-  );
-};
+  )
+}
 
-export default MeetingReviewPdf;
+export default Additionalquestion

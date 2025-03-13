@@ -1,9 +1,10 @@
 "use client";
-import { Input, Space, Form, Select } from "antd";
+import { Input, Space, Form, Select, InputNumber } from "antd";
 import dynamic from "next/dynamic";
 import React, { useCallback, useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import api from "@/utils/api";
+import { useSelector } from "react-redux";
 const { Row, Col, Card, Button, Pagination } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
     ssr: false,
@@ -29,7 +30,7 @@ const AntModal = dynamic(() => import("antd").then((module) => module.Modal), {
 
 const CustomModal = (props: any) => {
   const [addModalOpen, setAddModalOpen] = useState(false);
-
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
   const [loading, setLoading] = useState(false);
 
   const [addLoading, setAddLoading] = useState(false);
@@ -64,6 +65,9 @@ const CustomModal = (props: any) => {
       question_id: props?.id,
       question: values.question,
       question_type: values.question_type,
+      page_type: values.page_type,
+      quesiton_position:values.quesiton_position,
+      meeting_id:getUserdata.meetings.NextMeeting.id,
     };
 
     try {
@@ -71,6 +75,9 @@ const CustomModal = (props: any) => {
         let item = {
           question: values.question,
           question_type: values.question_type,
+          page_type: values.page_type,
+          quesiton_position:values.quesiton_position,
+          meeting_id:getUserdata.meetings.NextMeeting.id,
         };
         let res = await api.Manage_Question.create(item as any);
         props?.initialise();
@@ -145,13 +152,58 @@ const CustomModal = (props: any) => {
                 },
               ]}
             >
+              {/* BUSINESS UPDATE,CRAFTSMEN TOOLBOX,CRAFTSMEN CHECK-UP,Fall 2024 MEETING REVIEW,Spring 2025 MEETING PREPARATION */}
               <Select size="large" placeholder={`${props?.type} Question Type`}>
                 <Option value="short_text">Short Text</Option>
                 <Option value="long_text">Long Text</Option>
                 <Option value="dropdown">Dropdown</Option>
                 <Option value="single_choice">Single Choice Checkbox</Option>
                 <Option value="multi_choice">Multi Choice Checkbox</Option>
+                 
               </Select>
+            </Form.Item>
+            <Form.Item
+              name="page_type"
+              label={`${props?.type} Page Type`}
+              rules={[
+                {
+                  required: true,
+                  message: `Please select a valid ${props?.type} Page Type`,
+                },
+              ]}
+            >
+              {/* BUSINESS UPDATE,CRAFTSMEN TOOLBOX,CRAFTSMEN CHECK-UP,Fall 2024 MEETING REVIEW,Spring 2025 MEETING PREPARATION */}
+              <Select size="large" placeholder={`${props?.type} Page Type`|| "Select Page Type"}>
+              <Option value="business_update">Business Update</Option>
+                <Option value="technology">Craftsmen Toolbox</Option>
+                <Option value="craftsmen_checkup">Craftsmen check-Up</Option>
+                <Option value="meeting_review">Fall 2024 Meeting Review</Option>
+                <Option value="round_table_topic">Spring 2025 Meeting Preparation</Option>
+                <Option value="answers">Additional Questionnaire</Option>
+                 
+              </Select>
+            </Form.Item>
+
+
+            <Form.Item
+              name="quesiton_position"
+              label={`${props?.type} Question Position`}
+              rules={[
+                {
+                  required: true,
+                  whitespace: true,
+                  message: `Please Enter valid ${props?.type} Question Position`,
+                },
+              ]}
+            >
+              <Input size={"large"} placeholder={`${props?.type} Question Position`} 
+              onKeyPress={(e: any) => {
+                if (!/[0-9]/.test(e.key)) {
+                  e.preventDefault();  // Prevent input if it's not a number
+                } else {
+                  e.target.value = String(e.target.value).trim();  // Trim spaces (if any)
+                }
+              }}/>
             </Form.Item>
             <Space className="w-100 justify-content-end">
               <Button type="default" onClick={() => setAddModalOpen(false)}>
@@ -164,7 +216,7 @@ const CustomModal = (props: any) => {
                 loading={addLoading}
                 disabled={addLoading}
               >
-                {props?.type}
+                {props?.type==="Edit"?"Update":props?.type}
               </Button>
             </Space>
           </Form>

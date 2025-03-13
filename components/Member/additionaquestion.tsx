@@ -11,14 +11,27 @@ import { StepBackwardOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import useAutoSaveForm from "../common/useAutoSaveForm";
 const AdditionalQuestion = () => {
+
+ 
+
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<any>(false);
   const [loading1, setLoading1] = useState<any>(false);
-  const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
+  const [actionType, setActionType] = useState<"submit" | "save" | null>(null);
   const [state, setState] = useState<any>("");
   const [question, setQuestion] = useState<any>([]);
-
+  console.log(question,"question");
+  
+  const filtered_questions = question?.filter((item: any) => item.page_type === "answers") // Step 1: Filter by page_type
+  .sort((a: any, b: any) => parseInt(a.quesiton_position) - parseInt(b.quesiton_position)) // Step 2: Sort by question_position
+  .map((item: any, index: number) => {
+    item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
+    return item;
+  });
+  console.log(filtered_questions,"filtered_questions");
+  
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : "";
@@ -31,12 +44,12 @@ const AdditionalQuestion = () => {
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 300);
 
- 
-  const submit = async(values: any) => {
-    if (actionType === 'submit') {
+  const submit = async (values: any) => {
+    if (actionType === "submit") {
       let items = {
         additional_question: {
-          userId: value,
+          user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
           questions: question.map((q: any) => ({
             question_id: q.id,
             question: q.question,
@@ -45,10 +58,12 @@ const AdditionalQuestion = () => {
         },
       };
       try {
-        if (type == "edit") {
+        // if (type == "edit") {
+        if (state?.answer?.length) {
           let items = {
             additional_question: {
-              userId: value,
+              user_id: value,
+              meeting_id: getUserdata.meetings.NextMeeting.id,
               questions: question.map((q: any) => ({
                 question_id: q.id,
                 question: q.question,
@@ -57,7 +72,7 @@ const AdditionalQuestion = () => {
             },
           } as any;
           setLoading(true);
-  
+
           let res = await api.User.edit(items);
           toast.success(res?.message);
           // if (!pagetype) {
@@ -68,21 +83,21 @@ const AdditionalQuestion = () => {
           // }
           setTimeout(() => {
             if (!pagetype) {
-                router.push(`/admin/member/add/page8?${res?.userId}&edit`)
+              router.push(`/admin/member/add/page8?${value}&edit`);
             } else {
-                router.push("/admin/questionnaire?additionalPage")
+              router.push("/admin/questionnaire?additionalPage");
             }
           }, 1000);
         } else {
           setLoading(true);
           let res = await api.Auth.signUp(items);
-          if (res?.status == 500) {
-            toast.error("Session Expired Login Again");
-            router.replace("/auth/signin");
-          }
+          // if (res?.status == 500) {
+          //   toast.error("Session Expired Login Again");
+          //   router.replace("/auth/signin");
+          // }
           if (!pagetype) {
             router.push(
-              `/admin/member/add/page8?${res?.userId}&edit&questionnair`
+              `/admin/member/add/page8?${value}&edit&questionnair`
             );
           } else {
             router?.back();
@@ -92,22 +107,23 @@ const AdditionalQuestion = () => {
         if (!pagetype) {
           setLoading(false);
         }
-        if (error?.status == 500) {
-          localStorage.setItem('redirectAfterLogin', window.location.pathname);
-          localStorage.removeItem("hasReloaded")
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
+        // if (error?.status == 500) {
+        //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        //   localStorage.removeItem("hasReloaded")
+        //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        //   toast.error("Session Expired. Login Again");
+        //   router.replace("/auth/signin");
+        // }
       } finally {
         if (pagetype) {
           setLoading(false);
         }
       }
-    } else if (actionType === 'save') {
+    } else if (actionType === "save") {
       let items = {
         additional_question: {
-          userId: value,
+          user_id: value,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
           questions: question.map((q: any) => ({
             question_id: q.id,
             question: q.question,
@@ -116,10 +132,12 @@ const AdditionalQuestion = () => {
         },
       };
       try {
-        if (type == "edit") {
+        if (state?.answer?.length) {
+          // if (type == "edit") {
           let items = {
             additional_question: {
-              userId: value,
+              user_id: value,
+              meeting_id: getUserdata.meetings.NextMeeting.id,
               questions: question.map((q: any) => ({
                 question_id: q.id,
                 question: q.question,
@@ -128,7 +146,7 @@ const AdditionalQuestion = () => {
             },
           } as any;
           setLoading1(true);
-  
+
           let res = await api.User.edit(items);
           toast.success(res?.message);
           // if (!pagetype) {
@@ -137,27 +155,25 @@ const AdditionalQuestion = () => {
           //     router?.back()
           // }
           // }
-        
         } else {
           setLoading1(true);
           let res = await api.Auth.signUp(items);
-          if (res?.status == 500) {
-            toast.error("Session Expired Login Again");
-            router.replace("/auth/signin");
-          }
-         
+          // if (res?.status == 500) {
+          //   toast.error("Session Expired Login Again");
+          //   router.replace("/auth/signin");
+          // }
         }
       } catch (error: any) {
         if (!pagetype) {
           setLoading1(false);
         }
-        if (error?.status == 500) {
-          localStorage.setItem('redirectAfterLogin', window.location.pathname);
-          localStorage.removeItem("hasReloaded")
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
+        // if (error?.status == 500) {
+        //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        //   localStorage.removeItem("hasReloaded")
+        //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        //   toast.error("Session Expired. Login Again");
+        //   router.replace("/auth/signin");
+        // }
       } finally {
         if (pagetype) {
           setLoading1(false);
@@ -167,12 +183,12 @@ const AdditionalQuestion = () => {
     setLoading1(false);
   };
   const handleSubmitClick = () => {
-    setActionType('submit');
+    setActionType("submit");
     form.submit(); // Trigger form submission
   };
 
   const handleSaveClick = () => {
-    setActionType('save');
+    setActionType("save");
     form.submit(); // Trigger form submission
   };
   const getQuestion = async () => {
@@ -180,39 +196,43 @@ const AdditionalQuestion = () => {
       const res = await api.User.getQuestion();
       setQuestion(res);
 
-      if (
-        res?.data?.status == 500 ||
-        res?.data?.message ==
-          "Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token."
-      ) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (
+      //   res?.data?.status == 500 ||
+      //   res?.data?.message ==
+      //     "Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token."
+      // ) {
+      //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      //   localStorage.removeItem("hasReloaded")
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+      //   toast.error("Session Expired. Login Again");
+      //   router.replace("/auth/signin");
+      // }
     } catch (error) {}
   };
-
- 
 
   useEffect(() => {
     getQuestion();
   }, []);
+
+
+  
   const getDataById = async () => {
     const item = {
       user_id: value,
+      meeting_id: getUserdata.meetings.NextMeeting.id,
     };
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
-      if (res?.data?.status == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
+      console.log(res?.data,"qwert");
+      
+      // if (res?.data?.status == 500) {
+      //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      //   localStorage.removeItem("hasReloaded")
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+      //   toast.error("Session Expired. Login Again");
+      //   router.replace("/auth/signin");
+      // }
 
       // Prepare an object to set form values
       // const resValues = res?.data?.questions.reduce(
@@ -229,27 +249,25 @@ const AdditionalQuestion = () => {
               acc[key] = formValues[key];
               return acc;
             }, {})
-          : res?.data?.questions.reduce((acc: any, question: any) => {
+          : res?.data?.answer[0].reduce((acc: any, question: any) => {
               acc[`question_${question.question_id}`] = question.answer;
               return acc;
             }, {});
 
-     
-
       form.setFieldsValue(resValues);
     } catch (error: any) {
-      if (error == 500) {
-        // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        // localStorage.removeItem("hasReloaded");
-        // // }
-        // toast.error("Session Expired Login Again");
-        // router.replace("/auth/signin");
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (error == 500) {
+      //   // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   // localStorage.removeItem("hasReloaded");
+      //   // // }
+      //   // toast.error("Session Expired Login Again");
+      //   // router.replace("/auth/signin");
+      //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      //   localStorage.removeItem("hasReloaded")
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+      //   toast.error("Session Expired. Login Again");
+      //   router.replace("/auth/signin");
+      // }
     }
   };
   useEffect(() => {
@@ -265,7 +283,6 @@ const AdditionalQuestion = () => {
   };
 
   const onValuesChange = (changedValues: any) => {
-  
     setFormValues((prevValues: any) => ({
       ...prevValues,
       ...changedValues,
@@ -319,7 +336,7 @@ const AdditionalQuestion = () => {
                   >
                     {/* First Name  */}
 
-                    {question.map((question: any) => (
+                    {filtered_questions.map((question: any) => (
                       <Form.Item
                         key={question.id}
                         name={`question_${question.id}`}
@@ -369,7 +386,7 @@ const AdditionalQuestion = () => {
                         <Button
                           size={"large"}
                           type="primary"
-                         onClick={handleSubmitClick}
+                          onClick={handleSubmitClick}
                           className="login-form-button "
                           loading={loading}
                         >

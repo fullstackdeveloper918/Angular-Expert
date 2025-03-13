@@ -18,8 +18,10 @@ import { toast } from "react-toastify";
 import { destroyCookie } from "nookies";
 import { MinusCircleOutlined } from "@ant-design/icons";
 import AdditionalRoles from "../../utils/AdditionalRoles.json";
+import { useSelector } from "react-redux";
 const { Option } = Select;
 const Additionaladd = () => {
+  const getUserdata = useSelector((state: any) => state?.user?.userData)
   const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -29,6 +31,7 @@ const Additionaladd = () => {
   const [companyType, setCompanyType] = useState<any>("");
 
   const value = entries.length > 0 ? entries[0][0] : "";
+console.log(value,"hkhkh");
 
   let type = entries?.length > 1 && entries[1]?.length > 0 ? entries[1][0] : "";
 
@@ -82,6 +85,7 @@ const Additionaladd = () => {
     });
     setAllFieldsFilled(areAllFieldsFilled);
   };
+console.log(state,"state");
 
   const onFinish = async (values: any) => {
     // country_code: values.country_code ?? "+93",
@@ -148,10 +152,40 @@ const Additionaladd = () => {
     }
   };
 
+
+
+
+
+  useEffect(() => {
+    // if (type == "edit") {
+      const getDataById = async () => {
+        const item = {
+          parent_user_id: value,
+          // meeting_id:getUserdata.meetings.NextMeeting.id,
+        }
+        try {
+          const res = await api.User.getById1(item as any);
+          setState(res?.data || null);
+          if (res?.data?.status == 500) {
+            toast.error("Session Expired Login Again")
+            router.replace("/auth/signin")
+          }
+          form.setFieldsValue(res?.data)
+        } catch (error: any) {
+          alert(error.message);
+        }
+      };
+      getDataById();
+    // }
+  }, [type, form]);
   // form.setFieldsValue(res);
   const onBack = () => {
     router.push("/admin/member");
   };
+
+
+
+
   return (
     <>
       <Fragment>

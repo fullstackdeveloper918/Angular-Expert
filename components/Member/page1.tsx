@@ -48,24 +48,41 @@ import {  clearSpecificFormData } from "@/lib/features/formSlice";
 //     ssr: false,
 //   }),
 // };
-const Page1 = () => {
+const Page1 = ({questions}:any) => {
+  console.log(questions,"ytyt");
+  // const filtered_questions = questions?.data?.filter((item:any) => item.page_type === "business_update");
+  const filtered_questions = questions?.data
+  .filter((item: any) => item.page_type === "business_update") // Step 1: Filter by page_type
+  .sort((a: any, b: any) => parseInt(a.quesiton_position) - parseInt(b.quesiton_position)) // Step 2: Sort by question_position
+  .map((item: any, index: number) => {
+    item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
+    return item;
+  });
+  console.log(filtered_questions,"filtered_questions");
+  
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
+  console.log(getUserdata,"getUserdata");
   const router = useRouter();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-
+const [question,setQuestion]=useState<any>([])
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [state, setState] = useState<any>("");
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
+console.log(state,"state");
 
   const value = entries.length > 0 ? entries[0][0] : "";
+  console.log(value,"value");
+  
   const type = entries.length > 1 ? entries[1][0] : "";
   const pagetype = entries.length > 2 ? entries[2][0] : "";
   const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 300);
+console.log(formValues,"formValuessad");
 
   const setCookie = (name: any, value: any, days: any) => {
     nookies.set(null, name, value, {
@@ -76,17 +93,19 @@ const Page1 = () => {
   const onFinish = async(values: any) => {
     if (actionType === 'submit') {
       let items = {
-        bussiness_update: {
-          userId: value,
-          financial_position: values?.financial_position,
-          sales_position: values?.sales_position,
-          accomplishments: values?.accomplishments,
-          hr_position: values?.hr_position,
-          current_challenges: values?.current_challenges,
-          craftsmen_support: values?.craftsmen_support,
+        business_update: {
+          meeting_id:getUserdata.meetings.NextMeeting.id,
+          user_id:getUserdata.user_id,
+          business_update_questions: filtered_questions.map((q: any) => ({
+            question_id: q.id,
+            question: q.question,
+            answer: values[`question_${q.id}`] || "",
+            question_position:q.quesiton_position
+          })),
+     
         },
       } as any;
-  
+   
       try {
         const fieldsToClear = [
           "financial_position",
@@ -96,16 +115,19 @@ const Page1 = () => {
           "current_challenges",
           "craftsmen_support",
         ];
-        if (type == "edit") {
+        // if (type == "edit") {
+        if (state?.businessUpdate?.length) {
           let items = {
-            bussiness_update: {
-              userId: value,
-              financial_position: values?.financial_position,
-              sales_position: values?.sales_position,
-              accomplishments: values?.accomplishments,
-              hr_position: values?.hr_position,
-              current_challenges: values?.current_challenges,
-              craftsmen_support: values?.craftsmen_support,
+            business_update: {
+              meeting_id:getUserdata.meetings.NextMeeting.id,
+              user_id:getUserdata.user_id,
+              business_update_questions: filtered_questions.map((q: any) => ({
+                question_id: q.id,
+                question: q.question,
+                answer: values[`question_${q.id}`] || "",
+                question_position:q.quesiton_position
+              })),
+         
             },
           } as any;
           setLoading(true);
@@ -123,24 +145,24 @@ const Page1 = () => {
           setLoading(true);
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-          if (res?.status == 500) {
-            localStorage.setItem('redirectAfterLogin', window.location.pathname);
-            localStorage.removeItem("hasReloaded")
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-          }
-          router.push(`/admin/member/add/page3?${res?.user_id}`)
+          // if (res?.status == 500) {
+          //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          //   localStorage.removeItem("hasReloaded")
+          // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          // toast.error("Session Expired. Login Again");
+          // router.replace("/auth/signin");
+          // }
+          router.push(`/admin/member/add/page3?${value}`)
         }
       } catch (error: any) {
         setLoading(false);
-        if (error?.status == 500) {
-          localStorage.setItem('redirectAfterLogin', window.location.pathname);
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          localStorage.removeItem("hasReloaded")
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
+        // if (error?.status == 500) {
+        //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        //   localStorage.removeItem("hasReloaded")
+        //   toast.error("Session Expired. Login Again");
+        //   router.replace("/auth/signin");
+        // }
         if (!pagetype) {
           setLoading(false);
         }
@@ -151,14 +173,16 @@ const Page1 = () => {
       }
     } else if (actionType === 'save') {
       let items = {
-        bussiness_update: {
-          userId: value,
-          financial_position: values?.financial_position,
-          sales_position: values?.sales_position,
-          accomplishments: values?.accomplishments,
-          hr_position: values?.hr_position,
-          current_challenges: values?.current_challenges,
-          craftsmen_support: values?.craftsmen_support,
+        business_update: {
+          meeting_id:getUserdata.meetings.NextMeeting.id,
+          user_id:getUserdata.user_id,
+          business_update_questions: filtered_questions.map((q: any) => ({
+            question_id: q.id,
+            question: q.question,
+            answer: values[`question_${q.id}`] || "",
+            question_position:q.quesiton_position
+          })),
+     
         },
       } as any;
   
@@ -171,16 +195,19 @@ const Page1 = () => {
           "current_challenges",
           "craftsmen_support",
         ];
-        if (type == "edit") {
+        if (state?.businessUpdate?.length) {
+        // if (type == "edit") {
           let items = {
-            bussiness_update: {
-              userId: value,
-              financial_position: values?.financial_position,
-              sales_position: values?.sales_position,
-              accomplishments: values?.accomplishments,
-              hr_position: values?.hr_position,
-              current_challenges: values?.current_challenges,
-              craftsmen_support: values?.craftsmen_support,
+            business_update: {
+              meeting_id:getUserdata.meetings.NextMeeting.id,
+              user_id:getUserdata.user_id,
+              business_update_questions: filtered_questions.map((q: any) => ({
+                question_id: q.id,
+                question: q.question,
+                answer: values[`question_${q.id}`] || "",
+                question_position:q.quesiton_position
+              })),
+         
             },
           } as any;
           setLoading1(true);
@@ -197,24 +224,24 @@ const Page1 = () => {
           setLoading1(true);
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
-          if (res?.status == 500) {
-            localStorage.setItem('redirectAfterLogin', window.location.pathname);
-            localStorage.removeItem("hasReloaded")
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-          }
+          // if (res?.status == 500) {
+          //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          //   localStorage.removeItem("hasReloaded")
+          // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          // toast.error("Session Expired. Login Again");
+          // router.replace("/auth/signin");
+          // }
           // router.push(`/admin/member/add/page3?${res?.user_id}`)
         }
       } catch (error: any) {
         setLoading1(false);
-        if (error?.status == 500) {
-          localStorage.setItem('redirectAfterLogin', window.location.pathname);
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          localStorage.removeItem("hasReloaded")
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
+        // if (error?.status == 500) {
+        //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        //   localStorage.removeItem("hasReloaded")
+        //   toast.error("Session Expired. Login Again");
+        //   router.replace("/auth/signin");
+        // }
         if (!pagetype) {
           setLoading1(false);
         }
@@ -227,57 +254,79 @@ const Page1 = () => {
     setLoading1(false);
   };
  
-
+  console.log(formValues,"qwertyuiop");
   const getDataById = async () => {
+    console.log(formValues,"1231231");
     const item = {
       user_id: value,
+      meeting_id:getUserdata.meetings.NextMeeting.id
     };
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
-      if (res?.data?.status == 500) {
-        localStorage.removeItem("hasReloaded");
-        toast.error("Session Expired Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (res?.data?.status == 500) {
+      //   localStorage.removeItem("hasReloaded");
+      //   toast.error("Session Expired Login Again");
+      //   router.replace("/auth/signin");
+      // }
+console.log(res?.data,"piopiopi");
+console.log(formValues,"popopo");
 
-      const dataFromApi = res?.data || {};
+console.log(formValues," ");
 
-      const finalData = {
-        financial_position:
-          formValues?.financial_position ||
-          dataFromApi?.financial_position ||
-          "",
-        sales_position:
-          formValues?.sales_position || dataFromApi?.sales_position,
-        accomplishments:
-          formValues?.accomplishments || dataFromApi?.accomplishments,
-        hr_position: formValues?.hr_position || dataFromApi?.hr_position,
-        current_challenges:
-          formValues?.current_challenges || dataFromApi?.current_challenges,
-        craftsmen_support:
-          formValues?.craftsmen_support || dataFromApi?.craftsmen_support,
-      };
+      // const finalData = {
+      //   financial_position:
+      //     formValues?.financial_position[0]?.answer ||
+      //     dataFromApi?.businessUpdate[0]?.financial_position[0]?.answer ||
+      //     "",
+      //   sales_position:
+      //     formValues?.sales_position || dataFromApi?.businessUpdate[0]?.sales_position[0]?.answer,
+      //   accomplishments:
+      //     formValues?.accomplishments || dataFromApi?.businessUpdate[0]?.accomplishments[0]?.answer,
+      //   hr_position: formValues?.hr_position || dataFromApi?.businessUpdate[0]?.hr_position[0]?.answer,
+      //   current_challenges:
+      //     formValues?.current_challenges || dataFromApi?.businessUpdate[0]?.current_challenges[0]?.answer,
+      //   craftsmen_support:
+      //     formValues?.craftsmen_support || dataFromApi?.businessUpdate[0]?.craftsmen_support[0]?.answer,
+      // };
 
-      form.setFieldsValue(finalData);
+      // form.setFieldsValue(finalData);
+      const resValues = 
+      Object.keys(formValues).length > 0
+        ? Object.keys(formValues).reduce((acc: any, key) => {
+            acc[key] = formValues[key];
+            return acc;
+          }, {})
+        :res?.data?.businessUpdate[0]?.business_update_questions?.reduce((acc: any, question: any) => {
+          console.log(acc,"accaccacc");
+            acc[`question_${question.question_id}`] = question.answer;
+            return acc;
+          }, {});
+
+    form.setFieldsValue(resValues);
     } catch (error: any) {
-      if (error?.status == 500) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        localStorage.removeItem("hasReloaded");
-        toast.error("Session Expired Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (error?.status == 500) {
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   localStorage.removeItem("hasReloaded");
+      //   toast.error("Session Expired Login Again");
+      //   router.replace("/auth/signin");
+      // // }
     }
   };
 
   useEffect(() => {
-    if (type == "edit") {
+    if (state?.businessUpdate?.length||type == "edit") {
       getDataById();
     }
-  }, [type]);
+  }, [state?.businessUpdate?.length||type == "edit"]);
+  // useEffect(() => {
+  //   if (type == "edit") {
+  //     getDataById();
+  //   }
+  // }, [type]);
 
 
-  
+  console.log(formValues,"asdas");
   const onPrevious = () => {
     router.replace(`/admin/member/add?${value}&edit`);
   };
@@ -286,6 +335,8 @@ const Page1 = () => {
   };
 
   const onValuesChange = (changedValues: any) => {
+    console.log(changedValues,"changedValues");
+    
     setFormValues((prevValues: any) => ({
       ...prevValues,
       ...changedValues,
@@ -300,6 +351,25 @@ const Page1 = () => {
     setActionType('save');
     form.submit(); // Trigger form submission
   };
+
+
+  const getQuestion=async()=>{
+    try {
+      let res = await api.Manage_Question.listing()
+      setQuestion(res);
+
+    } catch (error) {
+      
+    }
+  }
+
+  useEffect(()=>{
+getQuestion()
+  },[])
+
+
+  // console.log(question?.data[1]?.question,"question");
+  const label = questions.length > 0 &&  `label=${questions?.data[1]?.question}`;
   return (
     <>
       <Fragment>
@@ -348,31 +418,24 @@ const Page1 = () => {
                     onValuesChange={onValuesChange}
                   >
                     {/* First Name  */}
-                    <Form.Item
-                      name="financial_position"
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: "Please Fill Field",
-                        },
-                      ]}
-                      label="Describe your current financial position:"
-                    >
-                      <TextArea
-                        size={"large"}
-                        placeholder="Enter..."
-                      // onKeyPress={(e: any) => {
-                      //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                      //         e.preventDefault();
-                      //     } else {
-                      //         e.target.value = String(e.target.value).trim()
-                      //     }
-                      // }}
-                      />
-                    </Form.Item>
+                    {filtered_questions.map((question: any) => (
+                      <Form.Item
+                        key={question.id}
+                        name={`question_${question.id}`}
+                        rules={[
+                          {
+                            required: true,
+                            whitespace: true,
+                            message: "Please Fill Field",
+                          },
+                        ]}
+                        label={question.question}
+                      >
+                        <TextArea size="large" placeholder="Enter..." />
+                      </Form.Item>
+                    ))}
                     {/* Last Name  */}
-                    <Form.Item
+                    {/* <Form.Item
                       name="sales_position"
                       rules={[
                         {
@@ -381,7 +444,8 @@ const Page1 = () => {
                           message: "Please Fill Field",
                         },
                       ]}
-                      label="Describe your current sales positions, hot prospects, recently contracted work:"
+                      label={filtered_questions[1]?.question||"N/A"}
+                      // label="Describe your current sales positions, hot prospects, recently contracted work:"
                     >
                       <TextArea
                         size={"large"}
@@ -404,18 +468,13 @@ const Page1 = () => {
                           message: "Please Fill Field",
                         },
                       ]}
-                      label="Describe your accomplishments in the last 6 months:"
+                      label={filtered_questions[3]?.question||"N/A"}
+                      // label="Describe your accomplishments in the last 6 months:"
                     >
                       <TextArea
                         size={"large"}
                         placeholder="Enter..."
-                      // onKeyPress={(e: any) => {
-                      //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                      //         e.preventDefault();
-                      //     } else {
-                      //         e.target.value = String(e.target.value).trim()
-                      //     }
-                      // }}
+                  
                       />
                     </Form.Item>
                     <Form.Item
@@ -427,7 +486,8 @@ const Page1 = () => {
                           message: "Please Fill Field",
                         },
                       ]}
-                      label="Describe your HR position &/or needs:"
+                      label={filtered_questions[4]?.question||"N/A"}
+                      // label="Describe your HR position &/or needs:"
                     >
                       <TextArea
                         size={"large"}
@@ -450,8 +510,9 @@ const Page1 = () => {
                           message: "Please Fill Field",
                         },
                       ]}
-                      label="Describe any current challenges your business is facing (i.e. problem client, personnel
-issue(s), trade availability, rising costs, supply chain, etc.):"
+                      label={filtered_questions[2]?.question||"N/A"}
+//                       label="Describe any current challenges your business is facing (i.e. problem client, personnel
+// issue(s), trade availability, rising costs, supply chain, etc.):"
                     >
                       <TextArea
                         size={"large"}
@@ -464,12 +525,13 @@ issue(s), trade availability, rising costs, supply chain, etc.):"
                       //     }
                       // }}
                       />
-                    </Form.Item>
+                    </Form.Item> */}
 
-                    <Form.Item
+                    {/* <Form.Item
                       name="craftsmen_support"
                       rules={[{ required: true, message: "Please Fill Field" }]}
-                      label="How can the Craftsmen aid or support you with these challenges?"
+                      label={filtered_questions[0]?.question||"N/A"}
+                      // label="How can the Craftsmen aid or support you with these challenges?"
                     >
                       <TextArea
                         size={"large"}
@@ -482,7 +544,7 @@ issue(s), trade availability, rising costs, supply chain, etc.):"
                       //     }
                       // }}
                       />
-                    </Form.Item>
+                    </Form.Item> */}
 
                     {/* Button  */}
                     <div className="d-flex mt-3">

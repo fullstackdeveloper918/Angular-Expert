@@ -3,6 +3,7 @@ const SuperagentPromise = require('superagent-promise');
 const superagent = SuperagentPromise(_superagent, global.Promise);
 import { parseCookies } from 'nookies';
 import { info } from "console";
+// import { useSelector } from "react-redux";
 
 // const API_ROOT = 'https://app-uilsndszlq-uc.a.run.app/';
 const API_ROOT = 'https://frontend.goaideme.com/';
@@ -19,7 +20,8 @@ const API_FILE_ROOT_DB_BACKUP = `${BUCKET_ROOT}backup/`;
 const cookies = parseCookies();
 const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
 
-
+// const getUserdata = useSelector((state: any) => state?.user?.userData);
+// console.log(getUserdata,"getUserdata");
 const encode = encodeURIComponent;
 const responseBody = (res: any) => res.body;
 
@@ -67,15 +69,15 @@ const Auth = {
     requests.patch('profile', info),
 };
 const dashboard={
-  upcoming: () =>
-    requests.get(`upcoming-meeting`),
-  next: () =>
-    requests.get(`next-meetings`),
+  upcoming: (q?: string) =>
+    requests.get(`upcoming-meeting?meeting_id=${q ? `${q}` : ""}`),
+  next: (q?: string) =>
+    requests.get(`next-meetings?meeting_id=${q ? `${q}` : ""}`),
 }
 const Admin={
   // admin/listadmin/add
   listing: (q?: string) =>
-    requests.get(`admin/list${q ? `?${q}` : ""}`),
+    requests.get(`admin/list${q ? `${q}` : ""}`),
   
   create: (info: any) =>
     requests.post('admin/add', info),
@@ -112,24 +114,26 @@ const User = {
     requests.post('add-adtional-user', info),
   edit_additional_user: (info: any) =>
     requests.post('update-additional-users', info),
-  listing: (q?: string) =>
-    requests.get(`list${q ? `?${q}` : ""}`),
+  listing: (q?: string,id?:any) =>
+    requests.get(`list?meeting_id=${id ? `${id}` : ""}${q ? `${q}` : ""}`),
+  past_meeting_list: (q?: string,id?:any) =>
+    requests.get(`past-meetings-user?meeting_id=${id ? `${id}` : ""}${q ? `${q}` : ""}`),
   // additional_user_listing: (q?: string) =>
   //   requests.get(`addtional-user-list${q ? `?${q}` : ""}`),
   additional_user_listing: (info: any) =>
     requests.post(`addtional-user-list`,info),
   arcivelisting: (q?: string) =>
-    requests.get(`archive-user-listing${q ? `?${q}` : ""}`),
-  completelist: () =>
-    requests.get(`descending-completed-form`),
+    requests.get(`archive-user-listing${q ? `${q}` : ""}`),
+  completelist: (q?:string) =>
+    requests.get(`descending-completed-form?meeting_id=${q ? `${q}` : ""}`),
   listing1: () =>
     requests.get(`list`),
   user_listing: (q?: string) =>
-    requests.get(`single-user-form-status`),
-  check_fall_spring: () =>
-    requests.get(`spring-fall-meeting-count`),
-  user_completed_noncompleted: () =>
-    requests.get(`complete-uncomplete-form`),
+    requests.get(`single-user-form-status?meeting_id=${q ? `${q}` : ""}`),
+  check_fall_spring: (q?:string) =>
+    requests.get(`spring-fall-meeting-count?meeting_id=${q ? `${q}` : ""}`),
+  user_completed_noncompleted: (q?:string) =>
+    requests.get(`complete-uncomplete-form?meeting_id=${q ? `${q}` : ""}`),
   user_total_count: (q?: string) =>
     requests.get(`total-member-count`),
   user_remains_userfor_meeting: (q?: string) =>
@@ -139,13 +143,13 @@ const User = {
   getById: (info: any) =>
     requests.post(`single-user-detail`,info),
   getById1: (info: any) =>
-    requests.post(`get-additional-users`,info),
+    requests.post(`addtional-user-list`,info),
   getAdditionalId: (info: any) =>
     requests.post(`single-additional-users`,info),
   getQuestion: () =>
     requests.get(`new-questions`),
   getPurchase: (_id: string, q?: string) =>
-    requests.get(`user/${_id}/purchase${q ? `?${q}` : ""}`),
+    requests.get(`user/${_id}/purchase${q ? `${q}` : ""}`),
   detailPurchase: (_id: string) =>
     requests.get(`user/purchase/${_id}`),
   block: (id: string, info: any) =>
@@ -167,18 +171,18 @@ const Meeting={
   // add-meeting
   create: (info: any) =>
     requests.post('add-meeting', info),
-  update:()=>
-    requests.get("five-day-beforemeeting-countdown"),
+  update:(q?: string)=>
+    requests.get(`five-day-beforemeeting-countdown?meeting_id=${q ? `${q}` : ""}`),
   past_meeting:(q?: string)=>
-    requests.get(`past-meetings${q ? `?${q}` : ""}`),
+    requests.get(`past-meetings${q ? `${q}` : ""}`),
   meeting_user:(info: any)=>
     requests.post(`past-meetings-user`,info),
   listing: (q?: string) =>
-    requests.get(`meeting-list${q ? `?${q}` : ""}`),
-  upcoming_meeting: () =>
-    requests.get(`upcoming-meeting`),
+    requests.get(`meeting-list${q ? `${q}` : ""}`),
+  upcoming_meeting: (q?: string) =>
+    requests.get(`upcoming-meeting?meeting_id=${q ? `${q}` : ""}`),
   archive: (q?: string) =>
-    requests.get(`meeting-archive${q ? `?${q}` : ""}`),
+    requests.get(`meeting-archive${q ? `${q}` : ""}`),
   getById: (info: any) =>
     requests.post(`meeting-detail`,info),
   edit: ( info: any) =>
@@ -212,8 +216,8 @@ const Manage_Question={
     requests.post(`question-delete`, info),
 }
 const Questionnaire={
-  listing: (q?: string) =>
-    requests.get(`question-list${q ? `?${q}` : ""}`),
+  listing: (q?: string,id?:any) =>
+    requests.get(`question-list?meeting_id=${id ? `${id}` : ""}${q ? `${q}` : ""}`),
 }
 // const Dashboard = {
 //   listing: (q?: string) =>

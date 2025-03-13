@@ -21,6 +21,8 @@ type Page<P = {}> = NextPage<P> & {
 
 const AdminDashboard: Page = (props: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData)
+  console.log(getUserdata,"getUserdata");
+  
   const [loading, setLoading] = useState<any>(true)
   const [state1, setState1] = useState<any>([])
   const [state2, setState2] = useState<any>([])
@@ -50,11 +52,16 @@ const AdminDashboard: Page = (props: any) => {
   console.log(xyz1,"xyz1");
   
   const abc:any = xyz ? dayjs.tz(xyz, 'America/New_York').valueOf() : undefined;
-console.log(xyz, "axfz");
+// console.log(getUserdata.meetings.NextMeeting.id, "axfz");
 
 
   const updateDue = async () => {
-    let res = await api.Meeting.update()
+console.log(getUserdata,"getUserdatagetUserdata");
+
+    let item={
+      meeting_id:getUserdata.meetings.NextMeeting.id
+    }
+    let res = await api.Meeting.update(getUserdata.meetings.NextMeeting.id)
 
   }
   useEffect(() => {
@@ -163,7 +170,7 @@ const [error,setError]=useState<any>("")
     },
   ]
   const getDataById = async (id: any) => {
-    const item = { user_id: id };
+    const item = { user_id: id,meeting_id:getUserdata.meetings.NextMeeting.id };
     try {
       const res = await api.User.getById(item as any);
       return res?.data || null; 
@@ -226,9 +233,13 @@ const [error,setError]=useState<any>("")
     
     return acc;
   }, []);
+  console.log(state2,"state2");
   
-
-  const non_completed = filteredData?.filter((res: any) => res?.is_completed === false);
+  // const filteredArray = state2.filter((item:any) => item.is_form_completed == true);
+  const non_completed = state2?.filter((res: any) => res?.is_form_completed == false);
+  console.log(non_completed,"non_completed");
+  
+  // const non_completed = filteredData?.filter((res: any) => res?.is_completed === false);
   
   
   const dataSource = state1?.map((res: any, index: number) => {
@@ -250,7 +261,9 @@ const [error,setError]=useState<any>("")
     }
   }
   );
-  const dataSource1 = state2
+  const filteredArray = state2.filter((item:any) => item.is_form_completed == true);
+
+  const dataSource1 = filteredArray
   ?.sort((a: any, b: any) => {
     const dateA = new Date(a.updatedAt._seconds * 1000 + a.updatedAt._nanoseconds / 1000000);
     const dateB = new Date(b.updatedAt._seconds * 1000 + b.updatedAt._nanoseconds / 1000000);
@@ -295,6 +308,8 @@ const [error,setError]=useState<any>("")
       ),
     };
   });
+
+  // const filteredArray = state2.filter((item:any) => item.is_form_completed == true);
 
   const dataSource2 = non_completed?.map((res: any, index: number) => {
     const companyName = companyNameMap[res?.company_name || ""] || "N/A";
@@ -485,18 +500,20 @@ const [error,setError]=useState<any>("")
   const getData = async () => {
     setLoading(true)
     try {
-      let apiRes1 = await api.User.user_completed_noncompleted()
+      let apiRes1 = await api.User.user_completed_noncompleted(getUserdata.meetings.NextMeeting.id)
       setComplete(apiRes1.data)
       setLoading(false)
     } catch (error) {
       setLoading(false)
     }
   }
+  console.log(state2,"ljlsjdfl");
+  
   const userlist = async () => {
     setLoading(true)
     try {
-      let res = await api.User.listing()
-      let response = await api.User.completelist()
+      let res = await api.User.listing(getUserdata.meetings.NextMeeting.id)
+      let response = await api.User.completelist(getUserdata.meetings.NextMeeting.id)
       setState1(res?.data)
       setState2(response)
       setLoading(false)
@@ -511,9 +528,9 @@ const [error,setError]=useState<any>("")
   }, []);
   const initialise = async () => {
     try {
-        let res = await api.Meeting.upcoming_meeting();
+        let res = await api.Meeting.upcoming_meeting(getUserdata.meetings.NextMeeting.id);
         setAreas(res);
-        let apiRes1 = await api.User.check_fall_spring()
+        let apiRes1 = await api.User.check_fall_spring(getUserdata.meetings.NextMeeting.id)
         setCheck(apiRes1)
     } catch (error) {
     }
@@ -528,6 +545,19 @@ const [error,setError]=useState<any>("")
 
   }, [])
 
+   
+//   const getSeasonByReviewMonth = (month:any) =>
+//     month >= 1 && month <= 6 ? 'Spring' : month >= 7 && month <= 12 ? 'Fall' : 'Invalid Month';
+
+
+// const meeting_review_month= dayjs(props?.state?.meetings?.lastMeeting?.start_meeting_date).format("MM")
+// const season_review_month = getSeasonByReviewMonth(meeting_review_month);
+// console.log(season_review_month,"season");
+
+// const meeting_review_year= dayjs(props?.state?.meetings?.lastMeeting?.start_meeting_date).format("YYYY")
+// console.log(meeting_review_year,"meeting_review_year");
+
+  
   return (
         <section>
           <Row gutter={[20, 20]} className="mb-4 ">
@@ -573,7 +603,7 @@ const [error,setError]=useState<any>("")
               <Col sm={24} md={24} lg={24} xxl={12}>
                 <Card className='common-card'>
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                    <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates for Fall 2024</Typography.Title>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates for Spring 2025</Typography.Title>
 
                   </div>
                   <div className='tabs-wrapper'>
@@ -589,7 +619,7 @@ const [error,setError]=useState<any>("")
                 <Card className='common-card'>
 
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                    <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates for Fall 2024</Typography.Title>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates for Spring 2025</Typography.Title>
                   </div>
                   <div className='tabs-wrapper'>
                     <Table

@@ -435,7 +435,27 @@ const meetingTime = '2024-09-11T13:00:00'; // 1 PM in Asheville
   }, [shortCounrtyName])
 
 
-  
+  const companyNameMap = {
+    augusta: "Augusta Homes, Inc.",
+    buffington: "Buffington Homes, L.P.",
+    cabin: "Cabin John Builders",
+    cataldo: "Cataldo Custom Builders",
+    david_campbell: "The DCB",
+    dc_building: "DC Building Inc.",
+    Ddenman_construction: "Denman Construction, Inc.",
+    ellis: "Ellis Custom Homes",
+    tm_grady_builders: "T.M. Grady Builders",
+    hardwick: "Hardwick G. C.",
+    homeSource: "HomeSource Construction",
+    ed_nikles: "Ed Nikles Custom Builder, Inc.",
+    olsen: "Olsen Custom Homes",
+    raykon: "Raykon Construction",
+    matt_sitra: "Matt Sitra Custom Homes",
+    schneider: "Schneider Construction, LLC",
+    shaeffer: "Shaeffer Hyde Construction",
+    split: "Split Rock Custom Homes",
+    tiara: "Tiara Sun Development",
+};
   return (
     <>
       <Fragment>
@@ -553,13 +573,21 @@ const meetingTime = '2024-09-11T13:00:00'; // 1 PM in Asheville
                           placeholder="Enter your address"
                         />
                       </Form.Item>
-                      <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
+                      {/* <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
                         <Input size={'large'} placeholder="Host Company"
 
                         />
-                      </Form.Item>
+                      </Form.Item> */}
 
-
+ <Form.Item name="host_company" className='col-lg-6 col-sm-12' label="Host Company">
+                <Select size={'large'} placeholder="Select Host Company">
+                    {Object.entries(companyNameMap).map(([key, value]) => (
+                        <Select.Option key={key} value={key}>
+                            {value}
+                        </Select.Option>
+                    ))}
+                </Select>
+            </Form.Item>
 
                       <Form.Item
                         name="host"
