@@ -21,6 +21,7 @@ import html2canvas from "html2canvas";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
 
 const { Row, Col, Card, Button, Pagination, Tooltip } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
@@ -46,6 +47,7 @@ const { Row, Col, Card, Button, Pagination, Tooltip } = {
 const { Search } = Input;
 const { Option } = Select;
 const Technology = () => {
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
   const [loading, setLoading] = useState(false);
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
@@ -55,19 +57,19 @@ const Technology = () => {
       ?.replace(/_/g, " ")
       ?.replace(/\b\w/g, (char: any) => char.toUpperCase());
   };
-  const [selectedValue, setSelectedValue] = useState<any>("technology");
+  const [selectedValue, setSelectedValue] = useState<any>("2024");
   console.log(selectedValue, "selectedValue");
 
   const handleSelectChange = (value: any) => {
     setSelectedValue(value as string);
   };
+  let item=selectedValue=="2024"?getUserdata.meetings.lastMeeting.id:getUserdata.meetings.NextMeeting.id
   const handleDownloadPdf = async () => {
     setLoading(true);
-
     try {
       // Fetch API data
       const response = await fetch(
-        "https://frontend.goaideme.com/get-original-report",
+        `https://frontend.goaideme.com/technology-product-project-report?meeting_id=${item}`,
         {
           method: "GET",
           headers: {
@@ -90,9 +92,10 @@ const Technology = () => {
       container.style.width = "800px";
       container.style.padding = "20px";
       container.style.backgroundColor = "#fff";
+
       {
-        selectedValue === "product" &&
-          data.data.productData.forEach((item: any) => {
+        selectedValue === "2024" ?
+          data.data.forEach((item: any) => {
             const companyDiv = document.createElement("div");
             companyDiv.style.marginBottom = "20px";
             companyDiv.style.borderBottom = "1px solid #ccc";
@@ -100,31 +103,7 @@ const Technology = () => {
 
             const companyName = document.createElement("h2");
             companyName.innerText = `Company Name: ${capFirst(
-              item.company_name || "N/A"
-            )}`;
-            companyDiv.appendChild(companyName);
-
-            const products = document.createElement("p");
-            products.innerHTML = `<strong>Products:</strong> ${capFirst(
-              item.products || "N/A"
-            )}`;
-            companyDiv.appendChild(products);
-
-            container.appendChild(companyDiv);
-          });
-      }
-
-      {
-        selectedValue === "technology" &&
-          data.data.technologyData.forEach((item: any) => {
-            const companyDiv = document.createElement("div");
-            companyDiv.style.marginBottom = "20px";
-            companyDiv.style.borderBottom = "1px solid #ccc";
-            companyDiv.style.paddingBottom = "10px";
-
-            const companyName = document.createElement("h2");
-            companyName.innerText = `Company Name: ${capFirst(
-              item.company_name || "N/A"
+              item?.user?.company_name || "N/A"
             )}`;
             companyDiv.appendChild(companyName);
 
@@ -135,7 +114,27 @@ const Technology = () => {
             companyDiv.appendChild(technology);
 
             container.appendChild(companyDiv);
-          });
+          }):
+          data.data.forEach((item: any) => {
+            const companyDiv = document.createElement("div");
+            companyDiv.style.marginBottom = "20px";
+            companyDiv.style.borderBottom = "1px solid #ccc";
+            companyDiv.style.paddingBottom = "10px";
+
+            const companyName = document.createElement("h2");
+            companyName.innerText = `Company Name: ${capFirst(
+              item?.user?.company_name || "N/A"
+            )}`;
+            companyDiv.appendChild(companyName);
+
+            const technology = document.createElement("p");
+            technology.innerHTML = `<strong>Technology:</strong> ${capFirst(
+              item?.craftsmen_toolbox_update_questions[0]?.question || "N/A"
+            )}`;
+            companyDiv.appendChild(technology);
+
+            container.appendChild(companyDiv);
+          })
       }
       if (selectedValue === "round") {
         const tittle = document.createElement("h2");
@@ -251,11 +250,11 @@ const Technology = () => {
   // const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   console.log(data, "data");
-
+const [filterYear,setFIlterYear]=useState<any>("")
   useEffect(() => {
     const fetchData = async () => {
       const type = "yourType";
-      const url = `https://frontend.goaideme.com/technology-product-project-report`;
+      const url = `https://frontend.goaideme.com/technology-product-project-report?meeting_id=${item}`;
       // const url = `https://frontend.goaideme.com/round-table-report?type=${type}`;
 
       try {
@@ -282,7 +281,7 @@ const Technology = () => {
     };
 
     fetchData();
-  }, []); // Empty array ensures th
+  }, [selectedValue]); // Empty array ensures th
 
   const dataSource =
     data?.data?.length &&
@@ -303,7 +302,7 @@ const Technology = () => {
             res?.meeting?.meeting_type
           )} ${dayjs(res?.meeting?.start_meeting_date).format("YYYY")}` ||
           "N/A",
-        host_name: capFirst(res?.username) || "N/A",
+        host_name: capFirst(res?.user?.firstname)  || "N/A",
         // products: (
         //   <Tooltip title={res?.products}>
         //     {truncateText(capFirst(res?.products) || "N/A", 5)}
@@ -317,6 +316,48 @@ const Technology = () => {
         technology: (
           <Tooltip title={res?.technology}>
             {truncateText(capFirst(res?.technology) || "N/A", 15)}
+          </Tooltip>
+        ),
+        host_city: (
+          <Tooltip title={res?.location}>
+            {res?.location ? `${res?.location.slice(0, 20)}...` : "N/A"}
+          </Tooltip>
+        ),
+      };
+    });
+  const dataSource1 =
+    data?.data?.length &&
+    data?.data.map((res: any, index: number) => {
+      // Helper function to truncate text to a max of 15 words
+      const truncateText = (text: string, maxWords: number = 15) => {
+        const words = text.split(" "); // Split the string into words
+        if (words.length > maxWords) {
+          return words.slice(0, maxWords).join(" ") + "..."; // Join the first 'maxWords' words and add '...'
+        }
+        return text;
+      };
+
+      return {
+        key: index + 1,
+        meeting:
+          `${validation.capitalizeFirstLetter(
+            res?.meeting?.meeting_type
+          )} ${dayjs(res?.meeting?.start_meeting_date).format("YYYY")}` ||
+          "N/A",
+        host_name: capFirst(res?.user?.firstname) || "N/A",
+        // products: (
+        //   <Tooltip title={res?.products}>
+        //     {truncateText(capFirst(res?.products) || "N/A", 5)}
+        //   </Tooltip>
+        // ),
+        // project: (
+        //   <Tooltip title={res?.project}>
+        //     {truncateText(capFirst(res?.project) || "N/A", 5)}
+        //   </Tooltip>
+        // ),
+        technology: (
+          <Tooltip title={res?.craftsmen_toolbox_update_questions[0]?.question}>
+            {truncateText(capFirst(res?.craftsmen_toolbox_update_questions[0]?.question) || "N/A", 15)}
           </Tooltip>
         ),
         host_city: (
@@ -401,6 +442,16 @@ const Technology = () => {
                   <Typography.Title level={3} className="m-0 fw-bold">
                   Technology
                   </Typography.Title>
+                  <div className="justify-content-between gap-3">
+                  <Select
+            defaultValue="2024"
+            style={{ width: 170 }}
+             onChange={handleSelectChange}
+           >
+             <Option value="2024">2024</Option>
+             <Option value="2025">2025</Option>
+             {/* <Option value="technology">Technology Data</Option> */}
+           </Select>
                   <Button
                     type="primary"
                     className="mb-3"
@@ -409,6 +460,7 @@ const Technology = () => {
                   >
                     Export PDF
                   </Button>
+                  </div>
                 </div>
                 {/* Search  */}
                 <div className="my-2 d-flex justify-content-end gap-3">
@@ -445,7 +497,7 @@ const Technology = () => {
                     </div>
                   ) : (
                     <Table
-                      dataSource={dataSource}
+                      dataSource={selectedValue==="2024"?dataSource:dataSource1}
                       columns={baseColumns}
                       pagination={{
                         position: ["bottomCenter"],

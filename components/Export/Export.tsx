@@ -67,7 +67,7 @@ const Export = () => {
     try {
       // Fetch API data
       const response = await fetch(
-        "https://frontend.goaideme.com/get-original-report",
+        "https://frontend.goaideme.com/round-table-report",
         {
           method: "GET",
           headers: {
@@ -142,7 +142,7 @@ const Export = () => {
         tittle.innerText = "Round Table Topic";
         tittle.style.textAlign = "center";
 
-        data.data.roundTableTopic.forEach((item: any) => {
+        data.data.forEach((item: any) => {
           const companyDiv = document.createElement("div");
           companyDiv.style.marginBottom = "20px";
           companyDiv.style.borderBottom = "1px solid #ccc";
