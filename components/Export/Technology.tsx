@@ -67,7 +67,7 @@ const Technology = () => {
     try {
       // Fetch API data
       const response = await fetch(
-        "https://nahb.goaideme.com/get-original-report",
+        "https://frontend.goaideme.com/get-original-report",
         {
           method: "GET",
           headers: {
@@ -255,8 +255,8 @@ const Technology = () => {
   useEffect(() => {
     const fetchData = async () => {
       const type = "yourType";
-      const url = `https://nahb.goaideme.com/technology-product-project-report`;
-      // const url = `https://nahb.goaideme.com/round-table-report?type=${type}`;
+      const url = `https://frontend.goaideme.com/technology-product-project-report`;
+      // const url = `https://frontend.goaideme.com/round-table-report?type=${type}`;
 
       try {
         const response = await fetch(url, {
