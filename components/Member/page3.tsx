@@ -190,7 +190,7 @@ const Page3 = ({questions}:any) => {
       let parsedGoals = savedGoalsData ? JSON.parse(savedGoalsData) : [];
 
       if (parsedGoals.length === 0) {
-        parsedGoals = res?.data?.lastNextMeetings[0]?.goal_next_meeting || [];
+        parsedGoals = res?.data?.lastNextMeetings[0]?.goal_next_meeting || res?.data?.goal_last_meeting;
       }
 
       const fetchedGoals = parsedGoals

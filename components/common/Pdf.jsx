@@ -289,18 +289,7 @@ console.log(props?.state,"props");
 
           <View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
-            {props?.state?.businessUpdate.length?
-            props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
-            (
-              <>
-              <Text style={styles.text} key={index}>{res?.question}</Text>
-            <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
-              {res.answer}
-            </Text>
-              </>
-            )
-            )
-            :
+            {props?.state?.businessUpdate[0]?.craftsmen_support?
             <>
             <Text style={styles.text}>Current financial position:</Text>
             <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
@@ -335,7 +324,19 @@ console.log(props?.state,"props");
             <Text style={styles.textarea} wrap={false}>
               {props?.state?.businessUpdate[0]?.craftsmen_support}
             </Text>
-            </>
+            </>:
+            props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
+            (
+              <>
+              <Text style={styles.text} key={index}>{res?.question}</Text>
+            <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
+              {res.answer}
+            </Text>
+              </>
+            )
+            )
+            
+            
 
 }
           </View>
@@ -394,7 +395,7 @@ console.log(props?.state,"props");
             <Text style={styles.main_heading}>CRAFTSMEN TOOLBOX</Text>
             <View style={styles.goal}>
 
-            {props?.state?.technologyData?.length?
+            {props?.state?.technologyData[0]?.craftsmen_toolbox_update_questions?
             props?.state?.technologyData[0]?.craftsmen_toolbox_update_questions.map((res,index)=>
             (
               <>
@@ -444,7 +445,7 @@ console.log(props?.state,"props");
             <View style={styles.goal}>
 
 
-            {props?.state?.craftsMenUpdates?.length?
+            {props?.state?.craftsMenUpdates[0]?.craftsmen_checkup_update_questions?
             props?.state?.craftsMenUpdates[0]?.craftsmen_checkup_update_questions.map((res,index)=>
             (
               <>
@@ -500,7 +501,7 @@ console.log(props?.state,"props");
             <Text style={styles.main_heading}>Fall 2024 MEETING REVIEW</Text>
             <View style={styles.goal}>
 
-            {props?.state?.meetingReviews.length?
+            {props?.state?.meetingReviews[0].fallmeeting_review_update_questions?
             props?.state?.meetingReviews[0]?.fallmeeting_review_update_questions?.map((res,index)=>
             (
               <>
