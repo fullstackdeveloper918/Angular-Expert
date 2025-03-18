@@ -203,7 +203,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
           <View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
             {/* <Text style={styles.main_heading}>Business Update</Text> */}
-                       {props?.state?.businessUpdate.length?
+                       {props?.state?.businessUpdate[0].business_update_questions?
                        props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
                        (
                          <>
