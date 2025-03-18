@@ -54,9 +54,10 @@ const AdditionalQuestion = ({questions}:any) => {
   const submit = async (values: any) => {
     if (actionType === "submit") {
       let items = {
-        answer: {
+        additional_question: {
           user_id: value,
-          meeting_id: filtered_questions.map((q: any) => ({
+          meeting_id: getUserdata.meetings.NextMeeting.id,
+          answer: filtered_questions.map((q: any) => ({
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
@@ -68,9 +69,10 @@ const AdditionalQuestion = ({questions}:any) => {
         // if (type == "edit") {
         if (state?.answer?.length) {
           let items = {
-            answer: {
+            additional_question: {
               user_id: value,
-              meeting_id: filtered_questions.map((q: any) => ({
+              meeting_id: getUserdata.meetings.NextMeeting.id,
+              answer: filtered_questions.map((q: any) => ({
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
@@ -128,10 +130,10 @@ const AdditionalQuestion = ({questions}:any) => {
       }
     } else if (actionType === "save") {
       let items = {
-        answer: {
+        additional_question: {
           user_id: value,
           meeting_id: getUserdata.meetings.NextMeeting.id,
-          questions: filtered_questions.map((q: any) => ({
+          answer:filtered_questions.map((q: any) => ({
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
@@ -143,9 +145,10 @@ const AdditionalQuestion = ({questions}:any) => {
         if (state?.answer?.length) {
           // if (type == "edit") {
           let items = {
-            answer: {
+            additional_question: {
               user_id: value,
-              meeting_id: filtered_questions.map((q: any) => ({
+              meeting_id: getUserdata.meetings.NextMeeting.id,
+              answer:filtered_questions.map((q: any) => ({
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
