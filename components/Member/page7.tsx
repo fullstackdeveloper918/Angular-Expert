@@ -14,6 +14,7 @@ import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearSpecificFormData } from "@/lib/features/formSlice";
 
 const Page7 = ({questions}:any) => {
+
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
