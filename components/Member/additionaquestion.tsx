@@ -351,13 +351,13 @@ const AdditionalQuestion = ({questions}:any) => {
                       <Form.Item
                         key={question.id}
                         name={`question_${question.id}`}
-                        rules={[
-                          {
-                            required: true,
-                            whitespace: true,
-                            message: "Please Fill Field",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     whitespace: true,
+                        //     message: "Please Fill Field",
+                        //   },
+                        // ]}
                         label={question.question}
                       >
                         <TextArea size="large" placeholder="Enter..." />

@@ -300,13 +300,13 @@ const Page7 = ({questions}:any) => {
                     {/* First Name  */}
                     <Form.Item
                       name="estimating"
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: "Please Fill Field",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     whitespace: true,
+                      //     message: "Please Fill Field",
+                      //   },
+                      // ]}
                     >
                       <TextArea
                         size={"large"}
@@ -316,13 +316,13 @@ const Page7 = ({questions}:any) => {
                     </Form.Item>
                     <Form.Item
                       name="accountability"
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: "Please Fill Field",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     whitespace: true,
+                      //     message: "Please Fill Field",
+                      //   },
+                      // ]}
                     >
                       <TextArea
                         size={"large"}
@@ -332,13 +332,13 @@ const Page7 = ({questions}:any) => {
                     </Form.Item>
                     <Form.Item
                       name="productivity"
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: "Please Fill Field",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     whitespace: true,
+                      //     message: "Please Fill Field",
+                      //   },
+                      // ]}
                     >
                       <TextArea
                         size={"large"}
