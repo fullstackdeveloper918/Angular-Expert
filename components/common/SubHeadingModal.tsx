@@ -28,30 +28,33 @@ const AntModal = dynamic(() => import("antd").then((module) => module.Modal), {
   ssr: false,
 });
 
-const CustomModal = (props: any) => {
-  const [state, setState] = React.useState<any>([])
+const SubHeadingModal = (props: any) => {
+  console.log(props,"yuiyuiyuiyui");
+  
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [addModalOpen1, setAddModalOpen1] = useState(false);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const [loading, setLoading] = useState(false);
 
   const [addLoading, setAddLoading] = useState(false);
 
   const [addForm] = Form.useForm();
+  const [addForm1] = Form.useForm();
 
-console.log(state,"asjdla");
 
+  const [formValues, setFormValues] = useState<any>({});
 
   const getDataById = useCallback(async (): Promise<void> => {
     const item = {
-      question_id: props.id,
+      section_heading_id: props.id,
     };
     try {
       setLoading(true);
-      const res = await api.Manage_Question.getById(item);
+      const res = await api.Manage_Question.getByIdsubHeading(item);
 
       addForm.setFieldsValue(res.data);
     } catch (error: any) {
-      alert(error.message);
+    //   alert(error.message);
     } finally {
       setLoading(false);
     }
@@ -62,63 +65,32 @@ console.log(state,"asjdla");
     }
   }, [props.id, getDataById]);
   const addQuestion = async (values: any) => {
-    console.log(values,"ieytieyr");
-    return
-    
     let item = {
-      question_id: props?.id,
-      question: values.question,
-      question_type: values.question_type,
+        section_heading_id: props?.id,
       page_type: values.page_type,
-      quesiton_position:values.quesiton_position,
+      subheading: values.subheading,
       meeting_id:getUserdata.meetings.NextMeeting.id,
     };
 
     try {
       if (props?.type === "Add") {
         let item = {
-          question: values.question,
-          question_type: values.question_type,
-          page_type: values.page_type,
-          quesiton_position:values.quesiton_position,
+            page_type: values.page_type,
+            subheading: values.subheading,
           meeting_id:getUserdata.meetings.NextMeeting.id,
         };
-        let res = await api.Manage_Question.create(item as any);
+        let res = await api.Manage_Question.add_sub_heading(item as any);
         props?.initialise();
         setAddModalOpen(false);
       } else {
-        let res = await api.Manage_Question.edit(item as any);
+        let res = await api.Manage_Question.edit_sub_heading(item as any);
         props?.initialise();
         setAddModalOpen(false);
       }
     } catch (error) {
     }
   };
-  const initialise = async () => {
-    try {
-      let res = await api.Manage_Question.list()
-      setState(res.data)
-    //   if (res?.data?.status == 500) {
-    //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-    //     localStorage.removeItem('hasReloaded');
-    //     toast.error("Session Expired Login Again")
-    //     router.replace("/auth/signin")
-    // }
-    } catch (error:any) {
-    //   if (error.status==500) {
-    //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-    //     localStorage.removeItem('hasReloaded');
-    //     // }
-    //     toast.error("Session Expired Login Again")
-    //     router.replace("/auth/signin")
-    // }
-    } finally {
-    }
-  }
-
-  useEffect(() => {
-    initialise()
-  }, [])
+ 
 
   return (
     <>
@@ -132,7 +104,7 @@ console.log(state,"asjdla");
             onClick={() => setAddModalOpen(true)}
           >
             <PlusOutlined />
-            Add New Questions
+           Add Sub Heading
           </Button>
           </div>
         ) : (
@@ -161,50 +133,31 @@ console.log(state,"asjdla");
             autoComplete="off"
           >
             <Form.Item
-              name="question"
-              label={`${props?.type} Questions`}
+              name="subheading"
+              label={`${props?.type} Sub Heading`}
               rules={[
                 {
                   required: true,
                   whitespace: true,
-                  message: `Please Enter valid ${props?.type} Questions`,
+                  message: `Please Enter valid ${props?.type} Sub Heading`,
                 },
               ]}
             >
-              <Input size={"large"} placeholder={`${props?.type} Questions`} />
+              <Input size={"large"} placeholder={`${props?.type} Sub Heading`} />
             </Form.Item>
-            <Form.Item
-              name="question_type"
-              label={`${props?.type} Questions Type`}
-              rules={[
-                {
-                  required: true,
-                  message: `Please select a valid ${props?.type} Questions Type`,
-                },
-              ]}
-            >
-              {/* BUSINESS UPDATE,CRAFTSMEN TOOLBOX,CRAFTSMEN CHECK-UP,Fall 2024 MEETING REVIEW,Spring 2025 MEETING PREPARATION */}
-              <Select size="large" placeholder={`${props?.type} Question Type`}>
-                <Option value="short_text">Short Text</Option>
-                <Option value="long_text">Long Text</Option>
-                <Option value="dropdown">Dropdown</Option>
-                <Option value="single_choice">Single Choice Checkbox</Option>
-                <Option value="multi_choice">Multi Choice Checkbox</Option>
-                 
-              </Select>
-            </Form.Item>
+          
             <Form.Item
               name="page_type"
-              label={`${props?.type} Page Section`}
+              label={`${props?.type} Page Type`}
               rules={[
                 {
                   required: true,
-                  message: `Please select a valid ${props?.type} Page Section`,
+                  message: `Please select a valid ${props?.type} Page Type`,
                 },
               ]}
             >
               {/* BUSINESS UPDATE,CRAFTSMEN TOOLBOX,CRAFTSMEN CHECK-UP,Fall 2024 MEETING REVIEW,Spring 2025 MEETING PREPARATION */}
-              <Select size="large" placeholder={`${props?.type} Page Section`|| "Select Page Section"}>
+              <Select size="large" placeholder={`${props?.type} Page Type`|| "Select Page Type"}>
               <Option value="business_update">Business Update</Option>
                 <Option value="technology">Craftsmen Toolbox</Option>
                 <Option value="craftsmen_checkup">Craftsmen check-Up</Option>
@@ -213,47 +166,6 @@ console.log(state,"asjdla");
                 <Option value="answers">Additional Questionnaire</Option>
                  
               </Select>
-            </Form.Item>
-            <Form.Item
-              name="sub_heading"
-              label={`${props?.type} Sub Heading`}
-              rules={[
-                {
-                  required: true,
-                  message: `Please select a valid ${props?.type} Sub Heading`,
-                },
-              ]}
-            >
-              {/* BUSINESS UPDATE,CRAFTSMEN TOOLBOX,CRAFTSMEN CHECK-UP,Fall 2024 MEETING REVIEW,Spring 2025 MEETING PREPARATION */}
-              <Select size="large" placeholder={`${props?.type} Sub Heading`|| "Select Sub Heading"}>
-                {state?.map((res:any,index:number)=>
-              <Option value={res?.subheading} key={index}>{res?.subheading}</Option>
-                )}
-               
-                 
-              </Select>
-            </Form.Item>
-
-
-            <Form.Item
-              name="quesiton_position"
-              label={`${props?.type} Question Position`}
-              rules={[
-                {
-                  required: true,
-                  whitespace: true,
-                  message: `Please Enter valid ${props?.type} Question Position`,
-                },
-              ]}
-            >
-              <Input size={"large"} placeholder={`${props?.type} Question Position`} 
-              onKeyPress={(e: any) => {
-                if (!/[0-9]/.test(e.key)) {
-                  e.preventDefault();  // Prevent input if it's not a number
-                } else {
-                  e.target.value = String(e.target.value).trim();  // Trim spaces (if any)
-                }
-              }}/>
             </Form.Item>
             <Space className="w-100 justify-content-end">
               <Button type="default" onClick={() => setAddModalOpen(false)}>
@@ -277,4 +189,4 @@ console.log(state,"asjdla");
   );
 };
 
-export default CustomModal;
+export default SubHeadingModal;

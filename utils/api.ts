@@ -3,10 +3,11 @@ const SuperagentPromise = require('superagent-promise');
 const superagent = SuperagentPromise(_superagent, global.Promise);
 import { parseCookies } from 'nookies';
 import { info } from "console";
+import { list } from "postcss";
 // import { useSelector } from "react-redux";
 
 // const API_ROOT = 'https://app-uilsndszlq-uc.a.run.app/';
-const API_ROOT = 'https://frontend.goaideme.com/';
+const API_ROOT = 'https://nahb.goaideme.com/';
 
 const BUCKET_ROOT = `https://shared2.fra1.digitaloceanspaces.com/shared2/`;
 
@@ -93,7 +94,7 @@ const Export={
   // listing: (q?: string) =>
   //   requests.get(`admin/list${q ? `?${q}` : ""}`),
   listing: () =>
-    requests.get(`https://frontend.goaideme.com/get-original-report`),
+    requests.get(`https://nahb.goaideme.com/get-original-report`),
 }
 const photo_section={
   remove_photo: (info: any) =>
@@ -206,6 +207,19 @@ const Questionnair={
 const Manage_Question={
   create: (info: any) =>
     requests.post('question-add', info),
+  add_sub_heading: (info: any) =>
+    requests.post('section-sub-heading', info),
+  edit_sub_heading: (info: any) =>
+    requests.post('update-sub-heading', info),
+  // list-section-sub-heading
+  list: () =>
+    requests.get(`list-section-sub-heading`),
+
+  delete_subheading: (info: any) =>
+    requests.post(`delete-section-sub-heading`, info),
+  getByIdsubHeading: (info: any) =>
+    requests.post(`section-by-id`,info),
+
   edit: ( info: any) =>
     requests.put(`question-update`, info),
   listing: () =>

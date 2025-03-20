@@ -12,7 +12,7 @@ const page = async() => {
     const gettoken:any = cookiesList.get('COOKIES_USER_ACCESS_TOKEN');
   console.log(gettoken,"gettoken");
   
-    let data = await fetch('https://frontend.goaideme.com/question-list', {
+    let data = await fetch('https://nahb.goaideme.com/question-list', {
       method: 'GET', // Method set to GET
       headers: {
         'Cache-Control': 'no-cache',

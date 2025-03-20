@@ -258,7 +258,7 @@ const Page8 = () => {
       formData.append("comment_id", state?.photo_section?.commentId || "");
 
       const response = await axios.post(
-        "https://frontend.goaideme.com/remove-project",
+        "https://nahb.goaideme.com/remove-project",
         formData,
         {
           headers: {
@@ -797,7 +797,7 @@ console.log(response,"oerutouer");
     formData.append("company_name", companyName);
     // formData.append("company_name", responseData?.company_name);
     const res = await fetch(
-      "https://frontend.goaideme.com/send-completeform-mail-to-superadmin",
+      "https://nahb.goaideme.com/send-completeform-mail-to-superadmin",
       {
         method: "POST",
         body: formData,

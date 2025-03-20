@@ -124,7 +124,7 @@ const ArchiveMemberList = () => {
         const file = new File([blob], `${capFirst(item?.company_name)}.pdf`, { type: 'application/pdf' });
         const formData = new FormData();
         formData.append('file', file);
-        const res = await fetch('https://frontend.goaideme.com/save-pdf', {
+        const res = await fetch('https://nahb.goaideme.com/save-pdf', {
             method: 'POST',
             body: formData,
             headers: {

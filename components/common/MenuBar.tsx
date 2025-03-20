@@ -217,6 +217,18 @@ const handleLinkClick = () => {
           getUserdata?.is_admin &&
             getItem(
               <Link
+                href="/admin/manage_sub_heading"
+                className="text-decoration-none"
+                onClick={handleLinkClick}
+              >
+                Manage Sub Heading for Meeting
+              </Link>,
+              "manage_sub_heading",
+              <AppstoreAddOutlined style={iconSize} />
+            ),
+          getUserdata?.is_admin &&
+            getItem(
+              <Link
                 href="/admin/manage_questions"
                 className="text-decoration-none"
                 onClick={handleLinkClick}

@@ -152,7 +152,7 @@ console.log(res,"rtetert");
         formData.append("meeting_id", id12);
         formData.append("company_name", companyName);
 
-        const res = await fetch('https://frontend.goaideme.com/save-pdf', {
+        const res = await fetch('https://nahb.goaideme.com/save-pdf', {
         // const res = await fetch('https://app-uilsndszlq-uc.a.run.app/save-pdf', {
 
             method: 'POST',
