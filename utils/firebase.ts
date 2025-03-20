@@ -14,16 +14,6 @@ const firebaseConfig = {
     // measurementId: "G-WLPH62WMN0"
 
 
-    // apiKey: "AIzaSyDqYgP14ixdD2V5GKxEi-wiiV7qiMNmSLI",
-    // authDomain: "nabh-41663.firebaseapp.com",
-    // databaseURL: "https://nabh-41663-default-rtdb.firebaseio.com",
-    // projectId: "nabh-41663",
-    // storageBucket: "nabh-41663.appspot.com",
-    // messagingSenderId: "720960124468",
-    // appId: "1:720960124468:web:2e85c1f341f10a5461bc61",
-    // measurementId: "G-YNTENEH3KR"
-
-
     apiKey: "AIzaSyA7GpxmHUqofA_rSTAsOJJNsxTCK6YdTEU",
   authDomain: "new-craftsmen.firebaseapp.com",
   databaseURL: "https://new-craftsmen-default-rtdb.firebaseio.com",

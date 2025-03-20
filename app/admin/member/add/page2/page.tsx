@@ -22,10 +22,23 @@ console.log(gettoken,"gettoken");
   let posts = await data.json();
 
 console.log(posts,"posts");
+  let getsubheading = await fetch('https://nahb.goaideme.com/list-section-sub-heading', {
+    method: 'GET', // Method set to GET
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Token': `${gettoken.value}`, // Send the token in the Authorization header
+       cache: 'reload'
+    }
+  });
+  // console.log(gettoken,"ggg");
+  // Parse the response JSON
+  let getsubheadingdata = await getsubheading.json();
+
+console.log(getsubheadingdata,"getsubheadingdata");
 
   return (
     <div>
-      <Page1 questions={posts}/>
+      <Page1 questions={posts} subheadinglist={getsubheadingdata}/>
     </div>
   );
 };

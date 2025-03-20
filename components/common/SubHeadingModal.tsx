@@ -82,10 +82,12 @@ const SubHeadingModal = (props: any) => {
         let res = await api.Manage_Question.add_sub_heading(item as any);
         props?.initialise();
         setAddModalOpen(false);
+        addForm.resetFields();
       } else {
         let res = await api.Manage_Question.edit_sub_heading(item as any);
         props?.initialise();
         setAddModalOpen(false);
+        addForm.resetFields();
       }
     } catch (error) {
     }
@@ -118,7 +120,7 @@ const SubHeadingModal = (props: any) => {
         )}
         <AntModal
           centered
-          title={`${props?.type} Questions for Meeting`}
+          title={`${props?.type} Sub Heading`}
           open={addModalOpen}
           footer={null}
           onCancel={() => setAddModalOpen(false)}

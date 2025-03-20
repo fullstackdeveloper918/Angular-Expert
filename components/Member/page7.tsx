@@ -14,6 +14,7 @@ import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearSpecificFormData } from "@/lib/features/formSlice";
 
 const Page7 = ({questions}:any) => {
+
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
@@ -299,13 +300,13 @@ const Page7 = ({questions}:any) => {
                     {/* First Name  */}
                     <Form.Item
                       name="estimating"
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: "Please Fill Field",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     whitespace: true,
+                      //     message: "Please Fill Field",
+                      //   },
+                      // ]}
                     >
                       <TextArea
                         size={"large"}
@@ -315,13 +316,13 @@ const Page7 = ({questions}:any) => {
                     </Form.Item>
                     <Form.Item
                       name="accountability"
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: "Please Fill Field",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     whitespace: true,
+                      //     message: "Please Fill Field",
+                      //   },
+                      // ]}
                     >
                       <TextArea
                         size={"large"}
@@ -331,13 +332,13 @@ const Page7 = ({questions}:any) => {
                     </Form.Item>
                     <Form.Item
                       name="productivity"
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: "Please Fill Field",
-                        },
-                      ]}
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     whitespace: true,
+                      //     message: "Please Fill Field",
+                      //   },
+                      // ]}
                     >
                       <TextArea
                         size={"large"}

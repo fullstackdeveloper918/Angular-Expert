@@ -29,6 +29,10 @@ const AntModal = dynamic(() => import("antd").then((module) => module.Modal), {
 });
 
 const CustomModal = (props: any) => {
+  const [subheadingId, setSubheadingId] = useState(null);
+  const [subheadingId1, setSubheadingId1] = useState(null);
+  console.log(subheadingId1,"subheadingId1");
+  
   const [state, setState] = React.useState<any>([])
   const [addModalOpen, setAddModalOpen] = useState(false);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
@@ -63,7 +67,8 @@ console.log(state,"asjdla");
   }, [props.id, getDataById]);
   const addQuestion = async (values: any) => {
     console.log(values,"ieytieyr");
-    return
+    console.log(subheadingId,"subheadingId");
+    // return
     
     let item = {
       question_id: props?.id,
@@ -72,6 +77,8 @@ console.log(state,"asjdla");
       page_type: values.page_type,
       quesiton_position:values.quesiton_position,
       meeting_id:getUserdata.meetings.NextMeeting.id,
+      subheading_id:subheadingId||"",
+      subheading_title:values?.subheading_title||""
     };
 
     try {
@@ -82,14 +89,18 @@ console.log(state,"asjdla");
           page_type: values.page_type,
           quesiton_position:values.quesiton_position,
           meeting_id:getUserdata.meetings.NextMeeting.id,
+           subheading_id:subheadingId||"",
+      subheading_title:values?.subheading_title||""
         };
         let res = await api.Manage_Question.create(item as any);
         props?.initialise();
         setAddModalOpen(false);
+        addForm.resetFields();
       } else {
         let res = await api.Manage_Question.edit(item as any);
         props?.initialise();
         setAddModalOpen(false);
+        addForm.resetFields();
       }
     } catch (error) {
     }
@@ -204,7 +215,9 @@ console.log(state,"asjdla");
               ]}
             >
               {/* BUSINESS UPDATE,CRAFTSMEN TOOLBOX,CRAFTSMEN CHECK-UP,Fall 2024 MEETING REVIEW,Spring 2025 MEETING PREPARATION */}
-              <Select size="large" placeholder={`${props?.type} Page Section`|| "Select Page Section"}>
+              <Select size="large" placeholder={`${props?.type} Page Section`|| "Select Page Section"} 
+               onChange={(value:any, option:any) => {setSubheadingId1(value); 
+    }}>
               <Option value="business_update">Business Update</Option>
                 <Option value="technology">Craftsmen Toolbox</Option>
                 <Option value="craftsmen_checkup">Craftsmen check-Up</Option>
@@ -214,8 +227,9 @@ console.log(state,"asjdla");
                  
               </Select>
             </Form.Item>
+            {subheadingId1==="business_update"&&
             <Form.Item
-              name="sub_heading"
+              name="subheading_title"
               label={`${props?.type} Sub Heading`}
               rules={[
                 {
@@ -225,16 +239,24 @@ console.log(state,"asjdla");
               ]}
             >
               {/* BUSINESS UPDATE,CRAFTSMEN TOOLBOX,CRAFTSMEN CHECK-UP,Fall 2024 MEETING REVIEW,Spring 2025 MEETING PREPARATION */}
-              <Select size="large" placeholder={`${props?.type} Sub Heading`|| "Select Sub Heading"}>
-                {state?.map((res:any,index:number)=>
-              <Option value={res?.subheading} key={index}>{res?.subheading}</Option>
-                )}
-               
-                 
-              </Select>
+              <Select
+    size="large"
+    placeholder={`${props?.type} Sub Heading` || "Select Sub Heading"}
+    onChange={(value:any, option:any) => {
+      // Capturing both the subheading and its corresponding id
+      const selectedSubheading = value;
+      const selectedId = option.key; // option.key will give us the id
+      setSubheadingId(selectedId); // Store the selected id in the state
+    }}
+  >
+    {state?.map((res: any, index: number) => (
+      <Option value={res?.subheading} key={res?.id}>
+        {res?.subheading}
+      </Option>
+    ))}
+  </Select>
             </Form.Item>
-
-
+  }
             <Form.Item
               name="quesiton_position"
               label={`${props?.type} Question Position`}

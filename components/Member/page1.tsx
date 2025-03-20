@@ -48,8 +48,9 @@ import {  clearSpecificFormData } from "@/lib/features/formSlice";
 //     ssr: false,
 //   }),
 // };
-const Page1 = ({questions}:any) => {
+const Page1 = ({questions,subheadinglist}:any) => {
   console.log(questions,"ytyt");
+  console.log(subheadinglist,"subheadinglist");
   // const filtered_questions = questions?.data?.filter((item:any) => item.page_type === "business_update");
   const filtered_questions = questions?.data
   .filter((item: any) => item.page_type === "business_update") // Step 1: Filter by page_type
@@ -59,7 +60,11 @@ const Page1 = ({questions}:any) => {
     return item;
   });
   console.log(filtered_questions,"filtered_questions");
+  const filteredFinancialQuestions = filtered_questions.filter(
+    (question:any) => question.subheading_title === "Financial Position"
+  );
   
+  console.log(filteredFinancialQuestions,"filteredFinancialQuestions");
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   console.log(getUserdata,"getUserdata");
   const router = useRouter();
@@ -83,6 +88,15 @@ console.log(state,"state");
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 300);
 console.log(formValues,"formValuessad");
+const groupedQuestions = filtered_questions.reduce((acc:any, question:any) => {
+  const { subheading_title } = question;
+  if (!acc[subheading_title]) {
+    acc[subheading_title] = [];
+  }
+  acc[subheading_title].push(question);
+  return acc;
+}, {});
+console.log(groupedQuestions,"groupedQuestions");
 
   const setCookie = (name: any, value: any, days: any) => {
     nookies.set(null, name, value, {
@@ -100,7 +114,9 @@ console.log(formValues,"formValuessad");
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
-            question_position:q.quesiton_position
+            question_position:q.quesiton_position,
+            subheading_id:q.subheading_id,
+            subheading_title:q.subheading_title,
           })),
      
         },
@@ -125,7 +141,9 @@ console.log(formValues,"formValuessad");
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
-                question_position:q.quesiton_position
+                question_position:q.quesiton_position,
+                subheading_id:q.subheading_id,
+                subheading_title:q.subheading_title,
               })),
          
             },
@@ -180,7 +198,9 @@ console.log(formValues,"formValuessad");
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
-            question_position:q.quesiton_position
+            question_position:q.quesiton_position,
+            subheading_id:q.subheading_id,
+            subheading_title:q.subheading_title,
           })),
      
         },
@@ -205,7 +225,9 @@ console.log(formValues,"formValuessad");
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
-                question_position:q.quesiton_position
+                question_position:q.quesiton_position,
+                subheading_id:q.subheading_id,
+                subheading_title:q.subheading_title,
               })),
          
             },
@@ -370,6 +392,10 @@ getQuestion()
 
   // console.log(question?.data[1]?.question,"question");
   const label = questions.length > 0 &&  `label=${questions?.data[1]?.question}`;
+
+
+
+ 
   return (
     <>
       <Fragment>
@@ -418,135 +444,23 @@ getQuestion()
                     onValuesChange={onValuesChange}
                   >
                     {/* First Name  */}
-                    {filtered_questions.map((question: any) => (
-                      <Form.Item
-                        key={question.id}
-                        name={`question_${question.id}`}
-                        rules={[
-                          {
-                            required: true,
-                            whitespace: true,
-                            message: "Please Fill Field",
-                          },
-                        ]}
-                        label={question.question}
-                      >
-                        <TextArea size="large" placeholder="Enter..." />
-                      </Form.Item>
-                    ))}
-                    {/* Last Name  */}
-                    {/* <Form.Item
-                      name="sales_position"
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: "Please Fill Field",
-                        },
-                      ]}
-                      label={filtered_questions[1]?.question||"N/A"}
-                      // label="Describe your current sales positions, hot prospects, recently contracted work:"
-                    >
-                      <TextArea
-                        size={"large"}
-                        placeholder="Enter..."
-                      // onKeyPress={(e: any) => {
-                      //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                      //         e.preventDefault();
-                      //     } else {
-                      //         e.target.value = String(e.target.value).trim()
-                      //     }
-                      // }}
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name="accomplishments"
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: "Please Fill Field",
-                        },
-                      ]}
-                      label={filtered_questions[3]?.question||"N/A"}
-                      // label="Describe your accomplishments in the last 6 months:"
-                    >
-                      <TextArea
-                        size={"large"}
-                        placeholder="Enter..."
+                    {Object.keys(groupedQuestions).map((subheadingTitle) => (
+        <div key={subheadingTitle} className="mt-5">
+          {/* Display the subheading title */}
+          <h5>{subheadingTitle}</h5>
+          {/* Display questions for the current subheading */}
+          {groupedQuestions[subheadingTitle].map((question: any) => (
+            <Form.Item
+              key={question.id}
+              name={`question_${question.id}`}
+              label={question.question}
+            >
+              <TextArea size="large" placeholder="Enter..." />
+            </Form.Item>
+          ))}
+        </div>
+      ))}
                   
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name="hr_position"
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: "Please Fill Field",
-                        },
-                      ]}
-                      label={filtered_questions[4]?.question||"N/A"}
-                      // label="Describe your HR position &/or needs:"
-                    >
-                      <TextArea
-                        size={"large"}
-                        placeholder="Enter..."
-                      // onKeyPress={(e: any) => {
-                      //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                      //         e.preventDefault();
-                      //     } else {
-                      //         e.target.value = String(e.target.value).trim()
-                      //     }
-                      // }}
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name="current_challenges"
-                      rules={[
-                        {
-                          required: true,
-                          whitespace: true,
-                          message: "Please Fill Field",
-                        },
-                      ]}
-                      label={filtered_questions[2]?.question||"N/A"}
-//                       label="Describe any current challenges your business is facing (i.e. problem client, personnel
-// issue(s), trade availability, rising costs, supply chain, etc.):"
-                    >
-                      <TextArea
-                        size={"large"}
-                        placeholder="Enter..."
-                      // onKeyPress={(e: any) => {
-                      //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                      //         e.preventDefault();
-                      //     } else {
-                      //         e.target.value = String(e.target.value).trim()
-                      //     }
-                      // }}
-                      />
-                    </Form.Item> */}
-
-                    {/* <Form.Item
-                      name="craftsmen_support"
-                      rules={[{ required: true, message: "Please Fill Field" }]}
-                      label={filtered_questions[0]?.question||"N/A"}
-                      // label="How can the Craftsmen aid or support you with these challenges?"
-                    >
-                      <TextArea
-                        size={"large"}
-                        placeholder="Enter..."
-                      // onKeyPress={(e: any) => {
-                      //     if (!/[a-zA-Z ]/.test(e.key) || (e.key === ' ' && !e.target.value)) {
-                      //         e.preventDefault();
-                      //     } else {
-                      //         e.target.value = String(e.target.value).trim()
-                      //     }
-                      // }}
-                      />
-                    </Form.Item> */}
-
-                    {/* Button  */}
                     <div className="d-flex mt-3">
                       {!pagetype ? (
                         <div className="col-2">

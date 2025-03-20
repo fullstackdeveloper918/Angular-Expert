@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   },
   heightGivenwrap: {
     minHeight: 350,
-    marginBottom:'20px',
+    marginBottom: '20px',
   },
   heightGivenwrapper: {
     minHeight: 330,
@@ -187,9 +187,9 @@ const MemberUpdatePDF = (props) => {
   // const [totalPages, setTotalPages] = useState(null);
   // const getUserdata = useSelector((state) => state?.user?.userData)
   // console.log(getUserdata,"getUserdata");
-// const { pageNumber } = usePage();
-// console.log(pageNumber,"pageNumber");
-// console.log(totalPages,"totalPages");
+  // const { pageNumber } = usePage();
+  // console.log(pageNumber,"pageNumber");
+  // console.log(totalPages,"totalPages");
 
   // const onRender = () => {
   //   // This will be triggered after all the pages are rendered
@@ -197,7 +197,8 @@ const MemberUpdatePDF = (props) => {
   // };
 
   const photoSection = props?.state?.photo_section || [];
-console.log(props?.state,"props");
+  console.log(props?.state, "props");
+  console.log(props?.subheadinglist1, "sadas");
 
   const options = { httpHeaders: { crossOrigin: "anonymous" } };
   // <Image key={imageIndex} style={{ width: 100, height: 100 }} options={options} src={{ uri: ${file.url}, method: "GET", headers: { Pragma: 'no-cache', "Cache-Control": "no-cache" }, body: "" }} />
@@ -232,31 +233,40 @@ console.log(props?.state,"props");
 
 
 
-    
-    // const getSeasonByReviewMonth = (month) =>
-    //     month >= 1 && month <= 6 ? 'Spring' : month >= 7 && month <= 12 ? 'Fall' : 'Invalid Month';
-    
-    
-    // const meeting_review_month= dayjs(props?.state?.meetings?.lastMeeting?.start_meeting_date).format("MM")
-    // const season_review_month = getSeasonByReviewMonth(meeting_review_month);
-    // console.log(season_review_month,"season");
-    
-    // const meeting_review_year= dayjs(props?.state?.meetings?.lastMeeting?.start_meeting_date).format("YYYY")
-    // console.log(meeting_review_year,"meeting_review_year");
-    
-    
-    // const meeting_prepration_month= dayjs(props?.state?.meetings?.NextMeeting?.start_meeting_date).format("MM")
-    // const season_prepration_month = getSeasonByReviewMonth(meeting_prepration_month);
-    // console.log(season_prepration_month,"season_prepration_month");
-    
-    
-    
-    // const meeting_prepration_year= dayjs(props?.state?.meetings?.NextMeeting?.start_meeting_date).format("YYYY")
-    // console.log(meeting_prepration_year,"meeting_prepration_year");
-    
+
+  // const getSeasonByReviewMonth = (month) =>
+  //     month >= 1 && month <= 6 ? 'Spring' : month >= 7 && month <= 12 ? 'Fall' : 'Invalid Month';
+
+
+  // const meeting_review_month= dayjs(props?.state?.meetings?.lastMeeting?.start_meeting_date).format("MM")
+  // const season_review_month = getSeasonByReviewMonth(meeting_review_month);
+  // console.log(season_review_month,"season");
+
+  // const meeting_review_year= dayjs(props?.state?.meetings?.lastMeeting?.start_meeting_date).format("YYYY")
+  // console.log(meeting_review_year,"meeting_review_year");
+
+
+  // const meeting_prepration_month= dayjs(props?.state?.meetings?.NextMeeting?.start_meeting_date).format("MM")
+  // const season_prepration_month = getSeasonByReviewMonth(meeting_prepration_month);
+  // console.log(season_prepration_month,"season_prepration_month");
+
+
+
+  // const meeting_prepration_year= dayjs(props?.state?.meetings?.NextMeeting?.start_meeting_date).format("YYYY")
+  // console.log(meeting_prepration_year,"meeting_prepration_year");
+  const groupedQuestions = props?.state?.businessUpdate[0]?.business_update_questions.reduce((acc, question) => {
+    const { subheading_title } = question;
+    if (!acc[subheading_title]) {
+      acc[subheading_title] = [];
+    }
+    acc[subheading_title].push(question);
+    return acc;
+  }, {});
+  console.log(groupedQuestions, "groupedQuestions");
+
   return (
     <>
-      <Document> 
+      <Document>
         <Page size="A4" style={styles.page} wrap >
           <View style={{ textAlign: "center", display: "block" }}>
             <Image
@@ -280,8 +290,8 @@ console.log(props?.state,"props");
                   textTransform: "capitalize",
                 }}
               >
-                {props?.state?.businessUpdate.length?"Spring 2025":
-                "Fall 2024"}
+                {props?.state?.businessUpdate.length ? "Spring 2025" :
+                  "Fall 2024"}
               </Text>
             </Text>
             <Text style={styles.subheader}>{companyName}</Text>
@@ -289,55 +299,87 @@ console.log(props?.state,"props");
 
           <View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
-            {props?.state?.businessUpdate.length?
-            props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
-            (
+            {props?.state?.businessUpdate[0]?.craftsmen_support ?
               <>
-              <Text style={styles.text} key={index}>{res?.question}</Text>
-            <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
-              {res.answer}
-            </Text>
-              </>
-            )
-            )
-            :
-            <>
-            <Text style={styles.text}>Current financial position:</Text>
-            <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
-              {props?.state?.businessUpdate[0]?.financial_position}
-            </Text>
-            <Text style={styles.text} wrap={false}>
-              Current sales positions, hot prospects, recently contracted work:
-            </Text>
-            <Text style={styles.textarea} wrap={false}>
-              {props?.state?.businessUpdate[0]?.sales_position}
-            </Text>
-            <Text style={styles.text}>
-              Accomplishments in the last 6 months:
-            </Text>
-            <Text style={styles.textarea} wrap={false}>
-              {props?.state?.businessUpdate[0]?.accomplishments}
-            </Text>
-            <Text style={styles.text}> HR position &/or needs: </Text>
-            <Text style={styles.textarea} wrap={false}>
-              {props?.state?.businessUpdate[0]?.hr_position}
-            </Text>
-            <Text style={styles.text}>
-              Current challenges (e.g., problem client, personnel issue(s),
-              trade availability, rising costs, supply chain):
-            </Text>
-            <Text style={styles.textarea} wrap={false}>
-              {props?.state?.businessUpdate[0]?.current_challenges}
-            </Text>
-            <Text style={styles.text}>
-              How can the Craftsmen aid or support you with these challenges?
-            </Text>
-            <Text style={styles.textarea} wrap={false}>
-              {props?.state?.businessUpdate[0]?.craftsmen_support}
-            </Text>
-            </>
+                <Text style={styles.text}>Current financial position:</Text>
+                <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.financial_position}
+                </Text>
+                <Text style={styles.text} wrap={false}>
+                  Current sales positions, hot prospects, recently contracted work:
+                </Text>
+                <Text style={styles.textarea} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.sales_position}
+                </Text>
+                <Text style={styles.text}>
+                  Accomplishments in the last 6 months:
+                </Text>
+                <Text style={styles.textarea} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.accomplishments}
+                </Text>
+                <Text style={styles.text}> HR position &/or needs: </Text>
+                <Text style={styles.textarea} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.hr_position}
+                </Text>
+                <Text style={styles.text}>
+                  Current challenges (e.g., problem client, personnel issue(s),
+                  trade availability, rising costs, supply chain):
+                </Text>
+                <Text style={styles.textarea} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.current_challenges}
+                </Text>
+                <Text style={styles.text}>
+                  How can the Craftsmen aid or support you with these challenges?
+                </Text>
+                <Text style={styles.textarea} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.craftsmen_support}
+                </Text>
+              </> :
 
-}
+              Object.keys(groupedQuestions).map((subheadingTitle) => (
+                <>
+                  <Text>{subheadingTitle}</Text>
+                  {/* Display questions for the current subheading */}
+                  {groupedQuestions[subheadingTitle].map((res) => (
+                    // console.log(question,"yyy")
+                    <>
+                      <Text style={styles.text} >{res?.question}</Text>
+                      <Text style={[styles.textarea]} wrap={false}>
+                        {res.answer}
+                      </Text>
+                    </>
+                  ))}
+                </>
+
+
+
+              ))
+
+              //    <Text>{subheadingTitle}</Text>
+              //    {/* Display questions for the current subheading */}
+              //    {groupedQuestions[subheadingTitle].map((question) => (
+              //     <>
+              //    <Text style={styles.text} key={index}>{question?.question}</Text>
+              //    <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
+              //      {question.answer}
+              //    </Text>
+              //     </>
+              //    ))}
+              //  </>
+
+
+              // props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
+              // (
+              //   <>
+              //   <Text style={styles.text} key={index}>{res?.question}</Text>
+              // <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
+              //   {res.answer}
+              // </Text>
+              //   </>
+              // )
+              // )
+
+            }
           </View>
 
           <View style={styles.section}>
@@ -349,7 +391,7 @@ console.log(props?.state,"props");
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Goal #{index + 1}: </Text>
                     <Text style={styles.textarea} wrap={false}>
-                         {res?.name}  
+                      {res?.name}
                     </Text>
                   </View>
                   <View style={styles.Flex_div}>
@@ -361,7 +403,7 @@ console.log(props?.state,"props");
                 </View>
                 <Text style={styles.text}> Comments: </Text>
                 <Text style={styles.textarea} wrap={false}>
-                    {res?.comment}   
+                  {res?.comment}
                 </Text>
               </View>
             ))}
@@ -375,14 +417,14 @@ console.log(props?.state,"props");
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Goal #{index + 1}: </Text>
                     <Text style={styles.textarea} wrap={false}>
-                         {res?.name}  
+                      {res?.name}
                     </Text>
                   </View>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Priority: {res?.status}</Text>
                     <Text style={styles.textarea} wrap={false}>
                       {/*   {res?.status}    */}
-                      
+
                     </Text>
                   </View>
                 </View>
@@ -394,47 +436,47 @@ console.log(props?.state,"props");
             <Text style={styles.main_heading}>CRAFTSMEN TOOLBOX</Text>
             <View style={styles.goal}>
 
-            {props?.state?.technologyData?.length?
-            props?.state?.technologyData[0]?.craftsmen_toolbox_update_questions.map((res,index)=>
-            (
-              <>
-              <Text style={styles.text} key={index}>{res?.question}</Text>
-            <Text 
-            // style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}
-            style={[styles.textarea, index === 0 ? styles.heightGiventab : styles.heightGivenwrapper]} wrap={false}
-            >
-              {res.answer}
-            </Text>
-              </>
-            )
-            )
-            :
+              {props?.state?.technologyData[0]?.craftsmen_toolbox_update_questions ?
+                props?.state?.technologyData[0]?.craftsmen_toolbox_update_questions.map((res, index) =>
+                (
+                  <>
+                    <Text style={styles.text} key={index}>{res?.question}</Text>
+                    <Text
+                      // style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}
+                      style={[styles.textarea, index === 0 ? styles.heightGiventab : styles.heightGivenwrapper]} wrap={false}
+                    >
+                      {res.answer}
+                    </Text>
+                  </>
+                )
+                )
+                :
 
-<>
-              <Text style={styles.text}>
-                Describe any new technology you started using and share the name
-                of the app or website:
-              </Text>
-              <Text style={styles.textarea} wrap={false}>
-                {props?.state?.technologyData[0]?.technology}
-              </Text>
+                <>
+                  <Text style={styles.text}>
+                    Describe any new technology you started using and share the name
+                    of the app or website:
+                  </Text>
+                  <Text style={styles.textarea} wrap={false}>
+                    {props?.state?.technologyData[0]?.technology}
+                  </Text>
 
-              <Text style={styles.text}>
-                Describe any new products you have used in the last 6 months &
-                share the name and website:
-              </Text>
-              <Text style={styles.textarea} wrap={false}>
-                {props?.state?.technologyData[0]?.products}
-              </Text>
+                  <Text style={styles.text}>
+                    Describe any new products you have used in the last 6 months &
+                    share the name and website:
+                  </Text>
+                  <Text style={styles.textarea} wrap={false}>
+                    {props?.state?.technologyData[0]?.products}
+                  </Text>
 
-              <Text style={styles.text}>
-                Describe something that you do with each project that sets you
-                apart from your competition:
-              </Text>
-              <Text style={styles.textarea} wrap={false}>
-                   {props?.state?.technologyData[0]?.project}   
-              </Text>
-</>}
+                  <Text style={styles.text}>
+                    Describe something that you do with each project that sets you
+                    apart from your competition:
+                  </Text>
+                  <Text style={styles.textarea} wrap={false}>
+                    {props?.state?.technologyData[0]?.project}
+                  </Text>
+                </>}
             </View>
 
           </View>
@@ -444,54 +486,54 @@ console.log(props?.state,"props");
             <View style={styles.goal}>
 
 
-            {props?.state?.craftsMenUpdates?.length?
-            props?.state?.craftsMenUpdates[0]?.craftsmen_checkup_update_questions.map((res,index)=>
-            (
-              <>
-              <Text style={styles.text} key={index}>{res?.question}</Text>
-            <Text 
-            // style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}
-            style={[styles.textarea, index === 0 ? styles.heightGiventbottom : styles.heightGivenwrapper]} wrap={false}
-            >
-              {res.answer}
-            </Text>
-              </>
-            )
-            )
-            :
+              {props?.state?.craftsMenUpdates[0]?.craftsmen_checkup_update_questions ?
+                props?.state?.craftsMenUpdates[0]?.craftsmen_checkup_update_questions.map((res, index) =>
+                (
+                  <>
+                    <Text style={styles.text} key={index}>{res?.question}</Text>
+                    <Text
+                      // style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}
+                      style={[styles.textarea, index === 0 ? styles.heightGiventbottom : styles.heightGivenwrapper]} wrap={false}
+                    >
+                      {res.answer}
+                    </Text>
+                  </>
+                )
+                )
+                :
 
-<>
+                <>
 
 
-              <Text style={styles.text}>
-                What is your level of commitment to our club?
-              </Text>
-              <Text style={styles.textarea} wrap={false}>
-                {props?.state?.craftsMenUpdates[0]?.commitment}
-              </Text>
+                  <Text style={styles.text}>
+                    What is your level of commitment to our club?
+                  </Text>
+                  <Text style={styles.textarea} wrap={false}>
+                    {props?.state?.craftsMenUpdates[0]?.commitment}
+                  </Text>
 
-              <Text style={styles.text}>
-                List Something(s) you can do to contribute to our club.
-              </Text>
-              <Text style={styles.textarea} wrap={false}>
-                {props?.state?.craftsMenUpdates[0]?.contribute}
-              </Text>
+                  <Text style={styles.text}>
+                    List Something(s) you can do to contribute to our club.
+                  </Text>
+                  <Text style={styles.textarea} wrap={false}>
+                    {props?.state?.craftsMenUpdates[0]?.contribute}
+                  </Text>
 
-              <Text style={styles.text}>
-                How is your present health, wellbeing, family life?
-              </Text>
-              <Text style={styles.textarea} wrap={false}>
-                {props?.state?.craftsMenUpdates[0]?.wellbeing}
-              </Text>
+                  <Text style={styles.text}>
+                    How is your present health, wellbeing, family life?
+                  </Text>
+                  <Text style={styles.textarea} wrap={false}>
+                    {props?.state?.craftsMenUpdates[0]?.wellbeing}
+                  </Text>
 
-              <Text style={styles.text}>
-                Have any items on your contact info changed?
-              </Text>
-              <Text style={styles.textarea} wrap={false}>
-                {props?.state?.craftsMenUpdates[0]?.contact_info}
-              </Text>
+                  <Text style={styles.text}>
+                    Have any items on your contact info changed?
+                  </Text>
+                  <Text style={styles.textarea} wrap={false}>
+                    {props?.state?.craftsMenUpdates[0]?.contact_info}
+                  </Text>
 
-              </>}
+                </>}
             </View>
           </View>
 
@@ -500,37 +542,37 @@ console.log(props?.state,"props");
             <Text style={styles.main_heading}>Fall 2024 MEETING REVIEW</Text>
             <View style={styles.goal}>
 
-            {props?.state?.meetingReviews.length?
-            props?.state?.meetingReviews[0]?.fallmeeting_review_update_questions?.map((res,index)=>
-            (
-              <>
-              <Text style={styles.text} key={index}>{res?.question}</Text>
-            <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
-              {res.answer}
-            </Text>
-              </>
-            )
-            )
-            :
+              {props?.state?.meetingReviews[0].fallmeeting_review_update_questions ?
+                props?.state?.meetingReviews[0]?.fallmeeting_review_update_questions?.map((res, index) =>
+                (
+                  <>
+                    <Text style={styles.text} key={index}>{res?.question}</Text>
+                    <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                      {res.answer}
+                    </Text>
+                  </>
+                )
+                )
+                :
 
-<>
-              
-              <Text style={styles.text}>
-                What was your most valuable take away from our fall meeting?
-              </Text>
-              <Text style={styles.textarea} wrap={false}>
-                {props?.state?.meetingReviews[0]?.fall_meeting}
-              </Text>
+                <>
 
-              <Text style={styles.text}>
-                Have you implemented any of Jim Weber’s estate/financial
-                planning reccomendations into your business and/or personal
-                finances?
-              </Text>
-              <Text style={styles.textarea} wrap={false}>
-                {props?.state?.meetingReviews[0]?.personal_finances}
-              </Text>
-              </>}
+                  <Text style={styles.text}>
+                    What was your most valuable take away from our fall meeting?
+                  </Text>
+                  <Text style={styles.textarea} wrap={false}>
+                    {props?.state?.meetingReviews[0]?.fall_meeting}
+                  </Text>
+
+                  <Text style={styles.text}>
+                    Have you implemented any of Jim Weber’s estate/financial
+                    planning reccomendations into your business and/or personal
+                    finances?
+                  </Text>
+                  <Text style={styles.textarea} wrap={false}>
+                    {props?.state?.meetingReviews[0]?.personal_finances}
+                  </Text>
+                </>}
             </View>
           </View>
 
@@ -565,7 +607,7 @@ console.log(props?.state,"props");
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> {res?.questions[0]?.question} </Text>
                     <Text style={styles.textarea} wrap={false}>
-                         {res?.questions[0]?.answer}  
+                      {res?.questions[0]?.answer}
                     </Text>
                   </View>
                 </View>
@@ -584,20 +626,20 @@ console.log(props?.state,"props");
                       <View style={styles.goal} key={index}>
                         <View style={styles.goal_two}>
                           <View style={styles.images_div}>
-                          <Text
-                            style={[
-                              styles.subheading,
-                              styles.marginequal,
-                              styles.block,
-                            ]}
-                          >
-                            Comment: {item?.comment}
-                          </Text>
+                            <Text
+                              style={[
+                                styles.subheading,
+                                styles.marginequal,
+                                styles.block,
+                              ]}
+                            >
+                              Comment: {item?.comment}
+                            </Text>
                             {Array.isArray(item?.images) &&
                               item.images.map((imageUrl, imgIndex) => (
-                                
+
                                 <React.Fragment key={imgIndex}>
-                                  {console.log(imageUrl,"imageUrl")}
+                                  {console.log(imageUrl, "imageUrl")}
                                   <Image
                                     style={styles.innderImg}
                                     options={options}
@@ -613,7 +655,7 @@ console.log(props?.state,"props");
                               ))}
                           </View>
 
-                         
+
                         </View>
                       </View>
                     ))}

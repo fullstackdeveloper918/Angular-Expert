@@ -10,9 +10,16 @@ import { destroyCookie } from "nookies";
 import { StepBackwardOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import useAutoSaveForm from "../common/useAutoSaveForm";
-const AdditionalQuestion = () => {
+const AdditionalQuestion = ({questions}:any) => {
 
- 
+  console.log(questions,"ytaaayt");
+  const filtered_questions = questions?.data?.filter((item: any) => item.page_type === "answers") // Step 1: Filter by page_type
+  .sort((a: any, b: any) => parseInt(a.quesiton_position) - parseInt(b.quesiton_position)) // Step 2: Sort by question_position
+  .map((item: any, index: number) => {
+    item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
+    return item;
+  });
+  console.log(filtered_questions,"filtered_questions");
 
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
@@ -21,15 +28,15 @@ const AdditionalQuestion = () => {
   const [loading1, setLoading1] = useState<any>(false);
   const [actionType, setActionType] = useState<"submit" | "save" | null>(null);
   const [state, setState] = useState<any>("");
-  const [question, setQuestion] = useState<any>([]);
-  console.log(question,"question");
+  // const [question, setQuestion] = useState<any>([]);
+  console.log(questions,"questions");
   
-  const filtered_questions = question?.filter((item: any) => item.page_type === "answers") // Step 1: Filter by page_type
-  .sort((a: any, b: any) => parseInt(a.quesiton_position) - parseInt(b.quesiton_position)) // Step 2: Sort by question_position
-  .map((item: any, index: number) => {
-    item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
-    return item;
-  });
+  // const filtered_questions = question?.filter((item: any) => item.page_type === "answers") // Step 1: Filter by page_type
+  // .sort((a: any, b: any) => parseInt(a.quesiton_position) - parseInt(b.quesiton_position)) // Step 2: Sort by question_position
+  // .map((item: any, index: number) => {
+  //   item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
+  //   return item;
+  // });
   console.log(filtered_questions,"filtered_questions");
   
   const searchParams = useSearchParams();
@@ -50,10 +57,11 @@ const AdditionalQuestion = () => {
         additional_question: {
           user_id: value,
           meeting_id: getUserdata.meetings.NextMeeting.id,
-          questions: question.map((q: any) => ({
+          answer: filtered_questions.map((q: any) => ({
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
+            question_position:q.quesiton_position
           })),
         },
       };
@@ -64,10 +72,11 @@ const AdditionalQuestion = () => {
             additional_question: {
               user_id: value,
               meeting_id: getUserdata.meetings.NextMeeting.id,
-              questions: question.map((q: any) => ({
+              answer: filtered_questions.map((q: any) => ({
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
+                question_position:q.quesiton_position
               })),
             },
           } as any;
@@ -124,10 +133,11 @@ const AdditionalQuestion = () => {
         additional_question: {
           user_id: value,
           meeting_id: getUserdata.meetings.NextMeeting.id,
-          questions: question.map((q: any) => ({
+          answer:filtered_questions.map((q: any) => ({
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
+            question_position:q.quesiton_position
           })),
         },
       };
@@ -138,10 +148,11 @@ const AdditionalQuestion = () => {
             additional_question: {
               user_id: value,
               meeting_id: getUserdata.meetings.NextMeeting.id,
-              questions: question.map((q: any) => ({
+              answer:filtered_questions.map((q: any) => ({
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
+                question_position:q.quesiton_position
               })),
             },
           } as any;
@@ -191,28 +202,28 @@ const AdditionalQuestion = () => {
     setActionType("save");
     form.submit(); // Trigger form submission
   };
-  const getQuestion = async () => {
-    try {
-      const res = await api.User.getQuestion();
-      setQuestion(res);
+  // const getQuestion = async () => {
+  //   try {
+  //     const res = await api.User.getQuestion();
+  //     setQuestion(res);
 
-      // if (
-      //   res?.data?.status == 500 ||
-      //   res?.data?.message ==
-      //     "Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token."
-      // ) {
-      //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
-      //   localStorage.removeItem("hasReloaded")
-      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-      //   toast.error("Session Expired. Login Again");
-      //   router.replace("/auth/signin");
-      // }
-    } catch (error) {}
-  };
+  //     // if (
+  //     //   res?.data?.status == 500 ||
+  //     //   res?.data?.message ==
+  //     //     "Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token."
+  //     // ) {
+  //     //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+  //     //   localStorage.removeItem("hasReloaded")
+  //     //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+  //     //   toast.error("Session Expired. Login Again");
+  //     //   router.replace("/auth/signin");
+  //     // }
+  //   } catch (error) {}
+  // };
 
-  useEffect(() => {
-    getQuestion();
-  }, []);
+  // useEffect(() => {
+  //   getQuestion();
+  // }, []);
 
 
   
@@ -340,13 +351,13 @@ const AdditionalQuestion = () => {
                       <Form.Item
                         key={question.id}
                         name={`question_${question.id}`}
-                        rules={[
-                          {
-                            required: true,
-                            whitespace: true,
-                            message: "Please Fill Field",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     whitespace: true,
+                        //     message: "Please Fill Field",
+                        //   },
+                        // ]}
                         label={question.question}
                       >
                         <TextArea size="large" placeholder="Enter..." />

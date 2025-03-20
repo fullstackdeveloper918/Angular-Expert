@@ -204,7 +204,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
               <View style={styles.goal}>
             
             
-                        {props?.state?.craftsMenUpdates?.length?
+                        {props?.state?.craftsMenUpdates[0]?.craftsmen_checkup_update_questions?
                         props?.state?.craftsMenUpdates[0]?.craftsmen_checkup_update_questions.map((res,index)=>
                         (
                           <>

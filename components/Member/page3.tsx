@@ -190,7 +190,7 @@ const Page3 = ({questions}:any) => {
       let parsedGoals = savedGoalsData ? JSON.parse(savedGoalsData) : [];
 
       if (parsedGoals.length === 0) {
-        parsedGoals = res?.data?.lastNextMeetings[0]?.goal_next_meeting || [];
+        parsedGoals = res?.data?.lastNextMeetings[0]?.goal_next_meeting || res?.data?.goal_last_meeting;
       }
 
       const fetchedGoals = parsedGoals
@@ -429,7 +429,7 @@ const Page3 = ({questions}:any) => {
                               <Form.Item
                                 {...restField}
                                 name={[name, "name"]}
-                                label={`Goal #${key+1}`}
+                                label={`Business Goal #${key+1}`}
                                 rules={[
                                   {
                                     required: true,

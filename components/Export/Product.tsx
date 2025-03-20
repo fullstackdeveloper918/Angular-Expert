@@ -21,6 +21,7 @@ import html2canvas from "html2canvas";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
 
 const { Row, Col, Card, Button, Pagination, Tooltip } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
@@ -45,7 +46,8 @@ const { Row, Col, Card, Button, Pagination, Tooltip } = {
 };
 const { Search } = Input;
 const { Option } = Select;
-const Export = () => {
+const Product = () => {
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
   const [loading, setLoading] = useState(false);
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
@@ -55,9 +57,9 @@ const Export = () => {
       ?.replace(/_/g, " ")
       ?.replace(/\b\w/g, (char: any) => char.toUpperCase());
   };
-  const [selectedValue, setSelectedValue] = useState<any>("round");
+  const [selectedValue, setSelectedValue] = useState<any>("2024");
   console.log(selectedValue, "selectedValue");
-
+  let item=selectedValue=="2024"?getUserdata.meetings.lastMeeting.id:getUserdata.meetings.NextMeeting.id
   const handleSelectChange = (value: any) => {
     setSelectedValue(value as string);
   };
@@ -67,7 +69,7 @@ const Export = () => {
     try {
       // Fetch API data
       const response = await fetch(
-        "https://nahb.goaideme.com/round-table-report",
+        `https://nahb.goaideme.com/technology-product-project-report?meeting_id=${item}`,
         {
           method: "GET",
           headers: {
@@ -91,8 +93,8 @@ const Export = () => {
       container.style.padding = "20px";
       container.style.backgroundColor = "#fff";
       {
-        selectedValue === "product" &&
-          data.data.productData.forEach((item: any) => {
+        selectedValue === "2024"?
+          data.data.forEach((item: any) => {
             const companyDiv = document.createElement("div");
             companyDiv.style.marginBottom = "20px";
             companyDiv.style.borderBottom = "1px solid #ccc";
@@ -100,7 +102,7 @@ const Export = () => {
 
             const companyName = document.createElement("h2");
             companyName.innerText = `Company Name: ${capFirst(
-              item.company_name || "N/A"
+              item?.user?.company_name || "N/A"
             )}`;
             companyDiv.appendChild(companyName);
 
@@ -111,12 +113,8 @@ const Export = () => {
             companyDiv.appendChild(products);
 
             container.appendChild(companyDiv);
-          });
-      }
-
-      {
-        selectedValue === "technology" &&
-          data.data.technologyData.forEach((item: any) => {
+          }):
+          data.data.productData.forEach((item: any) => {
             const companyDiv = document.createElement("div");
             companyDiv.style.marginBottom = "20px";
             companyDiv.style.borderBottom = "1px solid #ccc";
@@ -124,66 +122,24 @@ const Export = () => {
 
             const companyName = document.createElement("h2");
             companyName.innerText = `Company Name: ${capFirst(
-              item.company_name || "N/A"
+              item?.user?.company_name|| "N/A"
             )}`;
             companyDiv.appendChild(companyName);
 
-            const technology = document.createElement("p");
-            technology.innerHTML = `<strong>Technology:</strong> ${capFirst(
-              item.technology || "N/A"
+            const products = document.createElement("p");
+            products.innerHTML = `<strong>Products:</strong> ${capFirst(
+              item.craftsmen_toolbox_update_questions[0]?.question || "N/A"
             )}`;
-            companyDiv.appendChild(technology);
+            companyDiv.appendChild(products);
 
             container.appendChild(companyDiv);
-          });
+          })
+
+          
       }
-      if (selectedValue === "round") {
-        const tittle = document.createElement("h2");
-        tittle.innerText = "Round Table Topic";
-        tittle.style.textAlign = "center";
 
-        data.data.forEach((item: any) => {
-          const companyDiv = document.createElement("div");
-          companyDiv.style.marginBottom = "20px";
-          companyDiv.style.borderBottom = "1px solid #ccc";
-          companyDiv.style.paddingBottom = "10px";
-
-          companyDiv.appendChild(tittle);
-
-          const companyName = document.createElement("h2");
-          companyName.innerText = `Company Name: ${capFirst(
-            item.company_name || "N/A"
-          )}`;
-          companyDiv.appendChild(companyName);
-
-          const firstName = document.createElement("h3");
-          firstName.innerText = `Name: ${capFirst(
-            item.firstname || "N/A"
-          )}  ${capFirst(item.lastname || "N/A")}`;
-          companyDiv.appendChild(firstName);
-
-          const productivity = document.createElement("p");
-          productivity.innerHTML = `<strong>Productivity:</strong> ${capFirst(
-            item.productivity || "N/A"
-          )}`;
-          companyDiv.appendChild(productivity);
-
-          const accountability = document.createElement("p");
-          accountability.innerHTML = `<strong>Accountability:</strong> ${capFirst(
-            item.accountability || "N/A"
-          )}`;
-          companyDiv.appendChild(accountability);
-
-          const estimating = document.createElement("p");
-          estimating.innerHTML = `<strong>Estimating:</strong> ${capFirst(
-            item.estimating || "N/A"
-          )}`;
-          companyDiv.appendChild(estimating);
-
-          // Append the created div to the container
-          container.appendChild(companyDiv);
-        });
-      }
+    
+   
 
       document.body.appendChild(container);
 
@@ -208,23 +164,11 @@ const Export = () => {
         heightLeft -= pdf.internal.pageSize.height;
       }
 
-      pdf.save(
-        selectedValue === "product"
-          ? "Product Report.pdf"
-          : selectedValue === "round"
-          ? "Round Table Report"
-          : "Technology Report.pdf"
-      );
+      pdf.save("Product Report.pdf");
 
       // Cleanup
       document.body.removeChild(container);
-      message.success(
-        selectedValue === "product"
-          ? "Product PDF downloaded successfully"
-          : selectedValue === "round"
-          ? "Round Table PDF downloaded successfully"
-          : "Technology PDF downloaded successfully"
-      );
+      message.success("Product PDF downloaded successfully");
       // message.success("PDF downloaded successfully");
     } catch (error) {
       console.error("Error:", error);
@@ -255,7 +199,7 @@ const Export = () => {
   useEffect(() => {
     const fetchData = async () => {
       const type = "yourType";
-      const url = `https://nahb.goaideme.com/round-table-report`;
+      const url =  `https://nahb.goaideme.com/technology-product-project-report?meeting_id=${item}`;
       // const url = `https://nahb.goaideme.com/round-table-report?type=${type}`;
 
       try {
@@ -282,13 +226,13 @@ const Export = () => {
     };
 
     fetchData();
-  }, []); // Empty array ensures th
+  }, [selectedValue]); // Empty array ensures th
 
   const dataSource =
     data?.data?.length &&
     data?.data.map((res: any, index: number) => {
       // Helper function to truncate text to a max of 15 words
-      const truncateText = (text: string, maxWords: number = 5) => {
+      const truncateText = (text: string, maxWords: number = 15) => {
         const words = text.split(" "); // Split the string into words
         if (words.length > maxWords) {
           return words.slice(0, maxWords).join(" ") + "..."; // Join the first 'maxWords' words and add '...'
@@ -303,20 +247,66 @@ const Export = () => {
             res?.meeting?.meeting_type
           )} ${dayjs(res?.meeting?.start_meeting_date).format("YYYY")}` ||
           "N/A",
-        host_name: capFirst(res?.username) || "N/A",
-        productivity: (
-          <Tooltip title={res?.productivity}>
-            {truncateText(capFirst(res?.productivity) || "N/A", 5)}
+          host_name: (res?.user?.firstname && res?.user?.lastname) ? `${capFirst(res?.user?.firstname)} ${capFirst(res?.user?.lastname)}` : "N/A",
+
+        products: (
+          <Tooltip title={res?.products}>
+            {truncateText(capFirst(res?.products) || "N/A", 15)}
           </Tooltip>
         ),
-        accountability: (
-          <Tooltip title={res?.accountability}>
-            {truncateText(capFirst(res?.accountability) || "N/A", 5)}
+        // project: (
+        //   <Tooltip title={res?.project}>
+        //     {truncateText(capFirst(res?.project) || "N/A", 5)}
+        //   </Tooltip>
+        // ),
+        // technology: (
+        //   <Tooltip title={res?.technology}>
+        //     {truncateText(capFirst(res?.technology) || "N/A", 5)}
+        //   </Tooltip>
+        // ),
+        host_city: (
+          <Tooltip title={res?.location}>
+            {res?.location ? `${res?.location.slice(0, 20)}...` : "N/A"}
           </Tooltip>
         ),
-        estimating: (
-          <Tooltip title={res?.estimating}>
-            {truncateText(capFirst(res?.estimating) || "N/A", 5)}
+      };
+    });
+
+
+
+    const dataSource1 =
+    data?.data?.length &&
+    data?.data.map((res: any, index: number) => {
+      // Helper function to truncate text to a max of 15 words
+      const truncateText = (text: string, maxWords: number = 15) => {
+        const words = text.split(" "); // Split the string into words
+        if (words.length > maxWords) {
+          return words.slice(0, maxWords).join(" ") + "..."; // Join the first 'maxWords' words and add '...'
+        }
+        return text;
+      };
+
+      return {
+        key: index + 1,
+        meeting:
+          `${validation.capitalizeFirstLetter(
+            res?.meeting?.meeting_type
+          )} ${dayjs(res?.meeting?.start_meeting_date).format("YYYY")}` ||
+          "N/A",
+        host_name: capFirst(res?.user?.firstname) || "N/A",
+        // products: (
+        //   <Tooltip title={res?.products}>
+        //     {truncateText(capFirst(res?.products) || "N/A", 5)}
+        //   </Tooltip>
+        // ),
+        // project: (
+        //   <Tooltip title={res?.project}>
+        //     {truncateText(capFirst(res?.project) || "N/A", 5)}
+        //   </Tooltip>
+        // ),
+        products: (
+          <Tooltip title={res?.craftsmen_toolbox_update_questions[1]?.question}>
+            {truncateText(capFirst(res?.craftsmen_toolbox_update_questions[1]?.question) || "N/A", 15)}
           </Tooltip>
         ),
         host_city: (
@@ -342,21 +332,21 @@ const Export = () => {
       dataIndex: "host_name",
       key: "host_name",
     },
+    // {
+    //   title: "Project",
+    //   dataIndex: "project",
+    //   key: "project",
+    // },
     {
-      title: "Productivity",
-      dataIndex: "productivity",
-      key: "productivity",
+      title: "Products",
+      dataIndex: "products",
+      key: "products",
     },
-    {
-      title: "Accountability",
-      dataIndex: "accountability",
-      key: "start_accountabilitydate",
-    },
-    {
-      title: "Estimating",
-      dataIndex: "estimating",
-      key: "estimating",
-    },
+    // {
+    //   title: "Technology",
+    //   dataIndex: "technology",
+    //   key: "technology",
+    // },
     // {
     //     title: 'Meeting End Date',
     //     dataIndex: 'end_date',
@@ -392,23 +382,34 @@ const Export = () => {
                       </Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item className="text-decoration-none">
-                      Round Table
+                    Products
                     </Breadcrumb.Item>
                   </Breadcrumb>
                 </div>
                 {/* title  */}
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
                   <Typography.Title level={3} className="m-0 fw-bold">
-                    Round Table
+                  Products
                   </Typography.Title>
-                  <Button
-                    type="primary"
-                    className="mb-3"
-                    onClick={handleDownloadPdf}
-                    loading={loading}
-                  >
-                    Export PDF
-                  </Button>
+                  <div className="justify-content-between gap-3">
+                                   <Select
+                             defaultValue="2024"    
+                             style={{ width: 170 }}
+                              onChange={handleSelectChange}
+                            >
+                              <Option value="2024">2024</Option>
+                              <Option value="2025">2025</Option>
+                              {/* <Option value="technology">Technology Data</Option> */}
+                            </Select>
+                                   <Button
+                                     type="primary"
+                                     className="mb-3"
+                                     onClick={handleDownloadPdf}
+                                     loading={loading}
+                                   >
+                                     Export PDF
+                                   </Button>
+                                   </div>
                 </div>
                 {/* Search  */}
                 <div className="my-2 d-flex justify-content-end gap-3">
@@ -445,7 +446,7 @@ const Export = () => {
                     </div>
                   ) : (
                     <Table
-                      dataSource={dataSource}
+                    dataSource={selectedValue==="2024"?dataSource:dataSource1}
                       columns={baseColumns}
                       pagination={{
                         position: ["bottomCenter"],
@@ -528,4 +529,4 @@ const Export = () => {
 //   width: "100%",
 // };
 
-export default Export;
+export default Product;
