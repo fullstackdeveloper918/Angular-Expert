@@ -88,7 +88,7 @@ console.log(state,"state");
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 300);
 console.log(formValues,"formValuessad");
-const groupedQuestions = filtered_questions.reduce((acc:any, question:any) => {
+const groupedQuestions = filtered_questions?.reduce((acc:any, question:any) => {
   const { subheading_title } = question;
   if (!acc[subheading_title]) {
     acc[subheading_title] = [];
@@ -444,16 +444,16 @@ getQuestion()
                     onValuesChange={onValuesChange}
                   >
                     {/* First Name  */}
-                    {Object.keys(groupedQuestions).map((subheadingTitle) => (
-        <div key={subheadingTitle} className="mt-5">
+                    {Object.keys(groupedQuestions)?.map((subheadingTitle:any, index:any) => (
+        <div key={index} className="mt-5">
           {/* Display the subheading title */}
           <h5>{subheadingTitle}</h5>
           {/* Display questions for the current subheading */}
-          {groupedQuestions[subheadingTitle].map((question: any) => (
+          {groupedQuestions[subheadingTitle]?.map((question: any, index:any) => (
             <Form.Item
-              key={question.id}
+              key={question?.id}
               name={`question_${question.id}`}
-              label={question.question}
+              label={question?.question}
             >
               <TextArea size="large" placeholder="Enter..." />
             </Form.Item>
