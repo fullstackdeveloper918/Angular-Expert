@@ -291,7 +291,7 @@ const Page3 = ({questions}:any) => {
                       className="text-white"
                       disabled
                     >
-                      2/8
+                      2/9
                     </Button>
                   )}
                 </div>

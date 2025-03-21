@@ -224,6 +224,9 @@ console.log(state,"asjdla");
                 <Option value="meeting_review">Fall 2024 Meeting Review</Option>
                 <Option value="round_table_topic">Spring 2025 Meeting Preparation</Option>
                 <Option value="answers">Additional Questionnaire</Option>
+                <Option value="well_being">Personal Well-Being Check-In</Option>
+                <Option value="business_evolution">Business Evolution & Industry trends</Option>
+                <Option value="roundtable">Round-Table Topics</Option>
                  
               </Select>
             </Form.Item>

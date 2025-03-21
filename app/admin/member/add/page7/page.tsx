@@ -2,6 +2,7 @@
 import React from "react";
 import Page7 from "../../../../../components/Member/page7";
 import { cookies } from "next/headers";
+// import Well_being_ckeck_in from "@/components/Member/Well_being_ckeck_in";
 
 const page = async() => {
    const cookiesList = cookies();

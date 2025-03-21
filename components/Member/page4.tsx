@@ -50,7 +50,9 @@ const Page4 = ({questions}:any) => {
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
-            question_position:q.quesiton_position
+            question_position:q.quesiton_position,
+            subheading_id:q.subheading_id||"",
+            subheading_title:q.subheading_title||"",
           })),
           // technology: values?.technology,
           // products: values?.products,
@@ -69,7 +71,9 @@ const Page4 = ({questions}:any) => {
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
-                question_position:q.quesiton_position
+                question_position:q.quesiton_position,
+                subheading_id:q.subheading_id||"",
+                subheading_title:q.subheading_title||"",
               })),
               // technology: values?.technology,
               // products: values?.products,
@@ -138,7 +142,9 @@ const Page4 = ({questions}:any) => {
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
-            question_position:q.quesiton_position
+            question_position:q.quesiton_position,
+            subheading_id:q.subheading_id||"",
+            subheading_title:q.subheading_title||"",
           })),
           // technology: values?.technology,
           // products: values?.products,
@@ -157,7 +163,9 @@ const Page4 = ({questions}:any) => {
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
-                question_position:q.quesiton_position
+                question_position:q.quesiton_position,
+                subheading_id:q.subheading_id||"",
+                subheading_title:q.subheading_title||"",
               })),
               // technology: values?.technology,
               // products: values?.products,
@@ -339,7 +347,7 @@ console.log(dataFromApi,"dataFromApi");
                       className="text-white"
                       disabled
                     >
-                      3/8
+                      3/9
                     </Button>
                   )}
                 </div>

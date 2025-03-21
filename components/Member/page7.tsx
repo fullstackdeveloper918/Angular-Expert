@@ -14,7 +14,14 @@ import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearSpecificFormData } from "@/lib/features/formSlice";
 
 const Page7 = ({questions}:any) => {
-
+  console.log(questions,"ytaaayt");
+  const filtered_questions = questions?.data?.filter((item: any) => item.page_type === "roundtable") // Step 1: Filter by page_type
+  .sort((a: any, b: any) => parseInt(a.quesiton_position) - parseInt(b.quesiton_position)) // Step 2: Sort by question_position
+  .map((item: any, index: number) => {
+    item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
+    return item;
+  });
+  console.log(filtered_questions,"filtered_questions");
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
@@ -71,13 +78,13 @@ const Page7 = ({questions}:any) => {
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
   
-          if (res?.status == 500) {
-              localStorage.setItem('redirectAfterLogin', window.location.pathname);
-              localStorage.removeItem("hasReloaded")
-              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-              toast.error("Session Expired. Login Again");
-              router.replace("/auth/signin");
-          }
+          // if (res?.status == 500) {
+          //     localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          //     localStorage.removeItem("hasReloaded")
+          //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          //     toast.error("Session Expired. Login Again");
+          //     router.replace("/auth/signin");
+          // }
           if (!pagetype) {
             router.push(`/admin/member/add/page8?${res?.userId}`);
           } else {
@@ -114,6 +121,14 @@ const Page7 = ({questions}:any) => {
               estimating: values?.estimating,
               accountability: values?.accountability,
               productivity: values?.productivity,
+              round_table: filtered_questions.map((q: any) => ({
+                question_id: q.id,
+                question: q.question,
+                answer: values[`question_${q.id}`] || "",
+                question_position:q.quesiton_position,
+                subheading_id:q.subheading_id||"",
+                subheading_title:q.subheading_title||"",
+              })),
             },
           } as any;
           setLoading1(true);
@@ -130,13 +145,13 @@ const Page7 = ({questions}:any) => {
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
   
-          if (res?.status == 500) {
-              localStorage.setItem('redirectAfterLogin', window.location.pathname);
-              localStorage.removeItem("hasReloaded")
-              destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-              toast.error("Session Expired. Login Again");
-              router.replace("/auth/signin");
-          }
+          // if (res?.status == 500) {
+          //     localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          //     localStorage.removeItem("hasReloaded")
+          //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+          //     toast.error("Session Expired. Login Again");
+          //     router.replace("/auth/signin");
+          // }
           // if (!pagetype) {
           //   router.push(`/admin/member/add/page8?${res?.userId}`);
           // } else {
@@ -173,13 +188,13 @@ const Page7 = ({questions}:any) => {
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
-      if (res?.data?.status == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (res?.data?.status == 500) {
+      //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      //   localStorage.removeItem("hasReloaded")
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+      //   toast.error("Session Expired. Login Again");
+      //   router.replace("/auth/signin");
+      // }
 
       const dataFromApi = res?.data?.roundTableTopics[0] || {};
 
@@ -188,17 +203,24 @@ const Page7 = ({questions}:any) => {
         accountability:
           formValues?.accountability || dataFromApi?.accountability,
         productivity: formValues?.productivity || dataFromApi?.productivity,
+
+
+        // round_table: dataFromApi?.round_table?.reduce((acc: any, question: any) => {
+        //   console.log(acc,"accaccacc");
+        //     acc[`question_${question.question_id}`] = question.answer;
+        //     return acc;
+        //   }, {})
       };
 
       form.setFieldsValue(finalData);
     } catch (error: any) {
-      if (error?.status == 500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.removeItem("hasReloaded")
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (error?.status == 500) {
+      //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      //   localStorage.removeItem("hasReloaded")
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+      //   toast.error("Session Expired. Login Again");
+      //   router.replace("/auth/signin");
+      // }
     }
   };
   React.useEffect(() => {
@@ -264,7 +286,8 @@ const Page7 = ({questions}:any) => {
                                     </div> : ""} */}
                 <div className="mb-2 d-flex justify-content-between">
                   <Typography.Title level={3} className="m-0 fw-bold">
-                    SPRING 2025 MEETING PREPARATION
+                    {/* SPRING 2025 MEETING PREPARATION */}
+                    ROUNDTABLE TOPICS 
                   </Typography.Title>
                   {/* <Button size={'large'} type="primary" className="text-white" disabled>6/8</Button> */}
                   {!pagetype && (
@@ -293,7 +316,8 @@ const Page7 = ({questions}:any) => {
                     <div className="mt-3 mb-1">
                       <Typography.Title level={5} className="m-0 fw-bold">
                         LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER IN
-                        OUR FALL MEETING (IN ORDER OF IMPORTANCE)
+                        OUR SPRING MEETING (IN ORDER OF IMPORTANCE)
+                        {/* List three roundtable topics that you want to cover in the Spring meeting (in order of importance):  */}
                       </Typography.Title>
                     </div>
                     <Divider plain></Divider>
@@ -307,6 +331,7 @@ const Page7 = ({questions}:any) => {
                       //     message: "Please Fill Field",
                       //   },
                       // ]}
+                       label="First roundtable topic:"
                     >
                       <TextArea
                         size={"large"}
@@ -323,6 +348,7 @@ const Page7 = ({questions}:any) => {
                       //     message: "Please Fill Field",
                       //   },
                       // ]}
+                       label="Second roundtable topic:"
                     >
                       <TextArea
                         size={"large"}
@@ -339,6 +365,7 @@ const Page7 = ({questions}:any) => {
                       //     message: "Please Fill Field",
                       //   },
                       // ]}
+                       label="Third roundtable topic:"
                     >
                       <TextArea
                         size={"large"}
@@ -347,7 +374,22 @@ const Page7 = ({questions}:any) => {
                         // What CRM systems do you use?"
                       />
                     </Form.Item>
-
+                    {filtered_questions.map((question: any) => (
+                      <Form.Item
+                        key={question.id}
+                        name={`question_${question.id}`}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     whitespace: true,
+                        //     message: "Please Fill Field",
+                        //   },
+                        // ]}
+                        label={question.question}
+                      >
+                        <TextArea size="large" placeholder="Enter..." />
+                      </Form.Item>
+                    ))}
                     {/* Button  */}
                     <div className="d-flex mt-3">
                       {!pagetype ? (

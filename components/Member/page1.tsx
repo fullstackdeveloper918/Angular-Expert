@@ -115,8 +115,8 @@ console.log(groupedQuestions,"groupedQuestions");
             question: q.question,
             answer: values[`question_${q.id}`] || "",
             question_position:q.quesiton_position,
-            subheading_id:q.subheading_id,
-            subheading_title:q.subheading_title,
+            subheading_id:q.subheading_id||"",
+            subheading_title:q.subheading_title||"",
           })),
      
         },
@@ -142,8 +142,8 @@ console.log(groupedQuestions,"groupedQuestions");
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
                 question_position:q.quesiton_position,
-                subheading_id:q.subheading_id,
-                subheading_title:q.subheading_title,
+                subheading_id:q.subheading_id||"",
+            subheading_title:q.subheading_title||"",
               })),
          
             },
@@ -199,8 +199,8 @@ console.log(groupedQuestions,"groupedQuestions");
             question: q.question,
             answer: values[`question_${q.id}`] || "",
             question_position:q.quesiton_position,
-            subheading_id:q.subheading_id,
-            subheading_title:q.subheading_title,
+            subheading_id:q.subheading_id||"",
+            subheading_title:q.subheading_title||"",
           })),
      
         },
@@ -226,8 +226,8 @@ console.log(groupedQuestions,"groupedQuestions");
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
                 question_position:q.quesiton_position,
-                subheading_id:q.subheading_id,
-                subheading_title:q.subheading_title,
+                subheading_id:q.subheading_id||"",
+            subheading_title:q.subheading_title||"",
               })),
          
             },
@@ -427,7 +427,7 @@ getQuestion()
                       className="text-white"
                       disabled
                     >
-                      1/8
+                      1/9
                     </Button>
                   )}
                 </div>

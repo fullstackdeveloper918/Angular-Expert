@@ -49,7 +49,9 @@ const Page5 = ({questions}:any) => {
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
-            question_position:q.quesiton_position
+            question_position:q.quesiton_position,
+            subheading_id:q.subheading_id||"",
+            subheading_title:q.subheading_title||"",
           })),
           // commitment: values?.commitment,
           // contribute: values?.contribute,
@@ -74,7 +76,9 @@ const Page5 = ({questions}:any) => {
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
-                question_position:q.quesiton_position
+                question_position:q.quesiton_position,
+                subheading_id:q.subheading_id||"",
+                subheading_title:q.subheading_title||"",
               })),
               // commitment: values?.commitment,
               // contribute: values?.contribute,
@@ -94,7 +98,7 @@ const Page5 = ({questions}:any) => {
           // }
           setTimeout(() => {
             if (!pagetype) {
-              router.push(`/admin/member/add/page6?${value}&edit`);
+              router.push(`/admin/member/add/well_being_check_in?${value}&edit`);
             } else {
               router.push("/admin/questionnaire?page5");
             }
@@ -104,17 +108,17 @@ const Page5 = ({questions}:any) => {
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
 
-          if (res?.status == 500) {
-            localStorage.setItem(
-              "redirectAfterLogin",
-              window.location.pathname
-            );
-            localStorage.removeItem("hasReloaded");
-            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-            toast.error("Session Expired. Login Again");
-            router.replace("/auth/signin");
-          }
-          router.push(`/admin/member/add/page6?${value}`);
+          // if (res?.status == 500) {
+          //   localStorage.setItem(
+          //     "redirectAfterLogin",
+          //     window.location.pathname
+          //   );
+          //   localStorage.removeItem("hasReloaded");
+          //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+          //   toast.error("Session Expired. Login Again");
+          //   router.replace("/auth/signin");
+          // }
+          router.push(`/admin/member/add/well_being_check_in?${value}`);
         }
       } catch (error) {
         if (!pagetype) {
@@ -134,7 +138,9 @@ const Page5 = ({questions}:any) => {
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
-            question_position:q.quesiton_position
+            question_position:q.quesiton_position,
+            subheading_id:q.subheading_id||"",
+            subheading_title:q.subheading_title||"",
           })),
           // commitment: values?.commitment,
           // contribute: values?.contribute,
@@ -159,7 +165,9 @@ const Page5 = ({questions}:any) => {
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
-                question_position:q.quesiton_position
+                question_position:q.quesiton_position,
+                subheading_id:q.subheading_id||"",
+                subheading_title:q.subheading_title||"",
               })),
               // commitment: values?.commitment,
               // contribute: values?.contribute,
@@ -182,17 +190,17 @@ const Page5 = ({questions}:any) => {
           let res = await api.Auth.signUp(items);
           dispatch(clearSpecificFormData(fieldsToClear));
 
-          if (res?.status == 500) {
-            localStorage.setItem(
-              "redirectAfterLogin",
-              window.location.pathname
-            );
-            localStorage.removeItem("hasReloaded");
-            destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-            toast.error("Session Expired. Login Again");
-            router.replace("/auth/signin");
-          }
-          router.push(`/admin/member/add/page6?${value}`);
+          // if (res?.status == 500) {
+          //   localStorage.setItem(
+          //     "redirectAfterLogin",
+          //     window.location.pathname
+          //   );
+          //   localStorage.removeItem("hasReloaded");
+          //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+          //   toast.error("Session Expired. Login Again");
+          //   router.replace("/auth/signin");
+          // }
+          router.push(`/admin/member/add/well_being_check_in?${value}`);
         }
       } catch (error) {
         if (!pagetype) {
@@ -225,13 +233,13 @@ const Page5 = ({questions}:any) => {
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
-      if (res?.data?.status == 500) {
-        localStorage.setItem("redirectAfterLogin", window.location.pathname);
-        localStorage.removeItem("hasReloaded");
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (res?.data?.status == 500) {
+      //   localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      //   localStorage.removeItem("hasReloaded");
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   toast.error("Session Expired. Login Again");
+      //   router.replace("/auth/signin");
+      // }
       const dataFromApi = res?.data?.craftsMenUpdates[0] || {};
       const resValues = 
       Object.keys(formValues).length > 0
@@ -253,13 +261,13 @@ const Page5 = ({questions}:any) => {
 
       form.setFieldsValue(resValues);
     } catch (error: any) {
-      if (error?.status == 500) {
-        localStorage.setItem("redirectAfterLogin", window.location.pathname);
-        localStorage.removeItem("hasReloaded");
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-      }
+      // if (error?.status == 500) {
+      //   localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      //   localStorage.removeItem("hasReloaded");
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   toast.error("Session Expired. Login Again");
+      //   router.replace("/auth/signin");
+      // }
     }
   };
   useEffect(() => {
@@ -312,7 +320,7 @@ const Page5 = ({questions}:any) => {
                       className="text-white"
                       disabled
                     >
-                      4/8
+                      4/9
                     </Button>
                   )}
                 </div>

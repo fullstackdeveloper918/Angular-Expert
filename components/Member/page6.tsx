@@ -47,7 +47,9 @@ const Page6 = ({questions}:any) => {
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
-            question_position:q.quesiton_position
+            question_position:q.quesiton_position,
+            subheading_id:q.subheading_id||"",
+            subheading_title:q.subheading_title||"",
           })),
           // fall_meeting: values?.fall_meeting,
           // personal_finances: values?.personal_finances,
@@ -65,7 +67,9 @@ const Page6 = ({questions}:any) => {
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
-                question_position:q.quesiton_position
+                question_position:q.quesiton_position,
+                subheading_id:q.subheading_id||"",
+                subheading_title:q.subheading_title||"",
               })),
               // fall_meeting: values?.fall_meeting,
               // personal_finances: values?.personal_finances,
@@ -127,7 +131,9 @@ const Page6 = ({questions}:any) => {
             question_id: q.id,
             question: q.question,
             answer: values[`question_${q.id}`] || "",
-            question_position:q.quesiton_position
+            question_position:q.quesiton_position,
+            subheading_id:q.subheading_id||"",
+            subheading_title:q.subheading_title||"",
           })),
           // fall_meeting: values?.fall_meeting,
           // personal_finances: values?.personal_finances,
@@ -144,7 +150,9 @@ const Page6 = ({questions}:any) => {
                 question_id: q.id,
                 question: q.question,
                 answer: values[`question_${q.id}`] || "",
-                question_position:q.quesiton_position
+                question_position:q.quesiton_position,
+                subheading_id:q.subheading_id||"",
+                subheading_title:q.subheading_title||"",
               })),
               // fall_meeting: values?.fall_meeting,
               // personal_finances: values?.personal_finances,
@@ -318,7 +326,7 @@ Object.keys(formValues).length > 0
                       className="text-white"
                       disabled
                     >
-                      5/8
+                      7/9
                     </Button>
                   )}
                 </div>
