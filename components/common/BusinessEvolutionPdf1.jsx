@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const GoalsPDF = (props) => {
+const BusinessEvolutionPdf1 = (props) => {
   const photoSection = props?.state?.photo_section || [];
 
   const options = { httpHeaders: { 'crossOrigin': 'anonymous' }, };
@@ -192,7 +192,7 @@ const GoalsPDF = (props) => {
             /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize: 18, textTransform: "capitalize" }}>  {props?.state?.futureMeetings[0]?.goal_next_meeting?.length ? "Spring 2025" :
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize: 18, textTransform: "capitalize" }}>{props?.state?.technologyData[0]?.craftsmen_toolbox_update_questions?.length ? "Spring 2025" :
                 "Fall 2024"}</Text>
             </Text>
             <Text style={styles.subheader}>
@@ -201,49 +201,23 @@ const GoalsPDF = (props) => {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.main_heading}>Goals</Text>
-            <Text style={styles.subheading}>Goals from Last Meeting</Text>
-            {props?.state?.lastNextMeetings[0]?.goal_next_meeting?.map((res, index) => (
-              <View style={styles.goal} key={index}>
-                <View style={styles.div_wrapper}>
-                  <View style={styles.Flex_div}>
-                    <Text style={styles.text}> Goal #{index + 1}: </Text>
-                    <Text style={styles.textarea}>   {res?.name}  </Text>
-                  </View>
-                  <View style={styles.Flex_div}>
-                    <Text style={styles.text}> Status of Goal: </Text>
-                    <Text style={styles.textarea}>   {res?.status}  </Text>
-                  </View>
-                </View>
-                <Text style={styles.text}> Comments: </Text>
-                <Text style={styles.textarea}>  {res?.comment}   </Text>
-              </View>
-            ))}
-          </View>
+            {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
+            <Text style={styles.main_heading}>BUSINESS EVOLUTION & INDUSTRY TRENDS</Text>
+            <View style={styles.goal}>
 
-          <View style={styles.section}>
-            <Text style={styles.subheading}>Goals for Next Meeting</Text>
-            {props?.state?.futureMeetings[0]?.goal_next_meeting?.map((res, index) => (
-              <View style={styles.goal} key={index}>
-                <View style={styles.div_wrapper}>
-                  <View style={styles.Flex_div}>
-                    <Text style={styles.text}> Business Goal #{index + 1}: </Text>
-                    <Text style={styles.textarea}>   {res?.name}  </Text>
-                  </View>
-                  <View style={styles.Flex_div}>
-                    <Text style={styles.text}> Priority: </Text>
-                    <Text style={styles.textarea}>  {res?.status}   </Text>
-                  </View>
-                  <View style={styles.Flex_div}>
-                    <Text style={styles.text}> To be Completed By:</Text>
-                    <Text style={styles.textarea} wrap={false}>
-                      {res?.to_be_completed_by}
-
+              {props?.state?.businessEvolutionIndustryTrendsUpdates[0].business_evolution_update_industry_trends ?
+                props?.state?.businessEvolutionIndustryTrendsUpdates[0].business_evolution_update_industry_trends?.map((res, index) =>
+                (
+                  <>
+                    <Text style={styles.text} key={index}>{res?.question}</Text>
+                    <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                      {res.answer}
                     </Text>
-                  </View>
-                </View>
-              </View>
-            ))}
+                  </>
+                )
+                )
+                : ""}
+            </View>
           </View>
         </Page>
       </Document>
@@ -251,4 +225,4 @@ const GoalsPDF = (props) => {
   );
 };
 
-export default GoalsPDF;
+export default BusinessEvolutionPdf1;

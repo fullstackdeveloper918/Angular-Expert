@@ -29,6 +29,8 @@ import QuestionanirModal from "../common/QuestionnairModal";
 import PhotoSectionPdf from "../common/Photosectionpdf";
 import Link from "next/link";
 import dayjs from "dayjs";
+import PersonalWellBeing from "../common/PersonalWellBeing";
+import BusinessEvolutionPdf1 from "../common/BusinessEvolutionPdf1";
 
 
 const { Search } = Input;
@@ -224,6 +226,30 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdf4 = async () => {
         const { blob, timestamp } = await generatePdf4();
+        saveAs(blob, `Order_${timestamp}.pdf`);
+    };
+    const generatePdfWellBeing = async () => {
+        const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+        const blob = await pdf(<PersonalWellBeing state={state1} />).toBlob();
+        const pdfUrl = URL.createObjectURL(blob);
+        return { blob, pdfUrl, timestamp };
+    };
+
+    // Function to handle PDF download
+    const downLoadPdfWellBeing= async () => {
+        const { blob, timestamp } = await generatePdfWellBeing();
+        saveAs(blob, `Order_${timestamp}.pdf`);
+    };
+    const generatePdfBusinessEvolution = async () => {
+        const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+        const blob = await pdf(<BusinessEvolutionPdf1 state={state1} />).toBlob();
+        const pdfUrl = URL.createObjectURL(blob);
+        return { blob, pdfUrl, timestamp };
+    };
+
+    // Function to handle PDF download
+    const downLoadPdfBusinessEvolution= async () => {
+        const { blob, timestamp } = await generatePdfBusinessEvolution();
         saveAs(blob, `Order_${timestamp}.pdf`);
     };
     const generatePdf5 = async () => {
@@ -1373,9 +1399,9 @@ console.log(meeting_prepration_year,"meeting_prepration_year");
                                                           <h5 className="fw-bold text-start mb-4">PERSONAL WELL-BEING CHECK-IN</h5>
                                                           {state1?.craftsMenUpdates?.length ?
                                                           <Tooltip title="Download Pdf">
-                                                              <Button className="borderBtn" onClick={downLoadPdf4}><DownloadOutlined /></Button>
+                                                              <Button className="borderBtn" onClick={downLoadPdfWellBeing}><DownloadOutlined /></Button>
                                                           </Tooltip>:<Tooltip title="No Data Available">
-                                                              <Button className="borderBtn" onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
+                                                              <Button className="borderBtn" onClick={downLoadPdfWellBeing} disabled><DownloadOutlined /></Button>
                                                           </Tooltip>}
                                                           {/* <Tooltip title="Download Pdf">
                                                               <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>
@@ -1404,9 +1430,9 @@ console.log(meeting_prepration_year,"meeting_prepration_year");
                                                           <h5 className="fw-bold text-start mb-4">BUSINESS EVOLUTION & INDUSTRY TRENDS</h5>
                                                           {state1?.craftsMenUpdates?.length ?
                                                           <Tooltip title="Download Pdf">
-                                                              <Button className="borderBtn" onClick={downLoadPdf4}><DownloadOutlined /></Button>
+                                                              <Button className="borderBtn" onClick={downLoadPdfBusinessEvolution}><DownloadOutlined /></Button>
                                                           </Tooltip>:<Tooltip title="No Data Available">
-                                                              <Button className="borderBtn" onClick={downLoadPdf4} disabled><DownloadOutlined /></Button>
+                                                              <Button className="borderBtn" onClick={downLoadPdfBusinessEvolution} disabled><DownloadOutlined /></Button>
                                                           </Tooltip>}
                                                           {/* <Tooltip title="Download Pdf">
                                                               <Button onClick={downLoadPdf4}><DownloadOutlined /></Button>

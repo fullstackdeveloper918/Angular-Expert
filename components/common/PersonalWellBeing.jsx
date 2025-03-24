@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const MeetingPreparationPdf = (props) => {
+const PersonalWellBeing = (props) => {
   const photoSection = props?.state?.photo_section || [];
 
   const options = { httpHeaders: { 'crossOrigin': 'anonymous' }, };
@@ -192,105 +192,37 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 /></View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>Spring 2025</Text>
+              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>{props?.state?.technologyData[0]?.craftsmen_toolbox_update_questions?.length?"Spring 2025":
+                "Fall 2024"}</Text>
             </Text>
             <Text style={styles.subheader}>
               {companyName}
             </Text>
           </View>
 
-       {props?.state?.roundTableTopics[0]?.round_table?
-                 <View style={styles.section}>
-                   <Text style={styles.main_heading}>
-                     {/* {meeting_prepration_month} {meeting_prepration_year} MEETING PREPARATION */}
-                     ROUNDTABLE TOPICS
-                   </Text>
-                   <Text style={styles.subheading}>
-                     LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER WITH SPRING
-                     MEETING (IN ORDER OF IMPORTANCE)
-                   </Text>
-                   <View style={styles.goal}>
-                   <Text style={styles.text}>
-                   First roundtable topic
-                         </Text>
-                     <Text style={styles.textarea} wrap={false}>
-                       {props?.state?.roundTableTopics[0]?.estimating}
-                     </Text>
-                     <Text style={styles.text}>
-                     Second roundtable topic
-                         </Text>
-                     <Text style={styles.textarea} wrap={false}>
-                       {props?.state?.roundTableTopics[0]?.accountability}
-                     </Text>
-                     <Text style={styles.text}>
-                     Third roundtable topic
-                         </Text>
-                     <Text style={styles.textarea} wrap={false}>
-                       {props?.state?.roundTableTopics[0]?.productivity}
-                     </Text>
-       
-                    { props?.state?.roundTableTopics[0]?.round_table?.map((res, index) =>
-                       (
-                         <>
-                           <Text style={styles.text} key={index}>{res?.question}</Text>
-                           <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
-                             {res.answer}
-                           </Text>
-                         </>
-                       )
-                       )}
-                   </View>
-                 </View>
-       
-       :
-                 <View style={styles.section}>
-                   <Text style={styles.main_heading}>
-                     {/* {meeting_prepration_month} {meeting_prepration_year} MEETING PREPARATION */}
-                     Spring 2025 MEETING PREPARATION
-                   </Text>
-                   <Text style={styles.subheading}>
-                     LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER WITH SPRING
-                     MEETING (IN ORDER OF IMPORTANCE)
-                   </Text>
-                   <View style={styles.goal}>
-                     <Text style={styles.textarea} wrap={false}>
-                       {props?.state?.roundTableTopics[0]?.estimating}
-                     </Text>
-       
-                     <Text style={styles.textarea} wrap={false}>
-                       {props?.state?.roundTableTopics[0]?.accountability}
-                     </Text>
-                     <Text style={styles.textarea} wrap={false}>
-                       {props?.state?.roundTableTopics[0]?.productivity}
-                     </Text>
-                   </View>
-                 </View>}
-          {/* <View style={styles.section}>
-            <Text style={styles.main_heading}>
-              SPRING 2025 MEETING PREPARATION
-            </Text>
-            <Text style={styles.subheading}>
-              LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER WITH SPRING
-              MEETING (IN ORDER OF IMPORTANCE)
-            </Text>
-            <View style={styles.goal}>
-              <Text style={styles.textarea}>
-              {props?.state?.roundTableTopics[0]?.estimating}
-              </Text>
-
-              <Text style={styles.textarea}>
-              {props?.state?.roundTableTopics[0]?.accountability}
-              </Text>
-              <Text style={styles.textarea}>
-              {props?.state?.roundTableTopics[0]?.productivity}
-              </Text>
-            </View>
-          </View> */}
-
+          <View style={styles.section}>
+                      {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
+                      <Text style={styles.main_heading}>PERSONAL WELL-BEING CHECK-IN</Text>
+                      <View style={styles.goal}>
+          
+                        {props?.state?.personalWellBeingUpdates[0].personal_well_being_update_checkup ?
+                          props?.state?.personalWellBeingUpdates[0].personal_well_being_update_checkup?.map((res, index) =>
+                          (
+                            <>
+                              <Text style={styles.text} key={index}>{res?.question}</Text>
+                              <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                                {res.answer}
+                              </Text>
+                            </>
+                          )
+                          )
+                        :""}
+                      </View>
+                    </View>
         </Page>
       </Document>
     </>
   );
 };
 
-export default MeetingPreparationPdf;
+export default PersonalWellBeing;

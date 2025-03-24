@@ -43,6 +43,9 @@ interface Goal {
 const { Option } = Select;
 const Page3 = ({questions}:any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData);
+  console.log(getUserdata,"getUserdata");
+  // console.log(getUserdata?.meetings?.lastMeeting?.id,"getUserdata");
+  
   const router = useRouter();
   const [form] = Form.useForm();
 
@@ -60,12 +63,21 @@ const Page3 = ({questions}:any) => {
   const questionnair = entries.length > 2 ? entries[2][1] : "";
   const pagetype = entries.length > 2 ? entries[2][0] : "";
   const submit = async (values: any) => {
+    console.log(values,"ioiooiio");
+    // const updatedLastGoals = values?.last_goals?.map((goal:any) => ({
+    //   ...goal, // Spread the current goal object
+    //   lastMeetingId: getUserdata?.meetings?.lastMeeting?.id // Add the lastMeetingId
+    // }));
+    // console.log(updatedLastGoals,"updatedLastGoalsljaljas");
+    
     // return
+
     if (actionType === "submit") {
       let items = {
         goals: {
           user_id: value,
               meeting_id:getUserdata?.meetings?.NextMeeting?.id,
+              lastMeetingId: getUserdata?.meetings?.lastMeeting?.id,
           goal_last_meeting: values?.last_goals,
           goal_next_meeting: values?.next_goals,
         },
@@ -79,6 +91,7 @@ const Page3 = ({questions}:any) => {
             goals: {
               user_id: value,
               meeting_id:getUserdata.meetings.NextMeeting.id,
+              lastMeetingId: getUserdata?.meetings?.lastMeeting?.id,
               goal_last_meeting: values?.last_goals,
               goal_next_meeting: values?.next_goals,
             },
@@ -117,6 +130,7 @@ const Page3 = ({questions}:any) => {
         goals: {
           user_id: value,
               meeting_id:getUserdata.meetings.NextMeeting.id,
+              lastMeetingId: getUserdata?.meetings?.lastMeeting?.id,
           goal_last_meeting: values?.last_goals,
           goal_next_meeting: values?.next_goals,
         },
@@ -129,6 +143,7 @@ const Page3 = ({questions}:any) => {
             goals: {
               user_id: value,
               meeting_id:getUserdata.meetings.NextMeeting.id,
+              lastMeetingId: getUserdata?.meetings?.lastMeeting?.id,
               goal_last_meeting: values?.last_goals,
               goal_next_meeting: values?.next_goals,
             },
@@ -322,7 +337,8 @@ const Page3 = ({questions}:any) => {
                           {fields.map(({ key, name, ...restField }) => (
                             <>
                              <Form.Item  {...restField} name={[name, "status"]}>
-                                <Select disabled
+                                <Select 
+                                // disabled
                                 defaultValue={"...Select"}
                                   className="responiveSelect"
                                   style={{
@@ -350,24 +366,24 @@ const Page3 = ({questions}:any) => {
                                 label={`Goal #${key+1}`}
                               >
                                 <TextArea
-                                disabled
+                                // disabled
                                   size={"large"}
                                   placeholder="Enter..."
                                   className="text-black"
                                 />
                               </Form.Item>
-                              {/* <Form.Item
+                              <Form.Item
                                 {...restField}
                                 name={[name, "comment"]}
                                 label={`Comment #${key+1}`}
                               >
                                 <TextArea
-                                disabled
+                                // disabled
                                   size={"large"}
                                   placeholder="Enter..."
                                   className="text-black"
                                 />
-                              </Form.Item> */}
+                              </Form.Item>
                              
                               <div className="remove_row" >
                                 <MinusCircleOutlined
@@ -430,6 +446,24 @@ const Page3 = ({questions}:any) => {
                                 {...restField}
                                 name={[name, "name"]}
                                 label={`Business Goal #${key+1}`}
+                                rules={[
+                                  {
+                                    required: true,
+                                    whitespace: true,
+                                    message: "Please Fill Field",
+                                  },
+                                ]}
+                              >
+                                <TextArea
+                                  size={"large"}
+                                  placeholder="Enter..."
+                                  className="text-black"
+                                />
+                              </Form.Item>
+                              <Form.Item
+                                {...restField}
+                                name={[name, "to_be_completed_by"]}
+                                label={`To be Completed By:`}
                                 rules={[
                                   {
                                     required: true,

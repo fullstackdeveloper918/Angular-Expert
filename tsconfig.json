@@ -62,7 +62,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/common/Autolocation.tsx"
-  ],
+, "components/common/PersonalWellBeing.jsx"  ],
   "exclude": [
     "node_modules"
   ]

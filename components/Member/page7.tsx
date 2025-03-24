@@ -197,22 +197,31 @@ const Page7 = ({questions}:any) => {
       // }
 
       const dataFromApi = res?.data?.roundTableTopics[0] || {};
+      const resValues = 
+      Object.keys(formValues).length > 0
+        ? Object.keys(formValues).reduce((acc: any, key) => {
+            acc[key] = formValues[key];
+            return acc;
+          }, {})
+        : dataFromApi?.round_table?.reduce((acc: any, question: any) => {
+          console.log(acc,"accaccacc");
+            acc[`question_${question.question_id}`] = question.answer;
+            return acc;
+          }, { estimating: formValues?.estimating || dataFromApi?.estimating,
+            accountability: formValues?.accountability || dataFromApi?.accountability,
+            productivity: formValues?.productivity || dataFromApi?.productivity,});
+      // const finalData = {
+      //   estimating: formValues?.estimating || dataFromApi?.estimating,
+      //   accountability: formValues?.accountability || dataFromApi?.accountability,
+      //   productivity: formValues?.productivity || dataFromApi?.productivity,
+      
+      //   round_table: dataFromApi?.round_table?.reduce((acc: any, question: any) => {
+      //     acc[`question_${question.question_id}`] = question.answer;
+      //     return acc;
+      //   }, {}),
+      // };
 
-      const finalData = {
-        estimating: formValues?.estimating || dataFromApi?.estimating,
-        accountability:
-          formValues?.accountability || dataFromApi?.accountability,
-        productivity: formValues?.productivity || dataFromApi?.productivity,
-
-
-        // round_table: dataFromApi?.round_table?.reduce((acc: any, question: any) => {
-        //   console.log(acc,"accaccacc");
-        //     acc[`question_${question.question_id}`] = question.answer;
-        //     return acc;
-        //   }, {})
-      };
-
-      form.setFieldsValue(finalData);
+      form.setFieldsValue(resValues);
     } catch (error: any) {
       // if (error?.status == 500) {
       //   localStorage.setItem('redirectAfterLogin', window.location.pathname);

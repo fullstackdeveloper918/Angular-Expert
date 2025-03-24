@@ -179,7 +179,14 @@ const BussinessPDF = (props) => {
 const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
 
   const newArr = props?.state?.photo_section?.fileUrls?.length && Object.values(props?.state?.photo_section?.fileUrls[0])
-
+  const groupedQuestions = props?.state?.businessUpdate[0]?.business_update_questions.reduce((acc, question) => {
+    const { subheading_title } = question;
+    if (!acc[subheading_title]) {
+      acc[subheading_title] = [];
+    }
+    acc[subheading_title].push(question);
+    return acc;
+  }, {});
   return (
     <>
       <Document>
@@ -199,10 +206,93 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
               {companyName}
             </Text>
           </View>
-
-          <View style={styles.section}>
+<View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
+            {props?.state?.businessUpdate[0]?.craftsmen_support ?
+              <>
+                <Text style={styles.text}>Current financial position:</Text>
+                <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.financial_position}
+                </Text>
+                <Text style={styles.text} wrap={false}>
+                  Current sales positions, hot prospects, recently contracted work:
+                </Text>
+                <Text style={styles.textarea} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.sales_position}
+                </Text>
+                <Text style={styles.text}>
+                  Accomplishments in the last 6 months:
+                </Text>
+                <Text style={styles.textarea} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.accomplishments}
+                </Text>
+                <Text style={styles.text}> HR position &/or needs: </Text>
+                <Text style={styles.textarea} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.hr_position}
+                </Text>
+                <Text style={styles.text}>
+                  Current challenges (e.g., problem client, personnel issue(s),
+                  trade availability, rising costs, supply chain):
+                </Text>
+                <Text style={styles.textarea} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.current_challenges}
+                </Text>
+                <Text style={styles.text}>
+                  How can the Craftsmen aid or support you with these challenges?
+                </Text>
+                <Text style={styles.textarea} wrap={false}>
+                  {props?.state?.businessUpdate[0]?.craftsmen_support}
+                </Text>
+              </> :
+
+              Object.keys(groupedQuestions).map((subheadingTitle) => (
+                <>
+                  <Text>{subheadingTitle}</Text>
+                  {/* Display questions for the current subheading */}
+                  {groupedQuestions[subheadingTitle].map((res) => (
+                    // console.log(question,"yyy")
+                    <>
+                      <Text style={styles.text} >{res?.question}</Text>
+                      <Text style={[styles.textarea]} wrap={false}>
+                        {res.answer}
+                      </Text>
+                    </>
+                  ))}
+                </>
+
+
+
+              ))
+
+              //    <Text>{subheadingTitle}</Text>
+              //    {/* Display questions for the current subheading */}
+              //    {groupedQuestions[subheadingTitle].map((question) => (
+              //     <>
+              //    <Text style={styles.text} key={index}>{question?.question}</Text>
+              //    <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
+              //      {question.answer}
+              //    </Text>
+              //     </>
+              //    ))}
+              //  </>
+
+
+              // props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
+              // (
+              //   <>
+              //   <Text style={styles.text} key={index}>{res?.question}</Text>
+              // <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
+              //   {res.answer}
+              // </Text>
+              //   </>
+              // )
+              // )
+
+            }
+          </View>
             {/* <Text style={styles.main_heading}>Business Update</Text> */}
+          {/* <View style={styles.section}>
+            <Text style={styles.main_heading}>Business Update</Text>
                        {props?.state?.businessUpdate[0].business_update_questions?
                        props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
                        (
@@ -252,7 +342,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                        </>
            
            }
-          </View>
+          </View> */}
         </Page>
       </Document>
     </>
