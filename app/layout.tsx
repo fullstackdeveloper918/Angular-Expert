@@ -5,6 +5,7 @@ import "../styles/globals.scss";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "../lib/store";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 // import { Router } from 'next/navigation';
 import NProgress from 'nprogress';
 import NextTopLoader from 'nextjs-toploader';
@@ -48,7 +49,8 @@ export default function RootLayout({
         </head>
         <body className={inter.className}>
           {/* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossOrigin="anonymous"></script> */}
-   
+          <AntdRegistry>
+
             <NextTopLoader  color="#2299DD"
  initialPosition={0.08}
  crawlSpeed={200}
@@ -58,11 +60,13 @@ export default function RootLayout({
  easing="ease"
  speed={200}
  shadow="0 0 10px #2299DD,0 0 5px #2299DD" />
+
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               {children}
             </PersistGate>
           </Provider>
+          </AntdRegistry>
         </body>
       </html>
     </>
