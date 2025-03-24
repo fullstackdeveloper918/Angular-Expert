@@ -7,7 +7,7 @@ import { list } from "postcss";
 // import { useSelector } from "react-redux";
 
 // const API_ROOT = 'https://app-uilsndszlq-uc.a.run.app/';
-const API_ROOT = 'https://nahb.goaideme.com/';
+const API_ROOT = 'https://frontend.goaideme.com/';
 
 const BUCKET_ROOT = `https://shared2.fra1.digitaloceanspaces.com/shared2/`;
 
@@ -94,7 +94,7 @@ const Export={
   // listing: (q?: string) =>
   //   requests.get(`admin/list${q ? `?${q}` : ""}`),
   listing: () =>
-    requests.get(`https://nahb.goaideme.com/get-original-report`),
+    requests.get(`https://frontend.goaideme.com/get-original-report`),
 }
 const photo_section={
   remove_photo: (info: any) =>

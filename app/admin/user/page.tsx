@@ -10,7 +10,7 @@ const cookiesList = cookies();
   const gettoken:any = cookiesList.get('COOKIES_USER_ACCESS_TOKEN');
 console.log(gettoken,"gettoken");
 
-  let getsubheading = await fetch('https://nahb.goaideme.com/list-section-sub-heading', {
+  let getsubheading = await fetch('https://frontend.goaideme.com/list-section-sub-heading', {
     method: 'GET', // Method set to GET
     headers: {
       'Cache-Control': 'no-cache',

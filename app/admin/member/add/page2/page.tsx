@@ -9,7 +9,7 @@ const page = async() => {
   const gettoken:any = cookiesList.get('COOKIES_USER_ACCESS_TOKEN');
 console.log(gettoken,"gettoken");
 
-  let data = await fetch('https://nahb.goaideme.com/question-list', {
+  let data = await fetch('https://frontend.goaideme.com/question-list', {
     method: 'GET', // Method set to GET
     headers: {
       'Cache-Control': 'no-cache',
@@ -22,7 +22,7 @@ console.log(gettoken,"gettoken");
   let posts = await data.json();
 
 console.log(posts,"posts");
-  let getsubheading = await fetch('https://nahb.goaideme.com/list-section-sub-heading', {
+  let getsubheading = await fetch('https://frontend.goaideme.com/list-section-sub-heading', {
     method: 'GET', // Method set to GET
     headers: {
       'Cache-Control': 'no-cache',
