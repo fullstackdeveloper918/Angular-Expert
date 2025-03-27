@@ -239,16 +239,28 @@ const PastMeetingList = () => {
             end_date: formatWithOrdinal(res?.end_meeting_date)||"N/A",
             end_time: dayjs(res?.end_time).format('hh:mm A')||"N/A",
             action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
-                {getUserdata?.is_admin?
+                {/* {getUserdata?.is_admin? */}
                 <li>
               <Link href={`/admin/meetings/${res?.id}/meeting-user?${dayjs(res?.start_meeting_date).format('YYYY')}`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
-          </li>:
+          </li>
+          {/* :
           <li>
                     <Tooltip title="Download Pdf">
                         <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.id)}>   {isLoading ? <Spin /> : <DownloadOutlined />}</Button>
                     </Tooltip>
-                </li>}
+                </li>} */}
             </ul>
+        //     action: <ul className='list-unstyled mb-0 gap-3 d-flex'>
+        //         {getUserdata?.is_admin?
+        //         <li>
+        //       <Link href={`/admin/meetings/${res?.id}/meeting-user?${dayjs(res?.start_meeting_date).format('YYYY')}`}> <Tooltip title="View Details"><Button className='ViewMore'><EyeOutlined /></Button> </Tooltip></Link>
+        //   </li>:
+        //   <li>
+        //             <Tooltip title="Download Pdf">
+        //                 <Button className='ViewMore ' onClick={() => handleDownloadAndFetchData(res?.id)}>   {isLoading ? <Spin /> : <DownloadOutlined />}</Button>
+        //             </Tooltip>
+        //         </li>}
+        //     </ul>
         }
     })
     const isUserAvailable = true;

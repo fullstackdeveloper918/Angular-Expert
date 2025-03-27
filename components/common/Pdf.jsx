@@ -184,24 +184,10 @@ const styles = StyleSheet.create({
 });
 
 const MemberUpdatePDF = (props) => {
-  // const [totalPages, setTotalPages] = useState(null);
-  // const getUserdata = useSelector((state) => state?.user?.userData)
-  // console.log(getUserdata,"getUserdata");
-  // const { pageNumber } = usePage();
-  // console.log(pageNumber,"pageNumber");
-  // console.log(totalPages,"totalPages");
-
-  // const onRender = () => {
-  //   // This will be triggered after all the pages are rendered
-  //   setTotalPages(document?.pageCount);  // Get total page count
-  // };
-
-  const photoSection = props?.state?.photo_section || [];
   console.log(props?.state, "props");
   console.log(props?.subheadinglist1, "sadas");
 
   const options = { httpHeaders: { crossOrigin: "anonymous" } };
-  // <Image key={imageIndex} style={{ width: 100, height: 100 }} options={options} src={{ uri: ${file.url}, method: "GET", headers: { Pragma: 'no-cache', "Cache-Control": "no-cache" }, body: "" }} />
   const companyNameMap = {
     augusta: "Augusta Homes, Inc.",
     buffington: "Buffington Homes, L.P.",

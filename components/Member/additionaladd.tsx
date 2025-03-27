@@ -109,44 +109,17 @@ console.log(state,"state");
       if (type) {
         let res = await api.User.edit_additional_user(item);
         toast.success(res?.data?.message);
-        if (res?.data?.status == 500) {
-          // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
 
-          // // }
-          // // dispatch(clearUserData({}));
-          // toast.error("Session Expired Login Again")
-          // router.replace("/auth/signin")
-          localStorage.setItem("redirectAfterLogin", window.location.pathname);
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-          // dispatch(clearUserData({}));
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
         if (res) {
           router.back();
         }
       } else {
         let res = await api.User.add_additional_user(item);
         toast.success(res?.data?.message);
-        if (res?.data?.status == 500) {
-          localStorage.setItem("redirectAfterLogin", window.location.pathname);
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-          // dispatch(clearUserData({}));
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
-        if (res) {
-          router.back();
-        }
+       
       }
     } catch (error: any) {
-      if (error) {
-        if (error?.status === 409) {
-          toast.error(
-            "The email address is already in use by another account."
-          );
-        }
-      }
+     
     } finally {
       setLoading(false);
     }
@@ -166,10 +139,7 @@ console.log(state,"state");
         try {
           const res = await api.User.getById1(item as any);
           setState(res?.data || null);
-          if (res?.data?.status == 500) {
-            toast.error("Session Expired Login Again")
-            router.replace("/auth/signin")
-          }
+         
           form.setFieldsValue(res?.data)
         } catch (error: any) {
           alert(error.message);

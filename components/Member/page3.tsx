@@ -54,7 +54,7 @@ const Page3 = ({questions}:any) => {
   const [state, setState] = useState<any>("");
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
-
+  const [popup, setPopup] = useState<any>(false);
   const [formValues, setFormValues] = useState<any>("");
   useAutoSaveForm(formValues, 300);
   const [actionType, setActionType] = useState<"submit" | "save" | null>(null);
@@ -150,7 +150,14 @@ const Page3 = ({questions}:any) => {
           } as any;
           setLoading1(true);
           let res = await api.User.edit(items);
-          toast.success(res?.message);
+          // toast.success(res?.message);
+          setPopup(true);
+          toast.success(res?.message, {
+            autoClose: 500, // 10 seconds
+          });
+          setTimeout(() => {
+            setPopup(false);
+          }, 3000);
           localStorage.removeItem("LastGoals");
           localStorage.removeItem("NextGoals");
           setTimeout(() => {
@@ -422,7 +429,7 @@ const Page3 = ({questions}:any) => {
                     <Form.List name="next_goals">
                       {(fields, { add, remove }) => (
                         <>
-                          {fields.map(({ key, name, ...restField }) => (
+                          {fields.slice(0,3).map(({ key, name, ...restField }) => (
                             <>
                              <Form.Item {...restField} name={[name, "status"]} >
                                 <Select
@@ -493,6 +500,19 @@ const Page3 = ({questions}:any) => {
                               </div>
                             </>
                           ))}
+                          {fields?.length ===3?
+                           <Form.Item className="mt-2">
+                           <Button
+                           disabled
+                             type="dashed"
+                             onClick={() => add()}
+                             block
+                             icon={<PlusOutlined />}
+                           >
+                             Add field
+                           </Button>
+                         </Form.Item>
+                          :
                           <Form.Item className="mt-2">
                             <Button
                               type="dashed"
@@ -502,7 +522,7 @@ const Page3 = ({questions}:any) => {
                             >
                               Add field
                             </Button>
-                          </Form.Item>
+                          </Form.Item>}
                         </>
                       )}
                     </Form.List>
@@ -564,6 +584,8 @@ const Page3 = ({questions}:any) => {
                           <Button
                             size={"large"}
                             type="primary"
+                            disabled={popup}
+                            style={{ opacity: popup ? "0" : "1" }}
                             onClick={handleSaveClick}
                             className="login-form-button "
                             loading={loading1}

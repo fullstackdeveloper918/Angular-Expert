@@ -5,22 +5,25 @@ import React, { Fragment, useCallback, useEffect, useState } from "react";
 import MainLayout from "../../components/Layout/layout";
 import TextArea from "antd/es/input/TextArea";
 import api from "@/utils/api";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { destroyCookie } from "nookies";
 import { StepBackwardOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import useAutoSaveForm from "../common/useAutoSaveForm";
-const Well_being_ckeck_in = ({questions}:any) => {
-
-  console.log(questions,"ytaaayt");
-  const filtered_questions = questions?.data?.filter((item: any) => item.page_type === "well_being") // Step 1: Filter by page_type
-  .sort((a: any, b: any) => parseInt(a.quesiton_position) - parseInt(b.quesiton_position)) // Step 2: Sort by question_position
-  .map((item: any, index: number) => {
-    item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
-    return item;
-  });
-  console.log(filtered_questions,"filtered_questions");
-
+const Well_being_ckeck_in = ({ questions }: any) => {
+  console.log(questions, "ytaaayt");
+  const filtered_questions = questions?.data
+    ?.filter((item: any) => item.page_type === "well_being") // Step 1: Filter by page_type
+    .sort(
+      (a: any, b: any) =>
+        parseInt(a.quesiton_position) - parseInt(b.quesiton_position)
+    ) // Step 2: Sort by question_position
+    .map((item: any, index: number) => {
+      item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
+      return item;
+    });
+  console.log(filtered_questions, "filtered_questions");
+  const [popup, setPopup] = useState<any>(false);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
@@ -29,16 +32,16 @@ const Well_being_ckeck_in = ({questions}:any) => {
   const [actionType, setActionType] = useState<"submit" | "save" | null>(null);
   const [state, setState] = useState<any>("");
   // const [question, setQuestion] = useState<any>([]);
-  console.log(questions,"questions");
-  
+  console.log(questions, "questions");
+
   // const filtered_questions = question?.filter((item: any) => item.page_type === "answers") // Step 1: Filter by page_type
   // .sort((a: any, b: any) => parseInt(a.quesiton_position) - parseInt(b.quesiton_position)) // Step 2: Sort by question_position
   // .map((item: any, index: number) => {
   //   item.quesiton_position = index.toString(); // Step 3: Update quesiton_position to 0, 1, 2, ...
   //   return item;
   // });
-  console.log(filtered_questions,"filtered_questions");
-  
+  console.log(filtered_questions, "filtered_questions");
+
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const value = entries.length > 0 ? entries[0][0] : "";
@@ -57,14 +60,16 @@ const Well_being_ckeck_in = ({questions}:any) => {
         personal_well_being_checkup: {
           user_id: value,
           meeting_id: getUserdata.meetings.NextMeeting.id,
-          personal_well_being_update_checkup: filtered_questions.map((q: any) => ({
-            question_id: q.id,
-            question: q.question,
-            answer: values[`question_${q.id}`] || "",
-            question_position:q.quesiton_position,
-            subheading_id:q.subheading_id||"",
-            subheading_title:q.subheading_title||"",
-          })),
+          personal_well_being_update_checkup: filtered_questions.map(
+            (q: any) => ({
+              question_id: q.id,
+              question: q.question,
+              answer: values[`question_${q.id}`] || "",
+              question_position: q.quesiton_position,
+              subheading_id: q.subheading_id || "",
+              subheading_title: q.subheading_title || "",
+            })
+          ),
         },
       };
       try {
@@ -74,14 +79,16 @@ const Well_being_ckeck_in = ({questions}:any) => {
             personal_well_being_checkup: {
               user_id: value,
               meeting_id: getUserdata.meetings.NextMeeting.id,
-              personal_well_being_update_checkup: filtered_questions.map((q: any) => ({
-                question_id: q.id,
-                question: q.question,
-                answer: values[`question_${q.id}`] || "",
-                question_position:q.quesiton_position,
-                subheading_id:q.subheading_id||"",
-                subheading_title:q.subheading_title||"",
-              })),
+              personal_well_being_update_checkup: filtered_questions.map(
+                (q: any) => ({
+                  question_id: q.id,
+                  question: q.question,
+                  answer: values[`question_${q.id}`] || "",
+                  question_position: q.quesiton_position,
+                  subheading_id: q.subheading_id || "",
+                  subheading_title: q.subheading_title || "",
+                })
+              ),
             },
           } as any;
           setLoading(true);
@@ -137,14 +144,16 @@ const Well_being_ckeck_in = ({questions}:any) => {
         personal_well_being_checkup: {
           user_id: value,
           meeting_id: getUserdata.meetings.NextMeeting.id,
-          personal_well_being_update_checkup:filtered_questions.map((q: any) => ({
-            question_id: q.id,
-            question: q.question,
-            answer: values[`question_${q.id}`] || "",
-            question_position:q.quesiton_position,
-            subheading_id:q.subheading_id||"",
-            subheading_title:q.subheading_title||"",
-          })),
+          personal_well_being_update_checkup: filtered_questions.map(
+            (q: any) => ({
+              question_id: q.id,
+              question: q.question,
+              answer: values[`question_${q.id}`] || "",
+              question_position: q.quesiton_position,
+              subheading_id: q.subheading_id || "",
+              subheading_title: q.subheading_title || "",
+            })
+          ),
         },
       };
       try {
@@ -154,20 +163,29 @@ const Well_being_ckeck_in = ({questions}:any) => {
             personal_well_being_checkup: {
               user_id: value,
               meeting_id: getUserdata.meetings.NextMeeting.id,
-              personal_well_being_update_checkup:filtered_questions.map((q: any) => ({
-                question_id: q.id,
-                question: q.question,
-                answer: values[`question_${q.id}`] || "",
-                question_position:q.quesiton_position,
-                subheading_id:q.subheading_id||"",
-                subheading_title:q.subheading_title||"",
-              })),
+              personal_well_being_update_checkup: filtered_questions.map(
+                (q: any) => ({
+                  question_id: q.id,
+                  question: q.question,
+                  answer: values[`question_${q.id}`] || "",
+                  question_position: q.quesiton_position,
+                  subheading_id: q.subheading_id || "",
+                  subheading_title: q.subheading_title || "",
+                })
+              ),
             },
           } as any;
           setLoading1(true);
 
           let res = await api.User.edit(items);
-          toast.success(res?.message);
+
+          setPopup(true);
+          toast.success(res?.message, {
+            autoClose: 500, // 10 seconds
+          });
+          setTimeout(() => {
+            setPopup(false);
+          }, 3000);
           // if (!pagetype) {
           //     router.push(`/admin/member/add/page8?${res?.userId}&edit&questionnair`)
           // }else{
@@ -233,8 +251,6 @@ const Well_being_ckeck_in = ({questions}:any) => {
   //   getQuestion();
   // }, []);
 
-
-  
   const getDataById = async () => {
     const item = {
       user_id: value,
@@ -243,8 +259,8 @@ const Well_being_ckeck_in = ({questions}:any) => {
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
-      console.log(res?.data,"qwert");
-      
+      console.log(res?.data, "qwert");
+
       // if (res?.data?.status == 500) {
       //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
       //   localStorage.removeItem("hasReloaded")
@@ -268,10 +284,13 @@ const Well_being_ckeck_in = ({questions}:any) => {
               acc[key] = formValues[key];
               return acc;
             }, {})
-          : dataFromApi?.personal_well_being_update_checkup.reduce((acc: any, question: any) => {
-              acc[`question_${question.question_id}`] = question.answer;
-              return acc;
-            }, {});
+          : dataFromApi?.personal_well_being_update_checkup.reduce(
+              (acc: any, question: any) => {
+                acc[`question_${question.question_id}`] = question.answer;
+                return acc;
+              },
+              {}
+            );
 
       form.setFieldsValue(resValues);
     } catch (error: any) {
@@ -311,6 +330,18 @@ const Well_being_ckeck_in = ({questions}:any) => {
   return (
     <>
       <Fragment>
+      <ToastContainer
+            className="toast-container-center"
+            position="top-right"
+            autoClose={false} // Disable auto-close
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         <section className="club_member">
           <Row justify="center" gutter={[20, 20]} className="heightCenter">
             <Col xs={24} sm={22} md={20} lg={16} xl={14} xxl={12}>
@@ -328,7 +359,7 @@ const Well_being_ckeck_in = ({questions}:any) => {
                                     </div> : ""} */}
                 <div className="mb-2 d-flex justify-content-between">
                   <Typography.Title level={3} className="m-0 fw-bold">
-                  PERSONAL WELL-BEING CHECK-IN 
+                    PERSONAL WELL-BEING CHECK-IN
                   </Typography.Title>
                   {/* <Button size={'large'} type="primary" className="text-white" disabled>7/8</Button> */}
                   {!pagetype && (
@@ -373,67 +404,74 @@ const Well_being_ckeck_in = ({questions}:any) => {
                     ))}
 
                     {/* Button  */}
-                    {!pagetype ? (
-                      <div className="col-2">
-                        <Button
-                          size={"large"}
-                          type="primary"
-                          className=" "
-                          onClick={handleSaveClick}
-                          loading={loading1}
-                        >
-                          Save
-                        </Button>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                    {!pagetype ? (
-                      <div className=" col-8 d-flex gap-5 justify-content-center">
-                        {!pagetype ? (
-                          <Button
-                            size={"large"}
-                            type="primary"
-                            className=" "
-                            onClick={onPrevious}
-                          >
-                            Previous
-                          </Button>
-                        ) : (
-                          ""
-                        )}
-                        <Button
-                          size={"large"}
-                          type="primary"
-                          onClick={handleSubmitClick}
-                          className="login-form-button "
-                          loading={loading}
-                        >
-                          {!pagetype ? "Next" : "Save"}
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className=" col-8 d-flex gap-5 justify-content-center">
-                        <Button
-                          size={"large"}
-                          type="primary"
-                          className=" "
-                          onClick={hnandleBack}
-                        >
-                          Back
-                        </Button>
-
-                        <Button
-                          size={"large"}
-                          type="primary"
-                          onClick={handleSaveClick}
-                          className="login-form-button "
-                          loading={loading1}
-                        >
-                          Save
-                        </Button>
-                      </div>
-                    )}
+                   <div className="d-flex mt-3">
+                                        {!pagetype ? (
+                                          <div className="col-2">
+                                            <Button
+                                              size={"large"}
+                                              type="primary"
+                                              className=" "
+                                              loading={loading1}
+                                              onClick={handleSaveClick}
+                                            >
+                                              Save
+                                            </Button>
+                                          </div>
+                                        ) : (
+                                          ""
+                                        )}
+                                        {!pagetype ? (
+                                          <div className=" col-8 d-flex gap-5 justify-content-center">
+                                            {!pagetype ? (
+                                              <Button
+                                                size={"large"}
+                                                type="primary"
+                                                className=" "
+                                                onClick={onPrevious}
+                                              >
+                                                Previous
+                                              </Button>
+                                            ) : (
+                                              ""
+                                            )}
+                                            <Button
+                                              size={"large"}
+                                              type="primary"
+                                              // htmlType="submit"
+                                              className="login-form-button "
+                                              loading={loading}
+                                              onClick={handleSubmitClick}
+                                            >
+                                              Next
+                                              {/* {!pagetype ? "Next" : "Save"} */}
+                                            </Button>
+                                          </div>
+                                        ) : (
+                                          <div className=" col-8 d-flex gap-5 justify-content-center">
+                                            <Button
+                                              size={"large"}
+                                              type="primary"
+                                              className=" "
+                                              onClick={hnandleBack}
+                                            >
+                                              Back
+                                            </Button>
+                  
+                                            <Button
+                                              size={"large"}
+                                              type="primary"
+                                              disabled={popup}
+                                              style={{ opacity: popup ? "0" : "1" }}
+                                              // htmlType="submit"
+                                              className="login-form-button "
+                                              loading={loading1}
+                                              onClick={handleSaveClick}
+                                            >
+                                              Save
+                                            </Button>
+                                          </div>
+                                        )}
+                                      </div>
                   </Form>
                 </div>
               </Card>

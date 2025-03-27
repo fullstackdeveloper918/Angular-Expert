@@ -36,7 +36,7 @@ const Page4 = ({questions}:any) => {
   const type = entries.length > 1 ? entries[1][0] : "";
   const questionnaire = entries.length > 2 ? entries[2][0] : "";
   const pagetype = entries.length > 2 ? entries[2][0] : "";
-
+  const [popup, setPopup] = useState<any>(false);
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 300);
@@ -175,10 +175,16 @@ const Page4 = ({questions}:any) => {
           setLoading1(true);
   
           let res = await api.User.edit(items);
-          toast.success("Update Craftsmen Toolbox");
+          // toast.success("Update Craftsmen Toolbox");
   
           dispatch(clearSpecificFormData(fieldsToClear));
-  
+          setPopup(true);
+          toast.success(res?.message, {
+            autoClose: 500, // 10 seconds
+          });
+          setTimeout(() => {
+            setPopup(false);
+          }, 3000);
           // toast.success(res?.message)
           // if (!pagetype) {
           //     router.push(`/admin/member/add/page5?${value}&edit`)
@@ -484,6 +490,8 @@ console.log(dataFromApi,"dataFromApi");
                           <Button
                             size={"large"}
                             type="primary"
+                            disabled={popup}
+                            style={{ opacity: popup ? "0" : "1" }}
                             // htmlType="submit"
                             className="login-form-button "
                             loading={loading1}

@@ -475,7 +475,7 @@ console.log(res,"rtetert");
                                     ) : (
                                         <>
                                     {getUserdata?.is_admin == false ?
-                                        <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} pagination={{
+                                        <Table className="tableBox" dataSource={dataSource}   columns={columns} pagination={{
                                             position: ['bottomCenter'],
                                         }} /> :
                                         <Table className="tableBox" dataSource={dataSource}   columns={columns}  pagination={{
@@ -483,6 +483,15 @@ console.log(res,"rtetert");
                                         }}/>
                                     }
                                     </>)}
+                                    {/* {getUserdata?.is_admin == false ?
+                                        <Table className="tableBox" dataSource={user_completed} columns={user_completed_columns} pagination={{
+                                            position: ['bottomCenter'],
+                                        }} /> :
+                                        <Table className="tableBox" dataSource={dataSource}   columns={columns}  pagination={{
+                                            position: ['bottomCenter'],
+                                        }}/>
+                                    }
+                                    </>)} */}
                                 </div>
                                
                             </Card>

@@ -77,7 +77,7 @@ const [question,setQuestion]=useState<any>([])
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
 console.log(state,"state");
-
+const [popup, setPopup] = useState<any>(false);
   const value = entries.length > 0 ? entries[0][0] : "";
   console.log(value,"value");
   
@@ -234,7 +234,14 @@ console.log(groupedQuestions,"groupedQuestions");
           } as any;
           setLoading1(true);
           let res = await api.User.edit(items);
-          toast.success(res?.message);
+          setPopup(true);
+          toast.success(res?.message, {
+            autoClose: 500, // 10 seconds
+          });
+          setTimeout(() => {
+            setPopup(false);
+          }, 3000);
+          // toast.success(res?.message);
           setTimeout(() => {
             if (pagetype) {
               router.push("/admin/questionnaire?page2")
@@ -295,6 +302,7 @@ console.log(res?.data,"piopiopi");
 console.log(formValues,"popopo");
 
 console.log(formValues," ");
+console.log(Object.keys(formValues).length > 0,"oioio");
 
       // const finalData = {
       //   financial_position:
@@ -324,6 +332,7 @@ console.log(formValues," ");
             acc[`question_${question.question_id}`] = question.answer;
             return acc;
           }, {});
+console.log(resValues,"resValues");
 
     form.setFieldsValue(resValues);
     } catch (error: any) {
@@ -509,6 +518,8 @@ getQuestion()
                             <Button
                               size={"large"}
                               type="primary"
+                              disabled={popup}
+                            style={{ opacity: popup ? "0" : "1" }}
                               // htmlType="submit"
                               className="login-form-button "
                               onClick={handleSaveClick}

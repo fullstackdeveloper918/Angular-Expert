@@ -27,6 +27,7 @@ const Page7 = ({questions}:any) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [state, setState] = useState<any>("");
+  const [popup, setPopup] = useState<any>("");
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [actionType, setActionType] = useState<'submit' | 'save' | null>(null);
@@ -35,6 +36,7 @@ const Page7 = ({questions}:any) => {
   const value = entries.length > 0 ? entries[0][0] : "";
   const type = entries.length > 1 ? entries[1][0] : "";
   const pagetype = entries.length > 2 ? entries[2][0] : "";
+console.log(popup,"popup");
 
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
@@ -68,10 +70,10 @@ const Page7 = ({questions}:any) => {
           let res = await api.User.edit(items);
           dispatch(clearSpecificFormData(fieldsToClear));
           if (!pagetype) {
-            router.push(`/admin/member/add/additional_questionnaire?${value}&edit`)
+            router.push(`/admin/member/add/page8?${value}&edit`)
         } else {
             // router?.back()
-            router.push("/admin/questionnaire?page7")
+            router.push("/admin/questionnaire?page6")
         }
         } else {
           setLoading(true);
@@ -133,8 +135,19 @@ const Page7 = ({questions}:any) => {
           } as any;
           setLoading1(true);
           let res = await api.User.edit(items);
+          setPopup(true);
           dispatch(clearSpecificFormData(fieldsToClear));
-          toast.success(res?.message);
+          toast.success(res?.message, {
+            autoClose: 500, 
+          });
+          setTimeout(() => {
+            setPopup(false);
+
+          }, 3000);
+
+
+
+          // setPopup(false)
           setTimeout(() => {
             if (pagetype) {
               router.push("/admin/questionnaire?page7")
@@ -207,20 +220,17 @@ const Page7 = ({questions}:any) => {
           console.log(acc,"accaccacc");
             acc[`question_${question.question_id}`] = question.answer;
             return acc;
-          }, { estimating: formValues?.estimating || dataFromApi?.estimating,
+          }, { estimating: dataFromApi?.estimating,
             accountability: formValues?.accountability || dataFromApi?.accountability,
             productivity: formValues?.productivity || dataFromApi?.productivity,});
-      // const finalData = {
-      //   estimating: formValues?.estimating || dataFromApi?.estimating,
-      //   accountability: formValues?.accountability || dataFromApi?.accountability,
-      //   productivity: formValues?.productivity || dataFromApi?.productivity,
-      
-      //   round_table: dataFromApi?.round_table?.reduce((acc: any, question: any) => {
-      //     acc[`question_${question.question_id}`] = question.answer;
-      //     return acc;
-      //   }, {}),
-      // };
+      const finalData = {
+        estimating: formValues?.estimating || dataFromApi?.estimating,
+        accountability: formValues?.accountability || dataFromApi?.accountability,
+        productivity: formValues?.productivity || dataFromApi?.productivity,
+    
+      };
 
+      form.setFieldsValue(finalData);
       form.setFieldsValue(resValues);
     } catch (error: any) {
       // if (error?.status == 500) {
@@ -306,7 +316,7 @@ const Page7 = ({questions}:any) => {
                       className="text-white"
                       disabled
                     >
-                      6/8
+                      8/9
                     </Button>
                   )}
                 </div>
@@ -454,6 +464,8 @@ const Page7 = ({questions}:any) => {
                           <Button
                             size={"large"}
                             type="primary"
+                            disabled={popup}
+                            style={{opacity: popup ? "0": "1"}}
                             onClick={handleSaveClick}
                             className="login-form-button "
                             loading={loading1}

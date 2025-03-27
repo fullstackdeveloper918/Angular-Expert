@@ -54,23 +54,23 @@ const Admin: Page = () => {
           
             let res = await api.Admin.listing()
             setState(res)
-            if (res?.status == 500) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                localStorage.removeItem('hasReloaded');
-                // }
-                dispatch(clearUserData({}));
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
-            }
+            // if (res?.status == 500) {
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            //     localStorage.removeItem('hasReloaded');
+            //     // }
+            //     dispatch(clearUserData({}));
+            //     toast.error("Session Expired Login Again")
+            //     router.replace("/auth/signin")
+            // }
         } catch (error:any) {
-            if (error?.status==500) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                localStorage.removeItem('hasReloaded');
-                // }
-                dispatch(clearUserData({}));
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
-            }
+            // if (error?.status==500) {
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            //     localStorage.removeItem('hasReloaded');
+            //     // }
+            //     dispatch(clearUserData({}));
+            //     toast.error("Session Expired Login Again")
+            //     router.replace("/auth/signin")
+            // }
             setLoading(false)
         } finally {
         }
@@ -88,13 +88,13 @@ const Admin: Page = () => {
           initialise()
         //   setAreas
         } catch (error) {
-            if (error==400) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                localStorage.removeItem('hasReloaded');
-                // }
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
-            }
+            // if (error==400) {
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            //     localStorage.removeItem('hasReloaded');
+            //     // }
+            //     toast.error("Session Expired Login Again")
+            //     router.replace("/auth/signin")
+            // }
         }
       }
     const columns = [
