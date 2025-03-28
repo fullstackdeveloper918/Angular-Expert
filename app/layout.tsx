@@ -49,7 +49,7 @@ export default function RootLayout({
         </head>
         <body className={inter.className}>
           {/* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossOrigin="anonymous"></script> */}
-          <AntdRegistry>
+          {/* <AntdRegistry> */}
 
             <NextTopLoader  color="#2299DD"
  initialPosition={0.08}
@@ -66,7 +66,7 @@ export default function RootLayout({
               {children}
             </PersistGate>
           </Provider>
-          </AntdRegistry>
+          {/* </AntdRegistry> */}
         </body>
       </html>
     </>
