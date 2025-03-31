@@ -28,6 +28,7 @@ import { destroyCookie, parseCookies } from "nookies";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
 import Compressor from "compressorjs";
+import { capFirst } from "@/utils/validation";
 
 const { Title } = Typography;
 
@@ -409,7 +410,8 @@ const Page8 = () => {
           console.log(response, "sjdkahdgasd");
 
           const messages: any = {
-            200: "Updated Successfully",
+            200: "Member update completed on the dasboard",
+            // 200: "Updated Successfully",
             201: "Added Successfully",
           };
 
@@ -460,7 +462,8 @@ const Page8 = () => {
           setLoading(false);
 
           const messages: any = {
-            200: "Updated Successfully",
+            200:"Member update completed on the dasboard",
+            // 200: "Updated Successfully",
             201: "Added Successfully",
           };
 
@@ -479,6 +482,7 @@ const Page8 = () => {
 
           responseData = response?.pdfReponseData;
         }
+
       } catch (error: any) {
         setLoadButton("");
         // if (error?.status === 500) {
@@ -758,14 +762,32 @@ const Page8 = () => {
   //   }
   // };
 
-  const generatePdf = async (data?: any) => {
-    console.log(data, "sdafasdfasd");
-
-    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
-    const blob = await pdf(<Pdf state={data} />).toBlob();
-    const pdfUrl = URL.createObjectURL(blob);
-    return { blob, pdfUrl, timestamp };
+  const generatePdf = async (data?: any): Promise<{ blob: Blob; pdfUrl: string; timestamp: string } | undefined> => {
+    console.log(data, "asdasdas");
+  
+    // If data is missing or invalid, return undefined
+    if (!data) {
+      console.error("Data is missing or invalid");
+      return undefined;
+    }
+  
+    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
+    
+    try {
+      // Generate the PDF
+      const blob = await pdf(<Pdf state={data} />).toBlob();
+      const pdfUrl = URL.createObjectURL(blob);
+      
+      // Return the blob, pdfUrl, and timestamp
+      return { blob, pdfUrl, timestamp };
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      return undefined;
+    }
   };
+  
+  
+  
   const companyNameMap: any = {
     augusta: "Augusta Homes, Inc.",
     buffington: "Buffington Homes, L.P.",
@@ -790,19 +812,31 @@ const Page8 = () => {
 
   const sharePdf = async (responseData: any) => {
     console.log(responseData, "responseData");
+  
     const companyName =
       companyNameMap[responseData?.company_name || ""] || "N/A";
-    const { pdfUrl, timestamp } = await generatePdf(responseData);
+  
+    // Destructure the result from generatePdf, handle the undefined case
+    const result = await generatePdf(responseData);
+  
+    if (!result) {
+      console.error("PDF generation failed");
+      return;
+    }
+  
+    const { pdfUrl, timestamp } = result;  // Safely destructure only if result is valid
+    
     const response = await fetch(pdfUrl);
     const blob = await response.blob();
-
-    const file = new File([blob], `check.pdf`, { type: "application/pdf" });
+  
+    const file = new File([blob], `${capFirst(responseData?.company_name)}.pdf`, { type: "application/pdf" });
+    
     const formData = new FormData();
     formData.append("file", file);
     formData.append("user_id", getUserdata?.user_id);
     formData.append("meeting_id", getUserdata.meetings.NextMeeting.id);
     formData.append("company_name", companyName);
-    // formData.append("company_name", responseData?.company_name);
+  
     const res = await fetch(
       "https://frontend.goaideme.com/send-completeform-mail-to-superadmin",
       {
@@ -814,7 +848,7 @@ const Page8 = () => {
       }
     );
   };
-
+  
   const handleFetchAndFetchData = async (values: any) => {
     if (actionType === "submit") {
       let item = await submit(values);

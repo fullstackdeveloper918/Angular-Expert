@@ -31,6 +31,7 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import PersonalWellBeing from "../common/PersonalWellBeing";
 import BusinessEvolutionPdf1 from "../common/BusinessEvolutionPdf1";
+import { capFirst } from "@/utils/validation";
 
 
 const { Search } = Input;
@@ -133,13 +134,13 @@ const QuestionnairList = () => {
             
             setState1(res?.data || null);
         } catch (error: any) {
-            if (error?.status == 500) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                localStorage.removeItem('hasReloaded');
-                // }
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
-            }
+            // if (error?.status == 500) {
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            //     localStorage.removeItem('hasReloaded');
+            //     // }
+            //     toast.error("Session Expired Login Again")
+            //     router.replace("/auth/signin")
+            // }
         }
     };
     useEffect(() => {
@@ -157,20 +158,20 @@ const QuestionnairList = () => {
             let res = await api.Questionnaire.listing(query,getUserdata.meetings.NextMeeting.id);
 
             setState(res.data);
-            if (res?.data?.status == 500) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            // if (res?.data?.status == 500) {
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
                 
-                localStorage.removeItem('hasReloaded');
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
-            }
+            //     localStorage.removeItem('hasReloaded');
+            //     toast.error("Session Expired Login Again")
+            //     router.replace("/auth/signin")
+            // }
         } catch (error: any) {
-            if (error?.status == 500) {
-                destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-                localStorage.removeItem('hasReloaded');
-                toast.error("Session Expired Login Again")
-                router.replace("/auth/signin")
-            }
+            // if (error?.status == 500) {
+            //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+            //     localStorage.removeItem('hasReloaded');
+            //     toast.error("Session Expired Login Again")
+            //     router.replace("/auth/signin")
+            // }
         } finally {
         }
     };
@@ -190,7 +191,9 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdf = async () => {
         const { blob, timestamp } = await generatePdf();
-        saveAs(blob, `Order_${timestamp}.pdf`);
+        // saveAs(blob,  `${capFirst(timestamp)}.pdf`);
+        saveAs(blob, `BUSINESS UPDATE.pdf`);
+        // saveAs(blob, `Order_${timestamp}.pdf`);
     };
     const generatePdf2 = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
@@ -202,7 +205,8 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdf2 = async () => {
         const { blob, timestamp } = await generatePdf2();
-        saveAs(blob, `Order_${timestamp}.pdf`);
+        saveAs(blob, `GOALS.pdf`);
+        // saveAs(blob, `Order_${timestamp}.pdf`);
     };
     const generatePdf3 = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
@@ -214,7 +218,7 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdf3 = async () => {
         const { blob, timestamp } = await generatePdf3();
-        saveAs(blob, `Order_${timestamp}.pdf`);
+        saveAs(blob, `CRAFTSMEN TOOLBOX.pdf`);
     };
     const generatePdf4 = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
@@ -226,7 +230,8 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdf4 = async () => {
         const { blob, timestamp } = await generatePdf4();
-        saveAs(blob, `Order_${timestamp}.pdf`);
+        saveAs(blob, `CRAFTSMEN CHECK-UP.pdf`);
+        // saveAs(blob, `Order_${timestamp}.pdf`);
     };
     const generatePdfWellBeing = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
@@ -238,7 +243,8 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdfWellBeing= async () => {
         const { blob, timestamp } = await generatePdfWellBeing();
-        saveAs(blob, `Order_${timestamp}.pdf`);
+        saveAs(blob, `PERSONAL WELL-BEING CHECK-IN.pdf`);
+        // saveAs(blob, `Order_${timestamp}.pdf`);
     };
     const generatePdfBusinessEvolution = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
@@ -250,7 +256,8 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdfBusinessEvolution= async () => {
         const { blob, timestamp } = await generatePdfBusinessEvolution();
-        saveAs(blob, `Order_${timestamp}.pdf`);
+        saveAs(blob, `BUSINESS EVOLUTION & INDUSTRY TRENDS.pdf`);
+        // saveAs(blob, `Order_${timestamp}.pdf`);
     };
     const generatePdf5 = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
@@ -262,7 +269,8 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdf5 = async () => {
         const { blob, timestamp } = await generatePdf5();
-        saveAs(blob, `Order_${timestamp}.pdf`);
+        saveAs(blob, `MEETING REVIEW.pdf`);
+        // saveAs(blob, `Order_${timestamp}.pdf`);
     };
     const generatePdf6 = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
@@ -274,7 +282,8 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdf6 = async () => {
         const { blob, timestamp } = await generatePdf6();
-        saveAs(blob, `Order_${timestamp}.pdf`);
+        saveAs(blob, `ROUNDTABLE TOPICS.pdf`);
+        // saveAs(blob, `Order_${timestamp}.pdf`);
     };
     const generatePdf7 = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
@@ -286,7 +295,8 @@ const QuestionnairList = () => {
     // Function to handle PDF download
     const downLoadPdf7 = async () => {
         const { blob, timestamp } = await generatePdf7();
-        saveAs(blob, `Order_${timestamp}.pdf`);
+        saveAs(blob, `PHOTO SECTION.pdf`);
+        // saveAs(blob, `Order_${timestamp}.pdf`);
     };
     const generatePdf8 = async () => {
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');

@@ -8,9 +8,24 @@ import {
   Image,
   Document,
   StyleSheet,
-  usePage
+  usePage,
+  Font 
 } from "@react-pdf/renderer";
+Font.register({
+  family: 'Open Sans',
+  fonts: [
+  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
+  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf', fontWeight: 600 }
+  ]
+  });
+
 const styles = StyleSheet.create({
+  textBold: {
+    fontFamily: "Open Sans",  // Use the registered font family
+    fontWeight: "bold",       // You can also set font weight directly here
+    fontSize: 16,
+    textTransform:"uppercase",
+  },
   page: {
     padding: 20,
     background: "#fff",
@@ -51,7 +66,7 @@ const styles = StyleSheet.create({
   },
   subheader: {
     fontSize: 15,
-    // marginBottom: ,
+    marginTop:20 ,
     textTransform: "capitalize",
     textDecoration: "underline",
   },
@@ -65,6 +80,7 @@ const styles = StyleSheet.create({
     borderBottom: "3px solid #d2d2d2",
     marginBottom: "20px",
     paddingBottom: "10px",
+    fontFamily: "Open Sans",
   },
   text: {
     marginBottom: 8,
@@ -73,9 +89,23 @@ const styles = StyleSheet.create({
     break: "auto",
     overflow: "wrap",
     fontWeight: "bold",
+    fontFamily: "Open Sans",
   },
   textarea: {
-    padding: 8,
+    padding: '2 0 8',
+    // border: "1px solid #000",
+    marginBottom: 10,
+    width: "100%",
+    display: "inline-block",
+    fontSize: 11,
+    break: "auto",
+    minHeight: 35,
+    overflow: "wrap",
+    fontWeight: "400",
+    color: "#333",
+  },
+  textareanew: {
+    padding: ' 8px ',
     border: "1px solid #000",
     marginBottom: 10,
     width: "100%",
@@ -249,7 +279,9 @@ const MemberUpdatePDF = (props) => {
     return acc;
   }, {});
   console.log(groupedQuestions, "groupedQuestions");
-
+if(!groupedQuestions){
+  return
+}
   return (
     <>
       <Document>
@@ -272,7 +304,6 @@ const MemberUpdatePDF = (props) => {
               <Text
                 style={{
                   fontStyle: "italic",
-                  fontSize: 18,
                   textTransform: "capitalize",
                 }}
               >
@@ -321,10 +352,9 @@ const MemberUpdatePDF = (props) => {
                   {props?.state?.businessUpdate[0]?.craftsmen_support}
                 </Text>
               </> :
-
-              Object.keys(groupedQuestions).map((subheadingTitle) => (
+  Object.keys(groupedQuestions).map((subheadingTitle) => (
                 <>
-                  <Text>{subheadingTitle}</Text>
+                  <Text style={styles.textBold}>{subheadingTitle}</Text>
                   {/* Display questions for the current subheading */}
                   {groupedQuestions[subheadingTitle].map((res) => (
                     // console.log(question,"yyy")
@@ -376,7 +406,7 @@ const MemberUpdatePDF = (props) => {
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Goal #{index + 1}: </Text>
-                    <Text style={styles.textarea} wrap={false}>
+                    <Text style={styles.textareanew} wrap={false}>
                       {res?.name}
                     </Text>
                   </View>
@@ -388,7 +418,7 @@ const MemberUpdatePDF = (props) => {
                   </View>
                 </View>
                 <Text style={styles.text}> Comments: </Text>
-                <Text style={styles.textarea} wrap={false}>
+                <Text style={styles.textareanew} wrap={false}>
                   {res?.comment}
                 </Text>
               </View>
@@ -402,17 +432,17 @@ const MemberUpdatePDF = (props) => {
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Business Goal #{index + 1}: </Text>
-                    <Text style={styles.textarea} wrap={false}>
+                    <Text style={styles.textareanew} wrap={false}>
                       {res?.name}
                     </Text>
                   </View>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Priority: </Text>
-                    <Text style={styles.textarea}>  {res?.status}   </Text>
+                    <Text style={styles.textareanew}>  {res?.status}   </Text>
                   </View>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> To be Completed By:</Text>
-                    <Text style={styles.textarea} wrap={false}>
+                    <Text style={styles.textareanew} wrap={false}>
                       {res?.to_be_completed_by}
 
                     </Text>

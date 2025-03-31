@@ -7,23 +7,30 @@ import {
   Image,
   Document,
   StyleSheet,
+  Font 
 } from "@react-pdf/renderer";
+Font.register({
+  family: 'Open Sans',
+  fonts: [
+  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
+  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf', fontWeight: 600 }
+  ]
+  });
 
-
-
-import validation from "@/utils/validation";
 const styles = StyleSheet.create({
+  textBold: {
+    fontFamily: "Open Sans",  // Use the registered font family
+    fontWeight: "bold",       // You can also set font weight directly here
+    fontSize: 16,
+    textTransform:"uppercase",
+  },
   page: {
     padding: 20,
     background: "#fff",
-    break: 'auto', // Ensure text can break across pages
-    overflow: 'wrap',
+    break: "auto",
+    overflow: "wrap",
   },
-  section: {
-    padding: 10,
-    flexDirection: "column",
-    display: "flex",
-  },
+
   header: {
     fontSize: 15,
     textAlign: "center",
@@ -51,13 +58,13 @@ const styles = StyleSheet.create({
   },
   itali_text: {
     fontSize: "13px",
-    fontStyle: 'italic',
+    fontStyle: "italic",
     fontWeight: "400",
     fontFamily: "Roboto",
   },
   subheader: {
     fontSize: 15,
-    // marginBottom: ,
+    marginTop:20 ,
     textTransform: "capitalize",
     textDecoration: "underline",
   },
@@ -71,25 +78,42 @@ const styles = StyleSheet.create({
     borderBottom: "3px solid #d2d2d2",
     marginBottom: "20px",
     paddingBottom: "10px",
+    fontFamily: "Open Sans",
   },
   text: {
     marginBottom: 8,
-    fontSize: 12,
+    fontSize: 13,
     color: "#000",
-    break: 'auto',
+    break: "auto",
     overflow: "wrap",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
   },
   textarea: {
-    padding: 8,
+    padding: '2 0 8',
+    // border: "1px solid #000",
+    marginBottom: 10,
+    width: "100%",
+    display: "inline-block",
+    fontSize: 11,
+    break: "auto",
+    minHeight: 35,
+    overflow: "wrap",
+    fontWeight: "400",
+    color: "#333",
+  },
+  textareanew: {
+    padding: ' 8px ',
     border: "1px solid #000",
     marginBottom: 10,
     width: "100%",
     display: "inline-block",
-    color: "#000",
-    fontSize: 12,
-    break: 'auto', 
-    minHeight:35,
-    overflow: 'wrap',
+    fontSize: 11,
+    break: "auto",
+    minHeight: 35,
+    overflow: "wrap",
+    fontWeight: "400",
+    color: "#333",
   },
   goal: {
     marginBottom: 20,
@@ -127,33 +151,69 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     margin: "auto",
   },
-  marginequal:{
-    marginVertical:10,
+  marginequal: {
+    marginVertical: 10,
   },
-  flexBox :{
+  flexBox: {
     display: "flex",
   },
   goal_two: {
-    display: "flex",
-    gap: 5,
+    // display: "flex",
+    // gap: 5,
     width: "100%",
-    flexDirection:"row",
-    flexWrap:"wrap",
+    // flexWrap:"wrap",
   },
-  memberUpdate : {
-    fontWeight: 900 ,
-    fontSize:24,
+  memberUpdate: {
+    fontWeight: 900,
+    fontSize: 24,
   },
-  heightGiven :{
-    minHeight:400,
+  heightGiven: {
+    minHeight: 550,
+  },
+  heightGiventab: {
+    minHeight: 450,
+  },
+  heightGiventbottom: {
+    minHeight: 390,
+  },
+  heightGivenwrap: {
+    minHeight: 350,
+    marginBottom: '20px',
+  },
+  heightGivenwrapper: {
+    minHeight: 330,
+  },
+  images_div: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "10px",
+    flexDirection: "row",
+  },
+  innderImg: {
+    width: `100%`,
+    maxWidth: "270px",
+    height: "auto",
+    minHeight: "350px",
+    maxHeight: "350px",
+    objectFit: "cover",
+    // flex:'1 0 47%'
+  },
+  footer: {
+    position: "absolute",
+    bottom: 20,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+  },
+  pageNumber: {
+    fontSize: 12,
+    color: "#ff6347", // Change color here (e.g., tomato red)
   },
 });
 
 const BussinessPDF = (props) => {
   const photoSection = props?.state?.photo_section || [];
 
-  const options = { httpHeaders: { 'crossOrigin': 'anonymous' }, };
-  // <Image key={imageIndex} style={{ width: 100, height: 100 }} options={options} src={{ uri: ${file.url}, method: "GET", headers: { Pragma: 'no-cache', "Cache-Control": "no-cache" }, body: "" }} />
   const companyNameMap = {
     "augusta": "Augusta Homes, Inc.",
     "buffington": "Buffington Homes, L.P.",
@@ -174,11 +234,10 @@ const BussinessPDF = (props) => {
     "shaeffer": "Shaeffer Hyde Construction",
     "split": "Split Rock Custom Homes",
     "tiara": "Tiara Sun Development"
-};
+  };
 
-const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
+  const companyName = companyNameMap[props?.state?.company_name || ""] || "N/A";
 
-  const newArr = props?.state?.photo_section?.fileUrls?.length && Object.values(props?.state?.photo_section?.fileUrls[0])
   const groupedQuestions = props?.state?.businessUpdate[0]?.business_update_questions.reduce((acc, question) => {
     const { subheading_title } = question;
     if (!acc[subheading_title]) {
@@ -187,165 +246,72 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
     acc[subheading_title].push(question);
     return acc;
   }, {});
+
   return (
-    <>
-      <Document>
-        <Page size="A4" style={styles.page}>
-          <View style={{ textAlign: "center", display: "block" }}>
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <View style={{ textAlign: "center", display: "block" }}>
           <Image
-  src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"
-  style={{ width:"50%", objectFit: 'contain' , textAlign:"center", margin:"10px auto 15px"}}
-  alt="Image"
-/></View>
-          <View style={styles.header}>
-            <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}> {props?.state?.businessUpdate.length?"Spring 2025":
-                "Fall 2024"}</Text>
+            src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"
+            style={{ width: "50%", objectFit: 'contain', textAlign: "center", margin: "10px auto 15px" }}
+            alt="Image"
+          />
+        </View>
+        <View style={styles.header}>
+          <Text style={styles.memberUpdate}>
+            Member Update / <Text style={{ fontStyle: 'italic', fontSize: 18, textTransform: "capitalize" }}>
+              {props?.state?.businessUpdate.length ? "Spring 2025" : "Fall 2024"}
             </Text>
-            <Text style={styles.subheader}>
-              {companyName}
-            </Text>
-          </View>
-<View style={styles.section}>
-            <Text style={styles.main_heading}>Business Update</Text>
-            {props?.state?.businessUpdate[0]?.craftsmen_support ?
+          </Text>
+          <Text style={styles.subheader}>
+            {companyName}
+          </Text>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.main_heading}>Business Update</Text>
+          {props?.state?.businessUpdate[0]?.craftsmen_support ? (
+            <>
+              <Text style={styles.text}>Current financial position:</Text>
+              <Text style={styles.textarea}>
+                {props?.state?.businessUpdate[0]?.financial_position}
+              </Text>
+              <Text style={styles.text}>Current sales positions, hot prospects, recently contracted work:</Text>
+              <Text style={styles.textarea}>
+                {props?.state?.businessUpdate[0]?.sales_position}
+              </Text>
+              <Text style={styles.text}>Accomplishments in the last 6 months:</Text>
+              <Text style={styles.textarea}>
+                {props?.state?.businessUpdate[0]?.accomplishments}
+              </Text>
+              <Text style={styles.text}>HR position &/or needs:</Text>
+              <Text style={styles.textarea}>
+                {props?.state?.businessUpdate[0]?.hr_position}
+              </Text>
+              <Text style={styles.text}>Current challenges:</Text>
+              <Text style={styles.textarea}>
+                {props?.state?.businessUpdate[0]?.current_challenges}
+              </Text>
+              <Text style={styles.text}>How can the Craftsmen aid or support you?</Text>
+              <Text style={styles.textarea}>
+                {props?.state?.businessUpdate[0]?.craftsmen_support}
+              </Text>
+            </>
+          ) : (
+            Object.keys(groupedQuestions).map((subheadingTitle) => (
               <>
-                <Text style={styles.text}>Current financial position:</Text>
-                <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.financial_position}
-                </Text>
-                <Text style={styles.text} wrap={false}>
-                  Current sales positions, hot prospects, recently contracted work:
-                </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.sales_position}
-                </Text>
-                <Text style={styles.text}>
-                  Accomplishments in the last 6 months:
-                </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.accomplishments}
-                </Text>
-                <Text style={styles.text}> HR position &/or needs: </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.hr_position}
-                </Text>
-                <Text style={styles.text}>
-                  Current challenges (e.g., problem client, personnel issue(s),
-                  trade availability, rising costs, supply chain):
-                </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.current_challenges}
-                </Text>
-                <Text style={styles.text}>
-                  How can the Craftsmen aid or support you with these challenges?
-                </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.craftsmen_support}
-                </Text>
-              </> :
-
-              Object.keys(groupedQuestions).map((subheadingTitle) => (
-                <>
-                  <Text>{subheadingTitle}</Text>
-                  {/* Display questions for the current subheading */}
-                  {groupedQuestions[subheadingTitle].map((res) => (
-                    // console.log(question,"yyy")
-                    <>
-                      <Text style={styles.text} >{res?.question}</Text>
-                      <Text style={[styles.textarea]} wrap={false}>
-                        {res.answer}
-                      </Text>
-                    </>
-                  ))}
-                </>
-
-
-
-              ))
-
-              //    <Text>{subheadingTitle}</Text>
-              //    {/* Display questions for the current subheading */}
-              //    {groupedQuestions[subheadingTitle].map((question) => (
-              //     <>
-              //    <Text style={styles.text} key={index}>{question?.question}</Text>
-              //    <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
-              //      {question.answer}
-              //    </Text>
-              //     </>
-              //    ))}
-              //  </>
-
-
-              // props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
-              // (
-              //   <>
-              //   <Text style={styles.text} key={index}>{res?.question}</Text>
-              // <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
-              //   {res.answer}
-              // </Text>
-              //   </>
-              // )
-              // )
-
-            }
-          </View>
-            {/* <Text style={styles.main_heading}>Business Update</Text> */}
-          {/* <View style={styles.section}>
-            <Text style={styles.main_heading}>Business Update</Text>
-                       {props?.state?.businessUpdate[0].business_update_questions?
-                       props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
-                       (
-                         <>
-                         <Text style={styles.text} key={index}>{res?.question}</Text>
-                       <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
-                         {res.answer}
-                       </Text>
-                         </>
-                       )
-                       )
-                       :
-                       <>
-                       <Text style={styles.text}>Current financial position:</Text>
-                       <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
-                         {props?.state?.businessUpdate[0]?.financial_position}
-                       </Text>
-                       <Text style={styles.text} wrap={false}>
-                         Current sales positions, hot prospects, recently contracted work:
-                       </Text>
-                       <Text style={styles.textarea} wrap={false}>
-                         {props?.state?.businessUpdate[0]?.sales_position}
-                       </Text>
-                       <Text style={styles.text}>
-                         Accomplishments in the last 6 months:
-                       </Text>
-                       <Text style={styles.textarea} wrap={false}>
-                         {props?.state?.businessUpdate[0]?.accomplishments}
-                       </Text>
-                       <Text style={styles.text}> HR position &/or needs: </Text>
-                       <Text style={styles.textarea} wrap={false}>
-                         {props?.state?.businessUpdate[0]?.hr_position}
-                       </Text>
-                       <Text style={styles.text}>
-                         Current challenges (e.g., problem client, personnel issue(s),
-                         trade availability, rising costs, supply chain):
-                       </Text>
-                       <Text style={styles.textarea} wrap={false}>
-                         {props?.state?.businessUpdate[0]?.current_challenges}
-                       </Text>
-                       <Text style={styles.text}>
-                         How can the Craftsmen aid or support you with these challenges?
-                       </Text>
-                       <Text style={styles.textarea} wrap={false}>
-                         {props?.state?.businessUpdate[0]?.craftsmen_support}
-                       </Text>
-                       </>
-           
-           }
-          </View> */}
-        </Page>
-      </Document>
-    </>
+                <Text style={styles.textBold}>{subheadingTitle}</Text>
+                {groupedQuestions[subheadingTitle].map((res) => (
+                  <>
+                    <Text style={styles.text}>{res?.question}</Text>
+                    <Text style={styles.textarea}>{res.answer}</Text>
+                  </>
+                ))}
+              </>
+            ))
+          )}
+        </View>
+      </Page>
+    </Document>
   );
 };
 

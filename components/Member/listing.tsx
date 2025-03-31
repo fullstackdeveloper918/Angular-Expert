@@ -189,6 +189,24 @@ const MemberList = ({response}:any) => {
         let item = await getDataById(id);
         await sharePdf(item);
     };
+    const formatPhoneNumber = (phoneNumber:any) => {
+        // Remove any non-numeric characters
+        const cleanNumber = phoneNumber.replace(/\D/g, "");
+      
+        // Check if the length is 11 digits (e.g. +1 followed by 10 digits)
+        if (cleanNumber.length === 11) {
+          // Extract the country code and the rest of the number
+          const countryCode = cleanNumber.slice(0, 1);  // Country code (+1)
+          const areaCode = cleanNumber.slice(1, 4);  // Area code (next 3 digits)
+          const firstPart = cleanNumber.slice(4, 7);  // First part of the phone number (next 3 digits)
+          const secondPart = cleanNumber.slice(7);  // Second part of the phone number (last 4 digits)
+      
+          // Format the number: +1 (xxx) xxx-xxxx
+          return `+${countryCode} (${areaCode}) ${firstPart}-${secondPart}`;
+        }
+      
+        return phoneNumber;  // Return the original number if it doesn't fit the expected pattern
+      };
     // const completed2 = state2?.filter((res:any) => res?.is_completed === true);
     const user_completed = state2?.slice(0, 5).map((res: any, index: number) => {
         const companyName = companyNameMap[res?.company_name || ""] || "N/A";
@@ -258,7 +276,7 @@ const MemberList = ({response}:any) => {
             name: res?.firstname ? `${validation?.capitalizeFirstLetter(res?.firstname)} ${validation?.capitalizeFirstLetter(res?.lastname)}` : "N/A",
             company:companyName||"N/A",
             email: res?.email||"N/A",
-            phone: res?.phone_number||"N/A",
+            phone: formatPhoneNumber(res?.phone_number)||"N/A",
             position: validation?.capitalizeFirstLetter(res?.position||"N/A"),
             city: validation?.capitalizeFirstLetter(res?.home_city||"N/A"),
             action: <ul className='m-0 list-unstyled d-flex gap-2'>

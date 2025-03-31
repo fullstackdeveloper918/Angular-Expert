@@ -7,23 +7,30 @@ import {
   Image,
   Document,
   StyleSheet,
+  Font 
 } from "@react-pdf/renderer";
+Font.register({
+  family: 'Open Sans',
+  fonts: [
+  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
+  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf', fontWeight: 600 }
+  ]
+  });
 
-
-
-import validation from "@/utils/validation";
 const styles = StyleSheet.create({
+  textBold: {
+    fontFamily: "Open Sans",  // Use the registered font family
+    fontWeight: "bold",       // You can also set font weight directly here
+    fontSize: 16,
+    textTransform:"uppercase",
+  },
   page: {
     padding: 20,
     background: "#fff",
-    break: 'auto', // Ensure text can break across pages
-    overflow: 'wrap',
+    break: "auto",
+    overflow: "wrap",
   },
-  section: {
-    padding: 10,
-    flexDirection: "column",
-    display: "flex",
-  },
+
   header: {
     fontSize: 15,
     textAlign: "center",
@@ -51,13 +58,13 @@ const styles = StyleSheet.create({
   },
   itali_text: {
     fontSize: "13px",
-    fontStyle: 'italic',
+    fontStyle: "italic",
     fontWeight: "400",
     fontFamily: "Roboto",
   },
   subheader: {
     fontSize: 15,
-    // marginBottom: ,
+    marginTop:20 ,
     textTransform: "capitalize",
     textDecoration: "underline",
   },
@@ -71,25 +78,42 @@ const styles = StyleSheet.create({
     borderBottom: "3px solid #d2d2d2",
     marginBottom: "20px",
     paddingBottom: "10px",
+    fontFamily: "Open Sans",
   },
   text: {
     marginBottom: 8,
-    fontSize: 12,
+    fontSize: 13,
     color: "#000",
-    break: 'auto',
+    break: "auto",
     overflow: "wrap",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
   },
   textarea: {
-    padding: 8,
+    padding: '2 0 8',
+    // border: "1px solid #000",
+    marginBottom: 10,
+    width: "100%",
+    display: "inline-block",
+    fontSize: 11,
+    break: "auto",
+    minHeight: 35,
+    overflow: "wrap",
+    fontWeight: "400",
+    color: "#333",
+  },
+  textareanew: {
+    padding: ' 8px ',
     border: "1px solid #000",
     marginBottom: 10,
     width: "100%",
     display: "inline-block",
-    color: "#000",
-    fontSize: 12,
-    break: 'auto',
+    fontSize: 11,
+    break: "auto",
     minHeight: 35,
-    overflow: 'wrap',
+    overflow: "wrap",
+    fontWeight: "400",
+    color: "#333",
   },
   goal: {
     marginBottom: 20,
@@ -134,18 +158,56 @@ const styles = StyleSheet.create({
     display: "flex",
   },
   goal_two: {
-    display: "flex",
-    gap: 5,
+    // display: "flex",
+    // gap: 5,
     width: "100%",
-    flexDirection: "row",
-    flexWrap: "wrap",
+    // flexWrap:"wrap",
   },
   memberUpdate: {
     fontWeight: 900,
     fontSize: 24,
   },
   heightGiven: {
-    minHeight: 400,
+    minHeight: 550,
+  },
+  heightGiventab: {
+    minHeight: 450,
+  },
+  heightGiventbottom: {
+    minHeight: 390,
+  },
+  heightGivenwrap: {
+    minHeight: 350,
+    marginBottom: '20px',
+  },
+  heightGivenwrapper: {
+    minHeight: 330,
+  },
+  images_div: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "10px",
+    flexDirection: "row",
+  },
+  innderImg: {
+    width: `100%`,
+    maxWidth: "270px",
+    height: "auto",
+    minHeight: "350px",
+    maxHeight: "350px",
+    objectFit: "cover",
+    // flex:'1 0 47%'
+  },
+  footer: {
+    position: "absolute",
+    bottom: 20,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+  },
+  pageNumber: {
+    fontSize: 12,
+    color: "#ff6347", // Change color here (e.g., tomato red)
   },
 });
 

@@ -75,27 +75,24 @@ const Add = () => {
         } as any
         let res = await api.User.edit(items)
         toast.success(res?.message)
-        // if(res)  {
-          router.push(`/admin/member/additional_user?${value}&edit`)
-        // }
+          // router.push(`/admin/member/additional_user?${value}&edit`)
+          router.back()
         // router.push(`/admin/member/add/page2?${value}&edit`)
       } else {
         let res = await api.Auth.signUp(items)
         toast.success(res?.message)
      
-        // if(res)  {
-        //   router.push('/admin/member')
+      router.back()
+        // router.push(`/admin/member/additional_user?${res?.user_id}`)
+        // if (res?.status == 500) {
+        //   // toast.error("Session Expired Login Again")
+        //   // router.replace("/auth/signin")
+        //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
+        //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+        //   // dispatch(clearUserData({}));
+        //   toast.error("Session Expired. Login Again");
+        //   router.replace("/auth/signin");
         // }
-        router.push(`/admin/member/additional_user?${res?.user_id}`)
-        if (res?.status == 500) {
-          // toast.error("Session Expired Login Again")
-          // router.replace("/auth/signin")
-          localStorage.setItem('redirectAfterLogin', window.location.pathname);
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          // dispatch(clearUserData({}));
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
       }
 
     } catch (error: any) {
