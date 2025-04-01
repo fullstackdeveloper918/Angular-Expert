@@ -270,7 +270,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                        (
                          <>
                          <Text style={styles.text} key={index}>{res?.question}</Text>
-                       <Text style={[styles.textarea, styles.heightGiven]} wrap={false}>
+                       <Text style={[styles.textarea]} wrap={true}>
                          {res.answer}
                        </Text>
                          </>
@@ -283,7 +283,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                          <Text style={styles.text}>
                            What was your most valuable take away from our fall meeting?
                          </Text>
-                         <Text style={styles.textarea} wrap={false}>
+                         <Text style={styles.textarea} wrap={true}>
                            {props?.state?.meetingReviews[0]?.fall_meeting}
                          </Text>
            
@@ -292,7 +292,7 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                            planning reccomendations into your business and/or personal
                            finances?
                          </Text>
-                         <Text style={styles.textarea} wrap={false}>
+                         <Text style={styles.textarea} wrap={true}>
                            {props?.state?.meetingReviews[0]?.personal_finances}
                          </Text>
                          </>}

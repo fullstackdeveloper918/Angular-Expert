@@ -9,22 +9,22 @@ import {
   Document,
   StyleSheet,
   usePage,
-  Font
+  Font 
 } from "@react-pdf/renderer";
 Font.register({
   family: 'Open Sans',
   fonts: [
-    { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
-    { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf', fontWeight: 600 }
+  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
+  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf', fontWeight: 600 }
   ]
-});
+  });
 
 const styles = StyleSheet.create({
   textBold: {
     fontFamily: "Open Sans",  // Use the registered font family
     fontWeight: "bold",       // You can also set font weight directly here
     fontSize: 16,
-    textTransform: "uppercase",
+    textTransform:"uppercase",
   },
   page: {
     padding: 20,
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   subheader: {
     fontSize: 15,
-    marginTop: 20,
+    marginTop:20 ,
     textTransform: "capitalize",
     textDecoration: "underline",
   },
@@ -279,9 +279,9 @@ const MemberUpdatePDF = (props) => {
     return acc;
   }, {});
   console.log(groupedQuestions, "groupedQuestions");
-  if (!groupedQuestions) {
-    return
-  }
+if(!groupedQuestions){
+  return
+}
   return (
     <>
       <Document>
@@ -348,11 +348,11 @@ const MemberUpdatePDF = (props) => {
                 <Text style={styles.text}>
                   How can the Craftsmen aid or support you with these challenges?
                 </Text>
-                <Text style={styles.textarea} wrap={true}>
+                <Text style={styles.textarea} wrap={false}>
                   {props?.state?.businessUpdate[0]?.craftsmen_support}
                 </Text>
               </> :
-              Object.keys(groupedQuestions).map((subheadingTitle) => (
+  Object.keys(groupedQuestions).map((subheadingTitle) => (
                 <>
                   <Text style={styles.textBold}>{subheadingTitle}</Text>
                   {/* Display questions for the current subheading */}
@@ -360,7 +360,7 @@ const MemberUpdatePDF = (props) => {
                     // console.log(question,"yyy")
                     <>
                       <Text style={styles.text} >{res?.question}</Text>
-                      <Text style={[styles.textarea]} wrap={true}>
+                      <Text style={[styles.textarea]} wrap={false}>
                         {res.answer}
                       </Text>
                     </>
@@ -371,7 +371,30 @@ const MemberUpdatePDF = (props) => {
 
               ))
 
-          
+              //    <Text>{subheadingTitle}</Text>
+              //    {/* Display questions for the current subheading */}
+              //    {groupedQuestions[subheadingTitle].map((question) => (
+              //     <>
+              //    <Text style={styles.text} key={index}>{question?.question}</Text>
+              //    <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
+              //      {question.answer}
+              //    </Text>
+              //     </>
+              //    ))}
+              //  </>
+
+
+              // props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
+              // (
+              //   <>
+              //   <Text style={styles.text} key={index}>{res?.question}</Text>
+              // <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
+              //   {res.answer}
+              // </Text>
+              //   </>
+              // )
+              // )
+
             }
           </View>
 
@@ -382,8 +405,8 @@ const MemberUpdatePDF = (props) => {
               <View style={styles.goal} key={index}>
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
-                    <Text style={styles.text} > Goal #{index + 1}: </Text>
-                    <Text style={styles.textareanew} wrap={true}>
+                    <Text style={styles.text}> Goal #{index + 1}: </Text>
+                    <Text style={styles.textareanew} wrap={false}>
                       {res?.name}
                     </Text>
                   </View>
@@ -394,8 +417,8 @@ const MemberUpdatePDF = (props) => {
                     </Text> */}
                   </View>
                 </View>
-                <Text style={styles.text} > Comments: </Text>
-                <Text style={styles.textareanew} wrap={true}>
+                <Text style={styles.text}> Comments: </Text>
+                <Text style={styles.textareanew} wrap={false}>
                   {res?.comment}
                 </Text>
               </View>
@@ -408,18 +431,18 @@ const MemberUpdatePDF = (props) => {
               <View style={styles.goal} key={index}>
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
-                    <Text style={styles.text} wrap={false}> Business Goal #{index + 1}: </Text>
+                    <Text style={styles.text}> Business Goal #{index + 1}: </Text>
                     <Text style={styles.textareanew} wrap={false}>
                       {res?.name}
                     </Text>
                   </View>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Priority: </Text>
-                    <Text style={styles.textareanew} wrap={true}>  {res?.status}   </Text>
+                    <Text style={styles.textareanew}>  {res?.status}   </Text>
                   </View>
                   <View style={styles.Flex_div}>
-                    <Text style={styles.text} wrap={true}> To be Completed By:</Text>
-                    <Text style={styles.textareanew} wrap={true}>
+                    <Text style={styles.text}> To be Completed By:</Text>
+                    <Text style={styles.textareanew} wrap={false}>
                       {res?.to_be_completed_by}
 
                     </Text>
@@ -440,7 +463,7 @@ const MemberUpdatePDF = (props) => {
                     <Text style={styles.text} key={index}>{res?.question}</Text>
                     <Text
                       // style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}
-                      style={[styles.textarea]} wrap={true}
+                      style={[styles.textarea, index === 0 ? styles.heightGiventab : styles.heightGivenwrapper]} wrap={false}
                     >
                       {res.answer}
                     </Text>
@@ -490,7 +513,7 @@ const MemberUpdatePDF = (props) => {
                     <Text style={styles.text} key={index}>{res?.question}</Text>
                     <Text
                       // style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}
-                      style={[styles.textarea]} wrap={true}
+                      style={[styles.textarea, index === 0 ? styles.heightGiventbottom : styles.heightGivenwrapper]} wrap={false}
                     >
                       {res.answer}
                     </Text>
@@ -548,7 +571,7 @@ const MemberUpdatePDF = (props) => {
                   (
                     <>
                       <Text style={styles.text} key={index}>{res?.question}</Text>
-                      <Text style={[styles.textarea]} wrap={true}>
+                      <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
                         {res.answer}
                       </Text>
                     </>
@@ -568,7 +591,7 @@ const MemberUpdatePDF = (props) => {
                   (
                     <>
                       <Text style={styles.text} key={index}>{res?.question}</Text>
-                      <Text style={[styles.textarea]} wrap={true}>
+                      <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
                         {res.answer}
                       </Text>
                     </>
@@ -589,7 +612,7 @@ const MemberUpdatePDF = (props) => {
                 (
                   <>
                     <Text style={styles.text} key={index}>{res?.question}</Text>
-                    <Text style={[styles.textarea]} wrap={true}>
+                    <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
                       {res.answer}
                     </Text>
                   </>
@@ -633,19 +656,19 @@ const MemberUpdatePDF = (props) => {
                 <Text style={styles.text}>
                   First roundtable topic
                 </Text>
-                <Text style={styles.textarea} wrap={true}>
+                <Text style={styles.textarea} wrap={false}>
                   {props?.state?.roundTableTopics[0]?.estimating}
                 </Text>
                 <Text style={styles.text}>
                   Second roundtable topic
                 </Text>
-                <Text style={styles.textarea} wrap={true}>
+                <Text style={styles.textarea} wrap={false}>
                   {props?.state?.roundTableTopics[0]?.accountability}
                 </Text>
                 <Text style={styles.text}>
                   Third roundtable topic
                 </Text>
-                <Text style={styles.textarea} wrap={true}>
+                <Text style={styles.textarea} wrap={false}>
                   {props?.state?.roundTableTopics[0]?.productivity}
                 </Text>
 
@@ -653,7 +676,7 @@ const MemberUpdatePDF = (props) => {
                 (
                   <>
                     <Text style={styles.text} key={index}>{res?.question}</Text>
-                    <Text style={[styles.textarea]} wrap={true}>
+                    <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
                       {res.answer}
                     </Text>
                   </>
@@ -693,7 +716,7 @@ const MemberUpdatePDF = (props) => {
                   <View style={styles.div_wrapper}>
                     <View style={styles.Flex_div}>
                       <Text style={styles.text}> {res?.questions[0]?.question} </Text>
-                      <Text style={styles.textarea} wrap={true}>
+                      <Text style={styles.textarea} wrap={false}>
                         {res?.questions[0]?.answer}
                       </Text>
                     </View>

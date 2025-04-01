@@ -315,14 +315,14 @@ const companyName = companyNameMap[props?.state?.company_name|| ""] || "N/A";
                      MEETING (IN ORDER OF IMPORTANCE)
                    </Text>
                    <View style={styles.goal}>
-                     <Text style={styles.textarea} wrap={false}>
+                     <Text style={styles.textarea} wrap={true}>
                        {props?.state?.roundTableTopics[0]?.estimating}
                      </Text>
        
-                     <Text style={styles.textarea} wrap={false}>
+                     <Text style={styles.textarea} wrap={true}>
                        {props?.state?.roundTableTopics[0]?.accountability}
                      </Text>
-                     <Text style={styles.textarea} wrap={false}>
+                     <Text style={styles.textarea} wrap={true}>
                        {props?.state?.roundTableTopics[0]?.productivity}
                      </Text>
                    </View>

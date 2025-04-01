@@ -272,7 +272,7 @@ const BusinessEvolutionPdf1 = (props) => {
                 (
                   <>
                     <Text style={styles.text} key={index}>{res?.question}</Text>
-                    <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                    <Text style={[styles.textarea]} wrap={true}>
                       {res.answer}
                     </Text>
                   </>

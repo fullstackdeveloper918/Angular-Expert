@@ -17,199 +17,56 @@ Font.register({
   ]
   });
 
-const styles = StyleSheet.create({
-  textBold: {
-    fontFamily: "Open Sans",  // Use the registered font family
-    fontWeight: "bold",       // You can also set font weight directly here
-    fontSize: 16,
-    textTransform:"uppercase",
-  },
-  page: {
-    padding: 20,
-    background: "#fff",
-    break: "auto",
-    overflow: "wrap",
-  },
-
-  header: {
-    fontSize: 15,
-    textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    padding: "10",
-    marginBottom: "10px",
-  },
-  main_heading: {
-    fontSize: "16px",
-    padding: "8px",
-    textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    backgroundColor: "#000",
-    width: "100%",
-    color: "#fff",
-    marginBottom: "30px",
-  },
-  itali_text: {
-    fontSize: "13px",
-    fontStyle: "italic",
-    fontWeight: "400",
-    fontFamily: "Roboto",
-  },
-  subheader: {
-    fontSize: 15,
-    marginTop:20 ,
-    textTransform: "capitalize",
-    textDecoration: "underline",
-  },
-  subheading: {
-    fontSize: 13,
-    marginBottom: 10,
-    textTransform: "capitalize",
-    textAlign: "left",
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    borderBottom: "3px solid #d2d2d2",
-    marginBottom: "20px",
-    paddingBottom: "10px",
-    fontFamily: "Open Sans",
-  },
-  text: {
-    marginBottom: 8,
-    fontSize: 13,
-    color: "#000",
-    break: "auto",
-    overflow: "wrap",
-    fontWeight: "bold",
-    fontFamily: "Open Sans",
-  },
-  textarea: {
-    padding: '2 0 8',
-    // border: "1px solid #000",
-    marginBottom: 10,
-    width: "100%",
-    display: "inline-block",
-    fontSize: 11,
-    break: "auto",
-    minHeight: 35,
-    overflow: "wrap",
-    fontWeight: "400",
-    color: "#333",
-  },
-  textareanew: {
-    padding: ' 8px ',
-    border: "1px solid #000",
-    marginBottom: 10,
-    width: "100%",
-    display: "inline-block",
-    fontSize: 11,
-    break: "auto",
-    minHeight: 35,
-    overflow: "wrap",
-    fontWeight: "400",
-    color: "#333",
-  },
-  goal: {
-    marginBottom: 20,
-    display: "flex",
-    flexDirection: "column",
-  },
-
-  div_wrapper: {
-    display: "flex",
-    gap: "30px",
-    width: "100%",
-  },
-  checkbox: {
-    borderWidth: 1,
-    borderColor: "#000",
-    marginRight: 5,
-  },
-  checked: {
-    width: "12px",
-    height: "12px",
-    backgroundColor: "#0000001a",
-    display: "inline-block",
-    border: "1px solid #000",
-    cursor: "pointer",
-    marginRight: 5,
-  },
-  imgg: {
-    margin: "auto",
-    objectFit: "contain",
-    width: "400px",
-    height: "400px",
-  },
-  logoNew: {
-    width: "100%",
-    maxWidth: "100%",
-    margin: "auto",
-  },
-  marginequal: {
-    marginVertical: 10,
-  },
-  flexBox: {
-    display: "flex",
-  },
-  goal_two: {
-    // display: "flex",
-    // gap: 5,
-    width: "100%",
-    // flexWrap:"wrap",
-  },
-  memberUpdate: {
-    fontWeight: 900,
-    fontSize: 24,
-  },
-  heightGiven: {
-    minHeight: 550,
-  },
-  heightGiventab: {
-    minHeight: 450,
-  },
-  heightGiventbottom: {
-    minHeight: 390,
-  },
-  heightGivenwrap: {
-    minHeight: 350,
-    marginBottom: '20px',
-  },
-  heightGivenwrapper: {
-    minHeight: 330,
-  },
-  images_div: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "10px",
-    flexDirection: "row",
-  },
-  innderImg: {
-    width: `100%`,
-    maxWidth: "270px",
-    height: "auto",
-    minHeight: "350px",
-    maxHeight: "350px",
-    objectFit: "cover",
-    // flex:'1 0 47%'
-  },
-  footer: {
-    position: "absolute",
-    bottom: 20,
-    left: 0,
-    right: 0,
-    textAlign: "center",
-  },
-  pageNumber: {
-    fontSize: 12,
-    color: "#ff6347", // Change color here (e.g., tomato red)
-  },
-});
+  const styles = StyleSheet.create({
+    textBold: {
+      fontFamily: "Open Sans",
+      fontWeight: "bold",
+      fontSize: 16,
+      textTransform: "uppercase",
+    },
+    page: {
+      padding: 20,
+      background: "#fff",
+    },
+    header: {
+      fontSize: 15,
+      textAlign: "center",
+      fontWeight: "bold",
+      marginBottom: 10,
+    },
+    subheader: {
+      fontSize: 15,
+      textAlign: "center",
+      marginBottom: 20,
+    },
+    question: {
+      fontSize: 14,
+      fontWeight: "bold",
+      marginBottom: 5,
+    },
+    answer: {
+      fontSize: 12,
+      marginBottom: 15,
+      marginTop: 5,
+    },
+    section: {
+      marginBottom: 20,
+    },
+    main_heading: {
+      fontSize: "16px",
+      padding: "8px",
+      textAlign: "center",
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: "column",
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      backgroundColor: "#000",
+      width: "100%",
+      color: "#fff",
+      marginBottom: "30px",
+    },
+  });
 
 const BussinessPDF = (props) => {
   const photoSection = props?.state?.photo_section || [];
@@ -250,65 +107,54 @@ const BussinessPDF = (props) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View style={{ textAlign: "center", display: "block" }}>
+        <View style={styles.header}>
           <Image
             src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"
-            style={{ width: "50%", objectFit: 'contain', textAlign: "center", margin: "10px auto 15px" }}
+            style={{ width: "50%", objectFit: "contain", margin: "10px auto 15px" }}
             alt="Image"
           />
         </View>
-        <View style={styles.header}>
-          <Text style={styles.memberUpdate}>
-            Member Update / <Text style={{ fontStyle: 'italic', fontSize: 18, textTransform: "capitalize" }}>
-              {props?.state?.businessUpdate.length ? "Spring 2025" : "Fall 2024"}
-            </Text>
-          </Text>
-          <Text style={styles.subheader}>
-            {companyName}
-          </Text>
+
+     <View style={styles.header}>
+                 <Text style={styles.memberUpdate}>
+                   Member Update /
+                   <Text
+                     style={{
+                       fontStyle: "italic",
+                       textTransform: "capitalize",
+                     }}
+                   >
+                     {props?.state?.businessUpdate.length ? "Spring 2025" :
+                       "Fall 2024"}
+                   </Text>
+                 </Text>
+                 <Text style={styles.subheader}>{companyName}</Text>
+               </View>
+        
+        <View style={styles.subheader}>
+          <Text>{props?.companyName}</Text>
         </View>
+
         <View style={styles.section}>
           <Text style={styles.main_heading}>Business Update</Text>
-          {props?.state?.businessUpdate[0]?.craftsmen_support ? (
-            <>
-              <Text style={styles.text}>Current financial position:</Text>
-              <Text style={styles.textarea}>
-                {props?.state?.businessUpdate[0]?.financial_position}
-              </Text>
-              <Text style={styles.text}>Current sales positions, hot prospects, recently contracted work:</Text>
-              <Text style={styles.textarea}>
-                {props?.state?.businessUpdate[0]?.sales_position}
-              </Text>
-              <Text style={styles.text}>Accomplishments in the last 6 months:</Text>
-              <Text style={styles.textarea}>
-                {props?.state?.businessUpdate[0]?.accomplishments}
-              </Text>
-              <Text style={styles.text}>HR position &/or needs:</Text>
-              <Text style={styles.textarea}>
-                {props?.state?.businessUpdate[0]?.hr_position}
-              </Text>
-              <Text style={styles.text}>Current challenges:</Text>
-              <Text style={styles.textarea}>
-                {props?.state?.businessUpdate[0]?.current_challenges}
-              </Text>
-              <Text style={styles.text}>How can the Craftsmen aid or support you?</Text>
-              <Text style={styles.textarea}>
-                {props?.state?.businessUpdate[0]?.craftsmen_support}
-              </Text>
-            </>
-          ) : (
-            Object.keys(groupedQuestions).map((subheadingTitle) => (
-              <>
-                <Text style={styles.textBold}>{subheadingTitle}</Text>
-                {groupedQuestions[subheadingTitle].map((res) => (
-                  <>
-                    <Text style={styles.text}>{res?.question}</Text>
-                    <Text style={styles.textarea}>{res.answer}</Text>
-                  </>
-                ))}
-              </>
-            ))
-          )}
+
+          {Object.keys(groupedQuestions).map((subheadingTitle) => (
+            <View key={subheadingTitle}>
+              {/* Render the subheading just once */}
+              <Text style={styles.textBold}>{subheadingTitle}</Text>
+
+              {/* Render questions and answers for this subheading */}
+              {groupedQuestions[subheadingTitle].map((res, index) => (
+                <View key={index} style={{ marginBottom: 20 }}>
+                  {/* Question */}
+                  <Text style={styles.question}>{res?.question}</Text>
+
+                  {/* Answer */}
+                  <Text style={styles.answer}>{res?.answer}</Text>
+                </View>
+              ))}
+            </View>
+          ))}
         </View>
       </Page>
     </Document>
