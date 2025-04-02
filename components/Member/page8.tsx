@@ -7,6 +7,7 @@ import {
   Button,
   Popconfirm,
   Spin,
+  Input,
 } from "antd";
 import {
   PlusOutlined,
@@ -73,6 +74,8 @@ const Page8 = () => {
       goalLabel: "Project 0",
       commentName: "comment0",
       commentLabel: "comment_0",
+      projectName:"project0",
+      projectLabel:"project_0"
     },
   ]);
   const [fileLists, setFileLists] = useState<any>({});
@@ -257,6 +260,8 @@ const Page8 = () => {
         goalLabel: `Project comment_${inputPairs.length}`,
         commentName: `comment${newId}`,
         commentLabel: `comment_${inputPairs.length}`,
+        projectName: `project_name${inputPairs.length}`,
+        projectLabel: `project${inputPairs.length}`,
       },
     ]);
   };
@@ -378,6 +383,7 @@ const Page8 = () => {
       const photoComment = inputPairs.map((pair) => ({
         comment: values[pair.commentName],
         files: values[pair.goalName],
+        projectName: values[pair.projectName],
       }));
 
       try {
@@ -507,10 +513,12 @@ const Page8 = () => {
       const photoComment = inputPairs.map((pair) => ({
         comment: values[pair.commentName],
         files: values[pair.goalName],
+        projectName: values[pair.projectName],
       }));
 
       try {
         const formData: any = new FormData();
+        console.log(state?.photo_section?.fileUrls?.length, 'length kitni hais')
 
         if (state?.photo_section?.fileUrls?.length) {
           formData.append("id", state?.photo_section?.commentId);
@@ -518,7 +526,11 @@ const Page8 = () => {
           formData.append("meeting_id", getUserdata.meetings.NextMeeting.id);
           formData.append("is_save", "true");
           for (const item of inputPairs) {
+            console.log(item, 'item ki hai')
             formData.append(`${item?.commentLabel}`, values[item?.commentName]);
+            // formData.append(`${item?.projectLabel}`, values[item?.projectName]);
+            //  formData.append(`project_${item}`, values[item?.goalName]);
+
 
             for (const file of values[item.goalName]?.fileList || []) {
               if (file?.originFileObj) {
@@ -553,11 +565,11 @@ const Page8 = () => {
           setLoadButton("");
           setResponseData(response?.data?.pdfReponseData);
 
-          if (!pagetype) {
-            router.replace(`/admin/user?${getUserdata?.user_id}`);
-          } else {
-            router.push("/admin/questionnaire?page8");
-          }
+          // if (!pagetype) {
+          //   router.replace(`/admin/user?${getUserdata?.user_id}`);
+          // } else {
+          //   router.push("/admin/questionnaire?page8");
+          // }
 
           responseData = response?.data?.pdfReponseData;
         } else {
@@ -567,6 +579,8 @@ const Page8 = () => {
           formData.append("meeting_id", getUserdata.meetings.NextMeeting.id);
           for (const [index, item] of photoComment.entries()) {
             formData.append(`comment_${index}`, item?.comment);
+            console.log(item, 'asdasdasdasd')
+            // formData.append(`project_${index}`, item?.projectName);
 
             for (const [fileIndex, file] of (
               item?.files?.fileList || []
@@ -602,7 +616,7 @@ const Page8 = () => {
           setResponseData(response?.data?.pdfReponseData);
 
           if (response) {
-            router.replace(`/admin/user?${getUserdata?.user_id}`);
+            // router.replace(`/admin/user?${getUserdata?.user_id}`);
           }
 
           responseData = response?.data?.pdfReponseData;
@@ -860,6 +874,8 @@ const Page8 = () => {
   const hnandleBack = () => {
     router.back();
   };
+  console.log(inputPairs,"inputPairsinputPairs");
+  
   return (
     <>
       <Fragment>
@@ -956,9 +972,25 @@ const Page8 = () => {
                         .map((pair: any, index: number) => (
                           <>
                             <div key={pair.id} style={{ position: "relative" }}>
+                            {/* <Form.Item
+                                name={pair.projectName}
+                                rules={[
+                                  {
+                                    required: true,
+                                    whitespace: true,
+                                    message: "Please Fill Field",
+                                  },
+                                ]}
+                                label={`Project Name`}
+                            
+                                // label={`Comment ${index+1}`}
+                                // label={pair.commentLabel}
+                              >
+                                <Input size="large" placeholder="Enter..." />
+                              </Form.Item> */}
                               <Form.Item
                                 name={pair.goalName}
-                                label={`Project Name`}
+                                label={`Images`}
                                 // label={`Project ${index+1}`}
                                 // label={pair.goalLabel}
                               >
@@ -966,7 +998,7 @@ const Page8 = () => {
                                   listType="picture-card"
                                   fileList={fileLists[pair.id] || []}
                                   onPreview={handlePreview}
-                                  onChange={(info) =>
+                                  onChange={(info) => 
                                     handleFileChange(
                                       info,
                                       pair.id.toString(),
@@ -997,6 +1029,7 @@ const Page8 = () => {
                                   )}
                                 </Upload> */}
                               </Form.Item>
+                             
                               <Form.Item
                                 name={pair.commentName}
                                 rules={[

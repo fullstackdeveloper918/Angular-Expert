@@ -41,11 +41,11 @@ interface Goal {
   goal_next?: string;
 }
 const { Option } = Select;
-const Page3 = ({questions}:any) => {
+const Page3 = ({ questions }: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData);
-  console.log(getUserdata,"getUserdata");
+  console.log(getUserdata, "getUserdata");
   // console.log(getUserdata?.meetings?.lastMeeting?.id,"getUserdata");
-  
+
   const router = useRouter();
   const [form] = Form.useForm();
 
@@ -63,21 +63,21 @@ const Page3 = ({questions}:any) => {
   const questionnair = entries.length > 2 ? entries[2][1] : "";
   const pagetype = entries.length > 2 ? entries[2][0] : "";
   const submit = async (values: any) => {
-    console.log(values,"ioiooiio");
+    console.log(values, "ioiooiio");
     // const updatedLastGoals = values?.last_goals?.map((goal:any) => ({
     //   ...goal, // Spread the current goal object
     //   lastMeetingId: getUserdata?.meetings?.lastMeeting?.id // Add the lastMeetingId
     // }));
     // console.log(updatedLastGoals,"updatedLastGoalsljaljas");
-    
+
     // return
 
     if (actionType === "submit") {
       let items = {
         goals: {
           user_id: value,
-              meeting_id:getUserdata?.meetings?.NextMeeting?.id,
-              lastMeetingId: getUserdata?.meetings?.lastMeeting?.id,
+          meeting_id: getUserdata?.meetings?.NextMeeting?.id,
+          lastMeetingId: getUserdata?.meetings?.lastMeeting?.id,
           goal_last_meeting: values?.last_goals,
           goal_next_meeting: values?.next_goals,
         },
@@ -86,11 +86,11 @@ const Page3 = ({questions}:any) => {
       try {
         setLoading(true);
         if (state?.futureMeetings?.length) {
-        // if (type == "edit") {
+          // if (type == "edit") {
           let items = {
             goals: {
               user_id: value,
-              meeting_id:getUserdata.meetings.NextMeeting.id,
+              meeting_id: getUserdata.meetings.NextMeeting.id,
               lastMeetingId: getUserdata?.meetings?.lastMeeting?.id,
               goal_last_meeting: values?.last_goals,
               goal_next_meeting: values?.next_goals,
@@ -129,8 +129,8 @@ const Page3 = ({questions}:any) => {
       let items = {
         goals: {
           user_id: value,
-              meeting_id:getUserdata.meetings.NextMeeting.id,
-              lastMeetingId: getUserdata?.meetings?.lastMeeting?.id,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
+          lastMeetingId: getUserdata?.meetings?.lastMeeting?.id,
           goal_last_meeting: values?.last_goals,
           goal_next_meeting: values?.next_goals,
         },
@@ -142,7 +142,7 @@ const Page3 = ({questions}:any) => {
           let items = {
             goals: {
               user_id: value,
-              meeting_id:getUserdata.meetings.NextMeeting.id,
+              meeting_id: getUserdata.meetings.NextMeeting.id,
               lastMeetingId: getUserdata?.meetings?.lastMeeting?.id,
               goal_last_meeting: values?.last_goals,
               goal_next_meeting: values?.next_goals,
@@ -162,8 +162,8 @@ const Page3 = ({questions}:any) => {
           localStorage.removeItem("NextGoals");
           setTimeout(() => {
             if (pagetype) {
-              router.push("/admin/questionnaire?page3")
-            } 
+              router.push("/admin/questionnaire?page3");
+            }
           }, 1000);
         } else {
           let res = await api.Auth.signUp(items);
@@ -194,7 +194,7 @@ const Page3 = ({questions}:any) => {
   const getDataById = async () => {
     const item = {
       user_id: value,
-      meeting_id:getUserdata.meetings.NextMeeting.id
+      meeting_id: getUserdata.meetings.NextMeeting.id,
     };
     try {
       const res = await api.User.getById(item as any);
@@ -212,13 +212,15 @@ const Page3 = ({questions}:any) => {
       let parsedGoals = savedGoalsData ? JSON.parse(savedGoalsData) : [];
 
       if (parsedGoals.length === 0) {
-        parsedGoals = res?.data?.lastNextMeetings[0]?.goal_next_meeting || res?.data?.goal_last_meeting;
+        parsedGoals =
+          res?.data?.lastNextMeetings[0]?.goal_next_meeting ||
+          res?.data?.goal_last_meeting;
       }
 
       const fetchedGoals = parsedGoals
         ? parsedGoals
         : res?.data.lastNextMeetings[0].goal_next_meeting || [];
-        form.setFieldsValue({ last_goals: fetchedGoals });
+      form.setFieldsValue({ last_goals: fetchedGoals });
       const savedGoalsData1 = localStorage.getItem("NextGoals");
       let parsedGoals1 = savedGoalsData1 ? JSON.parse(savedGoalsData1) : [];
       if (parsedGoals1.length === 0) {
@@ -242,31 +244,29 @@ const Page3 = ({questions}:any) => {
 
   useEffect(() => {
     // if (type=="edit") {
-      getDataById();
+    getDataById();
     // }
-  }, [ form]);
+  }, [form]);
   // useEffect(() => {
   //   if (type == "edit") {
   //     getDataById();
   //   }
   // }, [type, form]);
-  const[backLoading,setBackLoading]=useState<any>(false)
+  const [backLoading, setBackLoading] = useState<any>(false);
   const onPrevious = () => {
-    
     try {
-      setBackLoading(true)
+      setBackLoading(true);
       router.replace(`/admin/member/add/page2?${value}&edit`);
-      
     } catch (error) {
-      setBackLoading(false)
+      setBackLoading(false);
     }
   };
   const hnandleBack = () => {
     try {
-      setBackLoading(true)
+      setBackLoading(true);
       router.back();
     } catch (error) {
-      setBackLoading(false)
+      setBackLoading(false);
     }
   };
 
@@ -276,29 +276,31 @@ const Page3 = ({questions}:any) => {
   };
   useEffect(() => {
     // Ensure there are at least 3 fields
-    const last_goals = form.getFieldValue('last_goals') || [];
+    const last_goals = form.getFieldValue("last_goals") || [];
     if (last_goals.length < 3) {
       const additionalFields = Array(3 - last_goals.length).fill(null);
-      additionalFields.forEach(() => form.getFieldValue('last_goals').push({ name: '', comment: '' }));
-      form.setFieldsValue({ last_goals: form.getFieldValue('last_goals') });
+      additionalFields.forEach(() =>
+        form.getFieldValue("last_goals").push({ name: "", comment: "" })
+      );
+      form.setFieldsValue({ last_goals: form.getFieldValue("last_goals") });
     }
   }, [form]);
   return (
     <>
       <Fragment>
         <section className="club_member">
-           <ToastContainer
-                      className="toast-container-center"
-                      position="top-right"
-                      autoClose={false} // Disable auto-close
-                      hideProgressBar={false}
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                    />
+          <ToastContainer
+            className="toast-container-center"
+            position="top-right"
+            autoClose={false} // Disable auto-close
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           <Row justify="center" gutter={[20, 20]}>
             <Col sm={22} md={24} lg={16} xl={16} xxl={12}>
               <Card className="common-card">
@@ -333,20 +335,30 @@ const Page3 = ({questions}:any) => {
                     className="add-staff-form"
                     scrollToFirstError
                     layout="vertical"
-                    
-                    onValuesChange={onValuesChange}
+                    // onValuesChange={onValuesChange}
                     onFinish={submit}
-                    initialValues={{ last_goals: [{ name: '', comment: '' }, { name: '', comment: '' }, { name: '', comment: '' }] }}
+                    initialValues={{
+                      last_goals: [
+                        { name: "", comment: "" },
+                        { name: "", comment: "" },
+                        { name: "", comment: "" },
+                      ],
+                      next_goals: [
+                        { status: "high", name: "", to_be_completed_by: "" },
+                        { status: "medium", name: "", to_be_completed_by: "" },
+                        { status: "low", name: "", to_be_completed_by: "" },
+                      ],
+                    }}
                   >
-                    <Form.List name="last_goals" >
+                    <Form.List name="last_goals">
                       {(fields, { add, remove }) => (
                         <>
                           {fields.map(({ key, name, ...restField }) => (
                             <>
-                             <Form.Item  {...restField} name={[name, "status"]}>
-                                <Select 
-                                // disabled
-                                defaultValue={"...Select"}
+                              <Form.Item {...restField} name={[name, "status"]}>
+                                <Select
+                                  // disabled
+                                  defaultValue={"...Select"}
                                   className="responiveSelect"
                                   style={{
                                     position: "absolute",
@@ -370,10 +382,10 @@ const Page3 = ({questions}:any) => {
                               <Form.Item
                                 {...restField}
                                 name={[name, "name"]}
-                                label={`Goal #${key+1}`}
+                                label={`Goal #${key + 1}`}
                               >
                                 <TextArea
-                                // disabled
+                                  // disabled
                                   size={"large"}
                                   placeholder="Enter..."
                                   className="text-black"
@@ -382,17 +394,17 @@ const Page3 = ({questions}:any) => {
                               <Form.Item
                                 {...restField}
                                 name={[name, "comment"]}
-                                label={`Comment #${key+1}`}
+                                label={`Comment #${key + 1}`}
                               >
                                 <TextArea
-                                // disabled
+                                  // disabled
                                   size={"large"}
                                   placeholder="Enter..."
                                   className="text-black"
                                 />
                               </Form.Item>
-                             
-                              <div className="remove_row" >
+
+                              <div className="remove_row">
                                 <MinusCircleOutlined
                                   style={{
                                     top: "-11px",
@@ -426,103 +438,122 @@ const Page3 = ({questions}:any) => {
                         GOALS FOR NEXT MEETING
                       </Typography.Title>
                     </div>
-                    <Form.List name="next_goals">
+                    <Form.List
+                      name="next_goals"
+                      initialValue={[
+                        { status: "high", name: "", to_be_completed_by: "" },
+                        { status: "medium", name: "", to_be_completed_by: "" },
+                        { status: "low", name: "", to_be_completed_by: "" },
+                      ]}
+                    >
                       {(fields, { add, remove }) => (
                         <>
-                          {fields.slice(0,3).map(({ key, name, ...restField }) => (
-                            <>
-                             <Form.Item {...restField} name={[name, "status"]} >
-                                <Select
-                                  className="responiveSelect"
-                                  defaultValue={"...Select"}
-                                  style={{
-                                    position: "absolute",
-                                    top: "35px",
-                                    right: "0px",
-                                    fontSize: "24px",
-                                    cursor: "pointer",
-                                    width: 120,
-                                  }}
-                                >
-                                  <Option value="high">High</Option>
-                                  <Option value="medium">Medium</Option>
-                                  <Option value="low">Low</Option>
-                                </Select>
-                              </Form.Item>
-                              <Form.Item
-                                {...restField}
-                                name={[name, "name"]}
-                                label={`Business Goal #${key+1}`}
-                                rules={[
-                                  {
-                                    required: true,
-                                    whitespace: true,
-                                    message: "Please Fill Field",
-                                  },
-                                ]}
-                              >
-                                <TextArea
-                                  size={"large"}
-                                  placeholder="Enter..."
-                                  className="text-black"
-                                />
-                              </Form.Item>
-                              <Form.Item
-                                {...restField}
-                                name={[name, "to_be_completed_by"]}
-                                label={`To be Completed By:`}
-                                rules={[
-                                  {
-                                    required: true,
-                                    whitespace: true,
-                                    message: "Please Fill Field",
-                                  },
-                                ]}
-                              >
-                                <TextArea
-                                  size={"large"}
-                                  placeholder="Enter..."
-                                  className="text-black"
-                                />
-                              </Form.Item>
+                          {console.log(add, "add")}
+                          {fields
+                            .slice(0, 3)
+                            .map(
+                              ({ key, name, fieldKey, ...restField }: any) => (
+                                <>
+                                  {console.log(restField, "wewe")}
+                                  <Form.Item
+                                    {...restField}
+                                    name={[name, "status"]}
+                                    fieldKey={[fieldKey, "status"]}
+                                  >
+                                    <Select
+                                      className="responiveSelect"
+                                      defaultValue={"...Select"}
+                                      style={{
+                                        position: "absolute",
+                                        top: "35px",
+                                        right: "0px",
+                                        fontSize: "24px",
+                                        cursor: "pointer",
+                                        width: 120,
+                                      }}
+                                    >
+                                      <Option value="high">High</Option>
+                                      <Option value="medium">Medium</Option>
+                                      <Option value="low">Low</Option>
+                                    </Select>
+                                  </Form.Item>
+                                  <Form.Item
+                                    {...restField}
+                                    name={[name, "name"]}
+                                    label={`Business Goal #${key + 1}`}
+                                    fieldKey={[fieldKey, "name"]}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        whitespace: true,
+                                        message: "Please Fill Field",
+                                      },
+                                    ]}
+                                  >
+                                    <TextArea
+                                      size={"large"}
+                                      placeholder="Enter..."
+                                      className="text-black"
+                                    />
+                                  </Form.Item>
+                                  <Form.Item
+                                    {...restField}
+                                    name={[name, "to_be_completed_by"]}
+                                    label={`To be Completed By:`}
+                                    fieldKey={[fieldKey, "to_be_completed_by"]}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        whitespace: true,
+                                        message: "Please Fill Field",
+                                      },
+                                    ]}
+                                  >
+                                    <TextArea
+                                      size={"large"}
+                                      placeholder="Enter..."
+                                      className="text-black"
+                                    />
+                                  </Form.Item>
 
-                             
-                              <div className="remove_row">
-                                <MinusCircleOutlined
-                                  style={{
-                                    top: "-11px",
-                                    right: "0",
-                                    fontSize: "24px",
-                                    cursor: "pointer",
-                                  }}
-                                  onClick={() => remove(name)}
-                                />
-                              </div>
-                            </>
-                          ))}
-                          {fields?.length ===3?
-                           <Form.Item className="mt-2">
-                           <Button
-                           disabled
-                             type="dashed"
-                             onClick={() => add()}
-                             block
-                             icon={<PlusOutlined />}
-                           >
-                             Add field
-                           </Button>
-                         </Form.Item>
-                          :
-                          <Form.Item className="mt-2">
-                            <Button
-                              type="dashed"
-                              onClick={() => add()}
-                              block
-                              icon={<PlusOutlined />}
-                            >
-                              Add field
-                            </Button>
-                          </Form.Item>}
+                                  <div className="remove_row">
+                                    <MinusCircleOutlined
+                                      style={{
+                                        top: "-11px",
+                                        right: "0",
+                                        fontSize: "24px",
+                                        cursor: "pointer",
+                                      }}
+                                      onClick={() => remove(name)}
+                                    />
+                                  </div>
+                                </>
+                              )
+                            )}
+                          {fields?.length === 3 ? (
+                            <Form.Item className="mt-2">
+                              <Button
+                                disabled
+                                type="dashed"
+                                onClick={() => add()}
+                                block
+                                icon={<PlusOutlined />}
+                              >
+                                Add field
+                              </Button>
+                            </Form.Item>
+                          ) : (
+                            <Form.Item className="mt-2">
+                              <Button
+                                type="dashed"
+                                onClick={() => add()}
+                                block
+                                icon={<PlusOutlined />}
+                              >
+                                Add field
+                              </Button>
+                            </Form.Item>
+                          )}
                         </>
                       )}
                     </Form.List>

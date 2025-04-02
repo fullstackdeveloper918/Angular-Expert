@@ -224,6 +224,35 @@ const [error,setError]=useState<any>("")
         setLoadingState((prevState) => ({ ...prevState, [id]: false }));
     }
 };
+
+const formatPhoneNumber = (phoneNumber: any) => {
+  // Remove any non-numeric characters
+  const cleanNumber = phoneNumber.replace(/\D/g, "");
+
+  // Check if the number starts with +61 and has 10 digits
+  if (cleanNumber.length === 10 && cleanNumber.startsWith("6")) {
+      // Format for numbers starting with +61 (e.g., +61 414580011)
+      const countryCode = cleanNumber.slice(0, 2);  // Country code (+61)
+      const restOfNumber = cleanNumber.slice(2);  // The remaining part of the number
+  
+      // Correct the formatting to include the space after the country code
+      return `+${countryCode} ${restOfNumber}`;  // Format: +61 414580011
+    }
+
+  // Check if the number starts with +1 and has 11 digits
+  if (cleanNumber.length === 11 && cleanNumber.startsWith("1")) {
+    // Format for numbers starting with +1 (e.g., +1 (xxx) xxx-xxxx)
+    const countryCode = cleanNumber.slice(0, 1);  // Country code (+1)
+    const areaCode = cleanNumber.slice(1, 4);  // Area code (next 3 digits)
+    const firstPart = cleanNumber.slice(4, 7);  // First part of the phone number (next 3 digits)
+    const secondPart = cleanNumber.slice(7);  // Second part of the phone number (last 4 digits)
+
+    return `+${countryCode} (${areaCode}) ${firstPart}-${secondPart}`;
+  }
+
+  // Return the original number if it doesn't fit the expected pattern
+  return` ${phoneNumber.slice(0,3)} ${phoneNumber.slice(3)}`;
+};
   const filteredData = state1?.reduce((acc: any[], res: any) => {
     
     
@@ -249,7 +278,7 @@ const [error,setError]=useState<any>("")
       name: capFirst(res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A"),
       company: companyName || "N/A",
       email: res?.email || "N/A",
-      phone: res?.phone_number || "N/A",
+      phone: formatPhoneNumber(res?.phone_number) || "N/A",
       position: capFirst(res?.position || "N/A"),
       city: capFirst(res?.home_city || "N/A"),
       action: <ul className='m-0 list-unstyled d-flex gap-2'><li>
