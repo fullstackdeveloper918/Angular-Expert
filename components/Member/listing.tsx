@@ -189,23 +189,33 @@ const MemberList = ({response}:any) => {
         let item = await getDataById(id);
         await sharePdf(item);
     };
-    const formatPhoneNumber = (phoneNumber:any) => {
+    const formatPhoneNumber = (phoneNumber: any) => {
         // Remove any non-numeric characters
         const cleanNumber = phoneNumber.replace(/\D/g, "");
       
-        // Check if the length is 11 digits (e.g. +1 followed by 10 digits)
-        if (cleanNumber.length === 11) {
-          // Extract the country code and the rest of the number
+        // Check if the number starts with +61 and has 10 digits
+        if (cleanNumber.length === 10 && cleanNumber.startsWith("6")) {
+            // Format for numbers starting with +61 (e.g., +61 414580011)
+            const countryCode = cleanNumber.slice(0, 2);  // Country code (+61)
+            const restOfNumber = cleanNumber.slice(2);  // The remaining part of the number
+        
+            // Correct the formatting to include the space after the country code
+            return `+${countryCode} ${restOfNumber}`;  // Format: +61 414580011
+          }
+      
+        // Check if the number starts with +1 and has 11 digits
+        if (cleanNumber.length === 11 && cleanNumber.startsWith("1")) {
+          // Format for numbers starting with +1 (e.g., +1 (xxx) xxx-xxxx)
           const countryCode = cleanNumber.slice(0, 1);  // Country code (+1)
           const areaCode = cleanNumber.slice(1, 4);  // Area code (next 3 digits)
           const firstPart = cleanNumber.slice(4, 7);  // First part of the phone number (next 3 digits)
           const secondPart = cleanNumber.slice(7);  // Second part of the phone number (last 4 digits)
       
-          // Format the number: +1 (xxx) xxx-xxxx
           return `+${countryCode} (${areaCode}) ${firstPart}-${secondPart}`;
         }
       
-        return phoneNumber;  // Return the original number if it doesn't fit the expected pattern
+        // Return the original number if it doesn't fit the expected pattern
+        return` ${phoneNumber.slice(0,3)} ${phoneNumber.slice(3)}`;
       };
     // const completed2 = state2?.filter((res:any) => res?.is_completed === true);
     const user_completed = state2?.slice(0, 5).map((res: any, index: number) => {
