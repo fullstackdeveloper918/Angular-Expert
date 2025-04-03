@@ -404,11 +404,34 @@ const MemberUpdatePDF = (props) => {
 
           <View style={styles.section}>
             <Text style={styles.subheading}>Goals for Next Meeting</Text>
-            {props?.state?.futureMeetings[0]?.goal_next_meeting?.map((res, index) => (
+            {props?.state?.futureMeetings[0]?.goal_next_meeting.slice(0,3)?.map((res, index) => (
               <View style={styles.goal} key={index}>
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text} wrap={false}> Business Goal #{index + 1}: </Text>
+                    <Text style={styles.textareanew} wrap={false}>
+                      {res?.name}
+                    </Text>
+                  </View>
+                  <View style={styles.Flex_div}>
+                    <Text style={styles.text}> Priority: </Text>
+                    <Text style={styles.textareanew} wrap={true}>  {res?.status}   </Text>
+                  </View>
+                  <View style={styles.Flex_div}>
+                    <Text style={styles.text} wrap={true}> To be Completed By:</Text>
+                    <Text style={styles.textareanew} wrap={true}>
+                      {res?.to_be_completed_by}
+
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            ))}
+            {props?.state?.futureMeetings[0]?.goal_next_meeting.slice(3,4)?.map((res, index) => (
+              <View style={styles.goal} key={index}>
+                <View style={styles.div_per}>
+                  <View style={styles.Flex_div}>
+                    <Text style={styles.text} wrap={false}> Personal Goal: </Text>
                     <Text style={styles.textareanew} wrap={false}>
                       {res?.name}
                     </Text>
@@ -713,6 +736,15 @@ const MemberUpdatePDF = (props) => {
                       <View style={styles.goal} key={index}>
                         <View style={styles.goal_two}>
                           <View style={styles.images_div}>
+                            <Text
+                              style={[
+                                styles.subheading,
+                                styles.marginequal,
+                                styles.block,
+                              ]}
+                            >
+                              Project Name: {item?.project||"N/A"}
+                            </Text>
                             <Text
                               style={[
                                 styles.subheading,
