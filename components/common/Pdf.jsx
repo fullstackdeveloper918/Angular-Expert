@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
 
 const MemberUpdatePDF = (props) => {
   console.log(props?.state, "props");
-  console.log(props?.subheadinglist1, "sadas");
+  // console.log(props?.subheadinglist1, "sadas");
 
   const options = { httpHeaders: { crossOrigin: "anonymous" } };
   const companyNameMap = {
@@ -316,62 +316,62 @@ const MemberUpdatePDF = (props) => {
 
           <View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
-            {props?.state?.businessUpdate[0]?.craftsmen_support ?
-              <>
-                <Text style={styles.text}>Current financial position:</Text>
-                <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.financial_position}
-                </Text>
-                <Text style={styles.text} wrap={false}>
-                  Current sales positions, hot prospects, recently contracted work:
-                </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.sales_position}
-                </Text>
-                <Text style={styles.text}>
-                  Accomplishments in the last 6 months:
-                </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.accomplishments}
-                </Text>
-                <Text style={styles.text}> HR position &/or needs: </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.hr_position}
-                </Text>
-                <Text style={styles.text}>
-                  Current challenges (e.g., problem client, personnel issue(s),
-                  trade availability, rising costs, supply chain):
-                </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.current_challenges}
-                </Text>
-                <Text style={styles.text}>
-                  How can the Craftsmen aid or support you with these challenges?
-                </Text>
-                <Text style={styles.textarea} wrap={true}>
-                  {props?.state?.businessUpdate[0]?.craftsmen_support}
-                </Text>
-              </> :
-              Object.keys(groupedQuestions).map((subheadingTitle) => (
-                <>
-                  <Text style={styles.textBold}>{subheadingTitle}</Text>
-                  {/* Display questions for the current subheading */}
-                  {groupedQuestions[subheadingTitle].map((res) => (
-                    // console.log(question,"yyy")
-                    <>
-                      <Text style={styles.text} >{res?.question}</Text>
-                      <Text style={[styles.textarea]} wrap={true}>
-                        {res.answer}
-                      </Text>
-                    </>
-                  ))}
-                </>
+            {props?.state?.businessUpdate[0]?.business_update_questions?.length ?
+             
+             Object.keys(groupedQuestions).map((subheadingTitle) => (
+               <>
+                 <Text style={styles.textBold}>{subheadingTitle}</Text>
+                 {/* Display questions for the current subheading */}
+                 {groupedQuestions[subheadingTitle].map((res) => (
+                   // console.log(question,"yyy")
+                   <>
+                     <Text style={styles.text} >{res?.question}</Text>
+                     <Text style={[styles.textarea]} wrap={true}>
+                       {res.answer}
+                     </Text>
+                   </>
+                 ))}
+               </>
 
 
 
-              ))
-
-          
+             ))
+              :
+              <> 
+              <Text style={styles.text}>Current financial position:</Text>
+              <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                {props?.state?.businessUpdate[0]?.financial_position}
+              </Text>
+              <Text style={styles.text} wrap={false}>
+                Current sales positions, hot prospects, recently contracted work:
+              </Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.businessUpdate[0]?.sales_position}
+              </Text>
+              <Text style={styles.text}>
+                Accomplishments in the last 6 months:
+              </Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.businessUpdate[0]?.accomplishments}
+              </Text>
+              <Text style={styles.text}> HR position &/or needs: </Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.businessUpdate[0]?.hr_position}
+              </Text>
+              <Text style={styles.text}>
+                Current challenges (e.g., problem client, personnel issue(s),
+                trade availability, rising costs, supply chain):
+              </Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.businessUpdate[0]?.current_challenges}
+              </Text>
+              <Text style={styles.text}>
+                How can the Craftsmen aid or support you with these challenges?
+              </Text>
+              <Text style={styles.textarea} wrap={true}>
+                {props?.state?.businessUpdate[0]?.craftsmen_support}
+              </Text>
+            </> 
             }
           </View>
 
@@ -537,7 +537,7 @@ const MemberUpdatePDF = (props) => {
 
 
 
-          {props?.state?.personalWellBeingUpdates ?
+          {props?.state?.personalWellBeingUpdates?.length ?
             <View style={styles.section}>
               {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
               <Text style={styles.main_heading}>PERSONAL WELL-BEING CHECK-IN</Text>
@@ -557,7 +557,7 @@ const MemberUpdatePDF = (props) => {
                   : ""}
               </View>
             </View> : ""}
-          {props?.state?.personalWellBeingUpdates ?
+          {props?.state?.businessEvolutionIndustryTrendsUpdates?.length ?
             <View style={styles.section}>
               {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
               <Text style={styles.main_heading}>BUSINESS EVOLUTION & INDUSTRY TRENDS</Text>

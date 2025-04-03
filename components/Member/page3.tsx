@@ -227,10 +227,10 @@ const Page3 = ({ questions }: any) => {
         parsedGoals1 = res?.data.futureMeetings[0].goal_next_meeting || [];
       }
 
-      const fetchedGoals1 = parsedGoals1
-        ? parsedGoals1
-        : res?.data?.futureMeetings[0]?.goal_next_meeting || [];
-      form.setFieldsValue({ next_goals: fetchedGoals1 });
+      const fetchedGoals1 =res?.data?.futureMeetings[0]?.goal_next_meeting || [];
+      if(res?.data?.futureMeetings[0]?.goal_next_meeting){
+        form.setFieldsValue({ next_goals: fetchedGoals1 });
+      }
     } catch (error: any) {
       // if (error.status == 500) {
       //   localStorage.setItem("redirectAfterLogin", window.location.pathname);
@@ -335,7 +335,7 @@ const Page3 = ({ questions }: any) => {
                     className="add-staff-form"
                     scrollToFirstError
                     layout="vertical"
-                    // onValuesChange={onValuesChange}
+                    onValuesChange={onValuesChange}
                     onFinish={submit}
                     initialValues={{
                       last_goals: [
@@ -346,6 +346,7 @@ const Page3 = ({ questions }: any) => {
                       next_goals: [
                         { status: "high", name: "", to_be_completed_by: "" },
                         { status: "medium", name: "", to_be_completed_by: "" },
+                        { status: "low", name: "", to_be_completed_by: "" },
                         { status: "low", name: "", to_be_completed_by: "" },
                       ],
                     }}
@@ -444,13 +445,14 @@ const Page3 = ({ questions }: any) => {
                         { status: "high", name: "", to_be_completed_by: "" },
                         { status: "medium", name: "", to_be_completed_by: "" },
                         { status: "low", name: "", to_be_completed_by: "" },
+                        { status: "low", name: "", to_be_completed_by: "" },
                       ]}
                     >
                       {(fields, { add, remove }) => (
                         <>
                           {console.log(add, "add")}
                           {fields
-                            .slice(0, 3)
+                            .slice(0, 4)
                             .map(
                               ({ key, name, fieldKey, ...restField }: any) => (
                                 <>
@@ -480,7 +482,7 @@ const Page3 = ({ questions }: any) => {
                                   <Form.Item
                                     {...restField}
                                     name={[name, "name"]}
-                                    label={`Business Goal #${key + 1}`}
+                                    label={key + 1===4?"Personal Goal":`Business Goal #${key + 1}`}
                                     fieldKey={[fieldKey, "name"]}
                                     rules={[
                                       {
@@ -530,7 +532,7 @@ const Page3 = ({ questions }: any) => {
                                 </>
                               )
                             )}
-                          {fields?.length === 3 ? (
+                          {fields?.length === 4 ? (
                             <Form.Item className="mt-2">
                               <Button
                                 disabled

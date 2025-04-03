@@ -9,22 +9,22 @@ import {
   Document,
   StyleSheet,
   usePage,
-  Font 
+  Font
 } from "@react-pdf/renderer";
 Font.register({
   family: 'Open Sans',
   fonts: [
-  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
-  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf', fontWeight: 600 }
+    { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
+    { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf', fontWeight: 600 }
   ]
-  });
+});
 
 const styles = StyleSheet.create({
   textBold: {
     fontFamily: "Open Sans",  // Use the registered font family
     fontWeight: "bold",       // You can also set font weight directly here
     fontSize: 16,
-    textTransform:"uppercase",
+    textTransform: "uppercase",
   },
   page: {
     padding: 20,
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   subheader: {
     fontSize: 15,
-    marginTop:20 ,
+    marginTop: 20,
     textTransform: "capitalize",
     textDecoration: "underline",
   },
@@ -213,9 +213,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const MemberUpdatePDF = (props) => {
+const Pdfcopy = (props) => {
   console.log(props?.state, "props");
-  console.log(props?.subheadinglist1, "sadas");
+  // console.log(props?.subheadinglist1, "sadas");
 
   const options = { httpHeaders: { crossOrigin: "anonymous" } };
   const companyNameMap = {
@@ -270,18 +270,7 @@ const MemberUpdatePDF = (props) => {
 
   // const meeting_prepration_year= dayjs(props?.state?.meetings?.NextMeeting?.start_meeting_date).format("YYYY")
   // console.log(meeting_prepration_year,"meeting_prepration_year");
-  const groupedQuestions = props?.state?.businessUpdate[0]?.business_update_questions.reduce((acc, question) => {
-    const { subheading_title } = question;
-    if (!acc[subheading_title]) {
-      acc[subheading_title] = [];
-    }
-    acc[subheading_title].push(question);
-    return acc;
-  }, {});
-  console.log(groupedQuestions, "groupedQuestions");
-if(!groupedQuestions){
-  return
-}
+ 
   return (
     <>
       <Document>
@@ -316,86 +305,43 @@ if(!groupedQuestions){
 
           <View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
-            {props?.state?.businessUpdate[0]?.craftsmen_support ?
-              <>
-                <Text style={styles.text}>Current financial position:</Text>
-                <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.financial_position}
-                </Text>
-                <Text style={styles.text} wrap={false}>
-                  Current sales positions, hot prospects, recently contracted work:
-                </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.sales_position}
-                </Text>
-                <Text style={styles.text}>
-                  Accomplishments in the last 6 months:
-                </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.accomplishments}
-                </Text>
-                <Text style={styles.text}> HR position &/or needs: </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.hr_position}
-                </Text>
-                <Text style={styles.text}>
-                  Current challenges (e.g., problem client, personnel issue(s),
-                  trade availability, rising costs, supply chain):
-                </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.current_challenges}
-                </Text>
-                <Text style={styles.text}>
-                  How can the Craftsmen aid or support you with these challenges?
-                </Text>
-                <Text style={styles.textarea} wrap={false}>
-                  {props?.state?.businessUpdate[0]?.craftsmen_support}
-                </Text>
-              </> :
-  Object.keys(groupedQuestions).map((subheadingTitle) => (
-                <>
-                  <Text style={styles.textBold}>{subheadingTitle}</Text>
-                  {/* Display questions for the current subheading */}
-                  {groupedQuestions[subheadingTitle].map((res) => (
-                    // console.log(question,"yyy")
-                    <>
-                      <Text style={styles.text} >{res?.question}</Text>
-                      <Text style={[styles.textarea]} wrap={false}>
-                        {res.answer}
-                      </Text>
-                    </>
-                  ))}
-                </>
-
-
-
-              ))
-
-              //    <Text>{subheadingTitle}</Text>
-              //    {/* Display questions for the current subheading */}
-              //    {groupedQuestions[subheadingTitle].map((question) => (
-              //     <>
-              //    <Text style={styles.text} key={index}>{question?.question}</Text>
-              //    <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
-              //      {question.answer}
-              //    </Text>
-              //     </>
-              //    ))}
-              //  </>
-
-
-              // props?.state?.businessUpdate[0]?.business_update_questions.map((res,index)=>
-              // (
-              //   <>
-              //   <Text style={styles.text} key={index}>{res?.question}</Text>
-              // <Text   style={[styles.textarea, index === 0 ? styles.heightGiven : styles.heightGivenwrap]} wrap={false}>
-              //   {res.answer}
-              // </Text>
-              //   </>
-              // )
-              // )
-
-            }
+          
+              <> 
+              <Text style={styles.text}>Current financial position:</Text>
+              <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                {props?.state?.businessUpdate[0]?.financial_position}
+              </Text>
+              <Text style={styles.text} wrap={false}>
+                Current sales positions, hot prospects, recently contracted work:
+              </Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.businessUpdate[0]?.sales_position}
+              </Text>
+              <Text style={styles.text}>
+                Accomplishments in the last 6 months:
+              </Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.businessUpdate[0]?.accomplishments}
+              </Text>
+              <Text style={styles.text}> HR position &/or needs: </Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.businessUpdate[0]?.hr_position}
+              </Text>
+              <Text style={styles.text}>
+                Current challenges (e.g., problem client, personnel issue(s),
+                trade availability, rising costs, supply chain):
+              </Text>
+              <Text style={styles.textarea} wrap={false}>
+                {props?.state?.businessUpdate[0]?.current_challenges}
+              </Text>
+              <Text style={styles.text}>
+                How can the Craftsmen aid or support you with these challenges?
+              </Text>
+              <Text style={styles.textarea} wrap={true}>
+                {props?.state?.businessUpdate[0]?.craftsmen_support}
+              </Text>
+            </> 
+            
           </View>
 
           <View style={styles.section}>
@@ -405,8 +351,8 @@ if(!groupedQuestions){
               <View style={styles.goal} key={index}>
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
-                    <Text style={styles.text}> Goal #{index + 1}: </Text>
-                    <Text style={styles.textareanew} wrap={false}>
+                    <Text style={styles.text} > Goal #{index + 1}: </Text>
+                    <Text style={styles.textareanew} wrap={true}>
                       {res?.name}
                     </Text>
                   </View>
@@ -417,8 +363,8 @@ if(!groupedQuestions){
                     </Text> */}
                   </View>
                 </View>
-                <Text style={styles.text}> Comments: </Text>
-                <Text style={styles.textareanew} wrap={false}>
+                <Text style={styles.text} > Comments: </Text>
+                <Text style={styles.textareanew} wrap={true}>
                   {res?.comment}
                 </Text>
               </View>
@@ -431,18 +377,18 @@ if(!groupedQuestions){
               <View style={styles.goal} key={index}>
                 <View style={styles.div_per}>
                   <View style={styles.Flex_div}>
-                    <Text style={styles.text}> Business Goal #{index + 1}: </Text>
+                    <Text style={styles.text} wrap={false}> Business Goal #{index + 1}: </Text>
                     <Text style={styles.textareanew} wrap={false}>
                       {res?.name}
                     </Text>
                   </View>
                   <View style={styles.Flex_div}>
                     <Text style={styles.text}> Priority: </Text>
-                    <Text style={styles.textareanew}>  {res?.status}   </Text>
+                    <Text style={styles.textareanew} wrap={true}>  {res?.status}   </Text>
                   </View>
                   <View style={styles.Flex_div}>
-                    <Text style={styles.text}> To be Completed By:</Text>
-                    <Text style={styles.textareanew} wrap={false}>
+                    <Text style={styles.text} wrap={true}> To be Completed By:</Text>
+                    <Text style={styles.textareanew} wrap={true}>
                       {res?.to_be_completed_by}
 
                     </Text>
@@ -463,7 +409,7 @@ if(!groupedQuestions){
                     <Text style={styles.text} key={index}>{res?.question}</Text>
                     <Text
                       // style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}
-                      style={[styles.textarea, index === 0 ? styles.heightGiventab : styles.heightGivenwrapper]} wrap={false}
+                      style={[styles.textarea]} wrap={true}
                     >
                       {res.answer}
                     </Text>
@@ -513,7 +459,7 @@ if(!groupedQuestions){
                     <Text style={styles.text} key={index}>{res?.question}</Text>
                     <Text
                       // style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}
-                      style={[styles.textarea, index === 0 ? styles.heightGiventbottom : styles.heightGivenwrapper]} wrap={false}
+                      style={[styles.textarea]} wrap={true}
                     >
                       {res.answer}
                     </Text>
@@ -560,7 +506,7 @@ if(!groupedQuestions){
 
 
 
-          {props?.state?.personalWellBeingUpdates ?
+          {props?.state?.personalWellBeingUpdates?.length ?
             <View style={styles.section}>
               {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
               <Text style={styles.main_heading}>PERSONAL WELL-BEING CHECK-IN</Text>
@@ -571,7 +517,7 @@ if(!groupedQuestions){
                   (
                     <>
                       <Text style={styles.text} key={index}>{res?.question}</Text>
-                      <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                      <Text style={[styles.textarea]} wrap={true}>
                         {res.answer}
                       </Text>
                     </>
@@ -580,7 +526,7 @@ if(!groupedQuestions){
                   : ""}
               </View>
             </View> : ""}
-          {props?.state?.personalWellBeingUpdates ?
+          {props?.state?.businessEvolutionIndustryTrendsUpdates?.length ?
             <View style={styles.section}>
               {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
               <Text style={styles.main_heading}>BUSINESS EVOLUTION & INDUSTRY TRENDS</Text>
@@ -591,7 +537,7 @@ if(!groupedQuestions){
                   (
                     <>
                       <Text style={styles.text} key={index}>{res?.question}</Text>
-                      <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                      <Text style={[styles.textarea]} wrap={true}>
                         {res.answer}
                       </Text>
                     </>
@@ -612,7 +558,7 @@ if(!groupedQuestions){
                 (
                   <>
                     <Text style={styles.text} key={index}>{res?.question}</Text>
-                    <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                    <Text style={[styles.textarea]} wrap={true}>
                       {res.answer}
                     </Text>
                   </>
@@ -656,19 +602,19 @@ if(!groupedQuestions){
                 <Text style={styles.text}>
                   First roundtable topic
                 </Text>
-                <Text style={styles.textarea} wrap={false}>
+                <Text style={styles.textarea} wrap={true}>
                   {props?.state?.roundTableTopics[0]?.estimating}
                 </Text>
                 <Text style={styles.text}>
                   Second roundtable topic
                 </Text>
-                <Text style={styles.textarea} wrap={false}>
+                <Text style={styles.textarea} wrap={true}>
                   {props?.state?.roundTableTopics[0]?.accountability}
                 </Text>
                 <Text style={styles.text}>
                   Third roundtable topic
                 </Text>
-                <Text style={styles.textarea} wrap={false}>
+                <Text style={styles.textarea} wrap={true}>
                   {props?.state?.roundTableTopics[0]?.productivity}
                 </Text>
 
@@ -676,7 +622,7 @@ if(!groupedQuestions){
                 (
                   <>
                     <Text style={styles.text} key={index}>{res?.question}</Text>
-                    <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
+                    <Text style={[styles.textarea]} wrap={true}>
                       {res.answer}
                     </Text>
                   </>
@@ -716,7 +662,7 @@ if(!groupedQuestions){
                   <View style={styles.div_wrapper}>
                     <View style={styles.Flex_div}>
                       <Text style={styles.text}> {res?.questions[0]?.question} </Text>
-                      <Text style={styles.textarea} wrap={false}>
+                      <Text style={styles.textarea} wrap={true}>
                         {res?.questions[0]?.answer}
                       </Text>
                     </View>
@@ -779,4 +725,4 @@ if(!groupedQuestions){
   );
 };
 
-export default MemberUpdatePDF;
+export default Pdfcopy;

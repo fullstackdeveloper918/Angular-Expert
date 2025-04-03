@@ -23,6 +23,7 @@ import { destroyCookie, parseCookies } from "nookies";
 import { toast, ToastContainer } from "react-toastify";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
+import Pdf1 from "../common/Pdfcopy";
 import saveAs from "file-saver";
 import { useSelector } from "react-redux";
 import validation, { capFirst } from "../../utils/validation";
@@ -121,7 +122,7 @@ const PastMeetingUserList = () => {
 console.log(data,";kd;ka;s");
 
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
-        const blob = await pdf(<Pdf state={data} />).toBlob();
+        const blob = await pdf(<Pdf1 state={data}/>).toBlob();
         const pdfUrl = URL.createObjectURL(blob);
         return { blob, pdfUrl, timestamp };
     };

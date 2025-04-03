@@ -72,10 +72,11 @@ const Page8 = () => {
       id: Date.now(),
       goalName: "goalcomment_0",
       goalLabel: "Project 0",
+         projectName:"project0",
+      projectLabel:"project_0",
       commentName: "comment0",
       commentLabel: "comment_0",
-      projectName:"project0",
-      projectLabel:"project_0"
+   
     },
   ]);
   const [fileLists, setFileLists] = useState<any>({});
@@ -260,8 +261,8 @@ const Page8 = () => {
         goalLabel: `Project comment_${inputPairs.length}`,
         commentName: `comment${newId}`,
         commentLabel: `comment_${inputPairs.length}`,
-        projectName: `project_name${inputPairs.length}`,
-        projectLabel: `project${inputPairs.length}`,
+        projectName: `project${newId}`,
+        projectLabel: `project_${inputPairs.length}`,
       },
     ]);
   };
@@ -396,6 +397,7 @@ const Page8 = () => {
           formData.append("is_save", "false");
           for (const item of inputPairs) {
             formData.append(`${item?.commentLabel}`, values[item?.commentName]);
+            formData.append(`${item?.projectLabel}`, values[item?.projectName]);
 
             for (const file of values[item.goalName]?.fileList || []) {
               if (file?.originFileObj) {
@@ -435,7 +437,8 @@ const Page8 = () => {
           if (!pagetype) {
             router.replace(`/admin/user?${getUserdata?.user_id}`);
           } else {
-            router.push("/admin/questionnaire?page8");
+            router.push("/admin/dashboard");
+            // router.push("/admin/questionnaire?page8");
           }
 
           responseData = response?.pdfReponseData;
@@ -446,7 +449,7 @@ const Page8 = () => {
           formData.append("meeting_id", getUserdata.meetings.NextMeeting.id);
           for (const [index, item] of photoComment.entries()) {
             formData.append(`comment_${index}`, item?.comment);
-
+            formData.append(`project_${index}`, item?.projectName);
             for (const [fileIndex, file] of (
               item?.files?.fileList || []
             ).entries()) {
@@ -483,7 +486,8 @@ const Page8 = () => {
           setResponseData(response?.data?.pdfReponseData);
 
           if (response) {
-            router.replace(`/admin/user?${getUserdata?.user_id}`);
+            router.push("/admin/dashboard");
+            // router.replace(`/admin/user?${getUserdata?.user_id}`);
           }
 
           responseData = response?.pdfReponseData;
@@ -528,7 +532,7 @@ const Page8 = () => {
           for (const item of inputPairs) {
             console.log(item, 'item ki hai')
             formData.append(`${item?.commentLabel}`, values[item?.commentName]);
-            // formData.append(`${item?.projectLabel}`, values[item?.projectName]);
+            formData.append(`${item?.projectLabel}`, values[item?.projectName]);
             //  formData.append(`project_${item}`, values[item?.goalName]);
 
 
@@ -580,7 +584,7 @@ const Page8 = () => {
           for (const [index, item] of photoComment.entries()) {
             formData.append(`comment_${index}`, item?.comment);
             console.log(item, 'asdasdasdasd')
-            // formData.append(`project_${index}`, item?.projectName);
+            formData.append(`project_${index}`, item?.projectName);
 
             for (const [fileIndex, file] of (
               item?.files?.fileList || []
@@ -664,17 +668,23 @@ const Page8 = () => {
       // }
       const fetchedGoals = res?.data?.photo_section?.fileUrls || [];
       const commentKey = fetchedGoals[0]?.commentId || "";
+console.log(fetchedGoals,"fetchedGoals");
 
       const formattedGoals: any = Object.keys(fetchedGoals[0] || {}).map(
         (key, index) => {
+          // console.log(key,"key");
+          
           return {
             id: index,
             goalName: `goal${key}`,
             goalLabel: `Project ${key}`,
             commentName: key,
             commentLabel: key,
+            projectName: `project_${key}`,
+            projectLabel: `project_${key}`,
             // initialGoal: key,
             initialComment: fetchedGoals[0][key]?.comment,
+            initialProject: fetchedGoals[0][key]?.project,
             images: fetchedGoals[0][key]?.images,
             commentId: commentKey,
           };
@@ -682,11 +692,15 @@ const Page8 = () => {
       );
 
       setInputPairs(formattedGoals);
+console.log(formattedGoals,"formattedGoals");
 
       const formValues: any = {};
       formattedGoals.forEach((goal: any) => {
+        console.log(goal,"goal");
+        
         formValues[goal.goalName] = goal.initialGoal;
         formValues[goal.commentName] = goal.initialComment;
+        formValues[goal.projectName] = goal.initialProject;
       });
 
       form.setFieldsValue(formValues);
@@ -971,8 +985,9 @@ const Page8 = () => {
                         })
                         .map((pair: any, index: number) => (
                           <>
+                          {console.log(pair,"pairpairpair")}
                             <div key={pair.id} style={{ position: "relative" }}>
-                            {/* <Form.Item
+                            <Form.Item
                                 name={pair.projectName}
                                 rules={[
                                   {
@@ -987,7 +1002,7 @@ const Page8 = () => {
                                 // label={pair.commentLabel}
                               >
                                 <Input size="large" placeholder="Enter..." />
-                              </Form.Item> */}
+                              </Form.Item>
                               <Form.Item
                                 name={pair.goalName}
                                 label={`Images`}

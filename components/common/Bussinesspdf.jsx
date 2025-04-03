@@ -69,6 +69,8 @@ Font.register({
   });
 
 const BussinessPDF = (props) => {
+  console.log(props,"popopopopo");
+  
   const photoSection = props?.state?.photo_section || [];
 
   const companyNameMap = {
