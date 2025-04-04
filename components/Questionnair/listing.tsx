@@ -1010,7 +1010,7 @@ console.log(meeting_prepration_year,"meeting_prepration_year");
 
 
 
-{getUserdata?.template_access?.includes("personalWellBeingUpdates") &&
+{getUserdata?.template_access?.includes("well_being_check_in") &&
                                               
                                               <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
                                               <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
@@ -1044,7 +1044,7 @@ console.log(meeting_prepration_year,"meeting_prepration_year");
                                                   </Card>
                                               </Col>
                                           }
-{getUserdata?.template_access?.includes("businessEvolutionIndustryTrendsUpdates") &&
+{getUserdata?.template_access?.includes("business_evolution_industry_trends") &&
                                               
                                               <Col  xs={24} sm={12} md={12} lg={12} xl={8}>
                                               <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
@@ -1135,7 +1135,7 @@ console.log(meeting_prepration_year,"meeting_prepration_year");
                                                     </Card>
                                                 </Col>
                                             }
-                                            {getUserdata?.template_access?.includes("spring_meeting") &&
+                                            {getUserdata?.template_access?.includes("roundtable_topics") &&
                                                 // <Col  span={8}>
                                                 //     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                 //         <div className="card-body pb-2 d-flex flex-column">
@@ -1192,7 +1192,7 @@ console.log(meeting_prepration_year,"meeting_prepration_year");
                                                     </Card>
                                                 </Col>
                                             }
-                                            {getUserdata?.template_access?.includes("additional_question") &&
+                                            {/* {getUserdata?.template_access?.includes("additional_question") &&
                                                 <Col xs={24} sm={12} md={12} lg={12} xl={8}>
                                                     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>
                                                         <div className="card-body pb-2 d-flex flex-column">
@@ -1222,7 +1222,7 @@ console.log(meeting_prepration_year,"meeting_prepration_year");
                                                         </div>
                                                     </Card>
                                                 </Col>
-                                            }
+                                            } */}
                                             {getUserdata?.template_access?.includes("photo_section") &&
                                                 // <Col  span={8}>
                                                 //     <Card className='common-card' style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)' }}>

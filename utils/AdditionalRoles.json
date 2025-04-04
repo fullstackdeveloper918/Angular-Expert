@@ -31,18 +31,24 @@
     },
     {
         "sr": 6,
-        "name": "Spring Meeting",
-        "rol": "spring_meeting",
+        "name": "ROUNDTABLE TOPICS",
+        "rol": "roundtable_topics",
         "color": "volcano"
     },
     {
         "sr": 7,
-        "name": "Additional Question",
-        "rol": "additional_question",
+        "name": "PERSONAL WELL-BEING CHECK-IN",
+        "rol": "well_being_check_in",
         "color": "volcano"
     },
     {
         "sr": 8,
+        "name": "BUSINESS EVOLUTION & INDUSTRY TRENDS",
+        "rol": "business_evolution_industry_trends",
+        "color": "volcano"
+    },
+    {
+        "sr": 9,
         "name": "Photo Section",
         "rol": "photo_section",
         "color": "volcano"
