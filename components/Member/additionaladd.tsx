@@ -21,28 +21,45 @@ import AdditionalRoles from "../../utils/AdditionalRoles.json";
 import { useSelector } from "react-redux";
 const { Option } = Select;
 const Additionaladd = () => {
-  const getUserdata = useSelector((state: any) => state?.user?.userData)
+  const getUserdata = useSelector((state: any) => state?.user?.userData);
   const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [state, setState] = useState<any>("");
+  const [state, setState] = useState<any>(null);
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
-  const [companyType, setCompanyType] = useState<any>("");
+  const [companyType, setCompanyType] = useState<any>(null);
+  const [fieldList, setFieldList] = useState<any>([{ id: Date.now() }]);
+  const [selectedRoles, setSelectedRoles] = useState<any>([]); 
+  const [allFieldsFilled, setAllFieldsFilled] = useState<boolean>(false);
 
-  const value = entries.length > 0 ? entries[0][0] : "";
-console.log(value,"hkhkh");
+  const value = entries.length > 0 ? entries[0][0] : '';
+  const type = entries.length > 1 && entries[1]?.length > 0 ? entries[1][0] : '';
 
-  let type = entries?.length > 1 && entries[1]?.length > 0 ? entries[1][0] : "";
+  // Fetch data when in edit mode
+  useEffect(() => {
+    if (type === 'edit') {
+      const getDataById = async () => {
+        const item = { parent_user_id: value };
+        try {
+          const res = await api.User.getById1(item);
+          setState(res?.data || null);
+          // Only set form values once data is fetched and avoid overwriting dynamic fields
+          if (res?.data) {
+            form.setFieldsValue({
+              ...res?.data,
+              // Make sure you merge field values correctly without overwriting ones that may already be set
+            });
+          }
+        } catch (error: any) {
+          alert(error.message);
+        }
+      };
+      getDataById();
+    }
+  }, [type, form]);
 
-  const [fieldList, setFieldList] = useState([{ id: Date.now() }]);
-  const [isAddMoreDisabled, setIsAddMoreDisabled] = useState(true);
-  const [selectedRoles, setSelectedRoles] = useState<any>([]); // Track selected roles
-  const [allFieldsFilled, setAllFieldsFilled] = useState<any>(false);
-  const handleChange = (value: any) => {
-    setCompanyType(value);
-  };
-
+  // Add a new field set
   const addFieldSet = () => {
     form.validateFields().then(() => {
       const newFieldId = Date.now();
@@ -56,12 +73,14 @@ console.log(value,"hkhkh");
     });
   };
 
+  // Remove a field set
   const removeFieldSet = (id: any) => {
-    setFieldList(fieldList.filter((field) => field.id !== id));
+    setFieldList((prevList:any) => prevList.filter((field:any) => field.id !== id));
   };
 
+  // Save data to localStorage
   const saveDataToLocalStorage = (id: any, currentFields: any) => {
-    const dataToStore = fieldList.map((field) => ({
+    const dataToStore = fieldList.map((field:any) => ({
       id: field.id,
       firstname: currentFields[`firstname_${field.id}`],
       lastname: currentFields[`lastname_${field.id}`],
@@ -70,11 +89,13 @@ console.log(value,"hkhkh");
       template_access: currentFields[`roles_${field.id}`] || [],
     }));
 
-    localStorage.setItem("formData", JSON.stringify(dataToStore));
+    localStorage.setItem('formData', JSON.stringify(dataToStore));
   };
+
+  // Check if all fields are filled
   const onFieldsChange = () => {
     const currentFields = form.getFieldsValue();
-    const areAllFieldsFilled = fieldList.every((field) => {
+    const areAllFieldsFilled = fieldList.every((field:any) => {
       return (
         currentFields[`firstname_${field.id}`] &&
         currentFields[`lastname_${field.id}`] &&
@@ -85,19 +106,18 @@ console.log(value,"hkhkh");
     });
     setAllFieldsFilled(areAllFieldsFilled);
   };
-console.log(state,"state");
 
+  // Handle form submission
   const onFinish = async (values: any) => {
-    // country_code: values.country_code ?? "+93",
-    const formattedData = fieldList.map((field, index) => ({
+    const formattedData = fieldList.map((field:any) => ({
       firstname: values[`firstname_${field.id}`],
       lastname: values[`lastname_${field.id}`],
       email: values[`email_${field.id}`],
       password: values[`password_${field.id}`],
       template_access: values[`roles_${field.id}`] || [],
-    })) as any;
+    }));
 
-    localStorage.setItem("formData", JSON.stringify(formattedData));
+    localStorage.setItem('formData', JSON.stringify(formattedData));
 
     let item = {
       parent_user_id: value,
@@ -106,85 +126,29 @@ console.log(state,"state");
 
     try {
       setLoading(true);
+      let res;
       if (type) {
-        let res = await api.User.edit_additional_user(item);
-        toast.success(res?.data?.message);
-        if (res?.data?.status == 500) {
-          // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-
-          // // }
-          // // dispatch(clearUserData({}));
-          // toast.error("Session Expired Login Again")
-          // router.replace("/auth/signin")
-          localStorage.setItem("redirectAfterLogin", window.location.pathname);
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-          // dispatch(clearUserData({}));
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
-        if (res) {
-          router.back();
-        }
+        res = await api.User.edit_additional_user(item);
       } else {
-        let res = await api.User.add_additional_user(item);
-        toast.success(res?.data?.message);
-        if (res?.data?.status == 500) {
-          localStorage.setItem("redirectAfterLogin", window.location.pathname);
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-          // dispatch(clearUserData({}));
-          toast.error("Session Expired. Login Again");
-          router.replace("/auth/signin");
-        }
-        if (res) {
-          router.back();
-        }
+        res = await api.User.add_additional_user(item);
+      }
+
+      toast.success(res?.data?.message);
+
+      if (res) {
+        router.back();
       }
     } catch (error: any) {
-      if (error) {
-        if (error?.status === 409) {
-          toast.error(
-            "The email address is already in use by another account."
-          );
-        }
-      }
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-
-
-
-
-  useEffect(() => {
-    // if (type == "edit") {
-      const getDataById = async () => {
-        const item = {
-          parent_user_id: value,
-          // meeting_id:getUserdata.meetings.NextMeeting.id,
-        }
-        try {
-          const res = await api.User.getById1(item as any);
-          setState(res?.data || null);
-          if (res?.data?.status == 500) {
-            toast.error("Session Expired Login Again")
-            router.replace("/auth/signin")
-          }
-          form.setFieldsValue(res?.data)
-        } catch (error: any) {
-          alert(error.message);
-        }
-      };
-      getDataById();
-    // }
-  }, [type, form]);
-  // form.setFieldsValue(res);
+  // Handle back navigation
   const onBack = () => {
-    router.push("/admin/member");
+    router.push('/admin/member');
   };
-
-
-
 
   return (
     <>
@@ -211,133 +175,94 @@ console.log(state,"state");
 
                 {/* form  */}
                 <div className="card-form-wrapper">
-                  <Form
-                    form={form}
-                    name="add_staff"
-                    className="add-staff-form"
-                    onFieldsChange={onFieldsChange}
-                    scrollToFirstError
-                    layout="vertical"
-                    onFinish={onFinish}
-                  >
-                    {/* First Name  */}
-                    {fieldList.map((field, index) => (
-                      <div
-                        key={field.id}
-                        className="row mt-4"
-                        style={{ position: "relative" }}
-                      >
-                        <Form.Item
-                          name={`firstname_${field.id}`}
-                          className="col-lg-6 col-sm-12"
-                          // rules={[{ required: true, whitespace: true, message: 'Please Enter First Name' }]}
-                          label={`First Name`}
-                          // label={`First Name ${index + 1}`}
-                        >
-                          <Input size="large" placeholder="First Name" />
-                        </Form.Item>
-                        <Form.Item
-                          name={`lastname_${field.id}`}
-                          className="col-lg-6 col-sm-12"
-                          // rules={[{ required: true, whitespace: true, message: 'Please Enter Last Name' }]}
-                          label={`Last Name`}
-                          // label={`Last Name ${index + 1}`}
-                        >
-                          <Input size="large" placeholder="Last Name" />
-                        </Form.Item>
-                        <Form.Item
-                          name={`email_${field.id}`}
-                          className="col-lg-6 col-sm-12"
-                          // rules={[{ required: true, message: 'Please Enter Email' }]}
-                          label={`Email`}
-                          // label={`Email ${index + 1}`}
-                        >
-                          <Input
-                            size="large"
-                            type="email"
-                            placeholder="Email"
-                          />
-                        </Form.Item>
-                        <Form.Item
-                          name={`password_${field.id}`}
-                          className="col-lg-6 col-sm-12"
-                          // rules={[{ required: true, message: 'Please Enter Password!' }]}
-                          label={`Password`}
-                          // label={`Password ${index + 1}`}
-                        >
-                          <Input.Password
-                            size="large"
-                            type="password"
-                            placeholder="Password"
-                          />
-                        </Form.Item>
-                        <Form.Item
-                          name={`roles_${field.id}`}
-                          label="Permissions"
-                          //  rules={[{ required: true, message: 'Please Select Permissions' }]}
-                        >
-                          <Select
-                            mode="tags"
-                            size={"large"}
-                            placeholder="Please select"
-                            style={{ width: "100%" }}
-                            // onChange={(value) => validateFirstFieldSet(value, field.id)}
-                            options={AdditionalRoles.filter(
-                              (role) => !selectedRoles.includes(role.rol)
-                            ).map((res) => ({
-                              value: res.rol,
-                              label: res.name,
-                            }))}
-                          />
-                        </Form.Item>
-                        {/* <Button  onClick={() => removeFieldSet(field.id)} className='col-lg-12'>
-                                                    Remove
-                                                </Button> */}
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: "-20px",
-                            right: "0",
-                            fontSize: "24px",
-                            cursor: "pointer",
-                            textAlign: "end",
-                          }}
-                          onClick={() => removeFieldSet(field.id)}
-                        >
-                          <MinusCircleOutlined />
-                        </div>
-                      </div>
-                    ))}
-                    <Button
-                      type="dashed"
-                      onClick={addFieldSet}
-                      className="col-lg-12 mt-4 mb-3"
-                      disabled={!allFieldsFilled}
-                    >
-                      Add More Fields
-                    </Button>
-                    {/* <Divider /> */}
-                    {/* Button  */}
-                    <div className="d-flex gap-3 justify-content-end">
-                      <Button
-                        size={"large"}
-                        type="primary"
-                        onClick={onBack}
-                        className=""
-                      >
-                        Back
-                      </Button>
-                      <Button
-                        size={"large"}
-                        type="primary"
-                        htmlType="submit"
-                        className="login-form-button "
-                        loading={loading}
-                      >
-                        Save
-                      </Button>
-                    </div>
-                  </Form>
+                <Form
+      form={form}
+      name="add_staff"
+      className="add-staff-form"
+      onValuesChange={onFieldsChange}
+      scrollToFirstError
+      layout="vertical"
+      onFinish={onFinish}
+    >
+      {/* Dynamic Field List Rendering */}
+      {fieldList.map((field:any) => (
+        <div key={field.id} className="row mt-4" style={{ position: 'relative' }}>
+          <Form.Item
+            name={`firstname_${field.id}`}
+            className="col-lg-6 col-sm-12"
+            label="First Name"
+          >
+            <Input size="large" placeholder="First Name" />
+          </Form.Item>
+          <Form.Item
+            name={`lastname_${field.id}`}
+            className="col-lg-6 col-sm-12"
+            label="Last Name"
+          >
+            <Input size="large" placeholder="Last Name" />
+          </Form.Item>
+          <Form.Item
+            name={`email_${field.id}`}
+            className="col-lg-6 col-sm-12"
+            label="Email"
+          >
+            <Input size="large" type="email" placeholder="Email" />
+          </Form.Item>
+          <Form.Item
+            name={`password_${field.id}`}
+            className="col-lg-6 col-sm-12"
+            label="Password"
+          >
+            <Input.Password size="large" placeholder="Password" />
+          </Form.Item>
+          <Form.Item name={`roles_${field.id}`} label="Permissions">
+            <Select
+              mode="tags"
+              size="large"
+              placeholder="Please select"
+              style={{ width: '100%' }}
+              options={AdditionalRoles.filter(
+                (role) => !selectedRoles.includes(role.rol)
+              ).map((res) => ({
+                value: res.rol,
+                label: res.name,
+              }))}
+            />
+          </Form.Item>
+          <div
+            style={{
+              position: 'absolute',
+              top: '-20px',
+              right: '0',
+              fontSize: '24px',
+              cursor: 'pointer',
+              textAlign: 'end',
+            }}
+            onClick={() => removeFieldSet(field.id)}
+          >
+            <MinusCircleOutlined />
+          </div>
+        </div>
+      ))}
+
+      <Button
+        type="dashed"
+        onClick={addFieldSet}
+        className="col-lg-12 mt-4 mb-3"
+        disabled={!allFieldsFilled}
+      >
+        Add More Fields
+      </Button>
+
+      <div className="d-flex gap-3 justify-content-end">
+        <Button size="large" type="primary" onClick={onBack}>
+          Back
+        </Button>
+        <Button size="large" type="primary" htmlType="submit" className="login-form-button" loading={loading}>
+          Save
+        </Button>
+      </div>
+    </Form>
                 </div>
               </Card>
             </Col>
