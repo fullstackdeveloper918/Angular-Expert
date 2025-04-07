@@ -8,6 +8,7 @@ import api from "@/utils/api";
 import { toast, ToastContainer } from "react-toastify";
 import { destroyCookie } from "nookies";
 import { useSelector } from "react-redux";
+import { storage, firestore, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } from '../../utils/firebase'; 
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
 //     ssr: false,
@@ -23,6 +24,21 @@ import { useSelector } from "react-redux";
 //   }),
 // };
 const { Option } = Select;
+
+import { PlusOutlined } from '@ant-design/icons';
+import { Image, Upload } from 'antd';
+import type { UploadFile, UploadProps } from 'antd';
+
+type FileType = Parameters<any>[0];
+
+const getBase64 = (file: any): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
 const Add = () => {
 
   const router = useRouter()
@@ -35,9 +51,79 @@ const Add = () => {
   const value = entries.length > 0 ? entries[0][0] : '';
   const type = entries.length > 0 ? entries[1][0] : '';
   const getUserdata = useSelector((state: any) => state?.user?.userData)
+
+
+
+
+
+
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [getImage, setGetImage] = useState<any>('');
+  const [file, setFile] = useState<any>(null); // Store a single file
+console.log(getImage,"getImage");
+
+  const handlePreview = async (file: UploadFile) => {
+    // if (!file.url && !file.preview) {
+    //   file.preview = await getBase64(file.originFileObj as FileType);
+    // }
+    console.log(getImage,"sd;kflsfljsljd");
+    
+    setPreviewImage(getImage);
+    setPreviewOpen(true);
+  };
+
+  const handleChange1: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    if (newFileList.length > 0) {
+      const newFile = newFileList[0];
+      setFile(newFile); // Set the first file as the current image
+      // setPreviewImage(`https://firebasestorage.googleapis.com/v0/b/new-craftsmen.firebasestorage.app/o/Screenshot%202024-07-22%20191941.png?alt=media&token=93f772c4-e541-41ee-b79f-d50684132df6`); // Set preview image
+    } else {
+      setFile(null); // If no file, reset the file state
+      // setPreviewImage(''); // Reset the preview image
+    }
+  };
   const handleChange = (value: any) => {
     setCompanyType(value);
   };
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<any>(null);
+
+ const handleFileUpload = async () => {
+    // if (!file) return;
+console.log(file,"hskdfhkasd");
+
+    setIsUploading(true);
+    setUploadError(null);
+
+    try {
+      const fileRef = ref(storage, `${file?.originFileObj.name}`);
+
+      await uploadBytes(fileRef, file?.originFileObj);
+
+      const downloadURL = await getDownloadURL(fileRef);
+console.log(downloadURL,"downloadURL");
+setGetImage(downloadURL)
+setPreviewImage(downloadURL)
+      await addDoc(collection(firestore, 'files'), {
+        fileUrl: downloadURL,
+        fileName: file.name,
+        createdAt: serverTimestamp(), 
+      });
+      setFile(null);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setUploadError("Error uploading file. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+useEffect(()=>{
+  handleFileUpload()
+},[file])
+
+
   const onFinish = async (values: any) => {
     // country_code: values.country_code ?? "+93",
     let items = {
@@ -208,6 +294,16 @@ router.back()
   const submit = () => {
     router.push("/admin/member/add/page2")
   }
+
+
+  const uploadButton = (
+    <button style={{ border: 0, background: 'none' }} type="button">
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  );
+  console.log(previewImage,"previewImage");
+  
   return (
     <>
       <Fragment>
@@ -226,6 +322,29 @@ router.back()
 
                 {/* form  */}
                 <div className='card-form-wrapper'>
+                <Upload
+        // action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+        listType="picture-circle"
+        fileList={file ? [file] : []} // Only one image allowed
+        onPreview={handlePreview}
+        onChange={handleChange1}
+        showUploadList={false} // Hide the default upload list
+      >
+        {file ? previewImage : uploadButton} {/* Only show the button if no file is selected */}
+      </Upload>
+
+      {getImage && (
+        <Image
+          wrapperStyle={{ display: 'none' }}
+          preview={{
+            visible: previewOpen,
+            onVisibleChange: (visible) => setPreviewOpen(visible),
+            afterOpenChange: (visible) => !visible && setPreviewImage(''),
+          }}
+          src={previewImage}
+        />
+     )} 
+                // 
                   <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onFinish}>
 
                     {/* First Name  */}
