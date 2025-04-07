@@ -64,13 +64,14 @@ const Add = () => {
   const [file, setFile] = useState<any>(null); // Store a single file
 console.log(getImage,"getImage");
 
-  const handlePreview = async (file: UploadFile) => {
-    // if (!file.url && !file.preview) {
-    //   file.preview = await getBase64(file.originFileObj as FileType);
-    // }
+  const handlePreview = async (file: any) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as any);
+    }
+
     console.log(getImage,"sd;kflsfljsljd");
     
-    setPreviewImage(getImage);
+    setPreviewImage(file.originFileObj );
     setPreviewOpen(true);
   };
 
@@ -105,7 +106,7 @@ console.log(file,"hskdfhkasd");
       const downloadURL = await getDownloadURL(fileRef);
 console.log(downloadURL,"downloadURL");
 setGetImage(downloadURL)
-setPreviewImage(downloadURL)
+// setPreviewImage(downloadURL)
       await addDoc(collection(firestore, 'files'), {
         fileUrl: downloadURL,
         fileName: file.name,
@@ -197,75 +198,75 @@ useEffect(()=>{
       setLoading(false)
     }
   };
-  const onPrevious = async (values: any) => {
-    // country_code: values.country_code ?? "+93",
-    let items = {
-      first_step: {
-        firstname: String(values.firstname).trim(),
-        lastname: String(values.lastname).trim(),
-        email: String(values.email).trim(),
-        password: String(values.password).trim(),
-        mobile: values.phone_number,
-        roles: values.roles,
-        company_name: values?.company_name,
-        position: values?.position,
-        home_city: values?.home_city,
-      }
-    } as any
+//   const onPrevious = async (values: any) => {
+//     // country_code: values.country_code ?? "+93",
+//     let items = {
+//       first_step: {
+//         firstname: String(values.firstname).trim(),
+//         lastname: String(values.lastname).trim(),
+//         email: String(values.email).trim(),
+//         password: String(values.password).trim(),
+//         mobile: values.phone_number,
+//         roles: values.roles,
+//         company_name: values?.company_name,
+//         position: values?.position,
+//         home_city: values?.home_city,
+//       }
+//     } as any
 
-    try {
-      setLoading(true)
-      if (type == "edit") {
-        let items = {
-          first_step: {
-            userId: value,
-            firstname: String(values.firstname).trim(),
-            lastname: String(values.lastname).trim(),
-            email: String(values.email).trim(),
-            password: String(values.password).trim(),
-            mobile: values.phone_number,
-            roles: "",
-            company_name: values?.company_name,
-            position: values?.position,
-            home_city: values?.home_city,
-            meeting_id:getUserdata.meetings.NextMeeting.id,
-          }
-        } as any
-        let res = await api.User.edit(items)
-        // router.push(`/admin/member/add/page2?${value}&edit`)
-        if (res?.status == 500) {
-          destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-          localStorage.removeItem('hasReloaded');
-          toast.error("Session Expired Login Again")
-          router.replace("/auth/signin")
-      }
-      } else {
+//     try {
+//       setLoading(true)
+//       if (type == "edit") {
+//         let items = {
+//           first_step: {
+//             userId: value,
+//             firstname: String(values.firstname).trim(),
+//             lastname: String(values.lastname).trim(),
+//             email: String(values.email).trim(),
+//             password: String(values.password).trim(),
+//             mobile: values.phone_number,
+//             roles: "",
+//             company_name: values?.company_name,
+//             position: values?.position,
+//             home_city: values?.home_city,
+//             meeting_id:getUserdata.meetings.NextMeeting.id,
+//           }
+//         } as any
+//         let res = await api.User.edit(items)
+//         // router.push(`/admin/member/add/page2?${value}&edit`)
+//         if (res?.status == 500) {
+//           destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+//           localStorage.removeItem('hasReloaded');
+//           toast.error("Session Expired Login Again")
+//           router.replace("/auth/signin")
+//       }
+//       } else {
 
-        let res = await api.Auth.signUp(items)
-        // router.push(`/admin/member/add/page2?${res?.user_id}`)
-        router.push(`/admin/member/additional_user`)
-        toast.success("Added Successfully")
-router.back()
-        if (res?.status == 500) {
-          toast.error("Session Expired Login Again")
-          router.replace("/auth/signin")
-        }
-      }
+//         let res = await api.Auth.signUp(items)
+//         // router.push(`/admin/member/add/page2?${res?.user_id}`)
+//         router.push(`/admin/member/additional_user`)
+//         toast.success("Added Successfully")
+// router.back()
+//         if (res?.status == 500) {
+//           toast.error("Session Expired Login Again")
+//           router.replace("/auth/signin")
+//         }
+//       }
 
-    } catch (error: any) {
+//     } catch (error: any) {
 
-      if (error?.status==400) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        localStorage.removeItem('hasReloaded');
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
-    }
+//       if (error?.status==400) {
+//         destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+//         localStorage.removeItem('hasReloaded');
+//         toast.error("Session Expired Login Again")
+//         router.replace("/auth/signin")
+//     }
 
 
-    } finally {
-      setLoading(false)
-    }
-  };
+//     } finally {
+//       setLoading(false)
+//     }
+//   };
 
 
   useEffect(() => {
@@ -333,7 +334,7 @@ router.back()
         {file ? previewImage : uploadButton} {/* Only show the button if no file is selected */}
       </Upload>
 
-      {getImage && (
+      {previewImage && (
         <Image
           wrapperStyle={{ display: 'none' }}
           preview={{
@@ -343,8 +344,8 @@ router.back()
           }}
           src={previewImage}
         />
-     )} 
-                // 
+      )}
+                
                   <Form form={form} name="add_staff" className="add-staff-form" scrollToFirstError layout='vertical' onFinish={onFinish}>
 
                     {/* First Name  */}
