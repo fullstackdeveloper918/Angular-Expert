@@ -648,7 +648,7 @@ const formatPhoneNumber = (phoneNumber: any) => {
                 <Card className='common-card'>
 
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                    <Typography.Title level={4} className='m-0 fw-bold'>Non-Complete Updates for Spring 2025</Typography.Title>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Incomplete Updates for Spring 2025</Typography.Title>
                   </div>
                   <div className='tabs-wrapper'>
                     <Table

@@ -157,20 +157,20 @@ const Add = () => {
         router.push(`/admin/member/additional_user`)
         toast.success("Added Successfully")
 router.back()
-        if (res?.status == 500) {
-          toast.error("Session Expired Login Again")
-          router.replace("/auth/signin")
-        }
+        // if (res?.status == 500) {
+        //   toast.error("Session Expired Login Again")
+        //   router.replace("/auth/signin")
+        // }
       }
 
     } catch (error: any) {
 
-      if (error?.status==400) {
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        localStorage.removeItem('hasReloaded');
-        toast.error("Session Expired Login Again")
-        router.replace("/auth/signin")
-    }
+    //   if (error?.status==400) {
+    //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+    //     localStorage.removeItem('hasReloaded');
+    //     toast.error("Session Expired Login Again")
+    //     router.replace("/auth/signin")
+    // }
 
 
     } finally {
