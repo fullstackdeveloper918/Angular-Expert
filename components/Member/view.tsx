@@ -77,6 +77,8 @@ const MeetingView = () => {
     is_activate: "",
     is_archive: ""
   })
+  console.log(state,"jkljkljkl");
+  
   const [loadingState, setLoadingState] = useState<any>(false);
   const searchParam = useParams();
   const cookies = parseCookies();
@@ -285,7 +287,10 @@ const formatPhoneNumber = (phoneNumber: any) => {
                 </div>
                 {/* Car Listing  */}
                 <div className='card-listing'>
-
+                  {state?
+                <div className='card-listing-image my-5' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                    <img src={state?.logo_url} alt="avataar" className='profile-image user-image' />
+                                </div>:""}
                   <ul className='list-unstyled my-4 mb-4'>
                     <li className='mb-2'><Typography.Text >Name:</Typography.Text > <Typography.Text className='ms-1 text-capitalize'>{state?.firstname ? `${validation.capitalizeFirstLetter(state?.firstname)} ${validation.capitalizeFirstLetter(state?.lastname)}` : 'N/A'}</Typography.Text ></li>
                     <li className='mb-2'><Typography.Text >Company Name:</Typography.Text > <Typography.Text className='ms-1'>{companyName || "N/A"}</Typography.Text ></li>

@@ -43,3 +43,7 @@ body {
   padding-top: 30px;
 }
 
+:where(.css-dev-only-do-not-override-98ntnt).ant-image .ant-image-mask:hover {
+  opacity: 1 !important; 
+  border-radius: 100% !important;
+}

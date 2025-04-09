@@ -313,7 +313,18 @@ const MemberUpdatePDF = (props) => {
             </Text>
             <Text style={styles.subheader}>{companyName}</Text>
           </View>
-
+          <View style={{ textAlign: "center", display: "block" }}>
+            <Image
+              src={props?.state?.logo_url}
+              style={{
+                width: "50%",
+                objectFit: "contain",
+                textAlign: "center",
+                margin: "10px auto 15px",
+              }}
+              alt="Image"
+            />
+          </View>
           <View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
             {props?.state?.businessUpdate[0]?.business_update_questions?.length ?
