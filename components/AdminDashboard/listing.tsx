@@ -293,73 +293,60 @@ const formatPhoneNumber = (phoneNumber: any) => {
   const filteredArray = state2.filter((item:any) => item.is_form_completed == true);
 console.log(filteredArray,"filteredArray");
 
-  const dataSource1 = filteredArray
-  ?.map((item: any, index: number) => ({ ...item, _originalIndex: index })) // Keep original index
-  .sort((a: any, b: any) => {
-    // Keep the first entry first and the last entry last
-    if (a._originalIndex === 0) return -1;
-    if (b._originalIndex === 0) return 1;
-    if (a._originalIndex === filteredArray.length - 1) return 1;
-    if (b._originalIndex === filteredArray.length - 1) return -1;
+const dataSource1 = filteredArray
+?.sort((a: any, b: any) => {
+  const dateA = new Date(
+    a?.photo_section?.form_completed_date?._seconds * 1000 +
+    a?.photo_section?.form_completed_date?._nanoseconds / 1000000
+  );
+  const dateB = new Date(
+    b?.photo_section?.form_completed_date?._seconds * 1000 +
+    b?.photo_section?.form_completed_date?._nanoseconds / 1000000
+  );
+  return dateA.getTime() - dateB.getTime(); // Ascending: older first
+})
+.map((res: any, index: number) => {
+  const companyName = companyNameMap[res?.company_name || ""] || "N/A";
+  const isLoading = loadingState[res?.id];
 
-    const dateA = new Date(a.updatedAt._seconds * 1000 + a.updatedAt._nanoseconds / 1000000);
-    const dateB = new Date(b.updatedAt._seconds * 1000 + b.updatedAt._nanoseconds / 1000000);
-    // return dateB.getTime() - dateA.getTime();
-    return   dateA.getTime()-dateB.getTime();
-  })
-  .map((res: any, index: number) => {
-    const companyName = companyNameMap[res?.company_name || ""] || "N/A";
-    const isLoading = loadingState[res?.id];
-    return {
-      key: index + 1,
-      name: res?.firstname ? `${validation.capitalizeFirstLetter(res?.firstname)} ${validation.capitalizeFirstLetter(res?.lastname)}` : "N/A",
-      company: companyName || "N/A",
-      email: res?.email || "N/A",
-      action: (
-        <ul className='m-0 list-unstyled d-flex gap-2'>
-          <li>
-            {hasClubMemberPermission || getUserdata?.is_admin == false ? (
-              <Link href={`/admin/member/${res?.id}/view`}>
-                <Button className='ViewMore'><EyeOutlined /></Button>
-              </Link>
-            ) : (
-              <Link href={`/admin/dashboard`}>
-                <Button className='ViewMore'><EyeOutlined /></Button>
-              </Link>
-            )}
-          </li>
-        </ul>
-      ),
-      action1: (
-        getUserdata?.is_admin == false?
-        <ul className='m-0 list-unstyled d-flex gap-2'>
-          <li>
-            <Tooltip title="Not allowed Download Pdf">
-              <Button
-                className='ViewMore'
-                disabled
-                onClick={() => handleDownloadAndFetchData(res?.id)}
-              >
-                {isLoading ? <Spin /> : <DownloadOutlined />}
-              </Button>
-            </Tooltip>
-          </li>
-        </ul>:
-        <ul className='m-0 list-unstyled d-flex gap-2'>
-          <li>
-            <Tooltip title="Download Pdf">
-              <Button
-                className='ViewMore'
-                onClick={() => handleDownloadAndFetchData(res?.id)}
-              >
-                {isLoading ? <Spin /> : <DownloadOutlined />}
-              </Button>
-            </Tooltip>
-          </li>
-        </ul>
-      ),
-    };
-  });
+  return {
+    key: index + 1,
+    name: res?.firstname
+      ? `${validation.capitalizeFirstLetter(res?.firstname)} ${validation.capitalizeFirstLetter(res?.lastname)}`
+      : "N/A",
+    company: companyName,
+    email: res?.email || "N/A",
+    action: (
+      <ul className='m-0 list-unstyled d-flex gap-2'>
+        <li>
+          {hasClubMemberPermission || getUserdata?.is_admin === false ? (
+            <Link href={`/admin/member/${res?.id}/view`}>
+              <Button className='ViewMore'><EyeOutlined /></Button>
+            </Link>
+          ) : (
+            <Link href={`/admin/dashboard`}>
+              <Button className='ViewMore'><EyeOutlined /></Button>
+            </Link>
+          )}
+        </li>
+      </ul>
+    ),
+    action1: (
+      <ul className='m-0 list-unstyled d-flex gap-2'>
+        <li>
+          <Tooltip title="Download Pdf">
+            <Button
+              className='ViewMore'
+              onClick={() => handleDownloadAndFetchData(res?.id)}
+            >
+              {isLoading ? <Spin /> : <DownloadOutlined />}
+            </Button>
+          </Tooltip>
+        </li>
+      </ul>
+    ),
+  };
+});
 
 
   // const filteredArray = state2.filter((item:any) => item.is_form_completed == true);
