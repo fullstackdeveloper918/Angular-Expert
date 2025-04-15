@@ -66,15 +66,7 @@ const Page8 = () => {
   const [imageSrc, setImageSrc] = useState(null);
 
   const [form] = Form.useForm();
-  const [inputPairs, setInputPairs] = useState([
-    {
-      id: Date.now(),
-      goalName: "goalcomment_0",
-      goalLabel: "Project 0",
-      commentName: "comment0",
-      commentLabel: "comment_0",
-    },
-  ]);
+  const [inputPairs, setInputPairs] = useState<any>([]);
   const [fileLists, setFileLists] = useState<any>({});
   const [uploadedUrls, setUploadedUrls] = useState<Record<string, string[]>>(
     {}
@@ -88,13 +80,15 @@ const Page8 = () => {
   const [loadButton, setLoadButton] = useState("");
   const [actionType, setActionType] = useState<"submit" | "save" | null>(null);
   const [state, setState] = useState<any>("");
+  const [imageUrl, setImageUrl] = useState<any>("");
   const [errorShown, setErrorShown] = useState(false);
   const images = JSON.stringify(fileLists);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
 
-
+  const [uploadedImageUrls, setUploadedImageUrls] = useState<{ [key: string]: string[] }>({});
+console.log(uploadedImageUrls,"uploadedImageUrls");
 
 const [file, setFile] = useState<any>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -105,33 +99,31 @@ console.log(file,"file");
     setFile(event.target.files[0]);
   };
 
-  const handleFileUpload = async () => {
-    // if (!file) return;
-console.log(file,"hskdfhkasd");
-
+  const handleFileUpload = async (file: File, index: string) => {
+    if (!file) return;
+  
     setIsUploading(true);
     setUploadError(null);
-
+  
     try {
-      // Create a reference to the file in Firebase Storage
       const fileRef = ref(storage, `${file.name}`);
-
-      // Upload the file to Firebase Storage
       await uploadBytes(fileRef, file);
-
-      // Get the download URL of the file
       const downloadURL = await getDownloadURL(fileRef);
-console.log(downloadURL,"downloadURL");
-
-      // Store the URL and other info in Firestore
+  console.log(downloadURL,"downloadURL");
+  
       await addDoc(collection(firestore, 'files'), {
         fileUrl: downloadURL,
         fileName: file.name,
-        createdAt: serverTimestamp(),  // Correct usage of serverTimestamp
+        createdAt: serverTimestamp(),
       });
-
-      // Reset the state after successful upload
-      setFile(null);
+  
+      setUploadedImageUrls((prev) => {
+        const updated = {
+          ...prev,
+          [index]: [...(prev[index] || []), downloadURL],
+        };
+        return updated;
+      });
     } catch (error) {
       console.error("Error uploading file:", error);
       setUploadError("Error uploading file. Please try again.");
@@ -139,9 +131,26 @@ console.log(downloadURL,"downloadURL");
       setIsUploading(false);
     }
   };
-useEffect(()=>{
-  handleFileUpload()
-},[file])
+  
+  const handleFileChange = (info: any, index: number, pair: any) => {
+    const newFileList = info.fileList;
+  
+    setFileLists((prev: any) => ({
+      ...prev,
+      [index]: newFileList,
+    }));
+  
+    // Only upload new files
+    if (info.file.originFileObj) {
+      handleFileUpload(info.file.originFileObj, index.toString());
+    }
+  };
+  
+  
+  
+// useEffect(()=>{
+//   handleFileUpload()
+// },[file])
 
 
   const handlePreview = async (file: UploadFile<any>) => {
@@ -200,65 +209,65 @@ useEffect(()=>{
       reader.readAsDataURL(file);
     });
   };
-  const handleFileChange = async (info: any, id: any, pair: any) => {
-    if (info.file.status === "removed") {
-      await handleDelete(info.file, pair);
-      const newFileLists = { ...fileLists, [id]: info.fileList };
-      setFileLists(newFileLists);
-      console.log(newFileLists,"newFileLists");
+  // const handleFileChange = async (info: any, id: any, pair: any) => {
+  //   if (info.file.status === "removed") {
+  //     await handleDelete(info.file, pair);
+  //     const newFileLists = { ...fileLists, [id]: info.fileList };
+  //     setFileLists(newFileLists);
+  //     console.log(newFileLists,"newFileLists");
       
-      setFile(newFileLists);
-      return;
-    } else if (
-      info.file.status === "done" &&
-      info.file.originFileObj?.size >= 10 * 1024 * 1024
-    ) {
-      toast.error("Please upload an image smaller than 10 MB.", {
-        position: "top-center",
-        autoClose: 1500,
-      });
-      return;
-    } else {
-      if (info.file.status === "done") {
-        try {
-          const compressedPngFile = await convertAndCompressToPNG(
-            info.file.originFileObj
-          );
-          console.log(info.file.originFileObj,"pipipi");
+  //     setFile(newFileLists);
+  //     return;
+  //   } else if (
+  //     info.file.status === "done" &&
+  //     info.file.originFileObj?.size >= 10 * 1024 * 1024
+  //   ) {
+  //     toast.error("Please upload an image smaller than 10 MB.", {
+  //       position: "top-center",
+  //       autoClose: 1500,
+  //     });
+  //     return;
+  //   } else {
+  //     if (info.file.status === "done") {
+  //       try {
+  //         const compressedPngFile = await convertAndCompressToPNG(
+  //           info.file.originFileObj
+  //         );
+  //         console.log(info.file.originFileObj,"pipipi");
           
-          setFile(info.file.originFileObj)
-          const newFileList = [...info.fileList];
-          const index = newFileList.findIndex(
-            (file: any) => file.uid === info.file.uid
-          );
-          if (index !== -1) {
-            newFileList[index] = {
-              ...info.fileList[index],
-              originFileObj: compressedPngFile,
-              url: URL.createObjectURL(compressedPngFile),
-            };
-          }
+  //         setFile(info.file.originFileObj)
+  //         const newFileList = [...info.fileList];
+  //         const index = newFileList.findIndex(
+  //           (file: any) => file.uid === info.file.uid
+  //         );
+  //         if (index !== -1) {
+  //           newFileList[index] = {
+  //             ...info.fileList[index],
+  //             originFileObj: compressedPngFile,
+  //             url: URL.createObjectURL(compressedPngFile),
+  //           };
+  //         }
 
-          const newFileLists = { ...fileLists, [id]: newFileList };
-          setFileLists(newFileLists);
-          console.log(newFileLists,"ljdlfjldf");
-          // setFile(newFileLists);
-        } catch (error) {
-          toast.error("Error converting and compressing the file to PNG.", {
-            position: "top-center",
-            autoClose: 1500,
-          });
-        }
-        return;
-      }
+  //         const newFileLists = { ...fileLists, [id]: newFileList };
+  //         setFileLists(newFileLists);
+  //         console.log(newFileLists,"ljdlfjldf");
+  //         // setFile(newFileLists);
+  //       } catch (error) {
+  //         toast.error("Error converting and compressing the file to PNG.", {
+  //           position: "top-center",
+  //           autoClose: 1500,
+  //         });
+  //       }
+  //       return;
+  //     }
 
-      if (info.file.status === "done" || info.file.status === "uploading") {
-        const newFileLists = { ...fileLists, [id]: info.fileList };
-        setFileLists(newFileLists);
-        // setFile(newFileLists);
-      }
-    }
-  };
+  //     if (info.file.status === "done" || info.file.status === "uploading") {
+  //       const newFileLists = { ...fileLists, [id]: info.fileList };
+  //       setFileLists(newFileLists);
+  //       // setFile(newFileLists);
+  //     }
+  //   }
+  // };
 
   // Function to convert image file to PNG format
   // const convertToPNG = (file: File): Promise<File> => {
@@ -433,7 +442,7 @@ useEffect(()=>{
       setLoadButton("Submit");
       setLoading(true);
 
-      const photoComment = inputPairs.map((pair) => ({
+      const photoComment = inputPairs.map((pair:any) => ({
         comment: values[pair.commentName],
         files: values[pair.goalName],
       }));
@@ -559,7 +568,7 @@ useEffect(()=>{
     } else if (actionType === "save") {
       setLoadButton("Save");
 
-      const photoComment = inputPairs.map((pair) => ({
+      const photoComment = inputPairs.map((pair:any) => ({
         comment: values[pair.commentName],
         files: values[pair.goalName],
       }));
@@ -608,11 +617,11 @@ useEffect(()=>{
           setLoadButton("");
           setResponseData(response?.data?.pdfReponseData);
 
-          if (!pagetype) {
-            router.replace(`/admin/user?${getUserdata?.user_id}`);
-          } else {
-            router.push("/admin/questionnaire?page8");
-          }
+          // if (!pagetype) {
+          //   router.replace(`/admin/user?${getUserdata?.user_id}`);
+          // } else {
+          //   router.push("/admin/questionnaire?page8");
+          // }
 
           responseData = response?.data?.pdfReponseData;
         } else {
@@ -656,9 +665,9 @@ useEffect(()=>{
           setLoadButton("");
           setResponseData(response?.data?.pdfReponseData);
 
-          if (response) {
-            router.replace(`/admin/user?${getUserdata?.user_id}`);
-          }
+          // if (response) {
+          //   router.replace(`/admin/user?${getUserdata?.user_id}`);
+          // }
 
           responseData = response?.data?.pdfReponseData;
         }
@@ -682,7 +691,42 @@ useEffect(()=>{
     setActionType("submit");
     form.submit();
   };
-
+  const handleSubmitClick1 = async () => {
+    // if (isUploading) {
+    //   message.warning("Please wait for all files to finish uploading.");
+    //   return;
+    // }
+  
+    try {
+      const values = await form.validateFields();
+  
+      const formattedData: any = {};
+  
+      inputPairs.forEach((pair: any) => {
+        const commentKey = pair.commentName; // e.g., "comment_0"
+        const projectKey = pair.goalName;    // e.g., "goal_0"
+        const index = pair.id.toString();    // e.g., "0", "1", etc.
+  
+        formattedData[commentKey] = {
+          comment: values[commentKey],
+          project: values[projectKey],
+          images: uploadedImageUrls[index] || [],
+        };
+      });
+  
+      const finalPayload = [formattedData];
+  
+      console.log(finalPayload, "Final payload to send");
+  
+      const response = await api.photo_section.update_file(finalPayload);
+      console.log(response, "API response");
+  
+      setLoading(false);
+    } catch (error) {
+      console.error("Validation failed:", error);
+    }
+  };
+  
   const handleSaveClick = () => {
     setActionType("save");
     form.submit();
@@ -1101,7 +1145,7 @@ useEffect(()=>{
                             size={"large"}
                             type="primary"
                             className="login-form-button "
-                            onClick={handleSubmitClick}
+                            onClick={handleSubmitClick1}
                           >
                             {loadButton === "Submit" ? <Spin /> : "Submit"}
                             {/* {!pagetype ? "Next" : "Save"} */}
@@ -1129,7 +1173,7 @@ useEffect(()=>{
                           <Button
                             size={"large"}
                             type="primary"
-                            onClick={handleSubmitClick}
+                            onClick={handleSubmitClick1}
                             className="login-form-button "
                           >
                             {loadButton === "Submit" ? <Spin /> : "Submit"}
