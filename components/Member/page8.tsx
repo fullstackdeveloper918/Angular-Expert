@@ -99,7 +99,7 @@ console.log(file,"file");
     setFile(event.target.files[0]);
   };
 
-  const handleFileUpload = async (file: File, index: string) => {
+  const handleFileUpload = async (file: File, index: number) => {
     if (!file) return;
   
     setIsUploading(true);
@@ -117,13 +117,18 @@ console.log(file,"file");
         createdAt: serverTimestamp(),
       });
   
-      setUploadedImageUrls((prev) => {
-        const updated = {
-          ...prev,
-          [index]: [...(prev[index] || []), downloadURL],
-        };
-        return updated;
-      });
+      const stringIndex = index.toString(); // convert to string for consistency
+
+    setUploadedImageUrls((prev) => {
+      const updated = {
+        ...prev,
+        [stringIndex]: [...(prev[stringIndex] || []), downloadURL],
+      };
+      console.log(updated,"updated");
+      
+      return updated;
+    });
+
     } catch (error) {
       console.error("Error uploading file:", error);
       setUploadError("Error uploading file. Please try again.");
@@ -131,22 +136,19 @@ console.log(file,"file");
       setIsUploading(false);
     }
   };
-  
   const handleFileChange = (info: any, index: number, pair: any) => {
     const newFileList = info.fileList;
   
-    setFileLists((prev: any) => ({
+    setFileLists((prev:any) => ({
       ...prev,
       [index]: newFileList,
     }));
   
-    // Only upload new files
+    // Upload only new files (you can customize this check)
     if (info.file.originFileObj) {
-      handleFileUpload(info.file.originFileObj, index.toString());
+      handleFileUpload(info.file.originFileObj, index);
     }
   };
-  
-  
   
 // useEffect(()=>{
 //   handleFileUpload()
@@ -692,21 +694,14 @@ console.log(file,"file");
     form.submit();
   };
   const handleSubmitClick1 = async () => {
-    // if (isUploading) {
-    //   message.warning("Please wait for all files to finish uploading.");
-    //   return;
-    // }
-  
     try {
       const values = await form.validateFields();
   
-      const formattedData: any = {};
-  
-      inputPairs.forEach((pair: any) => {
-        const commentKey = pair.commentName; // e.g., "comment_0"
-        const projectKey = pair.goalName;    // e.g., "goal_0"
-        const index = pair.id.toString();    // e.g., "0", "1", etc.
-  
+      const formattedData:any = {};
+      inputPairs.forEach((pair:any) => {
+        const commentKey = pair.commentName; // e.g., comment_0
+        const projectKey = pair.goalName; // e.g., goal_0
+        const index = pair.id.toString();
         formattedData[commentKey] = {
           comment: values[commentKey],
           project: values[projectKey],
@@ -715,18 +710,16 @@ console.log(file,"file");
       });
   
       const finalPayload = [formattedData];
-  
-      console.log(finalPayload, "Final payload to send");
-  
+  console.log(finalPayload,"finalPayload");
+  return
+      // Now send `finalPayload` to your API
       const response = await api.photo_section.update_file(finalPayload);
-      console.log(response, "API response");
-  
       setLoading(false);
+      console.log(response, "qwesdafsdfgewrtertt");
     } catch (error) {
-      console.error("Validation failed:", error);
+      console.error("Validation Failed:", error);
     }
   };
-  
   const handleSaveClick = () => {
     setActionType("save");
     form.submit();
