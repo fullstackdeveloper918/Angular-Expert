@@ -291,12 +291,21 @@ const formatPhoneNumber = (phoneNumber: any) => {
   }
   );
   const filteredArray = state2.filter((item:any) => item.is_form_completed == true);
+console.log(filteredArray,"filteredArray");
 
   const dataSource1 = filteredArray
-  ?.sort((a: any, b: any) => {
+  ?.map((item: any, index: number) => ({ ...item, _originalIndex: index })) // Keep original index
+  .sort((a: any, b: any) => {
+    // Keep the first entry first and the last entry last
+    if (a._originalIndex === 0) return -1;
+    if (b._originalIndex === 0) return 1;
+    if (a._originalIndex === filteredArray.length - 1) return 1;
+    if (b._originalIndex === filteredArray.length - 1) return -1;
+
     const dateA = new Date(a.updatedAt._seconds * 1000 + a.updatedAt._nanoseconds / 1000000);
     const dateB = new Date(b.updatedAt._seconds * 1000 + b.updatedAt._nanoseconds / 1000000);
-    return   dateB.getTime() -dateA.getTime();
+    // return dateB.getTime() - dateA.getTime();
+    return   dateA.getTime()-dateB.getTime();
   })
   .map((res: any, index: number) => {
     const companyName = companyNameMap[res?.company_name || ""] || "N/A";
@@ -322,6 +331,20 @@ const formatPhoneNumber = (phoneNumber: any) => {
         </ul>
       ),
       action1: (
+        getUserdata?.is_admin == false?
+        <ul className='m-0 list-unstyled d-flex gap-2'>
+          <li>
+            <Tooltip title="Not allowed Download Pdf">
+              <Button
+                className='ViewMore'
+                disabled
+                onClick={() => handleDownloadAndFetchData(res?.id)}
+              >
+                {isLoading ? <Spin /> : <DownloadOutlined />}
+              </Button>
+            </Tooltip>
+          </li>
+        </ul>:
         <ul className='m-0 list-unstyled d-flex gap-2'>
           <li>
             <Tooltip title="Download Pdf">
@@ -329,7 +352,7 @@ const formatPhoneNumber = (phoneNumber: any) => {
                 className='ViewMore'
                 onClick={() => handleDownloadAndFetchData(res?.id)}
               >
-             {isLoading ? <Spin /> : <DownloadOutlined />}
+                {isLoading ? <Spin /> : <DownloadOutlined />}
               </Button>
             </Tooltip>
           </li>
@@ -337,6 +360,7 @@ const formatPhoneNumber = (phoneNumber: any) => {
       ),
     };
   });
+
 
   // const filteredArray = state2.filter((item:any) => item.is_form_completed == true);
 
