@@ -313,6 +313,7 @@ const MemberUpdatePDF = (props) => {
             </Text>
             <Text style={styles.subheader}>{companyName}</Text>
           </View>
+          {props?.state?.logo_url?
           <View style={{ textAlign: "center", display: "block" }}>
             <Image
               src={props?.state?.logo_url}
@@ -324,7 +325,8 @@ const MemberUpdatePDF = (props) => {
               }}
               alt="Image"
             />
-          </View>
+          </View>:""}
+          {/* Bussines Update */}
           <View style={styles.section}>
             <Text style={styles.main_heading}>Business Update</Text>
             {props?.state?.businessUpdate[0]?.business_update_questions?.length ?
@@ -385,7 +387,7 @@ const MemberUpdatePDF = (props) => {
             </> 
             }
           </View>
-
+          {/* Goals Last Meeting */}
           <View style={styles.section}>
             <Text style={styles.main_heading}>Goals</Text>
             <Text style={styles.subheading}>Goals from Last Meeting</Text>
@@ -412,7 +414,7 @@ const MemberUpdatePDF = (props) => {
               </View>
             ))}
           </View>
-
+          {/* Goals Next Meeting */}
           <View style={styles.section}>
             <Text style={styles.subheading}>Goals for Next Meeting</Text>
             {props?.state?.futureMeetings[0]?.goal_next_meeting.slice(0,3)?.map((res, index) => (
@@ -462,7 +464,7 @@ const MemberUpdatePDF = (props) => {
               </View>
             ))}
           </View>
-
+          {/* Creaftsmen Toolbox */}
           <View style={styles.section}>
             <Text style={styles.main_heading}>CRAFTSMEN TOOLBOX</Text>
             <View style={styles.goal}>
@@ -511,7 +513,7 @@ const MemberUpdatePDF = (props) => {
             </View>
 
           </View>
-
+          {/* Craftsmen Checkup */}
           <View style={styles.section}>
             <Text style={styles.main_heading}>CRAFTSMEN CHECK-UP</Text>
             <View style={styles.goal}>
@@ -570,7 +572,7 @@ const MemberUpdatePDF = (props) => {
 
 
 
-
+          {/* Personal Well being check in  */}
           {props?.state?.personalWellBeingUpdates?.length ?
             <View style={styles.section}>
               {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
@@ -591,6 +593,8 @@ const MemberUpdatePDF = (props) => {
                   : ""}
               </View>
             </View> : ""}
+
+            {/* Business evolution and industry trends */}
           {props?.state?.businessEvolutionIndustryTrendsUpdates?.length ?
             <View style={styles.section}>
               {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
@@ -612,7 +616,7 @@ const MemberUpdatePDF = (props) => {
               </View>
             </View> : ""}
 
-
+            {/* Fall 2024 MEETING REVIEW */}
           <View style={styles.section}>
             {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
             <Text style={styles.main_heading}>Fall 2024 MEETING REVIEW</Text>
@@ -652,7 +656,7 @@ const MemberUpdatePDF = (props) => {
             </View>
           </View>
 
-
+          {/* ROUNDTABLE TOPICS */}
           {props?.state?.roundTableTopics[0]?.round_table ?
             <View style={styles.section}>
               <Text style={styles.main_heading}>
@@ -719,6 +723,8 @@ const MemberUpdatePDF = (props) => {
                 </Text>
               </View>
             </View>}
+
+            {/* Adddinational Questions */}
           {props?.state?.personalWellBeingUpdates ? "" :
             <View style={styles.section}>
               <Text style={styles.main_heading} wrap={false}> ADDITIONAL QUESTIONS</Text>
@@ -735,6 +741,9 @@ const MemberUpdatePDF = (props) => {
                 </View>
               ))}
             </View>}
+
+
+           {/* Photo Section */}
           <View style={styles.section}>
             <Text style={styles.main_heading}>PHOTO SECTION</Text>
 

@@ -181,12 +181,18 @@ const [error,setError]=useState<any>("")
   };
 
   const generatePdf = async (data?: any) => {
+    //  
+console.log(data,"yrrt");
 
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
     const blob = await pdf(<Pdf state={data} />).toBlob();
+    console.log(blob,"blob");
+    
     const pdfUrl = URL.createObjectURL(blob);
+    console.log(pdfUrl,"rtrtrt");
+    
     return { blob, pdfUrl, timestamp };
-  };
+};
   const companyNameMap: any = {
     "augusta": "Augusta Homes, Inc.",
     "buffington": "Buffington Homes, L.P.",
@@ -209,6 +215,8 @@ const [error,setError]=useState<any>("")
     "tiara": "Tiara Sun Development"
   };
   const downLoadPdf = async (data: any) => {
+    console.log(data,"sjlsjdfl");
+    
     const companyName = companyNameMap[data?.company_name || ""] || "N/A";
     const { blob, timestamp } = await generatePdf(data);
     saveAs(blob, `${capFirst(companyName)}.pdf`);
@@ -332,10 +340,12 @@ const dataSource1 = filteredArray
       </ul>
     ),
     action1: (
+      // getUserdata?.is_admin == false ?
       <ul className='m-0 list-unstyled d-flex gap-2'>
         <li>
           <Tooltip title="Download Pdf">
             <Button
+            // disabled
               className='ViewMore'
               onClick={() => handleDownloadAndFetchData(res?.id)}
             >
@@ -344,6 +354,19 @@ const dataSource1 = filteredArray
           </Tooltip>
         </li>
       </ul>
+    //   :
+    //   <ul className='m-0 list-unstyled d-flex gap-2'>
+    //   <li>
+    //     <Tooltip title="Download Pdf">
+    //       <Button
+    //         className='ViewMore'
+    //         onClick={() => handleDownloadAndFetchData(res?.id)}
+    //       >
+    //         {isLoading ? <Spin /> : <DownloadOutlined />}
+    //       </Button>
+    //     </Tooltip>
+    //   </li>
+    // </ul>
     ),
   };
 });

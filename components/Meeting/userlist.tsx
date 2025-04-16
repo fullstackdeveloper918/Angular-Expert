@@ -108,10 +108,14 @@ const UserList = ({subheadinglist}:any) => {
     };
     const generatePdf = async (data?: any) => {
         //  
+console.log(data,"popopo");
 
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
         const blob = await pdf(<Pdf state={data} />).toBlob();
+        console.log(blob,"sdglsdfkgsd");
         const pdfUrl = URL.createObjectURL(blob);
+        console.log(pdfUrl,"rtrtrt");
+        
         return { blob, pdfUrl, timestamp };
     };
 
