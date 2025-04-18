@@ -232,13 +232,7 @@ const Page3 = ({ questions }: any) => {
         form.setFieldsValue({ next_goals: fetchedGoals1 });
       }
     } catch (error: any) {
-      // if (error.status == 500) {
-      //   localStorage.setItem("redirectAfterLogin", window.location.pathname);
-      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-      //   toast.error("Session Expired. Login Again");
-      //   localStorage.removeItem("hasReloaded");
-      //   router.replace("/auth/signin");
-      // }
+    
     }
   };
 

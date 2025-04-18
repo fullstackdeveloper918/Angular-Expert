@@ -294,18 +294,7 @@ const Well_being_ckeck_in = ({ questions }: any) => {
 
       form.setFieldsValue(resValues);
     } catch (error: any) {
-      // if (error == 500) {
-      //   // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-      //   // localStorage.removeItem("hasReloaded");
-      //   // // }
-      //   // toast.error("Session Expired Login Again");
-      //   // router.replace("/auth/signin");
-      //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
-      //   localStorage.removeItem("hasReloaded")
-      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-      //   toast.error("Session Expired. Login Again");
-      //   router.replace("/auth/signin");
-      // }
+   
     }
   };
   useEffect(() => {
