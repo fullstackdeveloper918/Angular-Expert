@@ -196,45 +196,67 @@ const Page3 = ({ questions }: any) => {
       user_id: value,
       meeting_id: getUserdata.meetings.NextMeeting.id,
     };
+  
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
-
-      // if (res?.data?.status == 500) {
-      //   localStorage.setItem("redirectAfterLogin", window.location.pathname);
-      //   localStorage.removeItem("hasReloaded");
-      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-      //   toast.error("Session Expired. Login Again");
-      //   router.replace("/auth/signin");
-      // }
+  
+      // --- LOGGING ---
+      console.log(res?.data?.futureMeetings?.[0]?.goal_next_meeting, "jsladjflsajd");
+  
+      // --- LAST GOALS ---
       const savedGoalsData = localStorage.getItem("LastGoals");
-
-      let parsedGoals = savedGoalsData ? JSON.parse(savedGoalsData) : [];
-
+      let parsedGoals: any[] = [];
+  
+      try {
+        parsedGoals = savedGoalsData ? JSON.parse(savedGoalsData) : [];
+        if (!Array.isArray(parsedGoals)) parsedGoals = [];
+      } catch (err) {
+        parsedGoals = [];
+      }
+  
+      // If no valid saved goals, fallback to API
       if (parsedGoals.length === 0) {
         parsedGoals =
-          res?.data?.lastNextMeetings[0]?.goal_next_meeting ||
-          res?.data?.goal_last_meeting;
+          res?.data?.lastNextMeetings?.[0]?.goal_next_meeting ||
+          res?.data?.goal_last_meeting ||
+          [];
       }
-
-      const fetchedGoals = parsedGoals
-        ? parsedGoals
-        : res?.data.lastNextMeetings[0].goal_next_meeting || [];
+  
+      console.log(res?.data?.lastNextMeetings?.[0]?.goal_next_meeting, "piopioipo");
+      console.log(res?.data, "fsadfqr");
+  
+      const fetchedGoals = parsedGoals;
       form.setFieldsValue({ last_goals: fetchedGoals });
+  
+      // --- NEXT GOALS ---
       const savedGoalsData1 = localStorage.getItem("NextGoals");
-      let parsedGoals1 = savedGoalsData1 ? JSON.parse(savedGoalsData1) : [];
-      if (parsedGoals1.length === 0) {
-        parsedGoals1 = res?.data.futureMeetings[0].goal_next_meeting || [];
+      let parsedGoals1: any[] = [];
+  
+      try {
+        parsedGoals1 = savedGoalsData1 ? JSON.parse(savedGoalsData1) : [];
+        if (!Array.isArray(parsedGoals1)) parsedGoals1 = [];
+      } catch (err) {
+        parsedGoals1 = [];
       }
-
-      const fetchedGoals1 =res?.data?.futureMeetings[0]?.goal_next_meeting || [];
-      if(res?.data?.futureMeetings[0]?.goal_next_meeting){
+  
+      if (parsedGoals1.length === 0) {
+        parsedGoals1 = res?.data?.futureMeetings?.[0]?.goal_next_meeting || [];
+      }
+  
+      const fetchedGoals1 = res?.data?.futureMeetings?.[0]?.goal_next_meeting || [];
+      console.log(fetchedGoals1, "fetchedGoals1");
+  
+      if (fetchedGoals1 && fetchedGoals1.length > 0) {
         form.setFieldsValue({ next_goals: fetchedGoals1 });
       }
+  
     } catch (error: any) {
-    
+      console.error("Error in getDataById:", error);
     }
   };
+  
+  
 
   useEffect(() => {
     // if (type=="edit") {
