@@ -670,10 +670,26 @@ const dataSource1 = filteredArray
 
                   </div>
                   <div className='tabs-wrapper'>
-                    <Table className="tableBox" dataSource={dataSource1} columns={columns1} pagination={{
+                    {/* <Table className="tableBox" dataSource={dataSource1} columns={columns1} pagination={{
                       position: ['bottomCenter'],
                       pageSize: 5,
-                    }} />
+                    }} /> */}
+                    {!state2?.length ? (
+                      <div className="justify-center align-items-center">
+
+        <Spin size="large" />
+                      </div>
+      ) : (
+        <Table
+          className="tableBox"
+          dataSource={dataSource1}
+          columns={columns1}
+          pagination={{
+            position: ['bottomCenter'],
+            pageSize: 5,
+          }}
+        />
+      )}
                   </div>
                 </Card>
               </Col> : ""}
@@ -685,12 +701,27 @@ const dataSource1 = filteredArray
                     <Typography.Title level={4} className='m-0 fw-bold'>Incomplete Updates for Spring 2025</Typography.Title>
                   </div>
                   <div className='tabs-wrapper'>
-                    <Table
+                  {!state2.length ? (
+        <Spin size="large" />
+      ) : (
+        <Table
+          className="tableBox"
+          
+          dataSource={dataSource1}
+          columns={columns1}
+          pagination={{
+            position: ['bottomCenter'],
+            pageSize: 5,
+          }}
+        />
+      )}
+                    {/* <Table
+                      // dataSource={loading?<Spin size="large" />:}
                       dataSource={tableData}
                       columns={columns}
                       pagination={false}
                       rowKey={(record, index) => `row-${index}`}
-                    />
+                    /> */}
                   </div>
 
                 </Card>
