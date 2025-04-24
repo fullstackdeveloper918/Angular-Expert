@@ -707,12 +707,10 @@ const dataSource1 = filteredArray
         <Table
           className="tableBox"
           
-          dataSource={dataSource1}
-          columns={columns1}
-          pagination={{
-            position: ['bottomCenter'],
-            pageSize: 5,
-          }}
+          dataSource={tableData}
+          columns={columns}
+          pagination={false}
+          rowKey={(record, index) => `row-${index}`}
         />
       )}
                     {/* <Table
