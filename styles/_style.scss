@@ -107,7 +107,11 @@
     .user-image {
         @extend .profile-img;
         width: clamp(120px, 120px, 120px);
-        height: clamp(120px, 120px, 120px);
+        height: clamp(30px, 30px, 30px);
+        // width: 120px;
+        // height: 30px;
+        object-fit: contain;
+        border-radius: 0px;
     }
 }
 

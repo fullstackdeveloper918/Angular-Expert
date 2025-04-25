@@ -288,7 +288,7 @@ const formatPhoneNumber = (phoneNumber: any) => {
                 {/* Car Listing  */}
                 <div className='card-listing'>
                   {state?
-                <div className='card-listing-image my-5' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <div className='card-listing-image my-5' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',  }}>
                                     <img src={state?.logo_url} alt="avataar" className='profile-image user-image' />
                                 </div>:""}
                   <ul className='list-unstyled my-4 mb-4'>
