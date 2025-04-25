@@ -93,12 +93,12 @@ const MeetingView = () => {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
     } catch (error: any) {
-      if (error==500) {
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-        toast.error("Session Expired. Login Again");
-        router.replace("/auth/signin");
-    }
+    //   if (error==500) {
+    //     localStorage.setItem('redirectAfterLogin', window.location.pathname);
+    //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+    //     toast.error("Session Expired. Login Again");
+    //     router.replace("/auth/signin");
+    // }
     }
   };
 
