@@ -557,24 +557,49 @@ setUploadedImageUrls((prev) => {
   const handleSubmitClick1 = async () => {
     try {
       const values = await form.validateFields();
-  
+      const formData: any = new FormData();
+      for (const [key, value] of formData.entries()) {
+        console.log("check this",key, value);
+      }
       const formattedData:any = {};
+      console.log(inputPairs,"qwertyuiasfsd");
+      
       inputPairs.forEach((pair:any) => {
         const commentKey = pair.commentName; // e.g., comment_0
+        console.log(commentKey,"commentKey");
+        
         const projectKey = pair.goalName; // e.g., goal_0
         const index = pair.id.toString();
         formattedData[commentKey] = {
-          comment: values[commentKey],
+          comment: values[pair.commentName],
           project: values[pair.projectName],
           images: uploadedImageUrls[index] || [],
         };
       });
-  
+      
       const finalPayload = [formattedData];
   console.log(finalPayload,"finalPayload");
-  return
+
+  // formData.append("id", state?.photo_section?.commentId);
+  formData.append("id", value);
+          formData.append("is_save", "false");
+          formData.append("user_id", value);
+          formData.append("meeting_id", getUserdata.meetings.NextMeeting.id)
+  formData.append("fileUrls", finalPayload);
+  for (let pair of formData.entries()) {
+    console.log(pair[0], pair[1]);
+  }
+  let item={
+    fileUrls:finalPayload,
+    is_save:false,
+    user_id:value,
+    id:value,
+    meeting_id:getUserdata.meetings.NextMeeting.id
+  }
+  localStorage.setItem("myItem", JSON.stringify(item));
+  // return
       // Now send `finalPayload` to your API
-      const response = await api.photo_section.update_file(finalPayload);
+      const response = await api.photo_section.update_file(item);
       setLoading(false);
       console.log(response, "qwesdafsdfgewrtertt");
     } catch (error) {
@@ -585,6 +610,68 @@ setUploadedImageUrls((prev) => {
     setActionType("save");
     form.submit();
   };
+  const [storedItem, setStoredItem] = useState(null);
+console.log(storedItem,"storedItem");
+
+useEffect(() => {
+  const itemFromStorage = localStorage.getItem("myItem");
+  if (itemFromStorage) {
+    try {
+      const parsed = JSON.parse(itemFromStorage);
+      setStoredItem(parsed); // optional, only if you're using elsewhere
+
+      const fileUrlData = parsed?.fileUrls?.[0];
+
+      if (fileUrlData && typeof fileUrlData === "object") {
+        const newInputPairs = Object.entries(fileUrlData).map(([key, value]: any, index: number) => {
+          return {
+            id: Number(key.replace(/[^\d]/g, "")) || Date.now() + index,
+            goalName: `goalcomment_${index}`,
+            goalLabel: `Project ${index}`,
+            projectName: `project${index}`,
+            projectLabel: `project_${index}`,
+            commentName: key, // must match Form.Item `name`
+            commentLabel: key,
+            projectValue: value.project,
+            commentValue: value.comment,
+            images: value.images || []
+          };
+        });
+
+        // Update state
+        setInputPairs(newInputPairs);
+
+        // Set form field values
+        const initialValues: any = {};
+        newInputPairs.forEach((pair: any) => {
+          initialValues[pair.projectName] = pair.projectValue;
+          initialValues[pair.commentName] = pair.commentValue;
+        });
+        form.setFieldsValue(initialValues);
+
+        // Set Upload image previews
+        const newFileLists: any = {};
+        newInputPairs.forEach(pair => {
+          newFileLists[pair.id] = pair.images.map((url: string, i: number) => ({
+            uid: `${pair.id}-${i}`,
+            name: `Image ${i + 1}`,
+            status: 'done',
+            url: url,
+          }));
+        });
+
+        setFileLists(newFileLists);
+      }
+    } catch (error) {
+      console.error("Failed to parse item from localStorage", error);
+    }
+  }
+}, []);
+
+
+
+
+
 
   const getDataById = async () => {
     const item = {
@@ -630,8 +717,11 @@ setUploadedImageUrls((prev) => {
         formValues[goal.goalName] = goal.initialGoal;
         formValues[goal.commentName] = goal.initialComment;
       });
+// const items = JSON.parse(localStorage.getItem("myItem") ?? '{}');
+// console.log(item,"item");
+// const fetchProjects= items?.fileUrls[0]?.map
 
-      form.setFieldsValue(formValues);
+//       form.setFieldsValue(formValues);
 
       const fileListsData: any = {};
       formattedGoals.forEach((goal: any) => {
@@ -650,6 +740,55 @@ setUploadedImageUrls((prev) => {
      
     }
   };
+useEffect(() => {
+  const stored = localStorage.getItem("myItem");
+  if (stored) {
+    const parsed = JSON.parse(stored);
+
+    const fileUrlData = parsed?.fileUrls?.[0];
+
+    if (fileUrlData && typeof fileUrlData === "object") {
+      const newInputPairs = Object.entries(fileUrlData).map(([key, value]:any, index:any) => {
+        return {
+          id: Number(key.replace(/[^\d]/g, "")) || Date.now() + index,
+          goalName: `goalcomment_${index}`,
+          goalLabel: `Project ${index}`,
+          projectName: `project${index}`,
+          projectLabel: `project_${index}`,
+          commentName: key,
+          commentLabel: key,
+          projectValue: value.project,
+          commentValue: value.comment,
+          images: value.images || []
+        };
+      });
+
+      setInputPairs(newInputPairs);
+
+      // Set initial form values
+      const initialValues:any = {};
+      newInputPairs.forEach((pair:any) => {
+        initialValues[pair.projectName] = pair.projectValue;
+        initialValues[pair.commentName] = pair.commentValue;
+      });
+
+      form.setFieldsValue(initialValues);
+
+      // Set fileLists if you're using Upload
+      const newFileLists:any = {};
+      newInputPairs.forEach(pair => {
+        newFileLists[pair.id] = (pair.images || []).map((url: string, i: number) => ({
+          uid: `${pair.id}-${i}`,
+          name: `Image ${i + 1}`,
+          status: "done",
+          url,
+        }));
+      });
+
+      setFileLists(newFileLists);
+    }
+  }
+}, []);
 
   React.useEffect(() => {
     if (type == "edit") {
