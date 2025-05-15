@@ -7,7 +7,6 @@ import {
   Button,
   Popconfirm,
   Spin,
-  Input,
 } from "antd";
 import {
   PlusOutlined,
@@ -28,9 +27,8 @@ import { useSelector } from "react-redux";
 import { destroyCookie, parseCookies } from "nookies";
 import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
-import Compressor from "compressorjs";
-import FileUpload from "../common/FileUpload";
-import { storage, firestore, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } from '../../utils/firebase'; 
+import Compressor from 'compressorjs';
+
 const { Title } = Typography;
 
 const {
@@ -72,11 +70,8 @@ const Page8 = () => {
       id: Date.now(),
       goalName: "goalcomment_0",
       goalLabel: "Project 0",
-         projectName:"project0",
-      projectLabel:"project_0",
       commentName: "comment0",
       commentLabel: "comment_0",
-   
     },
   ]);
   const [fileLists, setFileLists] = useState<any>({});
@@ -92,85 +87,11 @@ const Page8 = () => {
   const [loadButton, setLoadButton] = useState("");
   const [actionType, setActionType] = useState<"submit" | "save" | null>(null);
   const [state, setState] = useState<any>("");
-  const [imageUrl, setImageUrl] = useState<any>("");
   const [errorShown, setErrorShown] = useState(false);
   const images = JSON.stringify(fileLists);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const cookies = parseCookies();
   const accessToken = cookies.COOKIES_USER_ACCESS_TOKEN;
-
-  const [uploadedImageUrls, setUploadedImageUrls] = useState<{ [key: string]: string[] }>({});
-console.log(uploadedImageUrls,"uploadedImageUrls"); 
-
-const [file, setFile] = useState<any>(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<any>(null);
-console.log(file,"file");
-
-  const handleFileChange1 = (event:any) => {
-    setFile(event.target.files[0]);
-  };
-
-  const handleFileUpload = async (file: File, index: number) => {
-    if (!file) return;
-    console.log(file,"jkjkljkljkljkl")
-  console.log(index,"indexsdfasdf");
-  
-    setIsUploading(true);
-    setUploadError(null);
-  
-    try {
-      const fileRef = ref(storage, `${file.name}`);
-      await uploadBytes(fileRef, file);
-      const downloadURL = await getDownloadURL(fileRef);
-  console.log(downloadURL,"downloadURL");
-  
-      // await addDoc(collection(firestore, 'files'), {
-      //   fileUrl: downloadURL,
-      //   fileName: file.name,
-      //   createdAt: serverTimestamp(),
-      // });
-  
-      const stringIndex = index; // convert to string for consistency
-console.log(stringIndex,"stringIndex");
-
-setUploadedImageUrls((prev) => {
-  const currentList = prev[stringIndex] || [];
-  const updatedList = currentList.includes(downloadURL)
-    ? currentList
-    : [...currentList, downloadURL];
-
-  return {
-    ...prev,
-    [stringIndex]: updatedList,
-  };
-});
-
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      setUploadError("Error uploading file. Please try again.");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-  const handleFileChange = (info: any, index: number, pair: any) => {
-    const newFileList = info.fileList;
-  
-    setFileLists((prev:any) => ({
-      ...prev,
-      [index]: newFileList,
-    }));
-  
-    // Upload only new files (you can customize this check)
-    if (info.file.originFileObj) {
-      handleFileUpload(info.file.originFileObj, index);
-    }
-  };
-  
-// useEffect(()=>{
-//   handleFileUpload()
-// },[file])
-
 
   const handlePreview = async (file: UploadFile<any>) => {
     file.preview = await getBase64(file.originFileObj as File);
@@ -182,19 +103,17 @@ setUploadedImageUrls((prev) => {
   const convertAndCompressToPNG = (file: any): Promise<any> => {
     return new Promise((resolve, reject) => {
       // Convert image to PNG format
-      convertToPNG(file)
-        .then((pngFile) => {
-          new Compressor(pngFile, {
-            quality: 0.6, // Adjust quality as needed
-            success(result) {
-              resolve(result);
-            },
-            error(err) {
-              reject(err);
-            },
-          });
-        })
-        .catch(reject);
+      convertToPNG(file).then((pngFile) => {
+        new Compressor(pngFile, {
+          quality: 0.6, // Adjust quality as needed
+          success(result) {
+            resolve(result);
+          },
+          error(err) {
+            reject(err);
+          }
+        });
+      }).catch(reject);
     });
   };
   const convertToPNG = (file: File): Promise<File> => {
@@ -203,23 +122,19 @@ setUploadedImageUrls((prev) => {
       reader.onload = (event) => {
         const img = new Image();
         img.onload = () => {
-          const canvas = document.createElement("canvas");
+          const canvas = document.createElement('canvas');
           canvas.width = img.width;
           canvas.height = img.height;
-          const ctx = canvas.getContext("2d");
+          const ctx = canvas.getContext('2d');
           ctx?.drawImage(img, 0, 0);
-
+  
           canvas.toBlob((blob) => {
             if (blob) {
-              resolve(
-                new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".png", {
-                  type: "image/png",
-                })
-              );
+              resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + '.png', { type: 'image/png' }));
             } else {
-              reject(new Error("Blob conversion failed"));
+              reject(new Error('Blob conversion failed'));
             }
-          }, "image/png");
+          }, 'image/png');
         };
         img.onerror = reject;
         img.src = event.target?.result as string;
@@ -228,66 +143,52 @@ setUploadedImageUrls((prev) => {
       reader.readAsDataURL(file);
     });
   };
-  // const handleFileChange = async (info: any, id: any, pair: any) => {
-  //   if (info.file.status === "removed") {
-  //     await handleDelete(info.file, pair);
-  //     const newFileLists = { ...fileLists, [id]: info.fileList };
-  //     setFileLists(newFileLists);
-  //     console.log(newFileLists,"newFileLists");
-      
-  //     setFile(newFileLists);
-  //     return;
-  //   } else if (
-  //     info.file.status === "done" &&
-  //     info.file.originFileObj?.size >= 10 * 1024 * 1024
-  //   ) {
-  //     toast.error("Please upload an image smaller than 10 MB.", {
-  //       position: "top-center",
-  //       autoClose: 1500,
-  //     });
-  //     return;
-  //   } else {
-  //     if (info.file.status === "done") {
-  //       try {
-  //         const compressedPngFile = await convertAndCompressToPNG(
-  //           info.file.originFileObj
-  //         );
-  //         console.log(info.file.originFileObj,"pipipi");
-          
-  //         setFile(info.file.originFileObj)
-  //         const newFileList = [...info.fileList];
-  //         const index = newFileList.findIndex(
-  //           (file: any) => file.uid === info.file.uid
-  //         );
-  //         if (index !== -1) {
-  //           newFileList[index] = {
-  //             ...info.fileList[index],
-  //             originFileObj: compressedPngFile,
-  //             url: URL.createObjectURL(compressedPngFile),
-  //           };
-  //         }
-
-  //         const newFileLists = { ...fileLists, [id]: newFileList };
-  //         setFileLists(newFileLists);
-  //         console.log(newFileLists,"ljdlfjldf");
-  //         // setFile(newFileLists);
-  //       } catch (error) {
-  //         toast.error("Error converting and compressing the file to PNG.", {
-  //           position: "top-center",
-  //           autoClose: 1500,
-  //         });
-  //       }
-  //       return;
-  //     }
-
-  //     if (info.file.status === "done" || info.file.status === "uploading") {
-  //       const newFileLists = { ...fileLists, [id]: info.fileList };
-  //       setFileLists(newFileLists);
-  //       // setFile(newFileLists);
-  //     }
-  //   }
-  // };
-
+  const handleFileChange = async (info: any, id: any, pair: any) => {
+    if (info.file.status === 'removed') {
+      await handleDelete(info.file, pair);
+      const newFileLists = { ...fileLists, [id]: info.fileList };
+      setFileLists(newFileLists);
+      return;
+    } else if (info.file.status === 'done' && info.file.originFileObj?.size >= 10 * 1024 * 1024) {
+      toast.error("Please upload an image smaller than 10 MB.", {
+        position: "top-center",
+        autoClose: 1500,
+      });
+      return;
+    } else {
+      if (info.file.status === 'done') {
+        try {
+          const compressedPngFile = await convertAndCompressToPNG(info.file.originFileObj);
+  
+          const newFileList = [...info.fileList];
+          const index = newFileList.findIndex((file: any) => file.uid === info.file.uid);
+          if (index !== -1) {
+            newFileList[index] = {
+              ...info.fileList[index],
+              originFileObj: compressedPngFile,
+              url: URL.createObjectURL(compressedPngFile),
+            };
+          }
+  
+          const newFileLists = { ...fileLists, [id]: newFileList };
+          setFileLists(newFileLists);
+        } catch (error) {
+          toast.error("Error converting and compressing the file to PNG.", {
+            position: "top-center",
+            autoClose: 1500,
+          });
+        }
+        return;
+      }
+  
+      if (info.file.status === 'done' || info.file.status === 'uploading') {
+        const newFileLists = { ...fileLists, [id]: info.fileList };
+        setFileLists(newFileLists);
+      }
+    }
+  };
+  
+  
   // Function to convert image file to PNG format
   // const convertToPNG = (file: File): Promise<File> => {
   //   return new Promise((resolve, reject) => {
@@ -300,7 +201,7 @@ setUploadedImageUrls((prev) => {
   //         canvas.height = img.height;
   //         const ctx = canvas.getContext('2d');
   //         ctx?.drawImage(img, 0, 0);
-
+  
   //         canvas.toBlob((blob) => {
   //           if (blob) {
   //             resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + '.png', { type: 'image/png' }));
@@ -316,6 +217,8 @@ setUploadedImageUrls((prev) => {
   //     reader.readAsDataURL(file);
   //   });
   // };
+  
+  
 
   // const handleChange = async (info: any, id: any) => {
   //   if (info?.file?.originFileObj?.size < 10 * 1024 * 1024) {
@@ -343,8 +246,6 @@ setUploadedImageUrls((prev) => {
         goalLabel: `Project comment_${inputPairs.length}`,
         commentName: `comment${newId}`,
         commentLabel: `comment_${inputPairs.length}`,
-        projectName: `project${newId}`,
-        projectLabel: `project_${inputPairs.length}`,
       },
     ]);
   };
@@ -413,7 +314,49 @@ setUploadedImageUrls((prev) => {
     return blob;
   }
 
-  
+  // const convertToPng = async (
+  //   file: File,
+  //   targetSizeMB: number = 1
+  // ): Promise<Blob> => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onload = (e: any) => {
+  //       const img = new Image();
+  //       img.onload = () => {
+  //         let scale = 1; // Start with no scaling
+  //         let canvas = document.createElement("canvas");
+  //         let ctx = canvas.getContext("2d");
+  //         if (!ctx) {
+  //           reject(new Error("Failed to get canvas context"));
+  //           return;
+  //         }
+
+  //         const reduceScale = () => {
+  //           canvas.width = img.width * scale;
+  //           canvas.height = img.height * scale;
+  //           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  //           canvas.toBlob((blob) => {
+  //             if (blob && blob.size / 1024 / 1024 <= targetSizeMB) {
+  //               resolve(blob);
+  //             } else if (scale > 0.1) {
+  //               // Reduce scale if needed
+  //               scale -= 0.1;
+  //               reduceScale();
+  //             } else {
+  //               reject(new Error("Failed to achieve target size"));
+  //             }
+  //           }, "image/png");
+  //         };
+
+  //         reduceScale();
+  //       };
+  //       img.src = e.target.result;
+  //     };
+  //     reader.onerror = (error) => reject(error);
+  //     reader.readAsDataURL(file);
+  //   });
+  // };
   const submit = async (values: any) => {
     let responseData = null; // Default value to handle the return
 
@@ -421,10 +364,9 @@ setUploadedImageUrls((prev) => {
       setLoadButton("Submit");
       setLoading(true);
 
-      const photoComment = inputPairs.map((pair:any) => ({
+      const photoComment = inputPairs.map((pair) => ({
         comment: values[pair.commentName],
         files: values[pair.goalName],
-        projectName: values[pair.projectName],
       }));
 
       try {
@@ -433,11 +375,11 @@ setUploadedImageUrls((prev) => {
         if (state?.photo_section?.fileUrls?.length) {
           formData.append("id", state?.photo_section?.commentId);
           formData.append("user_id", value);
-          formData.append("meeting_id", getUserdata.meetings.NextMeeting.id);
+          formData.append("meeting_id",  getUserdata.meetings.NextMeeting.id,);
           formData.append("is_save", "false");
           for (const item of inputPairs) {
             formData.append(`${item?.commentLabel}`, values[item?.commentName]);
-            formData.append(`${item?.projectLabel}`, values[item?.projectName]);
+
             for (const file of values[item.goalName]?.fileList || []) {
               if (file?.originFileObj) {
                 // const compressedJpegFile = await convertToPng(
@@ -454,7 +396,7 @@ setUploadedImageUrls((prev) => {
           }
 
           const response = await api.photo_section.update_file(formData);
-          console.log(response, "sjdkahdgasd");
+console.log(response,"sjdkahdgasd");
 
           const messages: any = {
             200: "Updated Successfully",
@@ -468,7 +410,7 @@ setUploadedImageUrls((prev) => {
             });
           }
           setLoadButton("");
-          console.log(response?.pdfReponseData, "qwertyuiop");
+console.log(response?.pdfReponseData,"qwertyuiop");
 
           setResponseData(response?.pdfReponseData);
           await sharePdf(response?.pdfReponseData);
@@ -483,10 +425,10 @@ setUploadedImageUrls((prev) => {
           formData.append("id", value);
           formData.append("is_save", "false");
           formData.append("user_id", value);
-          formData.append("meeting_id", getUserdata.meetings.NextMeeting.id);
+          formData.append("meeting_id",  getUserdata.meetings.NextMeeting.id,);
           for (const [index, item] of photoComment.entries()) {
             formData.append(`comment_${index}`, item?.comment);
-            formData.append(`project_${index}`, item?.projectName);
+
             for (const [fileIndex, file] of (
               item?.files?.fileList || []
             ).entries()) {
@@ -545,7 +487,125 @@ setUploadedImageUrls((prev) => {
           setLoading(false);
         }
       }
-    } 
+    } else if (actionType === "save") {
+      setLoadButton("Save");
+
+      const photoComment = inputPairs.map((pair) => ({
+        comment: values[pair.commentName],
+        files: values[pair.goalName],
+      }));
+
+      try {
+        const formData: any = new FormData();
+
+        if (state?.photo_section?.fileUrls?.length) {
+          formData.append("id", state?.photo_section?.commentId);
+          formData.append("user_id", value);
+          formData.append("meeting_id",  getUserdata.meetings.NextMeeting.id,);
+          formData.append("is_save", "true");
+          for (const item of inputPairs) {
+            formData.append(`${item?.commentLabel}`, values[item?.commentName]);
+
+            for (const file of values[item.goalName]?.fileList || []) {
+              if (file?.originFileObj) {
+                // const compressedJpegFile = await convertToPng(
+                //   file.originFileObj,
+                //   1
+                // );
+                formData.append(
+                  `${item?.commentLabel}_file`,
+                  file?.originFileObj,
+                  `${item?.commentLabel}_file.png`
+                );
+              }
+            }
+          }
+
+          const response = await api.photo_section.update_file(formData);
+          setLoading(false);
+console.log(response,"oerutouer");
+
+          const messages: any = {
+            200: "Updated Successfully",
+            201: "Added Successfully",
+          };
+
+          if (messages[response?.status]) {
+            toast.success(messages[response?.status], {
+              position: "top-center",
+              autoClose: 300,
+            });
+          }
+          setLoadButton("");
+          setResponseData(response?.data?.pdfReponseData);
+
+          if (!pagetype) {
+            router.replace(`/admin/user?${getUserdata?.user_id}`);
+          } else {
+            router.push("/admin/questionnaire?page8");
+          }
+
+          responseData = response?.data?.pdfReponseData;
+        } else {
+          formData.append("id", value);
+          formData.append("is_save", "true");
+          formData.append("user_id", value);
+          formData.append("meeting_id",  getUserdata.meetings.NextMeeting.id,);
+          for (const [index, item] of photoComment.entries()) {
+            formData.append(`comment_${index}`, item?.comment);
+
+            for (const [fileIndex, file] of (
+              item?.files?.fileList || []
+            ).entries()) {
+              if (file?.originFileObj) {
+                // const compressedJpegFile = await convertToPng(
+                //   file.originFileObj,
+                //   1
+                // );
+                formData.append(
+                  `comment_${index}_file${fileIndex}`,
+                  file?.originFileObj,
+                  `comment_${index}_file${fileIndex}.png`
+                );
+              }
+            }
+          }
+
+          const response = await api.photo_section.upload_file(formData);
+
+          const messages: any = {
+            200: "Updated Successfully",
+            201: "Added Successfully",
+          };
+
+          if (messages[response?.status]) {
+            toast.success(messages[response?.status], {
+              position: "top-center",
+              autoClose: 300,
+            });
+          }
+          setLoadButton("");
+          setResponseData(response?.data?.pdfReponseData);
+
+          if (response) {
+            router.replace(`/admin/user?${getUserdata?.user_id}`);
+          }
+
+          responseData = response?.data?.pdfReponseData;
+        }
+      } catch (error: any) {
+        setLoadButton("");
+          toast.error("Something went wrong Please try again", {
+            position: "top-center",
+            autoClose: 300,
+          });
+        
+      } finally {
+        if (pagetype) {
+          setLoading(false);
+        }
+      }
+    }
 
     return responseData; // Ensure return value
   };
@@ -554,124 +614,11 @@ setUploadedImageUrls((prev) => {
     setActionType("submit");
     form.submit();
   };
-  const handleSubmitClick1 = async () => {
-    try {
-      const values = await form.validateFields();
-      const formData: any = new FormData();
-      for (const [key, value] of formData.entries()) {
-        console.log("check this",key, value);
-      }
-      const formattedData:any = {};
-      console.log(inputPairs,"qwertyuiasfsd");
-      
-      inputPairs.forEach((pair:any) => {
-        const commentKey = pair.commentName; // e.g., comment_0
-        console.log(commentKey,"commentKey");
-        
-        const projectKey = pair.goalName; // e.g., goal_0
-        const index = pair.id.toString();
-        formattedData[commentKey] = {
-          comment: values[pair.commentName],
-          project: values[pair.projectName],
-          images: uploadedImageUrls[index] || [],
-        };
-      });
-      
-      const finalPayload = [formattedData];
-  console.log(finalPayload,"finalPayload");
 
-  // formData.append("id", state?.photo_section?.commentId);
-  formData.append("id", value);
-          formData.append("is_save", "false");
-          formData.append("user_id", value);
-          formData.append("meeting_id", getUserdata.meetings.NextMeeting.id)
-  formData.append("fileUrls", finalPayload);
-  for (let pair of formData.entries()) {
-    console.log(pair[0], pair[1]);
-  }
-  let item={
-    fileUrls:finalPayload,
-    is_save:false,
-    user_id:value,
-    id:value,
-    meeting_id:getUserdata.meetings.NextMeeting.id
-  }
-  localStorage.setItem("myItem", JSON.stringify(item));
-  // return
-      // Now send `finalPayload` to your API
-      const response = await api.photo_section.update_file(item);
-      setLoading(false);
-      console.log(response, "qwesdafsdfgewrtertt");
-    } catch (error) {
-      console.error("Validation Failed:", error);
-    }
-  };
   const handleSaveClick = () => {
     setActionType("save");
     form.submit();
   };
-  const [storedItem, setStoredItem] = useState(null);
-console.log(storedItem,"storedItem");
-
-useEffect(() => {
-  const itemFromStorage = localStorage.getItem("myItem");
-  if (itemFromStorage) {
-    try {
-      const parsed = JSON.parse(itemFromStorage);
-      setStoredItem(parsed); // optional, only if you're using elsewhere
-
-      const fileUrlData = parsed?.fileUrls?.[0];
-
-      if (fileUrlData && typeof fileUrlData === "object") {
-        const newInputPairs = Object.entries(fileUrlData).map(([key, value]: any, index: number) => {
-          return {
-            id: Number(key.replace(/[^\d]/g, "")) || Date.now() + index,
-            goalName: `goalcomment_${index}`,
-            goalLabel: `Project ${index}`,
-            projectName: `project${index}`,
-            projectLabel: `project_${index}`,
-            commentName: key, // must match Form.Item `name`
-            commentLabel: key,
-            projectValue: value.project,
-            commentValue: value.comment,
-            images: value.images || []
-          };
-        });
-
-        // Update state
-        setInputPairs(newInputPairs);
-
-        // Set form field values
-        const initialValues: any = {};
-        newInputPairs.forEach((pair: any) => {
-          initialValues[pair.projectName] = pair.projectValue;
-          initialValues[pair.commentName] = pair.commentValue;
-        });
-        form.setFieldsValue(initialValues);
-
-        // Set Upload image previews
-        const newFileLists: any = {};
-        newInputPairs.forEach(pair => {
-          newFileLists[pair.id] = pair.images.map((url: string, i: number) => ({
-            uid: `${pair.id}-${i}`,
-            name: `Image ${i + 1}`,
-            status: 'done',
-            url: url,
-          }));
-        });
-
-        setFileLists(newFileLists);
-      }
-    } catch (error) {
-      console.error("Failed to parse item from localStorage", error);
-    }
-  }
-}, []);
-
-
-
-
-
 
   const getDataById = async () => {
     const item = {
@@ -699,11 +646,8 @@ useEffect(() => {
             goalLabel: `Project ${key}`,
             commentName: key,
             commentLabel: key,
-            projectName: `project_${key}`,
-            projectLabel: `project_${key}`,
             // initialGoal: key,
             initialComment: fetchedGoals[0][key]?.comment,
-            initialProject: fetchedGoals[0][key]?.project,
             images: fetchedGoals[0][key]?.images,
             commentId: commentKey,
           };
@@ -717,11 +661,8 @@ useEffect(() => {
         formValues[goal.goalName] = goal.initialGoal;
         formValues[goal.commentName] = goal.initialComment;
       });
-// const items = JSON.parse(localStorage.getItem("myItem") ?? '{}');
-// console.log(item,"item");
-// const fetchProjects= items?.fileUrls[0]?.map
 
-//       form.setFieldsValue(formValues);
+      form.setFieldsValue(formValues);
 
       const fileListsData: any = {};
       formattedGoals.forEach((goal: any) => {
@@ -737,58 +678,14 @@ useEffect(() => {
 
       setFileLists(fileListsData);
     } catch (error: any) {
-     
+      // if (error?.status == 400) {
+      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
+      //   localStorage.removeItem("hasReloaded");
+      //   toast.error("Session Expired Login Again");
+      //   router.replace("/auth/signin");
+      // }
     }
   };
-useEffect(() => {
-  const stored = localStorage.getItem("myItem");
-  if (stored) {
-    const parsed = JSON.parse(stored);
-
-    const fileUrlData = parsed?.fileUrls?.[0];
-
-    if (fileUrlData && typeof fileUrlData === "object") {
-      const newInputPairs = Object.entries(fileUrlData).map(([key, value]:any, index:any) => {
-        return {
-          id: Number(key.replace(/[^\d]/g, "")) || Date.now() + index,
-          goalName: `goalcomment_${index}`,
-          goalLabel: `Project ${index}`,
-          projectName: `project${index}`,
-          projectLabel: `project_${index}`,
-          commentName: key,
-          commentLabel: key,
-          projectValue: value.project,
-          commentValue: value.comment,
-          images: value.images || []
-        };
-      });
-
-      setInputPairs(newInputPairs);
-
-      // Set initial form values
-      const initialValues:any = {};
-      newInputPairs.forEach((pair:any) => {
-        initialValues[pair.projectName] = pair.projectValue;
-        initialValues[pair.commentName] = pair.commentValue;
-      });
-
-      form.setFieldsValue(initialValues);
-
-      // Set fileLists if you're using Upload
-      const newFileLists:any = {};
-      newInputPairs.forEach(pair => {
-        newFileLists[pair.id] = (pair.images || []).map((url: string, i: number) => ({
-          uid: `${pair.id}-${i}`,
-          name: `Image ${i + 1}`,
-          status: "done",
-          url,
-        }));
-      });
-
-      setFileLists(newFileLists);
-    }
-  }
-}, []);
 
   React.useEffect(() => {
     if (type == "edit") {
@@ -805,17 +702,18 @@ useEffect(() => {
       commentId: state?.photo_section?.commentId,
       comment: pair.commentLabel || "",
     };
-
+  
     try {
       const res = await api.photo_section.remove_photo(data);
-
+     
+  
       if (res) {
         toast.success(res?.message, {
           position: "top-center",
           autoClose: 300,
         });
       }
-      // getDataById();
+      // getDataById(); 
     } catch (error: any) {
       if (error?.response?.data?.status === 500) {
         toast.error("Something went wrong", {
@@ -825,6 +723,7 @@ useEffect(() => {
       }
     }
   };
+  
 
   // const handleDelete = async (file: any, pair: any, index: number) => {
   //   const data = {
@@ -853,14 +752,15 @@ useEffect(() => {
   // };
 
   const generatePdf = async (data?: any) => {
-    console.log(data, "sdafasdfasd");
-
+    console.log(data,"sdafasdfasd");
+    
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
     const blob = await pdf(<Pdf state={data} />).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
-  const companyNameMap: any = {
+  const companyNameMap:any
+   = {
     augusta: "Augusta Homes, Inc.",
     buffington: "Buffington Homes, L.P.",
     cabin: "Cabin John Builders",
@@ -883,9 +783,8 @@ useEffect(() => {
   };
 
   const sharePdf = async (responseData: any) => {
-    console.log(responseData, "responseData");
-    const companyName =
-      companyNameMap[responseData?.company_name || ""] || "N/A";
+    console.log(responseData,"responseData");
+    const companyName = companyNameMap[responseData?.company_name || ""] || "N/A";
     const { pdfUrl, timestamp } = await generatePdf(responseData);
     const response = await fetch(pdfUrl);
     const blob = await response.blob();
@@ -924,18 +823,17 @@ useEffect(() => {
     <>
       <Fragment>
         <ToastContainer
-          className="toast-container-center"
-          position="top-right"
-          autoClose={false} // Disable auto-close
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-        {/* <FileUpload /> */}
+                              className="toast-container-center"
+                              position="top-right"
+                              autoClose={false} // Disable auto-close
+                              hideProgressBar={false}
+                              newestOnTop={false}
+                              closeOnClick
+                              rtl={false}
+                              pauseOnFocusLoss
+                              draggable
+                              pauseOnHover
+                            />
         {checkToast && (
           <div className="Custom_tost">
             <div>
@@ -1002,7 +900,6 @@ useEffect(() => {
                     onFinish={handleFetchAndFetchData}
                   >
                     <div>
-                      
                       {inputPairs
                         .sort((a: any, b: any) => {
                           const numA = parseInt(
@@ -1018,44 +915,27 @@ useEffect(() => {
                         .map((pair: any, index: number) => (
                           <>
                             <div key={pair.id} style={{ position: "relative" }}>
-                            <Form.Item
-                                name={pair.projectName}
-                                rules={[
-                                  {
-                                    required: true,
-                                    whitespace: true,
-                                    message: "Please Fill Field",
-                                  },
-                                ]}
-                                label={`Project Name`}
-                            
-                                // label={`Comment ${index+1}`}
-                                // label={pair.commentLabel}
-                              >
-                                <Input size="large" placeholder="Enter..." />
-                              </Form.Item>
                               <Form.Item
                                 name={pair.goalName}
-                                label={`Images`}
+                                label={pair.goalLabel}
                               >
-                                <Upload
-                                  listType="picture-card"
-                                  fileList={fileLists[pair.id] || []}
-                                  onPreview={handlePreview}
-                                  onChange={(info) =>{
-                                    handleFileChange(
-                                      info,
-                                      pair.id.toString(),
-                                      pair
-                                    )}
-                                  }
-                                  // onChange={handleFileChange}
-                                >
-                                  {(fileLists[pair.id] || []).length >=
-                                  10 ? null : (
-                                    <PlusOutlined />
-                                  )}
-                                </Upload>
+                              <Upload
+  listType="picture-card"
+  fileList={fileLists[pair.id] || []}
+  onPreview={handlePreview}
+  onChange={(info) =>
+    handleFileChange(
+      info,
+      pair.id.toString(),
+      pair
+    )
+  }
+>
+  {(fileLists[pair.id] || []).length >= 10 ? null : (
+    <PlusOutlined />
+  )}
+</Upload>
+
 
                                 {/* <Upload
                                   listType="picture-card"
@@ -1153,7 +1033,7 @@ useEffect(() => {
                             size={"large"}
                             type="primary"
                             className="login-form-button "
-                            onClick={handleSubmitClick1}
+                            onClick={handleSubmitClick}
                           >
                             {loadButton === "Submit" ? <Spin /> : "Submit"}
                             {/* {!pagetype ? "Next" : "Save"} */}
@@ -1181,7 +1061,7 @@ useEffect(() => {
                           <Button
                             size={"large"}
                             type="primary"
-                            onClick={handleSubmitClick1}
+                            onClick={handleSubmitClick}
                             className="login-form-button "
                           >
                             {loadButton === "Submit" ? <Spin /> : "Submit"}
@@ -1190,11 +1070,6 @@ useEffect(() => {
                       )}
                     </div>
                   </Form>
-
-
-                  {/* <button onClick={handleFileUpload} disabled={isUploading}>
-        {isUploading ? 'Uploading...' : 'Upload'}
-      </button> */}
                 </div>
               </DynamicCard>
             </DynamicCol>
