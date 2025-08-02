@@ -140,6 +140,8 @@ const Add = () => {
   }, [fileList]);
 
   const onFinish = async (values: any) => {
+        console.log(logoImage, "here to see values");
+
     // country_code: values.country_code ?? "+93",
     let items = {
       first_step: {
@@ -162,7 +164,7 @@ const Add = () => {
       if (type == "edit") {
         let items = {
           first_step: {
-            logo_url: getImage,
+            logo_url: logoImage,
             userId: value,
             firstname: String(values.firstname).trim(),
             lastname: String(values.lastname).trim(),
