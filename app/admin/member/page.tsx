@@ -8,7 +8,7 @@ const page = async() => {
   // const userInfoCookie = cookiesList.get('userInfo');
   // console.log(cookiesList,"cookiesList");
   const gettoken:any = cookiesList.get('COOKIES_USER_ACCESS_TOKEN');
-// console.log(gettoken,"gettoken");
+console.log(gettoken,"gettoken");
 
   let data = await fetch('https://frontend.goaideme.com/question-list', {
     method: 'GET', // Method set to GET
