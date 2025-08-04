@@ -37,7 +37,7 @@ export function middleware(request: NextRequest) {
   // const correctUsername = 'abhay@gmail.com';
   // const correctPassword = 'Abhay@123';
 
-  console.log('userToken', userToken);
+  // console.log('userToken', userToken);
   // console.log('Retrieved Username:', username);
   // console.log('Retrieved Password:', password);
 
