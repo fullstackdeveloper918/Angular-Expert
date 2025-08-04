@@ -1,6 +1,14 @@
 steps:
 - name: 'gcr.io/buildpacks/builder:v1'
-  args: ['build', '-builder', 'gcr.io/buildpacks/builder:v1', '-cache-from', 'gcr.io/$PROJECT_ID/nahb-craftsmen-cache', '-tag', 'gcr.io/$PROJECT_ID/nahb-craftsmen:$COMMIT_SHA']
+  args:
+  - 'pack'
+  - 'build'
+  - '--builder'
+  - 'gcr.io/buildpacks/builder:v1'
+  - '--cache-from'
+  - 'gcr.io/$PROJECT_ID/nahb-craftsmen-cache'
+  - '--tag'
+  - 'gcr.io/$PROJECT_ID/nahb-craftsmen:$COMMIT_SHA'
   env:
   - 'NEXT_PUBLIC_GOOGLE_MAP_API_KEY=$_NEXT_PUBLIC_GOOGLE_MAP_API_KEY'
 images:
