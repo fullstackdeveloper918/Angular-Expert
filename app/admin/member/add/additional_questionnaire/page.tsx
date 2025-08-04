@@ -7,7 +7,7 @@ const page = async() => {
 
   const cookiesList = cookies();
       // const userInfoCookie = cookiesList.get('userInfo');
-      console.log(cookiesList,"cookiesList");
+      // console.log(cookiesList,"cookiesList");
       const gettoken:any = cookiesList.get('COOKIES_USER_ACCESS_TOKEN');
     console.log(gettoken,"gettoken");
     
