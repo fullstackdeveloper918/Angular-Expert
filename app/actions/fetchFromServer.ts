@@ -13,7 +13,7 @@ export async function fetchFromServer(api: any, ctx: any): Promise<any> {
   const authToken = cookies.COOKIES_USER_ACCESS_TOKEN;
 
   // Log for debugging
-  console.log(authToken, "authToken");
+  // console.log(authToken, "authToken");
 
   // Prepare the headers for the request
   const headers: Record<string, string> = {
