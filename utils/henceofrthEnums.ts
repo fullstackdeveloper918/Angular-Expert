@@ -49,8 +49,7 @@ enum Roles {
     ARTISTS = "ARTISTS",
     REWARDS = "REWARDS",
     PAYOUT = "PAYOUT",
-    COMPANIES = "COMPANIES"
-
+COMPANIES = "COMPANIES"
 }
 
 enum ArtistStatus {
