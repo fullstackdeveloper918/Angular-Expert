@@ -48,7 +48,8 @@ enum Roles {
     BADGES = "BADGES",
     ARTISTS = "ARTISTS",
     REWARDS = "REWARDS",
-    PAYOUT = "PAYOUT"
+    PAYOUT = "PAYOUT",
+    COMPANIES = "COMPANIES"
 
 }
 

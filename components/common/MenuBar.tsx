@@ -2,7 +2,13 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assests/images/image.png";
 import { Typography, type MenuProps } from "antd";
-import { CloseOutlined, ExportOutlined, ProductOutlined, RadarChartOutlined, TeamOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  ExportOutlined,
+  ProductOutlined,
+  RadarChartOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
 import User from "../../assests/images/placeholder.png";
 import favicon from "../../assests/images/favicon.png";
 import {
@@ -30,8 +36,6 @@ import { useRouter } from "next/navigation";
 import henceofrthEnums from "../../utils/henceofrthEnums";
 
 const iconSize = { fontSize: "18px" };
-
-
 
 const { Row, Col, Avatar, Card, Menu, Pagination, Tooltip, Button } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
@@ -82,14 +86,13 @@ interface ScreenSize {
   height: number;
 }
 const MenuBar = ({ collapsed, setCollapsed }: any) => {
-
   const [screenSize, setScreenSize] = useState<ScreenSize>({
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
   });
   const [openKeys, setOpenKeys] = useState(["sub1"]);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
-console.log(getUserdata,"getUserdata");
+  console.log(getUserdata, "getUserdata");
 
   const hasDashboardPermission =
     (getUserdata?.permission?.length &&
@@ -123,57 +126,66 @@ console.log(getUserdata,"getUserdata");
     }
   };
 
-const[active,setActive]=useState<any>(null)
+  const [active, setActive] = useState<any>(null);
 
-useEffect(() => {
-  const checkPathname = () => {
-    const pathname = window.location.pathname;
-    const parts: string[] = pathname.split("/").filter(Boolean)
-    const checkPath=parts.pop()
-    setActive(checkPath); 
-    localStorage.setItem("Pathname", pathname);
+  useEffect(() => {
+    const checkPathname = () => {
+      const pathname = window.location.pathname;
+      const parts: string[] = pathname.split("/").filter(Boolean);
+      const checkPath = parts.pop();
+      setActive(checkPath);
+      localStorage.setItem("Pathname", pathname);
+    };
+    const intervalId = setInterval(checkPathname, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+  let pathname = localStorage.getItem("Pathname");
+
+  // const paths = ['dashboard', 'Members', 'Products', 'Care Team', 'Questions', "setting", 'Content Page', 'More', 'contact-us', 'DB Backup', 'contact-us', 'notification']
+  // const [root, sub] = window.location.pathname?.split('/');
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  console.log(getUserdata, "getUserdata erej");
+  // Handler for the link click
+  const handleLinkClick = () => {
+    if (screenSize.width < 400) {
+      setCollapsed(true);
+    }
   };
-  const intervalId = setInterval(checkPathname, 1000);
-  return () => clearInterval(intervalId);
-}, []);
-let pathname=localStorage.getItem("Pathname")
-
-// const paths = ['dashboard', 'Members', 'Products', 'Care Team', 'Questions', "setting", 'Content Page', 'More', 'contact-us', 'DB Backup', 'contact-us', 'notification']
-// const [root, sub] = window.location.pathname?.split('/');
-useEffect(() => {
-  const handleResize = () => {
-    setScreenSize({
-      width: window.innerWidth,
-      height: window.innerHeight
-    });
-  };
-
-  window.addEventListener('resize', handleResize);
-  return () => window.removeEventListener('resize', handleResize);
-}, []);
-
-// Handler for the link click
-const handleLinkClick = () => {
-  if (screenSize.width < 400) {
-    setCollapsed(true);
-  }
-};
   const mainMenu = [
     hasDashboardPermission && {
       key: henceofrthEnums.Roles.DASHBOARD,
       view: getItem(
-        <Link href="/admin/dashboard" className="text-decoration-none" onClick={handleLinkClick }>
+        <Link
+          href="/admin/dashboard"
+          className="text-decoration-none"
+          onClick={handleLinkClick}
+        >
           Dashboard
         </Link>,
         "dashboard",
         <DashboardOutlined style={iconSize} />
       ),
     },
-   
+
     hasClubMemberPermission && {
       key: henceofrthEnums.Roles.USERS,
       view: getItem(
-        <Link href="/admin/member" className="text-decoration-none"  onClick={handleLinkClick }>
+        <Link
+          href="/admin/member"
+          className="text-decoration-none"
+          onClick={handleLinkClick}
+        >
           {getUserdata?.is_admin == false ? "User" : "Club Members"}
         </Link>,
         "member",
@@ -183,13 +195,33 @@ const handleLinkClick = () => {
     hasClubMemberPermission && {
       key: henceofrthEnums.Roles.USERS,
       view: getItem(
-        <Link href="/admin/member/archive" className="text-decoration-none"  onClick={handleLinkClick}>
+        <Link
+          href="/admin/member/archive"
+          className="text-decoration-none"
+          onClick={handleLinkClick}
+        >
           {getUserdata?.is_admin == false ? "User" : "Archive Members"}
         </Link>,
         "archive",
         <UserOutlined style={iconSize} />
       ),
     },
+
+    hasClubMemberPermission && getUserdata?.is_admin && {
+      key: henceofrthEnums.Roles.COMPANIES,
+      view: getItem(
+        <Link
+          href="/admin/companies"
+          className="text-decoration-none"
+          onClick={handleLinkClick}
+        >
+          Companies
+        </Link>,
+        "companies",
+        <TeamOutlined style={iconSize} />
+      ),
+    },
+
     hasMeetingPermission && {
       key: henceofrthEnums.Roles.PAGES,
       view: getItem(
@@ -198,7 +230,11 @@ const handleLinkClick = () => {
         <UsergroupAddOutlined style={iconSize} />,
         [
           getItem(
-            <Link href="/admin/meetings" className="text-decoration-none"  onClick={handleLinkClick}>
+            <Link
+              href="/admin/meetings"
+              className="text-decoration-none"
+              onClick={handleLinkClick}
+            >
               Meetings
             </Link>,
             "meetings",
@@ -212,7 +248,7 @@ const handleLinkClick = () => {
               Past Meetings
             </Link>,
             "past_meeting",
-            <TeamOutlined  style={iconSize} />
+            <TeamOutlined style={iconSize} />
           ),
           getUserdata?.is_admin &&
             getItem(
@@ -249,14 +285,17 @@ const handleLinkClick = () => {
             "archive_meeting",
             <FolderOpenOutlined style={iconSize} />
           ),
-         
         ]
       ),
     },
     hasQUESTIONNAIREPermission && {
       key: henceofrthEnums.Roles.ORDER,
       view: getItem(
-        <Link href="/admin/questionnaire" className="text-decoration-none"  onClick={handleLinkClick}>
+        <Link
+          href="/admin/questionnaire"
+          className="text-decoration-none"
+          onClick={handleLinkClick}
+        >
           Questionnaire
         </Link>,
         "questionnaire",
@@ -267,41 +306,33 @@ const handleLinkClick = () => {
     },
     hasQEXPORTPermission && {
       key: henceofrthEnums.Roles.PAGES,
-      view: getItem(
-        "Reports",
-        "sub2",
-        <ExportOutlined style={iconSize} />,
-        [
-          getItem(
-            <Link href="/admin/export" className="text-decoration-none"  onClick={handleLinkClick}>
-              Round Table
-            </Link>,
-            "export",
-            <DatabaseOutlined style={iconSize} />
-          ),
-          getItem(
-            <Link
-              href="/admin/technology"
-              className="text-decoration-none"
-            >
-              Technology
-            </Link>,
-            "technology",
-            <RadarChartOutlined  style={iconSize} />
-          ),
-          getItem(
-            <Link
-              href="/admin/product"
-              className="text-decoration-none"
-            >
-              Product
-            </Link>,
-            "product",
-            <ProductOutlined  style={iconSize} />
-          ),
-         
-        ]
-      ),
+      view: getItem("Reports", "sub2", <ExportOutlined style={iconSize} />, [
+        getItem(
+          <Link
+            href="/admin/export"
+            className="text-decoration-none"
+            onClick={handleLinkClick}
+          >
+            Round Table
+          </Link>,
+          "export",
+          <DatabaseOutlined style={iconSize} />
+        ),
+        getItem(
+          <Link href="/admin/technology" className="text-decoration-none">
+            Technology
+          </Link>,
+          "technology",
+          <RadarChartOutlined style={iconSize} />
+        ),
+        getItem(
+          <Link href="/admin/product" className="text-decoration-none">
+            Product
+          </Link>,
+          "product",
+          <ProductOutlined style={iconSize} />
+        ),
+      ]),
     },
     // hasQEXPORTPermission && {
     //   key: henceofrthEnums.Roles.ORDER,
@@ -358,7 +389,7 @@ const handleLinkClick = () => {
             `user`,
             <AppstoreAddOutlined style={iconSize} />
           ),
-         
+
           getItem(
             <Link
               href={`/admin/additional_users`}
@@ -372,13 +403,17 @@ const handleLinkClick = () => {
             <AppstoreAddOutlined style={iconSize} />
           ),
           getItem(
-            <Link href="/admin/meetings" className="text-decoration-none"  onClick={handleLinkClick}>
+            <Link
+              href="/admin/meetings"
+              className="text-decoration-none"
+              onClick={handleLinkClick}
+            >
               Meetings
             </Link>,
             "meetings",
             <OrderedListOutlined style={iconSize} />
           ),
-          
+
           getItem(
             <Link
               href="/admin/meetings/past_meeting"
@@ -388,10 +423,14 @@ const handleLinkClick = () => {
               Past Meetings
             </Link>,
             "past_meeting",
-            <TeamOutlined  style={iconSize} />
+            <TeamOutlined style={iconSize} />
           ),
           getItem(
-            <Link href="/admin/questionnaire" className="text-decoration-none"  onClick={handleLinkClick}>
+            <Link
+              href="/admin/questionnaire"
+              className="text-decoration-none"
+              onClick={handleLinkClick}
+            >
               Questionnaire
             </Link>,
             "questionnaire",
@@ -537,6 +576,7 @@ const handleLinkClick = () => {
       "ARTISTS",
       "REWARDS",
       "DB_BACKUP",
+      "COMPANIES"
     ],
     super_admin: true,
   };
@@ -608,26 +648,24 @@ const handleLinkClick = () => {
           <div>
             {getUserdata?.email === "nahbcraftsmen@gmail.com" ? (
               <>
-              <Typography.Title
-                level={5}
-                className="m-0 fw-bold text-capitalize"
-              >
-                {"Super Admin"}
-              </Typography.Title>
+                <Typography.Title
+                  level={5}
+                  className="m-0 fw-bold text-capitalize"
+                >
+                  {"Super Admin"}
+                </Typography.Title>
                 <Typography.Paragraph className="m-0">
-                {getUserdata?.firstname} {getUserdata?.lastname}
-              </Typography.Paragraph>
+                  {getUserdata?.firstname} {getUserdata?.lastname}
+                </Typography.Paragraph>
               </>
-
             ) : (
               <Typography.Title
                 level={5}
                 className="m-0 fw-bold text-capitalize"
               >
-              {getUserdata?.firstname} {getUserdata?.lastname}
+                {getUserdata?.firstname} {getUserdata?.lastname}
               </Typography.Title>
             )}
-          
           </div>
         )}
       </div>
@@ -637,7 +675,6 @@ const handleLinkClick = () => {
           openKeys={openKeys}
           onOpenChange={onOpenChange}
           defaultSelectedKeys={["dashboard"]}
-          
           selectedKeys={active}
           mode="inline"
           items={items}

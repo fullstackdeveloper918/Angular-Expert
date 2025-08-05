@@ -340,65 +340,6 @@ const Add = () => {
     router.push("/admin/member/add/page2");
   };
 
-  console.log(previewImage, "previewImage");
-  console.log(logoImage, "logoImage");
-
-  const handleAddCompany = async () => {
-    const key = newCompanyName.trim().toLowerCase().replace(/\s+/g, "_");
-    const value = newCompanyName.trim();
-
-    try {
-      const res = await fetch("/api/add-company", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key, value }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        toast.success("Company added!");
-        // setCompanyOptions((prev) => [...prev, value]);
-        form.setFieldsValue({ company_name: value });
-      } else {
-        toast.error(data.message || "Error adding company");
-      }
-    } catch (err) {
-      toast.error("Something went wrong");
-    } finally {
-      setIsModalOpen(false);
-      setNewCompanyName("");
-    }
-  };
-
-  const handleDelete = async (companyName: string) => {
-    try {
-      const response = await fetch("/api/delete-company", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ companyName }), // Send the company name to the API
-      });
-
-      const res = await response.json();
-
-      if (res?.message) {
-        toast.success("Company name deleted successfully");
-        // setCompanyOptions((prev) => [...prev, value]);
-        form.setFieldsValue({ company_name: value });
-      }
-      // window.location.reload()
-    } catch (error) {
-      toast.error("Something went wrong");
-      console.error("Error deleting company:", error);
-    }
-  };
-
-  console.log(
-    form.getFieldValue("company_name"),
-    "giving me values please check and update"
-  );
 
   return (
     <>
@@ -643,31 +584,13 @@ const Add = () => {
                                   }}
                                 >
                                   <span>{label}</span>
-                                  <Popconfirm
-                                    title="Are you sure to delete?"
-                                    onConfirm={() => handleDelete(param)}
-                                    okText="Yes"
-                                    cancelText="No"
-                                  >
-                                    <Button
-                                      icon={<DeleteOutlined />}
-                                      type="text"
-                                      danger
-                                      style={{ padding: 0 }}
-                                    />
-                                  </Popconfirm>
+                            
                                 </div>
                               </Option>
                             ))}
                           </Select>
 
-                          <Button
-                            type="primary"
-                            onClick={() => setIsModalOpen(true)}
-                            style={{ marginLeft: "2px", padding: "8px" }} // Optional, to push button to the right
-                          >
-                            +
-                          </Button>
+                        
                         </div>
                       </Form.Item>
 
@@ -817,7 +740,7 @@ const Add = () => {
           </Row>
         </section>
       </Fragment>
-      <Modal
+      {/* <Modal
         title="Add New Company"
         visible={isModalOpen}
         confirmLoading={isAdding}
@@ -843,7 +766,7 @@ const Add = () => {
           onChange={(e) => setNewCompanyName(e.target.value)}
           disabled={isAdding} // optional: disable input while loading
         />
-      </Modal>
+      </Modal> */}
     </>
   );
 };
