@@ -20,6 +20,7 @@ import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import companyNames from "@/utils/companyNames.json";
 
 const { Search } = Input;
+type CompanyData = Record<string, string>; // or `Record<string, any>` if values can vary
 
 const Companies: NextPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,12 +34,12 @@ const Companies: NextPage = () => {
 
  const fetchCompanyData = async () => {
   try {
-    const res = await fetch("/api/get-companies");
+    const res = await fetch("https://cybersify.tech/sellmacdev/company.php");
     const data = await res.json();
 
     console.log(data, "data here to s");
 
-    const reversed = Object.entries(data?.data).reverse(); // 👈 First reverse the data
+    const reversed = Object.entries(data).reverse(); // 👈 First reverse the data
 
     const allNames = reversed.map(([key, company], index) => ({
       key: index + 1, // 👈 Now index is correct (1 to 20)
@@ -77,7 +78,7 @@ useEffect(() => {
     const value = newCompanyName.trim();
 
     try {
-      const res = await fetch("/api/add-company", {
+      const res = await fetch("https://cybersify.tech/sellmacdev/company.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({key, value }),
@@ -102,8 +103,7 @@ useEffect(() => {
 
     const handleDelete = async (companyName: string) => {
       try {
-        console.log(companyName,"companyName delete")
-        const response = await fetch("/api/delete-company", {
+        const response = await fetch("https://cybersify.tech/sellmacdev/company.php", {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

@@ -21,7 +21,6 @@ import { destroyCookie } from "nookies";
 import { useSelector } from "react-redux";
 import type { UploadChangeParam } from "antd/es/upload";
 import { DeleteOutlined } from "@ant-design/icons";
-import companyNames from "@/utils/companyNames.json";
 
 import {
   storage,
@@ -81,8 +80,31 @@ const Add = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [newCompanyName, setNewCompanyName] = useState("");
   const [isAdding, setIsAdding] = useState<boolean>(false);
+const [allNames, setAllNames] = useState<[string, any][]>([]);
+  
+  
+   const fetchCompanyData = async () => {
+    try {
+      const res = await fetch("https://cybersify.tech/sellmacdev/company.php");
+      const data = await res.json();
+   
+ const objectContent = Object.entries(data);
 
-  const allNames = Object.entries(companyNames); // [ [key, label], ... ]
+ console.log(objectContent,"check nt=d")
+      setAllNames(objectContent)
+
+      // setFilteredData(allNames);
+    } catch (err) {
+      toast.error("Failed to fetch companies");
+    }
+  };
+
+  useEffect(()=>{
+    fetchCompanyData()
+  })
+  
+  
+  
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as File);
