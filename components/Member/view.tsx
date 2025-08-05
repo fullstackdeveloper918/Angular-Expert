@@ -289,11 +289,11 @@ const formatPhoneNumber = (phoneNumber: any) => {
                 <div className='card-listing'>
                   {state?
                 <div className='card-listing-image my-5' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',  }}>
-                                    <img src={state?.logo_url} alt="avataar" className='profile-image user-image' />
+                                    <img src={state?.logo_url} alt="avatar" className='profile-image user-image' />
                                 </div>:""}
                   <ul className='list-unstyled my-4 mb-4'>
                     <li className='mb-2'><Typography.Text >Name:</Typography.Text > <Typography.Text className='ms-1 text-capitalize'>{state?.firstname ? `${validation.capitalizeFirstLetter(state?.firstname)} ${validation.capitalizeFirstLetter(state?.lastname)}` : 'N/A'}</Typography.Text ></li>
-                    <li className='mb-2'><Typography.Text >Company Name:</Typography.Text > <Typography.Text className='ms-1'>{companyName || "N/A"}</Typography.Text ></li>
+                    <li className='mb-2'><Typography.Text >Company Name:</Typography.Text > <Typography.Text className='ms-1'>{state?.company_name || "N/A"}</Typography.Text ></li>
                     <li className='mb-2'><Typography.Text >Email:</Typography.Text > <Typography.Text className='ms-1'>{state?.email || "N/A"}</Typography.Text ></li>
                    {getUserdata?.parent_user_id?"":
                     <li className='mb-2'><Typography.Text >Phone no:</Typography.Text > <Typography.Text className='ms-10'>

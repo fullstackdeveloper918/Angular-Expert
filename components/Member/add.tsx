@@ -1,5 +1,16 @@
 "use client";
-import { Button, Card, Col, Form, Input, Row, Select, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Input,
+  Modal,
+  Popconfirm,
+  Row,
+  Select,
+  Typography,
+} from "antd";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
@@ -9,7 +20,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { destroyCookie } from "nookies";
 import { useSelector } from "react-redux";
 import type { UploadChangeParam } from "antd/es/upload";
-import { CloseOutlined } from "@ant-design/icons"; // Import the Ant Design Close icon
+import { DeleteOutlined } from "@ant-design/icons";
+import companyNames from "@/utils/companyNames.json";
 
 import {
   storage,
@@ -21,6 +33,7 @@ import {
   addDoc,
   serverTimestamp,
 } from "../../utils/firebase";
+
 const { Option } = Select;
 // const { Row, Col, Card, Button } = {
 //   Button: dynamic(() => import("antd").then((module) => module.Button), {
@@ -65,7 +78,11 @@ const Add = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<any>([]); // Always initialized as an array
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [newCompanyName, setNewCompanyName] = useState("");
+  const [isAdding, setIsAdding] = useState<boolean>(false);
 
+  const allNames = Object.entries(companyNames); // [ [key, label], ... ]
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as File);
@@ -76,6 +93,8 @@ const Add = () => {
 
   const handleRemove = (file: UploadFile) => {
     setLogoImage("");
+
+    console.log(fileList, "fileList");
     const newFileList = fileList.filter((item: any) => item.uid !== file.uid);
 
     setFileList(newFileList);
@@ -86,12 +105,14 @@ const Add = () => {
     fileList: newFileList,
   }) => {
     // Always ensure newFileList is an array
+    console.log(newFileList.length, "newFileList");
     setFileList(newFileList || []);
-    console.log(newFileList, "newFileList");
     if (newFileList.length === 1) {
       // If an image is uploaded, set it as the logo image
       const file = newFileList[0];
-      setLogoImage(file.url || (file.preview as string)); // Set the logoImage state
+      console.log(file, "newFileList file");
+
+      setLogoImage(file.thumbUrl || (file.preview as string)); // Set the logoImage state
     }
   };
 
@@ -101,8 +122,12 @@ const Add = () => {
     </Button>
   );
 
+  console.log(form.getFieldValue("company_name"), "form here to see blaue");
+
   const handleChange = (value: any) => {
-    setCompanyType(value);
+    // Update the form value directly when the select changes
+    form.setFieldsValue({ company_name: value });
+    setCompanyType(value); // Optional, if you need local state as well
   };
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<any>(null);
@@ -140,9 +165,9 @@ const Add = () => {
   }, [fileList]);
 
   const onFinish = async (values: any) => {
-        console.log(logoImage, "here to see values");
-
     // country_code: values.country_code ?? "+93",
+
+    console.log(logoImage, "here to see values");
     let items = {
       first_step: {
         logo_url: "",
@@ -164,7 +189,7 @@ const Add = () => {
       if (type == "edit") {
         let items = {
           first_step: {
-            logo_url: logoImage,
+            logo_url: logoImage ? logoImage : getImage,
             userId: value,
             firstname: String(values.firstname).trim(),
             lastname: String(values.lastname).trim(),
@@ -285,6 +310,7 @@ const Add = () => {
 
   useEffect(() => {
     if (type == "edit") {
+      console.log("running aaa");
       const getDataById = async () => {
         const item = {
           user_id: value,
@@ -292,8 +318,11 @@ const Add = () => {
         };
         try {
           const res = await api.User.getById(item as any);
+
+          console.log(res?.data, "check");
           setState(res?.data || null);
           setLogoImage(res?.data?.logo_url || null);
+          setCompanyType(res?.data?.company_name)
           if (res?.data?.status == 500) {
             toast.error("Session Expired Login Again");
             router.replace("/auth/signin");
@@ -305,7 +334,7 @@ const Add = () => {
       };
       getDataById();
     }
-  }, [type, form]);
+  }, [type]);
   // form.setFieldsValue(res);
   const submit = () => {
     router.push("/admin/member/add/page2");
@@ -314,6 +343,63 @@ const Add = () => {
   console.log(previewImage, "previewImage");
   console.log(logoImage, "logoImage");
 
+  const handleAddCompany = async () => {
+    const key = newCompanyName.trim().toLowerCase().replace(/\s+/g, "_");
+    const value = newCompanyName.trim();
+
+    try {
+      const res = await fetch("/api/add-company", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key, value }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success("Company added!");
+        // setCompanyOptions((prev) => [...prev, value]);
+        form.setFieldsValue({ company_name: value });
+      } else {
+        toast.error(data.message || "Error adding company");
+      }
+    } catch (err) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsModalOpen(false);
+      setNewCompanyName("");
+    }
+  };
+
+  const handleDelete = async (companyName: string) => {
+    try {
+      const response = await fetch("/api/delete-company", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ companyName }), // Send the company name to the API
+      });
+
+      const res = await response.json();
+
+      if (res?.message) {
+        toast.success("Company name deleted successfully");
+        // setCompanyOptions((prev) => [...prev, value]);
+        form.setFieldsValue({ company_name: value });
+      }
+      // window.location.reload()
+    } catch (error) {
+      toast.error("Something went wrong");
+      console.error("Error deleting company:", error);
+    }
+  };
+
+  console.log(
+    form.getFieldValue("company_name"),
+    "giving me values please check and update"
+  );
+
   return (
     <>
       <Fragment>
@@ -321,15 +407,15 @@ const Add = () => {
           <Row justify="center" gutter={[20, 20]} className="heightCenter">
             <Col xs={24} sm={22} md={20} lg={16} xl={14} xxl={12}>
               <Card className="common-card">
-                <div className="d-flex justify-content-center">
-                  <Typography.Title level={2} className="m-0 fw-bold">
+                <div className="d-flex justify-content-between">
+                  <Typography.Title level={3} className="m-0 mb-3 fw-bold">
                     {type == "edit" ? "Edit" : "Add"} Club Member
                   </Typography.Title>
                   {/* <Button size={'large'} type="primary" className="text-white" disabled>1/8</Button> */}
                 </div>
 
                 {/* form  */}
-                <div className="card-form-wrapper">
+                <div className="card-form-wrapper ">
                   {/* <Form.Item label="Upload Image" name="image" valuePropName="fileList"> */}
                   {!logoImage ? (
                     <Upload
@@ -361,72 +447,28 @@ const Add = () => {
       )} */}
                   {/* <img src={logoImage} alt="" className="" /> */}
                   {logoImage && (
-                    <div className="d-flex justify-content-center my-2 position-relative">
-                      <div
-                        className="d-flex justify-content-center my-4"
-                        style={{
-                          borderRadius: "100%",
-                          width: "200px",
-                          height: "200px",
-                          overflow: "hidden", // This is important to maintain the circular shape on hover
+                    <div>
+                      <Image
+                        width={200}
+                        src={logoImage}
+                        alt="Logo"
+                        preview={{
+                          visible: previewOpen,
+                          onVisibleChange: (visible) => setPreviewOpen(visible),
+                          afterOpenChange: (visible) =>
+                            !visible && setPreviewImage(""),
                         }}
-                      >
-                        <Image
-                          style={{
-                            borderRadius: "50%", // Ensure the image is round initially
-                            transition: "border-radius 0.3s ease", // Smooth transition for the hover effect
-                          }}
-                          width={200}
-                          height={200}
-                          src={logoImage}
-                          alt="Logo"
-                          preview={{
-                            visible: previewOpen,
-                            onVisibleChange: (visible) =>
-                              setPreviewOpen(visible),
-                            afterOpenChange: (visible) =>
-                              !visible && setPreviewImage(""),
-                          }}
-                          onMouseEnter={(
-                            e: React.MouseEvent<HTMLImageElement>
-                          ) => {
-                            // On hover, make the borderRadius 50% (round)
-                            (e.target as HTMLImageElement).style.borderRadius =
-                              "50%";
-                          }}
-                          onMouseLeave={(
-                            e: React.MouseEvent<HTMLImageElement>
-                          ) => {
-                            // On mouse leave, revert the borderRadius back to 50% (round)
-                            (e.target as HTMLImageElement).style.borderRadius =
-                              "50%";
-                          }}
-                        />
-                      </div>
-                      <Button
-                        style={{
-                          position: "absolute",
-                          right: "35%",
-                          top: "20px",
-                          padding: "0px",
-                          border: "none",
-                          background: "radial-gradient(#e1d9d9, transparent)",
-                          fontSize: "24px",
-                          color: "black",
-                          cursor: "pointer",
-                          borderRadius: "50%",
-                          width: "40px",
-                          height: "40px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                        onClick={() => setLogoImage("")} // Clear the logo image
-                        icon={<CloseOutlined />}
                       />
+                      {/* Add a button to delete the logo image */}
                     </div>
                   )}
-
+                  {logoImage ? (
+                    <Button className="mt-2" onClick={() => setLogoImage("")}>
+                      Delete Image
+                    </Button>
+                  ) : (
+                    ""
+                  )}
                   <Form
                     form={form}
                     name="add_staff"
@@ -532,7 +574,7 @@ const Add = () => {
                           }
                         }}
                       /> */}
-                        <Select
+                        {/* <Select
                           size={"large"}
                           placeholder="Select Company Name"
                           onChange={handleChange}
@@ -574,7 +616,59 @@ const Add = () => {
                           </Option>
                           <Option value="split">Split Rock Custom Homes</Option>
                           <Option value="tiara">Tiara Sun Development</Option>
-                        </Select>
+                        </Select> */}
+
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "2px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Select
+                            size="large"
+                            placeholder="Select Company Name"
+                            value={companyType}
+                            onChange={(selectedParam) => {
+                              handleChange(selectedParam);
+                            }}
+                            style={{ flex: 1 }}
+                          >
+                            {allNames.map(([param, label]) => (
+                              <Option key={param} value={label}>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                  }}
+                                >
+                                  <span>{label}</span>
+                                  <Popconfirm
+                                    title="Are you sure to delete?"
+                                    onConfirm={() => handleDelete(param)}
+                                    okText="Yes"
+                                    cancelText="No"
+                                  >
+                                    <Button
+                                      icon={<DeleteOutlined />}
+                                      type="text"
+                                      danger
+                                      style={{ padding: 0 }}
+                                    />
+                                  </Popconfirm>
+                                </div>
+                              </Option>
+                            ))}
+                          </Select>
+
+                          <Button
+                            type="primary"
+                            onClick={() => setIsModalOpen(true)}
+                            style={{ marginLeft: "2px", padding: "8px" }} // Optional, to push button to the right
+                          >
+                            +
+                          </Button>
+                        </div>
                       </Form.Item>
 
                       <Form.Item
@@ -723,6 +817,33 @@ const Add = () => {
           </Row>
         </section>
       </Fragment>
+      <Modal
+        title="Add New Company"
+        visible={isModalOpen}
+        confirmLoading={isAdding}
+        onOk={async () => {
+          if (newCompanyName.trim()) {
+            setIsAdding(true);
+            await handleAddCompany();
+            setIsAdding(false);
+          } else {
+            toast.error("Please enter a company name");
+          }
+        }}
+        onCancel={() => {
+          setIsModalOpen(false);
+          setNewCompanyName("");
+        }}
+        okText={isAdding ? "Loading..." : "Add"}
+        cancelText="Cancel"
+      >
+        <Input
+          placeholder="Enter new company name"
+          value={newCompanyName}
+          onChange={(e) => setNewCompanyName(e.target.value)}
+          disabled={isAdding} // optional: disable input while loading
+        />
+      </Modal>
     </>
   );
 };
