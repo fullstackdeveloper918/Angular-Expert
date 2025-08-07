@@ -228,7 +228,8 @@ const [allNames, setAllNames] = useState<[string, any][]>([]);
         let res = await api.User.edit(items);
         toast.success(res?.message);
         // if(res)  {
-        router.push(`/admin/member/additional_user?${value}&edit`);
+        router.push(`/admin/member/${value}/view`);
+        // router.push(`/admin/member/additional_user?${value}&edit`);
         // }
         // router.push(`/admin/member/add/page2?${value}&edit`)
       } else {
