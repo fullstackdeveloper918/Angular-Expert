@@ -20,15 +20,14 @@ type Page<P = {}> = NextPage<P> & {
 };
 
 const AdminDashboard: Page = (props: any) => {
-  const getUserdata = useSelector((state: any) => state?.user?.userData)
-  console.log(getUserdata,"getUserdata");
-  
+  const getUserdata = useSelector((state: any) => state?.user?.userData)  
   const [loading, setLoading] = useState<any>(true)
   const [state1, setState1] = useState<any>([])
   const [state2, setState2] = useState<any>([])
   const [areas, setAreas] = useState<any>([]);
   const [complete, setComplete] = useState<any>("")
   const [check, setCheck] = useState<any>("")
+  const [companyNameData,setCompanyNameData] = useState<any>("")
   const [loadingState, setLoadingState] = useState<{ [key: string]: boolean }>({});
   const hasClubMemberPermission = (getUserdata?.permission?.length && getUserdata.permission.includes("CLUB_MEMEBR")) || getUserdata?.email === "nahbcraftsmen@gmail.com";
   const xyz = areas?.result?.length > 0 
@@ -45,6 +44,11 @@ const AdminDashboard: Page = (props: any) => {
   ? areas.result
       .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime())[0]?.location 
   : undefined;
+
+    const xyz1_meeting = areas?.result?.length > 0 
+  ? areas.result
+      .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime())[0]?.meeting_type 
+  : undefined;
   const xyz2 = areas?.result?.length > 0 
   ? areas.result
       .sort((a: any, b: any) => new Date(a.start_meeting_date).getTime() - new Date(b.start_meeting_date).getTime())[1]?.location 
@@ -55,8 +59,8 @@ const AdminDashboard: Page = (props: any) => {
 // console.log(getUserdata.meetings.NextMeeting.id, "axfz");
 
 
+console.log(xyz1_meeting,"getUserdatagetUserdatahayiyan");
   const updateDue = async () => {
-console.log(getUserdata,"getUserdatagetUserdata");
 
     let item={
       meeting_id:getUserdata.meetings.NextMeeting.id
@@ -69,6 +73,8 @@ console.log(getUserdata,"getUserdatagetUserdata");
       updateDue()
     }
   }, [])
+
+
   const start_date = 1725993000000;
   const spring_start_date = 1745951400000;
   const fiveDaysInMilliseconds = 5 * 24 * 60 * 60 * 1000; 
@@ -96,6 +102,20 @@ const [error,setError]=useState<any>("")
     const formattedDate = `${dayjs(date).format('MMMM')} ${getOrdinalSuffix(day)}, ${dayjs(date).format('YYYY')}`;
     return formattedDate;
   };
+
+
+   function getDisplayNameByKey(key: string | undefined): string {
+      if (!key) return "N/A";
+
+      const keyLower = key.toLowerCase();
+
+      const found = companyNameData.find(
+        ([k, _]: [string, string]) => k.toLowerCase() === keyLower
+      );
+
+      return found ? found[1] : "N/A";
+    }
+
   const DashboardData = [
     {
       cardBackground: "#D3D3D3",
@@ -128,6 +148,7 @@ const [error,setError]=useState<any>("")
 
   ]
 
+  console.log(xyz1,"here to see xyz1")
   const DashboardData2 = [
     {
       cardBackground: "#D3D3D3",
@@ -193,31 +214,58 @@ console.log(data,"yrrt");
     
     return { blob, pdfUrl, timestamp };
 };
-  const companyNameMap: any = {
-    "augusta": "Augusta Homes, Inc.",
-    "buffington": "Buffington Homes, L.P.",
-    "cabin": "Cabin John Builders",
-    "cataldo": "Cataldo Custom Builders",
-    "david_campbell": "The DCB",
-    "dc_building": "DC Building Inc.",
-    "Ddenman_construction": "Denman Construction, Inc.",
-    "ellis": "Ellis Custom Homes",
-    "tm_grady_builders": "T.M. Grady Builders",
-    "hardwick": "Hardwick G. C.",
-    "homeSource": "HomeSource Construction",
-    "ed_nikles": "Ed Nikles Custom Builder, Inc.",
-    "olsen": "Olsen Custom Homes",
-    "raykon": "Raykon Construction",
-    "matt_sitra": "Matt Sitra Custom Homes",
-    "schneider": "Schneider Construction, LLC",
-    "shaeffer": "Shaeffer Hyde Construction",
-    "split": "Split Rock Custom Homes",
-    "tiara": "Tiara Sun Development"
+  // const companyNameData: any = {
+  //   "augusta": "Augusta Homes, Inc.",
+  //   "buffington": "Buffington Homes, L.P.",
+  //   "cabin": "Cabin John Builders",
+  //   "cataldo": "Cataldo Custom Builders",
+  //   "The DCB": "The DCB",
+  //   "dc_building": "DC Building Inc.",
+  //   "Ddenman_construction": "Denman Construction, Inc.",
+  //   "ellis": "Ellis Custom Homes",
+  //   "tm_grady_builders": "T.M. Grady Builders",
+  //   "hardwick": "Hardwick G. C.",
+  //   "homeSource": "HomeSource Construction",
+  //   "ed_nikles": "Ed Nikles Custom Builder, Inc.",
+  //   "olsen": "Olsen Custom Homes",
+  //   "raykon": "Raykon Construction",
+  //   "matt_sitra": "Matt Sitra Custom Homes",
+  //   "schneider": "Schneider Construction, LLC",
+  //   "shaeffer": "Shaeffer Hyde Construction",
+  //   "split": "Split Rock Custom Homes",
+  //   "tiara": "Tiara Sun Development",
+  //   "Hickory Construction, Inc": "Hickory Construction, Inc"
+  // };
+
+
+
+
+const fetchCompanyData = async () => {
+    try {
+      const res = await fetch("https://cybersify.tech/sellmacdev/company.php");
+      const data = await res.json();
+
+      const objectContent = Object.entries(data);
+
+
+      console.log(objectContent,"here to se companies")
+      setCompanyNameData(objectContent);
+
+      // setFilteredData(allNames);
+    } catch (err) {
+      console.log("Failed to fetch companies",err);
+    }
   };
+
+  useEffect(() => {
+    fetchCompanyData();
+  },[]);
+
+
   const downLoadPdf = async (data: any) => {
     console.log(data,"sjlsjdfl");
     
-    const companyName = companyNameMap[data?.company_name || ""] || "N/A";
+    const companyName = companyNameData[data?.company_name || ""] || "N/A";
     const { blob, timestamp } = await generatePdf(data);
     saveAs(blob, `${capFirst(companyName)}.pdf`);
   };
@@ -280,7 +328,8 @@ const formatPhoneNumber = (phoneNumber: any) => {
   
   
   const dataSource = state1?.map((res: any, index: number) => {
-    const companyName = companyNameMap[res?.company_name || ""] || "N/A";
+        const companyName = getDisplayNameByKey(res?.company_name);
+    // const companyName = companyNameData[res?.company_name || ""] || "N/A";
     return {
       key: index + 1,
       name: capFirst(res?.firstname ? `${res?.firstname} ${res?.lastname}` : "N/A"),
@@ -314,7 +363,8 @@ const dataSource1 = filteredArray
   return dateA.getTime() - dateB.getTime(); // Ascending: older first
 })
 .map((res: any, index: number) => {
-  const companyName = companyNameMap[res?.company_name || ""] || "N/A";
+      const companyName = getDisplayNameByKey(res?.company_name);
+  // const companyName = companyNameData[res?.company_name || ""] || "N/A";
   const isLoading = loadingState[res?.id];
 
   return {
@@ -374,8 +424,11 @@ const dataSource1 = filteredArray
 
   // const filteredArray = state2.filter((item:any) => item.is_form_completed == true);
 
+  console.log(non_completed,"non_completed seeememmememe")
   const dataSource2 = non_completed?.map((res: any, index: number) => {
-    const companyName = companyNameMap[res?.company_name || ""] || "N/A";
+    
+        const companyName = getDisplayNameByKey(res?.company_name);
+    // const companyName = companyNameData[res?.company_name || ""] || "N/A";
     const isLoading = loadingState[res?.id];
     return {
       key: index + 1,
@@ -394,6 +447,8 @@ const dataSource1 = filteredArray
     }
   }
   );
+
+  console.log(dataSource2,"dataSource2 ssss")
   const columnData: any = [];
   for (let i = 0; i < dataSource2.length; i += 7) {
     columnData.push(dataSource2.slice(i, i + 7));
@@ -424,6 +479,8 @@ const dataSource1 = filteredArray
     });
     return row;
   });
+
+  console.log(columnData,tableData,"tableData here to see")
 
   const dataSource3 = areas?.result?.length
     ? areas?.result
@@ -564,6 +621,8 @@ const dataSource1 = filteredArray
     setLoading(true)
     try {
       let apiRes1 = await api.User.user_completed_noncompleted(getUserdata.meetings.NextMeeting.id)
+      
+      
       setComplete(apiRes1.data)
       setLoading(false)
     } catch (error) {
@@ -577,6 +636,8 @@ const dataSource1 = filteredArray
     try {
       let res = await api.User.listing(getUserdata.meetings.NextMeeting.id)
       let response = await api.User.completelist(getUserdata.meetings.NextMeeting.id)
+    
+    console.log(res.data,"here to see response")
       setState1(res?.data)
       setState2(response)
       setLoading(false)
@@ -592,6 +653,8 @@ const dataSource1 = filteredArray
   const initialise = async () => {
     try {
         let res = await api.Meeting.upcoming_meeting(getUserdata.meetings.NextMeeting.id);
+     
+     console.log(res,"res here mer laam se jao")
         setAreas(res);
         let apiRes1 = await api.User.check_fall_spring(getUserdata.meetings.NextMeeting.id)
         setCheck(apiRes1)
@@ -603,10 +666,14 @@ const dataSource1 = filteredArray
     initialise();
 
   }, []);
+
+
   useEffect(() => {
     getData()
 
   }, [])
+
+
 
    
 //   const getSeasonByReviewMonth = (month:any) =>
@@ -619,6 +686,8 @@ const dataSource1 = filteredArray
 
 // const meeting_review_year= dayjs(props?.state?.meetings?.lastMeeting?.start_meeting_date).format("YYYY")
 // console.log(meeting_review_year,"meeting_review_year");
+{console.log(getUserdata,"getUserdata here to see")}
+{console.log(DashboardData2,"getUserdata here to see jjajajaja")}
 
   
   return (
@@ -661,12 +730,11 @@ const dataSource1 = filteredArray
               </>}
           </Row>
           <Row gutter={[20, 20]} className='dashboradTable'>
-
             {getUserdata?.is_admin == false ?
               <Col sm={24} md={24} lg={24} xxl={12}>
                 <Card className='common-card'>
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                    <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates for Spring 2025</Typography.Title>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Complete Updates for {xyz1_meeting} 2025</Typography.Title>
 
                   </div>
                   <div className='tabs-wrapper'>
@@ -698,7 +766,7 @@ const dataSource1 = filteredArray
                 <Card className='common-card'>
 
                   <div className='d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-3'>
-                    <Typography.Title level={4} className='m-0 fw-bold'>Incomplete Updates for Spring 2025</Typography.Title>
+                    <Typography.Title level={4} className='m-0 fw-bold'>Incomplete Updates for {xyz1_meeting} 2025</Typography.Title>
                   </div>
                   <div className='tabs-wrapper'>
                   {!state2.length ? (

@@ -43,7 +43,6 @@ interface Goal {
 const { Option } = Select;
 const Page3 = ({ questions }: any) => {
   const getUserdata = useSelector((state: any) => state?.user?.userData);
-  console.log(getUserdata, "getUserdata");
   // console.log(getUserdata?.meetings?.lastMeeting?.id,"getUserdata");
 
   const router = useRouter();

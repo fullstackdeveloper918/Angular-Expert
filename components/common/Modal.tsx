@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import api from "@/utils/api";
 import { useSelector } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
 const { Row, Col, Card, Button, Pagination } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
     ssr: false,
@@ -31,9 +32,9 @@ const AntModal = dynamic(() => import("antd").then((module) => module.Modal), {
 const CustomModal = (props: any) => {
   const [subheadingId, setSubheadingId] = useState(null);
   const [subheadingId1, setSubheadingId1] = useState(null);
-  console.log(subheadingId1,"subheadingId1");
-  
-  const [state, setState] = React.useState<any>([])
+  console.log(subheadingId1, "subheadingId1");
+
+  const [state, setState] = React.useState<any>([]);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   const [loading, setLoading] = useState(false);
@@ -42,8 +43,7 @@ const CustomModal = (props: any) => {
 
   const [addForm] = Form.useForm();
 
-console.log(state,"asjdla");
-
+  console.log(state, "asjdla");
 
   const getDataById = useCallback(async (): Promise<void> => {
     const item = {
@@ -66,19 +66,19 @@ console.log(state,"asjdla");
     }
   }, [props.id, getDataById]);
   const addQuestion = async (values: any) => {
-    console.log(values,"ieytieyr");
-    console.log(subheadingId,"subheadingId");
+    console.log(values, "ieytieyr");
+    console.log(subheadingId, "subheadingId");
     // return
-    
+
     let item = {
       question_id: props?.id,
       question: values.question,
       question_type: values.question_type,
       page_type: values.page_type,
-      quesiton_position:values.quesiton_position,
-      meeting_id:getUserdata.meetings.NextMeeting.id,
-      subheading_id:subheadingId||"",
-      subheading_title:values?.subheading_title||""
+      quesiton_position: values.quesiton_position,
+      meeting_id: getUserdata.meetings.NextMeeting.id,
+      subheading_id: subheadingId || "",
+      subheading_title: values?.subheading_title || "",
     };
 
     try {
@@ -87,64 +87,70 @@ console.log(state,"asjdla");
           question: values.question,
           question_type: values.question_type,
           page_type: values.page_type,
-          quesiton_position:values.quesiton_position,
-          meeting_id:getUserdata.meetings.NextMeeting.id,
-           subheading_id:subheadingId||"",
-      subheading_title:values?.subheading_title||""
+          quesiton_position: values.quesiton_position == 1 ? values.quesiton_position : values.quesiton_position - 1 ,
+          meeting_id: getUserdata.meetings.NextMeeting.id,
+          subheading_id: subheadingId || "",
+          subheading_title: values?.subheading_title || "",
         };
         let res = await api.Manage_Question.create(item as any);
         props?.initialise();
+
+        toast.success("Questions Update successfully");
+
         setAddModalOpen(false);
         addForm.resetFields();
       } else {
         let res = await api.Manage_Question.edit(item as any);
         props?.initialise();
+        toast.success(res?.message);
         setAddModalOpen(false);
         addForm.resetFields();
       }
     } catch (error) {
+      toast.error("Please try again.");
     }
   };
   const initialise = async () => {
     try {
-      let res = await api.Manage_Question.list()
-      setState(res.data)
-    //   if (res?.data?.status == 500) {
-    //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-    //     localStorage.removeItem('hasReloaded');
-    //     toast.error("Session Expired Login Again")
-    //     router.replace("/auth/signin")
-    // }
-    } catch (error:any) {
-    //   if (error.status==500) {
-    //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-    //     localStorage.removeItem('hasReloaded');
-    //     // }
-    //     toast.error("Session Expired Login Again")
-    //     router.replace("/auth/signin")
-    // }
+      let res = await api.Manage_Question.list();
+      setState(res.data);
+      //   if (res?.data?.status == 500) {
+      //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+      //     localStorage.removeItem('hasReloaded');
+      //     toast.error("Session Expired Login Again")
+      //     router.replace("/auth/signin")
+      // }
+    } catch (error: any) {
+      //   if (error.status==500) {
+      //     destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
+      //     localStorage.removeItem('hasReloaded');
+      //     // }
+      //     toast.error("Session Expired Login Again")
+      //     router.replace("/auth/signin")
+      // }
     } finally {
     }
-  }
+  };
 
   useEffect(() => {
-    initialise()
-  }, [])
+    initialise();
+  }, []);
 
   return (
     <>
+      <ToastContainer />
       <div className="">
         {props?.type === "Add" ? (
           <div className="d-flex gap-3">
-          <Button
-            type="primary"
-            htmlType="button"
-            size={"large"}
-            onClick={() => setAddModalOpen(true)}
-          >
-            <PlusOutlined />
-            Add New Questions
-          </Button>
+            <Button
+              type="primary"
+              htmlType="button"
+              size={"large"}
+              onClick={() => setAddModalOpen(true)}
+            >
+              <PlusOutlined />
+              Add New Questions
+            </Button>
           </div>
         ) : (
           <Button
@@ -201,7 +207,6 @@ console.log(state,"asjdla");
                 <Option value="dropdown">Dropdown</Option>
                 <Option value="single_choice">Single Choice Checkbox</Option>
                 <Option value="multi_choice">Multi Choice Checkbox</Option>
-                 
               </Select>
             </Form.Item>
             <Form.Item
@@ -215,51 +220,60 @@ console.log(state,"asjdla");
               ]}
             >
               {/* BUSINESS UPDATE,CRAFTSMEN TOOLBOX,CRAFTSMEN CHECK-UP,Fall 2024 MEETING REVIEW,Spring 2025 MEETING PREPARATION */}
-              <Select size="large" placeholder={`${props?.type} Page Section`|| "Select Page Section"} 
-               onChange={(value:any, option:any) => {setSubheadingId1(value); 
-    }}>
-              <Option value="business_update">Business Update</Option>
+              <Select
+                size="large"
+                placeholder={
+                  `${props?.type} Page Section` || "Select Page Section"
+                }
+                onChange={(value: any, option: any) => {
+                  setSubheadingId1(value);
+                }}
+              >
+                <Option value="business_update">Business Update</Option>
                 <Option value="technology">Craftsmen Toolbox</Option>
                 <Option value="craftsmen_checkup">Craftsmen check-Up</Option>
                 <Option value="well_being">Personal Well-Being Check-In</Option>
-                <Option value="business_evolution">Business Evolution & Industry trends</Option>
+                <Option value="business_evolution">
+                  Business Evolution & Industry trends
+                </Option>
                 <Option value="meeting_review">Fall 2024 Meeting Review</Option>
                 <Option value="roundtable">Round-Table Topics</Option>
                 {/* <Option value="round_table_topic">Spring 2025 Meeting Preparation</Option> */}
                 {/* <Option value="answers">Additional Questionnaire</Option> */}
-                 
               </Select>
             </Form.Item>
-            {subheadingId1==="business_update"&&
-            <Form.Item
-              name="subheading_title"
-              label={`${props?.type} Sub Heading`}
-              rules={[
-                {
-                  required: true,
-                  message: `Please select a valid ${props?.type} Sub Heading`,
-                },
-              ]}
-            >
-              {/* BUSINESS UPDATE,CRAFTSMEN TOOLBOX,CRAFTSMEN CHECK-UP,Fall 2024 MEETING REVIEW,Spring 2025 MEETING PREPARATION */}
-              <Select
-    size="large"
-    placeholder={`${props?.type} Sub Heading` || "Select Sub Heading"}
-    onChange={(value:any, option:any) => {
-      // Capturing both the subheading and its corresponding id
-      const selectedSubheading = value;
-      const selectedId = option.key; // option.key will give us the id
-      setSubheadingId(selectedId); // Store the selected id in the state
-    }}
-  >
-    {state?.map((res: any, index: number) => (
-      <Option value={res?.subheading} key={res?.id}>
-        {res?.subheading}
-      </Option>
-    ))}
-  </Select>
-            </Form.Item>
-  }
+            {subheadingId1 === "business_update" && (
+              <Form.Item
+                name="subheading_title"
+                label={`${props?.type} Sub Heading`}
+                rules={[
+                  {
+                    required: true,
+                    message: `Please select a valid ${props?.type} Sub Heading`,
+                  },
+                ]}
+              >
+                {/* BUSINESS UPDATE,CRAFTSMEN TOOLBOX,CRAFTSMEN CHECK-UP,Fall 2024 MEETING REVIEW,Spring 2025 MEETING PREPARATION */}
+                <Select
+                  size="large"
+                  placeholder={
+                    `${props?.type} Sub Heading` || "Select Sub Heading"
+                  }
+                  onChange={(value: any, option: any) => {
+                    // Capturing both the subheading and its corresponding id
+                    const selectedSubheading = value;
+                    const selectedId = option.key; // option.key will give us the id
+                    setSubheadingId(selectedId); // Store the selected id in the state
+                  }}
+                >
+                  {state?.map((res: any, index: number) => (
+                    <Option value={res?.subheading} key={res?.id}>
+                      {res?.subheading}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            )}
             <Form.Item
               name="quesiton_position"
               label={`${props?.type} Question Position`}
@@ -271,14 +285,17 @@ console.log(state,"asjdla");
                 },
               ]}
             >
-              <Input size={"large"} placeholder={`${props?.type} Question Position`} 
-              onKeyPress={(e: any) => {
-                if (!/[0-9]/.test(e.key)) {
-                  e.preventDefault();  // Prevent input if it's not a number
-                } else {
-                  e.target.value = String(e.target.value).trim();  // Trim spaces (if any)
-                }
-              }}/>
+              <Input
+                size={"large"}
+                placeholder={`${props?.type} Question Position`}
+                onKeyPress={(e: any) => {
+                  if (!/[1-9]/.test(e.key)) {
+                    e.preventDefault(); // Prevent input if it's not a number
+                  } else {
+                    e.target.value = String(e.target.value).trim(); // Trim spaces (if any)
+                  }
+                }}
+              />
             </Form.Item>
             <Space className="w-100 justify-content-end">
               <Button type="default" onClick={() => setAddModalOpen(false)}>
@@ -291,12 +308,11 @@ console.log(state,"asjdla");
                 loading={addLoading}
                 disabled={addLoading}
               >
-                {props?.type==="Edit"?"Update":props?.type}
+                {props?.type === "Edit" ? "Update" : props?.type}
               </Button>
             </Space>
           </Form>
         </AntModal>
-      
       </div>
     </>
   );

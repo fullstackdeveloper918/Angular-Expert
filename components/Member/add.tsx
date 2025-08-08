@@ -64,8 +64,6 @@ const Add = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState<any>("");
-  console.log(state?.logo_url, "ljljl");
-
   const searchParams = useSearchParams();
   const entries = Array.from(searchParams.entries());
   const [companyType, setCompanyType] = useState<any>("");
@@ -80,18 +78,16 @@ const Add = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [newCompanyName, setNewCompanyName] = useState("");
   const [isAdding, setIsAdding] = useState<boolean>(false);
-const [allNames, setAllNames] = useState<[string, any][]>([]);
-  
-  
-   const fetchCompanyData = async () => {
+  const [allNames, setAllNames] = useState<[string, any][]>([]);
+
+  const fetchCompanyData = async () => {
     try {
       const res = await fetch("https://cybersify.tech/sellmacdev/company.php");
       const data = await res.json();
-   
- const objectContent = Object.entries(data);
 
- console.log(objectContent,"check nt=d")
-      setAllNames(objectContent)
+      const objectContent = Object.entries(data);
+
+      setAllNames(objectContent);
 
       // setFilteredData(allNames);
     } catch (err) {
@@ -99,12 +95,10 @@ const [allNames, setAllNames] = useState<[string, any][]>([]);
     }
   };
 
-  useEffect(()=>{
-    fetchCompanyData()
-  })
-  
-  
-  
+  useEffect(() => {
+    fetchCompanyData();
+  },[]);
+
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as File);
@@ -144,8 +138,6 @@ const [allNames, setAllNames] = useState<[string, any][]>([]);
     </Button>
   );
 
-  console.log(form.getFieldValue("company_name"), "form here to see blaue");
-
   const handleChange = (value: any) => {
     // Update the form value directly when the select changes
     form.setFieldsValue({ company_name: value });
@@ -166,7 +158,6 @@ const [allNames, setAllNames] = useState<[string, any][]>([]);
       await uploadBytes(fileRef, fileList[0]?.originFileObj);
 
       const downloadURL = await getDownloadURL(fileRef);
-      console.log(downloadURL, "downloadURL");
       setGetImage(downloadURL);
       // setPreviewImage(downloadURL)
       await addDoc(collection(firestore, "files"), {
@@ -226,9 +217,14 @@ const [allNames, setAllNames] = useState<[string, any][]>([]);
           },
         } as any;
         let res = await api.User.edit(items);
+
+        console.log(res, "here to see response of api");
         toast.success(res?.message);
         // if(res)  {
-        router.push(`/admin/member/${value}/view`);
+        setTimeout(()=>{
+          
+          router.push(`/admin/member/${value}/view`);
+        },3000)
         // router.push(`/admin/member/additional_user?${value}&edit`);
         // }
         // router.push(`/admin/member/add/page2?${value}&edit`)
@@ -333,7 +329,6 @@ const [allNames, setAllNames] = useState<[string, any][]>([]);
 
   useEffect(() => {
     if (type == "edit") {
-      console.log("running aaa");
       const getDataById = async () => {
         const item = {
           user_id: value,
@@ -341,11 +336,9 @@ const [allNames, setAllNames] = useState<[string, any][]>([]);
         };
         try {
           const res = await api.User.getById(item as any);
-
-          console.log(res?.data, "check");
           setState(res?.data || null);
           setLogoImage(res?.data?.logo_url || null);
-          setCompanyType(res?.data?.company_name)
+          setCompanyType(res?.data?.company_name);
           if (res?.data?.status == 500) {
             toast.error("Session Expired Login Again");
             router.replace("/auth/signin");
@@ -363,9 +356,9 @@ const [allNames, setAllNames] = useState<[string, any][]>([]);
     router.push("/admin/member/add/page2");
   };
 
-
   return (
     <>
+    <ToastContainer/>
       <Fragment>
         <section className="club_member">
           <Row justify="center" gutter={[20, 20]} className="heightCenter">
@@ -599,7 +592,7 @@ const [allNames, setAllNames] = useState<[string, any][]>([]);
                             style={{ flex: 1 }}
                           >
                             {allNames.map(([param, label]) => (
-                              <Option key={param} value={label}>
+                              <Option key={param} value={param}>
                                 <div
                                   style={{
                                     display: "flex",
@@ -607,13 +600,10 @@ const [allNames, setAllNames] = useState<[string, any][]>([]);
                                   }}
                                 >
                                   <span>{label}</span>
-                            
                                 </div>
                               </Option>
                             ))}
                           </Select>
-
-                        
                         </div>
                       </Form.Item>
 

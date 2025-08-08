@@ -155,7 +155,6 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log(getUserdata, "getUserdata erej");
   // Handler for the link click
   const handleLinkClick = () => {
     if (screenSize.width < 400) {

@@ -91,6 +91,9 @@ const MeetingView = () => {
     }
     try {
       const res = await api.User.getById(item as any);
+    
+      console.log(res?.data,"see res data to cgheck")
+    
       setState(res?.data || null);
     } catch (error: any) {
     //   if (error==500) {
