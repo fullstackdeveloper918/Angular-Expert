@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assests/images/logo.png"
 import {
   Page,
@@ -70,32 +70,13 @@ Font.register({
 
 const BussinessPDF = (props) => {
   console.log(props,"popopopopo");
+    const [companyNameData, setCompanyNameData] = useState("");
   
+
   const photoSection = props?.state?.photo_section || [];
 
-  const companyNameMap = {
-    "augusta": "Augusta Homes, Inc.",
-    "buffington": "Buffington Homes, L.P.",
-    "cabin": "Cabin John Builders",
-    "cataldo": "Cataldo Custom Builders",
-    "david_campbell": "The DCB",
-    "dc_building": "DC Building Inc.",
-    "Ddenman_construction": "Denman Construction, Inc.",
-    "ellis": "Ellis Custom Homes",
-    "tm_grady_builders": "T.M. Grady Builders",
-    "hardwick": "Hardwick G. C.",
-    "homeSource": "HomeSource Construction",
-    "ed_nikles": "Ed Nikles Custom Builder, Inc.",
-    "olsen": "Olsen Custom Homes",
-    "raykon": "Raykon Construction",
-    "matt_sitra": "Matt Sitra Custom Homes",
-    "schneider": "Schneider Construction, LLC",
-    "shaeffer": "Shaeffer Hyde Construction",
-    "split": "Split Rock Custom Homes",
-    "tiara": "Tiara Sun Development"
-  };
 
-  const companyName = companyNameMap[props?.state?.company_name || ""] || "N/A";
+
 
   const groupedQuestions = props?.state?.businessUpdate[0]?.business_update_questions.reduce((acc, question) => {
     const { subheading_title } = question;
@@ -130,7 +111,7 @@ const BussinessPDF = (props) => {
                        "Fall 2024"}
                    </Text>
                  </Text>
-                 <Text style={styles.subheader}>{companyName}</Text>
+                 {/* <Text style={styles.subheader}>{props?.companyName}</Text> */}
                </View>
         
         <View style={styles.subheader}>

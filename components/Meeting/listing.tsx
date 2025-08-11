@@ -69,27 +69,6 @@ const MeetingList = () => {
 
   const host_company_match = getUserdata.company_name;
 
-  const companyNameMap = {
-    augusta: "Augusta Homes, Inc.",
-    buffington: "Buffington Homes, L.P.",
-    cabin: "Cabin John Builders",
-    cataldo: "Cataldo Custom Builders",
-    david_campbell: "The DCB",
-    dc_building: "DC Building Inc.",
-    Ddenman_construction: "Denman Construction, Inc.",
-    ellis: "Ellis Custom Homes",
-    tm_grady_builders: "T.M. Grady Builders",
-    hardwick: "Hardwick G. C.",
-    homeSource: "HomeSource Construction",
-    ed_nikles: "Ed Nikles Custom Builder, Inc.",
-    olsen: "Olsen Custom Homes",
-    raykon: "Raykon Construction",
-    matt_sitra: "Matt Sitra Custom Homes",
-    schneider: "Schneider Construction, LLC",
-    shaeffer: "Shaeffer Hyde Construction",
-    split: "Split Rock Custom Homes",
-    tiara: "Tiara Sun Development",
-  };
 
   const formatWithOrdinal = (date: any) => {
     const day = dayjs(date).date();

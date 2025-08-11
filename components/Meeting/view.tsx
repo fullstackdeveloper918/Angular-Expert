@@ -86,6 +86,43 @@ const data={
   const [address, setAddress] = useState(data?.hotel || "");
   const [latitude, setLatitude] = useState<any>(null);
   const [longitude, setLongitude] = useState<any>(null);
+
+    const [companyNameData,setCompanyNameData] = useState<any>("")
+  
+  const fetchCompanyData = async () => {
+      try {
+        const res = await fetch("https://cybersify.tech/sellmacdev/company.php");
+        const data = await res.json();
+  
+        const objectContent = Object.entries(data);
+  
+  
+        console.log(objectContent,"here to se companies")
+        setCompanyNameData(objectContent);
+  
+        // setFilteredData(allNames);
+      } catch (err) {
+        console.log("Failed to fetch companies",err);
+      }
+    };
+  
+    useEffect(() => {
+      fetchCompanyData();
+    },[]);
+  
+     function getDisplayNameByKey(key: string | undefined): string {
+        if (!key) return "N/A";
+  
+        const keyLower = key.toLowerCase();
+  
+        const found = companyNameData.find(
+          ([k, _]: [string, string]) => k.toLowerCase() === keyLower
+        );
+  
+        return found ? found[1] : "N/A";
+      }
+
+
   const geocodeAddress = async (address: string) => {
     try {
       const response = await axios.get(
@@ -243,6 +280,7 @@ const data={
     // }
   }, []);
   const generatePdf = async () => {
+
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
     const blob = await pdf(<Pdf state={state} />).toBlob();
     const pdfUrl = URL.createObjectURL(blob);

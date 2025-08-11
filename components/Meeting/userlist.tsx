@@ -142,12 +142,19 @@ const fetchCompanyData = async () => {
             alert(error.message);
         }
     };
+
+
+
+
+    
     const generatePdf = async (data?: any) => {
 
-        console.log(data,"data gaagagagga")
+        const companyName  = getDisplayNameByKey(data?.company_name)
+
+        console.log(data,companyName,"data gaagagagga")
         const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
         // const blob = await pdf(<Pdf state={data} />).toBlob();
-         const blob = await pdf(<Pdf state={data} />).toBlob();
+         const blob = await pdf(<Pdf state={data} companyName={companyName} />).toBlob();
         console.log(blob,"sdglsdfkgsd");
         const pdfUrl = URL.createObjectURL(blob);
         console.log(pdfUrl,"rtrtrt");
@@ -395,6 +402,8 @@ const fetchCompanyData = async () => {
         try {
             let query = searchTerm ? `searchTerm=${searchTerm}` : '';
             let res = await api.User.listing(query,getUserdata.meetings.NextMeeting.id);
+           console.log(res.data,"one data")
+           
             setState1(res?.data || []);
             if (res?.data?.status == 500||res?.data?.message=="Firebase ID token has expired. Get a fresh ID token from your client app and try again (auth/id-token-expired). See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.") {
                 localStorage.setItem('redirectAfterLogin', window.location.pathname);
@@ -405,6 +414,8 @@ const fetchCompanyData = async () => {
                 router.replace("/auth/signin");
             }
             let apiRes = await api.User.user_listing(getUserdata.meetings.NextMeeting.id)
+                  console.log(apiRes.data,"one data two")
+
             setState2(apiRes?.data)
             setLoading1(false)
             

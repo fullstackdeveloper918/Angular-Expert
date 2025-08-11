@@ -218,29 +218,29 @@ const Pdfcopy = (props) => {
   // console.log(props?.subheadinglist1, "sadas");
 
   const options = { httpHeaders: { crossOrigin: "anonymous" } };
-  const companyNameMap = {
-    augusta: "Augusta Homes, Inc.",
-    buffington: "Buffington Homes, L.P.",
-    cabin: "Cabin John Builders",
-    cataldo: "Cataldo Custom Builders",
-    david_campbell: "The DCB",
-    dc_building: "DC Building Inc.",
-    Ddenman_construction: "Denman Construction, Inc.",
-    ellis: "Ellis Custom Homes",
-    tm_grady_builders: "T.M. Grady Builders",
-    hardwick: "Hardwick G. C.",
-    homeSource: "HomeSource Construction",
-    ed_nikles: "Ed Nikles Custom Builder, Inc.",
-    olsen: "Olsen Custom Homes",
-    raykon: "Raykon Construction",
-    matt_sitra: "Matt Sitra Custom Homes",
-    schneider: "Schneider Construction, LLC",
-    shaeffer: "Shaeffer Hyde Construction",
-    split: "Split Rock Custom Homes",
-    tiara: "Tiara Sun Development",
-  };
+  // const companyNameMap = {
+  //   augusta: "Augusta Homes, Inc.",
+  //   buffington: "Buffington Homes, L.P.",
+  //   cabin: "Cabin John Builders",
+  //   cataldo: "Cataldo Custom Builders",
+  //   david_campbell: "The DCB",
+  //   dc_building: "DC Building Inc.",
+  //   Ddenman_construction: "Denman Construction, Inc.",
+  //   ellis: "Ellis Custom Homes",
+  //   tm_grady_builders: "T.M. Grady Builders",
+  //   hardwick: "Hardwick G. C.",
+  //   homeSource: "HomeSource Construction",
+  //   ed_nikles: "Ed Nikles Custom Builder, Inc.",
+  //   olsen: "Olsen Custom Homes",
+  //   raykon: "Raykon Construction",
+  //   matt_sitra: "Matt Sitra Custom Homes",
+  //   schneider: "Schneider Construction, LLC",
+  //   shaeffer: "Shaeffer Hyde Construction",
+  //   split: "Split Rock Custom Homes",
+  //   tiara: "Tiara Sun Development",
+  // };
 
-  const companyName = companyNameMap[props?.state?.company_name || ""] || "N/A";
+  // const companyName = companyNameMap[props?.state?.company_name || ""] || "N/A";
 
   const newArr =
     props?.state?.photo_section?.fileUrls?.length &&
@@ -300,7 +300,7 @@ const Pdfcopy = (props) => {
                   "Fall 2024"}
               </Text>
             </Text>
-            <Text style={styles.subheader}>{companyName}</Text>
+            <Text style={styles.subheader}>{props?.companyName}</Text>
           </View>
 
           <View style={styles.section}>

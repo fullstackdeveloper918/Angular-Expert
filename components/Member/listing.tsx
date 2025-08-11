@@ -127,10 +127,11 @@ const MemberList = ({ response }: any) => {
     }
   };
   const generatePdf = async (data?: any) => {
-    //
+             const companyName = getDisplayNameByKey(data?.company_name);
+
     console.log(data, "asjldjas");
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
-    const blob = await pdf(<Pdf state={data} />).toBlob();
+    const blob = await pdf(<Pdf state={data} companyName={companyName} />).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
@@ -316,7 +317,7 @@ const MemberList = ({ response }: any) => {
   });
   const user_completed_columns = [
     {
-      title: "Order No.",
+      title: "Order No.qqqqqqqqq",
       dataIndex: "key",
       key: "key",
     },

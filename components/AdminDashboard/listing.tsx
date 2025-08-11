@@ -202,11 +202,11 @@ const [error,setError]=useState<any>("")
   };
 
   const generatePdf = async (data?: any) => {
-    //  
-console.log(data,"yrrt");
+
+        const companyName  = getDisplayNameByKey(data?.company_name)
 
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, '');
-    const blob = await pdf(<Pdf state={data} />).toBlob();
+    const blob = await pdf(<Pdf state={data} companyName={companyName}  />).toBlob();
     console.log(blob,"blob");
     
     const pdfUrl = URL.createObjectURL(blob);
@@ -265,7 +265,7 @@ const fetchCompanyData = async () => {
   const downLoadPdf = async (data: any) => {
     console.log(data,"sjlsjdfl");
     
-    const companyName = companyNameData[data?.company_name || ""] || "N/A";
+        const companyName  = getDisplayNameByKey(data?.company_name)
     const { blob, timestamp } = await generatePdf(data);
     saveAs(blob, `${capFirst(companyName)}.pdf`);
   };

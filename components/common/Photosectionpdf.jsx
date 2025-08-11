@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assests/images/logo.png"
 import {
   Page,
@@ -214,32 +214,11 @@ const styles = StyleSheet.create({
 const PhotoSectionPdf = (props) => {
   const photoSection = props?.state?.photo_section || [];
 
+
+  console.log(props ,"here to see photo props")
   const options = { httpHeaders: { 'crossOrigin': 'anonymous' }, };
   // <Image key={imageIndex} style={{ width: 100, height: 100 }} options={options} src={{ uri: ${file.url}, method: "GET", headers: { Pragma: 'no-cache', "Cache-Control": "no-cache" }, body: "" }} />
-  const companyNameMap = {
-    "augusta": "Augusta Homes, Inc.",
-    "buffington": "Buffington Homes, L.P.",
-    "cabin": "Cabin John Builders",
-    "cataldo": "Cataldo Custom Builders",
-    "david_campbell": "The DCB",
-    "dc_building": "DC Building Inc.",
-    "Ddenman_construction": "Denman Construction, Inc.",
-    "ellis": "Ellis Custom Homes",
-    "tm_grady_builders": "T.M. Grady Builders",
-    "hardwick": "Hardwick G. C.",
-    "homeSource": "HomeSource Construction",
-    "ed_nikles": "Ed Nikles Custom Builder, Inc.",
-    "olsen": "Olsen Custom Homes",
-    "raykon": "Raykon Construction",
-    "matt_sitra": "Matt Sitra Custom Homes",
-    "schneider": "Schneider Construction, LLC",
-    "shaeffer": "Shaeffer Hyde Construction",
-    "split": "Split Rock Custom Homes",
-    "tiara": "Tiara Sun Development"
-  };
-
-  const companyName = companyNameMap[props?.state?.company_name || ""] || "N/A";
-
+ 
   const newArr = props?.state?.photo_section?.fileUrls?.length && Object.values(props?.state?.photo_section?.fileUrls[0])
 
   return (
@@ -257,7 +236,7 @@ const PhotoSectionPdf = (props) => {
               Member Update / <Text style={{ fontStyle: 'italic', fontSize: 18, textTransform: "capitalize" }}>Fall 2024</Text>
             </Text>
             <Text style={styles.subheader}>
-              {companyName}
+              {props?.companyName}
             </Text>
           </View>
 

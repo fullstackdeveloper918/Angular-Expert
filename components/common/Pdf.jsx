@@ -216,37 +216,16 @@ const styles = StyleSheet.create({
 
 
 const MemberUpdatePDF = (props) => {
-  console.log(props?.state, "props");
+  console.log(props?.state, "props s");
   // console.log(props?.subheadinglist1, "sadas");
 
   const options = { httpHeaders: { crossOrigin: "anonymous" } };
 
 
-  const companyNameMap = {
-  "augusta": "Augusta Homes, Inc.",
-  "buffington": "Buffington Homes, L.P.",
-  "cabin": "Cabin John Builders",
-  "cataldo": "Cataldo Custom Builders",
-  "david_campbell": "The DCB",
-  "dc_building": "DC Building Inc.",
-  "Ddenman_construction": "Denman Construction, Inc.",
-  "ellis": "Ellis Custom Homes",
-  "tm_grady_builders": "T.M. Grady Builders",
-  "hardwick": "Hardwick G. C.",
-  "homeSource": "HomeSource Construction",
-  "ed_nikles": "Ed Nikles Custom Builder, Inc.",
-  "olsen": "Olsen Custom Homes",
-  "raykon": "Raykon Construction",
-  "matt_sitra": "Matt Sitra Custom Homes",
-  "schneider": "Schneider Construction, LLC",
-  "shaeffer": "Shaeffer Hyde Construction",
-  "split": "Split Rock Custom Homes",
-  "tiara": "Tiara Sun Development",
-"hickory_construction,_inc": "Hickory Construction, Inc."
-}
+  // const companyName = companyNameMap[props?.state?.company_name || ""] || "N/A";
 
-  const companyName = companyNameMap[props?.state?.company_name || ""] || "N/A";
 
+  // console.log("game changers", companyName)
   const newArr =
     props?.state?.photo_section?.fileUrls?.length &&
     Object.values(props?.state?.photo_section?.fileUrls[0]);
@@ -284,9 +263,10 @@ const MemberUpdatePDF = (props) => {
     return acc;
   }, {});
   console.log(groupedQuestions, "groupedQuestions");
-  if (!groupedQuestions) {
-    return
-  }
+  // if (!groupedQuestions) {
+  //   return
+  // }
+  console.log("running properly")
   return (
     <>
       <Document>
@@ -316,7 +296,7 @@ const MemberUpdatePDF = (props) => {
                   "Fall 2024"}
               </Text>
             </Text>
-            <Text style={styles.subheader}>{companyName}</Text>
+            <Text style={styles.subheader}>{props?.companyName}</Text>
           </View>
           {props?.state?.logo_url?
           <View style={{ textAlign: "center", display: "block" }}>
@@ -627,7 +607,7 @@ const MemberUpdatePDF = (props) => {
             <Text style={styles.main_heading}>Fall 2024 MEETING REVIEW</Text>
             <View style={styles.goal}>
 
-              {props?.state?.meetingReviews[0].fallmeeting_review_update_questions ?
+              {props?.state?.meetingReviews?.length == 0 || props?.state?.meetingReviews?.length >= 0 ?
                 props?.state?.meetingReviews[0]?.fallmeeting_review_update_questions?.map((res, index) =>
                 (
                   <>

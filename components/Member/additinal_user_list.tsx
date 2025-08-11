@@ -81,27 +81,41 @@ const AdditionalList = () => {
         setSearchTerm(value);
     };
     
-    const companyNameMap:any = {
-        "augusta": "Augusta Homes, Inc.",
-        "buffington": "Buffington Homes, L.P.",
-        "cabin": "Cabin John Builders",
-        "cataldo": "Cataldo Custom Builders",
-        "david_campbell": "The DCB",
-        "dc_building": "DC Building Inc.",
-        "Ddenman_construction": "Denman Construction, Inc.",
-        "ellis": "Ellis Custom Homes",
-        "tm_grady_builders": "T.M. Grady Builders",
-        "hardwick": "Hardwick G. C.",
-        "homeSource": "HomeSource Construction",
-        "ed_nikles": "Ed Nikles Custom Builder, Inc.",
-        "olsen": "Olsen Custom Homes",
-        "raykon": "Raykon Construction",
-        "matt_sitra": "Matt Sitra Custom Homes",
-        "schneider": "Schneider Construction, LLC",
-        "shaeffer": "Shaeffer Hyde Construction",
-        "split": "Split Rock Custom Homes",
-        "tiara": "Tiara Sun Development"
-    };
+      const [companyNameData,setCompanyNameData] = useState<any>("")
+    
+    const fetchCompanyData = async () => {
+        try {
+          const res = await fetch("https://cybersify.tech/sellmacdev/company.php");
+          const data = await res.json();
+    
+          const objectContent = Object.entries(data);
+    
+    
+          console.log(objectContent,"here to se companies")
+          setCompanyNameData(objectContent);
+    
+          // setFilteredData(allNames);
+        } catch (err) {
+          console.log("Failed to fetch companies",err);
+        }
+      };
+    
+      useEffect(() => {
+        fetchCompanyData();
+      },[]);
+    
+       function getDisplayNameByKey(key: string | undefined): string {
+          if (!key) return "N/A";
+    
+          const keyLower = key.toLowerCase();
+    
+          const found = companyNameData.find(
+            ([k, _]: [string, string]) => k.toLowerCase() === keyLower
+          );
+    
+          return found ? found[1] : "N/A";
+        }
+    
     const archive = async (id: any) => {
         const item = {
             user_id: id,
@@ -118,8 +132,10 @@ const AdditionalList = () => {
            
         }
     }
+
+
     const dataSource = state1?.map((res: any, index: number) => {
-        const companyName = companyNameMap[res?.company_name || ""] || "N/A";
+        const companyName  = getDisplayNameByKey(res?.company_name)
         return {
             key: index + 1,
             name: res?.firstname ? `${validation?.capitalizeFirstLetter(res?.firstname)} ${validation?.capitalizeFirstLetter(res?.lastname)}` : "N/A",
