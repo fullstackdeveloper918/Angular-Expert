@@ -325,19 +325,21 @@ const Page1 = ({ questions, subheadinglist }: any) => {
       // form.setFieldsValue(finalData);
 
       console.log(formValues, "getting some values");
-      const questionAnswers =
-        res?.data?.businessUpdate[0]?.business_update_questions?.reduce(
-          (acc: any, question: any) => {
-            acc[`question_${question.question_id}`] = question.answer;
-            return acc;
-          },
-          {}
-        );
-
-      const resValues = {...formValues}
+      const resValues =
         Object.keys(formValues).length > 0
-          ? { ...questionAnswers, ...formValues }
-          : { ...res?.data, ...questionAnswers };
+          ? Object.keys(formValues).reduce((acc: any, key) => {
+              acc[key] = formValues[key];
+              return acc;
+            }, {})
+          : res?.data?.businessUpdate[0]?.business_update_questions?.reduce(
+              (acc: any, question: any) => {
+                console.log(acc, "accaccacc");
+                acc[`question_${question.question_id}`] = question.answer;
+                return acc;
+              },
+              {}
+            );
+      console.log(resValues, "resValues");
 
       form.setFieldsValue(resValues);
     } catch (error: any) {

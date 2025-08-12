@@ -18,7 +18,7 @@ const formSlice = createSlice({
     autoSaveForm: (state, action) => {
       const updatedState = { ...state, ...action.payload };
       // Save to localStorage
-      localStorage.setItem("formData", JSON.stringify(updatedState));
+      // localStorage.setItem("formData", JSON.stringify(updatedState));
       return updatedState;
     },
     clearFormData: () => {
@@ -37,7 +37,7 @@ const formSlice = createSlice({
       });
 
       // Update localStorage with the cleaned data
-      localStorage.setItem("formData", JSON.stringify(updatedState));
+      // localStorage.setItem("formData", JSON.stringify(updatedState));
       return updatedState;
     },
   },

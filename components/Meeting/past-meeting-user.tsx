@@ -167,7 +167,7 @@ const PastMeetingUserList = () => {
 
   const generatePdf = async (data?: any) => {
     const companyName = getDisplayNameByKey(data?.company_name);
-
+console.log(data,"data here to see me new to show")
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
     const blob = await pdf(
       <Pdf1 state={data} companyName={companyName} />

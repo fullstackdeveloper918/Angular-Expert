@@ -309,36 +309,36 @@ const Pdfcopy = (props) => {
               <> 
               <Text style={styles.text}>Current financial position:</Text>
               <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
-                {props?.state?.businessUpdate[0]?.financial_position}
+                {props?.state?.financial_position}
               </Text>
               <Text style={styles.text} wrap={false}>
                 Current sales positions, hot prospects, recently contracted work:
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.businessUpdate[0]?.sales_position}
+                {props?.state?.sales_position}
               </Text>
               <Text style={styles.text}>
                 Accomplishments in the last 6 months:
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.businessUpdate[0]?.accomplishments}
+                {props?.state?.accomplishments}
               </Text>
               <Text style={styles.text}> HR position &/or needs: </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.businessUpdate[0]?.hr_position}
+                {props?.state?.hr_position}
               </Text>
               <Text style={styles.text}>
                 Current challenges (e.g., problem client, personnel issue(s),
                 trade availability, rising costs, supply chain):
               </Text>
               <Text style={styles.textarea} wrap={false}>
-                {props?.state?.businessUpdate[0]?.current_challenges}
+                {props?.state?.current_challenges}
               </Text>
               <Text style={styles.text}>
                 How can the Craftsmen aid or support you with these challenges?
               </Text>
               <Text style={styles.textarea} wrap={true}>
-                {props?.state?.businessUpdate[0]?.craftsmen_support}
+                {props?.state?.craftsmen_support}
               </Text>
             </> 
             
