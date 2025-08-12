@@ -303,8 +303,7 @@ const Page1 = ({ questions, subheadinglist }: any) => {
       console.log(res?.data, "to see api dara new");
       console.log(formValues, "popopo");
 
-      console.log(formValues, " ");
-      console.log(Object.keys(formValues).length > 0, "oioio");
+
 
       // const finalData = {
       //   financial_position:
@@ -324,7 +323,7 @@ const Page1 = ({ questions, subheadinglist }: any) => {
 
       // form.setFieldsValue(finalData);
 
-      console.log(formValues, "getting some values");
+      console.log(res?.data?.businessUpdate, "getting some values bbb");
       const questionAnswers =
         res?.data?.businessUpdate[0]?.business_update_questions?.reduce(
           (acc: any, question: any) => {
@@ -334,11 +333,16 @@ const Page1 = ({ questions, subheadinglist }: any) => {
           {}
         );
 
-      const resValues = {...formValues}
+        console.log(questionAnswers,"questionAnswers to rdee")
+        
+
+      const resValues =
         Object.keys(formValues).length > 0
           ? { ...questionAnswers, ...formValues }
           : { ...res?.data, ...questionAnswers };
 
+
+          console.log(resValues,"value check kr la ")
       form.setFieldsValue(resValues);
     } catch (error: any) {
       // if (error?.status == 500) {
