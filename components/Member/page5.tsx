@@ -247,6 +247,8 @@ const Page5 = ({questions}:any) => {
       //   router.replace("/auth/signin");
       // }
       const dataFromApi = res?.data?.craftsMenUpdates[0] || {};
+
+      console.log(res.data,"dataFromApi to see data")
       const resValues = 
       Object.keys(formValues).length > 0
         ? Object.keys(formValues).reduce((acc: any, key) => {
@@ -277,10 +279,10 @@ const Page5 = ({questions}:any) => {
     }
   };
   useEffect(() => {
-    if (type == "edit") {
+    // if (type == "edit") {
       getDataById();
-    }
-  }, [type, form]);
+    // }
+  }, [form]);
   const onPrevious = () => {
     router.replace(`/admin/member/add/page4?${value}&edit`);
   };

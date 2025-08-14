@@ -190,72 +190,82 @@ const Page3 = ({ questions }: any) => {
   };
   const localLastGoal = localStorage.getItem("LastGoals");
 
-  const getDataById = async () => {
-    const item = {
-      user_id: value,
-      meeting_id: getUserdata.meetings.NextMeeting.id,
-    };
-  
-    try {
-      const res = await api.User.getById(item as any);
-      setState(res?.data || null);
-  
-      // --- LOGGING ---
-      console.log(res?.data?.futureMeetings?.[0]?.goal_next_meeting, "jsladjflsajd");
-  
-      // --- LAST GOALS ---
-      const savedGoalsData = localStorage.getItem("LastGoals");
-      let parsedGoals: any[] = [];
-  
-      try {
-        parsedGoals = savedGoalsData ? JSON.parse(savedGoalsData) : [];
-        if (!Array.isArray(parsedGoals)) parsedGoals = [];
-      } catch (err) {
-        parsedGoals = [];
-      }
-  
-      // If no valid saved goals, fallback to API
-      if (parsedGoals.length === 0) {
-        parsedGoals =
-          res?.data?.lastNextMeetings?.[0]?.goal_next_meeting ||
-          res?.data?.goal_last_meeting ||
-          [];
-      }
-  
-      console.log(res?.data?.lastNextMeetings?.[0]?.goal_next_meeting, "piopioipo");
-      console.log(res?.data, "fsadfqr");
-  
-      const fetchedGoals = parsedGoals;
-      form.setFieldsValue({ last_goals: fetchedGoals });
-  
-      // --- NEXT GOALS ---
-      const savedGoalsData1 = localStorage.getItem("NextGoals");
-      let parsedGoals1: any[] = [];
-  
-      try {
-        parsedGoals1 = savedGoalsData1 ? JSON.parse(savedGoalsData1) : [];
-        if (!Array.isArray(parsedGoals1)) parsedGoals1 = [];
-      } catch (err) {
-        parsedGoals1 = [];
-      }
-      
-      console.log(parsedGoals1,"here to see data")
-      // if (parsedGoals1.length === 0) {
-      //   parsedGoals1 = res?.data?.futureMeetings?.[0]?.goal_next_meeting || [];
-      // }
-  
-      const fetchedGoals1 = res?.data?.futureMeetings?.[0]?.goal_next_meeting || [];
-      console.log(fetchedGoals1, "fetchedGoals1");
-  
-      if (fetchedGoals1 && fetchedGoals1.length > 0) {
-        form.setFieldsValue({ next_goals: parsedGoals1 });
-      }
-  
-    } catch (error: any) {
-      console.error("Error in getDataById:", error);
-    }
+const getDataById = async () => {
+  const item = {
+    user_id: value,
+    meeting_id: getUserdata.meetings.NextMeeting.id,
   };
-  
+
+  try {
+    const res = await api.User.getById(item as any);
+    setState(res?.data || null);
+
+    // --- LAST GOALS ---
+    const savedLastGoals = localStorage.getItem("LastGoals");
+    let parsedLastGoals: any[] = [];
+
+    try {
+      parsedLastGoals = savedLastGoals ? JSON.parse(savedLastGoals) : [];
+      if (!Array.isArray(parsedLastGoals)) parsedLastGoals = [];
+    } catch (err) {
+      parsedLastGoals = [];
+    }
+
+    const apiLastGoals =
+      res?.data?.lastNextMeetings?.[0]?.goal_next_meeting ||
+      res?.data?.goal_last_meeting ||
+      [];
+
+    // Merge with condition: API > LocalStorage
+    const mergedLastGoals = Array.from(
+      { length: Math.max(apiLastGoals.length, parsedLastGoals.length) },
+      (_, index) => {
+        const apiGoal = apiLastGoals[index] || {};
+        const storageGoal = parsedLastGoals[index] || {};
+        return {
+          name: apiGoal.name || storageGoal.name || "",
+          comment: apiGoal.comment || storageGoal.comment || "",
+          status: apiGoal.status || storageGoal.status || "",
+        };
+      }
+    );
+
+    form.setFieldsValue({ last_goals: mergedLastGoals });
+
+    // --- NEXT GOALS ---
+    const savedNextGoals = localStorage.getItem("NextGoals");
+    let parsedNextGoals: any[] = [];
+
+    try {
+      parsedNextGoals = savedNextGoals ? JSON.parse(savedNextGoals) : [];
+      if (!Array.isArray(parsedNextGoals)) parsedNextGoals = [];
+    } catch (err) {
+      parsedNextGoals = [];
+    }
+
+    const apiNextGoals = res?.data?.futureMeetings?.[0]?.goal_next_meeting || [];
+
+    // Merge with condition: API > LocalStorage
+    const mergedNextGoals = Array.from(
+      { length: Math.max(apiNextGoals.length, parsedNextGoals.length) },
+      (_, index) => {
+        const apiGoal = apiNextGoals[index] || {};
+        const storageGoal = parsedNextGoals[index] || {};
+        return {
+          name: apiGoal.name || storageGoal.name || "",
+          to_be_completed_by:
+            apiGoal.to_be_completed_by || storageGoal.to_be_completed_by || "",
+          status: apiGoal.status || storageGoal.status || "",
+        };
+      }
+    );
+
+    form.setFieldsValue({ next_goals: mergedNextGoals });
+  } catch (error: any) {
+    console.error("Error in getDataById:", error);
+  }
+};
+
   
 
   useEffect(() => {

@@ -52,8 +52,7 @@ const Page1 = ({ questions, subheadinglist }: any) => {
   console.log(questions, "ytyt");
   console.log(questions, subheadinglist, "subheadinglist here to see");
   // const filtered_questions = questions?.data?.filter((item:any) => item.page_type === "business_update");
-  const filtered_questions = questions?.data
-    .filter((item: any) => item.page_type === "business_update") // Step 1: Filter by page_type
+  const filtered_questions = questions?.data?.filter((item: any) => item.page_type === "business_update") // Step 1: Filter by page_type
     .sort(
       (a: any, b: any) =>
         parseInt(a.quesiton_position) - parseInt(b.quesiton_position)
@@ -286,6 +285,7 @@ const Page1 = ({ questions, subheadinglist }: any) => {
   };
 
   console.log(formValues, "qwertyuiop");
+
   const getDataById = async () => {
     console.log(formValues, "1231231");
     const item = {
@@ -302,7 +302,6 @@ const Page1 = ({ questions, subheadinglist }: any) => {
       // }
       console.log(res?.data, "to see api dara new");
       console.log(formValues, "popopo");
-
 
 
       // const finalData = {
@@ -340,7 +339,25 @@ const Page1 = ({ questions, subheadinglist }: any) => {
         Object.keys(formValues).length > 0
           ? { ...questionAnswers, ...formValues }
           : { ...res?.data, ...questionAnswers };
+const fields = new Set([
+  ...Object.keys(questionAnswers || {}),
+  ...Object.keys(formValues || {})
+]);
 
+fields.forEach((key) => {
+  const apiValue = questionAnswers?.[key];
+  const formValue = formValues?.[key];
+
+  if (apiValue !== undefined && apiValue !== null && apiValue !== "") {
+    // Use API value if it exists
+    resValues[key] = apiValue;
+  } else {
+    // Otherwise fallback to form value
+    resValues[key] = formValue;
+  }
+});
+
+form.setFieldsValue(resValues);
 
           console.log(resValues,"value check kr la ")
       form.setFieldsValue(resValues);

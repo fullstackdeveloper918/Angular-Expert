@@ -50,7 +50,7 @@ const BusinessEvolution = ({ questions }: any) => {
   const pagetype = entries.length > 2 ? entries[2][0] : "";
 
   const savedFormData = useSelector((state: any) => state.form);
-
+console.log(state,"value of page")
   const [formValues, setFormValues] = useState(savedFormData);
   useAutoSaveForm(formValues, 300);
 
@@ -252,64 +252,50 @@ const BusinessEvolution = ({ questions }: any) => {
   //   getQuestion();
   // }, []);
 
+
+  console.log(formValues,"formValues here to see data of form value")
   const getDataById = async () => {
-    const item = {
-      user_id: value,
-      meeting_id: getUserdata.meetings.NextMeeting.id,
-    };
-    try {
-      const res = await api.User.getById(item as any);
-      setState(res?.data || null);
-      console.log(res?.data, "qwert");
-
-      // if (res?.data?.status == 500) {
-      //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
-      //   localStorage.removeItem("hasReloaded")
-      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-      //   toast.error("Session Expired. Login Again");
-      //   router.replace("/auth/signin");
-      // }
-
-      // Prepare an object to set form values
-      // const resValues = res?.data?.questions.reduce(
-      //   (acc: any, question: any) => {
-      //     acc[`question_${question.question_id}`] = question.answer;
-      //     return acc;
-      //   },
-      //   {}
-      // );
-      const dataFromApi =
-        res?.data?.businessEvolutionIndustryTrendsUpdates[0] || {};
-      const resValues =
-        dataFromApi?.business_evolution_update_industry_trends.reduce(
-          (acc: any, question: any) => {
-            acc[`question_${question.question_id}`] = question.answer;
-            return acc;
-          },
-          {}
-        );
-
-      form.setFieldsValue(resValues);
-    } catch (error: any) {
-      // if (error == 500) {
-      //   // destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: "/" });
-      //   // localStorage.removeItem("hasReloaded");
-      //   // // }
-      //   // toast.error("Session Expired Login Again");
-      //   // router.replace("/auth/signin");
-      //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
-      //   localStorage.removeItem("hasReloaded")
-      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-      //   toast.error("Session Expired. Login Again");
-      //   router.replace("/auth/signin");
-      // }
-    }
+  const item = {
+    user_id: value,
+    meeting_id: getUserdata.meetings.NextMeeting.id,
   };
+
+  try {
+    const res = await api.User.getById(item as any);
+    const dataFromApi = res?.data?.businessEvolutionIndustryTrendsUpdates?.[0] || {};
+      setState(res?.data || null);
+
+    const resValues: Record<string, any> = {};
+
+    // 1️⃣ Add all API fields
+    dataFromApi.business_evolution_update_industry_trends?.forEach((question: any) => {
+      const key = `question_${question.question_id}`;
+      if (question.answer !== undefined && question.answer !== null && question.answer !== "") {
+        resValues[key] = question.answer; // API value
+      }
+    });
+
+    // 2️⃣ Add remaining fields from formValues that are not in API
+    Object.keys(formValues).forEach((key) => {
+      if (!(key in resValues)) {
+        resValues[key] = formValues[key]; // show form value only if API has no value
+      }
+    });
+
+    // 3️⃣ Set values in form
+    form.setFieldsValue(resValues);
+
+  } catch (error: any) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+
   useEffect(() => {
-    if (type == "edit") {
+    // if (type == "edit") {
       getDataById();
-    }
-  }, [type, form]);
+    // }
+  }, [ form]);
   const onPrevious = () => {
     router.replace(`/admin/member/add/well_being_check_in?${value}&edit`);
   };

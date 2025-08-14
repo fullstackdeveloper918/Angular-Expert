@@ -43,6 +43,7 @@ const MeetingView = () => {
   const router = useRouter();
   const getUserdata = useSelector((state: any) => state?.user?.userData);
 
+  console.log(getUserdata,"getUserdata to see")
   const [companyNameData, setCompanyNameData] = useState<any>("");
 
   const fetchCompanyData = async () => {

@@ -256,52 +256,52 @@ const Well_being_ckeck_in = ({ questions }: any) => {
       user_id: value,
       meeting_id: getUserdata.meetings.NextMeeting.id,
     };
+
     try {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
-      console.log(res?.data, "qwert");
 
-      // if (res?.data?.status == 500) {
-      //   localStorage.setItem('redirectAfterLogin', window.location.pathname);
-      //   localStorage.removeItem("hasReloaded")
-      //   destroyCookie(null, "COOKIES_USER_ACCESS_TOKEN", { path: '/' });
-      //   toast.error("Session Expired. Login Again");
-      //   router.replace("/auth/signin");
-      // }
+      console.log( res?.data,"to see my dataa to share")
+      const apiQuestions = res?.data?.personalWellBeingUpdates?.[0]
+          ?.personal_well_being_update_checkup || [];
 
-      // Prepare an object to set form values
-      // const resValues = res?.data?.questions.reduce(
-      //   (acc: any, question: any) => {
-      //     acc[`question_${question.question_id}`] = question.answer;
-      //     return acc;
-      //   },
-      //   {}
-      // );
-      const dataFromApi = res?.data?.personalWellBeingUpdates[0] || {};
-      const resValues =
-        Object.keys(formValues).length > 0
-          ? Object.keys(formValues).reduce((acc: any, key) => {
-              acc[key] = formValues[key];
-              return acc;
-            }, {})
-          : dataFromApi?.personal_well_being_update_checkup.reduce(
-              (acc: any, question: any) => {
-                acc[`question_${question.question_id}`] = question.answer;
-                return acc;
-              },
-              {}
-            );
+      const resValues: Record<string, any> = {};
+
+
+      // Merge field by field: API data has priority, fallback to formValues
+      Object.keys(formValues).forEach((key) => {
+        console.log(resValues,key,"matching data")
+        // Remove prefix only for matching
+        const questionId = key.startsWith("question_") ? key.slice(9) : key;
+
+        console.log(apiQuestions,questionId,"maticjing kaka")
+        // Find API data
+        const apiQuestion = apiQuestions.find(
+          (q: any) => q.question_id === questionId
+        );
+console.log(apiQuestion,"apiQuestion here to ee")
+        if (apiQuestion && apiQuestion.answer && apiQuestion.answer !== "") {
+          resValues[key] = apiQuestion.answer; // use API data
+        } else if (formValues[key] !== undefined && formValues[key] !== null) {
+          resValues[key] = formValues[key]; // fallback
+        } else {
+          resValues[key] = ""; // optional
+        }
+      });
+
+      console.log(resValues, "resValues");
 
       form.setFieldsValue(resValues);
     } catch (error: any) {
-   
+      console.error("Error fetching data:", error);
     }
   };
+
   useEffect(() => {
-    if (type == "edit") {
-      getDataById();
-    }
-  }, [type, form]);
+    // if (type == "edit") {
+    getDataById();
+    // }
+  }, [form]);
   const onPrevious = () => {
     router.replace(`/admin/member/add/page5?${value}&edit`);
   };
@@ -319,18 +319,18 @@ const Well_being_ckeck_in = ({ questions }: any) => {
   return (
     <>
       <Fragment>
-      <ToastContainer
-            className="toast-container-center"
-            position="top-right"
-            autoClose={false} // Disable auto-close
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
+        <ToastContainer
+          className="toast-container-center"
+          position="top-right"
+          autoClose={false} // Disable auto-close
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <section className="club_member">
           <Row justify="center" gutter={[20, 20]} className="heightCenter">
             <Col xs={24} sm={22} md={20} lg={16} xl={14} xxl={12}>
@@ -393,74 +393,74 @@ const Well_being_ckeck_in = ({ questions }: any) => {
                     ))}
 
                     {/* Button  */}
-                   <div className="d-flex mt-3">
-                                        {!pagetype ? (
-                                          <div className="col-2">
-                                            <Button
-                                              size={"large"}
-                                              type="primary"
-                                              className=" "
-                                              loading={loading1}
-                                              onClick={handleSaveClick}
-                                            >
-                                              Save
-                                            </Button>
-                                          </div>
-                                        ) : (
-                                          ""
-                                        )}
-                                        {!pagetype ? (
-                                          <div className=" col-8 d-flex gap-5 justify-content-center">
-                                            {!pagetype ? (
-                                              <Button
-                                                size={"large"}
-                                                type="primary"
-                                                className=" "
-                                                onClick={onPrevious}
-                                              >
-                                                Previous
-                                              </Button>
-                                            ) : (
-                                              ""
-                                            )}
-                                            <Button
-                                              size={"large"}
-                                              type="primary"
-                                              // htmlType="submit"
-                                              className="login-form-button "
-                                              loading={loading}
-                                              onClick={handleSubmitClick}
-                                            >
-                                              Next
-                                              {/* {!pagetype ? "Next" : "Save"} */}
-                                            </Button>
-                                          </div>
-                                        ) : (
-                                          <div className=" col-8 d-flex gap-5 justify-content-center">
-                                            <Button
-                                              size={"large"}
-                                              type="primary"
-                                              className=" "
-                                              onClick={hnandleBack}
-                                            >
-                                              Back
-                                            </Button>
-                  
-                                            <Button
-                                              size={"large"}
-                                              type="primary"
-                                              disabled={popup}
-                                              style={{ opacity: popup ? "0" : "1" }}
-                                              // htmlType="submit"
-                                              className="login-form-button "
-                                              loading={loading1}
-                                              onClick={handleSaveClick}
-                                            >
-                                              Save
-                                            </Button>
-                                          </div>
-                                        )}
-                                      </div>
+                    <div className="d-flex mt-3">
+                      {!pagetype ? (
+                        <div className="col-2">
+                          <Button
+                            size={"large"}
+                            type="primary"
+                            className=" "
+                            loading={loading1}
+                            onClick={handleSaveClick}
+                          >
+                            Save
+                          </Button>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                      {!pagetype ? (
+                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                          {!pagetype ? (
+                            <Button
+                              size={"large"}
+                              type="primary"
+                              className=" "
+                              onClick={onPrevious}
+                            >
+                              Previous
+                            </Button>
+                          ) : (
+                            ""
+                          )}
+                          <Button
+                            size={"large"}
+                            type="primary"
+                            // htmlType="submit"
+                            className="login-form-button "
+                            loading={loading}
+                            onClick={handleSubmitClick}
+                          >
+                            Next
+                            {/* {!pagetype ? "Next" : "Save"} */}
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className=" col-8 d-flex gap-5 justify-content-center">
+                          <Button
+                            size={"large"}
+                            type="primary"
+                            className=" "
+                            onClick={hnandleBack}
+                          >
+                            Back
+                          </Button>
+
+                          <Button
+                            size={"large"}
+                            type="primary"
+                            disabled={popup}
+                            style={{ opacity: popup ? "0" : "1" }}
+                            // htmlType="submit"
+                            className="login-form-button "
+                            loading={loading1}
+                            onClick={handleSaveClick}
+                          >
+                            Save
+                          </Button>
+                        </div>
+                      )}
+                    </div>
                   </Form>
                 </div>
               </Card>

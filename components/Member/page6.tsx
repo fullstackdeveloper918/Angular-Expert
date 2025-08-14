@@ -11,6 +11,7 @@ import { StepBackwardOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import useAutoSaveForm from "../common/useAutoSaveForm";
 import { clearFormData, clearSpecificFormData } from "@/lib/features/formSlice";
+
 const Page6 = ({ questions }: any) => {
   console.log(questions, "ytaaayt");
   const filtered_questions = questions?.data
@@ -40,6 +41,7 @@ const Page6 = ({ questions }: any) => {
   const [popup, setPopup] = useState<any>(false);
   const savedFormData = useSelector((state: any) => state.form);
   const [formValues, setFormValues] = useState(savedFormData);
+
   useAutoSaveForm(formValues, 300);
   const submit = async (values: any) => {
     if (actionType === "submit") {
@@ -244,20 +246,29 @@ const Page6 = ({ questions }: any) => {
 
       const dataFromApi = res?.data?.meetingReviews[0] || {};
       console.log(dataFromApi, "dataFromApi");
-      const resValues =
-        Object.keys(formValues).length > 0
-          ? Object.keys(formValues).reduce((acc: any, key) => {
-              acc[key] = formValues[key];
-              return acc;
-            }, {})
-          : dataFromApi?.fallmeeting_review_update_questions?.reduce(
-              (acc: any, question: any) => {
-                console.log(acc, "accaccacc");
-                acc[`question_${question.question_id}`] = question.answer;
-                return acc;
-              },
-              {}
-            );
+      const resValues: Record<string, any> = {};
+
+      // 1️⃣ Fill values from API first
+      dataFromApi?.fallmeeting_review_update_questions?.forEach(
+        (question: any) => {
+          const key = `question_${question.question_id}`;
+          if (
+            question.answer !== undefined &&
+            question.answer !== null &&
+            question.answer !== ""
+          ) {
+            resValues[key] = question.answer; // API value takes priority
+          }
+        }
+      );
+
+      // 2️⃣ Fill remaining keys from formValues if not already set by API
+      Object.keys(formValues).forEach((key) => {
+        if (!(key in resValues)) {
+          resValues[key] = formValues[key]; // fallback for blank API fields
+        }
+      });
+
       const finalData = {
         fall_meeting:
           formValues?.fall_meeting || dataFromApi?.fall_meeting || "",
