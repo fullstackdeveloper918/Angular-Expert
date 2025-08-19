@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "../../assests/images/logo.png"
 import {
   Page,
   Text,
@@ -7,280 +6,147 @@ import {
   Image,
   Document,
   StyleSheet,
-  Font 
+  Font,
 } from "@react-pdf/renderer";
+
+// Register font
 Font.register({
-  family: 'Open Sans',
+  family: "Open Sans",
   fonts: [
-  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
-  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf', fontWeight: 600 }
-  ]
-  });
+    {
+      src: "https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf",
+    },
+    {
+      src: "https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf",
+      fontWeight: 600,
+    },
+  ],
+});
 
 const styles = StyleSheet.create({
-  textBold: {
-    fontFamily: "Open Sans",  // Use the registered font family
-    fontWeight: "bold",       // You can also set font weight directly here
-    fontSize: 16,
-    textTransform:"uppercase",
-  },
   page: {
     padding: 20,
-    background: "#fff",
-    break: "auto",
-    overflow: "wrap",
+    backgroundColor: "#fff",
   },
-
   header: {
     fontSize: 15,
     textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    padding: "10",
-    marginBottom: "10px",
+    marginBottom: 10,
   },
   main_heading: {
-    fontSize: "16px",
-    padding: "8px",
+    fontSize: 16,
+    padding: 8,
     textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
     fontWeight: "bold",
     textTransform: "uppercase",
     backgroundColor: "#000",
-    width: "100%",
     color: "#fff",
-    marginBottom: "30px",
-  },
-  itali_text: {
-    fontSize: "13px",
-    fontStyle: "italic",
-    fontWeight: "400",
-    fontFamily: "Roboto",
+    marginBottom: 30,
   },
   subheader: {
     fontSize: 15,
-    marginTop:20 ,
-    textTransform: "capitalize",
+    marginTop: 20,
     textDecoration: "underline",
+    textAlign: "center",
   },
-  subheading: {
-    fontSize: 13,
-    marginBottom: 10,
-    textTransform: "capitalize",
-    textAlign: "left",
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    borderBottom: "3px solid #d2d2d2",
-    marginBottom: "20px",
-    paddingBottom: "10px",
+  textBold: {
     fontFamily: "Open Sans",
+    fontWeight: "bold",
+    fontSize: 16,
+    textTransform: "uppercase",
   },
   text: {
     marginBottom: 8,
     fontSize: 13,
-    color: "#000",
-    break: "auto",
-    overflow: "wrap",
-    fontWeight: "bold",
     fontFamily: "Open Sans",
   },
   textarea: {
-    padding: '2 0 8',
+    padding: 8,
     // border: "1px solid #000",
     marginBottom: 10,
     width: "100%",
-    display: "inline-block",
     fontSize: 11,
-    break: "auto",
     minHeight: 35,
-    overflow: "wrap",
-    fontWeight: "400",
-    color: "#333",
-  },
-  textareanew: {
-    padding: ' 8px ',
-    border: "1px solid #000",
-    marginBottom: 10,
-    width: "100%",
-    display: "inline-block",
-    fontSize: 11,
-    break: "auto",
-    minHeight: 35,
-    overflow: "wrap",
-    fontWeight: "400",
-    color: "#333",
+    fontFamily: "Open Sans",
   },
   goal: {
     marginBottom: 20,
     display: "flex",
     flexDirection: "column",
   },
-
-  div_wrapper: {
-    display: "flex",
-    gap: "30px",
-    width: "100%",
-  },
-  checkbox: {
-    borderWidth: 1,
-    borderColor: "#000",
-    marginRight: 5,
-  },
-  checked: {
-    width: "12px",
-    height: "12px",
-    backgroundColor: "#0000001a",
-    display: "inline-block",
-    border: "1px solid #000",
-    cursor: "pointer",
-    marginRight: 5,
-  },
-  imgg: {
-    margin: "auto",
-    objectFit: "contain",
-    width: "400px",
-    height: "400px",
-  },
-  logoNew: {
-    width: "100%",
-    maxWidth: "100%",
-    margin: "auto",
-  },
-  marginequal: {
-    marginVertical: 10,
-  },
-  flexBox: {
-    display: "flex",
-  },
-  goal_two: {
-    // display: "flex",
-    // gap: 5,
-    width: "100%",
-    // flexWrap:"wrap",
-  },
   memberUpdate: {
     fontWeight: 900,
     fontSize: 24,
   },
-  heightGiven: {
-    minHeight: 550,
-  },
-  heightGiventab: {
-    minHeight: 450,
-  },
-  heightGiventbottom: {
-    minHeight: 390,
-  },
-  heightGivenwrap: {
-    minHeight: 350,
-    marginBottom: '20px',
-  },
-  heightGivenwrapper: {
-    minHeight: 330,
-  },
-  images_div: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "10px",
-    flexDirection: "row",
-  },
-  innderImg: {
-    width: `100%`,
-    maxWidth: "270px",
-    height: "auto",
-    minHeight: "350px",
-    maxHeight: "350px",
-    objectFit: "cover",
-    // flex:'1 0 47%'
-  },
-  footer: {
-    position: "absolute",
-    bottom: 20,
-    left: 0,
-    right: 0,
+  imageWrapper: {
     textAlign: "center",
+    marginVertical: 10,
   },
-  pageNumber: {
-    fontSize: 12,
-    color: "#ff6347", // Change color here (e.g., tomato red)
+  image: {
+    width: "50%",
+    objectFit: "contain",
+    marginVertical: 10,
   },
 });
 
 const MeetingReviewPdf = (props) => {
-  const photoSection = props?.state?.photo_section || [];
+  const state = props?.state || {};
+  const meetingReviews = state?.meetingReviews?.[0];
+  const technologyData = state?.technologyData?.[0];
+  const companyName = props?.companyName || "";
 
-  const options = { httpHeaders: { 'crossOrigin': 'anonymous' }, };
-  // <Image key={imageIndex} style={{ width: 100, height: 100 }} options={options} src={{ uri: ${file.url}, method: "GET", headers: { Pragma: 'no-cache', "Cache-Control": "no-cache" }, body: "" }} />
-  
-  const newArr = props?.state?.photo_section?.fileUrls?.length && Object.values(props?.state?.photo_section?.fileUrls[0])
+  console.log(technologyData,meetingReviews ,"data here  to see of download")
+  const fallMeetingQuestions =
+    meetingReviews?.fallmeeting_review_update_questions || [];
 
   return (
-    <>
-      <Document>
-        <Page size="A4" style={styles.page}>
-          <View style={{ textAlign: "center", display: "block" }}>
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <View style={styles.imageWrapper}>
           <Image
-  src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"
-  style={{ width:"50%", objectFit: 'contain' , textAlign:"center", margin:"10px auto 15px"}}
-  alt="Image"
-/></View>
-          <View style={styles.header}>
-            <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>{props?.state?.technologyData[0]?.fallmeeting_review_update_questions?.length?"Spring 2025":
-                "Fall 2024"}</Text>
-            </Text>
-            <Text style={styles.subheader}>
-              {props?.companyName}
-            </Text>
-          </View>
-          <View style={styles.section}>
-            <Text style={styles.main_heading}>FALL 2024 MEETING REVIEW</Text>
-           <View style={styles.goal}>
-           
-                       {props?.state?.meetingReviews[0].fallmeeting_review_update_questions?
-                       props?.state?.technologyData[0]?.fallmeeting_review_update_questions?.map((res,index)=>
-                       (
-                         <>
-                         <Text style={styles.text} key={index}>{res?.question}</Text>
-                       <Text style={[styles.textarea]} wrap={true}>
-                         {res.answer}
-                       </Text>
-                         </>
-                       )
-                       )
-                       :
-           
-           <>
-                         
-                         <Text style={styles.text}>
-                           What was your most valuable take away from our fall meeting?
-                         </Text>
-                         <Text style={styles.textarea} wrap={true}>
-                           {props?.state?.meetingReviews[0]?.fall_meeting}
-                         </Text>
-           
-                         <Text style={styles.text}>
-                           Have you implemented any of Jim Weber’s estate/financial
-                           planning reccomendations into your business and/or personal
-                           finances?
-                         </Text>
-                         <Text style={styles.textarea} wrap={true}>
-                           {props?.state?.meetingReviews[0]?.personal_finances}
-                         </Text>
-                         </>}
-                       </View>
-          </View>
+            src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"
+            style={styles.image}
+          />
+        </View>
 
-     
+        <View style={styles.header}>
+          <Text style={styles.memberUpdate}>
+            Member Update /{" "}
+            <Text style={{ fontStyle: "italic", fontSize: 18, textTransform: "capitalize" }}>
+              {fallMeetingQuestions.length ? "Spring 2025" : "Fall 2025"}
+            </Text>
+          </Text>
+          <Text style={styles.subheader}>{companyName}</Text>
+        </View>
 
-        </Page>
-      </Document>
-    </>
+        <View>
+          <Text style={styles.main_heading}>FALL 2025 MEETING REVIEW</Text>
+
+          <View style={styles.goal}>
+            {fallMeetingQuestions.length ? (
+              fallMeetingQuestions.map((res, index) => (
+                <React.Fragment key={index}>
+                  <Text style={styles.text}>{res?.question}</Text>
+                  <Text style={styles.textarea}>{res?.answer}</Text>
+                </React.Fragment>
+              ))
+            ) : (
+              <>
+                <Text style={styles.text}>
+                  What was your most valuable take away from our fall meeting?
+                </Text>
+                <Text style={styles.textarea}>{meetingReviews?.fall_meeting}</Text>
+
+                <Text style={styles.text}>
+                  Have you implemented any of Jim Weber’s estate/financial planning recommendations into your business and/or personal finances?
+                </Text>
+                <Text style={styles.textarea}>{meetingReviews?.personal_finances}</Text>
+              </>
+            )}
+          </View>
+        </View>
+      </Page>
+    </Document>
   );
 };
 

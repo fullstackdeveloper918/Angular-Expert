@@ -19,14 +19,14 @@ const Timmer: React.FC<CountdownProps> = ({ endDate }) => {
         const updateCountdown = () => {
             const now = dayjs(); // Current time in the user's local timezone
             const end = dayjs(endDate); // `endDate` is in milliseconds
-            const diff = end.diff(now);
+            const diff = end?.diff(now);
 
             if (diff <= 0) {
                 setTimeRemaining('00:00:00, 0 days');
                 return;
             }
 
-            const duration = dayjs.duration(diff);
+            const duration = dayjs?.duration(diff);
             const days = Math.floor(duration.asDays());
             const hours = duration.hours().toString().padStart(2, '0');
             const minutes = duration.minutes().toString().padStart(2, '0');

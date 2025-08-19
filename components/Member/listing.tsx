@@ -317,7 +317,7 @@ const MemberList = ({ response }: any) => {
   });
   const user_completed_columns = [
     {
-      title: "Order No.qqqqqqqqq",
+      title: "Order No.",
       dataIndex: "key",
       key: "key",
     },

@@ -23,6 +23,7 @@ Font.register({
       fontWeight: "bold",
       fontSize: 16,
       textTransform: "uppercase",
+      marginBottom:"15px"
     },
     page: {
       padding: 20,

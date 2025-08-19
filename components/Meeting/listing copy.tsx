@@ -27,13 +27,6 @@ import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import validation, { capFirst } from "@/utils/validation";
-
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-
 const { Row, Col, Card, Button, Pagination, Tooltip } = {
   Button: dynamic(() => import("antd").then((module) => module.Button), {
     ssr: false,
@@ -131,8 +124,6 @@ const MeetingList = () => {
       //   setAreas
     } catch (error) {}
   };
-  
-  console.log(filteredData,"getting filtered data to checking")
   // const dataSource = filteredData?.length && filteredData
   //     .sort((a: any, b: any) => a.start_meeting_date - b.start_meeting_date)
   //     .map((res: any, index: number) => {
@@ -177,82 +168,99 @@ const MeetingList = () => {
   //         }
   //     })
 
-const dataSource =
-  filteredData?.length &&
-  filteredData
-    .sort((a: any, b: any) => a.start_meeting_date - b.start_meeting_date)
-    .map((res: any, index: number) => {
-      const isHostCompanyValid =
-        res?.host_company?.trim()?.toLowerCase() ===
-        getUserdata?.company_name?.trim().toLowerCase();
+  const dataSource =
+    filteredData?.length &&
+    filteredData
+      .sort((a: any, b: any) => a.start_meeting_date - b.start_meeting_date)
+      .map((res: any, index: number) => {
+        const host_company_match = "cabin";
+        console.log(res, "sdfsdff");
+        // Replace this with dynamic value if needed
+        const isHostCompanyValid =
+          res?.host_company?.trim()?.toLowerCase() ===
+          getUserdata?.company_name?.trim().toLowerCase();
+        console.log(isHostCompanyValid, "isHostCompanyValid");
 
-const tz = res?.meeting_time_zone || "UTC"; // fallback
+        return {
+          key: index + 1,
+          meeting:
+            `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(
+              res?.start_meeting_date
+            ).format("YYYY")}` || "N/A",
+          host_name: capFirst(res?.host) || "N/A",
+          host_city: (
+            <Tooltip title={res?.location}>
+              {res?.location ? `${res?.location.slice(0, 20)}...` : "N/A"}
+            </Tooltip>
+          ),
+          start_date: formatWithOrdinal(res?.start_meeting_date) || "N/A",
+          start_time: dayjs(res?.start_time).format("hh:mm A") || "N/A",
+          end_date: formatWithOrdinal(res?.end_meeting_date) || "N/A",
+          end_time: dayjs(res?.end_time).format("hh:mm A") || "N/A",
+          action: (
+            <ul className="list-unstyled mb-0 gap-3 d-flex">
+              {isHostCompanyValid && (
+                <li>
+                  <Link href={`/admin/meetings/${res?.id}/edit`}>
+                    <Button
+                      type="text"
+                      className="px-0 border-0 bg-transparent shadow-none"
+                      disabled={!isHostCompanyValid}
+                    >
+                      <i className="fa-solid fa-pen-to-square"></i>
+                    </Button>
+                  </Link>
+                </li>
+              )}
+              {getUserdata?.is_admin == false ? (
+                ""
+              ) : (
+                <>
+                  <li>
+                    <Link href={`/admin/meetings/${res?.id}/edit`}>
+                      <Button
+                        type="text"
+                        className="px-0 border-0 bg-transparent shadow-none"
+                        // disabled={!isHostCompanyValid}
+                      >
+                        <i className="fa-solid fa-pen-to-square"></i>
+                      </Button>
+                    </Link>
+                  </li>
 
-const startTimeWithTZ = `${dayjs(res?.start_time)
-  .tz(tz)
-  .format("hh:mm A")} (${tz} UTC${dayjs(res?.start_time).tz(tz).format("Z")})`;
-
-const endTimeWithTZ = `${dayjs(res?.end_time)
-  .tz(tz)
-  .format("hh:mm A")} (${tz} UTC${dayjs(res?.end_time).tz(tz).format("Z")})`;
-
-      return {
-        key: index + 1,
-        meeting: `${validation.capitalizeFirstLetter(res?.meeting_type)} ${dayjs(res?.start_meeting_date).format("YYYY")}` || "N/A",
-        host_name: capFirst(res?.host) || "N/A",
-        host_city: (
-          <Tooltip title={res?.location}>
-            {res?.location ? `${res?.location.slice(0, 20)}...` : "N/A"}
-          </Tooltip>
-        ),
-        start_date: formatWithOrdinal(res?.start_meeting_date) || "N/A",
-        start_time: startTimeWithTZ,
-        end_date: formatWithOrdinal(res?.end_meeting_date) || "N/A",
-        end_time: endTimeWithTZ,
-        action: (
-          <ul className="list-unstyled mb-0 gap-3 d-flex">
-            {isHostCompanyValid && (
+                  <li>
+                    <Popconfirm
+                      title="Delete"
+                      description="Are you sure you want to delete?"
+                      onConfirm={(event: any) => {
+                        archive(res?.id);
+                      }}
+                    >
+                      <Button
+                        type="text"
+                        danger
+                        htmlType="button"
+                        className="px-0"
+                      >
+                        <i className="fa-solid fa-trash-can"></i>
+                      </Button>
+                    </Popconfirm>
+                  </li>
+                </>
+              )}
               <li>
-                <Link href={`/admin/meetings/${res?.id}/edit`}>
-                  <Button
-                    type="text"
-                    className="px-0 border-0 bg-transparent shadow-none"
-                    disabled={!isHostCompanyValid}
-                  >
-                    <i className="fa-solid fa-pen-to-square"></i>
-                  </Button>
+                <Link href={`/admin/meetings/${res?.id}/view`}>
+                  <Tooltip title="View Details">
+                    <Button className="ViewMore">
+                      <EyeOutlined />
+                    </Button>
+                  </Tooltip>
                 </Link>
               </li>
-            )}
-            {getUserdata?.is_admin && (
-              <>
-                <li>
-                  <Popconfirm
-                    title="Delete"
-                    description="Are you sure you want to delete?"
-                    onConfirm={() => archive(res?.id)}
-                  >
-                    <Button type="text" danger className="px-0">
-                      <i className="fa-solid fa-trash-can"></i>
-                    </Button>
-                  </Popconfirm>
-                </li>
-              </>
-            )}
-            <li>
-              <Link href={`/admin/meetings/${res?.id}/view`}>
-                <Tooltip title="View Details">
-                  <Button className="ViewMore">
-                    <EyeOutlined />
-                  </Button>
-                </Tooltip>
-              </Link>
-            </li>
-          </ul>
-        ),
-      };
-    });
-
+            </ul>
+          ),
+        };
+      });
 
   const baseColumns = [
     {

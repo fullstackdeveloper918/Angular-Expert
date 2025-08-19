@@ -253,7 +253,9 @@ const QuestionnairList = () => {
   const generatePdf2 = async () => {
     const companyName = getDisplayNameByKey(state1?.company_name);
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
-    const blob = await pdf(<GoalsPdf state={state1} companyName={companyName} />).toBlob();
+    const blob = await pdf(
+      <GoalsPdf state={state1} companyName={companyName} />
+    ).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
@@ -264,11 +266,15 @@ const QuestionnairList = () => {
     saveAs(blob, `GOALS.pdf`);
     // saveAs(blob, `Order_${timestamp}.pdf`);
   };
+
+  console.log(state1, "here to see state1 here");
   const generatePdf3 = async () => {
-        const companyName = getDisplayNameByKey(state1?.company_name);
+    const companyName = getDisplayNameByKey(state1?.company_name);
 
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
-    const blob = await pdf(<Toolboxpdf state={state1} companyName={companyName} />).toBlob();
+    const blob = await pdf(
+      <Toolboxpdf state={state1} companyName={companyName} />
+    ).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
@@ -279,10 +285,12 @@ const QuestionnairList = () => {
     saveAs(blob, `CRAFTSMEN TOOLBOX.pdf`);
   };
   const generatePdf4 = async () => {
-        const companyName = getDisplayNameByKey(state1?.company_name);
+    const companyName = getDisplayNameByKey(state1?.company_name);
 
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
-    const blob = await pdf(<Craftsmenpdf state={state1} companyName={companyName}/>).toBlob();
+    const blob = await pdf(
+      <Craftsmenpdf state={state1} companyName={companyName} />
+    ).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
@@ -294,10 +302,12 @@ const QuestionnairList = () => {
     // saveAs(blob, `Order_${timestamp}.pdf`);
   };
   const generatePdfWellBeing = async () => {
-            const companyName = getDisplayNameByKey(state1?.company_name);
+    const companyName = getDisplayNameByKey(state1?.company_name);
 
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
-    const blob = await pdf(<PersonalWellBeing state={state1} companyName={companyName} />).toBlob();
+    const blob = await pdf(
+      <PersonalWellBeing state={state1} companyName={companyName} />
+    ).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
@@ -325,10 +335,12 @@ const QuestionnairList = () => {
     // saveAs(blob, `Order_${timestamp}.pdf`);
   };
   const generatePdf5 = async () => {
-        const companyName = getDisplayNameByKey(state1?.company_name);
+    const companyName = getDisplayNameByKey(state1?.company_name);
 
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
-    const blob = await pdf(<MeetingReviewpdf state={state1}  companyName={companyName}/>).toBlob();
+    const blob = await pdf(
+      <MeetingReviewpdf state={state1} companyName={companyName} />
+    ).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
@@ -340,10 +352,12 @@ const QuestionnairList = () => {
     // saveAs(blob, `Order_${timestamp}.pdf`);
   };
   const generatePdf6 = async () => {
-        const companyName = getDisplayNameByKey(state1?.company_name);
+    const companyName = getDisplayNameByKey(state1?.company_name);
 
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
-    const blob = await pdf(<Meetingpreparationpdf state={state1} companyName={companyName} />).toBlob();
+    const blob = await pdf(
+      <Meetingpreparationpdf state={state1} companyName={companyName} />
+    ).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
@@ -355,10 +369,12 @@ const QuestionnairList = () => {
     // saveAs(blob, `Order_${timestamp}.pdf`);
   };
   const generatePdf7 = async () => {
-        const companyName = getDisplayNameByKey(state1?.company_name);
+    const companyName = getDisplayNameByKey(state1?.company_name);
 
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
-    const blob = await pdf(<PhotoSectionPdf state={state1} companyName={companyName} />).toBlob();
+    const blob = await pdf(
+      <PhotoSectionPdf state={state1} companyName={companyName} />
+    ).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };
@@ -370,10 +386,12 @@ const QuestionnairList = () => {
     // saveAs(blob, `Order_${timestamp}.pdf`);
   };
   const generatePdf8 = async () => {
-        const companyName = getDisplayNameByKey(state1?.company_name);
+    const companyName = getDisplayNameByKey(state1?.company_name);
 
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "");
-    const blob = await pdf(<Additionalquestion state={state1} companyName={companyName}/>).toBlob();
+    const blob = await pdf(
+      <Additionalquestion state={state1} companyName={companyName} />
+    ).toBlob();
     const pdfUrl = URL.createObjectURL(blob);
     return { blob, pdfUrl, timestamp };
   };

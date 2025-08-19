@@ -736,6 +736,7 @@ const Add = () => {
                       {/* <Button size={'large'} type="primary" onClick={onPrevious} className="" >
                         Save
                       </Button> */}
+                    
                       <Button
                         size={"large"}
                         type="primary"
@@ -743,7 +744,7 @@ const Add = () => {
                         className="login-form-button "
                         loading={loading}
                       >
-                        Next
+                       {type == "edit" ?  "Update" :"Add"}
                       </Button>
                     </div>
                   </Form>

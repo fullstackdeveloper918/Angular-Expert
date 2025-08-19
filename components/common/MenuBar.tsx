@@ -34,6 +34,7 @@ import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import henceofrthEnums from "../../utils/henceofrthEnums";
+import { useSearchParams } from "next/navigation";
 
 const iconSize = { fontSize: "18px" };
 
@@ -91,6 +92,14 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
     height: window.innerHeight,
   });
   const [openKeys, setOpenKeys] = useState(["sub1"]);
+
+const searchParams = useSearchParams();
+    const isEdit: boolean = searchParams.has("edit");
+  const isQuestionnair: boolean = searchParams.has("questionnair");
+
+
+  console.log("Query param:", isEdit,isQuestionnair);
+
   const getUserdata = useSelector((state: any) => state?.user?.userData);
   console.log(getUserdata, "getUserdata");
 
@@ -154,6 +163,10 @@ const MenuBar = ({ collapsed, setCollapsed }: any) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+
+
+  
 
   // Handler for the link click
   const handleLinkClick = () => {

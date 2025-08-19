@@ -222,7 +222,7 @@ const PersonalWellBeing = (props) => {
   return (
     <>
       <Document>
-        <Page size="A4" style={styles.page}>
+        <Page size="A4" style={styles.page} wrap={false}>
           <View style={{ textAlign: "center", display: "block" }}>
           <Image
   src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"

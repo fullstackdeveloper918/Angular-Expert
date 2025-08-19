@@ -30,8 +30,23 @@ import { pdf } from "@react-pdf/renderer";
 import Pdf from "../common/Pdf";
 import Compressor from "compressorjs";
 import { capFirst } from "@/utils/validation";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 const { Title } = Typography;
+
+type InputPair = {
+  id: string | number;
+  goalName: string;
+  goalLabel: string;
+  projectName: string;
+  projectLabel: string;
+  commentName: string;
+  commentLabel: string;
+  initialComment?: string;
+  initialProject?: string;
+  images?: string[];
+  commentId?: string;
+};
 
 const {
   Row: DynamicRow,
@@ -67,7 +82,7 @@ const Page8 = () => {
   const [imageSrc, setImageSrc] = useState(null);
 
   const [form] = Form.useForm();
-  const [inputPairs, setInputPairs] = useState([
+  const [inputPairs, setInputPairs] = useState<InputPair[]>([
     {
       id: Date.now(),
       goalName: "goalcomment_0",
@@ -78,6 +93,7 @@ const Page8 = () => {
       commentLabel: "comment_0",
     },
   ]);
+
   const [fileLists, setFileLists] = useState<any>({});
   const [uploadedUrls, setUploadedUrls] = useState<Record<string, string[]>>(
     {}
@@ -333,6 +349,7 @@ const Page8 = () => {
             };
           }
         );
+        console.log(response, "getting response check");
         setInputPairs(formattedGoals);
         setScreenLoader(false);
         toast.success("Project successfully deleted", {
@@ -703,25 +720,23 @@ const Page8 = () => {
       const commentKey = fetchedGoals[0]?.commentId || "";
       console.log(fetchedGoals, "fetchedGoals");
 
-      const formattedGoals: any = Object.keys(fetchedGoals[0] || {}).map(
-        (key, index) => {
-          // console.log(key,"key");
-
-          return {
-            id: index,
-            goalName: `goal${key}`,
-            goalLabel: `Project ${key}`,
-            commentName: key,
-            commentLabel: key,
-            projectName: `project_${key}`,
-            projectLabel: `project_${key}`,
-            // initialGoal: key,
-            initialComment: fetchedGoals[0][key]?.comment,
-            initialProject: fetchedGoals[0][key]?.project,
-            images: fetchedGoals[0][key]?.images,
-            commentId: commentKey,
-          };
-        }
+      const formattedGoals = (fetchedGoals as any[]).flatMap(
+        (goalObj: any, goalIndex: number) =>
+          Object.keys(goalObj || {}).map((key, index) => {
+            return {
+              id: `${goalIndex}-${index}`,
+              goalName: `goal${key}`,
+              goalLabel: `Project ${key}`,
+              commentName: key,
+              commentLabel: key,
+              projectName: `project_${key}`,
+              projectLabel: `project_${key}`,
+              initialComment: goalObj[key]?.comment,
+              initialProject: goalObj[key]?.project,
+              images: goalObj[key]?.images,
+              commentId: goalObj.commentId || "",
+            };
+          })
       );
 
       setInputPairs(formattedGoals);
@@ -762,9 +777,9 @@ const Page8 = () => {
   };
 
   React.useEffect(() => {
-    if (type == "edit") {
-      getDataById();
-    }
+    // if (type == "edit") {
+    getDataById();
+    // }
   }, [type, value]);
   const onPrevious = () => {
     router.replace(`/admin/member/add/page7?${value}&edit`);
@@ -852,13 +867,11 @@ const Page8 = () => {
     }
   };
 
-  
   const sharePdf = async (responseData: any) => {
     console.log(responseData, "responseData");
 
     const companyName = getDisplayNameByKey(responseData?.company_name);
 
-    
     // Destructure the result from generatePdf, handle the undefined case
     const result = await generatePdf(responseData);
 
@@ -908,6 +921,16 @@ const Page8 = () => {
     router.back();
   };
   console.log(inputPairs, "inputPairsinputPairs");
+
+  const storage = getStorage();
+  const fileRef = ref(storage, "eb35ef73-790e-4686-b457-1b0c8efa53d4.png");
+
+  getDownloadURL(fileRef)
+    .then((url) => {
+      console.log("Download URL:", url);
+    }).catch((err) => {
+      console.error("Download URL: error", err);
+    });
 
   return (
     <>
