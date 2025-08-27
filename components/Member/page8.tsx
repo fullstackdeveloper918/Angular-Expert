@@ -202,57 +202,57 @@ const Page8 = () => {
       reader.readAsDataURL(file);
     });
   };
+
+
   const handleFileChange = async (info: any, id: any, pair: any) => {
-    if (info.file.status === "removed") {
-      await handleDelete(info.file, pair);
-      const newFileLists = { ...fileLists, [id]: info.fileList };
-      setFileLists(newFileLists);
-      return;
-    } else if (
-      info.file.status === "done" &&
-      info.file.originFileObj?.size >= 10 * 1024 * 1024
-    ) {
+  let newFileList = [...info.fileList];
+
+  // Remove files that are too large or errored
+  newFileList = newFileList.filter(file => {
+    if (file.size >= 10 * 1024 * 1024) {
       toast.error("Please upload an image smaller than 10 MB.", {
         position: "top-center",
         autoClose: 1500,
       });
-      return;
-    } else {
-      if (info.file.status === "done") {
-        try {
-          const compressedPngFile = await convertAndCompressToPNG(
-            info.file.originFileObj
-          );
+      return false; // remove from list
+    }
+    if (file.status === "error") {
+      return false; // remove failed files
+    }
+    return true;
+  });
 
-          const newFileList = [...info.fileList];
-          const index = newFileList.findIndex(
-            (file: any) => file.uid === info.file.uid
-          );
-          if (index !== -1) {
-            newFileList[index] = {
-              ...info.fileList[index],
-              originFileObj: compressedPngFile,
-              url: URL.createObjectURL(compressedPngFile),
-            };
-          }
+  // Handle removed file
+  if (info.file.status === "removed") {
+    await handleDelete(info.file, pair);
+  }
 
-          const newFileLists = { ...fileLists, [id]: newFileList };
-          setFileLists(newFileLists);
-        } catch (error) {
-          toast.error("Error converting and compressing the file to PNG.", {
-            position: "top-center",
-            autoClose: 1500,
-          });
-        }
-        return;
-      }
-
-      if (info.file.status === "done" || info.file.status === "uploading") {
-        const newFileLists = { ...fileLists, [id]: info.fileList };
-        setFileLists(newFileLists);
+  // Convert & compress PNG for successfully uploaded files
+  for (let i = 0; i < newFileList.length; i++) {
+    const file = newFileList[i];
+    if (file.status === "done" && file.originFileObj) {
+      try {
+        const compressedPngFile = await convertAndCompressToPNG(file.originFileObj);
+        newFileList[i] = {
+          ...file,
+          originFileObj: compressedPngFile,
+          url: URL.createObjectURL(compressedPngFile),
+        };
+      } catch (error) {
+        toast.error("Error converting and compressing the file to PNG.", {
+          position: "top-center",
+          autoClose: 1500,
+        });
+        // remove file if conversion fails
+        newFileList.splice(i, 1);
+        i--;
       }
     }
-  };
+  }
+
+  // Update state
+  setFileLists({ ...fileLists, [id]: newFileList });
+};
 
   // Function to convert image file to PNG format
   // const convertToPNG = (file: File): Promise<File> => {
@@ -299,21 +299,34 @@ const Page8 = () => {
     setShowToast(false);
   };
 
-  const addInputPair = () => {
-    const newId = Date.now();
-    setInputPairs([
-      ...inputPairs,
-      {
-        id: newId,
-        goalName: `goal${newId}`,
-        goalLabel: `Project comment_${inputPairs.length}`,
-        commentName: `comment${newId}`,
-        commentLabel: `comment_${inputPairs.length}`,
-        projectName: `project${newId}`,
-        projectLabel: `project_${inputPairs.length}`,
-      },
-    ]);
-  };
+const addInputPair = () => {
+  const newId = Date.now();
+  // Get the last item in the inputPairs array
+  const lastPair = inputPairs[inputPairs.length - 1];
+  // Determine the next number for labels
+  let nextNumber = 0;
+  if (lastPair) {
+    // Extract number from last commentLabel (assuming format 'comment_X')
+    const matchComment = lastPair.commentLabel.match(/_(\d+)$/);
+    const matchProject = lastPair.projectLabel.match(/_(\d+)$/);
+    const lastNumberComment = matchComment ? parseInt(matchComment[1]) : 0;
+    const lastNumberProject = matchProject ? parseInt(matchProject[1]) : 0;
+    nextNumber = Math.max(lastNumberComment, lastNumberProject) + 1;
+  }
+
+  setInputPairs([
+    ...inputPairs,
+    {
+      id: newId,
+      goalName: `goal${newId}`,
+      goalLabel: `Project comment_${nextNumber}`,
+      commentName: `comment${newId}`,
+      commentLabel: `comment_${nextNumber}`,
+      projectName: `project${newId}`,
+      projectLabel: `project_${nextNumber}`,
+    },
+  ]);
+};
 
   const removeInputPair = async (id: number, comment_key: any) => {
     setScreenLoader(true);
@@ -352,6 +365,7 @@ const Page8 = () => {
         console.log(response, "getting response check");
         setInputPairs(formattedGoals);
         setScreenLoader(false);
+        getDataById()
         toast.success("Project successfully deleted", {
           position: "top-center",
           autoClose: 400,
@@ -374,12 +388,15 @@ const Page8 = () => {
   const value = entries.length > 0 ? entries[0][0] : "";
   const type = entries.length > 1 ? entries[1][0] : "";
   const pagetype = entries.length > 2 ? entries[2][0] : "";
+
+  
   async function convertUrlToBlob(url: any) {
     const response = await fetch(url);
     const blob = await response.blob();
     return blob;
   }
 
+  console.log(inputPairs,"inputPairs see")
   // const convertToPng = async (
   //   file: File,
   //   targetSizeMB: number = 1
@@ -445,6 +462,7 @@ const Page8 = () => {
           formData.append("meeting_id", getUserdata.meetings.NextMeeting.id);
           formData.append("is_save", "false");
           for (const item of inputPairs) {
+            console.log(item?.commentLabel, values[item?.commentName])
             formData.append(`${item?.commentLabel}`, values[item?.commentName]);
             formData.append(`${item?.projectLabel}`, values[item?.projectName]);
 
@@ -727,8 +745,8 @@ const Page8 = () => {
               id: `${goalIndex}-${index}`,
               goalName: `goal${key}`,
               goalLabel: `Project ${key}`,
-              commentName: key,
-              commentLabel: key,
+              commentName: `${key}`,
+              commentLabel: `${key}`,
               projectName: `project_${key}`,
               projectLabel: `project_${key}`,
               initialComment: goalObj[key]?.comment,
