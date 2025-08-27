@@ -33,6 +33,8 @@ const Page7 = ({ questions }: any) => {
   // Auto-save form every 300ms
   useAutoSaveForm(formValues, 300);
 
+
+  console.log(questions,"questions here to see data")
   // Filter and sort questions
   const filteredQuestions = questions?.data
     ?.filter((item: any) => item.page_type === "roundtable")
@@ -119,20 +121,42 @@ const Page7 = ({ questions }: any) => {
     }
   };
 
+  console.log(filteredQuestions,"filteredQuestions new data")
+
   const submit = async (values: any) => {
+    console.log(values,"values share to me");
+
     const fieldsToClear = ["estimating", "accountability", "productivity"];
-    const roundTableData = filteredQuestions.map((q: any) => {
-      // Ensure the answer exists before sending
-      const answer = values[`question_${q.id}`] || ""; // Default to empty if not filled
-      return {
-        question_id: q.id,
-        question: q.question,
-        answer: answer, // Use the correct answer from the form
-        question_position: q.question_position,
-        subheading_id: q.subheading_id || "",
-        subheading_title: q.subheading_title || "",
-      };
-    });
+   const roundTableData = [
+    {
+      question_id: "estimating",
+      question: "First roundtable topic",
+      answer: values?.estimating || "",
+      question_position: "0",
+    },
+    {
+      question_id: "accountability",
+      question: "Second roundtable topic",
+      answer: values?.accountability || "",
+      question_position: "1",
+    },
+    {
+      question_id: "productivity",
+      question: "Third roundtable topic",
+      answer: values?.productivity || "",
+      question_position: "2",
+    },
+    ...filteredQuestions.map((q: any, index: number) => ({
+      question_id: q.id,
+      question: q.question,
+      answer: values[`question_${q.id}`] || "",
+      question_position: (index + 3).toString(), // continue numbering
+      subheading_id: q.subheading_id || "",
+      subheading_title: q.subheading_title || "",
+    })),
+  ];
+    console.log(roundTableData,"roundTableData here to see")
+
 
     const items = {
       spring_meeting: {
