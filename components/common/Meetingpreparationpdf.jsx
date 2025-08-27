@@ -185,9 +185,7 @@ const styles = StyleSheet.create({
     minHeight: 350,
     marginBottom: "20px",
   },
-  heightGivenwrapper: {
-    minHeight: 330,
-  },
+
   images_div: {
     display: "flex",
     flexWrap: "wrap",
@@ -266,11 +264,11 @@ const MeetingPreparationPdf = (props) => {
                 ROUNDTABLE TOPICS
               </Text>
               <Text style={styles.subheading}>
-                LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER WITH SPRING
-                MEETING (IN ORDER OF IMPORTANCE)
+                 LIST THREE ROUNDTABLE TOPICS TO DISCUSS AT THE UPCOMING MEETING
+                   
               </Text>
               <View style={styles.goal}>
-                <Text style={styles.text}>First roundtable topic</Text>
+                {/* <Text style={styles.text}>First roundtable topic</Text>
                 <Text style={styles.textarea} wrap={false}>
                   {props?.state?.roundTableTopics[0]?.estimating}
                 </Text>
@@ -281,16 +279,16 @@ const MeetingPreparationPdf = (props) => {
                 <Text style={styles.text}>Third roundtable topic</Text>
                 <Text style={styles.textarea} wrap={false}>
                   {props?.state?.roundTableTopics[0]?.productivity}
-                </Text>
+                </Text> */}
 
                 {props?.state?.roundTableTopics[0]?.round_table?.map(
                   (res, index) => (
                     <>
-                      <Text style={styles.text} key={index}>
+                      <Text  style={styles.text} key={index} wrap={false}>
                         {res?.question}
                       </Text>
                       <Text
-                        style={[styles.textarea, styles.heightGivenwrapper]}
+                        style={[styles.textarea]}
                         wrap={false}
                       >
                         {res.answer}
@@ -307,8 +305,8 @@ const MeetingPreparationPdf = (props) => {
                 Spring 2025 MEETING PREPARATION
               </Text>
               <Text style={styles.subheading}>
-                LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER WITH SPRING
-                MEETING (IN ORDER OF IMPORTANCE)
+                 LIST THREE ROUNDTABLE TOPICS TO DISCUSS AT THE UPCOMING MEETING
+                   
               </Text>
               <View style={styles.goal}>
                 <Text style={styles.textarea} wrap={true}>
@@ -330,7 +328,7 @@ const MeetingPreparationPdf = (props) => {
             </Text>
             <Text style={styles.subheading}>
               LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER WITH SPRING
-              MEETING (IN ORDER OF IMPORTANCE)
+              MEETING  
             </Text>
             <View style={styles.goal}>
               <Text style={styles.textarea}>

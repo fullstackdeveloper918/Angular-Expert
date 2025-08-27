@@ -335,14 +335,33 @@ const Page1 = ({ questions, subheadinglist }: any) => {
         console.log(questionAnswers,"questionAnswers to rdee")
         
 
-      const resValues =
-        Object.keys(formValues).length > 0
-          ? { ...questionAnswers, ...formValues }
-          : { ...res?.data, ...questionAnswers };
+    // Merge API data and form values
+const resValues = {
+  ...dataFromApi?.craftsmen_checkup_update_questions?.reduce(
+    (acc: any, question: any) => {
+      acc[`question_${question.question_id}`] = question.answer;
+      return acc;
+    },
+    {}
+  ),
+  ...formValues, // formValues overwrite API data if exists
+};
+
+// Get all field keys
 const fields = new Set([
-  ...Object.keys(questionAnswers || {}),
-  ...Object.keys(formValues || {})
+  ...Object.keys(
+    dataFromApi?.craftsmen_checkup_update_questions?.reduce(
+      (acc: any, question: any) => {
+        acc[`question_${question.question_id}`] = question.answer;
+        return acc;
+      },
+      {}
+    ) || {}
+  ),
+  ...Object.keys(formValues || {}),
 ]);
+
+console.log(resValues, fields);
 
 fields.forEach((key) => {
   const apiValue = questionAnswers?.[key];

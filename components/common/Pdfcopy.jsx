@@ -595,8 +595,8 @@ const Pdfcopy = (props) => {
                 ROUNDTABLE TOPICS
               </Text>
               <Text style={styles.subheading}>
-                LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER WITH SPRING
-                MEETING (IN ORDER OF IMPORTANCE)
+                 LIST THREE ROUNDTABLE TOPICS TO DISCUSS AT THE UPCOMING MEETING
+                   
               </Text>
               <View style={styles.goal}>
                 <Text style={styles.text}>
@@ -638,8 +638,8 @@ const Pdfcopy = (props) => {
                 Spring 2025 MEETING PREPARATION
               </Text>
               <Text style={styles.subheading}>
-                LIST THREE ROUNDTABLE TOPICS THAT YOU WANT TO COVER WITH SPRING
-                MEETING (IN ORDER OF IMPORTANCE)
+                 LIST THREE ROUNDTABLE TOPICS TO DISCUSS AT THE UPCOMING MEETING
+                   
               </Text>
               <View style={styles.goal}>
                 <Text style={styles.textarea} wrap={false}>

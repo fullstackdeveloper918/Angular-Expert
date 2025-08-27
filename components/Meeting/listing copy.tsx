@@ -19,7 +19,7 @@ import { parseCookies, destroyCookie } from "nookies";
 import Link from "next/link";
 import { EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
-import MainLayout from "../../components/Layout/layout";
+import MainLayout from "../Layout/layout";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import FilterSelect from "@/components/common/FilterSelect";
 import dayjs from "dayjs";

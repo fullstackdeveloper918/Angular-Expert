@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../assests/images/logo.png"
+import logo from "../../assests/images/logo.png";
 import {
   Page,
   Text,
@@ -7,22 +7,27 @@ import {
   Image,
   Document,
   StyleSheet,
-  Font 
+  Font,
 } from "@react-pdf/renderer";
 Font.register({
-  family: 'Open Sans',
+  family: "Open Sans",
   fonts: [
-  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
-  { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf', fontWeight: 600 }
-  ]
-  });
+    {
+      src: "https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf",
+    },
+    {
+      src: "https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf",
+      fontWeight: 600,
+    },
+  ],
+});
 
 const styles = StyleSheet.create({
   textBold: {
-    fontFamily: "Open Sans",  // Use the registered font family
-    fontWeight: "bold",       // You can also set font weight directly here
+    fontFamily: "Open Sans", // Use the registered font family
+    fontWeight: "bold", // You can also set font weight directly here
     fontSize: 16,
-    textTransform:"uppercase",
+    textTransform: "uppercase",
   },
   page: {
     padding: 20,
@@ -64,7 +69,7 @@ const styles = StyleSheet.create({
   },
   subheader: {
     fontSize: 15,
-    marginTop:20 ,
+    marginTop: 20,
     textTransform: "capitalize",
     textDecoration: "underline",
   },
@@ -90,7 +95,7 @@ const styles = StyleSheet.create({
     fontFamily: "Open Sans",
   },
   textarea: {
-    padding: '2 0 8',
+    padding: "2 0 8",
     // border: "1px solid #000",
     marginBottom: 10,
     width: "100%",
@@ -103,7 +108,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   textareanew: {
-    padding: ' 8px ',
+    padding: " 8px ",
     border: "1px solid #000",
     marginBottom: 10,
     width: "100%",
@@ -178,7 +183,7 @@ const styles = StyleSheet.create({
   },
   heightGivenwrap: {
     minHeight: 350,
-    marginBottom: '20px',
+    marginBottom: "20px",
   },
   heightGivenwrapper: {
     minHeight: 330,
@@ -214,50 +219,74 @@ const styles = StyleSheet.create({
 const PersonalWellBeing = (props) => {
   const photoSection = props?.state?.photo_section || [];
 
-  const options = { httpHeaders: { 'crossOrigin': 'anonymous' }, };
+  const options = { httpHeaders: { crossOrigin: "anonymous" } };
   // <Image key={imageIndex} style={{ width: 100, height: 100 }} options={options} src={{ uri: ${file.url}, method: "GET", headers: { Pragma: 'no-cache', "Cache-Control": "no-cache" }, body: "" }} />
- 
-  const newArr = props?.state?.photo_section?.fileUrls?.length && Object.values(props?.state?.photo_section?.fileUrls[0])
+
+  const newArr =
+    props?.state?.photo_section?.fileUrls?.length &&
+    Object.values(props?.state?.photo_section?.fileUrls[0]);
 
   return (
     <>
       <Document>
         <Page size="A4" style={styles.page} wrap={false}>
           <View style={{ textAlign: "center", display: "block" }}>
-          <Image
-  src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"
-  style={{ width:"50%", objectFit: 'contain' , textAlign:"center", margin:"10px auto 15px"}}
-  alt="Image"
-/></View>
+            <Image
+              src="https://firebasestorage.googleapis.com/v0/b/craftsmen-cadd2.appspot.com/o/image%20(3)%20(1).png?alt=media&token=c033130e-7304-4715-980e-95f25f3501aa"
+              style={{
+                width: "50%",
+                objectFit: "contain",
+                textAlign: "center",
+                margin: "10px auto 15px",
+              }}
+              alt="Image"
+            />
+          </View>
           <View style={styles.header}>
             <Text style={styles.memberUpdate}>
-              Member Update / <Text style={{ fontStyle: 'italic', fontSize:18,textTransform:"capitalize" }}>{props?.state?.technologyData[0]?.craftsmen_toolbox_update_questions?.length?"Spring 2025":
-                "Fall 2024"}</Text>
+              Member Update /{" "}
+              <Text
+                style={{
+                  fontStyle: "italic",
+                  fontSize: 18,
+                  textTransform: "capitalize",
+                }}
+              >
+                {props?.state?.technologyData[0]
+                  ?.craftsmen_toolbox_update_questions?.length
+                  ? "Spring 2025"
+                  : "Fall 2024"}
+              </Text>
             </Text>
-            <Text style={styles.subheader}>
-              {props?.companyName}
-            </Text>
+            <Text style={styles.subheader}>{props?.companyName}</Text>
           </View>
 
           <View style={styles.section}>
-                      {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
-                      <Text style={styles.main_heading}>PERSONAL WELL-BEING CHECK-IN</Text>
-                      <View style={styles.goal}>
-          
-                        {props?.state?.personalWellBeingUpdates[0].personal_well_being_update_checkup ?
-                          props?.state?.personalWellBeingUpdates[0].personal_well_being_update_checkup?.map((res, index) =>
-                          (
-                            <>
-                              <Text style={styles.text} key={index}>{res?.question}</Text>
-                              <Text style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}>
-                                {res.answer}
-                              </Text>
-                            </>
-                          )
-                          )
-                        :""}
-                      </View>
-                    </View>
+            {/* <Text style={styles.main_heading}>{meeting_review_month} {meeting_review_year} MEETING REVIEW</Text> */}
+            <Text style={styles.main_heading}>
+              PERSONAL WELL-BEING CHECK-IN
+            </Text>
+            <View style={styles.goal}>
+              {props?.state?.personalWellBeingUpdates[0]
+                .personal_well_being_update_checkup
+                ? props?.state?.personalWellBeingUpdates[0].personal_well_being_update_checkup?.map(
+                    (res, index) => (
+                      <>
+                        <Text style={styles.text} key={index}>
+                          {res?.question}
+                        </Text>
+                        <Text
+                          style={[styles.textarea, styles.heightGivenwrapper]}
+                          wrap={false}
+                        >
+                          {res.answer}
+                        </Text>
+                      </>
+                    )
+                  )
+                : ""}
+            </View>
+          </View>
         </Page>
       </Document>
     </>
