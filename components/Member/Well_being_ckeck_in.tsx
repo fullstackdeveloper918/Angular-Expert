@@ -261,33 +261,36 @@ const Well_being_ckeck_in = ({ questions }: any) => {
       const res = await api.User.getById(item as any);
       setState(res?.data || null);
 
-      console.log( res?.data,"to see my dataa to share")
-      const apiQuestions = res?.data?.personalWellBeingUpdates?.[0]
+      console.log(res?.data?.personalWellBeingUpdates, "to see my dataa to share");
+      const apiQuestions =
+        res?.data?.personalWellBeingUpdates?.[0]
           ?.personal_well_being_update_checkup || [];
 
-      const resValues: Record<string, any> = {};
+      console.log(apiQuestions,form, "giving data to check");
+     const apiValues = (
+        apiQuestions || []
+      ).reduce((acc: any, question: any) => {
+        acc[`question_${question.question_id}`] =
+          question.answer ||
+          formValues?.[`question_${question.question_id}`] ||
+          "";
+        return acc;
+      }, {});
 
+      // Merge in any additional formValues that don't exist in API
+      const resValues = {
+        ...apiValues,
+        ...formValues,
+      };
 
-      // Merge field by field: API data has priority, fallback to formValues
-      Object.keys(formValues).forEach((key) => {
-        console.log(resValues,key,"matching data")
-        // Remove prefix only for matching
-        const questionId = key.startsWith("question_") ? key.slice(9) : key;
+      // const finalData = {
+      //   commitment: formValues?.commitment || dataFromApi?.commitment,
+      //   contribute: formValues?.contribute || dataFromApi?.contribute,
+      //   wellbeing: formValues?.wellbeing || dataFromApi?.wellbeing,
+      //   contact_info: formValues?.contact_info || dataFromApi?.contact_info,
+      // };
 
-        console.log(apiQuestions,questionId,"maticjing kaka")
-        // Find API data
-        const apiQuestion = apiQuestions.find(
-          (q: any) => q.question_id === questionId
-        );
-console.log(apiQuestion,"apiQuestion here to ee")
-        if (apiQuestion && apiQuestion.answer && apiQuestion.answer !== "") {
-          resValues[key] = apiQuestion.answer; // use API data
-        } else if (formValues[key] !== undefined && formValues[key] !== null) {
-          resValues[key] = formValues[key]; // fallback
-        } else {
-          resValues[key] = ""; // optional
-        }
-      });
+      form.setFieldsValue(resValues);
 
       console.log(resValues, "resValues");
 
@@ -302,7 +305,7 @@ console.log(apiQuestion,"apiQuestion here to ee")
     getDataById();
     // }
   }, [form]);
-  
+
   const onPrevious = () => {
     router.replace(`/admin/member/add/page5?${value}&edit`);
   };
