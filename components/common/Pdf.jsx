@@ -424,25 +424,23 @@ const MemberUpdatePDF = (props) => {
                   <View style={styles.div_per}>
                     <View style={styles.Flex_div}>
                       <Text style={styles.text} wrap={false}>
-                        {" "}
                         Business Goal #{index + 1}:{" "}
                       </Text>
-                      <Text style={styles.textareanew} wrap={false}>
+                      <Text style={[styles.textarea]} wrap={false}>
                         {res?.name}
                       </Text>
                     </View>
                     <View style={styles.Flex_div}>
-                      <Text style={styles.text}> Priority: </Text>
-                      <Text style={styles.textareanew} wrap={true}>
+                      <Text style={styles.text}>Priority: </Text>
+                      <Text style={[styles.textarea]} wrap={true}>
                           {res?.status}   
                       </Text>
                     </View>
                     <View style={styles.Flex_div}>
                       <Text style={styles.text} wrap={true}>
-                        {" "}
                         To be Completed By:
                       </Text>
-                      <Text style={styles.textareanew} wrap={true}>
+                      <Text style={[styles.textarea]} wrap={true}>
                         {res?.to_be_completed_by}
                       </Text>
                     </View>
@@ -455,26 +453,22 @@ const MemberUpdatePDF = (props) => {
                 <View style={styles.goal} key={index}>
                   <View style={styles.div_per}>
                     <View style={styles.Flex_div}>
-                      <Text style={styles.text} wrap={false}>
-                        {" "}
-                        Personal Goal:{" "}
+                      <Text style={styles.text} wrap={false}>Personal Goal:{" "}
                       </Text>
-                      <Text style={styles.textareanew} wrap={false}>
+                      <Text style={styles.textarea} wrap={false}>
                         {res?.name}
                       </Text>
                     </View>
                     <View style={styles.Flex_div}>
-                      <Text style={styles.text}> Priority: </Text>
-                      <Text style={styles.textareanew} wrap={true}>
+                      <Text style={styles.text}>Priority: </Text>
+                      <Text style={styles.textarea} wrap={true}>
                           {res?.status}   
                       </Text>
                     </View>
                     <View style={styles.Flex_div}>
-                      <Text style={styles.text} wrap={true}>
-                        {" "}
-                        To be Completed By:
+                      <Text style={styles.text} wrap={true}>To be Completed By:
                       </Text>
-                      <Text style={styles.textareanew} wrap={true}>
+                      <Text style={styles.textarea} wrap={true}>
                         {res?.to_be_completed_by}
                       </Text>
                     </View>
@@ -493,9 +487,7 @@ const MemberUpdatePDF = (props) => {
                     <>
                       <Text style={styles.heading}>Question:</Text>
 
-                      <Text style={styles.text} key={index}>
-                        {" "}
-                        {res?.question}
+                      <Text style={styles.text} key={index}>{res?.question}
                       </Text>
                       <Text
                         // style={[styles.textarea, styles.heightGivenwrapper]} wrap={false}

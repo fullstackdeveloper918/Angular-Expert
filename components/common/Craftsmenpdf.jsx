@@ -250,7 +250,7 @@ const CraftsmenPdf = (props) => {
                           <Text style={styles.text} key={index}>{res?.question}</Text>
                         <Text style={[styles.textarea]} wrap={true}>
                           {res.answer}
-                        </Text>
+                        </Text> 
                           </>
                         )
                         )
