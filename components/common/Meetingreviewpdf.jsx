@@ -55,19 +55,41 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textTransform: "uppercase",
   },
-  text: {
+  // text: {
+  //   marginBottom: 8,
+  //   fontSize: 13,
+  //   fontFamily: "Open Sans",
+  // },
+  // textarea: {
+  //   padding: 8,
+  //   // border: "1px solid #000",
+  //   marginBottom: 10,
+  //   width: "100%",
+  //   fontSize: 11,
+  //   minHeight: 35,
+  //   fontFamily: "Open Sans",
+  // },
+     text: {
     marginBottom: 8,
     fontSize: 13,
+    color: "#000",
+    break: "auto",
+    overflow: "wrap",
+    fontWeight: "bold",
     fontFamily: "Open Sans",
   },
   textarea: {
-    padding: 8,
+    padding: '2 0 8',
     // border: "1px solid #000",
     marginBottom: 10,
     width: "100%",
+    display: "inline-block",
     fontSize: 11,
+    break: "auto",
     minHeight: 35,
-    fontFamily: "Open Sans",
+    overflow: "wrap",
+    fontWeight: "400",
+    color: "#333",
   },
   goal: {
     marginBottom: 20,
@@ -127,7 +149,7 @@ const MeetingReviewPdf = (props) => {
               fallMeetingQuestions.map((res, index) => (
                 <React.Fragment key={index}>
                   <Text style={styles.text}>{res?.question}</Text>
-                  <Text style={styles.textarea}>{res?.answer}</Text>
+                  <Text style={[styles.textarea]}>{res?.answer}</Text>
                 </React.Fragment>
               ))
             ) : (

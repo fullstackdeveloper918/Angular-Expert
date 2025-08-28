@@ -54,9 +54,8 @@ const styles = StyleSheet.create({
   answer: {
     fontSize: 12,
     marginBottom: 15,
-    border: "1px solid #000",
+    // border: "1px solid #000",
     marginTop: 5,
-    padding: 10,
   },
   section: {
     marginBottom: 20,
@@ -74,6 +73,29 @@ const styles = StyleSheet.create({
     width: "100%",
     color: "#fff",
     marginBottom: "30px",
+  },
+
+   text: {
+    marginBottom: 8,
+    fontSize: 13,
+    color: "#000",
+    break: "auto",
+    overflow: "wrap",
+    fontWeight: "bold",
+    fontFamily: "Open Sans",
+  },
+  textarea: {
+    padding: '2 0 8',
+    // border: "1px solid #000",
+    marginBottom: 10,
+    width: "100%",
+    display: "inline-block",
+    fontSize: 11,
+    break: "auto",
+    minHeight: 35,
+    overflow: "wrap",
+    fontWeight: "400",
+    color: "#333",
   },
 });
 
@@ -142,12 +164,12 @@ const BussinessPDF = (props) => {
 
               {/* Render questions and answers for this subheading */}
               {groupedQuestions[subheadingTitle].map((res, index) => (
-                <View key={index} style={{ marginBottom: 20 }}>
+                <View key={index}>
                   {/* Question */}
-                  <Text style={styles.question}>{res?.question}</Text>
+                  <Text style={styles.text}>{res?.question}</Text>
 
                   {/* Answer */}
-                  <Text style={styles.answer}>{res?.answer}</Text>
+                  <Text style={[styles.textarea]}>{res?.answer}</Text>
                 </View>
               ))}
             </View>

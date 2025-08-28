@@ -276,7 +276,7 @@ const PersonalWellBeing = (props) => {
                           {res?.question}
                         </Text>
                         <Text
-                          style={[styles.textarea, styles.heightGivenwrapper]}
+                          style={[styles.textarea]}
                           wrap={false}
                         >
                           {res.answer}
