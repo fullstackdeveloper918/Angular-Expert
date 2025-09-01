@@ -206,7 +206,7 @@ const AdminDashboard: Page = (props: any) => {
       count: (
         <span style={{ fontSize: "20px" }}>
           {" "}
-          <Timmer endDate={new_date} />
+          <Timmer endDate={xyz} />
         </span>
       ),
       link: "/admin/dashboard",

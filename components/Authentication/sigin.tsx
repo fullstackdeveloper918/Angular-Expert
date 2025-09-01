@@ -20,6 +20,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { auth } from "../../utils/firebase";
 import { getuserData } from "../../lib/features/userSlice";
 import api from "@/utils/api";
+import { notification } from "antd";
+
 const { Row, Col, Button, Divider } = {
   Row: dynamic(() => import("antd").then((module) => module.Row), {
     ssr: false,
@@ -140,19 +142,34 @@ const scheduleTokenRefresh = (auth: any) => {
       localStorage.setItem("loginExpiryTime", expiryTime.toString());
       localStorage.setItem("AuthToken",idToken)
       setCookie("Auth", JSON.stringify(auth.currentUser), 30);
-        const redirectPath = localStorage.getItem('redirectAfterLogin') || '/admin/dashboard';
+      const redirectPath = localStorage.getItem('redirectAfterLogin') || '/admin/dashboard';
+      
+      router.push('/admin/dashboard');
+      // router.push(redirectPath);
+      localStorage.removeItem('redirectAfterLogin');
+      notification.open({
+      message: <div style={{ color: '#dc2626', fontWeight: 600 }}>Reminder</div>,
+      description: (
+        <div>
+          Please download your PDFs — for both completed and incomplete users, if the Round Table Topic is missing,
+          kindly fill it in and save again; if it’s already shown, you may ignore.
+        </div>
+      ),
+      duration: 0,
+      placement: "top",
+      className: "left-1/2 -translate-x-1/2 top-20 absolute m-0",
+    });
+
+
+
         
-        router.push('/admin/dashboard');
-        // router.push(redirectPath);
-        localStorage.removeItem('redirectAfterLogin');
-        
-const pathname=redirectPath?redirectPath:"/admin/dashboard"
-      scheduleTokenRefresh(auth);
-    } catch (error) {
-      toast.error("Invalid Credentials");
-      setLoading(false);
-    }
-  };
+    const pathname=redirectPath?redirectPath:"/admin/dashboard"
+          scheduleTokenRefresh(auth);
+        } catch (error) {
+          toast.error("Invalid Credentials");
+          setLoading(false);
+        }
+      };
 
 
 
