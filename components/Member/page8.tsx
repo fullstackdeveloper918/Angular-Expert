@@ -1073,6 +1073,7 @@ const addInputPair = () => {
                                   listType="picture-card"
                                   fileList={fileLists[pair.id] || []}
                                   onPreview={handlePreview}
+                                  showUploadList={{ showRemoveIcon: false, showPreviewIcon: false }}
                                   onChange={(info) =>
                                     handleFileChange(
                                       info,
